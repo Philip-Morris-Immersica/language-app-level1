@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { LessonNav } from '@/components/layout/LessonNav';
 import { Button } from '@/components/ui/button';
@@ -108,9 +109,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     <div className="text-lg text-gray-700 whitespace-pre-wrap leading-relaxed">{section.content}</div>
                   )}
                   {section.imageUrl && (
-                    <img 
+                    <Image 
                       src={section.imageUrl} 
                       alt={section.title || 'Lesson image'} 
+                      width={800}
+                      height={600}
                       className="mt-6 rounded-xl max-w-full h-auto shadow-md"
                     />
                   )}

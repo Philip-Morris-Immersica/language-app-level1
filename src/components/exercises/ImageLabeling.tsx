@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ImageLabelingExercise } from '@/content/types';
@@ -83,9 +84,11 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
               {/* Image or Emoji */}
               <div className="flex items-center justify-center mb-4 min-h-[120px]">
                 {image.imageUrl?.startsWith('http') ? (
-                  <img
+                  <Image
                     src={image.imageUrl}
                     alt="Flag"
+                    width={200}
+                    height={120}
                     className="max-w-full h-auto max-h-[120px] rounded-lg shadow-md"
                   />
                 ) : (

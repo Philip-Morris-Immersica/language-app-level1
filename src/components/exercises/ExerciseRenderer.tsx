@@ -41,7 +41,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return (
         <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
           <p className="text-yellow-800">
-            Exercise type "{exercise.type}" not yet implemented.
+            Exercise type &quot;{exercise.type}&quot; not yet implemented.
           </p>
           <p className="text-sm text-yellow-700 mt-2">
             {exercise.instruction}
