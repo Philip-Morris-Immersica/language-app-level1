@@ -7,9 +7,9 @@ import { getLessonMetadata } from '@/content';
 import { ChevronLeft } from 'lucide-react';
 
 interface ExercisesPageProps {
-  params: {
+  params: Promise<{
     lessonId: string;
-  };
+  }>;
 }
 
 async function getLessonData(lessonId: string) {

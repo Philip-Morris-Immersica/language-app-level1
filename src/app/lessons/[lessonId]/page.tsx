@@ -9,9 +9,9 @@ import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson } f
 import { BookOpen } from 'lucide-react';
 
 interface LessonPageProps {
-  params: {
+  params: Promise<{
     lessonId: string;
-  };
+  }>;
 }
 
 // This will be replaced with actual lesson data
