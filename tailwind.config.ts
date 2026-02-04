@@ -50,6 +50,18 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Bolt theme colors
+        bolt: {
+          primary: {
+            DEFAULT: "#6B8E23",  // Olive green
+            hover: "#556B1E",
+            dark: "#4A5D23",
+          },
+          secondary: {
+            light: "#F5F8E8",    // Cream background
+            DEFAULT: "#C9D99E",  // Light green border
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

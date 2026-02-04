@@ -1,0 +1,74 @@
+---
+alwaysApply: true
+---
+
+# Database Interactions with Drizzle ORM
+
+All database interactions in this project MUST use Drizzle ORM with the defined schema and queries.
+
+## Core Principles
+
+1. **Always use the Drizzle schema**: Reference [src/db/schema.ts](mdc:src/db/schema.ts) for all table definitions
+2. **Never use raw SQL queries**: Use Drizzle's query builder instead
+3. **Use Drizzle's type-safe queries**: Leverage TypeScript types from the schema
+4. **Follow the existing database patterns**: See [src/db/query-examples.ts](mdc:src/db/query-examples.ts) for examples
+
+## Database Configuration
+
+- Database config: [drizzle.config.ts](mdc:drizzle.config.ts)
+- Schema location: `./src/db/schema.ts`
+- Migration output: `./drizzle` folder
+
+## Available Tables
+
+- `usersTable` - User accounts
+- `lessonsTable` - Language lessons
+- `exercisesTable` - Lesson exercises
+- `userProgressTable` - User exercise completion tracking
+- `lessonProgressTable` - User lesson completion tracking
+
+## Query Guidelines
+
+### DO ✅
+
+```typescript
+import { db } from '@/db';
+import { usersTable, lessonsTable } from '@/db/schema';
+import { eq, and, desc } from 'drizzle-orm';
+
+// Type-safe queries with Drizzle
+const users = await db.select().from(usersTable);
+const user = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+await db.insert(usersTable).values({ name: 'John', email: 'john@example.com' });
+await db.update(usersTable).set({ name: 'Jane' }).where(eq(usersTable.id, userId));
+```
+
+### DON'T ❌
+
+```typescript
+// Never use raw SQL queries directly
+await sql`SELECT * FROM users`;
+await sql`INSERT INTO users (name, email) VALUES ('John', 'john@example.com')`;
+```
+
+## Schema Updates
+
+When updating the database schema:
+
+1. Modify [src/db/schema.ts](mdc:src/db/schema.ts)
+2. Run `npm run db:push` for development (quick push without migrations)
+3. OR run `npm run db:generate` followed by `npm run db:migrate` for production (creates migration files)
+4. Verify with `npm run db:studio` to view changes in Drizzle Studio
+
+## Relations
+
+Always use the defined relations in schema.ts for querying related data:
+
+```typescript
+// Use Drizzle's relations for joins
+const lessonsWithExercises = await db.query.lessonsTable.findMany({
+  with: {
+    exercises: true,
+  },
+});
+```

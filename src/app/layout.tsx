@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Sofia_Sans } from "next/font/google";
 import "./globals.css";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,9 +14,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const sofiaSans = Sofia_Sans({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-sofia-sans",
+});
+
 export const metadata: Metadata = {
-  title: "Language App Level A1",
-  description: "Bulgarian Language Learning App for A1 Level",
+  title: "Български език за мигранти A1",
+  description: "Интерактивен дигитален учебник по български език - ниво A1",
 };
 
 export default function RootLayout({
@@ -23,11 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="bg">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${sofiaSans.variable} antialiased font-[family-name:var(--font-sofia-sans)]`}
       >
-        {children}
+        <AppLayout>{children}</AppLayout>
       </body>
     </html>
   );

@@ -1,0 +1,151 @@
+'use client';
+
+import { useState } from 'react';
+import { Check, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import type { MultipleChoiceExercise } from '@/content/types';
+
+interface MultipleChoiceProps {
+  exercise: MultipleChoiceExercise;
+  onComplete?: (correct: boolean, score: number) => void;
+  exerciseNumber?: number;
+}
+
+export function MultipleChoice({ exercise, onComplete, exerciseNumber }: MultipleChoiceProps) {
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
+  const [validation, setValidation] = useState<{ [key: number]: boolean | null }>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSelect = (questionIndex: number, optionIndex: number) => {
+    if (isSubmitted) return;
+    
+    setSelectedAnswers(prev => ({ ...prev, [questionIndex]: optionIndex }));
+    
+    // Clear validation for this question
+    if (validation[questionIndex] !== null) {
+      setValidation(prev => ({ ...prev, [questionIndex]: null }));
+    }
+  };
+
+  const handleSubmit = () => {
+    const newValidation: { [key: number]: boolean } = {};
+    let correctCount = 0;
+
+    exercise.questions.forEach((question, index) => {
+      const selected = selectedAnswers[index];
+      const isCorrect = selected === question.correctIndex;
+      newValidation[index] = isCorrect;
+      if (isCorrect) correctCount++;
+    });
+
+    setValidation(newValidation);
+    setIsSubmitted(true);
+
+    if (onComplete) {
+      const totalQuestions = exercise.questions.length;
+      const score = exercise.points ? (correctCount / totalQuestions) * exercise.points : correctCount;
+      onComplete(correctCount === totalQuestions, score);
+    }
+  };
+
+  return (
+    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-8 md:p-10 shadow-sm">
+      {/* Exercise number badge */}
+      {exerciseNumber && (
+        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+          {exerciseNumber}
+        </div>
+      )}
+      
+      <p className="text-xl font-bold text-gray-800 mb-8">
+        {exercise.instruction}
+      </p>
+
+      <div className="space-y-8">
+        {exercise.questions.map((question, qIndex) => (
+          <div key={qIndex} className="space-y-4">
+            <p className="text-lg font-semibold text-gray-800">
+              {qIndex + 1}. {question.question}
+            </p>
+
+            <div className="space-y-3 pl-4">
+              {question.options.map((option, oIndex) => {
+                const isSelected = selectedAnswers[qIndex] === oIndex;
+                const isCorrect = oIndex === question.correctIndex;
+                const showCorrect = isSubmitted && isCorrect;
+                const showIncorrect = isSubmitted && isSelected && !isCorrect;
+
+                return (
+                  <button
+                    key={oIndex}
+                    onClick={() => handleSelect(qIndex, oIndex)}
+                    disabled={isSubmitted}
+                    className={`
+                      w-full text-left px-5 py-4 rounded-xl border-2 transition-all shadow-sm
+                      min-h-[56px] flex items-center gap-4 active:scale-[0.98]
+                      ${isSelected && !isSubmitted ? 'border-bolt-primary bg-bolt-secondary-light shadow-md' : 'border-gray-300'}
+                      ${showCorrect ? 'border-green-500 bg-green-50' : ''}
+                      ${showIncorrect ? 'border-red-500 bg-red-50' : ''}
+                      ${!isSubmitted ? 'hover:border-bolt-primary hover:bg-bolt-secondary-light hover:shadow-md cursor-pointer' : 'cursor-default'}
+                    `}
+                  >
+                    <div
+                      className={`
+                        w-6 h-6 rounded-full border-2 flex-shrink-0
+                        ${isSelected ? 'border-bolt-primary' : 'border-gray-400'}
+                        ${showCorrect ? 'border-green-500' : ''}
+                        ${showIncorrect ? 'border-red-500' : ''}
+                      `}
+                    >
+                      {isSelected && (
+                        <div className={`
+                          w-3.5 h-3.5 rounded-full m-[3px]
+                          ${!isSubmitted ? 'bg-bolt-primary' : ''}
+                          ${showCorrect ? 'bg-green-500' : ''}
+                          ${showIncorrect ? 'bg-red-500' : ''}
+                        `} />
+                      )}
+                    </div>
+                    
+                    <span className="flex-1 text-base font-medium">{option}</span>
+
+                    {showCorrect && <Check className="w-6 h-6 text-green-600 flex-shrink-0" />}
+                    {showIncorrect && <X className="w-6 h-6 text-red-600 flex-shrink-0" />}
+                  </button>
+                );
+              })}
+            </div>
+
+            {isSubmitted && validation[qIndex] !== null && (
+              <div className={`
+                mt-2 p-3 rounded text-sm
+                ${validation[qIndex] ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}
+              `}>
+                {validation[qIndex] ? '✓ Правилно' : '✗ Грешно'}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {!isSubmitted && (
+        <Button
+          onClick={handleSubmit}
+          className="mt-8 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          disabled={Object.keys(selectedAnswers).length < exercise.questions.length}
+        >
+          Провери
+        </Button>
+      )}
+
+      {isSubmitted && (
+        <div className="mt-8 p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+          <p className="text-base font-semibold text-gray-800">
+            Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.questions.length} правилни отговора
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
