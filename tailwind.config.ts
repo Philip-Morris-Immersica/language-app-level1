@@ -53,13 +53,18 @@ export default {
         // Bolt theme colors
         bolt: {
           primary: {
-            DEFAULT: "#6B8E23",  // Olive green
-            hover: "#556B1E",
+            DEFAULT: "#6B8543",  // По-тъмен зелен (от прототипа)
+            hover: "#5A7238",
             dark: "#4A5D23",
           },
           secondary: {
-            light: "#F5F8E8",    // Cream background
-            DEFAULT: "#C9D99E",  // Light green border
+            light: "#F5F1E8",    // Бежов/кремав фон
+            DEFAULT: "#8B9D5F",  // Светло зелена рамка
+            cream: "#F8F5EE",    // Много светъл крем
+          },
+          green: {
+            button: "#6B8543",   // Зелен за бутони
+            border: "#6B7B3F",   // Рамки
           },
         },
       },

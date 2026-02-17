@@ -6,6 +6,7 @@ import { MultipleChoice } from './MultipleChoice';
 import { MatchPairs } from './MatchPairs';
 import { WordOrder } from './WordOrder';
 import { ImageLabeling } from './ImageLabeling';
+import { IllustratedCards } from './IllustratedCards';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -31,6 +32,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     
     case 'image_labeling':
       return <ImageLabeling exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
+    
+    case 'illustrated_cards':
+      return <IllustratedCards exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
     
     // Placeholder for other exercise types
     case 'verb_conjugation':

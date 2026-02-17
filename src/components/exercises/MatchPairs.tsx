@@ -78,65 +78,75 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
   };
 
   return (
-    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-8 md:p-10 shadow-sm">
+    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
       {/* Exercise number badge */}
       {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
           {exerciseNumber}
         </div>
       )}
       
-      <p className="text-xl font-bold text-gray-800 mb-8">
+      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
         {exercise.instruction}
       </p>
 
-      <div className="space-y-5">
-        {exercise.pairs.map((pair) => {
+      <div className="space-y-3">
+        {exercise.pairs.map((pair, index) => {
           const isMatched = !!matches[pair.id];
           const isSelected = selectedLeft === pair.id;
           const validationResult = validation[pair.id];
 
           return (
-            <div key={pair.id} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              {/* Left item */}
-              <button
-                onClick={() => handleLeftClick(pair.id)}
-                disabled={isSubmitted}
-                className={`
-                  flex-1 min-h-[60px] px-5 py-4 rounded-xl border-2 font-semibold text-base
-                  transition-all text-left shadow-sm active:scale-95
-                  ${isSelected ? 'border-bolt-primary bg-bolt-primary text-white shadow-md' : 'border-bolt-secondary bg-white'}
-                  ${isMatched && !isSubmitted ? 'border-bolt-primary bg-bolt-secondary-light' : ''}
-                  ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
-                  ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
-                  ${!isSubmitted && !isMatched ? 'hover:border-bolt-primary hover:bg-bolt-secondary-light hover:shadow-md cursor-pointer' : ''}
-                  ${isSubmitted ? 'cursor-default' : ''}
-                `}
-              >
-                {pair.left}
-              </button>
+            <div key={pair.id} className="flex items-center gap-3">
+              {/* Number */}
+              <div className="flex-shrink-0 w-8 text-center">
+                <span className="text-base font-semibold text-gray-700">{index + 1}.</span>
+              </div>
 
-              {/* Arrow or matched right item */}
-              <div className="flex items-center justify-center min-w-[140px] sm:min-w-[200px]">
+              {/* Left item - just text */}
+              <div className="flex-shrink-0 w-24 md:w-32">
+                <span className="text-base md:text-lg font-medium text-gray-800">
+                  {pair.left}
+                </span>
+              </div>
+
+              {/* Matched right item or clickable area */}
+              <div className="flex-1 min-w-0">
                 {isMatched ? (
-                  <div className={`
-                    w-full px-5 py-4 rounded-xl border-2 text-center font-semibold text-base shadow-sm
-                    ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
-                    ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
-                    ${!isSubmitted ? 'border-bolt-secondary bg-bolt-secondary-light' : ''}
-                  `}>
+                  <div
+                    onClick={() => !isSubmitted && handleLeftClick(pair.id)}
+                    className={`
+                      w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
+                      transition-all
+                      ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
+                      ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
+                      ${!isSubmitted ? 'border-[#6B7B3F] bg-white cursor-pointer hover:bg-gray-50' : 'cursor-default'}
+                    `}
+                  >
                     {matches[pair.id]}
                   </div>
                 ) : (
-                  <div className="text-gray-400 text-center text-base font-medium">
-                    {isSelected ? '← Избери отговор' : '→'}
-                  </div>
+                  <button
+                    onClick={() => handleLeftClick(pair.id)}
+                    disabled={isSubmitted}
+                    className={`
+                      w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
+                      transition-all
+                      ${isSelected 
+                        ? 'border-[#6B8543] bg-[#6B8543] text-white' 
+                        : 'border-gray-300 bg-white text-gray-400 hover:border-[#6B7B3F] hover:bg-gray-50'
+                      }
+                      ${!isSubmitted ? 'cursor-pointer' : 'cursor-not-allowed'}
+                    `}
+                  >
+                    {isSelected ? '← Избери отговор' : '_______'}
+                  </button>
                 )}
               </div>
 
               {/* Validation icon */}
               {isSubmitted && (
-                <div className="flex items-center justify-center sm:w-8">
+                <div className="flex-shrink-0 w-6">
                   {validationResult === true && <Check className="w-6 h-6 text-green-600" />}
                   {validationResult === false && <X className="w-6 h-6 text-red-600" />}
                 </div>
@@ -148,19 +158,21 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
 
       {/* Right items pool (only show unmatched) */}
       {!isSubmitted && (
-        <div className="mt-8 pt-8 border-t-2 border-gray-200">
-          <p className="text-base font-bold text-gray-700 mb-4">Изберете отговори:</p>
-          <div className="flex flex-wrap gap-3">
+        <div className="mt-6 pt-6 border-t-2 border-gray-200">
+          <p className="text-sm font-medium text-gray-600 mb-3">
+            {selectedLeft ? 'Изберете правилния отговор:' : 'Кликнете на празното поле, след това изберете отговор:'}
+          </p>
+          <div className="flex flex-wrap gap-2">
             {rightItems.map((rightText, index) => (
               <button
                 key={index}
                 onClick={() => handleRightClick(rightText)}
                 disabled={isRightItemMatched(rightText) || !selectedLeft}
                 className={`
-                  px-5 py-3 rounded-xl border-2 text-base font-semibold min-h-[52px] shadow-sm
+                  px-4 py-2 rounded-lg border-2 text-base font-medium min-h-[44px] shadow-sm
                   transition-all active:scale-95
-                  ${isRightItemMatched(rightText) ? 'opacity-30 cursor-not-allowed border-gray-300' : ''}
-                  ${!selectedLeft ? 'opacity-50 cursor-not-allowed border-gray-300' : 'border-bolt-secondary hover:border-bolt-primary hover:bg-bolt-secondary-light hover:shadow-md cursor-pointer'}
+                  ${isRightItemMatched(rightText) ? 'opacity-30 cursor-not-allowed border-gray-300 bg-gray-100' : ''}
+                  ${!selectedLeft ? 'opacity-50 cursor-not-allowed border-gray-300 bg-white' : 'border-[#6B7B3F] bg-white hover:border-[#6B8543] hover:bg-[#F5F1E8] cursor-pointer'}
                 `}
               >
                 {rightText}
@@ -173,15 +185,15 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-8 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
           disabled={Object.keys(matches).length < exercise.pairs.length}
         >
-          Провери
+          Провери отговорите
         </Button>
       )}
 
       {isSubmitted && (
-        <div className="mt-8 p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+        <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
             Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.pairs.length} правилни съвпадения
           </p>

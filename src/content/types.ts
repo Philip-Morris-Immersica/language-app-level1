@@ -6,6 +6,7 @@ export type ExerciseType =
   | 'word_order'           // Arrange words into sentences
   | 'verb_conjugation'     // Fill verb conjugation tables
   | 'image_labeling'       // Write words under images
+  | 'illustrated_cards'    // Illustrated vocabulary cards with audio
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
@@ -71,12 +72,14 @@ export interface VerbConjugationExercise extends BaseExercise {
 
 export interface ImageLabelingExercise extends BaseExercise {
   type: 'image_labeling';
-  items: {
+  images: {
     id: string;
     imageUrl: string;
     correctLabel: string;
     acceptableLabels?: string[];
   }[];
+  options: string[];           // List of options for dropdown/selection
+  displayType?: 'flags' | 'default';  // For specific formatting
 }
 
 export interface NumberWritingExercise extends BaseExercise {
@@ -85,6 +88,19 @@ export interface NumberWritingExercise extends BaseExercise {
     numeral: string;        // "1", "5", "10"
     correctWord: string;    // "едно", "пет", "десет"
   }[];
+}
+
+export interface IllustratedCardsExercise extends BaseExercise {
+  type: 'illustrated_cards';
+  title: string;           // "НОВИ ДУМИ 1"
+  audioUrl?: string;       // For "Listen" button
+  cards: {
+    id: string;
+    imageUrl: string;      // Path to illustration
+    label: string;         // "Добро утро!", "Здравей!" etc.
+    audioUrl?: string;     // Individual audio for card
+  }[];
+  displayMode?: 'grid' | 'presentation';  // For different display modes
 }
 
 export interface DialogueReadingExercise extends BaseExercise {
@@ -129,6 +145,7 @@ export type Exercise =
   | WordOrderExercise
   | VerbConjugationExercise
   | ImageLabelingExercise
+  | IllustratedCardsExercise
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise
