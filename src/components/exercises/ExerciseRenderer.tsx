@@ -12,6 +12,8 @@ import { GrammarVisual } from './GrammarVisual';
 import { WordSearch } from './WordSearch';
 import { GrammarWithExamples } from './GrammarWithExamples';
 import { Dialogues } from './Dialogues';
+import { DropdownMatch } from './DropdownMatch';
+import { LetterChoice } from './LetterChoice';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -31,6 +33,26 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     
     case 'match_pairs':
       return <MatchPairs exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
+    
+    case 'dropdown_match':
+      return (
+        <DropdownMatch
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          questions={exercise.questions}
+          onComplete={onComplete}
+        />
+      );
+    
+    case 'letter_choice':
+      return (
+        <LetterChoice
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          puzzles={exercise.puzzles}
+          onComplete={onComplete}
+        />
+      );
     
     case 'word_order':
       return <WordOrder exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;

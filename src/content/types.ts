@@ -3,6 +3,8 @@ export type ExerciseType =
   | 'fill_in_blank'        // Most common - fill missing words
   | 'multiple_choice'      // Select/underline correct answer
   | 'match_pairs'          // Match left items with right items
+  | 'dropdown_match'       // Match with dropdown selection
+  | 'letter_choice'        // Fill missing letters by clicking buttons
   | 'word_order'           // Arrange words into sentences
   | 'verb_conjugation'     // Fill verb conjugation tables
   | 'image_labeling'       // Write words under images
@@ -213,11 +215,33 @@ export interface DialoguesExercise extends BaseExercise {
   }[];
 }
 
+export interface DropdownMatchExercise extends BaseExercise {
+  type: 'dropdown_match';
+  questions: {
+    id: string;
+    left: string;            // 'Добро', 'аз'
+    options: string[];       // ['утро!', 'ден!', 'нощ!', 'вечер!']
+    correctAnswer: string;   // 'утро!'
+  }[];
+}
+
+export interface LetterChoiceExercise extends BaseExercise {
+  type: 'letter_choice';
+  puzzles: {
+    id: string;
+    word: string;              // 'Д_Б_Р'
+    correctLetters: string[];  // ['О', 'Ъ']
+    availableLetters: string[]; // ['О', 'Ъ', 'А', 'Е', 'И']
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise 
   | MultipleChoiceExercise 
   | MatchPairsExercise 
+  | DropdownMatchExercise
+  | LetterChoiceExercise
   | WordOrderExercise
   | VerbConjugationExercise
   | ImageLabelingExercise

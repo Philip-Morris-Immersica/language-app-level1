@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, DialoguesExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, DialoguesExercise, DropdownMatchExercise, LetterChoiceExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -46,35 +46,35 @@ export const exercises: Exercise[] = [
   // ORDER 3: Exercise 2 - Match word pairs (Page 9, bottom left)
   {
     id: 'l01-ex-02',
-    type: 'match_pairs',
+    type: 'dropdown_match',
     instruction: 'Свържете думите от колонките, за да получите фрази.',
     order: 3,
     points: 4,
-    pairs: [
-      { id: 'pair1', left: 'Добро', correctRight: 'утро!' },
-      { id: 'pair2', left: 'Добър', correctRight: 'ден!' },
-      { id: 'pair3', left: 'Лека', correctRight: 'нощ!' },
-      { id: 'pair4', left: 'Добър', correctRight: 'вечер!' },
+    questions: [
+      { id: 'q1', left: 'Добро', options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'утро!' },
+      { id: 'q2', left: 'Добър', options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'ден!' },
+      { id: 'q3', left: 'Лека', options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'нощ!' },
+      { id: 'q4', left: 'Добър', options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'вечер!' },
     ],
-  } as MatchPairsExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 4: Exercise 3 - Fill in missing letters (Page 9, bottom right)
   {
     id: 'l01-ex-03',
-    type: 'fill_in_blank',
+    type: 'letter_choice',
     instruction: 'Попълнете липсващите букви.',
     order: 4,
-    points: 20,
-    sentences: [
-      { text: 'Д_Б_Р', blanks: [1, 3], correctAnswers: ['О', 'Ъ'] },
-      { text: 'Д_ВИ_ДА_Е', blanks: [1, 4, 7], correctAnswers: ['О', 'Ж', 'Н'] },
-      { text: 'ДО_РО У_РО', blanks: [2, 8], correctAnswers: ['Б', 'Т'] },
-      { text: 'ЗД_А__Й', blanks: [2, 4, 5], correctAnswers: ['Р', 'В', 'Е'] },
-      { text: 'Д_Б_Р ВЕ_Е_', blanks: [1, 3, 8, 10], correctAnswers: ['О', 'Ъ', 'Ч', 'Р'] },
-      { text: 'НО_ НА Ш_Л', blanks: [2, 8], correctAnswers: ['Щ', 'А'] },
-      { text: 'З_Р_В_Й_Е', blanks: [1, 3, 5, 7], correctAnswers: ['Д', 'А', 'Е', 'Т'] },
+    points: 7,
+    puzzles: [
+      { id: 'p1', word: 'Д_Б_Р', correctLetters: ['О', 'Ъ'], availableLetters: ['О', 'Ъ', 'А', 'Е', 'И', 'У'] },
+      { id: 'p2', word: 'Д_ВИ_ДА_Е', correctLetters: ['О', 'Ж', 'Н'], availableLetters: ['О', 'Ж', 'Н', 'А', 'Е', 'И'] },
+      { id: 'p3', word: 'ДО_РО У_РО', correctLetters: ['Б', 'Т'], availableLetters: ['Б', 'Т', 'Д', 'П', 'К'] },
+      { id: 'p4', word: 'ЗД_А__Й', correctLetters: ['Р', 'В', 'Е'], availableLetters: ['Р', 'В', 'Е', 'А', 'О', 'И'] },
+      { id: 'p5', word: 'Д_Б_Р ВЕ_Е_', correctLetters: ['О', 'Ъ', 'Ч', 'Р'], availableLetters: ['О', 'Ъ', 'Ч', 'Р', 'А', 'Е'] },
+      { id: 'p6', word: 'НО_ НА Ш_Л', correctLetters: ['Щ', 'А'], availableLetters: ['Щ', 'А', 'К', 'О', 'Е'] },
+      { id: 'p7', word: 'З_Р_В_Й_Е', correctLetters: ['Д', 'А', 'Е', 'Т'], availableLetters: ['Д', 'А', 'Е', 'Т', 'О', 'И'] },
     ],
-  } as FillInBlankExercise,
+  } as LetterChoiceExercise,
 
   // ORDER 5: НОВИ ДУМИ 2 - Countries vocabulary (Page 10, top) - NOT AN EXERCISE!
   {
@@ -211,21 +211,21 @@ export const exercises: Exercise[] = [
   // ORDER 11: Exercise 7 - Match pronouns with verb forms (Page 12, top left)
   {
     id: 'l01-ex-07',
-    type: 'match_pairs',
+    type: 'dropdown_match',
     instruction: 'Свържете личните местоимения с правилната форма на глагола съм.',
     order: 11,
     points: 8,
-    pairs: [
-      { id: 'pair1', left: 'аз', correctRight: 'съм' },
-      { id: 'pair2', left: 'ти', correctRight: 'си' },
-      { id: 'pair3', left: 'той', correctRight: 'е' },
-      { id: 'pair4', left: 'тя', correctRight: 'е' },
-      { id: 'pair5', left: 'то', correctRight: 'е' },
-      { id: 'pair6', left: 'ние', correctRight: 'сме' },
-      { id: 'pair7', left: 'вие', correctRight: 'сте' },
-      { id: 'pair8', left: 'те', correctRight: 'са' },
+    questions: [
+      { id: 'q1', left: 'аз', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'съм' },
+      { id: 'q2', left: 'ти', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'си' },
+      { id: 'q3', left: 'той', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'е' },
+      { id: 'q4', left: 'тя', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'е' },
+      { id: 'q5', left: 'то', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'е' },
+      { id: 'q6', left: 'ние', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'сме' },
+      { id: 'q7', left: 'вие', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'сте' },
+      { id: 'q8', left: 'те', options: ['съм', 'си', 'е', 'сме', 'сте', 'са'], correctAnswer: 'са' },
     ],
-  } as MatchPairsExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 12: Exercise 8 - Fill with flags (Page 12, top right)
   {
