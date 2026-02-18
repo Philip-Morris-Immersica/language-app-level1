@@ -30,7 +30,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: 'Запознайте се с новите думи и изрази',
-    audioUrl: '/assets/lesson-01/audio/greetings.mp3',
+    audioUrl: '/assets/lesson-01/audio/new-words-01.mp3',
     order: 2,
     cards: [
       { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
@@ -82,7 +82,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: 'Запознайте се с имената на държавите',
-    audioUrl: '/assets/lesson-01/audio/countries.wav',
+    audioUrl: '/assets/lesson-01/audio/new-words-02.wav',
     order: 5,
     cards: [
       { 
