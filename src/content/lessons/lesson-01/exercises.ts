@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -149,4 +149,62 @@ export const exercises: Exercise[] = [
       { pronoun: 'те', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/te-sa-babur-ara-azar.jpg' },
     ]
   } as GrammarVisualExercise,
+
+  // ORDER 9: Exercise 6 - Word search (Page 11, middle)
+  {
+    id: 'l01-ex-06',
+    type: 'word_search',
+    instruction: 'Колко думи можете да намерите?',
+    order: 9,
+    points: 7,
+    letterString: 'ниетевиеазтойтоти',
+    correctWords: ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти'],
+  } as WordSearchExercise,
+
+  // ORDER 10: ГРАМАТИКА 2 - Verb СЪМ (Page 11, bottom) - NOT AN EXERCISE!
+  {
+    id: 'l01-gramatika-02',
+    type: 'grammar_examples',
+    title: 'ГРАМАТИКА 2',
+    subtitle: 'Глагол СЪМ',
+    instruction: 'Запознайте се с глагол СЪМ',
+    order: 10,
+    examples: [
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/az-sam-mohamed.jpg', 
+        text: 'Аз съм Мохамед.', 
+        subtext: 'Аз съм от Сирия.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/ti-si-haled.jpg', 
+        text: 'Ти си Халед.', 
+        subtext: 'Ти си от Ирак.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/toy-e-ivan.jpg', 
+        text: 'Той е Иван.', 
+        subtext: 'Той е от България.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/tya-e-ana.jpg', 
+        text: 'Тя е Ана.', 
+        subtext: 'Тя е от Украйна.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/nie-sme-mohamed-bana.jpg', 
+        text: 'Ние сме Мохамед и Баня.', 
+        subtext: 'Ние сме от Сирия.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/vye-ste-dzhamil-mariam.jpg', 
+        text: 'Вие сте Джамил и Мариам.', 
+        subtext: 'Вие сте от Ирак.' 
+      },
+      { 
+        imageUrl: '/assets/lesson-01/gramatika-1-pronouns/te-sa-babur-ara-azar.jpg', 
+        text: 'Те са Бабур, Ара и Азар.', 
+        subtext: 'Те са от Афганистан.' 
+      },
+    ]
+  } as GrammarExamplesExercise,
 ];

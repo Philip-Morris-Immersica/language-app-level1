@@ -9,6 +9,8 @@ import { ImageLabeling } from './ImageLabeling';
 import { IllustratedCards } from './IllustratedCards';
 import { SyllableBlocks } from './SyllableBlocks';
 import { GrammarVisual } from './GrammarVisual';
+import { WordSearch } from './WordSearch';
+import { GrammarWithExamples } from './GrammarWithExamples';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -48,6 +50,18 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         />
       );
     
+    case 'word_search':
+      return (
+        <WordSearch
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          letterString={exercise.letterString}
+          correctWords={exercise.correctWords}
+          hint={exercise.hint}
+          onComplete={onComplete}
+        />
+      );
+    
     case 'grammar_visual':
       return (
         <GrammarVisual
@@ -55,6 +69,16 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           title={exercise.title}
           subtitle={exercise.subtitle}
           pronouns={exercise.pronouns}
+        />
+      );
+    
+    case 'grammar_examples':
+      return (
+        <GrammarWithExamples
+          order={number}
+          title={exercise.title}
+          subtitle={exercise.subtitle}
+          examples={exercise.examples}
         />
       );
     

@@ -8,7 +8,9 @@ export type ExerciseType =
   | 'image_labeling'       // Write words under images
   | 'illustrated_cards'    // Illustrated vocabulary cards with audio
   | 'syllable_blocks'      // Arrange syllables to form words
+  | 'word_search'          // Find words in letter string
   | 'grammar_visual'       // Visual grammar explanation (pronouns, etc.)
+  | 'grammar_examples'     // Grammar with illustrated examples
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
@@ -160,6 +162,24 @@ export interface GrammarVisualExercise extends BaseExercise {
   }[];
 }
 
+export interface WordSearchExercise extends BaseExercise {
+  type: 'word_search';
+  letterString: string;      // 'ниетевиеазтойтоти'
+  correctWords: string[];    // ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти']
+  hint?: string;
+}
+
+export interface GrammarExamplesExercise extends BaseExercise {
+  type: 'grammar_examples';
+  title: string;             // 'ГРАМАТИКА 2'
+  subtitle?: string;         // 'Глагол СЪМ'
+  examples: {
+    imageUrl: string;
+    text: string;            // 'Аз съм Мохамед.'
+    subtext?: string;        // 'Аз съм от Сирия.'
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise 
@@ -170,7 +190,9 @@ export type Exercise =
   | ImageLabelingExercise
   | IllustratedCardsExercise
   | SyllableBlocksExercise
+  | WordSearchExercise
   | GrammarVisualExercise
+  | GrammarExamplesExercise
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise
