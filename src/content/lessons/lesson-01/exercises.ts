@@ -87,55 +87,55 @@ export const exercises: Exercise[] = [
     cards: [
       { 
         id: 'bulgaria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-03.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/bulgaria.jpg', 
         label: 'България',
         sublabels: ['българин', 'българка', 'българи']
       },
       { 
         id: 'iraq', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-04.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iraq.jpg', 
         label: 'Ирак',
         sublabels: ['иракчанин', 'иракчанка', 'иракчани']
       },
       { 
         id: 'ukraine', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-05.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/ukraine.jpg', 
         label: 'Украйна',
         sublabels: ['украинец', 'украинка', 'украинци']
       },
       { 
         id: 'syria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-06.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/syria.jpg', 
         label: 'Сирия',
         sublabels: ['сириец', 'сирийка', 'сирийци']
       },
       { 
         id: 'lebanon', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-07.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/lebanon.jpg', 
         label: 'Ливан',
         sublabels: ['ливанец', 'ливанка', 'ливанци']
       },
       { 
         id: 'iran', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-08.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg', 
         label: 'Иран',
         sublabels: ['иранец', 'иранка', 'иранци']
       },
       { 
         id: 'morocco', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/maroko.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg', 
         label: 'Мароко',
         sublabels: ['мароканец', 'мароканка', 'мароканци']
       },
       { 
         id: 'afghanistan', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-09.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/afghanistan.jpg', 
         label: 'Афганистан',
         sublabels: ['афганистанец', 'афганистанка', 'афганистанци']
       },
       { 
         id: 'algeria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-10.jpg', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/algeria.jpg', 
         label: 'Алжир',
         sublabels: ['алжирец', 'алжирка', 'алжирци']
       },
