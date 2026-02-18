@@ -1,7 +1,10 @@
 import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise } from '@/content/types';
 
+// ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
+// The 'order' property must match the sequence in the textbook
+
 export const exercises: Exercise[] = [
-  // Exercise 1: Flags - Write country names under flags
+  // ORDER 1: Exercise 1 - Flags (Page 9, top)
   {
     id: 'l01-ex-01',
     type: 'image_labeling',
@@ -21,12 +24,31 @@ export const exercises: Exercise[] = [
     options: ['Алжир', 'България', 'Ирак', 'Иран', 'Ливан', 'Сирия', 'Украйна'],
   } as ImageLabelingExercise,
 
-  // Exercise 2: Match word pairs to form greetings
+  // ORDER 2: НОВИ ДУМИ 1 - Greetings vocabulary (Page 9, middle) - NOT AN EXERCISE!
+  {
+    id: 'l01-novi-dumi-01',
+    type: 'illustrated_cards',
+    title: 'НОВИ ДУМИ 1',
+    instruction: 'Запознайте се с новите думи и изрази',
+    audioUrl: '/assets/lesson-01/audio/greetings.mp3',
+    order: 2,
+    cards: [
+      { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
+      { id: 'day', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/02-dobur-den.jpg', label: 'Добър ден!' },
+      { id: 'evening', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/03-dobur-vecher.jpg', label: 'Добър вечер!' },
+      { id: 'night', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/04-leka-nosht.jpg', label: 'Лека нощ!' },
+      { id: 'hello', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/05-zdravey.jpg', label: 'Здравей!' },
+      { id: 'hello_formal', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/06-zdraveyte.jpg', label: 'Здравейте!' },
+      { id: 'goodbye', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/07-dovizhdane.jpg', label: 'Довиждане!' },
+    ]
+  } as IllustratedCardsExercise,
+
+  // ORDER 3: Exercise 2 - Match word pairs (Page 9, bottom left)
   {
     id: 'l01-ex-02',
     type: 'match_pairs',
     instruction: 'Свържете думите от колонките, за да получите фрази.',
-    order: 2,
+    order: 3,
     points: 4,
     pairs: [
       { id: 'pair1', left: 'Добро', correctRight: 'утро!' },
@@ -36,12 +58,12 @@ export const exercises: Exercise[] = [
     ],
   } as MatchPairsExercise,
 
-  // Exercise 3: Fill in missing letters
+  // ORDER 4: Exercise 3 - Fill in missing letters (Page 9, bottom right)
   {
     id: 'l01-ex-03',
     type: 'fill_in_blank',
     instruction: 'Попълнете липсващите букви.',
-    order: 3,
+    order: 4,
     points: 20,
     sentences: [
       { text: 'Д_Б_Р', blanks: [1, 3], correctAnswers: ['О', 'Ъ'] },
@@ -54,26 +76,7 @@ export const exercises: Exercise[] = [
     ],
   } as FillInBlankExercise,
 
-  // НОВИ ДУМИ 1: Greetings vocabulary with illustrations
-  {
-    id: 'l01-novi-dumi-01',
-    type: 'illustrated_cards',
-    title: 'НОВИ ДУМИ 1',
-    instruction: 'Запознайте се с новите думи и изрази',
-    audioUrl: '/assets/lesson-01/audio/greetings.mp3',
-    order: 4,
-    cards: [
-      { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
-      { id: 'day', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/02-dobur-den.jpg', label: 'Добър ден!' },
-      { id: 'evening', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/03-dobur-vecher.jpg', label: 'Добър вечер!' },
-      { id: 'night', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/04-leka-nosht.jpg', label: 'Лека нощ!' },
-      { id: 'hello', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/05-zdravey.jpg', label: 'Здравей!' },
-      { id: 'hello_formal', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/06-zdraveyte.jpg', label: 'Здравейте!' },
-      { id: 'goodbye', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/07-dovizhdane.jpg', label: 'Довиждане!' },
-    ]
-  } as IllustratedCardsExercise,
-
-  // НОВИ ДУМИ 2: Countries vocabulary with maps
+  // ORDER 5: НОВИ ДУМИ 2 - Countries vocabulary (Page 10, top) - NOT AN EXERCISE!
   {
     id: 'l01-novi-dumi-02',
     type: 'illustrated_cards',
