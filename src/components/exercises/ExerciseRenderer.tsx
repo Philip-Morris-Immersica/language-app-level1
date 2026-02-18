@@ -11,6 +11,7 @@ import { SyllableBlocks } from './SyllableBlocks';
 import { GrammarVisual } from './GrammarVisual';
 import { WordSearch } from './WordSearch';
 import { GrammarWithExamples } from './GrammarWithExamples';
+import { Dialogues } from './Dialogues';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -82,7 +83,19 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         />
       );
     
+    case 'dialogues':
+      return (
+        <Dialogues
+          order={number}
+          title={exercise.title}
+          subtitle={exercise.subtitle}
+          audioUrl={exercise.audioUrl}
+          sections={exercise.sections}
+        />
+      );
+    
     // Placeholder for other exercise types
+    case 'fill_with_images':
     case 'verb_conjugation':
     case 'number_writing':
     case 'dialogue_reading':

@@ -11,6 +11,8 @@ export type ExerciseType =
   | 'word_search'          // Find words in letter string
   | 'grammar_visual'       // Visual grammar explanation (pronouns, etc.)
   | 'grammar_examples'     // Grammar with illustrated examples
+  | 'fill_with_images'     // Fill in blanks with flag images
+  | 'dialogues'            // Dialogue sections with audio
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
@@ -180,6 +182,37 @@ export interface GrammarExamplesExercise extends BaseExercise {
   }[];
 }
 
+export interface FillWithImagesExercise extends BaseExercise {
+  type: 'fill_with_images';
+  model?: {
+    text: string;            // 'Аз съм Петър.'
+    subtext: string;         // 'Аз съм от България.'
+    flagUrl: string;
+  };
+  sentences: {
+    id: string;
+    pronoun: string;         // 'Ти', 'Той', etc.
+    name: string;            // 'Елена', 'Омар', etc.
+    blanks: string[];        // ['___', '___', '___']
+    correctAnswers: string[]; // ['съм', 'Елена', 'България']
+    flagUrl: string;
+  }[];
+}
+
+export interface DialoguesExercise extends BaseExercise {
+  type: 'dialogues';
+  title: string;             // 'ДИАЛОЗИ 1'
+  subtitle?: string;
+  audioUrl?: string;
+  sections: {
+    id: string;              // 'а.', 'б.'
+    lines: {
+      speaker?: string;
+      text: string;
+    }[];
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise 
@@ -193,6 +226,8 @@ export type Exercise =
   | WordSearchExercise
   | GrammarVisualExercise
   | GrammarExamplesExercise
+  | FillWithImagesExercise
+  | DialoguesExercise
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise

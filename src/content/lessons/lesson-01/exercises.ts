@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, DialoguesExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -207,4 +207,69 @@ export const exercises: Exercise[] = [
       },
     ]
   } as GrammarExamplesExercise,
+
+  // ORDER 11: Exercise 7 - Match pronouns with verb forms (Page 12, top left)
+  {
+    id: 'l01-ex-07',
+    type: 'match_pairs',
+    instruction: 'Свържете личните местоимения с правилната форма на глагола съм.',
+    order: 11,
+    points: 8,
+    pairs: [
+      { id: 'pair1', left: 'аз', correctRight: 'съм' },
+      { id: 'pair2', left: 'ти', correctRight: 'си' },
+      { id: 'pair3', left: 'той', correctRight: 'е' },
+      { id: 'pair4', left: 'тя', correctRight: 'е' },
+      { id: 'pair5', left: 'то', correctRight: 'е' },
+      { id: 'pair6', left: 'ние', correctRight: 'сме' },
+      { id: 'pair7', left: 'вие', correctRight: 'сте' },
+      { id: 'pair8', left: 'те', correctRight: 'са' },
+    ],
+  } as MatchPairsExercise,
+
+  // ORDER 12: Exercise 8 - Fill with flags (Page 12, top right)
+  {
+    id: 'l01-ex-08',
+    type: 'fill_in_blank',
+    instruction: 'Попълнете празните места.',
+    order: 12,
+    points: 18,
+    sentences: [
+      { text: 'Ти _ Елена. Ти _ от _.', blanks: [3, 9, 15], correctAnswers: ['съм', 'си', 'България'] },
+      { text: 'Той _ Омар. Той _ от _.', blanks: [4, 13, 19], correctAnswers: ['е', 'е', 'Сирия'] },
+      { text: 'Тя _ Ирина. Тя _ от _.', blanks: [3, 13, 19], correctAnswers: ['е', 'е', 'Украйна'] },
+      { text: 'Ние _ Лина и Ахмад. Ние _ от _.', blanks: [4, 24, 30], correctAnswers: ['сме', 'сме', 'Ливан'] },
+      { text: 'Вие _ Зайнеб и Али. Вие _ от _.', blanks: [4, 24, 30], correctAnswers: ['сте', 'сте', 'Ирак'] },
+      { text: 'Те _ Амир и Ширин. Те _ от _.', blanks: [3, 22, 28], correctAnswers: ['са', 'са', 'Иран'] },
+    ],
+  } as FillInBlankExercise,
+
+  // ORDER 13: ДИАЛОЗИ 1 (Page 12, middle) - NOT AN EXERCISE!
+  {
+    id: 'l01-dialozi-01',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 1',
+    instruction: 'Прочетете диалозите',
+    audioUrl: '/assets/lesson-01/audio/dialogues-01.wav',
+    order: 13,
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: 'Здравейте, аз съм Хасан.' },
+          { text: 'Здравейте, аз съм Иван.' },
+          { text: 'Приятно ми е!' },
+          { text: 'Приятно ми е!' },
+        ]
+      },
+      {
+        id: 'б.',
+        lines: [
+          { text: 'Откъде сте?' },
+          { text: 'Аз съм от България. А Вие?' },
+          { text: 'Аз съм от Мароко.' },
+        ]
+      },
+    ]
+  } as DialoguesExercise,
 ];
