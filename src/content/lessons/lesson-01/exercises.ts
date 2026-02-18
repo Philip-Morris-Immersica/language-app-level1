@@ -159,6 +159,7 @@ export const exercises: Exercise[] = [
     points: 7,
     letterString: 'ниетевиеазтойтоти',
     correctWords: ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти'],
+    distractorWords: ['тя', 'нея', 'ви'],
   } as WordSearchExercise,
 
   // ORDER 10: ГРАМАТИКА 2 - Verb СЪМ (Page 11, bottom) - NOT AN EXERCISE!
@@ -230,19 +231,23 @@ export const exercises: Exercise[] = [
   // ORDER 12: Exercise 8 - Fill with flags (Page 12, top right)
   {
     id: 'l01-ex-08',
-    type: 'fill_in_blank',
+    type: 'fill_with_images',
     instruction: 'Попълнете празните места.',
     order: 12,
     points: 18,
+    modelText: 'Аз съм Петър. Аз съм от България.',
+    modelFlag: '/assets/lesson-01/exercise-08-flags/flag-01.jpg',
     sentences: [
-      { text: 'Ти _ Елена. Ти _ от _.', blanks: [3, 9, 15], correctAnswers: ['съм', 'си', 'България'] },
-      { text: 'Той _ Омар. Той _ от _.', blanks: [4, 13, 19], correctAnswers: ['е', 'е', 'Сирия'] },
-      { text: 'Тя _ Ирина. Тя _ от _.', blanks: [3, 13, 19], correctAnswers: ['е', 'е', 'Украйна'] },
-      { text: 'Ние _ Лина и Ахмад. Ние _ от _.', blanks: [4, 24, 30], correctAnswers: ['сме', 'сме', 'Ливан'] },
-      { text: 'Вие _ Зайнеб и Али. Вие _ от _.', blanks: [4, 24, 30], correctAnswers: ['сте', 'сте', 'Ирак'] },
-      { text: 'Те _ Амир и Ширин. Те _ от _.', blanks: [3, 22, 28], correctAnswers: ['са', 'са', 'Иран'] },
+      { id: '1', pronoun: 'Ти', name: 'Елена', country: 'България', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-01.jpg', correctVerb1: 'си', correctVerb2: 'си' },
+      { id: '2', pronoun: 'Той', name: 'Омар', country: 'Сирия', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-02.jpg', correctVerb1: 'е', correctVerb2: 'е' },
+      { id: '3', pronoun: 'Тя', name: 'Ирина', country: 'Украйна', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-03.jpg', correctVerb1: 'е', correctVerb2: 'е' },
+      { id: '4', pronoun: 'Ние', name: 'Лина и Ахмад', country: 'Ливан', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-04.jpg', correctVerb1: 'сме', correctVerb2: 'сме' },
+      { id: '5', pronoun: 'Вие', name: 'Зайнеб и Али', country: 'Ирак', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-05.jpg', correctVerb1: 'сте', correctVerb2: 'сте' },
+      { id: '6', pronoun: 'Те', name: 'Амир и Ширин', country: 'Иран', flagUrl: '/assets/lesson-01/exercise-08-flags/flag-06.jpg', correctVerb1: 'са', correctVerb2: 'са' },
     ],
-  } as FillInBlankExercise,
+    verbOptions: ['съм', 'си', 'е', 'сме', 'сте', 'са'],
+    countryOptions: ['България', 'Сирия', 'Украйна', 'Ливан', 'Ирак', 'Иран'],
+  } as FillWithImagesExercise,
 
   // ORDER 13: ДИАЛОЗИ 1 (Page 12, middle) - NOT AN EXERCISE!
   {

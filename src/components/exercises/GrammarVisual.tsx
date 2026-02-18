@@ -77,31 +77,32 @@ export function GrammarVisual({ order, title, subtitle, pronouns }: GrammarVisua
                     <line x1="50" y1="65" x2="65" y2="85" stroke="#6B7280" strokeWidth="3" />
                   </svg>
                 )}
-                {(item.pronoun === 'той' || item.pronoun === 'тя' || item.pronoun === 'то') && (
-                  <svg className="w-24 h-24" viewBox="0 0 150 100">
-                    {/* Той - male */}
-                    <circle cx="40" cy="25" r="12" fill="#4B5563" />
-                    <line x1="40" y1="37" x2="40" y2="65" stroke="#4B5563" strokeWidth="3" />
-                    <line x1="40" y1="45" x2="28" y2="55" stroke="#4B5563" strokeWidth="3" />
-                    <line x1="40" y1="45" x2="52" y2="55" stroke="#4B5563" strokeWidth="3" />
-                    <line x1="40" y1="65" x2="28" y2="85" stroke="#4B5563" strokeWidth="3" />
-                    <line x1="40" y1="65" x2="52" y2="85" stroke="#4B5563" strokeWidth="3" />
+                {item.pronoun === 'то' && (
+                  <svg className="w-24 h-24" viewBox="0 0 120 100">
+                    {/* То - three figures (left dark, middle pink, right gray) */}
+                    {/* Left figure - dark */}
+                    <circle cx="30" cy="30" r="10" fill="#4B5563" />
+                    <line x1="30" y1="40" x2="30" y2="62" stroke="#4B5563" strokeWidth="2.5" />
+                    <line x1="30" y1="47" x2="20" y2="55" stroke="#4B5563" strokeWidth="2.5" />
+                    <line x1="30" y1="47" x2="40" y2="55" stroke="#4B5563" strokeWidth="2.5" />
+                    <line x1="30" y1="62" x2="20" y2="78" stroke="#4B5563" strokeWidth="2.5" />
+                    <line x1="30" y1="62" x2="40" y2="78" stroke="#4B5563" strokeWidth="2.5" />
                     
-                    {/* Тя - female */}
-                    <circle cx="75" cy="25" r="12" fill="#BE185D" />
-                    <line x1="75" y1="37" x2="75" y2="65" stroke="#BE185D" strokeWidth="3" />
-                    <line x1="75" y1="45" x2="63" y2="55" stroke="#BE185D" strokeWidth="3" />
-                    <line x1="75" y1="45" x2="87" y2="55" stroke="#BE185D" strokeWidth="3" />
-                    <line x1="75" y1="65" x2="63" y2="85" stroke="#BE185D" strokeWidth="3" />
-                    <line x1="75" y1="65" x2="87" y2="85" stroke="#BE185D" strokeWidth="3" />
+                    {/* Middle figure - pink/rose */}
+                    <circle cx="60" cy="30" r="10" fill="#BE185D" />
+                    <line x1="60" y1="40" x2="60" y2="62" stroke="#BE185D" strokeWidth="2.5" />
+                    <line x1="60" y1="47" x2="50" y2="55" stroke="#BE185D" strokeWidth="2.5" />
+                    <line x1="60" y1="47" x2="70" y2="55" stroke="#BE185D" strokeWidth="2.5" />
+                    <line x1="60" y1="62" x2="50" y2="78" stroke="#BE185D" strokeWidth="2.5" />
+                    <line x1="60" y1="62" x2="70" y2="78" stroke="#BE185D" strokeWidth="2.5" />
                     
-                    {/* То - child */}
-                    <circle cx="110" cy="30" r="10" fill="#94A3B8" />
-                    <line x1="110" y1="40" x2="110" y2="60" stroke="#94A3B8" strokeWidth="2.5" />
-                    <line x1="110" y1="47" x2="100" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
-                    <line x1="110" y1="47" x2="120" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
-                    <line x1="110" y1="60" x2="100" y2="75" stroke="#94A3B8" strokeWidth="2.5" />
-                    <line x1="110" y1="60" x2="120" y2="75" stroke="#94A3B8" strokeWidth="2.5" />
+                    {/* Right figure - gray */}
+                    <circle cx="90" cy="30" r="10" fill="#94A3B8" />
+                    <line x1="90" y1="40" x2="90" y2="62" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="90" y1="47" x2="80" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="90" y1="47" x2="100" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="90" y1="62" x2="80" y2="78" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="90" y1="62" x2="100" y2="78" stroke="#94A3B8" strokeWidth="2.5" />
                   </svg>
                 )}
                 {item.pronoun === 'ние' && (

@@ -1,51 +1,59 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 interface WordSearchProps {
   exerciseNumber?: number;
   instruction: string;
   letterString: string;
   correctWords: string[];
+  distractorWords?: string[]; // Optional distractor words
   hint?: string;
   onComplete?: (correct: boolean, score: number) => void;
 }
 
-export function WordSearch({ exerciseNumber, instruction, letterString, correctWords, hint, onComplete }: WordSearchProps) {
+export function WordSearch({ 
+  exerciseNumber, 
+  instruction, 
+  letterString, 
+  correctWords, 
+  distractorWords = [],
+  hint, 
+  onComplete 
+}: WordSearchProps) {
   const [foundWords, setFoundWords] = useState<string[]>([]);
-  const [currentInput, setCurrentInput] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [clickedWrong, setClickedWrong] = useState<string | null>(null);
 
-  const handleAddWord = () => {
-    const word = currentInput.trim().toLowerCase();
-    
-    if (!word) return;
+  // Shuffle available words (correct + distractors) deterministically
+  const availableWords = useMemo(() => {
+    const all = [...correctWords, ...distractorWords];
+    // Deterministic shuffle based on letter string
+    const seed = letterString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return all.sort((a, b) => {
+      const aVal = a.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed);
+      const bVal = b.split('').reduce((acc, char) => acc + char.charCodeAt(0), seed);
+      return aVal - bVal;
+    });
+  }, [correctWords, distractorWords, letterString]);
 
-    // Check if word is in correct words list and not already found
-    const isCorrect = correctWords.some(w => w.toLowerCase() === word);
-    const alreadyFound = foundWords.some(w => w.toLowerCase() === word);
+  const handleWordClick = (word: string) => {
+    if (isSubmitted) return;
 
-    if (isCorrect && !alreadyFound) {
-      setFoundWords([...foundWords, currentInput.trim()]);
-      setCurrentInput('');
-      setShowError(false);
-    } else if (alreadyFound) {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 2000);
+    // Check if already found
+    if (foundWords.includes(word)) return;
+
+    // Check if it's a correct word
+    const isCorrect = correctWords.some(w => w.toLowerCase() === word.toLowerCase());
+
+    if (isCorrect) {
+      setFoundWords([...foundWords, word]);
     } else {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 2000);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddWord();
+      // Show error feedback
+      setClickedWrong(word);
+      setTimeout(() => setClickedWrong(null), 1000);
     }
   };
 
@@ -88,31 +96,38 @@ export function WordSearch({ exerciseNumber, instruction, letterString, correctW
         </p>
       </div>
 
-      {/* Input field */}
+      {/* Word buttons */}
       {!isSubmitted && (
-        <div className="mb-6 space-y-3">
-          <div className="flex gap-3">
-            <Input
-              type="text"
-              value={currentInput}
-              onChange={(e) => setCurrentInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Напишете намерена дума..."
-              className="flex-1 text-lg h-12 border-2 border-gray-300 focus:border-[#6B8543]"
-            />
-            <Button
-              onClick={handleAddWord}
-              className="bg-[#6B8543] hover:bg-[#5A7238] text-white px-6"
-              disabled={!currentInput.trim()}
-            >
-              Добави
-            </Button>
+        <div className="mb-6">
+          <p className="text-sm md:text-base font-semibold text-gray-700 mb-3">
+            Изберете думите, които намирате в текста:
+          </p>
+          <div className="flex flex-wrap gap-2 md:gap-3">
+            {availableWords.map((word, index) => {
+              const isFound = foundWords.includes(word);
+              const isWrong = clickedWrong === word;
+              
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleWordClick(word)}
+                  disabled={isFound}
+                  className={`
+                    px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-base md:text-lg
+                    transition-all duration-200 border-2
+                    ${isFound 
+                      ? 'bg-green-100 border-green-400 text-green-700 cursor-not-allowed opacity-50' 
+                      : isWrong
+                      ? 'bg-red-100 border-red-400 text-red-700 animate-pulse'
+                      : 'bg-white border-[#6B8543] text-gray-800 hover:bg-[#F8F5EE] hover:scale-105 active:scale-95'
+                    }
+                  `}
+                >
+                  {word}
+                </button>
+              );
+            })}
           </div>
-          {showError && (
-            <p className="text-red-600 text-sm animate-in fade-in">
-              Грешна дума или вече е добавена!
-            </p>
-          )}
         </div>
       )}
 

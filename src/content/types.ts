@@ -170,6 +170,7 @@ export interface WordSearchExercise extends BaseExercise {
   type: 'word_search';
   letterString: string;      // 'ниетевиеазтойтоти'
   correctWords: string[];    // ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти']
+  distractorWords?: string[]; // Optional distractor words to make it harder
   hint?: string;
 }
 
@@ -186,19 +187,19 @@ export interface GrammarExamplesExercise extends BaseExercise {
 
 export interface FillWithImagesExercise extends BaseExercise {
   type: 'fill_with_images';
-  model?: {
-    text: string;            // 'Аз съм Петър.'
-    subtext: string;         // 'Аз съм от България.'
-    flagUrl: string;
-  };
+  modelText?: string;          // 'Аз съм Петър. Аз съм от България.'
+  modelFlag?: string;
   sentences: {
     id: string;
     pronoun: string;         // 'Ти', 'Той', etc.
     name: string;            // 'Елена', 'Омар', etc.
-    blanks: string[];        // ['___', '___', '___']
-    correctAnswers: string[]; // ['съм', 'Елена', 'България']
+    country: string;         // 'България', 'Сирия', etc.
     flagUrl: string;
+    correctVerb1: string;    // First verb: 'си', 'е', etc.
+    correctVerb2: string;    // Second verb: 'си', 'е', etc.
   }[];
+  verbOptions: string[];     // ['съм', 'си', 'е', 'сме', 'сте', 'са']
+  countryOptions: string[];  // List of countries for dropdown
 }
 
 export interface DialoguesExercise extends BaseExercise {

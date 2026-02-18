@@ -14,6 +14,7 @@ import { GrammarWithExamples } from './GrammarWithExamples';
 import { Dialogues } from './Dialogues';
 import { DropdownMatch } from './DropdownMatch';
 import { LetterChoice } from './LetterChoice';
+import { FillWithFlags } from './FillWithFlags';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -80,6 +81,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           instruction={exercise.instruction}
           letterString={exercise.letterString}
           correctWords={exercise.correctWords}
+          distractorWords={exercise.distractorWords}
           hint={exercise.hint}
           onComplete={onComplete}
         />
@@ -118,6 +120,19 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     
     // Placeholder for other exercise types
     case 'fill_with_images':
+      return (
+        <FillWithFlags
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          modelText={exercise.modelText}
+          modelFlag={exercise.modelFlag}
+          sentences={exercise.sentences}
+          verbOptions={exercise.verbOptions}
+          countryOptions={exercise.countryOptions}
+          onComplete={onComplete}
+        />
+      );
+
     case 'verb_conjugation':
     case 'number_writing':
     case 'dialogue_reading':
