@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -23,20 +23,48 @@ interface SyllableBlocksProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
+// Shuffle array deterministically based on puzzle ID
+function shuffleArray<T>(array: T[], seed: string): T[] {
+  const arr = [...array];
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+    hash = hash & hash;
+  }
+  
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.abs(hash % (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    hash = ((hash << 5) - hash) + i;
+  }
+  return arr;
+}
+
+// Remove dashes from syllables
+function cleanSyllable(syllable: string): string {
+  return syllable.replace(/-/g, '');
+}
+
 export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplete }: SyllableBlocksProps) {
-  const [wordStates, setWordStates] = useState<{
-    [wordId: string]: {
-      available: SyllableBlock[];
-      selected: SyllableBlock[];
-      answer: string;
-      validation: boolean | null;
-    };
-  }>(() => {
-    const initial: typeof wordStates = {};
+  // Initialize with deterministic shuffle to avoid hydration mismatch
+  const initialStates = useMemo(() => {
+    const initial: {
+      [wordId: string]: {
+        available: SyllableBlock[];
+        selected: SyllableBlock[];
+        answer: string;
+        validation: boolean | null;
+      };
+    } = {};
+    
     puzzles.forEach(puzzle => {
-      const shuffled = [...puzzle.syllables]
-        .sort(() => Math.random() - 0.5)
-        .map((syl, idx) => ({ syllable: syl, id: `${puzzle.id}-${idx}` }));
+      const shuffled = shuffleArray(
+        puzzle.syllables.map((syl, idx) => ({
+          syllable: cleanSyllable(syl),
+          id: `${puzzle.id}-${idx}`
+        })),
+        puzzle.id
+      );
       initial[puzzle.id] = {
         available: shuffled,
         selected: [],
@@ -45,8 +73,9 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
       };
     });
     return initial;
-  });
+  }, [puzzles]);
 
+  const [wordStates, setWordStates] = useState(initialStates);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSyllableClick = (wordId: string, block: SyllableBlock, fromSelected: boolean) => {
@@ -104,7 +133,7 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
 
     puzzles.forEach(puzzle => {
       const state = wordStates[puzzle.id];
-      const isCorrect = state.answer.toLowerCase() === puzzle.correctWord.toLowerCase();
+      const isCorrect = state.answer.toUpperCase() === puzzle.correctWord.toUpperCase();
       newStates[puzzle.id] = {
         ...newStates[puzzle.id],
         validation: isCorrect,

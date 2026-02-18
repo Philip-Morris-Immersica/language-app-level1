@@ -105,16 +105,16 @@ export const exercises: Exercise[] = [
     order: 6,
     points: 8,
     puzzles: [
-      { id: 'puzzle1', syllables: ['-БЪЛ-', '-ГА-', '-РИ-', '-Я'], correctWord: 'БЪЛГАРИЯ' },
-      { id: 'puzzle2', syllables: ['-ВАН', '-ЛИ-'], correctWord: 'ЛИВАН' },
-      { id: 'puzzle3', syllables: ['-РИ-', '-Я', '-СИ-'], correctWord: 'СИРИЯ' },
-      { id: 'puzzle4', syllables: ['-РИ-', '-Я', '-СИ-'], correctWord: 'СИРИЯ' },
-      { id: 'puzzle5', syllables: ['-КРА-', '-И-', '-У-', '-НЕЦ'], correctWord: 'УКРАЙНЕЦ' },
-      { id: 'puzzle6', syllables: ['-ЖИР', '-АЛ-'], correctWord: 'АЛЖИР' },
-      { id: 'puzzle7', syllables: ['-НИ-', '-СТАН', '-АФ-', '-ГА-'], correctWord: 'АФГАНИСТАН' },
-      { id: 'puzzle8', syllables: ['-РАК-', '-ЧА-', '-И-', '-НИН'], correctWord: 'ИРАКЧАНИН' },
-      { id: 'puzzle9', syllables: ['-КА', '-РАН-', '-И-'], correctWord: 'ИРАНКА' },
-      { id: 'puzzle10', syllables: ['-ЛЕС-', '-ТИ-', '-НЕЦ', '-ПА-'], correctWord: 'ПАЛЕСТИНЕЦ' },
+      { id: 'puzzle1', syllables: ['БЪЛ', 'ГА', 'РИ', 'Я'], correctWord: 'БЪЛГАРИЯ' },
+      { id: 'puzzle2', syllables: ['ВАН', 'ЛИ'], correctWord: 'ЛИВАН' },
+      { id: 'puzzle3', syllables: ['РИ', 'Я', 'СИ'], correctWord: 'СИРИЯ' },
+      { id: 'puzzle4', syllables: ['РИ', 'Я', 'СИ'], correctWord: 'СИРИЯ' },
+      { id: 'puzzle5', syllables: ['КРА', 'И', 'У', 'НЕЦ'], correctWord: 'УКРАЙНЕЦ' },
+      { id: 'puzzle6', syllables: ['ЖИР', 'АЛ'], correctWord: 'АЛЖИР' },
+      { id: 'puzzle7', syllables: ['НИ', 'СТАН', 'АФ', 'ГА'], correctWord: 'АФГАНИСТАН' },
+      { id: 'puzzle8', syllables: ['РАК', 'ЧА', 'И', 'НИН'], correctWord: 'ИРАКЧАНИН' },
+      { id: 'puzzle9', syllables: ['КА', 'РАН', 'И'], correctWord: 'ИРАНКА' },
+      { id: 'puzzle10', syllables: ['ЛЕС', 'ТИ', 'НЕЦ', 'ПА'], correctWord: 'ПАЛЕСТИНЕЦ' },
     ]
   } as SyllableBlocksExercise,
 
@@ -126,7 +126,7 @@ export const exercises: Exercise[] = [
     order: 7,
     points: 1,
     sentences: [
-      { text: '________________', blanks: [0], correctAnswers: ['България', 'Сирия', 'Ливан', 'Украйна', 'Иран', 'Ирак', 'Алжир', 'Афганистан', 'Мароко'] },
+      { text: '__________', blanks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], correctAnswers: ['България', 'Сирия', 'Ливан', 'Украйна', 'Иран', 'Ирак', 'Алжир', 'Афганистан', 'Мароко'] },
     ],
   } as FillInBlankExercise,
 
@@ -139,14 +139,14 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
     pronouns: [
-      { pronoun: 'аз' },
-      { pronoun: 'ти' },
-      { pronoun: 'той' },
-      { pronoun: 'тя' },
+      { pronoun: 'аз', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/az-sam-mohamed.jpg' },
+      { pronoun: 'ти', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/ti-si-haled.jpg' },
+      { pronoun: 'той', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/toy-e-ivan.jpg' },
+      { pronoun: 'тя', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/tya-e-ana.jpg' },
       { pronoun: 'то' },
-      { pronoun: 'ние' },
-      { pronoun: 'вие' },
-      { pronoun: 'те' },
+      { pronoun: 'ние', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/nie-sme-mohamed-bana.jpg' },
+      { pronoun: 'вие', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/vye-ste-dzhamil-mariam.jpg' },
+      { pronoun: 'те', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/te-sa-babur-ara-azar.jpg' },
     ]
   } as GrammarVisualExercise,
 ];
