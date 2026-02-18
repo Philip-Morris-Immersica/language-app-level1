@@ -44,12 +44,12 @@ export function GrammarWithExamples({ order, title, subtitle, examples }: Gramma
             className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 flex flex-col items-center"
           >
             {/* Image */}
-            <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+            <div className="relative w-full h-56 md:h-64 mb-4 rounded-lg overflow-hidden bg-gray-50">
               <Image
                 src={example.imageUrl}
                 alt={example.text}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
