@@ -106,6 +106,7 @@ export interface IllustratedCardsExercise extends BaseExercise {
     id: string;
     imageUrl: string;      // Path to illustration
     label: string;         // "Добро утро!", "Здравей!" etc.
+    sublabels?: string[];  // Additional text lines (e.g., ["българин", "българка", "българи"])
     audioUrl?: string;     // Individual audio for card
   }[];
   displayMode?: 'grid' | 'presentation';  // For different display modes

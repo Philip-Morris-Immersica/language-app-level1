@@ -85,15 +85,60 @@ export const exercises: Exercise[] = [
     audioUrl: '/assets/lesson-01/audio/countries.wav',
     order: 5,
     cards: [
-      { id: 'bulgaria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-03.jpg', label: 'България' },
-      { id: 'iraq', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-04.jpg', label: 'Ирак' },
-      { id: 'ukraine', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-05.jpg', label: 'Украйна' },
-      { id: 'syria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-06.jpg', label: 'Сирия' },
-      { id: 'lebanon', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-07.jpg', label: 'Ливан' },
-      { id: 'iran', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-08.jpg', label: 'Иран' },
-      { id: 'morocco', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/maroko.jpg', label: 'Мароко' },
-      { id: 'afghanistan', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-09.jpg', label: 'Афганистан' },
-      { id: 'algeria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-10.jpg', label: 'Алжир' },
+      { 
+        id: 'bulgaria', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-03.jpg', 
+        label: 'България',
+        sublabels: ['българин', 'българка', 'българи']
+      },
+      { 
+        id: 'iraq', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-04.jpg', 
+        label: 'Ирак',
+        sublabels: ['иракчанин', 'иракчанка', 'иракчани']
+      },
+      { 
+        id: 'ukraine', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-05.jpg', 
+        label: 'Украйна',
+        sublabels: ['украинец', 'украинка', 'украинци']
+      },
+      { 
+        id: 'syria', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-06.jpg', 
+        label: 'Сирия',
+        sublabels: ['сириец', 'сирийка', 'сирийци']
+      },
+      { 
+        id: 'lebanon', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-07.jpg', 
+        label: 'Ливан',
+        sublabels: ['ливанец', 'ливанка', 'ливанци']
+      },
+      { 
+        id: 'iran', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-08.jpg', 
+        label: 'Иран',
+        sublabels: ['иранец', 'иранка', 'иранци']
+      },
+      { 
+        id: 'morocco', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/maroko.jpg', 
+        label: 'Мароко',
+        sublabels: ['мароканец', 'мароканка', 'мароканци']
+      },
+      { 
+        id: 'afghanistan', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-09.jpg', 
+        label: 'Афганистан',
+        sublabels: ['афганистанец', 'афганистанка', 'афганистанци']
+      },
+      { 
+        id: 'algeria', 
+        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-10.jpg', 
+        label: 'Алжир',
+        sublabels: ['алжирец', 'алжирка', 'алжирци']
+      },
     ]
   } as IllustratedCardsExercise,
 

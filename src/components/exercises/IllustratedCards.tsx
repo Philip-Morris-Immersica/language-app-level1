@@ -110,9 +110,21 @@ export function IllustratedCards({ exercise, onComplete, exerciseNumber }: Illus
             </div>
 
             {/* Label */}
-            <p className="text-center text-base md:text-lg font-semibold text-gray-800">
-              {card.label}
-            </p>
+            <div className="text-center">
+              <p className="text-base md:text-lg font-semibold text-gray-800">
+                {card.label}
+              </p>
+              {/* Sublabels */}
+              {card.sublabels && card.sublabels.length > 0 && (
+                <div className="mt-2 space-y-0.5">
+                  {card.sublabels.map((sublabel, index) => (
+                    <p key={index} className="text-sm md:text-base text-gray-700">
+                      {sublabel}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
