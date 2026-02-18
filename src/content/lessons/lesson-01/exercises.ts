@@ -82,7 +82,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: 'Запознайте се с имената на държавите',
-    audioUrl: '/assets/lesson-01/audio/new-words-02.wav',
+    audioUrl: '/assets/lesson-01/audio/new-words-02.wav?v=2',
     order: 5,
     cards: [
       { 
