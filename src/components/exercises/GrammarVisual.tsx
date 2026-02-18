@@ -1,0 +1,201 @@
+'use client';
+
+import Image from 'next/image';
+import { BookOpen } from 'lucide-react';
+
+interface PronounVisual {
+  pronoun: string;
+  imageUrl?: string;
+  description?: string;
+}
+
+interface GrammarVisualProps {
+  order: number;
+  title: string;
+  subtitle?: string;
+  pronouns: PronounVisual[];
+}
+
+export function GrammarVisual({ order, title, subtitle, pronouns }: GrammarVisualProps) {
+  return (
+    <div className="relative bg-gradient-to-br from-[#F8F5EE] to-[#F0EDE0] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-10 shadow-md">
+      {/* Header with icon */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-12 h-12 bg-[#6B8543] rounded-xl flex items-center justify-center shadow-md">
+          <BookOpen className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="text-sm md:text-base text-gray-600 mt-1">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Visual grid for pronouns */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+        {pronouns.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm hover:shadow-md transition-all hover:scale-105 flex flex-col items-center justify-center"
+          >
+            {/* Image placeholder or actual image */}
+            {item.imageUrl ? (
+              <div className="relative w-full h-32 mb-4">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.pronoun}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                />
+              </div>
+            ) : (
+              <div className="w-full h-32 mb-4 flex items-center justify-center">
+                {/* Simple stick figure representations */}
+                {item.pronoun === 'аз' && (
+                  <svg className="w-20 h-20" viewBox="0 0 100 100">
+                    <circle cx="50" cy="25" r="12" fill="#9CA3AF" />
+                    <line x1="50" y1="37" x2="50" y2="65" stroke="#9CA3AF" strokeWidth="3" />
+                    <line x1="50" y1="45" x2="35" y2="55" stroke="#9CA3AF" strokeWidth="3" />
+                    <line x1="50" y1="45" x2="65" y2="55" stroke="#9CA3AF" strokeWidth="3" />
+                    <line x1="50" y1="65" x2="35" y2="85" stroke="#9CA3AF" strokeWidth="3" />
+                    <line x1="50" y1="65" x2="65" y2="85" stroke="#9CA3AF" strokeWidth="3" />
+                  </svg>
+                )}
+                {item.pronoun === 'ти' && (
+                  <svg className="w-20 h-20" viewBox="0 0 100 100">
+                    <circle cx="50" cy="25" r="12" fill="#6B7280" />
+                    <line x1="50" y1="37" x2="50" y2="65" stroke="#6B7280" strokeWidth="3" />
+                    <line x1="50" y1="45" x2="35" y2="55" stroke="#6B7280" strokeWidth="3" />
+                    <line x1="50" y1="45" x2="65" y2="55" stroke="#6B7280" strokeWidth="3" />
+                    <line x1="50" y1="65" x2="35" y2="85" stroke="#6B7280" strokeWidth="3" />
+                    <line x1="50" y1="65" x2="65" y2="85" stroke="#6B7280" strokeWidth="3" />
+                  </svg>
+                )}
+                {(item.pronoun === 'той' || item.pronoun === 'тя' || item.pronoun === 'то') && (
+                  <svg className="w-24 h-24" viewBox="0 0 150 100">
+                    {/* Той - male */}
+                    <circle cx="40" cy="25" r="12" fill="#4B5563" />
+                    <line x1="40" y1="37" x2="40" y2="65" stroke="#4B5563" strokeWidth="3" />
+                    <line x1="40" y1="45" x2="28" y2="55" stroke="#4B5563" strokeWidth="3" />
+                    <line x1="40" y1="45" x2="52" y2="55" stroke="#4B5563" strokeWidth="3" />
+                    <line x1="40" y1="65" x2="28" y2="85" stroke="#4B5563" strokeWidth="3" />
+                    <line x1="40" y1="65" x2="52" y2="85" stroke="#4B5563" strokeWidth="3" />
+                    
+                    {/* Тя - female */}
+                    <circle cx="75" cy="25" r="12" fill="#BE185D" />
+                    <line x1="75" y1="37" x2="75" y2="65" stroke="#BE185D" strokeWidth="3" />
+                    <line x1="75" y1="45" x2="63" y2="55" stroke="#BE185D" strokeWidth="3" />
+                    <line x1="75" y1="45" x2="87" y2="55" stroke="#BE185D" strokeWidth="3" />
+                    <line x1="75" y1="65" x2="63" y2="85" stroke="#BE185D" strokeWidth="3" />
+                    <line x1="75" y1="65" x2="87" y2="85" stroke="#BE185D" strokeWidth="3" />
+                    
+                    {/* То - child */}
+                    <circle cx="110" cy="30" r="10" fill="#94A3B8" />
+                    <line x1="110" y1="40" x2="110" y2="60" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="110" y1="47" x2="100" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="110" y1="47" x2="120" y2="55" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="110" y1="60" x2="100" y2="75" stroke="#94A3B8" strokeWidth="2.5" />
+                    <line x1="110" y1="60" x2="120" y2="75" stroke="#94A3B8" strokeWidth="2.5" />
+                  </svg>
+                )}
+                {item.pronoun === 'ние' && (
+                  <svg className="w-24 h-24" viewBox="0 0 100 100">
+                    {/* Two figures */}
+                    <circle cx="35" cy="25" r="10" fill="#374151" />
+                    <line x1="35" y1="35" x2="35" y2="60" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="35" y1="43" x2="25" y2="51" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="35" y1="43" x2="45" y2="51" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="35" y1="60" x2="25" y2="75" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="35" y1="60" x2="45" y2="75" stroke="#374151" strokeWidth="2.5" />
+                    
+                    <circle cx="65" cy="25" r="10" fill="#374151" />
+                    <line x1="65" y1="35" x2="65" y2="60" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="65" y1="43" x2="55" y2="51" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="65" y1="43" x2="75" y2="51" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="65" y1="60" x2="55" y2="75" stroke="#374151" strokeWidth="2.5" />
+                    <line x1="65" y1="60" x2="75" y2="75" stroke="#374151" strokeWidth="2.5" />
+                  </svg>
+                )}
+                {item.pronoun === 'вие' && (
+                  <svg className="w-24 h-24" viewBox="0 0 100 100">
+                    {/* Two figures */}
+                    <circle cx="35" cy="25" r="10" fill="#1F2937" />
+                    <line x1="35" y1="35" x2="35" y2="60" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="35" y1="43" x2="25" y2="51" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="35" y1="43" x2="45" y2="51" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="35" y1="60" x2="25" y2="75" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="35" y1="60" x2="45" y2="75" stroke="#1F2937" strokeWidth="2.5" />
+                    
+                    <circle cx="65" cy="25" r="10" fill="#1F2937" />
+                    <line x1="65" y1="35" x2="65" y2="60" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="65" y1="43" x2="55" y2="51" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="65" y1="43" x2="75" y2="51" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="65" y1="60" x2="55" y2="75" stroke="#1F2937" strokeWidth="2.5" />
+                    <line x1="65" y1="60" x2="75" y2="75" stroke="#1F2937" strokeWidth="2.5" />
+                  </svg>
+                )}
+                {item.pronoun === 'те' && (
+                  <svg className="w-28 h-24" viewBox="0 0 120 100">
+                    {/* Multiple figures */}
+                    <circle cx="25" cy="28" r="9" fill="#111827" />
+                    <line x1="25" y1="37" x2="25" y2="58" stroke="#111827" strokeWidth="2" />
+                    <line x1="25" y1="44" x2="17" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="25" y1="44" x2="33" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="25" y1="58" x2="17" y2="72" stroke="#111827" strokeWidth="2" />
+                    <line x1="25" y1="58" x2="33" y2="72" stroke="#111827" strokeWidth="2" />
+                    
+                    <circle cx="50" cy="28" r="9" fill="#111827" />
+                    <line x1="50" y1="37" x2="50" y2="58" stroke="#111827" strokeWidth="2" />
+                    <line x1="50" y1="44" x2="42" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="50" y1="44" x2="58" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="50" y1="58" x2="42" y2="72" stroke="#111827" strokeWidth="2" />
+                    <line x1="50" y1="58" x2="58" y2="72" stroke="#111827" strokeWidth="2" />
+                    
+                    <circle cx="75" cy="28" r="9" fill="#111827" />
+                    <line x1="75" y1="37" x2="75" y2="58" stroke="#111827" strokeWidth="2" />
+                    <line x1="75" y1="44" x2="67" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="75" y1="44" x2="83" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="75" y1="58" x2="67" y2="72" stroke="#111827" strokeWidth="2" />
+                    <line x1="75" y1="58" x2="83" y2="72" stroke="#111827" strokeWidth="2" />
+                    
+                    <circle cx="100" cy="28" r="9" fill="#111827" />
+                    <line x1="100" y1="37" x2="100" y2="58" stroke="#111827" strokeWidth="2" />
+                    <line x1="100" y1="44" x2="92" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="100" y1="44" x2="108" y2="51" stroke="#111827" strokeWidth="2" />
+                    <line x1="100" y1="58" x2="92" y2="72" stroke="#111827" strokeWidth="2" />
+                    <line x1="100" y1="58" x2="108" y2="72" stroke="#111827" strokeWidth="2" />
+                  </svg>
+                )}
+              </div>
+            )}
+
+            {/* Pronoun label */}
+            <p className="text-center text-xl md:text-2xl font-bold text-gray-800">
+              {item.pronoun}
+            </p>
+
+            {/* Optional description */}
+            {item.description && (
+              <p className="text-center text-sm text-gray-600 mt-2">
+                {item.description}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Note at bottom */}
+      <div className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
+        <p className="text-sm text-gray-700 text-center italic">
+          {subtitle || 'Граматика – Лични местоимения'}
+        </p>
+      </div>
+    </div>
+  );
+}

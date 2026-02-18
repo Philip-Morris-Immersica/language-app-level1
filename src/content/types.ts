@@ -7,6 +7,8 @@ export type ExerciseType =
   | 'verb_conjugation'     // Fill verb conjugation tables
   | 'image_labeling'       // Write words under images
   | 'illustrated_cards'    // Illustrated vocabulary cards with audio
+  | 'syllable_blocks'      // Arrange syllables to form words
+  | 'grammar_visual'       // Visual grammar explanation (pronouns, etc.)
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
@@ -137,6 +139,27 @@ export interface ListeningExercise extends BaseExercise {
   }[];
 }
 
+export interface SyllableBlocksExercise extends BaseExercise {
+  type: 'syllable_blocks';
+  puzzles: {
+    id: string;
+    syllables: string[];     // ['-РИ-', '-Я', '-ГА-', '-БЪЛ-']
+    correctWord: string;     // 'БЪЛГАРИЯ'
+    hint?: string;
+  }[];
+}
+
+export interface GrammarVisualExercise extends BaseExercise {
+  type: 'grammar_visual';
+  title: string;             // 'ГРАМАТИКА 1'
+  subtitle?: string;         // 'Граматика – Лични местоимения (8)'
+  pronouns: {
+    pronoun: string;         // 'аз', 'ти', 'той', etc.
+    imageUrl?: string;       // Optional image
+    description?: string;    // Optional description
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise 
@@ -146,6 +169,8 @@ export type Exercise =
   | VerbConjugationExercise
   | ImageLabelingExercise
   | IllustratedCardsExercise
+  | SyllableBlocksExercise
+  | GrammarVisualExercise
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise

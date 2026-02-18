@@ -7,6 +7,8 @@ import { MatchPairs } from './MatchPairs';
 import { WordOrder } from './WordOrder';
 import { ImageLabeling } from './ImageLabeling';
 import { IllustratedCards } from './IllustratedCards';
+import { SyllableBlocks } from './SyllableBlocks';
+import { GrammarVisual } from './GrammarVisual';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -35,6 +37,26 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     
     case 'illustrated_cards':
       return <IllustratedCards exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
+    
+    case 'syllable_blocks':
+      return (
+        <SyllableBlocks
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          puzzles={exercise.puzzles}
+          onComplete={onComplete}
+        />
+      );
+    
+    case 'grammar_visual':
+      return (
+        <GrammarVisual
+          order={number}
+          title={exercise.title}
+          subtitle={exercise.subtitle}
+          pronouns={exercise.pronouns}
+        />
+      );
     
     // Placeholder for other exercise types
     case 'verb_conjugation':

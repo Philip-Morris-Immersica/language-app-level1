@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -96,4 +96,57 @@ export const exercises: Exercise[] = [
       { id: 'algeria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/country-visual-10.jpg', label: 'Алжир' },
     ]
   } as IllustratedCardsExercise,
+
+  // ORDER 6: Exercise 4 - Syllable blocks (Page 10, middle) - Custom component
+  {
+    id: 'l01-ex-04',
+    type: 'syllable_blocks',
+    instruction: 'Подредете блокчетата в думи.',
+    order: 6,
+    points: 8,
+    puzzles: [
+      { id: 'puzzle1', syllables: ['-БЪЛ-', '-ГА-', '-РИ-', '-Я'], correctWord: 'БЪЛГАРИЯ' },
+      { id: 'puzzle2', syllables: ['-ВАН', '-ЛИ-'], correctWord: 'ЛИВАН' },
+      { id: 'puzzle3', syllables: ['-РИ-', '-Я', '-СИ-'], correctWord: 'СИРИЯ' },
+      { id: 'puzzle4', syllables: ['-РИ-', '-Я', '-СИ-'], correctWord: 'СИРИЯ' },
+      { id: 'puzzle5', syllables: ['-КРА-', '-И-', '-У-', '-НЕЦ'], correctWord: 'УКРАЙНЕЦ' },
+      { id: 'puzzle6', syllables: ['-ЖИР', '-АЛ-'], correctWord: 'АЛЖИР' },
+      { id: 'puzzle7', syllables: ['-НИ-', '-СТАН', '-АФ-', '-ГА-'], correctWord: 'АФГАНИСТАН' },
+      { id: 'puzzle8', syllables: ['-РАК-', '-ЧА-', '-И-', '-НИН'], correctWord: 'ИРАКЧАНИН' },
+      { id: 'puzzle9', syllables: ['-КА', '-РАН-', '-И-'], correctWord: 'ИРАНКА' },
+      { id: 'puzzle10', syllables: ['-ЛЕС-', '-ТИ-', '-НЕЦ', '-ПА-'], correctWord: 'ПАЛЕСТИНЕЦ' },
+    ]
+  } as SyllableBlocksExercise,
+
+  // ORDER 7: Exercise 5 - Write country name (Page 10, bottom) - Simple text input
+  {
+    id: 'l01-ex-05',
+    type: 'fill_in_blank',
+    instruction: 'Напишете името на страната си.',
+    order: 7,
+    points: 1,
+    sentences: [
+      { text: '________________', blanks: [0], correctAnswers: ['България', 'Сирия', 'Ливан', 'Украйна', 'Иран', 'Ирак', 'Алжир', 'Афганистан', 'Мароко'] },
+    ],
+  } as FillInBlankExercise,
+
+  // ORDER 8: ГРАМАТИКА 1 - Personal pronouns (Page 11, top) - NOT AN EXERCISE!
+  {
+    id: 'l01-gramatika-01',
+    type: 'grammar_visual',
+    title: 'ГРАМАТИКА 1',
+    subtitle: 'Граматика – Лични местоимения (8)',
+    instruction: 'Запознайте се с личните местоимения',
+    order: 8,
+    pronouns: [
+      { pronoun: 'аз' },
+      { pronoun: 'ти' },
+      { pronoun: 'той' },
+      { pronoun: 'тя' },
+      { pronoun: 'то' },
+      { pronoun: 'ние' },
+      { pronoun: 'вие' },
+      { pronoun: 'те' },
+    ]
+  } as GrammarVisualExercise,
 ];
