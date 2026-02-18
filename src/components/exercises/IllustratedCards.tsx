@@ -16,6 +16,13 @@ export function IllustratedCards({ exercise, onComplete, exerciseNumber }: Illus
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'bg-BG';
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handlePlayAudio = () => {
     if (!exercise.audioUrl) return;
 
@@ -94,7 +101,8 @@ export function IllustratedCards({ exercise, onComplete, exerciseNumber }: Illus
         {exercise.cards.map((card) => (
           <div
             key={card.id}
-            className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer"
+            onClick={() => speak(card.label)}
+            className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95"
           >
             {/* Image */}
             <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">

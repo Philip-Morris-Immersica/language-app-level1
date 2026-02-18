@@ -17,6 +17,13 @@ interface GrammarWithExamplesProps {
 }
 
 export function GrammarWithExamples({ order, title, subtitle, examples }: GrammarWithExamplesProps) {
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'bg-BG';
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
     <div className="relative bg-gradient-to-br from-[#F8F5EE] to-[#F0EDE0] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-10 shadow-md">
       {/* Header with icon */}
@@ -41,7 +48,8 @@ export function GrammarWithExamples({ order, title, subtitle, examples }: Gramma
         {examples.map((example, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 flex flex-col items-center"
+            onClick={() => speak(example.text)}
+            className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {/* Image */}
             <div className="relative w-full h-56 md:h-64 mb-4 rounded-lg overflow-hidden bg-gray-50">
