@@ -232,8 +232,8 @@ export interface LetterChoiceExercise extends BaseExercise {
   puzzles: {
     id: string;
     word: string;              // 'Д_Б_Р'
-    correctLetters: string[];  // ['О', 'Ъ']
-    availableLetters: string[]; // ['О', 'Ъ', 'А', 'Е', 'И']
+    correctLetters: string[];  // ['О', 'Ъ'] - only these letters shown (no extras)
+    availableLetters?: string[]; // Deprecated - component uses correctLetters only
   }[];
 }
 
