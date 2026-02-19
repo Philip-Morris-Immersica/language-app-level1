@@ -184,14 +184,14 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
     pronouns: [
-      { pronoun: 'аз', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/az-sam-mohamed.jpg' },
-      { pronoun: 'ти', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/ti-si-haled.jpg' },
-      { pronoun: 'той', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/toy-e-ivan.jpg' },
-      { pronoun: 'тя', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/tya-e-ana.jpg' },
+      { pronoun: 'аз' },
+      { pronoun: 'ти' },
+      { pronoun: 'той' },
+      { pronoun: 'тя' },
       { pronoun: 'то' },
-      { pronoun: 'ние', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/nie-sme-mohamed-bana.jpg' },
-      { pronoun: 'вие', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/vye-ste-dzhamil-mariam.jpg' },
-      { pronoun: 'те', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/te-sa-babur-ara-azar.jpg' },
+      { pronoun: 'ние' },
+      { pronoun: 'вие' },
+      { pronoun: 'те' },
     ]
   } as GrammarVisualExercise,
 
