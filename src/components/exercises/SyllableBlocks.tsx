@@ -46,13 +46,11 @@ function cleanSyllable(syllable: string): string {
 }
 
 export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplete }: SyllableBlocksProps) {
-  // Initialize with deterministic shuffle to avoid hydration mismatch
   const initialStates = useMemo(() => {
     const initial: {
       [wordId: string]: {
-        available: SyllableBlock[];
-        selected: SyllableBlock[];
-        answer: string;
+        blocks: SyllableBlock[];
+        selectedIndex: number | null;
         validation: boolean | null;
       };
     } = {};
@@ -66,9 +64,8 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
         puzzle.id
       );
       initial[puzzle.id] = {
-        available: shuffled,
-        selected: [],
-        answer: '',
+        blocks: shuffled,
+        selectedIndex: null,
         validation: null,
       };
     });
@@ -78,52 +75,44 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
   const [wordStates, setWordStates] = useState(initialStates);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSyllableClick = (wordId: string, block: SyllableBlock, fromSelected: boolean) => {
+  const handleBlockClick = (wordId: string, clickedIndex: number) => {
     if (isSubmitted) return;
 
     setWordStates(prev => {
       const state = prev[wordId];
-      if (fromSelected) {
-        // Remove from selected, add back to available
+      
+      if (state.selectedIndex === null) {
         return {
           ...prev,
           [wordId]: {
             ...state,
-            selected: state.selected.filter(b => b.id !== block.id),
-            available: [...state.available, block],
-            answer: state.selected.filter(b => b.id !== block.id).map(b => b.syllable).join(''),
+            selectedIndex: clickedIndex,
           },
         };
       } else {
-        // Add to selected, remove from available
-        const newSelected = [...state.selected, block];
-        return {
-          ...prev,
-          [wordId]: {
-            ...state,
-            available: state.available.filter(b => b.id !== block.id),
-            selected: newSelected,
-            answer: newSelected.map(b => b.syllable).join(''),
-          },
-        };
+        if (state.selectedIndex === clickedIndex) {
+          return {
+            ...prev,
+            [wordId]: {
+              ...state,
+              selectedIndex: null,
+            },
+          };
+        } else {
+          const newBlocks = [...state.blocks];
+          [newBlocks[state.selectedIndex], newBlocks[clickedIndex]] = 
+            [newBlocks[clickedIndex], newBlocks[state.selectedIndex]];
+          
+          return {
+            ...prev,
+            [wordId]: {
+              ...state,
+              blocks: newBlocks,
+              selectedIndex: null,
+            },
+          };
+        }
       }
-    });
-  };
-
-  const handleReset = (wordId: string) => {
-    if (isSubmitted) return;
-
-    setWordStates(prev => {
-      const state = prev[wordId];
-      return {
-        ...prev,
-        [wordId]: {
-          ...state,
-          available: [...state.available, ...state.selected],
-          selected: [],
-          answer: '',
-        },
-      };
     });
   };
 
@@ -133,7 +122,8 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
 
     puzzles.forEach(puzzle => {
       const state = wordStates[puzzle.id];
-      const isCorrect = state.answer.toUpperCase() === puzzle.correctWord.toUpperCase();
+      const currentWord = state.blocks.map(b => b.syllable).join('');
+      const isCorrect = currentWord.toUpperCase() === puzzle.correctWord.toUpperCase();
       newStates[puzzle.id] = {
         ...newStates[puzzle.id],
         validation: isCorrect,
@@ -166,6 +156,8 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
         {puzzles.map((puzzle) => {
           const state = wordStates[puzzle.id];
           if (!state) return null;
+          
+          const currentWord = state.blocks.map(b => b.syllable).join('');
 
           return (
             <div
@@ -177,61 +169,39 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
                 ${state.validation === null ? 'border-gray-300' : ''}
               `}
             >
-              {/* Syllable blocks (available) */}
+              {/* Syllable blocks - tap to swap */}
               <div className="flex flex-wrap gap-2 mb-4 min-h-[60px] items-center justify-center">
-                {state.available.map((block) => (
+                {state.blocks.map((block, index) => (
                   <button
                     key={block.id}
-                    onClick={() => handleSyllableClick(puzzle.id, block, false)}
+                    onClick={() => handleBlockClick(puzzle.id, index)}
                     disabled={isSubmitted}
-                    className="
-                      px-3 py-2 rounded-lg border-2 border-[#A8B88A] bg-[#D8E4C8]
-                      font-bold text-base text-gray-800
-                      hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105
-                      active:scale-95 transition-all cursor-pointer
+                    className={`
+                      px-4 py-3 rounded-lg border-2 font-bold text-lg
+                      transition-all cursor-pointer
+                      ${state.selectedIndex === index
+                        ? 'bg-yellow-300 border-yellow-500 scale-110 shadow-lg'
+                        : 'bg-[#D8E4C8] border-[#A8B88A] hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105'
+                      }
+                      active:scale-95
                       disabled:cursor-default disabled:hover:scale-100
-                    "
+                    `}
                   >
                     {block.syllable}
                   </button>
                 ))}
               </div>
 
-              {/* Answer line */}
-              <div className="border-b-2 border-gray-400 mb-3 pb-1 min-h-[40px] flex items-center justify-center">
-                {state.selected.length > 0 ? (
-                  <div className="flex gap-1">
-                    {state.selected.map((block) => (
-                      <button
-                        key={block.id}
-                        onClick={() => handleSyllableClick(puzzle.id, block, true)}
-                        disabled={isSubmitted}
-                        className="
-                          px-2 py-1 rounded border border-gray-300 bg-white
-                          font-bold text-sm text-gray-700
-                          hover:bg-gray-100 transition-all
-                          disabled:cursor-default
-                        "
-                      >
-                        {block.syllable}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="text-gray-400 text-sm">_______________</span>
-                )}
-              </div>
-
-              {/* Word result */}
-              <div className="text-center mb-3">
-                <p className="font-bold text-lg text-gray-800">
-                  {state.answer || ''}
+              {/* Current word */}
+              <div className="text-center mb-3 pb-2 border-b-2 border-gray-300">
+                <p className="font-bold text-xl text-gray-800">
+                  {currentWord || '_______________'}
                 </p>
               </div>
 
-              {/* Validation icon */}
+              {/* Validation */}
               {isSubmitted && (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center mt-3">
                   {state.validation ? (
                     <div className="flex items-center gap-2 text-green-600">
                       <Check className="w-6 h-6" />
@@ -251,19 +221,11 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
                 </div>
               )}
 
-              {/* Reset button */}
-              {!isSubmitted && state.selected.length > 0 && (
-                <div className="flex justify-center mt-3">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleReset(puzzle.id)}
-                    className="text-gray-600 hover:text-gray-800 text-xs"
-                  >
-                    <RotateCcw className="w-3 h-3 mr-1" />
-                    Нулирай
-                  </Button>
-                </div>
+              {/* Hint */}
+              {!isSubmitted && (
+                <p className="text-xs text-gray-500 text-center mt-2 italic">
+                  Кликнете на две сричкита да разменят местата
+                </p>
               )}
             </div>
           );
@@ -274,7 +236,6 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
         <Button
           onClick={handleSubmit}
           className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={puzzles.some(p => !wordStates[p.id] || wordStates[p.id].selected.length === 0)}
         >
           Провери отговорите
         </Button>
