@@ -16,13 +16,27 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
   const [selectedLabels, setSelectedLabels] = useState<{ [imageId: string]: string }>({});
   const [validation, setValidation] = useState<{ [imageId: string]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [flippedCards, setFlippedCards] = useState<{ [imageId: string]: boolean }>({});
+
+  const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'bg-BG';
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleCardClick = (imageId: string, correctLabel: string) => {
+    setFlippedCards(prev => ({ ...prev, [imageId]: !prev[imageId] }));
+    if (!flippedCards[imageId]) {
+      speak(correctLabel);
+    }
+  };
 
   const handleSelect = (imageId: string, label: string) => {
     if (isSubmitted) return;
     
     setSelectedLabels(prev => ({ ...prev, [imageId]: label }));
     
-    // Clear validation for this image
     if (validation[imageId] !== null) {
       setValidation(prev => ({ ...prev, [imageId]: null }));
     }
@@ -53,11 +67,10 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
     return Object.values(selectedLabels).includes(label);
   };
 
-  // Flags display type - special layout
+  // Flags display type - flip cards
   if (exercise.displayType === 'flags') {
     return (
       <div className="relative bg-[#F5F1E8] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-        {/* Exercise number badge */}
         {exerciseNumber && (
           <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
             {exerciseNumber}
@@ -68,132 +81,63 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
           {exercise.instruction}
         </p>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Flags grid */}
-          <div className="flex-1">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {exercise.images.map((image) => {
-                const selectedLabel = selectedLabels[image.id];
-                const validationResult = validation[image.id];
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {exercise.images.map((image) => {
+            const isFlipped = flippedCards[image.id];
 
-                return (
+            return (
+              <div
+                key={image.id}
+                className="perspective-1000 h-48"
+                style={{ perspective: '1000px' }}
+              >
+                <div
+                  onClick={() => handleCardClick(image.id, image.correctLabel)}
+                  className="relative w-full h-full cursor-pointer transition-transform duration-500 preserve-3d"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  }}
+                >
+                  {/* Front - Flag */}
                   <div
-                    key={image.id}
-                    className={`
-                      relative rounded-xl border-2 p-4 transition-all shadow-sm bg-white
-                      ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
-                      ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
-                      ${validationResult === null ? 'border-gray-300' : ''}
-                    `}
+                    className="absolute w-full h-full backface-hidden bg-white rounded-xl border-2 border-[#8B9D5F] p-4 shadow-md flex items-center justify-center"
+                    style={{ backfaceVisibility: 'hidden' }}
                   >
-                    {/* Flag Image */}
-                    <div className="flex items-center justify-center mb-3 min-h-[80px]">
-                      <div className="relative w-full h-[80px]">
-                        <Image
-                          src={image.imageUrl}
-                          alt="Flag"
-                          fill
-                          className="object-contain rounded-lg"
-                          sizes="(max-width: 768px) 50vw, 33vw"
-                        />
-                      </div>
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={image.imageUrl}
+                        alt="Flag"
+                        fill
+                        className="object-contain rounded-lg"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
                     </div>
-
-                    {/* Input line or label */}
-                    {!isSubmitted ? (
-                      <div className="border-b-2 border-gray-400 min-h-[30px] text-center py-1">
-                        <span className="text-sm text-gray-600 font-medium">
-                          {selectedLabel || '___________'}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="text-center py-1">
-                        <p className="text-sm font-semibold text-gray-800">
-                          {selectedLabel || '(Без отговор)'}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Validation icon */}
-                    {isSubmitted && validationResult !== null && (
-                      <div className="absolute top-2 right-2">
-                        {validationResult ? (
-                          <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                            <Check className="w-4 h-4 text-white" />
-                          </div>
-                        ) : (
-                          <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                            <X className="w-4 h-4 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Show correct answer if wrong */}
-                    {isSubmitted && validationResult === false && (
-                      <p className="mt-2 text-xs text-red-700 font-medium text-center">
-                        Правилно: {image.correctLabel}
-                      </p>
-                    )}
                   </div>
-                );
-              })}
-            </div>
-          </div>
 
-          {/* Dropdown list on the side */}
-          {!isSubmitted && exercise.options && (
-            <div className="lg:w-64">
-              <div className="bg-[#FFFAED] border-2 border-[#6B7B3F] rounded-xl p-4 sticky top-4">
-                <p className="text-sm font-bold text-gray-700 mb-3">Изберете държава:</p>
-                <div className="space-y-2">
-                  {exercise.options.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        // Find first unmatched image and assign this option
-                        const unmatchedImage = exercise.images.find(
-                          img => !selectedLabels[img.id]
-                        );
-                        if (unmatchedImage) {
-                          handleSelect(unmatchedImage.id, option);
-                        }
-                      }}
-                      disabled={isLabelUsed(option)}
-                      className={`
-                        w-full px-3 py-2 rounded-lg text-left text-sm font-medium transition-all
-                        ${isLabelUsed(option) 
-                          ? 'bg-gray-200 text-gray-400 cursor-not-allowed line-through' 
-                          : 'bg-white hover:bg-[#F5F1E8] border border-gray-300 hover:border-[#6B7B3F] cursor-pointer'
-                        }
-                      `}
-                    >
-                      {option}
-                    </button>
-                  ))}
+                  {/* Back - Country name */}
+                  <div
+                    className="absolute w-full h-full backface-hidden bg-[#6B8543] rounded-xl border-2 border-[#8B9D5F] p-4 shadow-md flex items-center justify-center"
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)',
+                    }}
+                  >
+                    <p className="text-lg md:text-xl font-bold text-white text-center">
+                      {image.correctLabel}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })}
         </div>
 
-        {!isSubmitted && (
-          <Button
-            onClick={handleSubmit}
-            className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-            disabled={Object.keys(selectedLabels).length < exercise.images.length}
-          >
-            Провери
-          </Button>
-        )}
-
-        {isSubmitted && (
-          <div className="mt-6 p-5 rounded-xl bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
-            <p className="text-base font-semibold text-gray-800">
-              Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.images.length} правилни отговора
-            </p>
-          </div>
-        )}
+        <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
+          <p className="text-sm text-gray-700 text-center italic">
+            Кликнете на флаговете, за да видите имената на държавите
+          </p>
+        </div>
       </div>
     );
   }
