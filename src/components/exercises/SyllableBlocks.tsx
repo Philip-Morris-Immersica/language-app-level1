@@ -21,27 +21,6 @@ interface SyllableBlocksProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
-// Shuffle array deterministically based on puzzle ID
-function shuffleArray<T>(array: T[], seed: string): T[] {
-  const arr = [...array];
-  
-  // Create seeded random function
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-    hash = hash & hash;
-  }
-  
-  // Fisher-Yates shuffle with better randomization
-  for (let i = arr.length - 1; i > 0; i--) {
-    hash = ((hash * 1103515245) + 12345) & 0x7fffffff;
-    const j = Math.floor((hash / 0x7fffffff) * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  
-  return arr;
-}
-
 // Remove dashes from syllables
 function cleanSyllable(syllable: string): string {
   return syllable.replace(/-/g, '');
@@ -58,15 +37,13 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
     } = {};
     
     puzzles.forEach(puzzle => {
-      const shuffled = shuffleArray(
-        puzzle.syllables.map((syl, idx) => ({
-          syllable: cleanSyllable(syl),
-          id: `${puzzle.id}-${idx}`
-        })),
-        puzzle.id
-      );
+      // Use syllables in the exact order provided (no shuffle)
+      const blocks = puzzle.syllables.map((syl, idx) => ({
+        syllable: cleanSyllable(syl),
+        id: `${puzzle.id}-${idx}`
+      }));
       initial[puzzle.id] = {
-        blocks: shuffled,
+        blocks,
         draggedIndex: null,
         dragOverIndex: null,
       };
