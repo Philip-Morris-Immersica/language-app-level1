@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { BookOpen } from 'lucide-react';
 
 interface PronounVisual {
   pronoun: string;
@@ -10,13 +9,13 @@ interface PronounVisual {
 }
 
 interface GrammarVisualProps {
-  order: number;
-  title: string;
+  order?: number;
+  title?: string;
   subtitle?: string;
   pronouns: PronounVisual[];
 }
 
-export function GrammarVisual({ order, title, subtitle, pronouns }: GrammarVisualProps) {
+export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'bg-BG';
@@ -25,24 +24,7 @@ export function GrammarVisual({ order, title, subtitle, pronouns }: GrammarVisua
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-[#F8F5EE] to-[#F0EDE0] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-10 shadow-md">
-      {/* Header with icon */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 bg-[#6B8543] rounded-xl flex items-center justify-center shadow-md">
-          <BookOpen className="w-6 h-6 text-white" />
-        </div>
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-            {title}
-          </h2>
-          {subtitle && (
-            <p className="text-sm md:text-base text-gray-600 mt-1">
-              {subtitle}
-            </p>
-          )}
-        </div>
-      </div>
-
+    <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
       {/* Visual grid for pronouns */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
         {pronouns.map((item, index) => (

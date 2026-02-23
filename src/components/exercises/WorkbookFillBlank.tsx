@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 
 interface WorkbookSentence {
   text: string;
@@ -14,8 +15,6 @@ interface WorkbookSentence {
 }
 
 export interface WorkbookFillBlankProps {
-  exerciseNumber?: number;
-  instruction: string;
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'single';
   onComplete?: (correct: boolean, score: number) => void;
@@ -31,12 +30,11 @@ function parseText(text: string): { type: 'text' | 'blank'; value: string }[] {
 }
 
 export function WorkbookFillBlank({
-  exerciseNumber,
-  instruction,
   sentences,
   layout = 'two-column',
   onComplete,
 }: WorkbookFillBlankProps) {
+  const t = useT();
   const [answers, setAnswers] = useState<{ [key: string]: string[] }>({});
   const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -244,15 +242,7 @@ export function WorkbookFillBlank({
   });
 
   return (
-    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-6 md:p-8 shadow-sm">
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-10 h-10 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-base shadow-md">
-          {exerciseNumber}
-        </div>
-      )}
-
-      <p className="text-lg font-bold text-gray-800 mb-6">{instruction}</p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {layout === 'qa-split' ? (
         <div className="space-y-1">
           {sentences.map((s, i) => renderQASentence(s, i))}
@@ -276,23 +266,23 @@ export function WorkbookFillBlank({
         <Button
           onClick={handleSubmit}
           disabled={!allFilled}
-          className="mt-6 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
+          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
       {isSubmitted && (
-        <div className="mt-6 p-4 rounded-lg bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+        <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">
           <div className="flex items-center gap-2">
             {Object.values(validation).filter(v => v !== null).every(v => v === true)
               ? <Check className="w-5 h-5 text-green-600" />
               : <X className="w-5 h-5 text-red-500" />
             }
             <p className="font-semibold text-gray-800">
-              Резултат:{' '}
+              {t('exercise.result')}{' '}
               {Object.values(validation).filter(v => v === true).length} /{' '}
-              {Object.values(validation).filter(v => v !== null).length} правилни
+              {Object.values(validation).filter(v => v !== null).length} {t('exercise.correct_n')}
             </p>
           </div>
         </div>

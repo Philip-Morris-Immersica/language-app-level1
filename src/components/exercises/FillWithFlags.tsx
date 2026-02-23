@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import {
   Select,
   SelectContent,
@@ -23,8 +24,6 @@ interface SentencePair {
 }
 
 interface FillWithFlagsProps {
-  exerciseNumber?: number;
-  instruction: string;
   modelText?: string;
   modelFlag?: string;
   sentences: SentencePair[];
@@ -34,8 +33,6 @@ interface FillWithFlagsProps {
 }
 
 export function FillWithFlags({
-  exerciseNumber,
-  instruction,
   modelText,
   modelFlag,
   sentences,
@@ -43,6 +40,7 @@ export function FillWithFlags({
   countryOptions,
   onComplete,
 }: FillWithFlagsProps) {
+  const t = useT();
   const [answers, setAnswers] = useState<Record<string, { verb1: string; verb2: string; country: string }>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -101,22 +99,12 @@ export function FillWithFlags({
   };
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {/* Model */}
       {modelText && (
-        <div className="mb-6 p-4 bg-white rounded-xl border-2 border-[#6B8543] flex items-center gap-4">
+        <div className="mb-6 p-4 bg-white rounded-xl border-2 border-[#8FC412] flex items-center gap-4">
           <div className="flex-1">
-            <p className="text-sm font-semibold text-gray-600 mb-1">Модел:</p>
+            <p className="text-sm font-semibold text-gray-600 mb-1">{t('exercise.model')}</p>
             <p className="text-base md:text-lg text-gray-800">{modelText}</p>
           </div>
           {modelFlag && (
@@ -265,9 +253,9 @@ export function FillWithFlags({
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
@@ -286,14 +274,14 @@ export function FillWithFlags({
               <>
                 <Check className="w-6 h-6 text-green-600" />
                 <p className="text-base font-semibold text-green-800">
-                  Браво! Всички отговори са верни!
+                  {t('exercise.allCorrect')}
                 </p>
               </>
             ) : (
               <>
                 <X className="w-6 h-6 text-orange-600" />
                 <p className="text-base font-semibold text-orange-800">
-                  Проверете отново грешните отговори (маркирани в червено).
+                  {t('exercise.reviewErrors')}
                 </p>
               </>
             )}

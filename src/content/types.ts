@@ -25,6 +25,7 @@ export type ExerciseType =
 export interface BaseExercise {
   id: string;
   type: ExerciseType;
+  title?: string;           // Optional display title, e.g. "НОВИ ДУМИ 1". Falls back to "УПРАЖНЕНИЕ N".
   instruction: string;      // e.g., "Напишете личните местоимения."
   points?: number;          // For scoring
   order: number;

@@ -1,6 +1,8 @@
 'use client';
 
 import type { Exercise } from '@/content/types';
+import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { FillInBlank } from './FillInBlank';
 import { MultipleChoice } from './MultipleChoice';
 import { MatchPairs } from './MatchPairs';
@@ -23,74 +25,99 @@ interface ExerciseRendererProps {
   exerciseNumber?: number;
 }
 
+interface ExerciseHeaderProps {
+  title: string;
+  instruction: string;
+}
+
+function ExerciseHeader({ title, instruction }: ExerciseHeaderProps) {
+  const translatedTitle = useTranslate(title);
+  const translatedInstruction = useTranslate(instruction);
+  return (
+    <div className="mb-5 pb-4 border-b border-gray-100">
+      <h3 className="text-[#0279C3] font-bold text-xl md:text-2xl leading-tight">
+        {translatedTitle}
+      </h3>
+      {instruction && (
+        <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
+          {translatedInstruction}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: ExerciseRendererProps) {
   const number = exerciseNumber || exercise.order;
-  
+  const t = useT();
+
+  // Resolve the display title: use data title if present, otherwise generate translated numbered fallback
+  const resolvedTitle = exercise.title ?? `${t('exercise.prefix')} ${number}`;
+
+  function wrap(component: React.ReactNode) {
+    return (
+      <div>
+        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} />
+        {component}
+      </div>
+    );
+  }
+
   switch (exercise.type) {
     case 'fill_in_blank':
-      return <FillInBlank exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
+      return wrap(<FillInBlank exercise={exercise} onComplete={onComplete} />);
 
     case 'workbook_fill_blank':
-      return (
+      return wrap(
         <WorkbookFillBlank
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           sentences={exercise.sentences}
           layout={exercise.layout}
           onComplete={onComplete}
         />
       );
-    
+
     case 'multiple_choice':
-      return <MultipleChoice exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
-    
+      return wrap(<MultipleChoice exercise={exercise} onComplete={onComplete} />);
+
     case 'match_pairs':
-      return <MatchPairs exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
-    
+      return wrap(<MatchPairs exercise={exercise} onComplete={onComplete} />);
+
     case 'dropdown_match':
-      return (
+      return wrap(
         <DropdownMatch
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           questions={exercise.questions}
           onComplete={onComplete}
         />
       );
-    
+
     case 'letter_choice':
-      return (
+      return wrap(
         <LetterChoice
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           puzzles={exercise.puzzles}
           onComplete={onComplete}
         />
       );
-    
+
     case 'word_order':
-      return <WordOrder exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
-    
+      return wrap(<WordOrder exercise={exercise} onComplete={onComplete} />);
+
     case 'image_labeling':
-      return <ImageLabeling exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
-    
+      return wrap(<ImageLabeling exercise={exercise} onComplete={onComplete} />);
+
     case 'illustrated_cards':
-      return <IllustratedCards exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
-    
+      return wrap(<IllustratedCards exercise={exercise} onComplete={onComplete} />);
+
     case 'syllable_blocks':
-      return (
+      return wrap(
         <SyllableBlocks
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           puzzles={exercise.puzzles}
           onComplete={onComplete}
         />
       );
-    
+
     case 'word_search':
-      return (
+      return wrap(
         <WordSearch
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           letterString={exercise.letterString}
           correctWords={exercise.correctWords}
           distractorWords={exercise.distractorWords}
@@ -98,44 +125,35 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           onComplete={onComplete}
         />
       );
-    
+
     case 'grammar_visual':
-      return (
+      return wrap(
         <GrammarVisual
-          order={number}
-          title={exercise.title}
           subtitle={exercise.subtitle}
           pronouns={exercise.pronouns}
         />
       );
-    
+
     case 'grammar_examples':
-      return (
+      return wrap(
         <GrammarWithExamples
-          order={number}
-          title={exercise.title}
           subtitle={exercise.subtitle}
           examples={exercise.examples}
         />
       );
-    
+
     case 'dialogues':
-      return (
+      return wrap(
         <Dialogues
-          order={number}
-          title={exercise.title}
           subtitle={exercise.subtitle}
           audioUrl={exercise.audioUrl}
           sections={exercise.sections}
         />
       );
-    
-    // Placeholder for other exercise types
+
     case 'fill_with_images':
-      return (
+      return wrap(
         <FillWithFlags
-          exerciseNumber={number}
-          instruction={exercise.instruction}
           modelText={exercise.modelText}
           modelFlag={exercise.modelFlag}
           sentences={exercise.sentences}
@@ -150,17 +168,14 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     case 'dialogue_reading':
     case 'text_comprehension':
     case 'listening':
-      return (
+      return wrap(
         <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
           <p className="text-yellow-800">
             Exercise type &quot;{exercise.type}&quot; not yet implemented.
           </p>
-          <p className="text-sm text-yellow-700 mt-2">
-            {exercise.instruction}
-          </p>
         </div>
       );
-    
+
     default:
       return (
         <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-6">

@@ -4,15 +4,16 @@ import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useT } from '@/i18n/useT';
 import type { MultipleChoiceExercise } from '@/content/types';
 
 interface MultipleChoiceProps {
   exercise: MultipleChoiceExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function MultipleChoice({ exercise, onComplete, exerciseNumber }: MultipleChoiceProps) {
+export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
+  const t = useT();
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
   const [validation, setValidation] = useState<{ [key: number]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,18 +51,7 @@ export function MultipleChoice({ exercise, onComplete, exerciseNumber }: Multipl
   };
 
   return (
-    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-8 md:p-10 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
-          {exerciseNumber}
-        </div>
-      )}
-      
-      <p className="text-xl font-bold text-gray-800 mb-8">
-        {exercise.instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-8 md:p-10 shadow-md">
       <div className="space-y-8">
         {exercise.questions.map((question, qIndex) => (
           <div key={qIndex} className="space-y-4">
@@ -84,10 +74,10 @@ export function MultipleChoice({ exercise, onComplete, exerciseNumber }: Multipl
                     className={`
                       w-full text-left px-5 py-4 rounded-xl border-2 transition-all shadow-sm
                       min-h-[56px] flex items-center gap-4 active:scale-[0.98]
-                      ${isSelected && !isSubmitted ? 'border-bolt-primary bg-bolt-secondary-light shadow-md' : 'border-gray-300'}
+                      ${isSelected && !isSubmitted ? 'border-[#8FC412] bg-[#EEF7C8] shadow-md' : 'border-gray-300'}
                       ${showCorrect ? 'border-green-500 bg-green-50' : ''}
                       ${showIncorrect ? 'border-red-500 bg-red-50' : ''}
-                      ${!isSubmitted ? 'hover:border-bolt-primary hover:bg-bolt-secondary-light hover:shadow-md cursor-pointer' : 'cursor-default'}
+                      ${!isSubmitted ? 'hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md cursor-pointer' : 'cursor-default'}
                     `}
                   >
                     <div
@@ -101,7 +91,7 @@ export function MultipleChoice({ exercise, onComplete, exerciseNumber }: Multipl
                       {isSelected && (
                         <div className={`
                           w-3.5 h-3.5 rounded-full m-[3px]
-                          ${!isSubmitted ? 'bg-bolt-primary' : ''}
+                          ${!isSubmitted ? 'bg-[#8FC412]' : ''}
                           ${showCorrect ? 'bg-green-500' : ''}
                           ${showIncorrect ? 'bg-red-500' : ''}
                         `} />
@@ -122,7 +112,7 @@ export function MultipleChoice({ exercise, onComplete, exerciseNumber }: Multipl
                 mt-2 p-3 rounded text-sm
                 ${validation[qIndex] ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}
               `}>
-                {validation[qIndex] ? '✓ Правилно' : '✗ Грешно'}
+                {validation[qIndex] ? `✓ ${t('exercise.correct')}` : `✗ ${t('exercise.wrongLabel')}`}
               </div>
             )}
           </div>
@@ -132,17 +122,17 @@ export function MultipleChoice({ exercise, onComplete, exerciseNumber }: Multipl
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-8 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
           disabled={Object.keys(selectedAnswers).length < exercise.questions.length}
         >
-          Провери
+          {t('exercise.check')}
         </Button>
       )}
 
       {isSubmitted && (
-        <div className="mt-8 p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+        <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.questions.length} правилни отговора
+            {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.questions.length} {t('exercise.correct_n')}
           </p>
         </div>
       )}

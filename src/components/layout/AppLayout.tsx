@@ -9,31 +9,21 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <Header 
-        isMobileMenuOpen={isMobileMenuOpen} 
-        onToggleMobileMenu={toggleMobileMenu}
+      <Header
+        isMobileMenuOpen={isMenuOpen}
+        onToggleMobileMenu={() => setIsMenuOpen(!isMenuOpen)}
       />
-      
-      <div className="flex flex-1 overflow-hidden relative">
-        <Sidebar 
-          isOpen={isMobileMenuOpen} 
-          onClose={closeMobileMenu}
-        />
-        
+
+      {/* Sidebar is overlay — content always takes full width */}
+      <Sidebar isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+      <main className="flex-1 overflow-auto">
         {children}
-      </div>
+      </main>
     </div>
   );
 }

@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import type { MatchPairsExercise } from '@/content/types';
 
 interface MatchPairsProps {
   exercise: MatchPairsExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsProps) {
+export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
+  const t = useT();
   const [rightItems, setRightItems] = useState<string[]>([]);
   const [matches, setMatches] = useState<{ [leftId: string]: string }>({});
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
@@ -78,18 +79,7 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
   };
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-      
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {exercise.instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       <div className="space-y-3">
         {exercise.pairs.map((pair, index) => {
           const isMatched = !!matches[pair.id];
@@ -133,13 +123,13 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
                       w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
                       transition-all
                       ${isSelected 
-                        ? 'border-[#6B8543] bg-[#6B8543] text-white' 
+                        ? 'border-[#8FC412] bg-[#8FC412] text-white' 
                         : 'border-gray-300 bg-white text-gray-400 hover:border-[#6B7B3F] hover:bg-gray-50'
                       }
                       ${!isSubmitted ? 'cursor-pointer' : 'cursor-not-allowed'}
                     `}
                   >
-                    {isSelected ? '← Избери отговор' : '_______'}
+                    {isSelected ? `← ${t('exercise.chooseAnswer')}` : '_______'}
                   </button>
                 )}
               </div>
@@ -160,7 +150,7 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
       {!isSubmitted && (
         <div className="mt-6 pt-6 border-t-2 border-gray-200">
           <p className="text-sm font-medium text-gray-600 mb-3">
-            {selectedLeft ? 'Изберете правилния отговор:' : 'Кликнете на празното поле, след това изберете отговор:'}
+            {selectedLeft ? t('exercise.chooseAnswer') : t('exercise.chooseAnswer')}
           </p>
           <div className="flex flex-wrap gap-2">
             {rightItems.map((rightText, index) => (
@@ -172,7 +162,7 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
                   px-4 py-2 rounded-lg border-2 text-base font-medium min-h-[44px] shadow-sm
                   transition-all active:scale-95
                   ${isRightItemMatched(rightText) ? 'opacity-30 cursor-not-allowed border-gray-300 bg-gray-100' : ''}
-                  ${!selectedLeft ? 'opacity-50 cursor-not-allowed border-gray-300 bg-white' : 'border-[#6B7B3F] bg-white hover:border-[#6B8543] hover:bg-[#F5F1E8] cursor-pointer'}
+                  ${!selectedLeft ? 'opacity-50 cursor-not-allowed border-gray-300 bg-white' : 'border-[#6B7B3F] bg-white hover:border-[#8FC412] hover:bg-[#EEF7C8] cursor-pointer'}
                 `}
               >
                 {rightText}
@@ -185,17 +175,17 @@ export function MatchPairs({ exercise, onComplete, exerciseNumber }: MatchPairsP
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
           disabled={Object.keys(matches).length < exercise.pairs.length}
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.pairs.length} правилни съвпадения
+            {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.pairs.length} {t('exercise.correct_n')}
           </p>
         </div>
       )}

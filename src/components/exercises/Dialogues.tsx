@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { MessageSquare, Play, Pause } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 
 interface DialogueLine {
   speaker?: string;
@@ -15,14 +16,15 @@ interface DialogueSection {
 }
 
 interface DialoguesProps {
-  order: number;
-  title: string;
+  order?: number;
+  title?: string;
   subtitle?: string;
   audioUrl?: string;
   sections: DialogueSection[];
 }
 
-export function Dialogues({ order, title, subtitle, audioUrl, sections }: DialoguesProps) {
+export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
+  const t = useT();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -53,44 +55,28 @@ export function Dialogues({ order, title, subtitle, audioUrl, sections }: Dialog
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-[#F8F5EE] to-[#F0EDE0] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-10 shadow-md">
-      {/* Header with icon and audio button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-[#6B8543] rounded-xl flex items-center justify-center shadow-md">
-            <MessageSquare className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-              {title}
-            </h2>
-            {subtitle && (
-              <p className="text-sm md:text-base text-gray-600 mt-1">
-                {subtitle}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {audioUrl && (
+    <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {/* Audio button */}
+      {audioUrl && (
+        <div className="flex justify-end mb-6">
           <Button
             onClick={handlePlayAudio}
-            className="bg-[#6B8543] hover:bg-[#5A7238] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
           >
             {isPlaying ? (
               <>
                 <Pause className="w-5 h-5" />
-                Спри
+                {t('exercise.stop')}
               </>
             ) : (
               <>
                 <Play className="w-5 h-5" />
-                Слушай
+                {t('exercise.listen')}
               </>
             )}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Dialogue sections */}
       <div className="space-y-6">
@@ -101,7 +87,7 @@ export function Dialogues({ order, title, subtitle, audioUrl, sections }: Dialog
           >
             {/* Section label */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-sm">
+              <span className="w-8 h-8 bg-[#8FC412] text-white rounded-full flex items-center justify-center font-bold text-sm">
                 {section.id}
               </span>
             </div>
@@ -124,7 +110,7 @@ export function Dialogues({ order, title, subtitle, audioUrl, sections }: Dialog
       {/* Note at bottom */}
       <div className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
         <p className="text-sm text-gray-700 text-center italic">
-          Прочетете диалозите по двойки
+          {t('exercise.readInPairs')}
         </p>
       </div>
     </div>

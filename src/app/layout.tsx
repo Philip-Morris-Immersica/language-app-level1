@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Sofia_Sans } from "next/font/google";
 import "./globals.css";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { AuthProvider } from "@/components/AuthProvider";
+import { LanguageProvider } from "@/i18n/LanguageContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +37,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${sofiaSans.variable} antialiased font-[family-name:var(--font-sofia-sans)]`}
       >
-        <AppLayout>{children}</AppLayout>
+        <LanguageProvider>
+          <AuthProvider>
+            <AppLayout>{children}</AppLayout>
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

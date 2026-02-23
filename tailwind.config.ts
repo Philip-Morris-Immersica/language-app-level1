@@ -50,21 +50,27 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        // Bolt theme colors
+        // UNHCR theme colors
         bolt: {
           primary: {
-            DEFAULT: "#6B8543",  // По-тъмен зелен (от прототипа)
-            hover: "#5A7238",
-            dark: "#4A5D23",
+            DEFAULT: "#8FC412",  // Учебниково зелено
+            hover: "#7DAD0E",
+            dark: "#6A940C",
           },
           secondary: {
             light: "#F5F1E8",    // Бежов/кремав фон
-            DEFAULT: "#8B9D5F",  // Светло зелена рамка
+            DEFAULT: "#B8D45A",  // Светло зелена рамка
             cream: "#F8F5EE",    // Много светъл крем
           },
+          blue: {
+            DEFAULT: "#0279C3",  // UNHCR синьо за заглавия и лого
+            hover: "#0267A3",
+            dark: "#015585",
+          },
           green: {
-            button: "#6B8543",   // Зелен за бутони
-            border: "#6B7B3F",   // Рамки
+            button: "#8FC412",   // Зелен за бутони
+            border: "#7DAD0E",   // Рамки
+            light: "#EEF7C8",    // Много светъл зелен фон
           },
         },
       },

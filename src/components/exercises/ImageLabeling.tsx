@@ -4,15 +4,16 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import type { ImageLabelingExercise } from '@/content/types';
 
 interface ImageLabelingProps {
   exercise: ImageLabelingExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLabelingProps) {
+export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
+  const t = useT();
   const [selectedLabels, setSelectedLabels] = useState<{ [imageId: string]: string }>({});
   const [validation, setValidation] = useState<{ [imageId: string]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -70,17 +71,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
   // Flags display type - flip cards
   if (exercise.displayType === 'flags') {
     return (
-      <div className="relative bg-[#F5F1E8] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-        {exerciseNumber && (
-          <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-            {exerciseNumber}
-          </div>
-        )}
-        
-        <p className="text-xl font-bold text-gray-800 mb-6">
-          {exercise.instruction}
-        </p>
-
+      <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {exercise.images.map((image) => {
             const isFlipped = flippedCards[image.id];
@@ -101,7 +92,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
                 >
                   {/* Front - Flag */}
                   <div
-                    className="absolute w-full h-full backface-hidden bg-white rounded-xl border-2 border-[#8B9D5F] p-4 shadow-md flex items-center justify-center"
+                    className="absolute w-full h-full backface-hidden bg-white rounded-xl p-4 shadow-md flex items-center justify-center"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
                     <div className="relative w-full h-full">
@@ -117,7 +108,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
 
                   {/* Back - Country name */}
                   <div
-                    className="absolute w-full h-full backface-hidden bg-[#6B8543] rounded-xl border-2 border-[#8B9D5F] p-4 shadow-md flex items-center justify-center"
+                    className="absolute w-full h-full backface-hidden bg-[#8FC412] rounded-xl p-4 shadow-md flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
@@ -133,9 +124,9 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
           })}
         </div>
 
-        <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
+        <div className="mt-6 p-4 rounded-lg bg-white shadow-sm">
           <p className="text-sm text-gray-700 text-center italic">
-            Кликнете на флаговете, за да видите имената на държавите
+            {t('exercise.listen')}
           </p>
         </div>
       </div>
@@ -144,18 +135,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
 
   // Default display type - original grid layout
   return (
-    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-8 md:p-10 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
-          {exerciseNumber}
-        </div>
-      )}
-      
-      <p className="text-xl font-bold text-gray-800 mb-8">
-        {exercise.instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-8 md:p-10 shadow-md">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {exercise.images.map((image) => {
           const selectedLabel = selectedLabels[image.id];
@@ -168,7 +148,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
                 relative rounded-xl border-2 p-6 transition-all shadow-sm
                 ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
                 ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
-                ${validationResult === null ? 'border-bolt-secondary bg-white' : ''}
+                ${validationResult === null ? 'border-gray-200 bg-white' : ''}
               `}
             >
               {/* Image or Emoji */}
@@ -195,7 +175,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
                   onChange={(e) => handleSelect(image.id, e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 >
-                  <option value="">Изберете...</option>
+                  <option value="">{t('exercise.selectOption')}</option>
                   {exercise.options.map((option) => (
                     <option key={option} value={option}>
                       {option}
@@ -207,7 +187,7 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
                   type="text"
                   value={selectedLabel || ''}
                   onChange={(e) => handleSelect(image.id, e.target.value)}
-                  placeholder="Въведете..."
+                  placeholder={t('exercise.selectOption')}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 />
               ) : (
@@ -235,8 +215,8 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
 
               {/* Show correct answer if wrong */}
               {isSubmitted && validationResult === false && (
-                <p className="mt-3 text-sm text-red-700 font-medium">
-                  Правилно: {image.correctLabel}
+                  <p className="mt-3 text-sm text-red-700 font-medium">
+                  {t('exercise.correctLabel')} {image.correctLabel}
                 </p>
               )}
             </div>
@@ -247,17 +227,17 @@ export function ImageLabeling({ exercise, onComplete, exerciseNumber }: ImageLab
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-4 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          className="mt-4 bg-[#8FC412] hover:bg-[#8FC412]-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
           disabled={Object.keys(selectedLabels).length < exercise.images.length}
         >
-          Провери
+          {t('exercise.check')}
         </Button>
       )}
 
       {isSubmitted && (
-        <div className="mt-6 p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+        <div className="mt-6 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            Резултат: {Object.values(validation).filter(v => v === true).length} / {exercise.images.length} правилни отговора
+            {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.images.length} {t('exercise.correct_n')}
           </p>
         </div>
       )}

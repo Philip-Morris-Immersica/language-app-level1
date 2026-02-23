@@ -3,15 +3,16 @@
 import { useState, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import type { FillInBlankExercise } from '@/content/types';
 
 interface FillInBlankProps {
   exercise: FillInBlankExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function FillInBlank({ exercise, onComplete, exerciseNumber }: FillInBlankProps) {
+export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
+  const t = useT();
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -164,17 +165,7 @@ export function FillInBlank({ exercise, onComplete, exerciseNumber }: FillInBlan
   };
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-      
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {exercise.instruction}
-      </p>
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       
       <div className="space-y-4 md:space-y-6 mb-6">
         {exercise.sentences.map((sentence, index) => (
@@ -187,9 +178,9 @@ export function FillInBlank({ exercise, onComplete, exerciseNumber }: FillInBlan
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
@@ -202,7 +193,7 @@ export function FillInBlank({ exercise, onComplete, exerciseNumber }: FillInBlan
               <X className="w-6 h-6 text-red-600" />
             )}
             <p className="text-base font-semibold text-gray-800">
-              Резултат: {Object.values(validation).filter(v => v === true).length} / {Object.keys(validation).length} правилни отговора
+              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {Object.keys(validation).length} {t('exercise.correct_n')}
             </p>
           </div>
         </div>

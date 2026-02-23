@@ -19,6 +19,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useT } from '@/i18n/useT';
 
 interface SyllableBlock {
   syllable: string;
@@ -33,8 +34,6 @@ interface WordPuzzle {
 }
 
 interface SyllableBlocksProps {
-  exerciseNumber?: number;
-  instruction: string;
   puzzles: WordPuzzle[];
   onComplete?: (correct: boolean, score: number) => void;
 }
@@ -84,6 +83,7 @@ function SortableBlock({ id, syllable }: { id: string; syllable: string }) {
 
 // One puzzle card (independent DndContext per puzzle)
 function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
+  const t = useT();
   const [blocks, setBlocks] = useState<SyllableBlock[]>(() =>
     puzzle.syllables.map((syl, idx) => ({
       syllable: cleanSyllable(syl),
@@ -132,26 +132,16 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
 
       {/* Correct answer hint */}
       <div className="text-center pt-3 border-t-2 border-gray-200">
-        <p className="text-xs text-gray-400 mb-1 italic">Правилен отговор:</p>
+        <p className="text-xs text-gray-400 mb-1 italic">{t('exercise.correctAnswer')}</p>
         <p className="font-bold text-lg text-[#6B8543]">{puzzle.correctWord}</p>
       </div>
     </div>
   );
 }
 
-export function SyllableBlocks({ exerciseNumber, instruction, puzzles }: SyllableBlocksProps) {
+export function SyllableBlocks({ puzzles }: SyllableBlocksProps) {
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {puzzles.map(puzzle => (
           <PuzzleCard key={puzzle.id} puzzle={puzzle} />

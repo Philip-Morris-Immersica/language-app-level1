@@ -2,17 +2,16 @@
 
 import { useState, useRef } from 'react';
 import Image from 'next/image';
-import { BookOpen, Play, Pause } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { IllustratedCardsExercise } from '@/content/types';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function IllustratedCards({ exercise, onComplete, exerciseNumber }: IllustratedCardsProps) {
+export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -50,29 +49,13 @@ export function IllustratedCards({ exercise, onComplete, exerciseNumber }: Illus
   };
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-
-      {/* Header with title and audio button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#6B8543] rounded-lg flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-white" />
-          </div>
-          <h3 className="text-xl md:text-2xl font-bold text-gray-800">
-            {exercise.title}
-          </h3>
-        </div>
-        
-        {exercise.audioUrl && (
+    <div className="relative bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {/* Audio button */}
+      {exercise.audioUrl && (
+        <div className="flex justify-end mb-4">
           <Button
             onClick={handlePlayAudio}
-            className="bg-[#6B8543] hover:bg-[#5A7238] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
           >
             {isPlaying ? (
               <>
@@ -86,14 +69,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseNumber }: Illus
               </>
             )}
           </Button>
-        )}
-      </div>
-
-      {/* Instruction */}
-      {exercise.instruction && (
-        <p className="text-lg text-gray-700 mb-6">
-          {exercise.instruction}
-        </p>
+        </div>
       )}
 
       {/* Cards Grid */}

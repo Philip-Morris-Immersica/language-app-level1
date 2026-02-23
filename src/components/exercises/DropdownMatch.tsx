@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import {
   Select,
   SelectContent,
@@ -19,13 +20,12 @@ interface DropdownQuestion {
 }
 
 interface DropdownMatchProps {
-  exerciseNumber?: number;
-  instruction: string;
   questions: DropdownQuestion[];
   onComplete?: (correct: boolean, score: number) => void;
 }
 
-export function DropdownMatch({ exerciseNumber, instruction, questions, onComplete }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
+  const t = useT();
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -58,17 +58,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
   };
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       <div className="space-y-4">
         {questions.map((question, index) => (
           <div
@@ -104,7 +94,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
                     ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
                     ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
                   `}>
-                    <SelectValue placeholder="Избери..." />
+                    <SelectValue placeholder={t('exercise.selectOption')} />
                   </SelectTrigger>
                   <SelectContent>
                     {question.options.map((option) => (
@@ -127,7 +117,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
             {isSubmitted && validation[question.id] === false && (
               <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
                 <p className="text-sm text-yellow-800">
-                  <strong>Правилно:</strong> {question.left} {question.correctAnswer}
+                  <strong>{t('exercise.correctLabel')}</strong> {question.left} {question.correctAnswer}
                 </p>
               </div>
             )}
@@ -138,10 +128,10 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
           disabled={questions.some(q => q.options.length > 0 && !answers[q.id])}
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
@@ -154,7 +144,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
               <X className="w-6 h-6 text-red-600" />
             )}
             <p className="text-base font-semibold text-gray-800">
-              Резултат: {Object.values(validation).filter(v => v === true).length} / {questions.length} правилни отговора
+              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.length} {t('exercise.correct_n')}
             </p>
           </div>
         </div>

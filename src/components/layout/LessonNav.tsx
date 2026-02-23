@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import type { LessonMetadata } from '@/content/types';
 
 interface LessonNavProps {
@@ -13,6 +14,7 @@ interface LessonNavProps {
 }
 
 export function LessonNav({ prevLesson, nextLesson, testAvailable, testId }: LessonNavProps) {
+  const t = useT();
   return (
     <div className="mt-8 pt-6 border-t border-gray-200">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -34,8 +36,8 @@ export function LessonNav({ prevLesson, nextLesson, testAvailable, testId }: Les
         {testAvailable && testId && (
           <div className="w-full sm:w-auto">
             <Link href={`/tests/${testId}`}>
-              <Button className="w-full sm:w-auto bg-bolt-primary hover:bg-bolt-primary-hover">
-                Направи тест
+              <Button className="w-full sm:w-auto bg-[#8FC412] hover:bg-[#7DAD0E]">
+                {t('lesson.takeTest')}
               </Button>
             </Link>
           </div>

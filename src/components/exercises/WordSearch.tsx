@@ -3,26 +3,24 @@
 import { useState, useMemo } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 
 interface WordSearchProps {
-  exerciseNumber?: number;
-  instruction: string;
   letterString: string;
   correctWords: string[];
-  distractorWords?: string[]; // Optional distractor words
+  distractorWords?: string[];
   hint?: string;
   onComplete?: (correct: boolean, score: number) => void;
 }
 
 export function WordSearch({ 
-  exerciseNumber, 
-  instruction, 
   letterString, 
   correctWords, 
   distractorWords = [],
   hint, 
   onComplete 
 }: WordSearchProps) {
+  const t = useT();
   const [foundWords, setFoundWords] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [clickedWrong, setClickedWrong] = useState<string | null>(null);
@@ -78,19 +76,9 @@ export function WordSearch({
   );
 
   return (
-    <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#6B8543] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md z-10">
-          {exerciseNumber}
-        </div>
-      )}
-
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {/* Letter string display */}
-      <div className="bg-white rounded-xl border-2 border-[#6B8543] p-6 mb-6 text-center">
+      <div className="bg-white rounded-xl border-2 border-[#8FC412] p-6 mb-6 text-center">
         <p className="text-2xl md:text-3xl font-bold text-[#6B8543] tracking-wide break-all">
           {letterString}
         </p>
@@ -100,7 +88,7 @@ export function WordSearch({
       {!isSubmitted && (
         <div className="mb-6">
           <p className="text-sm md:text-base font-semibold text-gray-700 mb-3">
-            Изберете думите, които намирате в текста:
+            {t('exercise.selectWords')}
           </p>
           <div className="flex flex-wrap gap-2 md:gap-3">
             {availableWords.map((word, index) => {
@@ -119,7 +107,7 @@ export function WordSearch({
                       ? 'bg-green-100 border-green-400 text-green-700 cursor-not-allowed opacity-50' 
                       : isWrong
                       ? 'bg-red-100 border-red-400 text-red-700 animate-pulse'
-                      : 'bg-white border-[#6B8543] text-gray-800 hover:bg-[#F8F5EE] hover:scale-105 active:scale-95'
+                      : 'bg-white border-[#8FC412] text-gray-800 hover:bg-[#EEF7C8] hover:scale-105 active:scale-95'
                     }
                   `}
                 >
@@ -134,7 +122,7 @@ export function WordSearch({
       {/* Found words */}
       <div className="mb-6">
         <p className="text-base font-semibold text-gray-700 mb-3">
-          Намерени думи ({foundWords.length}/{correctWords.length}):
+          {t('exercise.foundWords')} ({foundWords.length}/{correctWords.length}):
         </p>
         <div className="flex flex-wrap gap-2">
           {foundWords.map((word, index) => (
@@ -154,7 +142,7 @@ export function WordSearch({
             </div>
           ))}
           {foundWords.length === 0 && (
-            <p className="text-gray-400 italic">Все още няма намерени думи...</p>
+            <p className="text-gray-400 italic">{t('exercise.noWordsYet')}</p>
           )}
         </div>
       </div>
@@ -163,9 +151,9 @@ export function WordSearch({
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
-          Провери отговорите
+          {t('exercise.checkAnswers')}
         </Button>
       )}
 
@@ -180,7 +168,7 @@ export function WordSearch({
                 <X className="w-6 h-6 text-orange-600" />
               )}
               <p className="text-base font-semibold text-gray-800">
-                Резултат: {foundWords.length} / {correctWords.length} думи
+                {t('exercise.result')} {foundWords.length} / {correctWords.length} {t('exercise.correct_n')}
               </p>
             </div>
           </div>
@@ -189,7 +177,7 @@ export function WordSearch({
           {missingWords.length > 0 && (
             <div className="p-4 rounded-lg bg-yellow-50 border-2 border-yellow-200">
               <p className="text-sm font-semibold text-yellow-800 mb-2">
-                Пропуснати думи:
+                {t('exercise.skippedWords')}
               </p>
               <div className="flex flex-wrap gap-2">
                 {missingWords.map((word, index) => (

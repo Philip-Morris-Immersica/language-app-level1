@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 import type { WordOrderExercise } from '@/content/types';
 
 interface WordOrderProps {
   exercise: WordOrderExercise;
   onComplete?: (correct: boolean, score: number) => void;
-  exerciseNumber?: number;
 }
 
-export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderProps) {
+export function WordOrder({ exercise, onComplete }: WordOrderProps) {
+  const t = useT();
   const [questionStates, setQuestionStates] = useState<{
     [qIndex: number]: {
       available: string[];
@@ -102,18 +103,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
   };
 
   return (
-    <div className="relative bg-white rounded-xl border-2 border-bolt-secondary p-8 md:p-10 shadow-sm">
-      {/* Exercise number badge */}
-      {exerciseNumber && (
-        <div className="absolute -top-4 -left-4 w-12 h-12 bg-bolt-primary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
-          {exerciseNumber}
-        </div>
-      )}
-      
-      <p className="text-xl font-bold text-gray-800 mb-8">
-        {exercise.instruction}
-      </p>
-
+    <div className="bg-white rounded-xl p-8 md:p-10 shadow-md">
       <div className="space-y-10">
         {exercise.questions.map((question, qIndex) => {
           const state = questionStates[qIndex];
@@ -140,7 +130,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
                     className="text-gray-600 hover:text-gray-800 shrink-0"
                   >
                     <RotateCcw className="w-4 h-4 mr-1" />
-                    Нулирай
+                    {t('exercise.reset')}
                   </Button>
                 )}
               </div>
@@ -153,7 +143,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
                 ${state.validation === null ? 'border-gray-300 bg-gray-50' : ''}
               `}>
                 {state.built.length === 0 ? (
-                  <span className="text-gray-400 text-base">Изберете думи, за да построите изречението...</span>
+                  <span className="text-gray-400 text-base">{t('exercise.buildSentence')}</span>
                 ) : (
                   <>
                     {state.built.map((word, wIndex) => (
@@ -162,7 +152,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
                         onClick={() => handleWordClick(qIndex, word, true)}
                         disabled={isSubmitted}
                         className={`
-                          px-4 py-3 rounded-xl border-2 border-bolt-primary bg-bolt-secondary-light shadow-sm
+                          px-4 py-3 rounded-xl border-2 border-[#8FC412] bg-[#EEF7C8] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
                           ${!isSubmitted ? 'hover:bg-white hover:shadow-md cursor-pointer' : 'cursor-default'}
                         `}
@@ -185,7 +175,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
 
               {/* Available words */}
               {!isSubmitted && state.available.length > 0 && (
-                <div className="p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary">
+                <div className="p-5 rounded-xl bg-[#EEF7C8]">
                   <div className="flex flex-wrap gap-3">
                     {state.available.map((word, wIndex) => (
                       <button
@@ -194,7 +184,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
                         className="
                           px-4 py-3 rounded-xl border-2 border-gray-300 bg-white shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95
-                          hover:border-bolt-primary hover:bg-bolt-secondary-light hover:shadow-md
+                          hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md
                           cursor-pointer transition-all
                         "
                       >
@@ -209,7 +199,7 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
               {isSubmitted && state.validation === false && (
                 <div className="p-3 rounded-lg bg-yellow-50 border border-yellow-200">
                   <p className="text-sm text-yellow-800">
-                    <strong>Правилен отговор:</strong> {question.correctSentence}
+                    <strong>{t('exercise.correctAnswer')}</strong> {question.correctSentence}
                   </p>
                 </div>
               )}
@@ -221,19 +211,19 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-8 bg-bolt-primary hover:bg-bolt-primary-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
           disabled={exercise.questions.some((_, idx) => 
             !questionStates[idx] || questionStates[idx].built.length === 0
           )}
         >
-          Провери
+          {t('exercise.check')}
         </Button>
       )}
 
       {isSubmitted && (
-        <div className="mt-8 p-5 rounded-xl bg-bolt-secondary-light border-2 border-bolt-secondary animate-in fade-in duration-300">
+        <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            Резултат: {Object.values(questionStates).filter(s => s.validation === true).length} / {exercise.questions.length} правилни изречения
+            {t('exercise.result')} {Object.values(questionStates).filter(s => s.validation === true).length} / {exercise.questions.length} {t('exercise.correct_n')}
           </p>
         </div>
       )}
