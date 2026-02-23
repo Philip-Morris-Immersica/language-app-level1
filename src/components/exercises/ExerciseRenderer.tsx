@@ -15,6 +15,7 @@ import { Dialogues } from './Dialogues';
 import { DropdownMatch } from './DropdownMatch';
 import { LetterChoice } from './LetterChoice';
 import { FillWithFlags } from './FillWithFlags';
+import { WorkbookFillBlank } from './WorkbookFillBlank';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -28,6 +29,17 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   switch (exercise.type) {
     case 'fill_in_blank':
       return <FillInBlank exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;
+
+    case 'workbook_fill_blank':
+      return (
+        <WorkbookFillBlank
+          exerciseNumber={number}
+          instruction={exercise.instruction}
+          sentences={exercise.sentences}
+          layout={exercise.layout}
+          onComplete={onComplete}
+        />
+      );
     
     case 'multiple_choice':
       return <MultipleChoice exercise={exercise} onComplete={onComplete} exerciseNumber={number} />;

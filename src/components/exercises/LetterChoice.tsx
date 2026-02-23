@@ -1,14 +1,25 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  DndContext,
+  DragOverlay,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface LetterPuzzle {
   id: string;
-  word: string;           // 'Д_Б_Р'
-  correctLetters: string[]; // ['О', 'Ъ']
-  availableLetters?: string[]; // Ignored - we use only correctLetters
+  word: string;
+  correctLetters: string[];
+  availableLetters: string[];
 }
 
 interface LetterChoiceProps {
@@ -18,201 +29,367 @@ interface LetterChoiceProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
-// Get letters still in pool (not yet placed in slots)
-function getRemainingLetters(correctLetters: string[], placedLetters: (string | null)[]): string[] {
-  const placed = placedLetters.filter(Boolean) as string[];
-  const remaining: string[] = [];
-  for (const letter of correctLetters) {
-    const needCount = correctLetters.filter(c => c === letter).length;
-    const placedCount = placed.filter(p => p === letter).length;
-    for (let i = 0; i < needCount - placedCount; i++) {
-      remaining.push(letter);
-    }
-  }
-  return remaining;
+// Floating letter shown while dragging
+function LetterTile({ letter, overlay }: { letter: string; overlay?: boolean }) {
+  return (
+    <div
+      className={`
+        w-12 h-12 flex items-center justify-center
+        text-xl font-bold rounded-lg border-2 select-none
+        bg-[#D8E4C8] border-[#6B8543]
+        ${overlay ? 'shadow-2xl scale-110 cursor-grabbing' : ''}
+      `}
+    >
+      {letter}
+    </div>
+  );
 }
 
-export function LetterChoice({ exerciseNumber, instruction, puzzles, onComplete }: LetterChoiceProps) {
-  const [answers, setAnswers] = useState<{ [key: string]: (string | null)[] }>({});
-  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [draggedLetter, setDraggedLetter] = useState<{ puzzleId: string; letter: string } | null>(null);
-  const [touchState, setTouchState] = useState<{ puzzleId: string; letter: string } | null>(null);
+// Draggable letter in the pool
+function DraggableLetter({
+  id,
+  letter,
+  puzzleId,
+}: {
+  id: string;
+  letter: string;
+  puzzleId: string;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    data: { puzzleId, letter },
+  });
 
-  const handleLetterDragStart = (e: React.DragEvent, puzzleId: string, letter: string) => {
-    if (isSubmitted) return;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', JSON.stringify({ puzzleId, letter }));
-    setDraggedLetter({ puzzleId, letter });
-  };
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{ opacity: isDragging ? 0 : 1 }}
+      className="
+        w-12 h-12 flex items-center justify-center
+        text-xl font-bold rounded-lg border-2 cursor-grab active:cursor-grabbing
+        select-none touch-none transition-transform
+        bg-[#D8E4C8] border-[#A8B88A]
+        hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105
+      "
+    >
+      {letter}
+    </div>
+  );
+}
 
-  const handleLetterTouchStart = (puzzleId: string, letter: string) => {
-    if (isSubmitted) return;
-    setTouchState({ puzzleId, letter });
-  };
+// Draggable letter already placed inside a slot
+function DraggableSlotLetter({
+  id,
+  letter,
+  puzzleId,
+  slotIndex,
+}: {
+  id: string;
+  letter: string;
+  puzzleId: string;
+  slotIndex: number;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    data: { type: 'slot', puzzleId, letter, slotIndex },
+  });
 
-  const handleLetterTouchEnd = (e: React.TouchEvent, puzzleId: string) => {
-    if (!touchState || touchState.puzzleId !== puzzleId) return;
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{ opacity: isDragging ? 0 : 1 }}
+      className="w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing touch-none select-none"
+    >
+      {letter}
+    </div>
+  );
+}
 
-    const touch = e.changedTouches[0];
-    const el = document.elementFromPoint(touch.clientX, touch.clientY);
-    const slot = el?.closest('[data-letter-slot]');
-    if (slot) {
-      const slotPuzzleId = slot.getAttribute('data-puzzle-id');
-      const slotIndex = parseInt(slot.getAttribute('data-slot-index') || '-1');
-      if (slotPuzzleId === puzzleId && slotIndex >= 0) {
-        const puzzle = puzzles.find(p => p.id === puzzleId);
-        if (puzzle) {
-          const currentAnswers = answers[puzzleId] || Array((puzzle.word.match(/_/g) || []).length).fill(null);
-          if (currentAnswers[slotIndex] === null) {
-            setAnswers(prev => {
-              const arr = [...(prev[puzzleId] || Array((puzzle.word.match(/_/g) || []).length).fill(null))];
-              arr[slotIndex] = touchState.letter;
-              return { ...prev, [puzzleId]: arr };
-            });
-          }
-        }
+// Droppable slot (blank in the word)
+function DroppableSlot({
+  id,
+  letter,
+  puzzleId,
+  slotIndex,
+  onClear,
+  isSubmitted,
+  validation,
+}: {
+  id: string;
+  letter: string | null;
+  puzzleId: string;
+  slotIndex: number;
+  onClear: () => void;
+  isSubmitted: boolean;
+  validation: boolean | null;
+}) {
+  const { isOver, setNodeRef } = useDroppable({ id });
+
+  const bgClass = isSubmitted
+    ? validation === true
+      ? 'bg-green-100 border-green-500 text-green-700'
+      : 'bg-red-100 border-red-500 text-red-700'
+    : letter
+    ? isOver
+      ? 'bg-yellow-100 border-yellow-400'
+      : 'bg-[#EFF7E8] border-[#6B8543]'
+    : isOver
+    ? 'bg-yellow-100 border-yellow-400 border-dashed scale-110'
+    : 'bg-white border-dashed border-gray-400';
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`
+        w-12 h-12 flex items-center justify-center
+        text-xl font-bold rounded-lg border-2
+        transition-all
+        ${bgClass}
+      `}
+    >
+      {letter && !isSubmitted ? (
+        <DraggableSlotLetter
+          id={`${id}-draggable`}
+          letter={letter}
+          puzzleId={puzzleId}
+          slotIndex={slotIndex}
+        />
+      ) : (
+        letter ?? ''
+      )}
+    </div>
+  );
+}
+
+// One puzzle card with its own DndContext
+function PuzzleCard({
+  puzzle,
+  slotContents,
+  onPlace,
+  onMoveSlot,
+  onClear,
+  isSubmitted,
+  validation,
+}: {
+  puzzle: LetterPuzzle;
+  slotContents: (string | null)[];
+  onPlace: (slotIndex: number, letter: string) => void;
+  onMoveSlot: (fromSlot: number, toSlot: number) => void;
+  onClear: (slotIndex: number) => void;
+  isSubmitted: boolean;
+  validation: boolean | null;
+}) {
+  const [activeLetter, setActiveLetter] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    setActiveLetter(null);
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeData = active.data.current as { type: 'pool' | 'slot'; puzzleId: string; letter: string; slotIndex?: number };
+    const overId = String(over.id);
+
+    // Determine target slot from droppable id (format: `${puzzleId}-slot-${idx}`)
+    const slotPrefix = `${puzzle.id}-slot-`;
+    if (!overId.startsWith(slotPrefix)) return;
+    const targetSlot = parseInt(overId.replace(slotPrefix, ''), 10);
+    if (isNaN(targetSlot)) return;
+
+    if (activeData.type === 'slot' && activeData.slotIndex !== undefined) {
+      // Moving from one slot to another
+      if (activeData.slotIndex !== targetSlot) {
+        onMoveSlot(activeData.slotIndex, targetSlot);
       }
+    } else {
+      // Placing from pool
+      onPlace(targetSlot, activeData.letter);
     }
-    setTouchState(null);
   };
 
-  const handleSlotDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+  // Remaining letters not yet placed
+  const getRemainingLetters = (): string[] => {
+    const counts: Record<string, number> = {};
+    puzzle.correctLetters.forEach(l => { counts[l] = (counts[l] || 0) + 1; });
+    slotContents.forEach(l => { if (l) counts[l] = (counts[l] || 0) - 1; });
+    const result: string[] = [];
+    Object.entries(counts).forEach(([letter, n]) => {
+      for (let i = 0; i < n; i++) result.push(letter);
+    });
+    return result;
   };
 
-  const handleSlotDrop = (e: React.DragEvent, puzzleId: string, slotIndex: number) => {
-    e.preventDefault();
-    if (isSubmitted) return;
+  const remainingLetters = getRemainingLetters();
 
-    try {
-      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-      if (data.puzzleId !== puzzleId) return;
-
-      const puzzle = puzzles.find(p => p.id === puzzleId);
-      if (!puzzle) return;
-
-      const currentAnswers = answers[puzzleId] || Array((puzzle.word.match(/_/g) || []).length).fill(null);
-      if (currentAnswers[slotIndex] !== null) return; // Already filled
-
-      setAnswers(prev => {
-        const arr = [...(prev[puzzleId] || Array((puzzle.word.match(/_/g) || []).length).fill(null))];
-        arr[slotIndex] = data.letter;
-        return { ...prev, [puzzleId]: arr };
-      });
-    } catch (_) {}
-    setDraggedLetter(null);
-  };
-
-  const handleSlotDragStart = (e: React.DragEvent, puzzleId: string, slotIndex: number) => {
-    if (isSubmitted) return;
-    const currentAnswers = answers[puzzleId] || [];
-    const letter = currentAnswers[slotIndex];
-    if (!letter) return;
-
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', JSON.stringify({ puzzleId, letter, fromSlot: slotIndex }));
-    setDraggedLetter({ puzzleId, letter });
-  };
-
-  const handleLetterPoolDrop = (e: React.DragEvent, puzzleId: string) => {
-    e.preventDefault();
-    if (isSubmitted) return;
-
-    try {
-      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-      if (data.puzzleId !== puzzleId) return;
-
-      const puzzle = puzzles.find(p => p.id === puzzleId);
-      if (!puzzle) return;
-
-      const slotIndex = data.fromSlot;
-      if (typeof slotIndex !== 'number') return;
-
-      setAnswers(prev => {
-        const arr = [...(prev[puzzleId] || [])];
-        arr[slotIndex] = null;
-        return { ...prev, [puzzleId]: arr };
-      });
-    } catch (_) {}
-    setDraggedLetter(null);
-  };
-
-  const handleReset = (puzzleId: string) => {
-    if (isSubmitted) return;
-    setAnswers(prev => ({ ...prev, [puzzleId]: [] }));
-  };
-
-  const renderWord = (puzzle: LetterPuzzle, puzzleAnswers: (string | null)[]) => {
+    // Render the word — fixed chars + droppable blanks
+  const renderWord = () => {
     const chars = puzzle.word.split('');
-    let answerIndex = 0;
-
-    return chars.map((char, index) => {
+    let slotIdx = 0;
+    return chars.map((char, i) => {
       if (char === '_') {
-        const letter = puzzleAnswers[answerIndex];
-        const slotIndex = answerIndex;
-        const validationColor = validation[puzzle.id] === true ? 'bg-green-100 border-green-500 text-green-700' :
-                                 validation[puzzle.id] === false ? 'bg-red-100 border-red-500 text-red-700' :
-                                 'bg-white border-gray-400 border-dashed';
-        answerIndex++;
+        const currentSlot = slotIdx++;
         return (
-          <div
-            key={index}
-            data-letter-slot
-            data-puzzle-id={puzzle.id}
-            data-slot-index={slotIndex}
-            draggable={!!letter && !isSubmitted}
-            onDragStart={(e) => letter && handleSlotDragStart(e, puzzle.id, slotIndex)}
-            onDragOver={handleSlotDragOver}
-            onDrop={(e) => handleSlotDrop(e, puzzle.id, slotIndex)}
-            onDragEnd={() => setDraggedLetter(null)}
-            className={`
-              w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-lg md:text-xl font-bold border-2 rounded-lg
-              min-w-[2.5rem] min-h-[2.5rem]
-              ${validationColor}
-              ${!letter && !isSubmitted ? 'cursor-copy' : ''}
-              ${letter && !isSubmitted ? 'cursor-move' : ''}
-            `}
-          >
-            {letter || ''}
-          </div>
-        );
-      } else if (char === ' ') {
-        return <div key={index} className="w-3 md:w-4" />;
-      } else {
-        return (
-          <div
-            key={index}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-lg md:text-xl font-bold text-gray-800"
-          >
-            {char}
-          </div>
+          <DroppableSlot
+            key={`${puzzle.id}-slot-${currentSlot}`}
+            id={`${puzzle.id}-slot-${currentSlot}`}
+            letter={slotContents[currentSlot]}
+            puzzleId={puzzle.id}
+            slotIndex={currentSlot}
+            onClear={() => onClear(currentSlot)}
+            isSubmitted={isSubmitted}
+            validation={validation}
+          />
         );
       }
+      if (char === ' ') return <div key={i} className="w-3 md:w-4" />;
+      return (
+        <div key={i} className="w-12 h-12 flex items-center justify-center text-xl font-bold text-gray-800">
+          {char}
+        </div>
+      );
+    });
+  };
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={e => setActiveLetter((e.active.data.current as any)?.letter ?? null)}
+      onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveLetter(null)}
+    >
+      <div className="bg-white rounded-xl border-2 border-gray-300 p-5 shadow-sm">
+        {/* Word with droppable slots */}
+        <div className="flex justify-center items-center gap-1 flex-wrap mb-4">
+          {renderWord()}
+        </div>
+
+        {/* Letter pool */}
+        {!isSubmitted && remainingLetters.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-2 pt-3 border-t border-gray-100">
+            {remainingLetters.map((letter, idx) => (
+              <DraggableLetter
+                key={`${puzzle.id}-pool-${idx}`}
+                id={`${puzzle.id}-pool-${idx}`}
+                letter={letter}
+                puzzleId={puzzle.id}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Hint */}
+        {!isSubmitted && slotContents.some(Boolean) && (
+          <p className="text-center text-xs text-gray-400 mt-2">
+            Влачете поставена буква за да я преместите
+          </p>
+        )}
+
+        {/* Validation result per puzzle */}
+        {isSubmitted && (
+          <div className="flex justify-center mt-3">
+            {validation === true ? (
+              <div className="flex items-center gap-2 text-green-600">
+                <Check className="w-5 h-5" />
+                <span className="font-semibold">Правилно!</span>
+              </div>
+            ) : (
+              <div className="text-center space-y-1">
+                <div className="flex items-center gap-2 text-red-600 justify-center">
+                  <X className="w-5 h-5" />
+                  <span className="font-semibold">Грешно</span>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Правилно:{' '}
+                  <strong>
+                    {(() => {
+                      let si = 0;
+                      return puzzle.word
+                        .split('')
+                        .map(c => (c === '_' ? puzzle.correctLetters[si++] : c))
+                        .join('');
+                    })()}
+                  </strong>
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Floating letter while dragging */}
+      <DragOverlay dropAnimation={null}>
+        {activeLetter ? <LetterTile letter={activeLetter} overlay /> : null}
+      </DragOverlay>
+    </DndContext>
+  );
+}
+
+// Main component
+export function LetterChoice({ exerciseNumber, instruction, puzzles, onComplete }: LetterChoiceProps) {
+  const [slotContents, setSlotContents] = useState<{ [puzzleId: string]: (string | null)[] }>(
+    () => Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)]))
+  );
+  const [validation, setValidation] = useState<{ [puzzleId: string]: boolean | null }>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handlePlace = (puzzleId: string, slotIndex: number, letter: string) => {
+    setSlotContents(prev => {
+      const slots = [...(prev[puzzleId] || [])];
+      slots[slotIndex] = letter;
+      return { ...prev, [puzzleId]: slots };
+    });
+  };
+
+  // Move letter already in a slot to another slot (swap if target occupied)
+  const handleMoveSlot = (puzzleId: string, fromSlot: number, toSlot: number) => {
+    setSlotContents(prev => {
+      const slots = [...(prev[puzzleId] || [])];
+      const temp = slots[toSlot];
+      slots[toSlot] = slots[fromSlot];
+      slots[fromSlot] = temp ?? null;
+      return { ...prev, [puzzleId]: slots };
+    });
+  };
+
+  const handleClear = (puzzleId: string, slotIndex: number) => {
+    setSlotContents(prev => {
+      const slots = [...(prev[puzzleId] || [])];
+      slots[slotIndex] = null;
+      return { ...prev, [puzzleId]: slots };
     });
   };
 
   const handleSubmit = () => {
     const newValidation: { [key: string]: boolean } = {};
-    let correctCount = 0;
+    let correct = 0;
 
     puzzles.forEach(puzzle => {
-      const userAnswers = (answers[puzzle.id] || []).filter(Boolean) as string[];
-      const isCorrect = userAnswers.length === puzzle.correctLetters.length &&
-                       userAnswers.every((letter, idx) => letter.toUpperCase() === puzzle.correctLetters[idx].toUpperCase());
+      const slots = slotContents[puzzle.id] || [];
+      const isCorrect =
+        slots.length === puzzle.correctLetters.length &&
+        slots.every((l, i) => (l ?? '').toUpperCase() === puzzle.correctLetters[i].toUpperCase());
       newValidation[puzzle.id] = isCorrect;
-      if (isCorrect) correctCount++;
+      if (isCorrect) correct++;
     });
 
     setValidation(newValidation);
     setIsSubmitted(true);
-
-    if (onComplete) {
-      const score = (correctCount / puzzles.length) * puzzles.length;
-      onComplete(correctCount === puzzles.length, score);
-    }
+    onComplete?.(correct === puzzles.length, correct);
   };
+
+  const allFilled = puzzles.every(p => {
+    const slots = slotContents[p.id] || [];
+    return slots.every(s => s !== null);
+  });
 
   return (
     <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
@@ -222,105 +399,28 @@ export function LetterChoice({ exerciseNumber, instruction, puzzles, onComplete 
         </div>
       )}
 
-      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">
-        {instruction}
-      </p>
+      <p className="text-lg md:text-xl font-bold text-gray-800 mb-6">{instruction}</p>
 
-      <div className="space-y-6">
-        {puzzles.map((puzzle) => {
-          const blankCount = (puzzle.word.match(/_/g) || []).length;
-          const puzzleAnswers: (string | null)[] = answers[puzzle.id] || Array(blankCount).fill(null);
-          const remainingLetters = getRemainingLetters(puzzle.correctLetters, puzzleAnswers);
-
-          return (
-            <div key={puzzle.id} className="bg-white rounded-xl border-2 border-gray-300 p-5 shadow-sm">
-              {/* Word display with blanks */}
-              <div className="flex justify-center items-center gap-1 mb-4 flex-wrap">
-                {renderWord(puzzle, puzzleAnswers)}
-              </div>
-
-              {/* Letter pool - only missing letters, draggable */}
-              {!isSubmitted && (
-                <div
-                  className="flex flex-wrap justify-center gap-2 mb-3 min-h-[3rem]"
-                  onDragOver={handleSlotDragOver}
-                  onDrop={(e) => handleLetterPoolDrop(e, puzzle.id)}
-                >
-                  {remainingLetters.map((letter, idx) => (
-                    <div
-                      key={`${letter}-${idx}`}
-                      draggable
-                      onDragStart={(e) => handleLetterDragStart(e, puzzle.id, letter)}
-                      onDragEnd={() => setDraggedLetter(null)}
-                      onTouchStart={() => handleLetterTouchStart(puzzle.id, letter)}
-                      onTouchEnd={(e) => handleLetterTouchEnd(e, puzzle.id)}
-                      className={`
-                        w-12 h-12 md:w-14 md:h-14 text-xl font-bold flex items-center justify-center
-                        bg-[#D8E4C8] border-2 border-[#A8B88A] rounded-lg
-                        hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105
-                        active:scale-95 transition-all cursor-move select-none touch-none
-                        ${draggedLetter?.letter === letter && draggedLetter?.puzzleId === puzzle.id ? 'opacity-50' : ''}
-                        ${touchState?.letter === letter && touchState?.puzzleId === puzzle.id ? 'opacity-50' : ''}
-                      `}
-                    >
-                      {letter}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Reset button */}
-              {!isSubmitted && puzzleAnswers.some(Boolean) && (
-                <div className="flex justify-center">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleReset(puzzle.id)}
-                    className="text-gray-600 hover:text-gray-800"
-                  >
-                    <RotateCcw className="w-4 h-4 mr-1" />
-                    Нулирай
-                  </Button>
-                </div>
-              )}
-
-              {/* Validation */}
-              {isSubmitted && (
-                <div className="flex justify-center mt-3">
-                  {validation[puzzle.id] ? (
-                    <div className="flex items-center gap-2 text-green-600">
-                      <Check className="w-5 h-5" />
-                      <span className="font-semibold">Правилно!</span>
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-red-600 justify-center">
-                        <X className="w-5 h-5" />
-                        <span className="font-semibold">Грешно</span>
-                      </div>
-                      <p className="text-sm text-gray-700 text-center">
-                        Правилно: <strong>{puzzle.word.split('').map((c, i) => {
-                          if (c === '_') return puzzle.correctLetters[puzzle.word.slice(0, i).split('').filter(ch => ch === '_').length];
-                          return c;
-                        }).join('')}</strong>
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
+      <div className="space-y-5">
+        {puzzles.map(puzzle => (
+          <PuzzleCard
+            key={puzzle.id}
+            puzzle={puzzle}
+            slotContents={slotContents[puzzle.id] || []}
+            onPlace={(slotIdx, letter) => handlePlace(puzzle.id, slotIdx, letter)}
+            onMoveSlot={(from, to) => handleMoveSlot(puzzle.id, from, to)}
+            onClear={slotIdx => handleClear(puzzle.id, slotIdx)}
+            isSubmitted={isSubmitted}
+            validation={validation[puzzle.id] ?? null}
+          />
+        ))}
       </div>
 
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={puzzles.some(p => {
-            const userAnswers = (answers[p.id] || []).filter(Boolean);
-            return userAnswers.length < (p.word.match(/_/g) || []).length;
-          })}
+          disabled={!allFilled}
+          className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
         >
           Провери отговорите
         </Button>

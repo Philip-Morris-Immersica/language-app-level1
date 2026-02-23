@@ -1,6 +1,7 @@
 // Exercise types matching real PDF content
 export type ExerciseType = 
   | 'fill_in_blank'        // Most common - fill missing words
+  | 'workbook_fill_blank'  // Workbook fill-in with dropdowns and 2-column layout
   | 'multiple_choice'      // Select/underline correct answer
   | 'match_pairs'          // Match left items with right items
   | 'dropdown_match'       // Match with dropdown selection
@@ -227,6 +228,19 @@ export interface DropdownMatchExercise extends BaseExercise {
   }[];
 }
 
+export interface WorkbookFillBlankExercise extends BaseExercise {
+  type: 'workbook_fill_blank';
+  layout?: 'two-column' | 'qa-split' | 'single';
+  sentences: {
+    text: string;
+    blanks: number[];
+    correctAnswers: string[];
+    acceptableAnswers?: string[][];
+    options?: string[];
+    isExample?: boolean;
+  }[];
+}
+
 export interface LetterChoiceExercise extends BaseExercise {
   type: 'letter_choice';
   puzzles: {
@@ -239,7 +253,8 @@ export interface LetterChoiceExercise extends BaseExercise {
 
 // Union type for all exercises
 export type Exercise = 
-  | FillInBlankExercise 
+  | FillInBlankExercise
+  | WorkbookFillBlankExercise
   | MultipleChoiceExercise 
   | MatchPairsExercise 
   | DropdownMatchExercise

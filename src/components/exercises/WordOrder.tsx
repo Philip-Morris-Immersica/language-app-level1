@@ -121,16 +121,23 @@ export function WordOrder({ exercise, onComplete, exerciseNumber }: WordOrderPro
 
           return (
             <div key={qIndex} className="space-y-5">
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start justify-between gap-4">
                 <p className="text-lg font-semibold text-gray-800">
-                  {qIndex + 1}. {question.hint && <span className="text-base text-gray-600 font-normal">({question.hint})</span>}
+                  {qIndex + 1}.
                 </p>
+                {question.hint && (
+                  <div className="flex-1 text-right">
+                    <span className="text-base text-gray-600 italic bg-gray-100 px-3 py-1 rounded-lg">
+                      {question.hint}
+                    </span>
+                  </div>
+                )}
                 {!isSubmitted && state.built.length > 0 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => handleReset(qIndex)}
-                    className="text-gray-600 hover:text-gray-800"
+                    className="text-gray-600 hover:text-gray-800 shrink-0"
                   >
                     <RotateCcw className="w-4 h-4 mr-1" />
                     Нулирай

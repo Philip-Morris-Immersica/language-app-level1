@@ -42,6 +42,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
     let correctCount = 0;
 
     questions.forEach(q => {
+      if (q.options.length === 0) return; // skip example items
       const isCorrect = answers[q.id]?.toLowerCase() === q.correctAnswer.toLowerCase();
       newValidation[q.id] = isCorrect;
       if (isCorrect) correctCount++;
@@ -87,26 +88,33 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
                 {question.left}
               </span>
 
-              <Select
-                value={answers[question.id] || ''}
-                onValueChange={(value) => handleSelect(question.id, value)}
-                disabled={isSubmitted}
-              >
-                <SelectTrigger className={`
-                  w-full sm:w-48 h-12 text-base font-semibold
-                  ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-                  ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
-                `}>
-                  <SelectValue placeholder="Избери..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {question.options.map((option) => (
-                    <SelectItem key={option} value={option} className="text-base">
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {question.options.length === 0 ? (
+                // Example item — no dropdown, just show answer as static text
+                question.correctAnswer ? (
+                  <span className="text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
+                ) : null
+              ) : (
+                <Select
+                  value={answers[question.id] || ''}
+                  onValueChange={(value) => handleSelect(question.id, value)}
+                  disabled={isSubmitted}
+                >
+                  <SelectTrigger className={`
+                    w-full sm:w-48 h-12 text-base font-semibold
+                    ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
+                    ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                  `}>
+                    <SelectValue placeholder="Избери..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {question.options.map((option) => (
+                      <SelectItem key={option} value={option} className="text-base">
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
 
               {validation[question.id] === true && (
                 <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
@@ -131,7 +139,7 @@ export function DropdownMatch({ exerciseNumber, instruction, questions, onComple
         <Button
           onClick={handleSubmit}
           className="mt-6 bg-[#6B8543] hover:bg-[#5A7238] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={questions.some(q => !answers[q.id])}
+          disabled={questions.some(q => q.options.length > 0 && !answers[q.id])}
         >
           Провери отговорите
         </Button>

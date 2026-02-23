@@ -1,6 +1,24 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface SyllableBlock {
   syllable: string;
@@ -21,194 +39,107 @@ interface SyllableBlocksProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
-// Remove dashes from syllables
 function cleanSyllable(syllable: string): string {
   return syllable.replace(/-/g, '');
 }
 
-export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplete }: SyllableBlocksProps) {
-  const initialStates = useMemo(() => {
-    const initial: {
-      [wordId: string]: {
-        blocks: SyllableBlock[];
-        draggedIndex: number | null;
-        dragOverIndex: number | null;
-      };
-    } = {};
-    
-    puzzles.forEach(puzzle => {
-      // Use syllables in the exact order provided (no shuffle)
-      const blocks = puzzle.syllables.map((syl, idx) => ({
-        syllable: cleanSyllable(syl),
-        id: `${puzzle.id}-${idx}`
-      }));
-      initial[puzzle.id] = {
-        blocks,
-        draggedIndex: null,
-        dragOverIndex: null,
-      };
-    });
-    return initial;
-  }, [puzzles]);
+// Single draggable syllable block
+function SortableBlock({ id, syllable }: { id: string; syllable: string }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
 
-  const [wordStates, setWordStates] = useState(initialStates);
-  const [touchState, setTouchState] = useState<{
-    wordId: string | null;
-    startIndex: number | null;
-    currentElement: HTMLElement | null;
-  }>({ wordId: null, startIndex: null, currentElement: null });
-
-  const handleDragStart = (e: React.DragEvent, wordId: string, index: number) => {
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
-    
-    setWordStates(prev => ({
-      ...prev,
-      [wordId]: {
-        ...prev[wordId],
-        draggedIndex: index,
-      },
-    }));
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : 0,
+    opacity: isDragging ? 0.5 : 1,
   };
 
-  const handleDragOver = (e: React.DragEvent, wordId: string, index: number) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    
-    setWordStates(prev => ({
-      ...prev,
-      [wordId]: {
-        ...prev[wordId],
-        dragOverIndex: index,
-      },
-    }));
-  };
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`
+        px-4 py-3 rounded-lg border-2 font-bold text-lg text-gray-800
+        cursor-grab active:cursor-grabbing select-none touch-none
+        transition-colors
+        ${isDragging
+          ? 'bg-yellow-100 border-yellow-400 shadow-lg'
+          : 'bg-[#D8E4C8] border-[#A8B88A] hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105'
+        }
+      `}
+    >
+      {syllable}
+    </div>
+  );
+}
 
-  const handleDragLeave = (wordId: string) => {
-    setWordStates(prev => ({
-      ...prev,
-      [wordId]: {
-        ...prev[wordId],
-        dragOverIndex: null,
-      },
-    }));
-  };
+// One puzzle card (independent DndContext per puzzle)
+function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
+  const [blocks, setBlocks] = useState<SyllableBlock[]>(() =>
+    puzzle.syllables.map((syl, idx) => ({
+      syllable: cleanSyllable(syl),
+      id: `${puzzle.id}-${idx}`,
+    }))
+  );
 
-  const handleDrop = (e: React.DragEvent, wordId: string, dropIndex: number) => {
-    e.preventDefault();
-    
-    setWordStates(prev => {
-      const state = prev[wordId];
-      if (state.draggedIndex === null || state.draggedIndex === dropIndex) {
-        return {
-          ...prev,
-          [wordId]: {
-            ...state,
-            draggedIndex: null,
-            dragOverIndex: null,
-          },
-        };
-      }
+  // MouseSensor: starts drag after 10px movement (desktop)
+  // TouchSensor: starts drag after 200ms hold + 5px tolerance (mobile – prevents scroll conflicts)
+  // KeyboardSensor: accessibility
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
-      const newBlocks = [...state.blocks];
-      [newBlocks[state.draggedIndex], newBlocks[dropIndex]] = 
-        [newBlocks[dropIndex], newBlocks[state.draggedIndex]];
-
-      return {
-        ...prev,
-        [wordId]: {
-          blocks: newBlocks,
-          draggedIndex: null,
-          dragOverIndex: null,
-        },
-      };
-    });
-  };
-
-  const handleDragEnd = (wordId: string) => {
-    setWordStates(prev => ({
-      ...prev,
-      [wordId]: {
-        ...prev[wordId],
-        draggedIndex: null,
-        dragOverIndex: null,
-      },
-    }));
-  };
-
-  // Touch handlers for mobile
-  const handleTouchStart = (e: React.TouchEvent, wordId: string, index: number) => {
-    const element = e.currentTarget as HTMLElement;
-    setTouchState({
-      wordId,
-      startIndex: index,
-      currentElement: element,
-    });
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchState.currentElement) return;
-    
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    
-    // Find if we're over another syllable block
-    const overBlock = element?.closest('[data-syllable-index]');
-    if (overBlock && touchState.wordId) {
-      const overIndex = parseInt(overBlock.getAttribute('data-syllable-index') || '-1');
-      if (overIndex >= 0) {
-        setWordStates(prev => ({
-          ...prev,
-          [touchState.wordId!]: {
-            ...prev[touchState.wordId!],
-            dragOverIndex: overIndex,
-          },
-        }));
-      }
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setBlocks(prev => {
+        const oldIndex = prev.findIndex(b => b.id === active.id);
+        const newIndex = prev.findIndex(b => b.id === over.id);
+        return arrayMove(prev, oldIndex, newIndex);
+      });
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchState.wordId || touchState.startIndex === null) return;
-    
-    const touch = e.changedTouches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const overBlock = element?.closest('[data-syllable-index]');
-    
-    if (overBlock && touchState.wordId) {
-      const dropIndex = parseInt(overBlock.getAttribute('data-syllable-index') || '-1');
-      if (dropIndex >= 0 && dropIndex !== touchState.startIndex) {
-        setWordStates(prev => {
-          const state = prev[touchState.wordId!];
-          const newBlocks = [...state.blocks];
-          [newBlocks[touchState.startIndex!], newBlocks[dropIndex]] = 
-            [newBlocks[dropIndex], newBlocks[touchState.startIndex!]];
+  return (
+    <div className="bg-white rounded-xl border-2 border-gray-300 p-5 shadow-sm">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={blocks.map(b => b.id)}
+          strategy={horizontalListSortingStrategy}
+        >
+          <div className="flex flex-wrap gap-2 mb-6 min-h-[56px] items-center justify-center">
+            {blocks.map(block => (
+              <SortableBlock key={block.id} id={block.id} syllable={block.syllable} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
-          return {
-            ...prev,
-            [touchState.wordId!]: {
-              blocks: newBlocks,
-              draggedIndex: null,
-              dragOverIndex: null,
-            },
-          };
-        });
-      }
-    }
-    
-    setWordStates(prev => ({
-      ...prev,
-      [touchState.wordId!]: {
-        ...prev[touchState.wordId!],
-        draggedIndex: null,
-        dragOverIndex: null,
-      },
-    }));
-    
-    setTouchState({ wordId: null, startIndex: null, currentElement: null });
-  };
+      {/* Correct answer hint */}
+      <div className="text-center pt-3 border-t-2 border-gray-200">
+        <p className="text-xs text-gray-400 mb-1 italic">Правилен отговор:</p>
+        <p className="font-bold text-lg text-[#6B8543]">{puzzle.correctWord}</p>
+      </div>
+    </div>
+  );
+}
 
-
+export function SyllableBlocks({ exerciseNumber, instruction, puzzles }: SyllableBlocksProps) {
   return (
     <div className="relative bg-[#F8F5EE] rounded-xl border-2 border-[#8B9D5F] p-6 md:p-8 shadow-sm">
       {exerciseNumber && (
@@ -222,62 +153,9 @@ export function SyllableBlocks({ exerciseNumber, instruction, puzzles, onComplet
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {puzzles.map((puzzle) => {
-          const state = wordStates[puzzle.id];
-          if (!state) return null;
-          
-          const currentWord = state.blocks.map(b => b.syllable).join('');
-
-          return (
-            <div
-              key={puzzle.id}
-              className="bg-white rounded-xl border-2 border-gray-300 p-5 shadow-sm"
-            >
-              {/* Draggable syllable blocks */}
-              <div className="flex flex-wrap gap-2 mb-6 min-h-[60px] items-center justify-center">
-                {state.blocks.map((block, index) => (
-                  <div
-                    key={block.id}
-                    data-syllable-index={index}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, puzzle.id, index)}
-                    onDragOver={(e) => handleDragOver(e, puzzle.id, index)}
-                    onDragLeave={() => handleDragLeave(puzzle.id)}
-                    onDrop={(e) => handleDrop(e, puzzle.id, index)}
-                    onDragEnd={() => handleDragEnd(puzzle.id)}
-                    onTouchStart={(e) => handleTouchStart(e, puzzle.id, index)}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    className={`
-                      px-4 py-3 rounded-lg border-2 font-bold text-lg text-gray-800
-                      transition-all cursor-move select-none
-                      ${state.draggedIndex === index ? 'opacity-50 scale-110' : ''}
-                      ${state.dragOverIndex === index && state.draggedIndex !== index 
-                        ? 'bg-yellow-200 border-yellow-400 scale-105' 
-                        : 'bg-[#D8E4C8] border-[#A8B88A]'
-                      }
-                      ${state.draggedIndex !== index && state.dragOverIndex !== index
-                        ? 'hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105'
-                        : ''
-                      }
-                      active:scale-95 touch-none
-                    `}
-                  >
-                    {block.syllable}
-                  </div>
-                ))}
-              </div>
-
-              {/* Correct answer (hint) */}
-              <div className="text-center pt-3 border-t-2 border-gray-200">
-                <p className="text-sm text-gray-500 mb-1 italic">Правилен отговор:</p>
-                <p className="font-bold text-lg text-[#6B8543]">
-                  {puzzle.correctWord}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+        {puzzles.map(puzzle => (
+          <PuzzleCard key={puzzle.id} puzzle={puzzle} />
+        ))}
       </div>
     </div>
   );
