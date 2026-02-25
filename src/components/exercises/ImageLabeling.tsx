@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { ImageLabelingExercise } from '@/content/types';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface ImageLabelingProps {
   exercise: ImageLabelingExercise;
@@ -14,10 +15,18 @@ interface ImageLabelingProps {
 
 export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   const t = useT();
-  const [selectedLabels, setSelectedLabels] = useState<{ [imageId: string]: string }>({});
-  const [validation, setValidation] = useState<{ [imageId: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [flippedCards, setFlippedCards] = useState<{ [imageId: string]: boolean }>({});
+  const { savedState, saveState } = useExercisePersistence(exercise.id);
+  const s = savedState as any;
+  const [selectedLabels, setSelectedLabels] = useState<{ [imageId: string]: string }>(() => s?.selectedLabels ?? {});
+  const [validation, setValidation] = useState<{ [imageId: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const [flippedCards, setFlippedCards] = useState<{ [imageId: string]: boolean }>(() => s?.flippedCards ?? {});
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ selectedLabels, validation, isSubmitted, flippedCards });
+  }, [selectedLabels, validation, isSubmitted, flippedCards]);
 
   const speak = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -228,7 +237,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
         <Button
           onClick={handleSubmit}
           className="mt-4 bg-[#8FC412] hover:bg-[#8FC412]-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={Object.keys(selectedLabels).length < exercise.images.length}
+          disabled={false}
         >
           {t('exercise.check')}
         </Button>

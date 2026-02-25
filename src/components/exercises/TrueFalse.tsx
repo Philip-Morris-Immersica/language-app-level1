@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface TrueFalseSentence {
   id: string;
@@ -13,14 +14,23 @@ interface TrueFalseSentence {
 interface TrueFalseProps {
   sentences: TrueFalseSentence[];
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 type Answer = 'true' | 'false' | null;
 
-export function TrueFalse({ sentences, onComplete }: TrueFalseProps) {
+export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps) {
   const t = useT();
-  const [answers, setAnswers] = useState<Record<string, Answer>>({});
-  const [checked, setChecked] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const [answers, setAnswers] = useState<Record<string, Answer>>(() => s?.answers ?? {});
+  const [checked, setChecked] = useState<boolean>(() => s?.checked ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ answers, checked });
+  }, [answers, checked]);
 
   const handleSelect = (id: string, value: Answer) => {
     if (checked) return;
@@ -121,7 +131,7 @@ export function TrueFalse({ sentences, onComplete }: TrueFalseProps) {
         {!checked ? (
           <Button
             onClick={handleCheck}
-            disabled={!allAnswered}
+            disabled={false}
             className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white disabled:opacity-50"
           >
             {t('exercise.check')}

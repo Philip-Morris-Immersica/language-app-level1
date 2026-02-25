@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface WordSearchProps {
   letterString: string;
@@ -11,6 +12,7 @@ interface WordSearchProps {
   distractorWords?: string[];
   hint?: string;
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 export function WordSearch({ 
@@ -18,12 +20,21 @@ export function WordSearch({
   correctWords, 
   distractorWords = [],
   hint, 
-  onComplete 
+  onComplete,
+  exerciseId,
 }: WordSearchProps) {
   const t = useT();
-  const [foundWords, setFoundWords] = useState<string[]>([]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const [foundWords, setFoundWords] = useState<string[]>(() => s?.foundWords ?? []);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
   const [clickedWrong, setClickedWrong] = useState<string | null>(null);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ foundWords, isSubmitted });
+  }, [foundWords, isSubmitted]);
 
   // Shuffle available words (correct + distractors) deterministically
   const availableWords = useMemo(() => {

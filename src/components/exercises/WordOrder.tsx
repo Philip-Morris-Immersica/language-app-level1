@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { WordOrderExercise } from '@/content/types';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface WordOrderProps {
   exercise: WordOrderExercise;
@@ -13,17 +14,26 @@ interface WordOrderProps {
 
 export function WordOrder({ exercise, onComplete }: WordOrderProps) {
   const t = useT();
+  const { savedState, saveState } = useExercisePersistence(exercise.id);
+  const s = savedState as any;
   const [questionStates, setQuestionStates] = useState<{
     [qIndex: number]: {
       available: string[];
       built: string[];
       validation: boolean | null;
     };
-  }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  }>(() => s?.questionStates ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    // Initialize each question with shuffled words
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ questionStates, isSubmitted });
+  }, [questionStates, isSubmitted]);
+
+  useEffect(() => {
+    // Initialize each question with shuffled words only if no saved state
+    if (s?.questionStates && Object.keys(s.questionStates).length > 0) return;
     const initialStates: typeof questionStates = {};
     exercise.questions.forEach((question, index) => {
       const shuffled = [...question.words].sort(() => Math.random() - 0.5);
@@ -212,9 +222,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
         <Button
           onClick={handleSubmit}
           className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={exercise.questions.some((_, idx) => 
-            !questionStates[idx] || questionStates[idx].built.length === 0
-          )}
+          disabled={false}
         >
           {t('exercise.check')}
         </Button>

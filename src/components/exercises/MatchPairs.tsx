@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { MatchPairsExercise } from '@/content/types';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface MatchPairsProps {
   exercise: MatchPairsExercise;
@@ -13,14 +14,23 @@ interface MatchPairsProps {
 
 export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   const t = useT();
-  const [rightItems, setRightItems] = useState<string[]>([]);
-  const [matches, setMatches] = useState<{ [leftId: string]: string }>({});
+  const { savedState, saveState } = useExercisePersistence(exercise.id);
+  const s = savedState as any;
+  const [rightItems, setRightItems] = useState<string[]>(() => s?.rightItems ?? []);
+  const [matches, setMatches] = useState<{ [leftId: string]: string }>(() => s?.matches ?? {});
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
-  const [validation, setValidation] = useState<{ [leftId: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [validation, setValidation] = useState<{ [leftId: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    // Shuffle right items
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ matches, validation, isSubmitted, rightItems });
+  }, [matches, validation, isSubmitted, rightItems]);
+
+  useEffect(() => {
+    // Shuffle right items only if no saved state
+    if (s?.rightItems?.length) return;
     const rights = exercise.pairs.map(p => p.correctRight);
     const shuffled = exercise.shuffledRights || [...rights].sort(() => Math.random() - 0.5);
     setRightItems(shuffled);
@@ -176,7 +186,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
         <Button
           onClick={handleSubmit}
           className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={Object.keys(matches).length < exercise.pairs.length}
+          disabled={false}
         >
           {t('exercise.checkAnswers')}
         </Button>

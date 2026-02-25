@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useT } from '@/i18n/useT';
 import type { MultipleChoiceExercise } from '@/content/types';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface MultipleChoiceProps {
   exercise: MultipleChoiceExercise;
@@ -14,9 +15,17 @@ interface MultipleChoiceProps {
 
 export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
   const t = useT();
-  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
-  const [validation, setValidation] = useState<{ [key: number]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exercise.id);
+  const s = savedState as any;
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>(() => s?.selectedAnswers ?? {});
+  const [validation, setValidation] = useState<{ [key: number]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ selectedAnswers, validation, isSubmitted });
+  }, [selectedAnswers, validation, isSubmitted]);
 
   const handleSelect = (questionIndex: number, optionIndex: number) => {
     if (isSubmitted) return;
@@ -123,7 +132,7 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
         <Button
           onClick={handleSubmit}
           className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={Object.keys(selectedAnswers).length < exercise.questions.length}
+          disabled={false}
         >
           {t('exercise.check')}
         </Button>

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface WorkbookSentence {
   text: string;
@@ -18,6 +19,7 @@ export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 // Parse text with _______ placeholders into segments
@@ -33,11 +35,20 @@ export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
   onComplete,
+  exerciseId,
 }: WorkbookFillBlankProps) {
   const t = useT();
-  const [answers, setAnswers] = useState<{ [key: string]: string[] }>({});
-  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const [answers, setAnswers] = useState<{ [key: string]: string[] }>(() => s?.answers ?? {});
+  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ answers, validation, isSubmitted });
+  }, [answers, validation, isSubmitted]);
 
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
     if (isSubmitted) return;
@@ -396,7 +407,7 @@ export function WorkbookFillBlank({
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          disabled={!allFilled}
+          disabled={false}
           className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
         >
           {t('exercise.checkAnswers')}

@@ -79,6 +79,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           sentences={exercise.sentences}
           layout={exercise.layout}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 
@@ -93,6 +94,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <DropdownMatch
           questions={exercise.questions}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 
@@ -101,6 +103,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <LetterChoice
           puzzles={exercise.puzzles}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 
@@ -129,6 +132,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           distractorWords={exercise.distractorWords}
           hint={exercise.hint}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 
@@ -172,6 +176,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <DialogueBuilder
           sections={exercise.sections}
+          exerciseId={exercise.id}
         />
       );
 
@@ -184,6 +189,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           verbOptions={exercise.verbOptions}
           countryOptions={exercise.countryOptions}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 
@@ -200,6 +206,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <TrueFalse
           sentences={exercise.sentences}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 

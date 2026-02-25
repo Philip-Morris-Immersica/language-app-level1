@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface DropdownQuestion {
   id: string;
@@ -22,13 +23,22 @@ interface DropdownQuestion {
 interface DropdownMatchProps {
   questions: DropdownQuestion[];
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
-export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMatchProps) {
   const t = useT();
-  const [answers, setAnswers] = useState<{ [key: string]: string }>({});
-  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const [answers, setAnswers] = useState<{ [key: string]: string }>(() => s?.answers ?? {});
+  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ answers, validation, isSubmitted });
+  }, [answers, validation, isSubmitted]);
 
   const handleSelect = (questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -148,7 +158,7 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
         <Button
           onClick={handleSubmit}
           className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={questions.some(q => q.options.length > 0 && !answers[q.id])}
+          disabled={false}
         >
           {t('exercise.checkAnswers')}
         </Button>

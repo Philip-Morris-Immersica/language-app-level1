@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import {
   DndContext,
   closestCenter,
@@ -102,11 +103,18 @@ function SortableItem({
 
 interface DialogueBuilderProps {
   sections: Section[];
+  exerciseId?: string;
 }
 
-export function DialogueBuilder({ sections }: DialogueBuilderProps) {
+export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) {
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const mounted = useRef(false);
+
   // Build initial state: shuffle non-first sentences per section
   const buildInitialState = useCallback((): Record<string, SectionState> => {
+    // Use saved state if available
+    if (s?.sectionStates) return s.sectionStates;
     const state: Record<string, SectionState> = {};
     for (const section of sections) {
       const rest = [...section.sentences.slice(1)];
@@ -130,6 +138,11 @@ export function DialogueBuilder({ sections }: DialogueBuilderProps) {
   const [sectionStates, setSectionStates] = useState<Record<string, SectionState>>(
     buildInitialState
   );
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ sectionStates });
+  }, [sectionStates]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),

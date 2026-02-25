@@ -7,6 +7,7 @@ import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
 import { LessonWorkbookSection } from '@/components/LessonWorkbookSection';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
+import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
 
 interface LessonPageProps {
   params: Promise<{
@@ -78,9 +79,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <h2 className="text-3xl font-bold text-bolt-blue">
               <T k="lesson.exercises" />
             </h2>
-            {lessonData.exercises.map((exercise: any, index: number) => (
-              <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
-            ))}
+            <LessonExercisesProvider lessonId={lessonId}>
+              {lessonData.exercises.map((exercise: any, index: number) => (
+                <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
+              ))}
+            </LessonExercisesProvider>
           </div>
         )}
 

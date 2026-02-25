@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { FillInBlankExercise } from '@/content/types';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface FillInBlankProps {
   exercise: FillInBlankExercise;
@@ -13,10 +14,18 @@ interface FillInBlankProps {
 
 export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
   const t = useT();
-  const [answers, setAnswers] = useState<{ [key: string]: string }>({});
-  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exercise.id);
+  const s = savedState as any;
+  const [answers, setAnswers] = useState<{ [key: string]: string }>(() => s?.answers ?? {});
+  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
   const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ answers, validation, isSubmitted });
+  }, [answers, validation, isSubmitted]);
 
   const handleChange = (sentenceIndex: number, blankIndex: number, value: string) => {
     const key = `${sentenceIndex}-${blankIndex}`;

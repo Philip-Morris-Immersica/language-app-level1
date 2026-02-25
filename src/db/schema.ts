@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, text, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar, text, boolean, timestamp, pgEnum, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 // Enums for exercise types and difficulty levels
@@ -70,6 +70,16 @@ export const lessonProgressTable = pgTable("lesson_progress", {
   completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+// Exercise state persistence — stores all user answers per exercise
+export const exerciseStatesTable = pgTable("exercise_states", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  lessonId: varchar("lesson_id", { length: 50 }).notNull(),
+  exerciseId: varchar("exercise_id", { length: 50 }).notNull(),
+  state: text().notNull().default('{}'),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (t) => [unique().on(t.userId, t.exerciseId)]);
 
 // Relations
 export const usersRelations = relations(usersTable, ({ many }) => ({

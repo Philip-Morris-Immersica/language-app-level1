@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Image from 'next/image';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface SentencePair {
   id: string;
@@ -30,6 +31,7 @@ interface FillWithFlagsProps {
   verbOptions: string[];
   countryOptions: string[];
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 export function FillWithFlags({
@@ -39,10 +41,19 @@ export function FillWithFlags({
   verbOptions,
   countryOptions,
   onComplete,
+  exerciseId,
 }: FillWithFlagsProps) {
   const t = useT();
-  const [answers, setAnswers] = useState<Record<string, { verb1: string; verb2: string; country: string }>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+  const [answers, setAnswers] = useState<Record<string, { verb1: string; verb2: string; country: string }>>(() => s?.answers ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ answers, isSubmitted });
+  }, [answers, isSubmitted]);
 
   const handleVerbChange = (sentenceId: string, verbNum: 1 | 2, value: string) => {
     setAnswers(prev => ({

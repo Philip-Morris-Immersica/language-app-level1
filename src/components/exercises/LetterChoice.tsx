@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import {
   DndContext,
   DragOverlay,
@@ -26,6 +27,7 @@ interface LetterPuzzle {
 interface LetterChoiceProps {
   puzzles: LetterPuzzle[];
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 // Floating letter shown while dragging
@@ -338,13 +340,21 @@ function PuzzleCard({
 }
 
 // Main component
-export function LetterChoice({ puzzles, onComplete }: LetterChoiceProps) {
+export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoiceProps) {
   const t = useT();
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
   const [slotContents, setSlotContents] = useState<{ [puzzleId: string]: (string | null)[] }>(
-    () => Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)]))
+    () => s?.slotContents ?? Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)]))
   );
-  const [validation, setValidation] = useState<{ [puzzleId: string]: boolean | null }>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [validation, setValidation] = useState<{ [puzzleId: string]: boolean | null }>(() => s?.validation ?? {});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ slotContents, validation, isSubmitted });
+  }, [slotContents, validation, isSubmitted]);
 
   const handlePlace = (puzzleId: string, slotIndex: number, letter: string) => {
     setSlotContents(prev => {
@@ -416,7 +426,7 @@ export function LetterChoice({ puzzles, onComplete }: LetterChoiceProps) {
       {!isSubmitted && (
         <Button
           onClick={handleSubmit}
-          disabled={!allFilled}
+          disabled={false}
           className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
         >
           {t('exercise.checkAnswers')}
