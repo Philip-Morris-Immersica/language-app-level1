@@ -21,7 +21,9 @@ export type ExerciseType =
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
-  | 'listening';           // Audio exercises (future)
+  | 'listening'            // Audio exercises (future)
+  | 'reading_text'         // Reading text with optional audio
+  | 'true_false';          // True/False sentences with ✓/✗ buttons
 
 // Base exercise interface
 export interface BaseExercise {
@@ -278,6 +280,21 @@ export interface LetterChoiceExercise extends BaseExercise {
   }[];
 }
 
+export interface ReadingTextExercise extends BaseExercise {
+  type: 'reading_text';
+  audioUrl?: string;
+  paragraphs: string[];
+}
+
+export interface TrueFalseExercise extends BaseExercise {
+  type: 'true_false';
+  sentences: {
+    id: string;
+    text: string;
+    isTrue: boolean;
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise
@@ -301,7 +318,9 @@ export type Exercise =
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise
-  | ListeningExercise;
+  | ListeningExercise
+  | ReadingTextExercise
+  | TrueFalseExercise;
 
 // Dialogue structure
 export interface Dialogue {

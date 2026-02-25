@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise, ReadingTextExercise, TrueFalseExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -641,6 +641,7 @@ export const exercises: Exercise[] = [
   } as DialoguesExercise,
 
   // ORDER 24: УПРАЖНЕНИЕ 17 - Подредете фразите (Page 15) - dialogue_builder
+  // (exercises 18 and 19 from the textbook are skipped — no audio or text available)
   {
     id: 'l01-ex-17',
     type: 'dialogue_builder',
@@ -707,4 +708,77 @@ export const exercises: Exercise[] = [
       },
     ],
   } as DialogueBuilderExercise,
+
+  // ORDER 25: ТЕКСТ 1 (Textbook ex. 20) - Reading text with audio
+  {
+    id: 'l01-ex-22',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
+    audioUrl: '/assets/lesson-01/audio/text-22.wav',
+    order: 25,
+    paragraphs: [
+      'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
+      'Те са Лейла и Исам. Ние сме бежанци от Ливан и сега сме в България.',
+      'Тя е Ава. Тя е иранка. Той е Омар. Той е иранец. Те са от Иран. Сега са в България.',
+      'Ага е кюрд, Лава е кюрдка. Те са кюрди, бежанци от Сирия. Сега са в България.',
+    ],
+  } as ReadingTextExercise,
+
+  // ORDER 26: УПРАЖНЕНИЕ 21 (Textbook ex. 21) - True/False based on text above
+  {
+    id: 'l01-ex-23',
+    type: 'true_false',
+    instruction: 'Вярно ✓ или не ✗?',
+    order: 26,
+    points: 9,
+    sentences: [
+      { id: 's1', text: 'Мохамед е от Сирия.',       isTrue: true  },
+      { id: 's2', text: 'Кадир не е сириец.',         isTrue: false },
+      { id: 's3', text: 'Лейла и Исам са от Ливан.',  isTrue: true  },
+      { id: 's4', text: 'Те са в България.',           isTrue: true  },
+      { id: 's5', text: 'Ава не е иранка.',            isTrue: false },
+      { id: 's6', text: 'Омар е от Иран.',             isTrue: true  },
+      { id: 's7', text: 'Ага и Лава са кюрди.',        isTrue: true  },
+      { id: 's8', text: 'Те не са бежанци.',           isTrue: false },
+      { id: 's9', text: 'Ага и Лава са в България.',   isTrue: true  },
+    ],
+  } as TrueFalseExercise,
+
+  // ORDER 27: ТЕКСТ 2 (Textbook ex. 22) - Reading text with audio
+  {
+    id: 'l01-ex-24',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
+    audioUrl: '/assets/lesson-01/audio/text-20.wav',
+    order: 27,
+    paragraphs: [
+      'Аз съм Бала от Мали. Мали е в Африка. Аз съм бежанец. Сега съм в България, в София.',
+      'Али е от Ирак. Той е иракчанин. Сега е в София.',
+      'Ара е учителка от Афганистан. Сега тя е бежанка в България.',
+      'Карим и Ахмед са алжирци. Те също са бежанци. Сега са в Харманли.',
+    ],
+  } as ReadingTextExercise,
+
+  // ORDER 28: УПРАЖНЕНИЕ 23 (Textbook ex. 23) - Answer questions with dropdown
+  {
+    id: 'l01-ex-25',
+    type: 'dropdown_match',
+    instruction: 'Отговорете на въпросите.',
+    order: 28,
+    points: 10,
+    questions: [
+      { id: 'q1',  left: 'Откъде е Бала?',              options: ['от Мали', 'от Алжир', 'от Ирак', 'от Афганистан'], correctAnswer: 'от Мали'        },
+      { id: 'q2',  left: 'Мали в Африка ли е?',         options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+      { id: 'q3',  left: 'Бала бежанец ли е?',          options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+      { id: 'q4',  left: 'Той в София ли е?',           options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+      { id: 'q5',  left: 'Откъде е Али?',               options: ['от Мали', 'от Алжир', 'от Ирак', 'от Афганистан'], correctAnswer: 'от Ирак'        },
+      { id: 'q6',  left: 'Той иракчанин ли е?',         options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+      { id: 'q7',  left: 'Откъде е Ара?',               options: ['от Мали', 'от Алжир', 'от Ирак', 'от Афганистан'], correctAnswer: 'от Афганистан'  },
+      { id: 'q8',  left: 'Тя учителка ли е?',           options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+      { id: 'q9',  left: 'Откъде са Карим и Ахмед?',   options: ['от Мали', 'от Алжир', 'от Ирак', 'от Афганистан'], correctAnswer: 'от Алжир'       },
+      { id: 'q10', left: 'Те бежанци ли са?',           options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
+    ],
+  } as DropdownMatchExercise,
 ];

@@ -20,6 +20,8 @@ import { LetterChoice } from './LetterChoice';
 import { FillWithFlags } from './FillWithFlags';
 import { WorkbookFillBlank } from './WorkbookFillBlank';
 import { GrammarTable } from './GrammarTable';
+import { ReadingText } from './ReadingText';
+import { TrueFalse } from './TrueFalse';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -181,6 +183,22 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           sentences={exercise.sentences}
           verbOptions={exercise.verbOptions}
           countryOptions={exercise.countryOptions}
+          onComplete={onComplete}
+        />
+      );
+
+    case 'reading_text':
+      return wrap(
+        <ReadingText
+          audioUrl={exercise.audioUrl}
+          paragraphs={exercise.paragraphs}
+        />
+      );
+
+    case 'true_false':
+      return wrap(
+        <TrueFalse
+          sentences={exercise.sentences}
           onComplete={onComplete}
         />
       );
