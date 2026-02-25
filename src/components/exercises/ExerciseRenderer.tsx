@@ -18,6 +18,7 @@ import { DropdownMatch } from './DropdownMatch';
 import { LetterChoice } from './LetterChoice';
 import { FillWithFlags } from './FillWithFlags';
 import { WorkbookFillBlank } from './WorkbookFillBlank';
+import { GrammarTable } from './GrammarTable';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -139,6 +140,17 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <GrammarWithExamples
           subtitle={exercise.subtitle}
           examples={exercise.examples}
+        />
+      );
+
+    case 'grammar_table':
+      return wrap(
+        <GrammarTable
+          tableTitle={exercise.tableTitle}
+          columns={exercise.columns}
+          rows={exercise.rows}
+          notes={exercise.notes}
+          subtitle={exercise.subtitle}
         />
       );
 

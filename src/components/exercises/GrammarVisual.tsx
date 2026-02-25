@@ -35,7 +35,7 @@ export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
           >
             {/* Image placeholder or actual image */}
             {item.imageUrl ? (
-              <div className="relative w-full h-32 mb-4">
+              <div className="relative w-full h-32 mb-4 bg-white">
                 <Image
                   src={item.imageUrl}
                   alt={item.pronoun}

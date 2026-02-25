@@ -6,6 +6,7 @@ import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
 import { getLessonMetadata } from '@/content';
 import { ChevronLeft } from 'lucide-react';
 import { T } from '@/components/T';
+import { TranslatedText } from '@/components/TranslatedText';
 
 interface ExercisesPageProps {
   params: Promise<{
@@ -73,7 +74,7 @@ export default async function ExercisesPage({ params }: ExercisesPageProps) {
 
         <div className="py-4">
           <h1 className="text-2xl md:text-3xl font-bold text-bolt-blue mb-2">
-            <T k="lesson.workbook" />: {metadata.title}
+            <T k="lesson.workbook" />: <TranslatedText text={metadata.title} />
           </h1>
         </div>
 

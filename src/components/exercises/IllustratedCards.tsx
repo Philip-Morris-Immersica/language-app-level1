@@ -82,7 +82,7 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
           >
             {/* Image */}
             <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
-              <div className="relative w-full h-[120px] md:h-[150px]">
+              <div className="relative w-full h-[120px] md:h-[150px] bg-white">
                 <Image
                   src={card.imageUrl}
                   alt={card.label}

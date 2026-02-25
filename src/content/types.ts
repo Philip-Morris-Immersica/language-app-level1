@@ -14,6 +14,7 @@ export type ExerciseType =
   | 'word_search'          // Find words in letter string
   | 'grammar_visual'       // Visual grammar explanation (pronouns, etc.)
   | 'grammar_examples'     // Grammar with illustrated examples
+  | 'grammar_table'        // Grammar table image + banner examples below
   | 'fill_with_images'     // Fill in blanks with flag images
   | 'dialogues'            // Dialogue sections with audio
   | 'number_writing'       // Write numbers as words
@@ -185,7 +186,21 @@ export interface GrammarExamplesExercise extends BaseExercise {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
     subtext?: string;        // 'Аз съм от Сирия.'
+    lines?: string[];        // Multiple equal-weight lines (replaces text/subtext display when provided)
   }[];
+}
+
+export interface GrammarTableExercise extends BaseExercise {
+  type: 'grammar_table';
+  title: string;             // 'ГРАМАТИКА 5'
+  subtitle?: string;         // 'Граматика – Сегашно време (12)'
+  tableTitle?: string;       // 'Сегашно време – съм'
+  columns?: string[];        // ['(+)', '(–)', '(?)']
+  rows?: {
+    pronoun: string;
+    cells: string[];
+  }[];
+  notes?: string[];          // Text notes shown below the table
 }
 
 export interface FillWithImagesExercise extends BaseExercise {
@@ -231,7 +246,7 @@ export interface DropdownMatchExercise extends BaseExercise {
 
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
-  layout?: 'two-column' | 'qa-split' | 'single';
+  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
   sentences: {
     text: string;
     blanks: number[];
@@ -268,6 +283,7 @@ export type Exercise =
   | WordSearchExercise
   | GrammarVisualExercise
   | GrammarExamplesExercise
+  | GrammarTableExercise
   | FillWithImagesExercise
   | DialoguesExercise
   | NumberWritingExercise

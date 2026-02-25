@@ -70,54 +70,73 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
               ${validation[question.id] === null ? 'border-gray-300' : ''}
             `}
           >
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-lg font-semibold text-gray-700 min-w-[2rem]">
                 {index + 1}.
               </span>
-              <span className="text-lg md:text-xl font-bold text-gray-800">
-                {question.left}
-              </span>
 
-              {question.options.length === 0 ? (
-                // Example item — no dropdown, just show answer as static text
-                question.correctAnswer ? (
-                  <span className="text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
-                ) : null
-              ) : (
-                <Select
-                  value={answers[question.id] || ''}
-                  onValueChange={(value) => handleSelect(question.id, value)}
-                  disabled={isSubmitted}
-                >
-                  <SelectTrigger className={`
-                    w-full sm:w-48 h-12 text-base font-semibold
-                    ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-                    ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
-                  `}>
-                    <SelectValue placeholder={t('exercise.selectOption')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {question.options.map((option) => (
-                      <SelectItem key={option} value={option} className="text-base">
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
+              {(() => {
+                const parts = question.left.split('…');
+                const hasSplit = parts.length === 2;
+                const before = hasSplit ? parts[0] : question.left;
+                const after = hasSplit ? parts[1] : '';
 
-              {validation[question.id] === true && (
-                <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
-              )}
-              {validation[question.id] === false && (
-                <X className="w-6 h-6 text-red-600 flex-shrink-0" />
-              )}
+                return (
+                  <>
+                    {before && (
+                      <span className="text-lg md:text-xl font-bold text-gray-800">
+                        {before.trim()}
+                      </span>
+                    )}
+
+                    {question.options.length === 0 ? (
+                      question.correctAnswer ? (
+                        <span className="text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
+                      ) : null
+                    ) : (
+                      <Select
+                        value={answers[question.id] || ''}
+                        onValueChange={(value) => handleSelect(question.id, value)}
+                        disabled={isSubmitted}
+                      >
+                        <SelectTrigger className={`
+                          w-36 h-10 text-base font-semibold
+                          ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
+                          ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                        `}>
+                          <SelectValue placeholder={t('exercise.selectOption')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {question.options.map((option) => (
+                            <SelectItem key={option} value={option} className="text-base">
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+
+                    {after && (
+                      <span className="text-lg md:text-xl font-bold text-gray-800">
+                        {after.trim()}
+                      </span>
+                    )}
+
+                    {validation[question.id] === true && (
+                      <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
+                    )}
+                    {validation[question.id] === false && (
+                      <X className="w-6 h-6 text-red-600 flex-shrink-0" />
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {isSubmitted && validation[question.id] === false && (
               <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
                 <p className="text-sm text-yellow-800">
-                  <strong>{t('exercise.correctLabel')}</strong> {question.left} {question.correctAnswer}
+                  <strong>{t('exercise.correctLabel')}</strong> {question.left.replace('…', question.correctAnswer)}
                 </p>
               </div>
             )}

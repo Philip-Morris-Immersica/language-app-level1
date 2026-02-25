@@ -4,10 +4,16 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { lessonsMetadata } from '@/content';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+function LessonTitle({ title }: { title: string }) {
+  const translated = useTranslate(title);
+  return <>{translated}</>;
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -69,7 +75,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     >
                       {lesson.number}
                     </span>
-                    <span className="flex-1 leading-snug">{lesson.title}</span>
+                    <span className="flex-1 leading-snug"><LessonTitle title={lesson.title} /></span>
                   </Link>
                 </li>
               );

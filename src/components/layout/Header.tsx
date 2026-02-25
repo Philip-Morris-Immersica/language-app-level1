@@ -2,7 +2,6 @@
 
 import { Menu, X, LogIn, LogOut, User, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
@@ -99,7 +98,7 @@ function ProfileMenu() {
 
 export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
   return (
-    <header className="bg-[#8FC412] text-white py-3 px-4 shadow-md">
+    <header className="bg-[#8FC412] text-white py-2 px-4 shadow-md">
       <div className="flex items-center justify-between gap-2">
 
         {/* Left: hamburger */}
@@ -116,17 +115,15 @@ export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
         </button>
 
         {/* Center: UNHCR logo + title */}
-        <Link href="/" className="flex items-center gap-3 flex-1 min-w-0 justify-center">
-          <Image
+        <Link href="/" className="flex items-center gap-6 flex-1 min-w-0 justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/unhcr-logo.png"
             alt="UNHCR"
-            width={140}
-            height={50}
-            className="h-10 w-auto flex-shrink-0"
-            priority
+            style={{ height: '31px', width: 'auto', flexShrink: 0 }}
           />
           <div className="hidden sm:block h-9 w-px bg-white/40 flex-shrink-0" />
-          <span className="hidden sm:block text-white font-bold text-xl md:text-2xl leading-tight truncate">
+          <span className="hidden sm:block text-white font-bold text-xl md:text-2xl leading-tight truncate uppercase tracking-wide">
             Български език за бежанци
           </span>
         </Link>
