@@ -85,16 +85,27 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
     let correctCount = 0;
     let totalCount = 0;
 
-    exercise.sentences.forEach((sentence, sIdx) => {
-      sentence.blanks.forEach((_, bIdx) => {
-        const key = `${sIdx}-${bIdx}`;
+    if (exercise.freeText) {
+      exercise.sentences.forEach((sentence, sIdx) => {
+        const key = `${sIdx}-0`;
         const answer = answers[key] || '';
-        const isCorrect = validateAnswer(answer, [sentence.correctAnswers[bIdx]]);
+        const isCorrect = validateAnswer(answer, sentence.correctAnswers);
         newValidation[key] = isCorrect;
         if (isCorrect) correctCount++;
         totalCount++;
       });
-    });
+    } else {
+      exercise.sentences.forEach((sentence, sIdx) => {
+        sentence.blanks.forEach((_, bIdx) => {
+          const key = `${sIdx}-${bIdx}`;
+          const answer = answers[key] || '';
+          const isCorrect = validateAnswer(answer, [sentence.correctAnswers[bIdx]]);
+          newValidation[key] = isCorrect;
+          if (isCorrect) correctCount++;
+          totalCount++;
+        });
+      });
+    }
 
     setValidation(newValidation);
     setIsSubmitted(true);
@@ -164,13 +175,48 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
     );
   };
 
+  const renderFreeTextInput = (sentence: typeof exercise.sentences[0], sentenceIndex: number) => {
+    const key = `${sentenceIndex}-0`;
+    const validationResult = validation[key];
+    return (
+      <div className="flex flex-col items-center gap-3">
+        <input
+          type="text"
+          value={answers[key] || ''}
+          onChange={e => {
+            if (!isSubmitted) setAnswers(prev => ({ ...prev, [key]: e.target.value }));
+          }}
+          onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
+          disabled={isSubmitted}
+          placeholder="Напишете отговора си тук..."
+          className={`
+            w-full max-w-xs text-center text-lg font-medium px-4 py-3 rounded-xl border-2
+            focus:outline-none focus:ring-2 focus:ring-[#6B8543] focus:ring-offset-1
+            transition-all
+            ${validationResult === true ? 'border-green-500 bg-green-50 text-green-700' : ''}
+            ${validationResult === false ? 'border-red-500 bg-red-50 text-red-700' : ''}
+            ${validationResult === null || validationResult === undefined ? 'border-gray-300 bg-white' : ''}
+          `}
+          autoComplete="off"
+        />
+        {isSubmitted && validationResult === false && (
+          <p className="text-sm text-red-600 italic">
+            Правилен отговор: {sentence.correctAnswers.join(' / ')}
+          </p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       
       <div className="space-y-4 md:space-y-6 mb-6">
         {exercise.sentences.map((sentence, index) => (
           <div key={index} className="bg-white rounded-lg p-4 md:p-6 shadow-sm">
-            {renderLetterBoxes(sentence, index)}
+            {exercise.freeText
+              ? renderFreeTextInput(sentence, index)
+              : renderLetterBoxes(sentence, index)}
           </div>
         ))}
       </div>

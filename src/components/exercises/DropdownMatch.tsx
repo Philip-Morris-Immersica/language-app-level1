@@ -71,7 +71,7 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
             `}
           >
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-lg font-semibold text-gray-700 min-w-[2rem]">
+              <span className="text-sm md:text-lg font-semibold text-gray-700 min-w-[1.5rem] md:min-w-[2rem]">
                 {index + 1}.
               </span>
 
@@ -84,14 +84,14 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
                 return (
                   <>
                     {before && (
-                      <span className="text-lg md:text-xl font-bold text-gray-800">
+                      <span className="text-sm md:text-lg font-bold text-gray-800">
                         {before.trim()}
                       </span>
                     )}
 
                     {question.options.length === 0 ? (
                       question.correctAnswer ? (
-                        <span className="text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
+                        <span className="text-sm md:text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
                       ) : null
                     ) : (
                       <Select
@@ -100,7 +100,7 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
                         disabled={isSubmitted}
                       >
                         <SelectTrigger className={`
-                          w-36 h-10 text-base font-semibold
+                          w-28 md:w-36 h-8 md:h-10 text-sm md:text-base font-semibold
                           ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
                           ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
                         `}>
@@ -108,7 +108,7 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
                         </SelectTrigger>
                         <SelectContent>
                           {question.options.map((option) => (
-                            <SelectItem key={option} value={option} className="text-base">
+                            <SelectItem key={option} value={option} className="text-sm md:text-base">
                               {option}
                             </SelectItem>
                           ))}
@@ -117,7 +117,7 @@ export function DropdownMatch({ questions, onComplete }: DropdownMatchProps) {
                     )}
 
                     {after && (
-                      <span className="text-lg md:text-xl font-bold text-gray-800">
+                      <span className="text-sm md:text-lg font-bold text-gray-800">
                         {after.trim()}
                       </span>
                     )}

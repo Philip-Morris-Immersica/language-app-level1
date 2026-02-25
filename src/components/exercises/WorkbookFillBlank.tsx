@@ -245,11 +245,36 @@ export function WorkbookFillBlank({
         if (seg.type === 'blank') {
           const bIdx = blankCounter++;
           const userVal = answers[sIdx]?.[bIdx] || '';
+          const opts = sentence.options || [];
           if (isExample) {
             return (
               <span key={segIdx} className="font-bold text-[#4a6b1f]">
                 {sentence.correctAnswers[bIdx] || ''}
               </span>
+            );
+          }
+          if (opts.length > 0) {
+            return (
+              <select
+                key={segIdx}
+                value={userVal}
+                onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
+                disabled={isSubmitted}
+                className={`
+                  inline-block border-b-2 rounded px-1 py-0.5 text-sm md:text-base font-medium bg-white
+                  focus:outline-none focus:ring-1 focus:ring-bolt-primary
+                  ${isSubmitted
+                    ? valid ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700'
+                    : 'border-[#8B9D5F] cursor-pointer'
+                  }
+                  disabled:cursor-default
+                `}
+              >
+                <option value="">— Избери —</option>
+                {opts.map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
             );
           }
           return (
@@ -280,8 +305,8 @@ export function WorkbookFillBlank({
     if (isExample) {
       return (
         <div key={sIdx} className="mb-5 p-4 border-2 border-[#8B9D5F] rounded-lg bg-[#f8faf4]">
-          <p className="text-base font-semibold text-gray-700 italic">{t('exercise.modelLabel') || 'Модел:'}</p>
-          <p className="text-base text-gray-700 mt-1">{questionPart}</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Модел:</p>
+          <p className="text-base text-gray-700">{questionPart}</p>
           <p className="text-base text-gray-700">
             {answerPart ? renderAnswerPart(answerPart) : null}
           </p>

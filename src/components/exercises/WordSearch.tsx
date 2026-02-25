@@ -79,7 +79,7 @@ export function WordSearch({
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {/* Letter string display */}
       <div className="bg-white rounded-xl border-2 border-[#8FC412] p-6 mb-6 text-center">
-        <p className="text-2xl md:text-3xl font-bold text-[#6B8543] tracking-wide break-all">
+        <p className="text-lg md:text-2xl font-bold text-[#6B8543] tracking-wide break-all">
           {letterString}
         </p>
       </div>

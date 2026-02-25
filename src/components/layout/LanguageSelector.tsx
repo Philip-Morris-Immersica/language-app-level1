@@ -29,7 +29,13 @@ export function LanguageSelector() {
         className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-white hover:bg-white/20 transition-colors text-sm font-medium"
         aria-label="Избор на език"
       >
-        <span className="text-lg leading-none">{selected.flag}</span>
+        <img
+          src={`https://flagcdn.com/24x18/${selected.flagCode}.png`}
+          width={24}
+          height={18}
+          alt={selected.label}
+          className="rounded-sm object-cover"
+        />
         <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -42,11 +48,17 @@ export function LanguageSelector() {
                 setLang(l.code);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                l.dir === 'rtl' ? 'text-right flex-row-reverse' : 'text-left'
-              } ${selected.code === l.code ? 'font-semibold text-[#0279C3]' : 'text-gray-700'}`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors text-left ${
+                selected.code === l.code ? 'font-semibold text-[#0279C3]' : 'text-gray-700'
+              }`}
             >
-              <span className="text-lg leading-none">{l.flag}</span>
+              <img
+                src={`https://flagcdn.com/24x18/${l.flagCode}.png`}
+                width={24}
+                height={18}
+                alt={l.label}
+                className="rounded-sm object-cover flex-shrink-0"
+              />
               <span>{l.label}</span>
             </button>
           ))}

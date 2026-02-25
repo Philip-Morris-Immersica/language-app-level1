@@ -38,10 +38,11 @@ export interface BaseExercise {
 // Specific exercise interfaces
 export interface FillInBlankExercise extends BaseExercise {
   type: 'fill_in_blank';
+  freeText?: boolean; // When true, renders a single free-form text input per sentence
   sentences: {
     text: string;           // "Аз съм Мохамед."
     blanks: number[];       // Positions of blanks [2] = "съм"
-    correctAnswers: string[]; // ["съм"]
+    correctAnswers: string[]; // ["съм"] or list of all accepted values (for freeText mode)
     acceptableAnswers?: string[][]; // Multiple acceptable answers per blank
   }[];
 }

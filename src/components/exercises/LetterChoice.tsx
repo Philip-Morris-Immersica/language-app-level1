@@ -33,8 +33,8 @@ function LetterTile({ letter, overlay }: { letter: string; overlay?: boolean }) 
   return (
     <div
       className={`
-        w-12 h-12 flex items-center justify-center
-        text-xl font-bold rounded-lg border-2 select-none
+        w-7 h-7 md:w-12 md:h-12 flex items-center justify-center
+        text-sm md:text-xl font-bold rounded-lg border-2 select-none
         bg-[#D8E4C8] border-[#6B8543]
         ${overlay ? 'shadow-2xl scale-110 cursor-grabbing' : ''}
       `}
@@ -66,8 +66,8 @@ function DraggableLetter({
       {...attributes}
       style={{ opacity: isDragging ? 0 : 1 }}
       className="
-        w-12 h-12 flex items-center justify-center
-        text-xl font-bold rounded-lg border-2 cursor-grab active:cursor-grabbing
+        w-7 h-7 md:w-12 md:h-12 flex items-center justify-center
+        text-sm md:text-xl font-bold rounded-lg border-2 cursor-grab active:cursor-grabbing
         select-none touch-none transition-transform
         bg-[#D8E4C8] border-[#A8B88A]
         hover:bg-[#C8D4B8] hover:border-[#6B8543] hover:scale-105
@@ -144,8 +144,8 @@ function DroppableSlot({
     <div
       ref={setNodeRef}
       className={`
-        w-12 h-12 flex items-center justify-center
-        text-xl font-bold rounded-lg border-2
+        w-7 h-7 md:w-12 md:h-12 flex items-center justify-center
+        text-sm md:text-xl font-bold rounded-lg border-2
         transition-all
         ${bgClass}
       `}
@@ -253,9 +253,9 @@ function PuzzleCard({
           />
         );
       }
-      if (char === ' ') return <div key={i} className="w-3 md:w-4" />;
+      if (char === ' ') return <div key={i} className="w-2 md:w-4" />;
       return (
-        <div key={i} className="w-12 h-12 flex items-center justify-center text-xl font-bold text-gray-800">
+        <div key={i} className="w-7 h-7 md:w-12 md:h-12 flex items-center justify-center text-sm md:text-xl font-bold text-gray-800">
           {char}
         </div>
       );

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Image from 'next/image';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { IllustratedCardsExercise } from '@/content/types';
 
@@ -15,7 +15,10 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const speak = (text: string) => {
+  const speak = (label: string, sublabels?: string[]) => {
+    window.speechSynthesis.cancel();
+    const parts = [label, ...(sublabels || [])];
+    const text = parts.join('. ');
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'bg-BG';
     utterance.rate = 0.85;
@@ -77,9 +80,14 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
         {exercise.cards.map((card) => (
           <div
             key={card.id}
-            onClick={() => speak(card.label)}
-            className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95"
+            onClick={() => speak(card.label, card.sublabels)}
+            className="relative bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95"
           >
+            {/* Speaker icon */}
+            <div className="absolute top-2 right-2 text-gray-400">
+              <Volume2 className="w-4 h-4" />
+            </div>
+
             {/* Image */}
             <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
               <div className="relative w-full h-[120px] md:h-[150px] bg-white">

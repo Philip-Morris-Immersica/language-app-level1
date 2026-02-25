@@ -70,13 +70,13 @@ function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 select-none transition-colors ${borderColor} ${
+      className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 select-none touch-none transition-colors ${borderColor} ${
         !isLocked && !checked ? 'cursor-grab active:cursor-grabbing' : ''
       }`}
+      {...(!isLocked && !checked ? { ...attributes, ...listeners } : {})}
     >
       {/* Drag handle */}
       <span
-        {...(isLocked || checked ? {} : { ...attributes, ...listeners })}
         className={`text-gray-300 flex-shrink-0 ${isLocked || checked ? 'invisible' : ''}`}
       >
         <GripVertical className="w-5 h-5" />
@@ -132,8 +132,8 @@ export function DialogueBuilder({ sections }: DialogueBuilderProps) {
   );
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } })
   );
 
   const handleDragEnd = (sectionId: string) => (event: DragEndEvent) => {

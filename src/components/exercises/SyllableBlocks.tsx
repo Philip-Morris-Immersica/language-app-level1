@@ -67,7 +67,7 @@ function SortableBlock({ id, syllable }: { id: string; syllable: string }) {
       {...attributes}
       {...listeners}
       className={`
-        px-4 py-3 rounded-lg border-2 font-bold text-lg text-gray-800
+        px-2 py-1.5 md:px-4 md:py-3 rounded-lg border-2 font-bold text-sm md:text-lg text-gray-800
         cursor-grab active:cursor-grabbing select-none touch-none
         transition-colors
         ${isDragging
@@ -122,7 +122,7 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
           items={blocks.map(b => b.id)}
           strategy={horizontalListSortingStrategy}
         >
-          <div className="flex flex-wrap gap-2 mb-6 min-h-[56px] items-center justify-center">
+          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6 min-h-[40px] md:min-h-[56px] items-center justify-center">
             {blocks.map(block => (
               <SortableBlock key={block.id} id={block.id} syllable={block.syllable} />
             ))}

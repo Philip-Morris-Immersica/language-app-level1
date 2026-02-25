@@ -95,7 +95,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
                     className="absolute w-full h-full backface-hidden bg-white rounded-xl p-4 shadow-md flex items-center justify-center"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
-                    <div className="relative w-full h-full">
+                    <div className={`relative w-full h-full ${image.id === 'bulgaria' ? 'ring-1 ring-gray-300 rounded-lg' : ''}`}>
                       <Image
                         src={image.imageUrl}
                         alt="Flag"

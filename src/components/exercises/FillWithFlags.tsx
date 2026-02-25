@@ -131,118 +131,105 @@ export function FillWithFlags({
           return (
             <div
               key={sentence.id}
-              className="bg-white rounded-xl border-2 border-gray-200 p-4 flex items-start gap-4"
+              className="bg-white rounded-xl border-2 border-gray-200 p-4 flex flex-col gap-2"
             >
-              {/* Number */}
-              <div className="flex-shrink-0 w-6 text-base font-bold text-gray-700">
-                {index + 1}.
+              {/* Header row: number + flag */}
+              <div className="flex items-center gap-2">
+                <span className="text-base font-bold text-[#0279C3]">{index + 1}.</span>
+                <div className="relative w-10 h-7 flex-shrink-0 border border-gray-300 rounded overflow-hidden">
+                  <Image
+                    src={sentence.flagUrl}
+                    alt={sentence.country}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span className="text-sm font-semibold text-gray-600">{sentence.pronoun} – {sentence.name}</span>
               </div>
 
-              {/* Sentences */}
-              <div className="flex-1 space-y-2">
-                {/* First line */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-base text-gray-800">{sentence.pronoun}</span>
-                  
-                  {/* Verb 1 dropdown */}
-                  <Select
-                    value={answer.verb1 || ''}
-                    onValueChange={(value) => handleVerbChange(sentence.id, 1, value)}
-                    disabled={isSubmitted}
+              {/* First sentence line */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-sm md:text-base text-gray-800">{sentence.pronoun}</span>
+                
+                <Select
+                  value={answer.verb1 || ''}
+                  onValueChange={(value) => handleVerbChange(sentence.id, 1, value)}
+                  disabled={isSubmitted}
+                >
+                  <SelectTrigger 
+                    className={`w-16 md:w-20 h-8 text-sm ${
+                      isSubmitted && verb1Correct === false
+                        ? 'border-red-500 bg-red-50'
+                        : isSubmitted && verb1Correct === true
+                        ? 'border-green-500 bg-green-50'
+                        : ''
+                    }`}
                   >
-                    <SelectTrigger 
-                      className={`w-20 h-9 text-sm ${
-                        isSubmitted && verb1Correct === false
-                          ? 'border-red-500 bg-red-50'
-                          : isSubmitted && verb1Correct === true
-                          ? 'border-green-500 bg-green-50'
-                          : ''
-                      }`}
-                    >
-                      <SelectValue placeholder="___" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {verbOptions.map((verb) => (
-                        <SelectItem key={verb} value={verb}>
-                          {verb}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <SelectValue placeholder="___" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {verbOptions.map((verb) => (
+                      <SelectItem key={verb} value={verb}>{verb}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-                  <span className="text-base text-gray-800">{sentence.name}.</span>
-                </div>
-
-                {/* Second line */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-base text-gray-800">{sentence.pronoun}</span>
-                  
-                  {/* Verb 2 dropdown */}
-                  <Select
-                    value={answer.verb2 || ''}
-                    onValueChange={(value) => handleVerbChange(sentence.id, 2, value)}
-                    disabled={isSubmitted}
-                  >
-                    <SelectTrigger 
-                      className={`w-20 h-9 text-sm ${
-                        isSubmitted && verb2Correct === false
-                          ? 'border-red-500 bg-red-50'
-                          : isSubmitted && verb2Correct === true
-                          ? 'border-green-500 bg-green-50'
-                          : ''
-                      }`}
-                    >
-                      <SelectValue placeholder="___" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {verbOptions.map((verb) => (
-                        <SelectItem key={verb} value={verb}>
-                          {verb}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <span className="text-base text-gray-800">от</span>
-
-                  {/* Country dropdown */}
-                  <Select
-                    value={answer.country || ''}
-                    onValueChange={(value) => handleCountryChange(sentence.id, value)}
-                    disabled={isSubmitted}
-                  >
-                    <SelectTrigger 
-                      className={`w-32 h-9 text-sm ${
-                        isSubmitted && countryCorrect === false
-                          ? 'border-red-500 bg-red-50'
-                          : isSubmitted && countryCorrect === true
-                          ? 'border-green-500 bg-green-50'
-                          : ''
-                      }`}
-                    >
-                      <SelectValue placeholder="_______" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {countryOptions.map((country) => (
-                        <SelectItem key={country} value={country}>
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <span className="text-base text-gray-800">.</span>
-                </div>
+                <span className="text-sm md:text-base text-gray-800">{sentence.name}.</span>
               </div>
 
-              {/* Flag */}
-              <div className="relative w-14 h-10 flex-shrink-0 border border-gray-300 rounded overflow-hidden">
-                <Image
-                  src={sentence.flagUrl}
-                  alt={sentence.country}
-                  fill
-                  className="object-cover"
-                />
+              {/* Second sentence line */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-sm md:text-base text-gray-800">{sentence.pronoun}</span>
+
+                <Select
+                  value={answer.verb2 || ''}
+                  onValueChange={(value) => handleVerbChange(sentence.id, 2, value)}
+                  disabled={isSubmitted}
+                >
+                  <SelectTrigger 
+                    className={`w-16 md:w-20 h-8 text-sm ${
+                      isSubmitted && verb2Correct === false
+                        ? 'border-red-500 bg-red-50'
+                        : isSubmitted && verb2Correct === true
+                        ? 'border-green-500 bg-green-50'
+                        : ''
+                    }`}
+                  >
+                    <SelectValue placeholder="___" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {verbOptions.map((verb) => (
+                      <SelectItem key={verb} value={verb}>{verb}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <span className="text-sm md:text-base text-gray-800">от</span>
+
+                <Select
+                  value={answer.country || ''}
+                  onValueChange={(value) => handleCountryChange(sentence.id, value)}
+                  disabled={isSubmitted}
+                >
+                  <SelectTrigger 
+                    className={`w-28 md:w-32 h-8 text-sm ${
+                      isSubmitted && countryCorrect === false
+                        ? 'border-red-500 bg-red-50'
+                        : isSubmitted && countryCorrect === true
+                        ? 'border-green-500 bg-green-50'
+                        : ''
+                    }`}
+                  >
+                    <SelectValue placeholder="_______" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countryOptions.map((country) => (
+                      <SelectItem key={country} value={country}>{country}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <span className="text-sm md:text-base text-gray-800">.</span>
               </div>
             </div>
           );
