@@ -18,7 +18,7 @@ export function ChatbotWidget() {
     <>
       {/* Chat panel — anchored at bottom-5 right-5 (same as FAB), grows upward */}
       {isOpen && (
-        <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[calc(100vw-2.5rem)] h-[calc(100dvh-2rem)] sm:w-[621px] sm:h-[540px]">
+        <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[536px] h-[803px] max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2rem)] sm:w-[621px] sm:h-[540px]">
           {/* Panel header */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#8FC412] text-white flex-shrink-0">
             <div className="flex items-center gap-2">
