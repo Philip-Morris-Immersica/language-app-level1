@@ -56,22 +56,18 @@ export function FillWithFlags({
   }, [answers, isSubmitted]);
 
   const handleVerbChange = (sentenceId: string, verbNum: 1 | 2, value: string) => {
+    if (isSubmitted) setIsSubmitted(false);
     setAnswers(prev => ({
       ...prev,
-      [sentenceId]: {
-        ...prev[sentenceId],
-        [`verb${verbNum}`]: value,
-      }
+      [sentenceId]: { ...prev[sentenceId], [`verb${verbNum}`]: value },
     }));
   };
 
   const handleCountryChange = (sentenceId: string, value: string) => {
+    if (isSubmitted) setIsSubmitted(false);
     setAnswers(prev => ({
       ...prev,
-      [sentenceId]: {
-        ...prev[sentenceId],
-        country: value,
-      }
+      [sentenceId]: { ...prev[sentenceId], country: value },
     }));
   };
 
@@ -165,7 +161,6 @@ export function FillWithFlags({
                 <Select
                   value={answer.verb1 || ''}
                   onValueChange={(value) => handleVerbChange(sentence.id, 1, value)}
-                  disabled={isSubmitted}
                 >
                   <SelectTrigger 
                     className={`w-16 md:w-20 h-8 text-sm ${
@@ -195,7 +190,6 @@ export function FillWithFlags({
                 <Select
                   value={answer.verb2 || ''}
                   onValueChange={(value) => handleVerbChange(sentence.id, 2, value)}
-                  disabled={isSubmitted}
                 >
                   <SelectTrigger 
                     className={`w-16 md:w-20 h-8 text-sm ${
@@ -220,7 +214,6 @@ export function FillWithFlags({
                 <Select
                   value={answer.country || ''}
                   onValueChange={(value) => handleCountryChange(sentence.id, value)}
-                  disabled={isSubmitted}
                 >
                   <SelectTrigger 
                     className={`w-28 md:w-32 h-8 text-sm ${
@@ -248,14 +241,12 @@ export function FillWithFlags({
       </div>
 
       {/* Submit button */}
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {/* Results */}
       {isSubmitted && (

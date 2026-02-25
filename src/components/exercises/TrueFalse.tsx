@@ -33,8 +33,10 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
   }, [answers, checked]);
 
   const handleSelect = (id: string, value: Answer) => {
-    if (checked) return;
     setAnswers(prev => ({ ...prev, [id]: value }));
+    if (checked) {
+      setChecked(false);
+    }
   };
 
   const handleCheck = () => {
@@ -78,7 +80,6 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
               {/* ✓ button */}
               <button
                 onClick={() => handleSelect(sentence.id, 'true')}
-                disabled={checked}
                 className={`w-10 h-10 rounded-lg font-bold text-lg border-2 transition-all
                   ${answer === 'true'
                     ? checked
@@ -87,14 +88,13 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
                         : 'bg-red-500 border-red-500 text-white'
                       : 'bg-[#8FC412] border-[#8FC412] text-white scale-105'
                     : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
-                  } disabled:cursor-not-allowed`}
+                  }`}
               >
                 ✓
               </button>
               {/* ✗ button */}
               <button
                 onClick={() => handleSelect(sentence.id, 'false')}
-                disabled={checked}
                 className={`w-10 h-10 rounded-lg font-bold text-lg border-2 transition-all
                   ${answer === 'false'
                     ? checked
@@ -103,7 +103,7 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
                         : 'bg-red-500 border-red-500 text-white'
                       : 'bg-[#8FC412] border-[#8FC412] text-white scale-105'
                     : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
-                  } disabled:cursor-not-allowed`}
+                  }`}
               >
                 ✗
               </button>
@@ -128,15 +128,13 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
 
       {/* Action buttons */}
       <div className="flex gap-3 pt-2">
-        {!checked ? (
-          <Button
-            onClick={handleCheck}
-            disabled={false}
-            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white disabled:opacity-50"
-          >
-            {t('exercise.check')}
-          </Button>
-        ) : (
+        <Button
+          onClick={handleCheck}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white"
+        >
+          {t('exercise.check')}
+        </Button>
+        {checked && (
           <Button onClick={handleReset} variant="outline">
             {t('exercise.reset')}
           </Button>

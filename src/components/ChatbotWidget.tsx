@@ -16,9 +16,9 @@ export function ChatbotWidget() {
 
   return (
     <>
-      {/* Chat panel — desktop: 621x540px, mobile: 536x803px */}
+      {/* Chat panel — anchored at bottom-5 right-5 (same as FAB), grows upward */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[calc(100vw-2rem)] h-[803px] sm:w-[621px] sm:h-[540px] max-h-[calc(100vh-7rem)]">
+        <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[calc(100vw-2.5rem)] h-[calc(100dvh-2rem)] sm:w-[621px] sm:h-[540px]">
           {/* Panel header */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#8FC412] text-white flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -51,26 +51,28 @@ export function ChatbotWidget() {
         </div>
       )}
 
-      {/* FAB button */}
-      <button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setIsPulsing(false);
-        }}
-        className="fixed bottom-5 right-5 z-[60] w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden border-2 border-white focus:outline-none focus:ring-2 focus:ring-[#8FC412] focus:ring-offset-2"
-        aria-label="Open AI chat assistant"
-      >
-        <img
-          src="/robi.jpg"
-          alt="Chat with Robi"
-          className="w-full h-full object-cover"
-        />
+      {/* FAB button — hidden when panel is open */}
+      {!isOpen && (
+        <button
+          onClick={() => {
+            setIsOpen(true);
+            setIsPulsing(false);
+          }}
+          className="fixed bottom-5 right-5 z-[60] w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden border-2 border-white focus:outline-none focus:ring-2 focus:ring-[#8FC412] focus:ring-offset-2"
+          aria-label="Open AI chat assistant"
+        >
+          <img
+            src="/robi.jpg"
+            alt="Chat with Robi"
+            className="w-full h-full object-cover"
+          />
 
-        {/* Pulse ring */}
-        {isPulsing && !isOpen && (
-          <span className="absolute inset-0 rounded-full border-2 border-[#8FC412] animate-ping opacity-60 pointer-events-none" />
-        )}
-      </button>
+          {/* Pulse ring */}
+          {isPulsing && (
+            <span className="absolute inset-0 rounded-full border-2 border-[#8FC412] animate-ping opacity-60 pointer-events-none" />
+          )}
+        </button>
+      )}
     </>
   );
 }

@@ -37,9 +37,10 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   }, [exercise]);
 
   const handleLeftClick = (leftId: string) => {
-    if (isSubmitted) return;
-    
-    // If already matched, unmatch it
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
+    }
     if (matches[leftId]) {
       setMatches(prev => {
         const newMatches = { ...prev };
@@ -53,12 +54,9 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   };
 
   const handleRightClick = (rightText: string) => {
-    if (isSubmitted || !selectedLeft) return;
-    
-    // Check if this right item is already matched
+    if (!selectedLeft) return;
     const alreadyMatched = Object.values(matches).includes(rightText);
     if (alreadyMatched) return;
-    
     setMatches(prev => ({ ...prev, [selectedLeft]: rightText }));
     setSelectedLeft(null);
   };
@@ -114,13 +112,13 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
               <div className="flex-1 min-w-0">
                 {isMatched ? (
                   <div
-                    onClick={() => !isSubmitted && handleLeftClick(pair.id)}
+                    onClick={() => handleLeftClick(pair.id)}
                     className={`
                       w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
-                      transition-all
+                      transition-all cursor-pointer
                       ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
                       ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
-                      ${!isSubmitted ? 'border-[#6B7B3F] bg-white cursor-pointer hover:bg-gray-50' : 'cursor-default'}
+                      ${!isSubmitted ? 'border-[#6B7B3F] bg-white hover:bg-gray-50' : 'border-[#6B7B3F] bg-white hover:bg-gray-50'}
                     `}
                   >
                     {matches[pair.id]}
@@ -128,15 +126,13 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                 ) : (
                   <button
                     onClick={() => handleLeftClick(pair.id)}
-                    disabled={isSubmitted}
                     className={`
                       w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
-                      transition-all
+                      transition-all cursor-pointer
                       ${isSelected 
                         ? 'border-[#8FC412] bg-[#8FC412] text-white' 
                         : 'border-gray-300 bg-white text-gray-400 hover:border-[#6B7B3F] hover:bg-gray-50'
                       }
-                      ${!isSubmitted ? 'cursor-pointer' : 'cursor-not-allowed'}
                     `}
                   >
                     {isSelected ? `← ${t('exercise.chooseAnswer')}` : '_______'}
@@ -157,8 +153,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
       </div>
 
       {/* Right items pool (only show unmatched) */}
-      {!isSubmitted && (
-        <div className="mt-6 pt-6 border-t-2 border-gray-200">
+      <div className="mt-6 pt-6 border-t-2 border-gray-200">
           <p className="text-sm font-medium text-gray-600 mb-3">
             {selectedLeft ? t('exercise.chooseAnswer') : t('exercise.chooseAnswer')}
           </p>
@@ -180,17 +175,13 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
             ))}
           </div>
         </div>
-      )}
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={false}
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">

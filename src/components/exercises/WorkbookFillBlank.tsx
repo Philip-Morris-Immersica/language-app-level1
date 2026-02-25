@@ -51,7 +51,10 @@ export function WorkbookFillBlank({
   }, [answers, validation, isSubmitted]);
 
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
-    if (isSubmitted) return;
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
+    }
     setAnswers(prev => {
       const current = prev[sentenceIdx] ? [...prev[sentenceIdx]] : [];
       current[blankIdx] = value;
@@ -126,17 +129,15 @@ export function WorkbookFillBlank({
                 key={segIdx}
                 value={userVal}
                 onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-                disabled={isSubmitted}
                 className={`
                   inline-block border-b-2 rounded px-1 py-0.5 text-base font-medium bg-white
-                  focus:outline-none focus:ring-2 focus:ring-bolt-primary
+                  focus:outline-none focus:ring-2 focus:ring-bolt-primary cursor-pointer
                   ${isSubmitted
                     ? valid
                       ? 'border-green-500 bg-green-50 text-green-700'
                       : 'border-red-400 bg-red-50 text-red-700'
-                    : 'border-bolt-primary hover:border-bolt-primary-hover cursor-pointer'
+                    : 'border-bolt-primary hover:border-bolt-primary-hover'
                   }
-                  disabled:cursor-default
                 `}
               >
                 <option value="">——</option>
@@ -202,13 +203,12 @@ export function WorkbookFillBlank({
               key={segIdx}
               value={userVal}
               onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-              disabled={isSubmitted}
               className={`
                 inline-block border-b-2 rounded px-1 py-0.5 text-sm font-medium bg-white
-                focus:outline-none focus:ring-1 focus:ring-bolt-primary
+                focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
                 ${isSubmitted
                   ? valid ? 'border-green-500 bg-green-50' : 'border-red-400 bg-red-50'
-                  : 'border-bolt-primary cursor-pointer'
+                  : 'border-bolt-primary'
                 }
               `}
             >
@@ -270,15 +270,13 @@ export function WorkbookFillBlank({
                 key={segIdx}
                 value={userVal}
                 onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-                disabled={isSubmitted}
                 className={`
                   inline-block border-b-2 rounded px-1 py-0.5 text-sm md:text-base font-medium bg-white
-                  focus:outline-none focus:ring-1 focus:ring-bolt-primary
+                  focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
                   ${isSubmitted
                     ? valid ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700'
-                    : 'border-[#8B9D5F] cursor-pointer'
+                    : 'border-[#8B9D5F]'
                   }
-                  disabled:cursor-default
                 `}
               >
                 <option value="">— Избери —</option>
@@ -294,7 +292,6 @@ export function WorkbookFillBlank({
               type="text"
               value={userVal}
               onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-              disabled={isSubmitted}
               className={`
                 inline-block border-b-2 bg-transparent text-base font-medium
                 min-w-[8rem] max-w-[14rem] px-1 focus:outline-none
@@ -304,7 +301,6 @@ export function WorkbookFillBlank({
                     : 'border-red-400 text-red-700'
                   : 'border-[#8B9D5F] focus:border-[#5a7030]'
                 }
-                disabled:cursor-default
               `}
             />
           );
@@ -404,15 +400,12 @@ export function WorkbookFillBlank({
         </div>
       )}
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          disabled={false}
-          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">

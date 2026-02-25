@@ -42,8 +42,9 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
 
   const handleSelect = (questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
-    if (validation[questionId] !== null) {
-      setValidation(prev => ({ ...prev, [questionId]: null }));
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
     }
   };
 
@@ -107,7 +108,6 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
                       <Select
                         value={answers[question.id] || ''}
                         onValueChange={(value) => handleSelect(question.id, value)}
-                        disabled={isSubmitted}
                       >
                         <SelectTrigger className={`
                           w-28 md:w-36 h-8 md:h-10 text-sm md:text-base font-semibold
@@ -154,15 +154,12 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
         ))}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-          disabled={false}
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">

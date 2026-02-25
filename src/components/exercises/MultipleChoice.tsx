@@ -28,13 +28,10 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
   }, [selectedAnswers, validation, isSubmitted]);
 
   const handleSelect = (questionIndex: number, optionIndex: number) => {
-    if (isSubmitted) return;
-    
     setSelectedAnswers(prev => ({ ...prev, [questionIndex]: optionIndex }));
-    
-    // Clear validation for this question
-    if (validation[questionIndex] !== null) {
-      setValidation(prev => ({ ...prev, [questionIndex]: null }));
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
     }
   };
 
@@ -79,14 +76,13 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
                   <button
                     key={oIndex}
                     onClick={() => handleSelect(qIndex, oIndex)}
-                    disabled={isSubmitted}
                     className={`
                       w-full text-left px-5 py-4 rounded-xl border-2 transition-all shadow-sm
-                      min-h-[56px] flex items-center gap-4 active:scale-[0.98]
+                      min-h-[56px] flex items-center gap-4 active:scale-[0.98] cursor-pointer
                       ${isSelected && !isSubmitted ? 'border-[#8FC412] bg-[#EEF7C8] shadow-md' : 'border-gray-300'}
                       ${showCorrect ? 'border-green-500 bg-green-50' : ''}
                       ${showIncorrect ? 'border-red-500 bg-red-50' : ''}
-                      ${!isSubmitted ? 'hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md cursor-pointer' : 'cursor-default'}
+                      hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md
                     `}
                   >
                     <div
@@ -128,15 +124,12 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
         ))}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={false}
-        >
-          {t('exercise.check')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+      >
+        {t('exercise.check')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">

@@ -43,12 +43,10 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   };
 
   const handleSelect = (imageId: string, label: string) => {
-    if (isSubmitted) return;
-    
     setSelectedLabels(prev => ({ ...prev, [imageId]: label }));
-    
-    if (validation[imageId] !== null) {
-      setValidation(prev => ({ ...prev, [imageId]: null }));
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
     }
   };
 
@@ -178,7 +176,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
               </div>
 
               {/* Label selection */}
-              {!isSubmitted && exercise.options ? (
+              {exercise.options ? (
                 <select
                   value={selectedLabel || ''}
                   onChange={(e) => handleSelect(image.id, e.target.value)}
@@ -191,7 +189,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
                     </option>
                   ))}
                 </select>
-              ) : !isSubmitted ? (
+              ) : (
                 <input
                   type="text"
                   value={selectedLabel || ''}
@@ -199,12 +197,6 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
                   placeholder={t('exercise.selectOption')}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 />
-              ) : (
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-gray-800">
-                    {selectedLabel || '(Без отговор)'}
-                  </p>
-                </div>
               )}
 
               {/* Validation icon */}
@@ -233,15 +225,12 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
         })}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-4 bg-[#8FC412] hover:bg-[#8FC412]-hover text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={false}
-        >
-          {t('exercise.check')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-4 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+      >
+        {t('exercise.check')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">

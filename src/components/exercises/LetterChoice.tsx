@@ -152,7 +152,7 @@ function DroppableSlot({
         ${bgClass}
       `}
     >
-      {letter && !isSubmitted ? (
+      {letter ? (
         <DraggableSlotLetter
           id={`${id}-draggable`}
           letter={letter}
@@ -279,7 +279,7 @@ function PuzzleCard({
         </div>
 
         {/* Letter pool */}
-        {!isSubmitted && remainingLetters.length > 0 && (
+        {remainingLetters.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2 pt-3 border-t border-gray-100">
             {remainingLetters.map((letter, idx) => (
               <DraggableLetter
@@ -357,6 +357,7 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
   }, [slotContents, validation, isSubmitted]);
 
   const handlePlace = (puzzleId: string, slotIndex: number, letter: string) => {
+    if (isSubmitted) { setIsSubmitted(false); setValidation({}); }
     setSlotContents(prev => {
       const slots = [...(prev[puzzleId] || [])];
       slots[slotIndex] = letter;
@@ -423,15 +424,12 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
         ))}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          disabled={false}
-          className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg disabled:opacity-50"
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">

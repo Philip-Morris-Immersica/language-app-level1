@@ -47,7 +47,16 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
   }, [exercise]);
 
   const handleWordClick = (questionIndex: number, word: string, fromBuilt: boolean) => {
-    if (isSubmitted) return;
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setQuestionStates(prev => {
+        const newStates = { ...prev };
+        Object.keys(newStates).forEach(k => {
+          newStates[Number(k)] = { ...newStates[Number(k)], validation: null };
+        });
+        return newStates;
+      });
+    }
 
     setQuestionStates(prev => {
       const state = prev[questionIndex];
@@ -76,8 +85,6 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
   };
 
   const handleReset = (questionIndex: number) => {
-    if (isSubmitted) return;
-
     setQuestionStates(prev => ({
       ...prev,
       [questionIndex]: {
@@ -132,7 +139,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                     </span>
                   </div>
                 )}
-                {!isSubmitted && state.built.length > 0 && (
+                {state.built.length > 0 && (
                   <Button
                     variant="ghost"
                     size="sm"
@@ -160,12 +167,11 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                       <button
                         key={wIndex}
                         onClick={() => handleWordClick(qIndex, word, true)}
-                        disabled={isSubmitted}
-                        className={`
+                        className="
                           px-4 py-3 rounded-xl border-2 border-[#8FC412] bg-[#EEF7C8] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
-                          ${!isSubmitted ? 'hover:bg-white hover:shadow-md cursor-pointer' : 'cursor-default'}
-                        `}
+                          hover:bg-white hover:shadow-md cursor-pointer
+                        "
                       >
                         {word}
                       </button>
@@ -184,7 +190,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
               </div>
 
               {/* Available words */}
-              {!isSubmitted && state.available.length > 0 && (
+              {state.available.length > 0 && (
                 <div className="p-5 rounded-xl bg-[#EEF7C8]">
                   <div className="flex flex-wrap gap-3">
                     {state.available.map((word, wIndex) => (
@@ -218,15 +224,12 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
         })}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-          disabled={false}
-        >
-          {t('exercise.check')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+      >
+        {t('exercise.check')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">

@@ -33,8 +33,11 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
     const upperValue = value.toUpperCase().slice(0, 1);
     setAnswers(prev => ({ ...prev, [key]: upperValue }));
     
-    // Auto-move to next field if letter entered
-    if (upperValue && !isSubmitted) {
+    if (isSubmitted) {
+      setIsSubmitted(false);
+      setValidation({});
+    }
+    if (upperValue) {
       const allBlanks = getAllBlanks();
       const currentIdx = allBlanks.indexOf(key);
       const nextKey = allBlanks[currentIdx + 1];
@@ -44,10 +47,6 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
       }
     }
     
-    // Clear validation for this input
-    if (validation[key] !== null) {
-      setValidation(prev => ({ ...prev, [key]: null }));
-    }
   };
 
   const getAllBlanks = (): string[] => {
@@ -150,7 +149,6 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
                 value={answers[key] || ''}
                 onChange={(e) => handleChange(sentenceIndex, currentBlankIndex, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, sentenceIndex, currentBlankIndex)}
-                disabled={isSubmitted}
                 maxLength={1}
                 className={`
                   w-10 h-10 md:w-12 md:h-12 text-center text-lg md:text-xl font-bold 
@@ -193,10 +191,10 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
           type="text"
           value={answers[key] || ''}
           onChange={e => {
-            if (!isSubmitted) setAnswers(prev => ({ ...prev, [key]: e.target.value }));
+            setAnswers(prev => ({ ...prev, [key]: e.target.value }));
+            if (isSubmitted) { setIsSubmitted(false); setValidation({}); }
           }}
           onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
-          disabled={isSubmitted}
           placeholder="Напишете отговора си тук..."
           className={`
             w-full max-w-xs text-center text-lg font-medium px-4 py-3 rounded-xl border-2
@@ -230,14 +228,12 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
         ))}
       </div>
 
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-        >
-          {t('exercise.checkAnswers')}
-        </Button>
-      )}
+      <Button
+        onClick={handleSubmit}
+        className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+      >
+        {t('exercise.checkAnswers')}
+      </Button>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
