@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -590,4 +590,121 @@ export const exercises: Exercise[] = [
       'Вие българин ли сте? = Българин ли сте?',
     ],
   } as GrammarTableExercise,
+
+  // ORDER 23: ДИАЛОЗИ 2 (Page 15) - TTS on click, no audio file
+  {
+    id: 'l01-dialozi-02',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 2',
+    instruction: 'Натиснете секцията за автоматично прочитане',
+    order: 23,
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: 'Здравей, как си?' },
+          { text: 'Благодаря, добре. А ти?' },
+          { text: 'Много добре.' },
+        ],
+      },
+      {
+        id: 'б.',
+        lines: [
+          { text: 'Здравейте! Как сте?' },
+          { text: 'Много добре. А Вие?' },
+          { text: 'Аз също, благодаря.' },
+          { text: 'Приятен ден!' },
+          { text: 'Приятен ден!' },
+        ],
+      },
+      {
+        id: 'в.',
+        lines: [
+          { text: 'Добър вечер! Как сте?' },
+          { text: 'Добре. А Вие как сте?' },
+          { text: 'Добре. Приятна вечер!' },
+          { text: 'Благодаря, подобно.' },
+        ],
+      },
+      {
+        id: 'г.',
+        lines: [
+          { text: 'Здравей, Мохамед! Как си?' },
+          { text: 'Чудесно!' },
+          { text: 'Как са Хади и Камал?' },
+          { text: 'Добре са.' },
+          { text: 'Довиждане! Всичко хубаво!' },
+          { text: 'Благодаря, подобно.' },
+        ],
+      },
+    ],
+  } as DialoguesExercise,
+
+  // ORDER 24: УПРАЖНЕНИЕ 17 - Подредете фразите (Page 15) - dialogue_builder
+  {
+    id: 'l01-ex-17',
+    type: 'dialogue_builder',
+    title: 'УПРАЖНЕНИЕ 17',
+    instruction: 'Подредете фразите, за да получите диалози.',
+    order: 24,
+    sections: [
+      {
+        id: 'а.',
+        givenFirstLine: 'Добър ден!',
+        sentences: [
+          'Добър ден!',
+          'Добър ден!',
+          'Как сте?',
+          'Благодаря, добре. А Вие?',
+          'Аз също.',
+          'Приятен ден!',
+          'Приятен ден!',
+        ],
+      },
+      {
+        id: 'б.',
+        givenFirstLine: 'Добро утро!',
+        sentences: [
+          'Добро утро!',
+          'Добро утро!',
+          'Аз съм учителят. А Вие?',
+          'Аз съм Ана.',
+          'Аз съм Георги. А Вие?',
+          'Аз също.',
+          'Довиждане!',
+          'Довиждане.',
+        ],
+      },
+      {
+        id: 'в.',
+        givenFirstLine: 'Добър вечер!',
+        sentences: [
+          'Добър вечер!',
+          'Добър вечер!',
+          'Аз съм Таня.',
+          'Аз съм Дмитро.',
+          'Аз съм от Украйна.',
+          'Българка ли сте?',
+          'Да, аз съм българка. А Вие?',
+          'Приятно ми е!',
+          'Приятно ми е!',
+        ],
+      },
+      {
+        id: 'г.',
+        givenFirstLine: 'Здравейте!',
+        sentences: [
+          'Здравейте!',
+          'Здравейте!',
+          'Аз съм Ева. А Вие?',
+          'Аз съм Фози.',
+          'Откъде сте?',
+          'Аз съм от България. А Вие?',
+          'Аз съм бежанец от Сирия.',
+          'Приятно ми е.',
+          'Приятно ми е.',
+        ],
+      },
+    ],
+  } as DialogueBuilderExercise,
 ];

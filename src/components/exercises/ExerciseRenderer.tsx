@@ -14,6 +14,7 @@ import { GrammarVisual } from './GrammarVisual';
 import { WordSearch } from './WordSearch';
 import { GrammarWithExamples } from './GrammarWithExamples';
 import { Dialogues } from './Dialogues';
+import { DialogueBuilder } from './DialogueBuilder';
 import { DropdownMatch } from './DropdownMatch';
 import { LetterChoice } from './LetterChoice';
 import { FillWithFlags } from './FillWithFlags';
@@ -49,11 +50,13 @@ function ExerciseHeader({ title, instruction }: ExerciseHeaderProps) {
 }
 
 export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: ExerciseRendererProps) {
-  const number = exerciseNumber || exercise.order;
+  const number = exerciseNumber ?? exercise.order;
   const t = useT();
 
-  // Resolve the display title: use data title if present, otherwise generate translated numbered fallback
-  const resolvedTitle = exercise.title ?? `${t('exercise.prefix')} ${number}`;
+  // Base title: use custom title or generic "УПРАЖНЕНИЕ", strip any trailing sub-number
+  const baseTitle = (exercise.title ?? t('exercise.prefix')).replace(/\s+\d+$/, '');
+  // Sequential prefix: "1. НОВИ ДУМИ", "8. ГРАМАТИКА", "3. УПРАЖНЕНИЕ"
+  const resolvedTitle = number != null ? `${number}. ${baseTitle}` : baseTitle;
 
   function wrap(component: React.ReactNode) {
     return (
@@ -159,6 +162,13 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <Dialogues
           subtitle={exercise.subtitle}
           audioUrl={exercise.audioUrl}
+          sections={exercise.sections}
+        />
+      );
+
+    case 'dialogue_builder':
+      return wrap(
+        <DialogueBuilder
           sections={exercise.sections}
         />
       );

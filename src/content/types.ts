@@ -17,6 +17,7 @@ export type ExerciseType =
   | 'grammar_table'        // Grammar table image + banner examples below
   | 'fill_with_images'     // Fill in blanks with flag images
   | 'dialogues'            // Dialogue sections with audio
+  | 'dialogue_builder'     // Order scrambled sentences to form a dialogue
   | 'number_writing'       // Write numbers as words
   | 'dialogue_reading'     // Read dialogues
   | 'text_comprehension'   // Read text and answer questions
@@ -234,6 +235,16 @@ export interface DialoguesExercise extends BaseExercise {
   }[];
 }
 
+export interface DialogueBuilderExercise extends BaseExercise {
+  type: 'dialogue_builder';
+  title: string;
+  sections: {
+    id: string;                  // 'а.', 'б.', etc.
+    givenFirstLine: string;      // The locked first line shown to the user
+    sentences: string[];         // All sentences in CORRECT order (first = givenFirstLine)
+  }[];
+}
+
 export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   questions: {
@@ -286,6 +297,7 @@ export type Exercise =
   | GrammarTableExercise
   | FillWithImagesExercise
   | DialoguesExercise
+  | DialogueBuilderExercise
   | NumberWritingExercise
   | DialogueReadingExercise
   | TextComprehensionExercise

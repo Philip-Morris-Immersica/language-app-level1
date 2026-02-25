@@ -80,8 +80,8 @@ export default async function ExercisesPage({ params }: ExercisesPageProps) {
 
         {/* Workbook exercises */}
         <div className="space-y-6">
-          {lessonData.workbookExercises.map((exercise: any) => (
-            <ExerciseRenderer key={exercise.id} exercise={exercise} />
+          {lessonData.workbookExercises.map((exercise: any, index: number) => (
+            <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
           ))}
         </div>
 

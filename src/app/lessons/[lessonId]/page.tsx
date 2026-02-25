@@ -78,8 +78,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <h2 className="text-3xl font-bold text-bolt-blue">
               <T k="lesson.exercises" />
             </h2>
-            {lessonData.exercises.map((exercise: any) => (
-              <ExerciseRenderer key={exercise.id} exercise={exercise} />
+            {lessonData.exercises.map((exercise: any, index: number) => (
+              <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
             ))}
           </div>
         )}

@@ -91,6 +91,7 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'lesson.backToLesson':   { bg: 'Назад към урока', ar: 'العودة إلى الدرس', fr: 'Retour au cours', en: 'Back to lesson', fa: 'بازگشت به درس', uk: 'Назад до уроку', ru: 'Вернуться к уроку' },
   'lesson.takeTest':       { bg: 'Направи тест',    ar: 'إجراء اختبار',   fr: 'Faire un test', en: 'Take test',     fa: 'انجام آزمون',    uk: 'Пройти тест',    ru: 'Пройти тест'    },
   'exercise.readInPairs':  { bg: 'Прочетете диалозите по двойки', ar: 'اقرأوا الحوارات في أزواج', fr: 'Lisez les dialogues par paires', en: 'Read the dialogues in pairs', fa: 'دیالوگ‌ها را دو نفره بخوانید', uk: 'Читайте діалоги парами', ru: 'Читайте диалоги парами' },
+  'exercise.clickToRead':  { bg: 'Натиснете секцията за автоматично прочитане', ar: 'انقر على القسم للقراءة التلقائية', fr: 'Cliquez sur une section pour la lire automatiquement', en: 'Click a section to hear it read aloud', fa: 'برای خواندن خودکار روی بخش کلیک کنید', uk: 'Натисніть секцію для автоматичного читання', ru: 'Нажмите на секцию для автоматического чтения' },
 };
 
 export type UIKey = keyof typeof UI_TRANSLATIONS;
