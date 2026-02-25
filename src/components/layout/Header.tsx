@@ -97,8 +97,9 @@ function ProfileMenu() {
 }
 
 export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
+  const t = useT();
   return (
-    <header className="bg-[#8FC412] text-white py-2 px-4 shadow-md">
+    <header className="sticky top-0 z-50 bg-[#8FC412] text-white py-2 px-4 shadow-md">
       <div className="flex items-center justify-between gap-2">
 
         {/* Left: hamburger */}
@@ -124,7 +125,7 @@ export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
           />
           <div className="hidden sm:block h-9 w-px bg-white/40 flex-shrink-0" />
           <span className="hidden sm:block text-white font-bold text-xl md:text-2xl leading-tight truncate uppercase tracking-wide">
-            Български език за бежанци
+            {t('app.title')}
           </span>
         </Link>
 

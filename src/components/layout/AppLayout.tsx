@@ -3,6 +3,7 @@
 import { useState, ReactNode } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { ChatbotWidget } from '@/components/ChatbotWidget';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -24,6 +25,8 @@ export function AppLayout({ children }: AppLayoutProps) {
       <main className="flex-1 overflow-auto">
         {children}
       </main>
+
+      <ChatbotWidget />
     </div>
   );
 }

@@ -10,4 +10,4 @@ export const SUPPORTED_LANGUAGES: { code: SupportedLang; label: string; flag: st
   { code: 'ru', label: 'Русский',    flag: '🇷🇺', flagCode: 'ru', dir: 'ltr' },
 ];
 
-export const DEFAULT_LANG: SupportedLang = 'bg';
+export const DEFAULT_LANG: SupportedLang = 'en';

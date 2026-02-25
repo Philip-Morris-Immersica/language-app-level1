@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { Lock, ArrowRight, BookOpen } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 const LEVELS = [
-  { code: 'A1', label: 'A1', href: '/lessons/lesson-01', available: true },
-  { code: 'A2', label: 'A2', href: '#', available: false },
-  { code: 'A3', label: 'A3', href: '#', available: false },
-  { code: 'A4', label: 'A4', href: '#', available: false },
+  { code: 'A1', labelBg: 'А1', labelEn: 'A1', href: '/lessons/lesson-01', available: true },
+  { code: 'A2', labelBg: 'А2', labelEn: 'A2', href: '#', available: false },
+  { code: 'B1', labelBg: 'Б1', labelEn: 'B1', href: '#', available: false },
+  { code: 'B2', labelBg: 'Б2', labelEn: 'B2', href: '#', available: false },
 ];
 
 const PROGRESS = 12;
@@ -28,6 +29,7 @@ function ProgressBar({ value }: { value: number }) {
 export function HomePageClient() {
   const { user, loading } = useAuth();
   const t = useT();
+  const { lang } = useLanguage();
 
   if (loading) {
     return (
@@ -98,14 +100,15 @@ export function HomePageClient() {
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {LEVELS.map((level) =>
-            level.available ? (
+          {LEVELS.map((level) => {
+            const displayLabel = lang === 'bg' ? level.labelBg : level.labelEn;
+            return level.available ? (
               <Link
                 key={level.code}
                 href={level.href}
                 className="rounded-2xl bg-[#8FC412] text-white p-8 flex flex-col items-center justify-center shadow-md hover:bg-[#7DAD0E] transition-colors"
               >
-                <span className="text-4xl font-bold mb-2">{level.label}</span>
+                <span className="text-4xl font-bold mb-2">{displayLabel}</span>
                 <span className="text-white/80 text-sm font-medium mb-3">{t('home.progress')}</span>
                 <ProgressBar value={PROGRESS} />
                 <span className="mt-2 text-white/60 text-xs">{PROGRESS}{t('home.completed')}</span>
@@ -115,11 +118,11 @@ export function HomePageClient() {
                 key={level.code}
                 className="rounded-2xl bg-gray-100 text-gray-400 p-8 flex flex-col items-center justify-center cursor-not-allowed"
               >
-                <span className="text-4xl font-bold mb-4">{level.label}</span>
+                <span className="text-4xl font-bold mb-4">{displayLabel}</span>
                 <Lock className="w-7 h-7 opacity-40" />
               </div>
-            )
-          )}
+            );
+          })}
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">{t('home.selectHint')}</p>
