@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Play, Pause, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { IllustratedCardsExercise } from '@/content/types';
+import { useT } from '@/i18n/useT';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -14,6 +15,7 @@ interface IllustratedCardsProps {
 export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const t = useT();
 
   const speak = (label: string, sublabels?: string[]) => {
     window.speechSynthesis.cancel();
@@ -63,12 +65,12 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
             {isPlaying ? (
               <>
                 <Pause className="w-5 h-5" />
-                Спри
+                {t('exercise.stop')}
               </>
             ) : (
               <>
                 <Play className="w-5 h-5" />
-                Слушай
+                {t('exercise.listen')}
               </>
             )}
           </Button>

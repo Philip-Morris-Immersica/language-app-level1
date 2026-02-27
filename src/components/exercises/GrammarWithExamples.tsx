@@ -85,13 +85,22 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
                 ))
               ) : (
                 <>
-                  <p className="text-base md:text-lg font-bold text-gray-800">
-                    {example.text}
-                  </p>
-                  {example.subtext && (
-                    <p className="text-sm md:text-base text-gray-600">
-                      {example.subtext}
+                  {/* Positive statement with green heart */}
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-xl flex-shrink-0">💚</span>
+                    <p className="text-base md:text-lg font-bold text-gray-800">
+                      {example.text}
                     </p>
+                  </div>
+                  
+                  {/* Negative statement with crossed heart */}
+                  {example.subtext && (
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-xl flex-shrink-0">💔</span>
+                      <p className="text-sm md:text-base text-gray-600">
+                        {example.subtext}
+                      </p>
+                    </div>
                   )}
                 </>
               )}

@@ -16,6 +16,7 @@ import { GrammarWithExamples } from './GrammarWithExamples';
 import { Dialogues } from './Dialogues';
 import { DialogueBuilder } from './DialogueBuilder';
 import { DropdownMatch } from './DropdownMatch';
+import { DragToColumns } from './DragToColumns';
 import { LetterChoice } from './LetterChoice';
 import { FillWithFlags } from './FillWithFlags';
 import { WorkbookFillBlank } from './WorkbookFillBlank';
@@ -95,6 +96,15 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           questions={exercise.questions}
           onComplete={onComplete}
           exerciseId={exercise.id}
+        />
+      );
+
+    case 'drag_to_columns':
+      return wrap(
+        <DragToColumns
+          items={exercise.items}
+          columns={exercise.columns}
+          onComplete={onComplete}
         />
       );
 

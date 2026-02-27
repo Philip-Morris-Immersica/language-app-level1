@@ -1,0 +1,80 @@
+---
+globs: src/i18n/**
+---
+# i18n Translations Guide
+
+## Two-layer system
+
+| Layer | Hook | File | When to use |
+|---|---|---|---|
+| Static UI | `useT()` | `src/i18n/ui.ts` | Buttons, labels, nav, static messages |
+| Dynamic content | `useTranslate()` | `src/i18n/useTranslate.ts` | Lesson titles, exercise instructions |
+
+**Never translate** exercise content (words, sentences, correct answers) — always stays Bulgarian.
+
+## Adding a new UI string
+
+Edit [src/i18n/ui.ts](mdc:src/i18n/ui.ts). Add one line in the correct section:
+
+```ts
+'my.key': { bg: 'Текст', ar: 'نص', fr: 'Texte', en: 'Text', fa: 'متن', uk: 'Текст', ru: 'Текст' },
+```
+
+Language order: **bg, ar, fr, en, fa, uk, ru** — always this order, always all 7.
+
+RTL languages: `ar` (Arabic) and `fa` (Farsi/Persian).
+
+## Key naming conventions
+
+```
+nav.*          Navigation and sidebar items
+auth.*         Login, register, profile
+home.*         Home page strings
+lesson.*       Lesson page UI (not lesson content)
+exercise.*     Exercise interaction buttons and feedback
+```
+
+## Existing exercise.* keys (most commonly needed)
+
+```
+exercise.check          → "Провери"
+exercise.checkAnswers   → "Провери отговорите"
+exercise.reset          → "Нулирай"
+exercise.correct        → "Правилно!"
+exercise.incorrect      → "Опитай пак"
+exercise.correctLabel   → "Правилно:"
+exercise.wrongLabel     → "Грешно"
+exercise.result         → "Резултат:"
+exercise.correct_n      → "правилни отговора"
+exercise.listen         → "Слушай"
+exercise.stop           → "Спри"
+exercise.selectOption   → "Избери..."
+exercise.allCorrect     → "Браво! Всички отговори са верни!"
+exercise.reviewErrors   → "Проверете грешните отговори (маркирани в червено)."
+exercise.model          → "Модел:"
+exercise.correctAnswer  → "Правилен отговор:"
+exercise.readInPairs    → "Прочетете диалозите по двойки"
+exercise.clickToRead    → "Натиснете секцията за автоматично прочитане"
+```
+
+## Using translations in components
+
+```tsx
+// Static UI strings — in any component:
+import { useT } from '@/i18n/useT';
+const t = useT();
+<Button>{t('exercise.check')}</Button>
+
+// Dynamic content — ONLY in ExerciseRenderer.tsx, not inside exercise components:
+import { useTranslate } from '@/i18n/useTranslate';
+const { translate } = useTranslate();
+const translated = await translate(text);
+```
+
+## Supported languages
+
+```ts
+type SupportedLang = 'bg' | 'ar' | 'fr' | 'en' | 'fa' | 'uk' | 'ru';
+```
+
+Language is stored in `LanguageContext` and changed via the language selector in the header.

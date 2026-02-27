@@ -5,6 +5,7 @@ export type ExerciseType =
   | 'multiple_choice'      // Select/underline correct answer
   | 'match_pairs'          // Match left items with right items
   | 'dropdown_match'       // Match with dropdown selection
+  | 'drag_to_columns'      // Drag items to correct columns (mobile-friendly)
   | 'letter_choice'        // Fill missing letters by clicking buttons
   | 'word_order'           // Arrange words into sentences
   | 'verb_conjugation'     // Fill verb conjugation tables
@@ -258,6 +259,17 @@ export interface DropdownMatchExercise extends BaseExercise {
   }[];
 }
 
+export interface DragToColumnsExercise extends BaseExercise {
+  type: 'drag_to_columns';
+  items: string[];              // Items to drag (e.g., "чай", "кафе", "сирене")
+  columns: {
+    id: string;                 // Column identifier (e.g., "drinks", "food")
+    title: string;              // Display title (e.g., "НАПИТКИ", "ХРАНИ")
+    icon?: string;              // Optional emoji/icon
+    correctItems: string[];     // Items that belong in this column
+  }[];
+}
+
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
@@ -303,6 +315,7 @@ export type Exercise =
   | MultipleChoiceExercise 
   | MatchPairsExercise 
   | DropdownMatchExercise
+  | DragToColumnsExercise
   | LetterChoiceExercise
   | WordOrderExercise
   | VerbConjugationExercise

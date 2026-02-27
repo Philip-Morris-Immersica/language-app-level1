@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+# Project Overview
+
+**UNHCR Bulgarian Language Platform** — free interactive app for refugees learning Bulgarian, A1 level. 11 lessons + 6 tests.
+
+**Stack:** Next.js 15 App Router, TypeScript, Tailwind CSS, shadcn/ui, Drizzle ORM + Neon PostgreSQL, JWT auth (HTTP-only cookies), dnd-kit.
+
+**7 languages:** `bg` (default), `ar`, `en`, `fr`, `fa`, `uk`, `ru` — RTL: `ar`, `fa`.
+
+**i18n:** `useT()` → static UI strings pre-translated in [src/i18n/ui.ts](mdc:src/i18n/ui.ts). `useTranslate()` → dynamic content via Google Translate API + localStorage cache. Exercise words/answers always stay in Bulgarian — never translate them.
+
+**Status:** lesson-01 fully complete. Lessons 2–11 have metadata only in [src/content/index.ts](mdc:src/content/index.ts). Progress tracked in localStorage ([src/lib/progress.ts](mdc:src/lib/progress.ts)); Neon DB schema exists for future migration.
+
+For content/lesson work → see `content-lessons` rule. For UI/component work → see `design-system` rule.

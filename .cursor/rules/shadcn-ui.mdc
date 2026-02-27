@@ -1,31 +1,13 @@
 ---
-alwaysApply: true
+description: shadcn/ui installation reference — pull manually when adding a new component
 ---
-# shadcn/ui Component Library
+# shadcn/ui — Installation
 
-This project uses **shadcn/ui** for all UI elements.
-
-## Initialization
-
-If shadcn/ui is not initialized in the project, use:
-
+Install a new component:
 ```bash
-npx shadcn@latest init
+npx shadcn@latest add [component-name]
 ```
 
-## Installing Components
+Examples: `button`, `card`, `input`, `dialog`, `dropdown-menu`, `select`, `badge`, `toast`
 
-To install a specific shadcn/ui component (for example, the button component):
-
-```bash
-npx shadcn@latest add button
-```
-
-Replace `button` with the name of any component you need to install (e.g., `card`, `input`, `dialog`, `dropdown-menu`, etc.).
-
-## Guidelines
-
-- Always use shadcn/ui components for UI elements
-- Check if a component is already installed before adding it
-- Follow shadcn/ui conventions and patterns for component usage
-- Import components from `@/components/ui/[component-name]`
+Already installed components are in `src/components/ui/`. Check there first before installing.

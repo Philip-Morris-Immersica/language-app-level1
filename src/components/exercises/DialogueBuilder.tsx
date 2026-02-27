@@ -20,6 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, CheckCircle2, XCircle, RotateCcw, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useT } from '@/i18n/useT';
 
 interface Section {
   id: string;
@@ -110,6 +111,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
   const mounted = useRef(false);
+  const t = useT();
 
   // Build initial state: shuffle non-first sentences per section
   const buildInitialState = useCallback((): Record<string, SectionState> => {
@@ -217,7 +219,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
               </span>
               {state.checked && (
                 <span className={`text-sm font-semibold ${state.correct ? 'text-green-600' : 'text-red-500'}`}>
-                  {state.correct ? '✓ Вярно!' : '✗ Опитай пак'}
+                  {state.correct ? `✓ ${t('exercise.correct')}` : `✗ ${t('exercise.incorrect')}`}
                 </span>
               )}
             </div>
@@ -251,7 +253,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
             </DndContext>
 
             {/* Action buttons */}
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-3 justify-start">
               {state.checked && !state.correct && (
                 <Button
                   variant="outline"
@@ -259,7 +261,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                   className="flex items-center gap-2 border-gray-300 text-gray-600"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  Опитай пак
+                  {t('exercise.incorrect')}
                 </Button>
               )}
               {state.checked && state.correct ? (
@@ -268,7 +270,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                   className="bg-green-500 text-white flex items-center gap-2 opacity-80"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Вярно!
+                  {t('exercise.correct')}
                 </Button>
               ) : (
                 <Button
@@ -276,7 +278,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                   className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white flex items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Провери
+                  {t('exercise.check')}
                 </Button>
               )}
             </div>

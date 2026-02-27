@@ -1,0 +1,109 @@
+---
+globs: src/components/exercises/**
+---
+# Exercise UI Standards
+
+## Translation Rules
+
+**Never hardcode Bulgarian text** in exercise components. Always use `useT()`:
+```tsx
+import { useT } from '@/i18n/useT';
+const t = useT();
+```
+
+**Titles and instructions** are translated automatically in [src/components/exercises/ExerciseRenderer.tsx](mdc:src/components/exercises/ExerciseRenderer.tsx) via `useTranslate()`.
+Do NOT add `useTranslate()` inside individual exercise components for titles/instructions.
+
+**Exercise content** (words, sentences, correct answers, vocabulary) stays in Bulgarian — never translate it.
+
+## Button Standards
+
+### Check / Verify buttons — LEFT aligned
+
+Single-answer exercises (one field to check):
+```tsx
+<Button onClick={handleCheck} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+  {t('exercise.check')}
+</Button>
+```
+
+Multi-answer exercises (many fields at once):
+```tsx
+<Button onClick={handleCheck} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+  {t('exercise.checkAnswers')}
+</Button>
+```
+
+### Reset button — LEFT aligned, next to check
+
+```tsx
+<Button variant="outline" onClick={handleReset} className="...">
+  <RotateCcw className="w-4 h-4" />
+  {t('exercise.reset')}
+</Button>
+```
+
+### Audio buttons (Listen / Stop) — RIGHT aligned
+
+```tsx
+<div className="flex justify-end mb-4">
+  <Button onClick={handlePlayAudio} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+    {isPlaying ? (
+      <><Pause className="w-5 h-5" />{t('exercise.stop')}</>
+    ) : (
+      <><Play className="w-5 h-5" />{t('exercise.listen')}</>
+    )}
+  </Button>
+</div>
+```
+
+### Button container alignment
+
+```tsx
+// Check/Reset buttons — left aligned:
+<div className="flex gap-3 mt-6">
+
+// Audio buttons — right aligned:
+<div className="flex justify-end mb-4">
+```
+
+## Available Translation Keys for Exercises
+
+```
+exercise.check          → "Провери"
+exercise.checkAnswers   → "Провери отговорите"
+exercise.reset          → "Нулирай"
+exercise.correct        → "Правилно!"
+exercise.incorrect      → "Опитай пак"
+exercise.correctLabel   → "Правилно:"
+exercise.wrongLabel     → "Грешно"
+exercise.result         → "Резултат:"
+exercise.correct_n      → "правилни отговора"
+exercise.listen         → "Слушай"
+exercise.stop           → "Спри"
+exercise.selectOption   → "Избери..."
+exercise.allCorrect     → "Браво! Всички отговори са верни!"
+exercise.reviewErrors   → "Проверете грешните отговори (маркирани в червено)."
+exercise.model          → "Модел:"
+exercise.correctAnswer  → "Правилен отговор:"
+exercise.readInPairs    → "Прочетете диалозите по двойки"
+```
+
+## State Persistence
+
+Use `useExercisePersistence` to save/restore exercise state across page navigations:
+
+```tsx
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+
+export function MyExercise({ exerciseId }: { exerciseId?: string }) {
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as any;
+
+  const [answers, setAnswers] = useState(() => s?.answers ?? {});
+
+  useEffect(() => {
+    saveState({ answers, isSubmitted });
+  }, [answers, isSubmitted]);
+}
+```

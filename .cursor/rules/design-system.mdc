@@ -1,0 +1,66 @@
+---
+globs: src/components/**
+---
+# Design System
+
+## Colors
+
+| Role | Hex |
+|---|---|
+| Primary green | `#8FC412` |
+| Primary hover | `#7DAD0E` |
+| Primary dark | `#6A940C` |
+| Secondary light bg | `#EEF7C8` |
+| UNHCR blue | `#0279C3` |
+| UNHCR blue hover | `#0267A3` |
+| Sidebar bg | `#F5F5F5` |
+| Active sidebar item | `#EEF7C8` |
+
+Use these exact values — never approximate with Tailwind color names like `green-500`.
+
+## Typography
+
+Font: **Sofia Sans** with Cyrillic subset — already loaded in [src/app/layout.tsx](mdc:src/app/layout.tsx). No imports needed.
+Base size: 16px minimum (prevents iOS zoom on inputs).
+
+## Icons
+
+Use **Lucide React** only. Import named icons directly:
+```tsx
+import { Menu, X, ChevronDown } from 'lucide-react';
+```
+
+## UI Components
+
+Use **shadcn/ui** only — import from `@/components/ui/[name]`:
+```tsx
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+```
+
+Check `src/components/ui/` for already-installed components before adding new ones.
+To install a new shadcn/ui component: `npx shadcn@latest add [name]` (e.g. `npx shadcn@latest add dialog`)
+
+## Common Patterns
+
+**Card/exercise container:**
+```tsx
+className="bg-white rounded-xl p-6 md:p-8 shadow-md"
+```
+
+**Touch targets** — minimum on all interactive elements:
+```tsx
+className="min-h-[48px]"
+```
+
+**Responsive:** mobile-first, single column on small screens. Use `md:` prefix for desktop variants.
+
+**Transitions:**
+```tsx
+className="transition-colors"   // for hover color changes
+className="active:scale-95"     // for button press feedback
+```
+
+## RTL Support
+
+Languages `ar` and `fa` are RTL. The `dir` attribute is set on the root element via [src/i18n/LanguageContext.tsx](mdc:src/i18n/LanguageContext.tsx). Use logical CSS properties when needed (`ms-`, `me-` instead of `ml-`, `mr-`).

@@ -1,0 +1,74 @@
+---
+globs: src/content/**
+---
+# Content & Lessons Guide
+
+## Lesson Folder Structure
+
+Each lesson lives in `src/content/lessons/lesson-XX/` with 5 files:
+
+- `metadata.ts` — id, number, title, description, grammarTopics[], vocabulary[]
+- `content.ts` — introduction text, dialogues, sections
+- `exercises.ts` — ALL lesson elements in PDF order (exercises + НОВИ ДУМИ + ГРАМАТИКА + ДИАЛОЗИ)
+- `workbook.ts` — workbook-only exercises
+- `index.ts` — re-exports everything as `lessonData`
+
+After creating the files, register the lesson in [src/content/index.ts](mdc:src/content/index.ts) `lessonsMetadata` array.
+
+## ID Naming Conventions
+
+| Element | Format | Example |
+|---|---|---|
+| Lesson | `lesson-XX` | `lesson-02` |
+| Exercise | `lXX-ex-NN` | `l02-ex-01` |
+| Workbook | `lXX-wb-NN` | `l02-wb-01` |
+| Нови думи | `lXX-novi-dumi-NN` | `l02-novi-dumi-01` |
+| Граматика | `lXX-gramatika-NN` | `l02-gramatika-01` |
+| Диалози | `lXX-dialozi-NN` | `l02-dialozi-01` |
+
+## Asset Paths
+
+Assets go in `/public/assets/lesson-XX/` with descriptive subfolders:
+- `audio/` — MP3/WAV files
+- `exercise-NN-name/` — images for a specific exercise
+- `novi-dumi-N-name/` — vocabulary card images
+- `gramatika-N/` — grammar section images
+
+Source files (PDFs, audio, images) are on the developer's machine at:
+`C:\Users\Work Account\Desktop\CURSOR\GITHUB A1\a1-files\lessons\lesson-X\`
+
+## exercises.ts — Key Rules
+
+- ALL lesson elements go here: exercises AND vocabulary sections AND grammar sections AND dialogues
+- The `order` field must match the exact sequence in the PDF
+- Informational sections (НОВИ ДУМИ, ГРАМАТИКА, ДИАЛОЗИ) have no `points` field
+- Actual exercises have a `points` field
+
+## Exercise Types — 5 Categories
+
+**НОВИ ДУМИ (FREQUENT):** `illustrated_cards`
+
+**ГРАМАТИКА (FREQUENT):** `grammar_visual`, `grammar_examples`, `grammar_table`
+
+**ДИАЛОЗИ И ТЕКСТОВЕ (FREQUENT):** `dialogues`, `reading_text`
+
+**УПРАЖНЕНИЯ — Чести (FREQUENT):** `fill_in_blank`, `workbook_fill_blank`, `multiple_choice`, `dropdown_match`, `word_order`
+
+**УПРАЖНЕНИЯ — Редки (RARE):** `match_pairs`, `letter_choice`, `image_labeling`, `syllable_blocks`, `word_search`, `true_false`, `dialogue_builder`, `fill_with_images`
+
+**Not yet implemented (show placeholder):** `verb_conjugation`, `number_writing`, `dialogue_reading`, `text_comprehension`, `listening`
+
+## Creating Exercises — ALWAYS Use Templates
+
+When creating exercises, **always read `@EXERCISE_TEMPLATES.ts` first**.
+Copy the relevant template and replace only the content — never write exercise structure from scratch.
+
+Reference: [LESSON_STRUCTURE.md](mdc:LESSON_STRUCTURE.md) shows how lesson-01 PDF maps to exercise types and IDs.
+
+## Adding a New Exercise Type — Checklist
+
+1. Add interface + type to [src/content/types.ts](mdc:src/content/types.ts)
+2. Create component in `src/components/exercises/`
+3. Add `case` in [src/components/exercises/ExerciseRenderer.tsx](mdc:src/components/exercises/ExerciseRenderer.tsx)
+4. Add template to [src/content/EXERCISE_TEMPLATES.ts](mdc:src/content/EXERCISE_TEMPLATES.ts)
+5. Add type to the category list in this rule
