@@ -68,41 +68,47 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
             className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {/* Image */}
-            <div className="relative w-full h-56 md:h-64 mb-4 rounded-lg overflow-hidden bg-white">
+            <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
               <ImageWithFallback
                 src={example.imageUrl}
                 alt={example.lines ? example.lines[0] : example.text}
               />
             </div>
 
-            {/* Text */}
-            <div className="text-center space-y-2">
+            {/* Text section - two columns with thumbs and text */}
+            <div className="mt-4">
               {example.lines ? (
-                example.lines.map((line, lineIndex) => (
-                  <p key={lineIndex} className="text-base md:text-lg font-bold text-gray-800">
-                    {line}
-                  </p>
-                ))
+                <div className="text-center space-y-2">
+                  {example.lines.map((line, lineIndex) => (
+                    <p key={lineIndex} className="text-base md:text-lg font-bold text-gray-800">
+                      {line}
+                    </p>
+                  ))}
+                </div>
               ) : (
-                <>
-                  {/* Positive statement with green heart */}
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-xl flex-shrink-0">💚</span>
-                    <p className="text-base md:text-lg font-bold text-gray-800">
+                <div className="grid grid-cols-2 gap-4 px-2">
+                  {/* Left column - Positive (thumbs up) */}
+                  <div className="flex flex-col items-center justify-start gap-3">
+                    <div className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg bg-green-500">
+                      <span className="text-2xl md:text-3xl">👍</span>
+                    </div>
+                    <p className="text-sm md:text-base font-bold text-gray-800 text-center">
                       {example.text}
                     </p>
                   </div>
                   
-                  {/* Negative statement with crossed heart */}
+                  {/* Right column - Negative (thumbs down) */}
                   {example.subtext && (
-                    <div className="flex items-center justify-center gap-2">
-                      <span className="text-xl flex-shrink-0">💔</span>
-                      <p className="text-sm md:text-base text-gray-600">
+                    <div className="flex flex-col items-center justify-start gap-3">
+                      <div className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg bg-red-500">
+                        <span className="text-2xl md:text-3xl">👎</span>
+                      </div>
+                      <p className="text-sm md:text-base text-gray-600 text-center">
                         {example.subtext}
                       </p>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>

@@ -34,6 +34,8 @@ export function DragToColumns({
   const [isCorrect, setIsCorrect] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [resetKey, setResetKey] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -85,13 +87,19 @@ export function DragToColumns({
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
+    setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
+    if (!isDragging) return;
+    const currentX = e.touches[0].clientX;
+    const diff = currentX - touchStartX.current;
+    setDragOffset(diff);
+    touchEndX.current = currentX;
   };
 
   const handleTouchEnd = () => {
+    setIsDragging(false);
     const diff = touchStartX.current - touchEndX.current;
     const threshold = 50;
 
@@ -102,19 +110,25 @@ export function DragToColumns({
         handleSwipe('right');
       }
     }
+    
+    setDragOffset(0);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
     touchStartX.current = e.clientX;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (e.buttons === 1) {
+    if (isDragging && e.buttons === 1) {
+      const diff = e.clientX - touchStartX.current;
+      setDragOffset(diff);
       touchEndX.current = e.clientX;
     }
   };
 
   const handleMouseUp = () => {
+    setIsDragging(false);
     const diff = touchStartX.current - touchEndX.current;
     const threshold = 50;
 
@@ -124,6 +138,15 @@ export function DragToColumns({
       } else {
         handleSwipe('right');
       }
+    }
+    
+    setDragOffset(0);
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setDragOffset(0);
     }
   };
 
@@ -199,15 +222,21 @@ export function DragToColumns({
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
-                className={`w-full max-w-xs bg-white border-4 border-[#8B9D5F] rounded-2xl p-8 shadow-xl cursor-grab active:cursor-grabbing touch-none select-none transition-all duration-300 ${
-                  swipeDirection === 'left'
-                    ? '-translate-x-[200%] opacity-0 rotate-[-20deg]'
+                onMouseLeave={handleMouseLeave}
+                className="w-full max-w-xs bg-white border-4 border-[#8B9D5F] rounded-2xl p-8 shadow-xl cursor-grab active:cursor-grabbing touch-none select-none"
+                style={{
+                  transform: dragOffset !== 0
+                    ? `translateX(${dragOffset}px) rotate(${dragOffset * 0.05}deg)`
+                    : swipeDirection === 'left'
+                    ? 'translateX(-200%) rotate(-20deg)'
                     : swipeDirection === 'right'
-                    ? 'translate-x-[200%] opacity-0 rotate-[20deg]'
-                    : 'translate-x-0 opacity-100 rotate-0'
-                }`}
+                    ? 'translateX(200%) rotate(20deg)'
+                    : 'translateX(0) rotate(0)',
+                  opacity: swipeDirection ? 0 : Math.max(0.5, 1 - Math.abs(dragOffset) / 300),
+                  transition: dragOffset !== 0 ? 'none' : 'all 0.3s ease-out',
+                }}
               >
-                <p className="text-3xl md:text-4xl font-bold text-gray-800 text-center">
+                <p className="text-xl md:text-2xl font-bold text-gray-800 text-center">
                   {currentItem}
                 </p>
               </div>
