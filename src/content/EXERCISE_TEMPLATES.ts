@@ -1,5 +1,5 @@
 /**
- * EXERCISE TEMPLATES — Copy-paste templates for all 19 implemented exercise types.
+ * EXERCISE TEMPLATES — Copy-paste templates for all 21 implemented exercise types.
  *
  * HOW TO USE:
  * 1. Find the template for the type you need (use Ctrl+F on the type name)
@@ -12,8 +12,8 @@
  *   Section 1 — НОВИ ДУМИ       (illustrated_cards) ⭐ FREQUENT
  *   Section 2 — ГРАМАТИКА        (grammar_visual, grammar_examples, grammar_table) ⭐ FREQUENT
  *   Section 3 — ДИАЛОЗИ / ТЕКСТ  (dialogues, reading_text) ⭐ FREQUENT
- *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, multiple_choice, dropdown_match, word_order) ⭐ FREQUENT
- *   Section 5 — УПРАЖНЕНИЯ РЕДКИ (match_pairs, letter_choice, image_labeling, syllable_blocks, word_search, true_false, dialogue_builder, fill_with_images)
+ *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, multiple_choice, dropdown_match, word_order, drag_to_columns) ⭐ FREQUENT
+ *   Section 5 — УПРАЖНЕНИЯ РЕДКИ (match_pairs, letter_choice, image_labeling, syllable_blocks, word_search, true_false, dialogue_builder, fill_with_images, personal_choice)
  *
  * ID CONVENTIONS:
  *   Lesson exercises:  l0X-ex-NN        (e.g. l02-ex-01)
@@ -35,6 +35,7 @@ import type {
   MultipleChoiceExercise,
   DropdownMatchExercise,
   WordOrderExercise,
+  DragToColumnsExercise,
   MatchPairsExercise,
   LetterChoiceExercise,
   ImageLabelingExercise,
@@ -43,6 +44,7 @@ import type {
   TrueFalseExercise,
   DialogueBuilderExercise,
   FillWithImagesExercise,
+  PersonalChoiceExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -361,6 +363,88 @@ export const TEMPLATE_word_order = {
   ],
 } as WordOrderExercise;
 
+/**
+ * drag_to_columns — Плъзни дума в правилната колона (swipe-based).
+ * Поддържа 2 или 3 колони. При 2: swipe ляво/дясно. При 3: swipe ляво/дясно/надолу.
+ *
+ * VARIANTS:
+ *   - 2 columns: ляво ⬅️ / дясно ➡️ (напр. ИМА / НЯМА, ДА / НЕ)
+ *   - 3 columns: ляво ⬅️ / дясно ➡️ / надолу ⬇️ (напр. ЕДИН / ЕДНА / ЕДНО)
+ *   - imageUrl: референтна картинка отгоре (напр. маса с храна за "какво има")
+ *
+ * SWIPE МЕХАНИЗЪМ:
+ *   - Threshold: 30px (ниско за по-добра чувствителност)
+ *   - Ляво = колона 0, Дясно = колона 1, Надолу = колона 2
+ *   - На мобилно контейнерите за колона 0 и 1 са до стрелките,
+ *     колона 2 е центрирана отдолу
+ *
+ * БЕЛЕЖКИ:
+ *   - items[] се разбъркват автоматично
+ *   - Всяка дума от items[] трябва да е в точно един correctItems[]
+ *   - icon е по избор (emoji пред заглавието на колоната)
+ *   - При 3 колони инструкцията автоматично казва "наляво, надясно или надолу"
+ */
+export const TEMPLATE_drag_to_columns_2col = {
+  id: 'l0X-ex-NN',             // REPLACE
+  type: 'drag_to_columns' as const,
+  instruction: 'Какво има и какво няма на масата?',  // REPLACE
+  order: 1,                     // REPLACE
+  points: 10,                   // REPLACE (= number of items)
+  imageUrl: '/assets/lesson-0X/exercise-NN/image.jpg',  // REPLACE or remove
+  items: [                      // REPLACE — all words to sort
+    'чай', 'кафе', 'мляко', 'захар', 'хляб',
+    'масло', 'мед', 'сирене', 'кашкавал', 'сок',
+  ],
+  columns: [
+    {
+      id: 'ima',                // REPLACE
+      title: 'ИМА',            // REPLACE
+      icon: '✓',               // REPLACE or remove
+      correctItems: ['чай', 'кафе', 'мляко', 'захар', 'хляб'],  // REPLACE
+    },
+    {
+      id: 'niama',
+      title: 'НЯМА',
+      icon: '✗',
+      correctItems: ['масло', 'мед', 'сирене', 'кашкавал', 'сок'],
+    },
+  ],
+} as DragToColumnsExercise;
+
+export const TEMPLATE_drag_to_columns_3col = {
+  id: 'l0X-ex-NN',             // REPLACE
+  type: 'drag_to_columns' as const,
+  instruction: 'Изберете правилната форма: един, една или едно?',  // REPLACE
+  order: 1,                     // REPLACE
+  points: 18,                   // REPLACE (= number of items)
+  items: [                      // REPLACE — all words to sort
+    'баница', 'вода', 'дюнер', 'капучино', 'кафе',
+    'кашкавал', 'кроасан', 'масло', 'мед', 'мляко',
+    'пица', 'салам', 'сирене', 'сок', 'филия', 'хляб',
+    'чай', 'шоколад',
+  ],
+  columns: [
+    {
+      id: 'edin',              // ⬅️ swipe LEFT = колона 0
+      title: 'ЕДИН (мъжки род)',
+      icon: '♂',
+      correctItems: ['дюнер', 'кашкавал', 'кроасан', 'мед', 'салам', 'сок', 'хляб', 'чай', 'шоколад'],
+    },
+    {
+      id: 'edna',              // ➡️ swipe RIGHT = колона 1
+      title: 'ЕДНА (женски род)',
+      icon: '♀',
+      correctItems: ['баница', 'вода', 'пица', 'филия'],
+    },
+    {
+      id: 'edno',              // ⬇️ swipe DOWN = колона 2
+      title: 'ЕДНО (среден род)',
+      icon: '⚬',
+      correctItems: ['капучино', 'кафе', 'масло', 'мляко', 'сирене'],
+    },
+  ],
+} as DragToColumnsExercise;
+
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION 5 — УПРАЖНЕНИЯ РЕДКИ
@@ -526,3 +610,57 @@ export const TEMPLATE_fill_with_images = {
   verbOptions: ['съм', 'си', 'е', 'сме', 'сте', 'са'],  // REPLACE
   countryOptions: ['България', 'Сирия', 'Украйна'],       // REPLACE
 } as FillWithImagesExercise;
+
+/**
+ * personal_choice — Двуфазово упражнение: личен избор + граматическа проверка.
+ * Фаза 1: Студентът избира Да/Не (лично предпочитание, без грешен отговор).
+ * Фаза 2: Въз основа на избора попълва бланка (с правилен/грешен отговор).
+ *
+ * ИДЕАЛЕН ЗА:
+ *   - Предлози с/без (кафе с мляко / без мляко)
+ *   - Ситуации в кафене/магазин/ресторант
+ *   - Всяко упражнение, комбиниращо лично мнение с граматика
+ *
+ * СТРУКТУРА НА ITEM:
+ *   question:         Въпросът (показан горе, с произношение)
+ *   positiveTemplate: Шаблон за отговор при "Да" (с ___ за бланка)
+ *   negativeTemplate: Шаблон за отговор при "Не" (с ___ за бланка)
+ *   positiveBlank:    Правилната дума за бланката при "Да"
+ *   negativeBlank:    Правилната дума за бланката при "Не"
+ *
+ * model: Показва се отгоре като пример (не е задължителен).
+ * blankOptions: Опциите, от които студентът избира (показани като бутони).
+ */
+export const TEMPLATE_personal_choice = {
+  id: 'l0X-ex-NN',             // REPLACE
+  type: 'personal_choice' as const,
+  title: 'УПРАЖНЕНИЕ 14',       // REPLACE
+  instruction: 'Вие сте в кафене. Сервитьорът пита — отговорете и попълнете правилния предлог.', // REPLACE
+  order: 1,                     // REPLACE
+  points: 5,                    // REPLACE (= number of items)
+  model: {                      // REPLACE or remove — optional reference model
+    question: 'Искате ли мед в чая?',
+    positiveAnswer: 'Да, пия чай с мед.',
+    negativeAnswer: 'Не, пия чай без мед.',
+  },
+  blankOptions: ['с', 'без'],   // REPLACE — the buttons shown for phase 2
+  items: [
+    {
+      id: 'item1',                                       // REPLACE
+      question: 'Искате ли захар в кафето?',             // REPLACE
+      positiveTemplate: 'Да, пия кафе ___ захар.',       // REPLACE — ___ marks the blank
+      negativeTemplate: 'Не, пия кафе ___ захар.',       // REPLACE
+      positiveBlank: 'с',                                // REPLACE — correct answer when "Да"
+      negativeBlank: 'без',                              // REPLACE — correct answer when "Не"
+    },
+    {
+      id: 'item2',
+      question: 'Искате ли мляко в кафето?',
+      positiveTemplate: 'Да, пия кафе ___ мляко.',
+      negativeTemplate: 'Не, пия кафе ___ мляко.',
+      positiveBlank: 'с',
+      negativeBlank: 'без',
+    },
+    // Add more items...
+  ],
+} as PersonalChoiceExercise;

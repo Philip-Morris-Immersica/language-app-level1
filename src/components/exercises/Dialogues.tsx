@@ -4,6 +4,8 @@ import { useState, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { InlineTranslation } from '@/components/InlineTranslation';
 
 interface DialogueLine {
   speaker?: string;
@@ -25,8 +27,10 @@ interface DialoguesProps {
 
 export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
   const t = useT();
+  const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [speakingSection, setSpeakingSection] = useState<string | null>(null);
+  const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Audio file playback (when audioUrl is provided)
@@ -50,8 +54,15 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
     }
   };
 
-  // TTS for a section (when no audioUrl)
+  // TTS for a section (when no audioUrl) + toggle translation
   const handleSectionClick = (section: DialogueSection) => {
+    setRevealedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(section.id)) next.delete(section.id);
+      else next.add(section.id);
+      return next;
+    });
+
     if (audioUrl) return;
 
     window.speechSynthesis.cancel();
@@ -98,29 +109,32 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
         </div>
       )}
 
+      {lang !== 'bg' && (
+        <p className="text-xs text-gray-400 text-center mb-4 italic">
+          {t('exercise.tapToTranslate')}
+        </p>
+      )}
+
       {/* Dialogue sections */}
       <div className="space-y-6">
         {sections.map((section) => {
           const isSpeaking = speakingSection === section.id;
+          const isRevealed = revealedSections.has(section.id);
           return (
             <div
               key={section.id}
               onClick={() => handleSectionClick(section)}
               className={`
-                bg-white rounded-xl border-2 p-6 shadow-sm transition-all
-                ${useTTS
-                  ? isSpeaking
-                    ? 'border-[#8FC412] bg-[#f4faee] cursor-pointer scale-[1.01]'
-                    : 'border-gray-200 cursor-pointer hover:border-[#8FC412] hover:bg-[#f9fdf2] active:scale-[0.99]'
-                  : 'border-gray-200'
+                bg-white rounded-xl border-2 p-6 shadow-sm transition-all cursor-pointer active:scale-[0.99]
+                ${isSpeaking
+                  ? 'border-[#8FC412] bg-[#f4faee] scale-[1.01]'
+                  : 'border-gray-200 hover:border-[#8FC412] hover:bg-[#f9fdf2]'
                 }
               `}
             >
               {/* Section label + speaking indicator */}
               <div className="flex items-center gap-2 mb-4">
-                <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
-                  isSpeaking ? 'bg-[#8FC412] text-white' : 'bg-[#8FC412] text-white'
-                }`}>
+                <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#8FC412] text-white">
                   {section.id}
                 </span>
                 {isSpeaking && (
@@ -141,9 +155,12 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
                 {section.lines.map((line, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <span className="text-2xl text-gray-400 leading-none mt-1">–</span>
-                    <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                      {line.text}
-                    </p>
+                    <div>
+                      <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                        {line.text}
+                      </p>
+                      <InlineTranslation text={line.text} visible={isRevealed} />
+                    </div>
                   </div>
                 ))}
               </div>

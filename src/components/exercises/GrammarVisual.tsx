@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { useT } from '@/i18n/useT';
+import { InlineTranslation } from '@/components/InlineTranslation';
 
 interface PronounVisual {
   pronoun: string;
@@ -16,21 +20,38 @@ interface GrammarVisualProps {
 }
 
 export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
-  const speak = (text: string) => {
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  const { lang } = useLanguage();
+  const t = useT();
+
+  const handleClick = (index: number, text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'bg-BG';
     utterance.rate = 0.85;
     window.speechSynthesis.speak(utterance);
+
+    setRevealed(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
   };
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {lang !== 'bg' && (
+        <p className="text-xs text-gray-400 text-center mb-4 italic">
+          {t('exercise.tapToTranslate')}
+        </p>
+      )}
+
       {/* Visual grid for pronouns */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
         {pronouns.map((item, index) => (
           <div
             key={index}
-            onClick={() => speak(item.pronoun)}
+            onClick={() => handleClick(index, item.pronoun)}
             className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center justify-center"
           >
             {/* Image placeholder or actual image */}
@@ -223,12 +244,16 @@ export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
             <p className="text-center text-xl md:text-2xl font-bold text-gray-800">
               {item.pronoun}
             </p>
+            <InlineTranslation text={item.pronoun} visible={revealed.has(index)} />
 
             {/* Optional description */}
             {item.description && (
-              <p className="text-center text-sm text-gray-600 mt-2">
-                {item.description}
-              </p>
+              <>
+                <p className="text-center text-sm text-gray-600 mt-2">
+                  {item.description}
+                </p>
+                <InlineTranslation text={item.description} visible={revealed.has(index)} />
+              </>
             )}
           </div>
         ))}

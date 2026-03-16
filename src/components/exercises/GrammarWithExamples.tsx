@@ -2,6 +2,9 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { useT } from '@/i18n/useT';
+import { InlineTranslation } from '@/components/InlineTranslation';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -31,6 +34,20 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+function HighlightPrepositions({ text }: { text: string }) {
+  const parts = text.split(/\b(без|със|с|Няма|няма|Има|има)\b/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const lower = part.toLowerCase();
+        if (lower === 'без' || lower === 'няма') return <span key={i} className="text-red-600 font-extrabold">{part}</span>;
+        if (lower === 'с' || lower === 'със' || lower === 'има') return <span key={i} className="text-green-700 font-extrabold">{part}</span>;
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 interface GrammarExample {
   imageUrl: string;
   text: string;
@@ -46,7 +63,11 @@ interface GrammarWithExamplesProps {
 }
 
 export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesProps) {
-  const speak = (example: GrammarExample) => {
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  const { lang } = useLanguage();
+  const t = useT();
+
+  const handleClick = (index: number, example: GrammarExample) => {
     const textToSpeak = example.lines
       ? example.lines.join(' ')
       : [example.text, example.subtext].filter(Boolean).join(' ');
@@ -55,16 +76,29 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
     utterance.lang = 'bg-BG';
     utterance.rate = 0.85;
     window.speechSynthesis.speak(utterance);
+
+    setRevealed(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
   };
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {lang !== 'bg' && (
+        <p className="text-xs text-gray-400 text-center mb-4 italic">
+          {t('exercise.tapToTranslate')}
+        </p>
+      )}
+
       {/* Examples grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {examples.map((example, index) => (
           <div
             key={index}
-            onClick={() => speak(example)}
+            onClick={() => handleClick(index, example)}
             className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {/* Image */}
@@ -75,40 +109,43 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
               />
             </div>
 
-            {/* Text section - two columns with thumbs and text */}
-            <div className="mt-4">
+            {/* Text section */}
+            <div className="mt-4 text-center space-y-2">
               {example.lines ? (
-                <div className="text-center space-y-2">
-                  {example.lines.map((line, lineIndex) => (
-                    <p key={lineIndex} className="text-base md:text-lg font-bold text-gray-800">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-4 px-2">
-                  {/* Left column - Positive (thumbs up) */}
-                  <div className="flex flex-col items-center justify-start gap-3">
-                    <div className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg bg-green-500">
-                      <span className="text-2xl md:text-3xl">👍</span>
-                    </div>
-                    <p className="text-sm md:text-base font-bold text-gray-800 text-center">
-                      {example.text}
-                    </p>
-                  </div>
-                  
-                  {/* Right column - Negative (thumbs down) */}
-                  {example.subtext && (
-                    <div className="flex flex-col items-center justify-start gap-3">
-                      <div className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg bg-red-500">
-                        <span className="text-2xl md:text-3xl">👎</span>
+                <>
+                  {example.lines.map((line, lineIndex) => {
+                    const isPositive = line.startsWith('✓');
+                    const isNegative = line.startsWith('✗');
+                    const colorClass = isPositive
+                      ? 'text-green-700'
+                      : isNegative
+                      ? 'text-red-600'
+                      : 'text-gray-800';
+                    return (
+                      <div key={lineIndex}>
+                        <p className={`text-base md:text-lg font-bold ${colorClass}`}>
+                          {line}
+                        </p>
+                        <InlineTranslation text={line} visible={revealed.has(index)} />
                       </div>
-                      <p className="text-sm md:text-base text-gray-600 text-center">
-                        {example.subtext}
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <p className="text-base md:text-lg font-bold text-gray-800">
+                    <HighlightPrepositions text={example.text} />
+                  </p>
+                  <InlineTranslation text={example.text} visible={revealed.has(index)} />
+                  {example.subtext && (
+                    <>
+                      <p className="text-sm md:text-base text-gray-600 italic">
+                        <HighlightPrepositions text={example.subtext} />
                       </p>
-                    </div>
+                      <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
+                    </>
                   )}
-                </div>
+                </>
               )}
             </div>
           </div>

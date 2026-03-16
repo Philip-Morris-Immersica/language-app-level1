@@ -24,7 +24,8 @@ export type ExerciseType =
   | 'text_comprehension'   // Read text and answer questions
   | 'listening'            // Audio exercises (future)
   | 'reading_text'         // Reading text with optional audio
-  | 'true_false';          // True/False sentences with ✓/✗ buttons
+  | 'true_false'           // True/False sentences with ✓/✗ buttons
+  | 'personal_choice';     // Interactive personal preference (no right/wrong)
 
 // Base exercise interface
 export interface BaseExercise {
@@ -261,6 +262,7 @@ export interface DropdownMatchExercise extends BaseExercise {
 
 export interface DragToColumnsExercise extends BaseExercise {
   type: 'drag_to_columns';
+  imageUrl?: string;              // Optional reference image shown above the exercise
   items: string[];              // Items to drag (e.g., "чай", "кафе", "сирене")
   columns: {
     id: string;                 // Column identifier (e.g., "drinks", "food")
@@ -308,6 +310,25 @@ export interface TrueFalseExercise extends BaseExercise {
   }[];
 }
 
+export interface PersonalChoiceExercise extends BaseExercise {
+  type: 'personal_choice';
+  title: string;
+  model?: {
+    question: string;
+    positiveAnswer: string;
+    negativeAnswer: string;
+  };
+  blankOptions: string[];
+  items: {
+    id: string;
+    question: string;
+    positiveTemplate: string;
+    negativeTemplate: string;
+    positiveBlank: string;
+    negativeBlank: string;
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise
@@ -334,7 +355,8 @@ export type Exercise =
   | TextComprehensionExercise
   | ListeningExercise
   | ReadingTextExercise
-  | TrueFalseExercise;
+  | TrueFalseExercise
+  | PersonalChoiceExercise;
 
 // Dialogue structure
 export interface Dialogue {

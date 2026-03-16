@@ -6,6 +6,8 @@ import { Play, Pause, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { IllustratedCardsExercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { InlineTranslation } from '@/components/InlineTranslation';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -14,8 +16,22 @@ interface IllustratedCardsProps {
 
 export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const t = useT();
+  const { lang } = useLanguage();
+
+  const toggleTranslation = (cardId: string) => {
+    setRevealedCards(prev => {
+      const next = new Set(prev);
+      if (next.has(cardId)) {
+        next.delete(cardId);
+      } else {
+        next.add(cardId);
+      }
+      return next;
+    });
+  };
 
   const speak = (label: string, sublabels?: string[]) => {
     window.speechSynthesis.cancel();
@@ -25,6 +41,11 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
     utterance.lang = 'bg-BG';
     utterance.rate = 0.85;
     window.speechSynthesis.speak(utterance);
+  };
+
+  const handleCardClick = (card: { id: string; label: string; sublabels?: string[] }) => {
+    speak(card.label, card.sublabels);
+    toggleTranslation(card.id);
   };
 
   const handlePlayAudio = () => {
@@ -77,12 +98,19 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
         </div>
       )}
 
+      {/* Tap hint for non-Bulgarian users */}
+      {lang !== 'bg' && (
+        <p className="text-xs text-gray-400 text-center mb-3 italic">
+          {t('exercise.tapToTranslate')}
+        </p>
+      )}
+
       {/* Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {exercise.cards.map((card) => (
           <div
             key={card.id}
-            onClick={() => speak(card.label, card.sublabels)}
+            onClick={() => handleCardClick(card)}
             className="relative bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95"
           >
             {/* Speaker icon */}
@@ -108,6 +136,10 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
               <p className="text-base md:text-lg font-semibold text-gray-800">
                 {card.label}
               </p>
+              <InlineTranslation
+                text={card.label}
+                visible={revealedCards.has(card.id)}
+              />
               {/* Sublabels */}
               {card.sublabels && card.sublabels.length > 0 && (
                 <div className="mt-2 space-y-0.5">

@@ -23,6 +23,7 @@ import { WorkbookFillBlank } from './WorkbookFillBlank';
 import { GrammarTable } from './GrammarTable';
 import { ReadingText } from './ReadingText';
 import { TrueFalse } from './TrueFalse';
+import { PersonalChoice } from './PersonalChoice';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -102,6 +103,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     case 'drag_to_columns':
       return wrap(
         <DragToColumns
+          imageUrl={exercise.imageUrl}
           items={exercise.items}
           columns={exercise.columns}
           onComplete={onComplete}
@@ -217,6 +219,16 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           sentences={exercise.sentences}
           onComplete={onComplete}
           exerciseId={exercise.id}
+        />
+      );
+
+    case 'personal_choice':
+      return wrap(
+        <PersonalChoice
+          model={exercise.model}
+          items={exercise.items}
+          blankOptions={exercise.blankOptions}
+          onComplete={onComplete}
         />
       );
 
