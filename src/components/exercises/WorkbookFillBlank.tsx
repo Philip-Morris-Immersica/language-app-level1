@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, Play, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
@@ -11,13 +11,20 @@ interface WorkbookSentence {
   blanks: number[];
   correctAnswers: string[];
   acceptableAnswers?: string[][];
-  options?: string[];
+  options?: string[] | string[][];
   isExample?: boolean;
+}
+
+function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx: number): string[] {
+  if (!options || options.length === 0) return [];
+  if (Array.isArray(options[0])) return (options as string[][])[blankIdx] || [];
+  return options as string[];
 }
 
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
@@ -34,6 +41,7 @@ function parseText(text: string): { type: 'text' | 'blank'; value: string }[] {
 export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
+  listeningText,
   onComplete,
   exerciseId,
 }: WorkbookFillBlankProps) {
@@ -111,7 +119,7 @@ export function WorkbookFillBlank({
           if (seg.type === 'blank') {
             const bIdx = blankCounter++;
             const userVal = answers[sIdx]?.[bIdx] || '';
-            const opts = sentence.options || [];
+            const opts = getOptionsForBlank(sentence.options, bIdx);
 
             if (isExample || opts.length === 0) {
               return (
@@ -190,7 +198,7 @@ export function WorkbookFillBlank({
         if (seg.type === 'blank') {
           const bIdx = blankCounter++;
           const userVal = answers[sIdx]?.[bIdx] || '';
-          const opts = sentence.options || [];
+          const opts = getOptionsForBlank(sentence.options, bIdx);
           if (isExample || opts.length === 0) {
             return (
               <span key={segIdx} className="inline-block border-b-2 border-gray-400 min-w-[4rem] text-center text-sm px-1">
@@ -256,7 +264,7 @@ export function WorkbookFillBlank({
         if (seg.type === 'blank') {
           const bIdx = blankCounter++;
           const userVal = answers[sIdx]?.[bIdx] || '';
-          const opts = sentence.options || [];
+          const opts = getOptionsForBlank(sentence.options, bIdx);
           if (isExample) {
             return (
               <span key={segIdx} className="font-bold text-[#4a6b1f]">
@@ -368,8 +376,39 @@ export function WorkbookFillBlank({
     return s.correctAnswers.every((_, bIdx) => !!userAnswers[bIdx]);
   });
 
+  const speakText = (text: string) => {
+    if (typeof window === 'undefined') return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'bg-BG';
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  };
+
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {listeningText && (
+        <div className="mb-6 flex items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={() => speakText(listeningText)}
+            className="flex items-center gap-2 border-2 border-[#8FC412] text-[#4a6b1f] hover:bg-[#EEF7C8] px-5 py-3 rounded-lg font-semibold min-h-[48px]"
+          >
+            <Play className="w-5 h-5 fill-current" />
+            🔊 Слушайте текста
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => speakText(listeningText)}
+            className="text-gray-400 hover:text-[#4a6b1f]"
+            title="Слушай отново"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
       {layout === 'qa-stacked' ? (
         <div className="space-y-3">
           {(() => {

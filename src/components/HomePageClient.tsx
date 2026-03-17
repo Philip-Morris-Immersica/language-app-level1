@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Lock, ArrowRight, BookOpen } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
@@ -7,13 +8,11 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 
 const LEVELS = [
-  { code: 'A1', labelBg: 'А1', labelEn: 'A1', href: '/lessons/lesson-01', available: true },
+  { code: 'A1', labelBg: 'А1', labelEn: 'A1', href: '/level/a1', available: true },
   { code: 'A2', labelBg: 'А2', labelEn: 'A2', href: '#', available: false },
   { code: 'B1', labelBg: 'Б1', labelEn: 'B1', href: '#', available: false },
   { code: 'B2', labelBg: 'Б2', labelEn: 'B2', href: '#', available: false },
 ];
-
-const PROGRESS = 12;
 
 function ProgressBar({ value }: { value: number }) {
   return (
@@ -83,6 +82,26 @@ export function HomePageClient() {
   }
 
   // ── LOGGED IN ────────────────────────────────────────────────────────────
+  const [a1Progress, setA1Progress] = useState(0);
+
+  // 11 lessons + 1 alphabet + 6 tests = 18 items, each with equal weight
+  const A1_TOTAL_ITEMS = 18;
+
+  useEffect(() => {
+    if (!user) return;
+    fetch('/api/progress/summary')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.lessons) return;
+        let weightedSum = 0;
+        for (const v of Object.values(data.lessons) as { completed: number; total: number }[]) {
+          if (v.total > 0) weightedSum += v.completed / v.total;
+        }
+        setA1Progress(Math.round((weightedSum / A1_TOTAL_ITEMS) * 100));
+      })
+      .catch(() => {});
+  }, [user]);
+
   return (
     <div className="min-h-[calc(100vh-56px)] bg-white flex flex-col">
       <div className="px-8 md:px-16 lg:px-24 pt-12 pb-6">
@@ -102,6 +121,7 @@ export function HomePageClient() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {LEVELS.map((level) => {
             const displayLabel = lang === 'bg' ? level.labelBg : level.labelEn;
+            const progress = level.code === 'A1' ? a1Progress : 0;
             return level.available ? (
               <Link
                 key={level.code}
@@ -110,8 +130,8 @@ export function HomePageClient() {
               >
                 <span className="text-4xl font-bold mb-2">{displayLabel}</span>
                 <span className="text-white/80 text-sm font-medium mb-3">{t('home.progress')}</span>
-                <ProgressBar value={PROGRESS} />
-                <span className="mt-2 text-white/60 text-xs">{PROGRESS}{t('home.completed')}</span>
+                <ProgressBar value={progress} />
+                <span className="mt-2 text-white/60 text-xs">{progress}{t('home.completed')}</span>
               </Link>
             ) : (
               <div

@@ -5,9 +5,12 @@ import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
 import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson } from '@/content';
 import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
-import { LessonWorkbookSection } from '@/components/LessonWorkbookSection';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
 import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
+import { ReviewSectionDivider } from '@/components/ReviewSectionDivider';
+import { VocabularyDrawer } from '@/components/VocabularyDrawer';
+import { CultureSection } from '@/components/CultureSection';
+import { GrammarReferenceSection } from '@/components/GrammarReferenceSection';
 
 interface LessonPageProps {
   params: Promise<{
@@ -57,6 +60,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
     );
   }
 
+  const vocabulary = lessonData.content?.vocabulary || [];
+
   return (
     <LessonLayout>
       <div className="space-y-8">
@@ -73,27 +78,41 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <LessonIntroText text={lessonData.content.introduction} />
         )}
 
-        {/* In-lesson exercises */}
-        {lessonData.exercises && lessonData.exercises.length > 0 && (
-          <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-bolt-blue">
-              <T k="lesson.exercises" />
-            </h2>
-            <LessonExercisesProvider lessonId={lessonId}>
+        {/* Culture section — collapsible accordion */}
+        {lessonData.content?.culturalNotes && lessonData.content.culturalNotes.length > 0 && (
+          <CultureSection notes={lessonData.content.culturalNotes} />
+        )}
+
+        <LessonExercisesProvider lessonId={lessonId}>
+          {/* In-lesson exercises */}
+          {lessonData.exercises && lessonData.exercises.length > 0 && (
+            <div className="space-y-8">
+              <h2 className="text-3xl font-bold text-bolt-blue">
+                <T k="lesson.exercises" />
+              </h2>
               {lessonData.exercises.map((exercise: any, index: number) => (
                 <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
               ))}
-            </LessonExercisesProvider>
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* Link to workbook */}
-        {lessonData.workbookExercises && lessonData.workbookExercises.length > 0 && (
-          <LessonWorkbookSection
-            lessonId={lessonId}
-            count={lessonData.workbookExercises.length}
-          />
-        )}
+          {/* Grammar reference — collapsible, before Преговор */}
+          {lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0 && (
+            <GrammarReferenceSection notes={lessonData.content.grammarReference} />
+          )}
+
+          {/* Workbook exercises — inline with Преговор divider */}
+          {lessonData.workbookExercises && lessonData.workbookExercises.length > 0 && (
+            <>
+              <ReviewSectionDivider />
+              <div className="space-y-8">
+                {lessonData.workbookExercises.map((exercise: any, index: number) => (
+                  <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
+                ))}
+              </div>
+            </>
+          )}
+        </LessonExercisesProvider>
 
         {/* Navigation */}
         <LessonNav
@@ -103,6 +122,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
           testId={metadata.testId}
         />
       </div>
+
+      {/* Floating vocabulary drawer */}
+      {vocabulary.length > 0 && (
+        <VocabularyDrawer
+          vocabulary={vocabulary}
+          lessonTitle={`${metadata.number}. ${metadata.title}`}
+        />
+      )}
     </LessonLayout>
   );
 }

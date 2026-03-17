@@ -51,9 +51,9 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
   const handleSubmit = () => {
     const newValidation: { [key: string]: boolean } = {};
     let correctCount = 0;
+    const gradedQuestions = questions.filter(q => q.options.length > 0);
 
-    questions.forEach(q => {
-      if (q.options.length === 0) return; // skip example items
+    gradedQuestions.forEach(q => {
       const isCorrect = answers[q.id]?.toLowerCase() === q.correctAnswer.toLowerCase();
       newValidation[q.id] = isCorrect;
       if (isCorrect) correctCount++;
@@ -63,28 +63,24 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
     setIsSubmitted(true);
 
     if (onComplete) {
-      const score = (correctCount / questions.length) * questions.length;
-      onComplete(correctCount === questions.length, score);
+      onComplete(correctCount === gradedQuestions.length, correctCount);
     }
   };
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
-      <div className="space-y-4">
-        {questions.map((question, index) => (
+      <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
+        {questions.map((question) => (
           <div
             key={question.id}
             className={`
-              bg-white rounded-xl border-2 p-4 md:p-5 transition-all
+              bg-white rounded-xl border-2 p-4 md:p-4 transition-all
               ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
               ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
               ${validation[question.id] === null ? 'border-gray-300' : ''}
             `}
           >
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm md:text-lg font-semibold text-gray-700 min-w-[1.5rem] md:min-w-[2rem]">
-                {index + 1}.
-              </span>
 
               {(() => {
                 const parts = question.left.split('…');
@@ -170,7 +166,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
               <X className="w-6 h-6 text-red-600" />
             )}
             <p className="text-base font-semibold text-gray-800">
-              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.length} {t('exercise.correct_n')}
+              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.filter(q => q.options.length > 0).length} {t('exercise.correct_n')}
             </p>
           </div>
         </div>

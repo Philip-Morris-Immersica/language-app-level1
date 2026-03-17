@@ -11,6 +11,7 @@ import type {
   WorkbookFillBlankExercise,
   DialoguesExercise,
   PersonalChoiceExercise,
+  ConnectDotsExercise,
 } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-2.pdf (see LESSON_STRUCTURE_02.md)
@@ -583,14 +584,191 @@ export const exercises: Exercise[] = [
     ],
   } as IllustratedCardsExercise,
 
-  // ORDER 30: SKIPPED — l02-ex-20 свържи точките (не е приложимо в апп)
-  // ORDER 31: l02-ex-21               fill_in_blank     Напишете числото
-  // ORDER 32: l02-ex-22               reading_text (placeholder) кръстословица
-  // ORDER 33: l02-ex-23               multiple_choice   Оградете излишната дума
-  // ORDER 34: l02-ex-24               fill_in_blank     Попълнете диалозите
-  // ORDER 35: l02-ex-25               reading_text (placeholder) слушай и рисувай
-  // ORDER 36: l02-ex-26               reading_text      ТЕКСТОВЕ – Амал и Наталия
-  // ORDER 37: l02-ex-27               true_false        Вярно или грешно?
-  // ORDER 38: l02-ex-29               fill_in_blank     Слушайте и попълнете
+  // ORDER 30: Упражнение 20 – Свържете точките
+  {
+    id: 'l02-ex-20',
+    type: 'connect_dots',
+    title: 'УПРАЖНЕНИЕ 20',
+    instruction: 'Натиснете числата по ред, като на часовник.',
+    order: 30,
+    points: 12,
+    dots: [
+      { id: 'd0',  label: 'нула',        position: 0 },
+      { id: 'd1',  label: 'едно',        position: 1 },
+      { id: 'd2',  label: 'две',         position: 2 },
+      { id: 'd3',  label: 'три',         position: 3 },
+      { id: 'd4',  label: 'четири',      position: 4 },
+      { id: 'd5',  label: 'пет',         position: 5 },
+      { id: 'd6',  label: 'шест',        position: 6 },
+      { id: 'd7',  label: 'седем',       position: 7 },
+      { id: 'd8',  label: 'осем',        position: 8 },
+      { id: 'd9',  label: 'девет',       position: 9 },
+      { id: 'd10', label: 'десет',       position: 10 },
+      { id: 'd11', label: 'единадесет',  position: 11 },
+    ],
+  } as ConnectDotsExercise,
+
+  // ORDER 31: Упражнение 21 – Напишете числото пред думата
+  {
+    id: 'l02-ex-21',
+    type: 'dropdown_match',
+    title: 'УПРАЖНЕНИЕ 21',
+    instruction: 'Напишете числото пред думата.',
+    order: 31,
+    points: 11,
+    questions: [
+      { id: 'q-edno',    left: 'едно',        options: [],                                                                    correctAnswer: '1'  },
+      { id: 'q-dve',     left: 'две',         options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '2'  },
+      { id: 'q-tri',     left: 'три',         options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '3'  },
+      { id: 'q-chetiri', left: 'четири',      options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '4'  },
+      { id: 'q-pet',     left: 'пет',         options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '5'  },
+      { id: 'q-shest',   left: 'шест',        options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '6'  },
+      { id: 'q-sedem',   left: 'седем',       options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '7'  },
+      { id: 'q-osem',    left: 'осем',        options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '8'  },
+      { id: 'q-devet',   left: 'девет',       options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '9'  },
+      { id: 'q-deset',   left: 'десет',       options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '10' },
+      { id: 'q-nula',    left: 'нула',        options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],       correctAnswer: '0'  },
+    ],
+  },
+
+  // ORDER 32: SKIPPED — кръстословица (изисква кирилица на клавиатурата)
+
+  // ORDER 33: Упражнение 23 – Оградете излишната дума
+  {
+    id: 'l02-ex-23',
+    type: 'multiple_choice',
+    title: 'УПРАЖНЕНИЕ 23',
+    instruction: 'Коя дума НЕ принадлежи на групата? Маркирайте излишната дума.',
+    order: 33,
+    points: 4,
+    questions: [
+      {
+        question: '🥤 Напитки (ПРИМЕР)',
+        options: ['вода', 'кафе', 'хляб', 'чай', 'капучино'],
+        correctIndex: 2,
+      },
+      {
+        question: '🥐 Тестени изделия',
+        options: ['баница', 'яйце', 'филия', 'хляб', 'кроасан'],
+        correctIndex: 1,
+      },
+      {
+        question: '🧀 Млечни продукти',
+        options: ['сирене', 'кашкавал', 'мляко', 'салам', 'масло'],
+        correctIndex: 3,
+      },
+      {
+        question: '🍖 Солени храни',
+        options: ['хляб', 'салам', 'шоколад', 'кашкавал', 'сандвич'],
+        correctIndex: 2,
+      },
+    ],
+  },
+  // ORDER 34: Упражнение 24 – Попълнете диалозите
+  {
+    id: 'l02-ex-24',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 24',
+    instruction: 'Попълнете диалозите с думите от списъка.',
+    order: 34,
+    points: 10,
+    layout: 'single',
+    sentences: [
+      // — а. —
+      { text: 'а.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– Добро _______.', blanks: [1], correctAnswers: ['утро'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      { text: '– Добро утро!', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– Има _______ чай?', blanks: [1], correctAnswers: ['ли'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      { text: '– Да, _______.', blanks: [1], correctAnswers: ['има'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      { text: '– Искам един чай.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– _______ мед?', blanks: [0], correctAnswers: ['С'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'], acceptableAnswers: [['с', 'С']] },
+      { text: '– Не, _______ мед.', blanks: [1], correctAnswers: ['без'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      // — б. —
+      { text: 'б.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– Здравейте.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– _______.', blanks: [0], correctAnswers: ['Здравейте'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'], acceptableAnswers: [['здравейте', 'Здравейте']] },
+      { text: '– _______ ли капучино?', blanks: [0], correctAnswers: ['Има'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'], acceptableAnswers: [['има', 'Има']] },
+      { text: '– Не, _______.', blanks: [1], correctAnswers: ['няма'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      // — в. —
+      { text: 'в.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '– Какво _______ _______?', blanks: [1, 2], correctAnswers: ['е', 'това'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+      { text: '– Това _______ баница.', blanks: [1], correctAnswers: ['е'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
+    ],
+  } as WorkbookFillBlankExercise,
+  // ORDER 35: Упражнение 25 – Слушайте текста + чеклист
+  {
+    id: 'l02-ex-25',
+    type: 'reading_text',
+    title: 'УПРАЖНЕНИЕ 25',
+    instruction: 'Слушайте текста и прочетете. Какво има на масата?',
+    order: 35,
+    points: 10,
+    paragraphs: [
+      'Има един кроасан и едно кафе със захар.',
+      'Има един чай с мед, един сандвич със салам и сирене и един сандвич с кашкавал.',
+    ],
+    checklist: {
+      instruction: 'Какво има на масата? Маркирайте с ✓ или ✗.',
+      items: [
+        { id: 'tf1',  text: 'кроасан',                    isTrue: true },
+        { id: 'tf2',  text: 'кафе със захар',             isTrue: true },
+        { id: 'tf3',  text: 'чай с мед',                  isTrue: true },
+        { id: 'tf4',  text: 'сандвич със салам и сирене',  isTrue: true },
+        { id: 'tf5',  text: 'сандвич с кашкавал',          isTrue: true },
+        { id: 'tf6',  text: 'баница',                      isTrue: false },
+        { id: 'tf7',  text: 'кафе с мляко',               isTrue: false },
+        { id: 'tf8',  text: 'чай без захар',              isTrue: false },
+        { id: 'tf9',  text: 'филия с масло',              isTrue: false },
+        { id: 'tf10', text: 'сок',                         isTrue: false },
+      ],
+    },
+  },
+
+  // ORDER 36: Упражнение 26 – ТЕКСТОВЕ: Амал и Наталия + Вярно или грешно?
+  {
+    id: 'l02-ex-26',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    order: 36,
+    points: 5,
+    showDictionary: true,
+    paragraphs: [
+      'Амал е от Ирак. За закуска тя много обича чай със захар, сок от портокал, сандвич с масло, сирене и домат. Не обича мед, салам и кашкавал.',
+      'Наталия е от Украйна. За закуска тя обича мляко с кафе и плодове. Не обича сирене и кашкавал.',
+      'Амал и Наталия обичат баница.',
+    ],
+    checklist: {
+      instruction: 'Вярно или грешно?',
+      items: [
+        { id: 'tf1', text: 'Амал обича чай със захар.',          isTrue: true },
+        { id: 'tf2', text: 'Амал обича сок от портокал.',        isTrue: true },
+        { id: 'tf3', text: 'Амал обича мед.',                     isTrue: false },
+        { id: 'tf4', text: 'Наталия не обича мляко с кафе.',     isTrue: false },
+        { id: 'tf5', text: 'Амал и Наталия обичат кашкавал.',    isTrue: false },
+      ],
+    },
+  },
+
+  // ORDER 38: Упражнение 29 – Слушайте текста и попълнете празните места
+  {
+    id: 'l02-ex-29',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 29',
+    instruction: 'Слушайте текста и попълнете празните места.',
+    order: 38,
+    points: 7,
+    layout: 'single',
+    listeningText: 'Иван и Мария са от България. За закуска те обичат кафе с мляко и малко захар. За закуска Иван обича баница със сирене. Не обича кисело мляко с плодове. За закуска Мария обича кроасан с шоколад. Не обича хляб и салам.',
+    sentences: [
+      { text: 'Иван и Мария са от _______.', blanks: [5], correctAnswers: ['България'], options: ['България', 'Ирак', 'Украйна'] },
+      { text: 'За закуска те обичат кафе с _______ ...', blanks: [6], correctAnswers: ['мляко'], options: ['мляко', 'сок', 'чай'] },
+      { text: '... и малко _______.', blanks: [2], correctAnswers: ['захар'], options: ['захар', 'мед', 'масло'] },
+      { text: 'За закуска Иван обича баница със _______.', blanks: [5], correctAnswers: ['сирене'], options: ['сирене', 'салам', 'кашкавал'] },
+      { text: 'Не обича _______ с плодове.', blanks: [2], correctAnswers: ['кисело мляко'], options: ['кисело мляко', 'прясно мляко', 'сок'] },
+      { text: 'За закуска Мария обича кроасан с _______.', blanks: [5], correctAnswers: ['шоколад'], options: ['шоколад', 'масло', 'мед'] },
+      { text: 'Не обича _______ и _______.', blanks: [2, 4], correctAnswers: ['хляб', 'салам'], options: [['хляб', 'баница', 'филия'], ['салам', 'сирене', 'кашкавал']] },
+    ],
+  } as WorkbookFillBlankExercise,
 
 ];

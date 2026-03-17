@@ -5,8 +5,24 @@ import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
+import { useLanguage } from '@/i18n/LanguageContext';
 import type { MultipleChoiceExercise } from '@/content/types';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+
+function TranslatedLabel({ text }: { text: string }) {
+  const labelOnly = text.replace(/^[\p{Emoji}\p{Emoji_Presentation}\s]+/u, '').replace(/\s*\(.*\)$/, '');
+  const translated = useTranslate(labelOnly);
+  const { lang } = useLanguage();
+
+  if (lang === 'bg' || !translated || translated === labelOnly) return null;
+
+  return (
+    <span className="text-sm text-[#0279C3] font-medium ml-1">
+      ({translated})
+    </span>
+  );
+}
 
 interface MultipleChoiceProps {
   exercise: MultipleChoiceExercise;
@@ -35,93 +51,138 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
     }
   };
 
+  const isExampleQuestion = (q: { question: string }) =>
+    /\(ПРИМЕР\)/i.test(q.question) || /\(EXAMPLE\)/i.test(q.question);
+
   const handleSubmit = () => {
     const newValidation: { [key: number]: boolean } = {};
     let correctCount = 0;
+    let gradedCount = 0;
 
     exercise.questions.forEach((question, index) => {
+      if (isExampleQuestion(question)) return;
       const selected = selectedAnswers[index];
       const isCorrect = selected === question.correctIndex;
       newValidation[index] = isCorrect;
       if (isCorrect) correctCount++;
+      gradedCount++;
     });
 
     setValidation(newValidation);
     setIsSubmitted(true);
 
     if (onComplete) {
-      const totalQuestions = exercise.questions.length;
-      const score = exercise.points ? (correctCount / totalQuestions) * exercise.points : correctCount;
-      onComplete(correctCount === totalQuestions, score);
+      const score = exercise.points ? (correctCount / gradedCount) * exercise.points : correctCount;
+      onComplete(correctCount === gradedCount, score);
     }
   };
 
   return (
     <div className="bg-white rounded-xl p-8 md:p-10 shadow-md">
-      <div className="space-y-8">
-        {exercise.questions.map((question, qIndex) => (
-          <div key={qIndex} className="space-y-4">
-            <p className="text-lg font-semibold text-gray-800">
-              {qIndex + 1}. {question.question}
-            </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {exercise.questions.map((question, qIndex) => {
+          const isExample = isExampleQuestion(question);
 
-            <div className="space-y-3 pl-4">
-              {question.options.map((option, oIndex) => {
-                const isSelected = selectedAnswers[qIndex] === oIndex;
-                const isCorrect = oIndex === question.correctIndex;
-                const showCorrect = isSubmitted && isCorrect;
-                const showIncorrect = isSubmitted && isSelected && !isCorrect;
+          if (isExample) {
+            return (
+              <div key={qIndex} className="space-y-4 opacity-80">
+                <p className="text-lg font-semibold text-gray-500 italic">
+                  {question.question}
+                  <TranslatedLabel text={question.question} />
+                </p>
+                <div className="space-y-3 pl-4">
+                  {question.options.map((option, oIndex) => {
+                    const isCorrect = oIndex === question.correctIndex;
+                    return (
+                      <div
+                        key={oIndex}
+                        className={`
+                          w-full text-left px-5 py-4 rounded-xl border-2 shadow-sm
+                          min-h-[56px] flex items-center gap-4
+                          ${isCorrect
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-gray-200 bg-gray-50 text-gray-400'
+                          }
+                        `}
+                      >
+                        <div className={`w-6 h-6 rounded-full border-2 flex-shrink-0 ${isCorrect ? 'border-green-500' : 'border-gray-300'}`}>
+                          {isCorrect && <div className="w-3.5 h-3.5 rounded-full m-[3px] bg-green-500" />}
+                        </div>
+                        <span className={`flex-1 text-base font-medium ${isCorrect ? 'text-green-700' : 'text-gray-400'}`}>{option}</span>
+                        {isCorrect && <Check className="w-6 h-6 text-green-600 flex-shrink-0" />}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          }
 
-                return (
-                  <button
-                    key={oIndex}
-                    onClick={() => handleSelect(qIndex, oIndex)}
-                    className={`
-                      w-full text-left px-5 py-4 rounded-xl border-2 transition-all shadow-sm
-                      min-h-[56px] flex items-center gap-4 active:scale-[0.98] cursor-pointer
-                      ${isSelected && !isSubmitted ? 'border-[#8FC412] bg-[#EEF7C8] shadow-md' : 'border-gray-300'}
-                      ${showCorrect ? 'border-green-500 bg-green-50' : ''}
-                      ${showIncorrect ? 'border-red-500 bg-red-50' : ''}
-                      hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md
-                    `}
-                  >
-                    <div
+          return (
+            <div key={qIndex} className="space-y-4">
+              <p className="text-lg font-semibold text-gray-800">
+                {qIndex}. {question.question}
+                <TranslatedLabel text={question.question} />
+              </p>
+
+              <div className="space-y-3 pl-4">
+                {question.options.map((option, oIndex) => {
+                  const isSelected = selectedAnswers[qIndex] === oIndex;
+                  const isCorrect = oIndex === question.correctIndex;
+                  const showCorrect = isSubmitted && isCorrect;
+                  const showIncorrect = isSubmitted && isSelected && !isCorrect;
+
+                  return (
+                    <button
+                      key={oIndex}
+                      onClick={() => handleSelect(qIndex, oIndex)}
                       className={`
-                        w-6 h-6 rounded-full border-2 flex-shrink-0
-                        ${isSelected ? 'border-bolt-primary' : 'border-gray-400'}
-                        ${showCorrect ? 'border-green-500' : ''}
-                        ${showIncorrect ? 'border-red-500' : ''}
+                        w-full text-left px-5 py-4 rounded-xl border-2 transition-all shadow-sm
+                        min-h-[56px] flex items-center gap-4 active:scale-[0.98] cursor-pointer
+                        ${isSelected && !isSubmitted ? 'border-[#8FC412] bg-[#EEF7C8] shadow-md' : 'border-gray-300'}
+                        ${showCorrect ? 'border-green-500 bg-green-50' : ''}
+                        ${showIncorrect ? 'border-red-500 bg-red-50' : ''}
+                        hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md
                       `}
                     >
-                      {isSelected && (
-                        <div className={`
-                          w-3.5 h-3.5 rounded-full m-[3px]
-                          ${!isSubmitted ? 'bg-[#8FC412]' : ''}
-                          ${showCorrect ? 'bg-green-500' : ''}
-                          ${showIncorrect ? 'bg-red-500' : ''}
-                        `} />
-                      )}
-                    </div>
-                    
-                    <span className="flex-1 text-base font-medium">{option}</span>
+                      <div
+                        className={`
+                          w-6 h-6 rounded-full border-2 flex-shrink-0
+                          ${isSelected ? 'border-bolt-primary' : 'border-gray-400'}
+                          ${showCorrect ? 'border-green-500' : ''}
+                          ${showIncorrect ? 'border-red-500' : ''}
+                        `}
+                      >
+                        {isSelected && (
+                          <div className={`
+                            w-3.5 h-3.5 rounded-full m-[3px]
+                            ${!isSubmitted ? 'bg-[#8FC412]' : ''}
+                            ${showCorrect ? 'bg-green-500' : ''}
+                            ${showIncorrect ? 'bg-red-500' : ''}
+                          `} />
+                        )}
+                      </div>
+                      
+                      <span className="flex-1 text-base font-medium">{option}</span>
 
-                    {showCorrect && <Check className="w-6 h-6 text-green-600 flex-shrink-0" />}
-                    {showIncorrect && <X className="w-6 h-6 text-red-600 flex-shrink-0" />}
-                  </button>
-                );
-              })}
-            </div>
-
-            {isSubmitted && validation[qIndex] !== null && (
-              <div className={`
-                mt-2 p-3 rounded text-sm
-                ${validation[qIndex] ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}
-              `}>
-                {validation[qIndex] ? `✓ ${t('exercise.correct')}` : `✗ ${t('exercise.wrongLabel')}`}
+                      {showCorrect && <Check className="w-6 h-6 text-green-600 flex-shrink-0" />}
+                      {showIncorrect && <X className="w-6 h-6 text-red-600 flex-shrink-0" />}
+                    </button>
+                  );
+                })}
               </div>
-            )}
-          </div>
-        ))}
+
+              {isSubmitted && validation[qIndex] !== null && (
+                <div className={`
+                  mt-2 p-3 rounded text-sm
+                  ${validation[qIndex] ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}
+                `}>
+                  {validation[qIndex] ? `✓ ${t('exercise.correct')}` : `✗ ${t('exercise.wrongLabel')}`}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <Button
@@ -134,7 +195,7 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
       {isSubmitted && (
         <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.questions.length} {t('exercise.correct_n')}
+            {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.questions.filter(q => !isExampleQuestion(q)).length} {t('exercise.correct_n')}
           </p>
         </div>
       )}

@@ -1,5 +1,114 @@
-import type { Exercise } from '@/content/types';
+import type { Exercise, WorkbookFillBlankExercise } from '@/content/types';
 
-// TODO: Review Workbook-Lesson-2-exercises.pdf to fill in the workbook exercises
-// PDF location: C:\Users\Work Account\Desktop\CURSOR\a1-files\lessons\lesson-2\Workbook-Lesson-2-exercises.pdf
-export const workbookExercises: Exercise[] = [];
+export const workbookExercises: Exercise[] = [
+
+  // WB Exercise 1: Напишете ЕДИН, ЕДНА или ЕДНО
+  {
+    id: 'l02-wb-01',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 1',
+    instruction: 'Напишете ЕДИН, ЕДНА или ЕДНО.',
+    order: 1,
+    points: 11,
+    layout: 'two-column',
+    sentences: [
+      { text: 'един дюнер', blanks: [], correctAnswers: [], isExample: true },
+      { text: '_______ филия',     blanks: [0], correctAnswers: ['една'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ яйце',      blanks: [0], correctAnswers: ['едно'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ фалафел',   blanks: [0], correctAnswers: ['един'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ кроасан',   blanks: [0], correctAnswers: ['един'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ капучино',  blanks: [0], correctAnswers: ['едно'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ домат',     blanks: [0], correctAnswers: ['един'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ пица',      blanks: [0], correctAnswers: ['една'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ салам',     blanks: [0], correctAnswers: ['един'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ кафе',      blanks: [0], correctAnswers: ['едно'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ чай',       blanks: [0], correctAnswers: ['един'],  options: ['един', 'една', 'едно'] },
+      { text: '_______ баница',   blanks: [0], correctAnswers: ['една'],  options: ['един', 'една', 'едно'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // WB Exercise 2: Глагол ОБИЧАМ
+  {
+    id: 'l02-wb-02',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 2',
+    instruction: 'Попълнете изреченията с правилната форма на глагола ОБИЧАМ.',
+    order: 2,
+    points: 7,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Тя обича сок. (+)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Аз _______ пица. (-)',               blanks: [1], correctAnswers: ['не обичам'],  options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'] },
+      { text: 'Те _______ чай?',                     blanks: [1], correctAnswers: ['обичат'],     options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'], acceptableAnswers: [['обичат', 'обичат ли']] },
+      { text: 'Ние _______ баница. (+)',             blanks: [1], correctAnswers: ['обичаме'],    options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'] },
+      { text: 'Той _______ салам. (-)',               blanks: [1], correctAnswers: ['не обича'],   options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'] },
+      { text: 'Ти _______ сирене?',                  blanks: [1], correctAnswers: ['обичаш'],     options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'], acceptableAnswers: [['обичаш', 'обичаш ли']] },
+      { text: 'То _______ кисело мляко. (+)',        blanks: [1], correctAnswers: ['обича'],      options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'] },
+      { text: 'Вие _______ кафе?',                   blanks: [1], correctAnswers: ['обичате'],    options: ['обичам', 'обичаш', 'обича', 'обичаме', 'обичате', 'обичат', 'не обичам', 'не обичаш', 'не обича', 'не обичаме', 'не обичате', 'не обичат'], acceptableAnswers: [['обичате', 'обичате ли']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // WB Exercise 3: Глагол ИСКАМ
+  {
+    id: 'l02-wb-03',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 3',
+    instruction: 'Попълнете изреченията с правилната форма на глагола ИСКАМ.',
+    order: 3,
+    points: 7,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Ние не искаме кашкавал. (-)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Вие _______ мед?',                    blanks: [1], correctAnswers: ['искате'],     options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'], acceptableAnswers: [['искате', 'искате ли']] },
+      { text: 'Аз _______ вода. (+)',                 blanks: [1], correctAnswers: ['искам'],      options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'] },
+      { text: 'Те _______ плодове. (-)',              blanks: [1], correctAnswers: ['не искат'],   options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'] },
+      { text: 'Тя _______ захар. (+)',                blanks: [1], correctAnswers: ['иска'],       options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'] },
+      { text: 'Ти _______ прясно мляко?',            blanks: [1], correctAnswers: ['искаш'],      options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'], acceptableAnswers: [['искаш', 'искаш ли']] },
+      { text: 'Той _______ масло?',                   blanks: [1], correctAnswers: ['иска'],       options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'], acceptableAnswers: [['иска', 'иска ли']] },
+      { text: 'То _______ хляб. (-)',                  blanks: [1], correctAnswers: ['не иска'],    options: ['искам', 'искаш', 'иска', 'искаме', 'искате', 'искат', 'не искам', 'не искаш', 'не иска', 'не искаме', 'не искате', 'не искат'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // WB Exercise 4: Отговорете на въпросите
+  {
+    id: 'l02-wb-04',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 4',
+    instruction: 'Отговорете на въпросите.',
+    order: 4,
+    points: 5,
+    layout: 'qa-split',
+    sentences: [
+      { text: 'Искате ли кафе с мляко? | Да, искаме.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Обичате ли мед? | Не, _______.', blanks: [1], correctAnswers: ['не обичаме'], acceptableAnswers: [['не обичаме', 'не обичаме мед']] },
+      { text: 'Искаш ли сандвич със салам и кашкавал? | Да, _______.', blanks: [1], correctAnswers: ['искам'], acceptableAnswers: [['искам', 'да, искам', 'искам сандвич']] },
+      { text: 'Обичаш ли чай без захар? | Не, _______.', blanks: [1], correctAnswers: ['не обичам'], acceptableAnswers: [['не обичам', 'не обичам чай без захар']] },
+      { text: 'Има ли плодове? | Да, _______.', blanks: [1], correctAnswers: ['има'], acceptableAnswers: [['има', 'да, има', 'има плодове']] },
+      { text: 'Има ли сок от портокал? | Не, _______.', blanks: [1], correctAnswers: ['няма'], acceptableAnswers: [['няма', 'не, няма', 'няма сок от портокал']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // WB Exercise 5: Напишете числата с думи
+  {
+    id: 'l02-wb-05',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 5',
+    instruction: 'Напишете числата с думи.',
+    order: 5,
+    points: 9,
+    layout: 'two-column',
+    sentences: [
+      { text: '1 — едно', blanks: [], correctAnswers: [], isExample: true },
+      { text: '2 — _______',  blanks: [1], correctAnswers: ['две'],    options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '3 — _______',  blanks: [1], correctAnswers: ['три'],    options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '4 — _______',  blanks: [1], correctAnswers: ['четири'], options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '5 — _______',  blanks: [1], correctAnswers: ['пет'],    options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '6 — _______',  blanks: [1], correctAnswers: ['шест'],   options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '7 — _______',  blanks: [1], correctAnswers: ['седем'],  options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '8 — _______',  blanks: [1], correctAnswers: ['осем'],   options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '9 — _______',  blanks: [1], correctAnswers: ['девет'],  options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+      { text: '10 — _______', blanks: [1], correctAnswers: ['десет'],  options: ['нула', 'едно', 'две', 'три', 'четири', 'пет', 'шест', 'седем', 'осем', 'девет', 'десет'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+];

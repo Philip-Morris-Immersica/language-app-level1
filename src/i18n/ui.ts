@@ -90,6 +90,8 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'lesson.workbook':       { bg: 'Работна тетрадка', ar: 'كتاب التمارين', fr: 'Cahier d\'exercices', en: 'Workbook', fa: 'کتاب تمرین',    uk: 'Робочий зошит',  ru: 'Рабочая тетрадь' },
   'lesson.workbookDesc':   { bg: 'Има още {n} упражнения в работната тетрадка за допълнителна практика.', ar: 'يوجد {n} تمارين إضافية في كتاب التمارين.', fr: 'Il y a {n} exercices supplémentaires dans le cahier.', en: 'There are {n} more exercises in the workbook for extra practice.', fa: 'در کتاب تمرین {n} تمرین دیگر وجود دارد.', uk: 'У робочому зошиті є ще {n} вправ для додаткової практики.', ru: 'В рабочей тетради есть ещё {n} упражнений для дополнительной практики.' },
   'lesson.openWorkbook':   { bg: 'Отвори работната тетрадка', ar: 'افتح كتاب التمارين', fr: 'Ouvrir le cahier d\'exercices', en: 'Open workbook', fa: 'باز کردن کتاب تمرین', uk: 'Відкрити робочий зошит', ru: 'Открыть рабочую тетрадь' },
+  'lesson.review':         { bg: 'Преговор', ar: 'مراجعة', fr: 'Révision', en: 'Review', fa: 'مرور', uk: 'Повторення', ru: 'Повторение' },
+  'lesson.reviewDesc':     { bg: 'Упражнения от работната тетрадка за затвърждаване на наученото.', ar: 'تمارين من كتاب التمارين لتثبيت ما تعلمته.', fr: 'Exercices du cahier pour consolider vos acquis.', en: 'Workbook exercises to reinforce what you\'ve learned.', fa: 'تمرین‌هایی از کتاب کار برای تثبیت آموخته‌ها.', uk: 'Вправи з робочого зошита для закріплення вивченого.', ru: 'Упражнения из рабочей тетради для закрепления изученного.' },
   'lesson.backToLesson':   { bg: 'Назад към урока', ar: 'العودة إلى الدرس', fr: 'Retour au cours', en: 'Back to lesson', fa: 'بازگشت به درس', uk: 'Назад до уроку', ru: 'Вернуться к уроку' },
   'lesson.takeTest':       { bg: 'Направи тест',    ar: 'إجراء اختبار',   fr: 'Faire un test', en: 'Take test',     fa: 'انجام آزمون',    uk: 'Пройти тест',    ru: 'Пройти тест'    },
   'exercise.readInPairs':  { bg: 'Прочетете диалозите по двойки', ar: 'اقرأوا الحوارات في أزواج', fr: 'Lisez les dialogues par paires', en: 'Read the dialogues in pairs', fa: 'دیالوگ‌ها را دو نفره بخوانید', uk: 'Читайте діалоги парами', ru: 'Читайте диалоги парами' },
@@ -106,6 +108,20 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'exercise.yourTurn':       { bg: 'Вашият ред — изберете отговор:', ar: 'دورك — اختر الإجابة:', fr: 'À vous — choisissez une réponse :', en: 'Your turn — choose an answer:', fa: 'نوبت شماست — پاسخ را انتخاب کنید:', uk: 'Ваша черга — виберіть відповідь:', ru: 'Ваша очередь — выберите ответ:' },
   'exercise.answered':       { bg: 'Отговорено', ar: 'تمت الإجابة', fr: 'Répondu', en: 'Answered', fa: 'پاسخ داده شده', uk: 'Відповідь дана', ru: 'Ответ дан' },
   'exercise.allAnswered':    { bg: 'Браво! Отговорихте на всички въпроси!', ar: 'أحسنت! أجبت على جميع الأسئلة!', fr: 'Bravo ! Vous avez répondu à toutes les questions !', en: 'Well done! You answered all the questions!', fa: 'آفرین! به همه سؤالات پاسخ دادید!', uk: 'Браво! Ви відповіли на всі запитання!', ru: 'Браво! Вы ответили на все вопросы!' },
+  'exercise.dictionary':     { bg: 'Речник', ar: 'قاموس', fr: 'Dictionnaire', en: 'Dictionary', fa: 'فرهنگ لغت', uk: 'Словник', ru: 'Словарь' },
+
+  'level.title':            { bg: 'Ниво А1 — Уроци', ar: 'المستوى A1 — الدروس', fr: 'Niveau A1 — Leçons', en: 'Level A1 — Lessons', fa: 'سطح A1 — دروس', uk: 'Рівень А1 — Уроки', ru: 'Уровень А1 — Уроки' },
+  'level.subtitle':         { bg: 'Български за начинаещи', ar: 'البلغارية للمبتدئين', fr: 'Bulgare pour débutants', en: 'Bulgarian for beginners', fa: 'بلغاری برای مبتدیان', uk: 'Болгарська для початківців', ru: 'Болгарский для начинающих' },
+  'level.overallProgress':  { bg: 'Общ прогрес', ar: 'التقدم العام', fr: 'Progression globale', en: 'Overall progress', fa: 'پیشرفت کلی', uk: 'Загальний прогрес', ru: 'Общий прогресс' },
+  'level.start':            { bg: 'Започни', ar: 'ابدأ', fr: 'Commencer', en: 'Start', fa: 'شروع', uk: 'Розпочати', ru: 'Начать' },
+  'level.continue':         { bg: 'Продължи', ar: 'تابع', fr: 'Continuer', en: 'Continue', fa: 'ادامه', uk: 'Продовжити', ru: 'Продолжить' },
+  'level.completed':        { bg: 'Завършен', ar: 'مكتمل', fr: 'Terminé', en: 'Completed', fa: 'تکمیل شده', uk: 'Завершено', ru: 'Завершён' },
+  'level.review':           { bg: 'Преглед', ar: 'مراجعة', fr: 'Revoir', en: 'Review', fa: 'مرور', uk: 'Переглянути', ru: 'Просмотреть' },
+  'level.test':             { bg: 'Тест', ar: 'اختبار', fr: 'Test', en: 'Test', fa: 'آزمون', uk: 'Тест', ru: 'Тест' },
+  'level.notStarted':       { bg: 'Не е започнат', ar: 'لم يبدأ', fr: 'Non commencé', en: 'Not started', fa: 'شروع نشده', uk: 'Не розпочато', ru: 'Не начат' },
+  'level.lessonsCompleted':  { bg: 'урока завършени', ar: 'دروس مكتملة', fr: 'leçons terminées', en: 'lessons completed', fa: 'درس تکمیل شده', uk: 'уроків завершено', ru: 'уроков завершено' },
+  'level.backToLevels':     { bg: 'Назад към нивата', ar: 'العودة للمستويات', fr: 'Retour aux niveaux', en: 'Back to levels', fa: 'بازگشت به سطوح', uk: 'Назад до рівнів', ru: 'К уровням' },
+  'level.lesson':           { bg: 'Урок', ar: 'درس', fr: 'Leçon', en: 'Lesson', fa: 'درس', uk: 'Урок', ru: 'Урок' },
 };
 
 export type UIKey = keyof typeof UI_TRANSLATIONS;

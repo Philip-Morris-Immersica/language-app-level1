@@ -24,6 +24,7 @@ import { GrammarTable } from './GrammarTable';
 import { ReadingText } from './ReadingText';
 import { TrueFalse } from './TrueFalse';
 import { PersonalChoice } from './PersonalChoice';
+import { ConnectDots } from './ConnectDots';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -80,6 +81,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <WorkbookFillBlank
           sentences={exercise.sentences}
           layout={exercise.layout}
+          listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -210,6 +212,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <ReadingText
           audioUrl={exercise.audioUrl}
           paragraphs={exercise.paragraphs}
+          showDictionary={exercise.showDictionary}
+          checklist={exercise.checklist}
+          onComplete={onComplete}
         />
       );
 
@@ -228,6 +233,14 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           model={exercise.model}
           items={exercise.items}
           blankOptions={exercise.blankOptions}
+          onComplete={onComplete}
+        />
+      );
+
+    case 'connect_dots':
+      return wrap(
+        <ConnectDots
+          dots={exercise.dots}
           onComplete={onComplete}
         />
       );

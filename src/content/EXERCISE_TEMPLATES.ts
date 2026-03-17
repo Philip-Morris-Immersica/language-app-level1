@@ -1,5 +1,5 @@
 /**
- * EXERCISE TEMPLATES — Copy-paste templates for all 21 implemented exercise types.
+ * EXERCISE TEMPLATES — Copy-paste templates for all 22 implemented exercise types/variants.
  *
  * HOW TO USE:
  * 1. Find the template for the type you need (use Ctrl+F on the type name)
@@ -12,7 +12,7 @@
  *   Section 1 — НОВИ ДУМИ       (illustrated_cards) ⭐ FREQUENT
  *   Section 2 — ГРАМАТИКА        (grammar_visual, grammar_examples, grammar_table) ⭐ FREQUENT
  *   Section 3 — ДИАЛОЗИ / ТЕКСТ  (dialogues, reading_text) ⭐ FREQUENT
- *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, multiple_choice, dropdown_match, word_order, drag_to_columns) ⭐ FREQUENT
+ *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, workbook_fill_blank_listening, multiple_choice, dropdown_match, word_order, drag_to_columns) ⭐ FREQUENT
  *   Section 5 — УПРАЖНЕНИЯ РЕДКИ (match_pairs, letter_choice, image_labeling, syllable_blocks, word_search, true_false, dialogue_builder, fill_with_images, personal_choice)
  *
  * ID CONVENTIONS:
@@ -303,6 +303,55 @@ export const TEMPLATE_workbook_fill_blank = {
     },
     // qa-split / qa-stacked: use | to separate question from answer part:
     // { text: 'Ти от Ирак ли си? | Да, _______.',  blanks: [1], correctAnswers: ['аз съм от Ирак.'] },
+  ],
+} as WorkbookFillBlankExercise;
+
+/**
+ * workbook_fill_blank (listening) — Слушай текста и попълни пропуските.
+ * Вариант на workbook_fill_blank с listeningText — текстът не се вижда,
+ * а се чува чрез TTS бутон. Студентът попълва бланките от dropdown.
+ *
+ * КОГА ДА ПОЛЗВАШ:
+ *   - Диктовка / слушане с разбиране
+ *   - Текст, който не трябва да се вижда — само да се чува
+ *   - Попълване от контекст (по 2–4 опции на бланка)
+ *
+ * БЕЛЕЖКИ:
+ *   - listeningText: пълният текст, който TTS чете на глас
+ *   - options може да е string[] (еднакви за всички бланки)
+ *     или string[][] (различни опции за всяка бланка поотделно)
+ *   - При 2+ бланки в едно изречение: options: [['опция1а', 'опция1б'], ['опция2а', 'опция2б']]
+ *   - layout: 'single' е препоръчителен за слушане
+ *   - points = брой изречения (всяко изречение се оценява като цяло)
+ */
+export const TEMPLATE_workbook_fill_blank_listening = {
+  id: 'l0X-ex-NN',              // REPLACE
+  type: 'workbook_fill_blank' as const,
+  title: 'УПРАЖНЕНИЕ NN',        // REPLACE
+  instruction: 'Слушайте текста и попълнете празните места.',  // REPLACE
+  order: 1,                      // REPLACE
+  points: 7,                     // REPLACE (= брой изречения, не бланки)
+  layout: 'single' as const,
+  listeningText: 'Иван и Мария са от България. За закуска те обичат кафе с мляко и малко захар.',  // REPLACE — целият текст за TTS
+  sentences: [
+    // Изречение с 1 бланка и dropdown опции:
+    {
+      text: 'Иван и Мария са от _______.',
+      blanks: [5],
+      correctAnswers: ['България'],
+      options: ['България', 'Ирак', 'Украйна'],
+    },
+    // Изречение с 2 бланки и РАЗЛИЧНИ опции за всяка:
+    {
+      text: 'Не обича _______ и _______.',
+      blanks: [2, 4],
+      correctAnswers: ['хляб', 'салам'],
+      options: [
+        ['хляб', 'баница', 'филия'],      // опции за 1-ва бланка
+        ['салам', 'сирене', 'кашкавал'],   // опции за 2-ра бланка
+      ],
+    },
+    // Add more sentences...
   ],
 } as WorkbookFillBlankExercise;
 

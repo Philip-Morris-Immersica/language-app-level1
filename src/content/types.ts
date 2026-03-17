@@ -25,7 +25,8 @@ export type ExerciseType =
   | 'listening'            // Audio exercises (future)
   | 'reading_text'         // Reading text with optional audio
   | 'true_false'           // True/False sentences with ✓/✗ buttons
-  | 'personal_choice';     // Interactive personal preference (no right/wrong)
+  | 'personal_choice'      // Interactive personal preference (no right/wrong)
+  | 'connect_dots';        // Connect dots in order (clock-style number sequence)
 
 // Base exercise interface
 export interface BaseExercise {
@@ -275,12 +276,13 @@ export interface DragToColumnsExercise extends BaseExercise {
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  listeningText?: string;
   sentences: {
     text: string;
     blanks: number[];
     correctAnswers: string[];
     acceptableAnswers?: string[][];
-    options?: string[];
+    options?: string[] | string[][];
     isExample?: boolean;
   }[];
 }
@@ -299,6 +301,11 @@ export interface ReadingTextExercise extends BaseExercise {
   type: 'reading_text';
   audioUrl?: string;
   paragraphs: string[];
+  showDictionary?: boolean;
+  checklist?: {
+    instruction: string;
+    items: { id: string; text: string; isTrue: boolean }[];
+  };
 }
 
 export interface TrueFalseExercise extends BaseExercise {
@@ -329,6 +336,15 @@ export interface PersonalChoiceExercise extends BaseExercise {
   }[];
 }
 
+export interface ConnectDotsExercise extends BaseExercise {
+  type: 'connect_dots';
+  dots: {
+    id: string;
+    label: string;
+    position: number;
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise
@@ -356,7 +372,8 @@ export type Exercise =
   | ListeningExercise
   | ReadingTextExercise
   | TrueFalseExercise
-  | PersonalChoiceExercise;
+  | PersonalChoiceExercise
+  | ConnectDotsExercise;
 
 // Dialogue structure
 export interface Dialogue {
@@ -410,6 +427,11 @@ export interface LessonContent {
     id: string;
     title: string;
     content: string;
+  }[];
+  grammarReference?: {
+    id: string;
+    title: Record<string, string>;
+    content: Record<string, string>;
   }[];
 }
 
