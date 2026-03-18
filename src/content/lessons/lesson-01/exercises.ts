@@ -10,7 +10,7 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Кликнете върху знамето за да видите думата и чуете произношението.',
     order: 1,
-    points: 7,
+    points: 9,
     displayType: 'flags',
     images: [
       { id: 'bulgaria', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-bulgaria.jpg', correctLabel: 'България' },
@@ -20,18 +20,20 @@ export const exercises: Exercise[] = [
       { id: 'iran', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-iran.jpg', correctLabel: 'Иран' },
       { id: 'iraq', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-iraq.jpg', correctLabel: 'Ирак' },
       { id: 'algeria', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-algeria.jpg', correctLabel: 'Алжир' },
+      { id: 'afghanistan', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-afghanistan.jpg', correctLabel: 'Афганистан' },
+      { id: 'morocco', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-morocco.jpg', correctLabel: 'Мароко' },
     ],
-    options: ['Алжир', 'България', 'Ирак', 'Иран', 'Ливан', 'Сирия', 'Украйна'],
+    options: ['Алжир', 'Афганистан', 'България', 'Ирак', 'Иран', 'Ливан', 'Мароко', 'Сирия', 'Украйна'],
   } as ImageLabelingExercise,
 
-  // ORDER 2: НОВИ ДУМИ 1 - Greetings vocabulary (Page 9, middle) - NOT AN EXERCISE!
+  // ORDER 5: НОВИ ДУМИ 1 - Greetings vocabulary (Page 9, middle) - NOT AN EXERCISE!
   {
     id: 'l01-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: 'Запознайте се с новите думи и изрази',
     audioUrl: '/assets/lesson-01/audio/new-words-01.mp3',
-    order: 2,
+    order: 5,
     cards: [
       { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
       { id: 'day', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/02-dobur-den.jpg', label: 'Добър ден!' },
@@ -43,12 +45,12 @@ export const exercises: Exercise[] = [
     ]
   } as IllustratedCardsExercise,
 
-  // ORDER 3: Exercise 2 - Match word pairs (Page 9, bottom left)
+  // ORDER 6: Exercise 2 - Match word pairs (Page 9, bottom left)
   {
     id: 'l01-ex-02',
     type: 'dropdown_match',
     instruction: 'Свържете думите от колонките, за да получите фрази.',
-    order: 3,
+    order: 6,
     points: 4,
     questions: [
       { id: 'q1', left: 'Добро', options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'утро!' },
@@ -58,12 +60,12 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 4: Exercise 3 - Fill in missing letters (Page 9, bottom right)
+  // ORDER 7: Exercise 3 - Fill in missing letters (Page 9, bottom right)
   {
     id: 'l01-ex-03',
     type: 'letter_choice',
     instruction: 'Попълнете липсващите букви.',
-    order: 4,
+    order: 7,
     points: 7,
     puzzles: [
       { id: 'p1', word: 'Д_Б_Р Д_Н', correctLetters: ['О', 'Ъ', 'Е'] },
@@ -76,77 +78,32 @@ export const exercises: Exercise[] = [
     ],
   } as LetterChoiceExercise,
 
-  // ORDER 5: НОВИ ДУМИ 2 - Countries vocabulary (Page 10, top) - NOT AN EXERCISE!
+  // ORDER 2: НОВИ ДУМИ 2 - Countries vocabulary (Page 10, top) - NOT AN EXERCISE!
   {
     id: 'l01-novi-dumi-02',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: 'Запознайте се с имената на държавите. Кликнете върху картата за да чуете произношението.',
-    order: 5,
+    order: 2,
     cards: [
-      { 
-        id: 'bulgaria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/bulgaria.jpg', 
-        label: 'България',
-        sublabels: ['българин', 'българка', 'българи']
-      },
-      { 
-        id: 'iraq', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iraq.jpg', 
-        label: 'Ирак',
-        sublabels: ['иракчанин', 'иракчанка', 'иракчани']
-      },
-      { 
-        id: 'ukraine', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/ukraine.jpg', 
-        label: 'Украйна',
-        sublabels: ['украинец', 'украинка', 'украинци']
-      },
-      { 
-        id: 'syria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/syria.jpg', 
-        label: 'Сирия',
-        sublabels: ['сириец', 'сирийка', 'сирийци']
-      },
-      { 
-        id: 'lebanon', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/lebanon.jpg', 
-        label: 'Ливан',
-        sublabels: ['ливанец', 'ливанка', 'ливанци']
-      },
-      { 
-        id: 'iran', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg', 
-        label: 'Иран',
-        sublabels: ['иранец', 'иранка', 'иранци']
-      },
-      { 
-        id: 'morocco', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg', 
-        label: 'Мароко',
-        sublabels: ['мароканец', 'мароканка', 'мароканци']
-      },
-      { 
-        id: 'afghanistan', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/afghanistan.jpg', 
-        label: 'Афганистан',
-        sublabels: ['афганистанец', 'афганистанка', 'афганистанци']
-      },
-      { 
-        id: 'algeria', 
-        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/algeria.jpg', 
-        label: 'Алжир',
-        sublabels: ['алжирец', 'алжирка', 'алжирци']
-      },
+      { id: 'bulgaria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/bulgaria.jpg', label: 'България', sublabels: ['българин', 'българка', 'българи'] },
+      { id: 'syria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/syria.jpg', label: 'Сирия', sublabels: ['сириец', 'сирийка', 'сирийци'] },
+      { id: 'lebanon', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/lebanon.jpg', label: 'Ливан', sublabels: ['ливанец', 'ливанка', 'ливанци'] },
+      { id: 'ukraine', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/ukraine.jpg', label: 'Украйна', sublabels: ['украинец', 'украинка', 'украинци'] },
+      { id: 'iran', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg', label: 'Иран', sublabels: ['иранец', 'иранка', 'иранци'] },
+      { id: 'iraq', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iraq.jpg', label: 'Ирак', sublabels: ['иракчанин', 'иракчанка', 'иракчани'] },
+      { id: 'algeria', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/algeria.jpg', label: 'Алжир', sublabels: ['алжирец', 'алжирка', 'алжирци'] },
+      { id: 'afghanistan', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/afghanistan.jpg', label: 'Афганистан', sublabels: ['афганистанец', 'афганистанка', 'афганистанци'] },
+      { id: 'morocco', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg', label: 'Мароко', sublabels: ['мароканец', 'мароканка', 'мароканци'] },
     ]
   } as IllustratedCardsExercise,
 
-  // ORDER 6: Exercise 4 - Syllable blocks (Page 10, middle) - Custom component
+  // ORDER 3: Exercise 4 - Syllable blocks (Page 10, middle) - Custom component
   {
     id: 'l01-ex-04',
     type: 'syllable_blocks',
     instruction: 'Подредете блокчетата в думи.',
-    order: 6,
+    order: 3,
     points: 8,
     puzzles: [
       { id: 'puzzle1', syllables: ['Я', 'РИ', 'БЪЛ', 'ГА'], correctWord: 'БЪЛГАРИЯ' },
@@ -161,12 +118,12 @@ export const exercises: Exercise[] = [
     ]
   } as SyllableBlocksExercise,
 
-  // ORDER 7: Exercise 5 - Write country name (Page 10, bottom) - Simple text input
+  // ORDER 4: Exercise 5 - Write country name (Page 10, bottom) - Simple text input
   {
     id: 'l01-ex-05',
     type: 'fill_in_blank',
     instruction: 'Напишете името на вашата страна.',
-    order: 7,
+    order: 4,
     points: 1,
     freeText: true,
     sentences: [
@@ -243,7 +200,7 @@ export const exercises: Exercise[] = [
     points: 7,
     letterString: 'ниетевиеазтойтоти',
     correctWords: ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти'],
-    distractorWords: ['тя', 'нея', 'ви'],
+    distractorWords: ['тя'],
   } as WordSearchExercise,
 
   // ORDER 10: ГРАМАТИКА 2 - Verb СЪМ (Page 11, bottom) - NOT AN EXERCISE!
@@ -362,14 +319,14 @@ export const exercises: Exercise[] = [
     ]
   } as DialoguesExercise,
 
-  // ORDER 17: ГРАМАТИКА 3 - Аз съм / Аз не съм (Page 13) - NOT AN EXERCISE!
+  // ORDER 15: ГРАМАТИКА 3 - Аз съм / Аз не съм (Page 13) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-03',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
     subtitle: 'Аз съм / Аз не съм',
     instruction: 'Запознайте се с конструкциите „аз съм" и „аз не съм".',
-    order: 17,
+    order: 15,
     examples: [
       {
         imageUrl: '/assets/lesson-01/gramatika-3/hasan.jpg',
@@ -428,12 +385,12 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 18: Exercise 12 - Make negative sentences (Page 13) - Borrowed from Ex.11 (dropdown_match)
+  // ORDER 16: Exercise 12 - Make negative sentences (Page 13) - Borrowed from Ex.11 (dropdown_match)
   {
     id: 'l01-ex-12',
     type: 'dropdown_match',
     instruction: 'Направете отрицателни изречения.',
-    order: 18,
+    order: 16,
     points: 6,
     questions: [
       { id: 'q1', left: 'Ти … учител.', options: ['не съм', 'не си', 'не е', 'не сме', 'не сте', 'не са'], correctAnswer: 'не си' },
@@ -445,14 +402,14 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 19: ГРАМАТИКА 4 - Questions & Answers (Page 13) - NOT AN EXERCISE!
+  // ORDER 14: ГРАМАТИКА 4 - Questions & Answers (Page 13) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-04',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Въпроси и отговори',
     instruction: 'Запознайте се с въпросителни изречения. Кликнете върху картинката за да чуете.',
-    order: 19,
+    order: 14,
     examples: [
       {
         imageUrl: '/assets/lesson-01/gramatika-4/bulgarin-li-ste.png',
@@ -473,12 +430,12 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 20: Exercise 13 - Complete sentences with Yes answers (Page 14)
+  // ORDER 17: Exercise 13 - Complete sentences with Yes answers (Page 14)
   {
     id: 'l01-ex-13',
     type: 'workbook_fill_blank',
     instruction: 'Довършете изреченията по модела.',
-    order: 20,
+    order: 17,
     points: 8,
     layout: 'qa-stacked',
     sentences: [
@@ -547,12 +504,12 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 21: Exercise 14 - Complete sentences with No answers (Page 14)
+  // ORDER 18: Exercise 14 - Complete sentences with No answers (Page 14)
   {
     id: 'l01-ex-14',
     type: 'workbook_fill_blank',
     instruction: 'Довършете изреченията по модела.',
-    order: 21,
+    order: 18,
     points: 8,
     layout: 'qa-stacked',
     sentences: [
@@ -621,13 +578,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 22: ГРАМАТИКА 5 - Сегашно време – съм (Page 14) - NOT AN EXERCISE!
+  // ORDER 19: ГРАМАТИКА 5 - Сегашно време – съм (Page 14) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-05',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
     instruction: 'Запознайте се с глагол съм – сегашно време',
-    order: 22,
+    order: 19,
     tableTitle: 'Сегашно време – съм',
     columns: ['(+)', '(–)', '(?)'],
     rows: [
@@ -646,13 +603,13 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarTableExercise,
 
-  // ORDER 23: ДИАЛОЗИ 2 (Page 15) - TTS on click, no audio file
+  // ORDER 20: ДИАЛОЗИ 2 (Page 15) - TTS on click, no audio file
   {
     id: 'l01-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
     instruction: 'Натиснете секцията за автоматично прочитане',
-    order: 23,
+    order: 20,
     sections: [
       {
         id: 'а.',
@@ -696,13 +653,12 @@ export const exercises: Exercise[] = [
   } as DialoguesExercise,
 
   // ORDER 24: УПРАЖНЕНИЕ 17 - Подредете фразите (Page 15) - dialogue_builder
-  // (exercises 18 and 19 from the textbook are skipped — no audio or text available)
   {
     id: 'l01-ex-17',
     type: 'dialogue_builder',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Подредете фразите, за да получите диалози.',
-    order: 24,
+    order: 21,
     sections: [
       {
         id: 'а.',
@@ -771,7 +727,7 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
     audioUrl: '/assets/lesson-01/audio/text-22.wav',
-    order: 25,
+    order: 22,
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
       'Те са Лейла и Исам. Ние сме бежанци от Ливан и сега сме в България.',
@@ -785,7 +741,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-23',
     type: 'true_false',
     instruction: 'На база на текста по-горе, определете дали твърденията са верни или не.',
-    order: 26,
+    order: 23,
     points: 9,
     sentences: [
       { id: 's1', text: 'Мохамед е от Сирия.',       isTrue: true  },
@@ -807,7 +763,7 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
     audioUrl: '/assets/lesson-01/audio/text-20.wav',
-    order: 27,
+    order: 24,
     paragraphs: [
       'Аз съм Бала от Мали. Мали е в Африка. Аз съм бежанец. Сега съм в България, в София.',
       'Али е от Ирак. Той е иракчанин. Сега е в София.',
@@ -821,7 +777,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-25',
     type: 'dropdown_match',
     instruction: 'Отговорете на въпросите.',
-    order: 28,
+    order: 25,
     points: 10,
     questions: [
       { id: 'q1',  left: 'Откъде е Бала?',              options: ['от Мали', 'от Алжир', 'от Ирак', 'от Афганистан'], correctAnswer: 'от Мали'        },
@@ -836,4 +792,106 @@ export const exercises: Exercise[] = [
       { id: 'q10', left: 'Те бежанци ли са?',           options: ['Да', 'Не'],                                        correctAnswer: 'Да'             },
     ],
   } as DropdownMatchExercise,
+
+  // ORDER 26: УПРАЖНЕНИЕ 18 - Listening + True/False checklist (Textbook ex. 18)
+  {
+    id: 'l01-ex-18',
+    type: 'reading_text',
+    title: 'УПРАЖНЕНИЕ 18',
+    instruction: 'Слушайте текста. Прочетете го и определете дали твърденията са верни (✓) или неверни (✗).',
+    order: 26,
+    points: 9,
+    paragraphs: [
+      'Мария е от България. Тя е от София. Мария е учителка.',
+      'Мохамед е от Сирия. Той е учител. Мохамед е бежанец.',
+      'Амина и Карим са от Алжир. Те са бежанци. Те не са учители.',
+    ],
+    checklist: {
+      instruction: 'Вярно или грешно?',
+      items: [
+        { id: 'c1', text: 'Мария е от България.', isTrue: true },
+        { id: 'c2', text: 'Тя не е от София.', isTrue: false },
+        { id: 'c3', text: 'Мария е учителка.', isTrue: true },
+        { id: 'c4', text: 'Мохамед е от Сирия.', isTrue: true },
+        { id: 'c5', text: 'Той не е учител.', isTrue: false },
+        { id: 'c6', text: 'Мохамед е бежанец.', isTrue: true },
+        { id: 'c7', text: 'Амина и Карим са от Алжир.', isTrue: true },
+        { id: 'c8', text: 'Те не са бежанци.', isTrue: false },
+        { id: 'c9', text: 'Те са учители.', isTrue: false },
+      ],
+    },
+  } as ReadingTextExercise,
+
+  // ORDER 27: УПРАЖНЕНИЕ 19 - Listening + Fill-in-blanks (Textbook ex. 19)
+  {
+    id: 'l01-ex-19',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 19',
+    instruction: 'Слушайте текста и попълнете празните места.',
+    order: 27,
+    points: 10,
+    listeningText: 'Иван и Катя са от България. Те са българи. Те са учители. Софиян и София са от Ирак. Те са бежанци. Те не са учители. Лилит е от Сирия. Тя е учителка. Азар е от Афганистан. Той е бежанец.',
+    sentences: [
+      {
+        text: 'Иван и Катя са от _.',
+        blanks: [0],
+        correctAnswers: ['България'],
+        options: ['България', 'Сирия', 'Ирак'],
+      },
+      {
+        text: 'Те са _.',
+        blanks: [0],
+        correctAnswers: ['българи'],
+        options: ['българи', 'сирийци', 'иракчани'],
+      },
+      {
+        text: 'Те са _.',
+        blanks: [0],
+        correctAnswers: ['учители'],
+        options: ['учители', 'бежанци', 'студенти'],
+      },
+      {
+        text: 'Софиян и София са от _.',
+        blanks: [0],
+        correctAnswers: ['Ирак'],
+        options: ['Ирак', 'България', 'Сирия'],
+      },
+      {
+        text: 'Те са _.',
+        blanks: [0],
+        correctAnswers: ['бежанци'],
+        options: ['бежанци', 'учители', 'българи'],
+      },
+      {
+        text: 'Те _ учители.',
+        blanks: [0],
+        correctAnswers: ['не са'],
+        options: ['не са', 'са', 'сме'],
+      },
+      {
+        text: 'Лилит е от _.',
+        blanks: [0],
+        correctAnswers: ['Сирия'],
+        options: ['Сирия', 'Ирак', 'Афганистан'],
+      },
+      {
+        text: 'Тя е _.',
+        blanks: [0],
+        correctAnswers: ['учителка'],
+        options: ['учителка', 'бежанка', 'иранка'],
+      },
+      {
+        text: 'Азар е от _.',
+        blanks: [0],
+        correctAnswers: ['Афганистан'],
+        options: ['Афганистан', 'Сирия', 'България'],
+      },
+      {
+        text: 'Той е _.',
+        blanks: [0],
+        correctAnswers: ['бежанец'],
+        options: ['бежанец', 'учител', 'българин'],
+      },
+    ],
+  } as WorkbookFillBlankExercise,
 ];
