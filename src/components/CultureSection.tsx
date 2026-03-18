@@ -7,15 +7,20 @@ import { useLanguage } from '@/i18n/LanguageContext';
 
 interface CultureNote {
   id: string;
-  title: string;
-  content: string;
+  title: string | Record<string, string>;
+  content: string | Record<string, string>;
 }
 
 interface CultureSectionProps {
   notes: CultureNote[];
 }
 
-function TranslatedParagraph({ text }: { text: string }) {
+function resolveText(value: string | Record<string, string>, lang: string): string {
+  if (typeof value === 'string') return value;
+  return value[lang] || value['bg'] || Object.values(value)[0] || '';
+}
+
+function DynamicTranslatedParagraph({ text }: { text: string }) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
 
@@ -29,10 +34,49 @@ function TranslatedParagraph({ text }: { text: string }) {
   );
 }
 
+function PreTranslatedParagraph({ content }: { content: Record<string, string> }) {
+  const { lang } = useLanguage();
+  const bgText = content['bg'] || '';
+  const localText = lang !== 'bg' ? (content[lang] || '') : '';
+
+  return (
+    <div className="mb-3 last:mb-0">
+      <p className="text-gray-700 leading-relaxed">{bgText}</p>
+      {localText && (
+        <p className="text-sm text-[#0279C3] mt-1 leading-relaxed italic">{localText}</p>
+      )}
+    </div>
+  );
+}
+
+function NoteTitle({ title }: { title: string | Record<string, string> }) {
+  const { lang } = useLanguage();
+  const bgTitle = typeof title === 'string' ? title : (title['bg'] || '');
+  const localTitle = typeof title === 'string'
+    ? ''
+    : (lang !== 'bg' ? (title[lang] || '') : '');
+  const dynamicTranslation = useTranslate(typeof title === 'string' ? title : '');
+
+  return (
+    <div className="mb-2">
+      <h4 className="font-semibold text-amber-800">{bgTitle}</h4>
+      {typeof title === 'string' && lang !== 'bg' && dynamicTranslation !== title && (
+        <p className="text-xs text-amber-600/80 italic">{dynamicTranslation}</p>
+      )}
+      {typeof title !== 'string' && localTitle && (
+        <p className="text-xs text-amber-600/80 italic">{localTitle}</p>
+      )}
+    </div>
+  );
+}
+
 export function CultureSection({ notes }: CultureSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { lang } = useLanguage();
-  const titleTranslated = useTranslate('Култура и начин на живот');
+  const sectionTitle = resolveText(
+    { bg: 'Култура и начин на живот', en: 'Culture and Way of Life', fr: 'Culture et mode de vie', ar: 'الثقافة وأسلوب الحياة', fa: 'فرهنگ و شیوه زندگی', ru: 'Культура и образ жизни', uk: 'Культура і спосіб життя' },
+    lang,
+  );
 
   if (!notes || notes.length === 0) return null;
 
@@ -47,8 +91,8 @@ export function CultureSection({ notes }: CultureSectionProps) {
           <h3 className="font-bold text-amber-900 text-lg">
             Култура и начин на живот
           </h3>
-          {lang !== 'bg' && titleTranslated !== 'Култура и начин на живот' && (
-            <p className="text-sm text-amber-700/70">{titleTranslated}</p>
+          {lang !== 'bg' && sectionTitle !== 'Култура и начин на живот' && (
+            <p className="text-sm text-amber-700/70">{sectionTitle}</p>
           )}
         </div>
         <ChevronDown className={`w-5 h-5 text-amber-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -64,7 +108,12 @@ export function CultureSection({ notes }: CultureSectionProps) {
           <div className="px-5 pb-5 pt-1 space-y-5 border-t border-amber-200">
             {notes.map((note) => (
               <div key={note.id}>
-                <TranslatedParagraph text={note.content} />
+                <NoteTitle title={note.title} />
+                {typeof note.content === 'string' ? (
+                  <DynamicTranslatedParagraph text={note.content} />
+                ) : (
+                  <PreTranslatedParagraph content={note.content} />
+                )}
               </div>
             ))}
           </div>

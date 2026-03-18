@@ -207,6 +207,12 @@ export interface GrammarTableExercise extends BaseExercise {
     pronoun: string;
     cells: string[];
   }[];
+  illustrations?: {
+    imageUrl: string;
+    singularLabel: string;
+    pluralLabel: string;
+    pluralCount?: number;    // how many times to repeat the image for plural (default 3)
+  }[];
   notes?: string[];          // Text notes shown below the table
 }
 
@@ -231,9 +237,11 @@ export interface DialoguesExercise extends BaseExercise {
   type: 'dialogues';
   title: string;             // 'ДИАЛОЗИ 1'
   subtitle?: string;
+  imageUrl?: string;
   audioUrl?: string;
   sections: {
     id: string;              // 'а.', 'б.'
+    imageUrl?: string;
     lines: {
       speaker?: string;
       text: string;
@@ -284,6 +292,7 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
     acceptableAnswers?: string[][];
     options?: string[] | string[][];
     isExample?: boolean;
+    images?: string[];
   }[];
 }
 
@@ -300,6 +309,10 @@ export interface LetterChoiceExercise extends BaseExercise {
 export interface ReadingTextExercise extends BaseExercise {
   type: 'reading_text';
   audioUrl?: string;
+  images?: {
+    imageUrl: string;
+    label: string;
+  }[];
   paragraphs: string[];
   showDictionary?: boolean;
   checklist?: {
@@ -345,6 +358,26 @@ export interface ConnectDotsExercise extends BaseExercise {
   }[];
 }
 
+export interface TableFillExercise extends BaseExercise {
+  type: 'table_fill';
+  paragraphs: {
+    speaker?: string;
+    text: string;
+    imageUrl?: string;
+  }[];
+  tables: {
+    name: string;
+    columns: string[];
+    rows: {
+      label: string;
+      cells: {
+        correctAnswers: string[];
+        options: string[];
+      }[];
+    }[];
+  }[];
+}
+
 // Union type for all exercises
 export type Exercise = 
   | FillInBlankExercise
@@ -373,7 +406,8 @@ export type Exercise =
   | ReadingTextExercise
   | TrueFalseExercise
   | PersonalChoiceExercise
-  | ConnectDotsExercise;
+  | ConnectDotsExercise
+  | TableFillExercise;
 
 // Dialogue structure
 export interface Dialogue {
@@ -406,6 +440,7 @@ export interface VocabularyItem {
   id: string;
   bulgarian: string;
   translation?: string;
+  translations?: Record<string, string>;
   category?: string;
   imageUrl?: string;
   audioUrl?: string;
@@ -425,8 +460,8 @@ export interface LessonContent {
   vocabulary?: VocabularyItem[];
   culturalNotes?: {
     id: string;
-    title: string;
-    content: string;
+    title: string | Record<string, string>;
+    content: string | Record<string, string>;
   }[];
   grammarReference?: {
     id: string;
