@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useT } from '@/i18n/useT';
+import { RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Dot {
   id: string;
@@ -14,12 +16,43 @@ interface ConnectDotsProps {
   onComplete?: (isCorrect: boolean) => void;
 }
 
-function getDotCoords(position: number, total: number, radius: number, cx: number, cy: number) {
-  const angle = (-90 + (position / total) * 360) * (Math.PI / 180);
-  return {
-    x: cx + radius * Math.cos(angle),
-    y: cy + radius * Math.sin(angle),
-  };
+const MOBILE_COLS = 3;
+const DESKTOP_COLS = 10;
+
+function getSnakePos(index: number, cols: number) {
+  const row = Math.floor(index / cols);
+  const colInRow = index % cols;
+  const col = row % 2 === 0 ? colInRow : cols - 1 - colInRow;
+  return { row, col };
+}
+
+function buildBodyPath(
+  points: { x: number; y: number }[],
+  gridMidX: number,
+  cellW: number,
+): string {
+  if (points.length < 2) return '';
+  const bulge = cellW * 0.8;
+  let d = `M ${points[0].x} ${points[0].y}`;
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const dx = Math.abs(curr.x - prev.x);
+    const dy = Math.abs(curr.y - prev.y);
+
+    if (dy > dx * 0.5 && dx < cellW * 0.3) {
+      const isRight = prev.x > gridMidX;
+      const b = isRight ? bulge : -bulge;
+      d +=
+        ` C ${prev.x + b} ${prev.y + (curr.y - prev.y) * 0.4},` +
+        ` ${curr.x + b} ${curr.y - (curr.y - prev.y) * 0.4},` +
+        ` ${curr.x} ${curr.y}`;
+    } else {
+      d += ` L ${curr.x} ${curr.y}`;
+    }
+  }
+  return d;
 }
 
 export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
@@ -29,178 +62,250 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
   const [connected, setConnected] = useState<number[]>([]);
   const [shakeId, setShakeId] = useState<string | null>(null);
   const [completed, setCompleted] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState(340);
   const completedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cols, setCols] = useState(MOBILE_COLS);
+  const [cellW, setCellW] = useState(80);
   const t = useT();
 
   useEffect(() => {
-    const updateSize = () => {
-      if (containerRef.current) {
-        const w = containerRef.current.offsetWidth;
-        setSize(Math.min(w, 420));
-      }
+    const measure = () => {
+      if (!containerRef.current) return;
+      const w = containerRef.current.offsetWidth;
+      const isDesktop = w >= 640;
+      const c = isDesktop ? DESKTOP_COLS : MOBILE_COLS;
+      setCols(c);
+      setCellW(Math.floor(w / c));
     };
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
   }, []);
 
-  const cx = size / 2;
-  const cy = size / 2;
-  const radius = size * 0.38;
-  const dotRadius = size < 360 ? 28 : 34;
-
   const nextExpected = connected.length;
-  const isAllConnected = connected.length === total;
+  const rows = Math.ceil(total / cols);
+  const cellH = cellW;
+  const rowGap = cols === MOBILE_COLS ? 32 : 24;
+  const dotR = Math.min(22, Math.max(16, (cellW - 12) / 2));
+  const bodyW = dotR * 2.2;
+  const gridW = cols * cellW;
+  const gridH = rows * cellH + (rows - 1) * rowGap;
 
-  const handleDotClick = (position: number, dotId: string) => {
-    if (completed) return;
-
-    if (position === nextExpected) {
-      const next = [...connected, position];
-      setConnected(next);
-
-      if (next.length === total && !completedRef.current) {
-        completedRef.current = true;
-        setCompleted(true);
-        onComplete?.(true);
+  const handleDotClick = useCallback(
+    (positionIndex: number, dotId: string) => {
+      if (completed) return;
+      if (positionIndex === nextExpected) {
+        const next = [...connected, positionIndex];
+        setConnected(next);
+        if (next.length === total && !completedRef.current) {
+          completedRef.current = true;
+          setCompleted(true);
+          onComplete?.(true);
+        }
+      } else {
+        setShakeId(dotId);
+        setTimeout(() => setShakeId(null), 500);
       }
-    } else {
-      setShakeId(dotId);
-      setTimeout(() => setShakeId(null), 500);
-    }
-  };
+    },
+    [completed, connected, nextExpected, total, onComplete],
+  );
 
-  const handAngle = (() => {
-    if (isAllConnected) return null;
-    const target = nextExpected;
-    return -90 + (target / total) * 360;
-  })();
+  const handleReset = useCallback(() => {
+    setConnected([]);
+    setCompleted(false);
+    completedRef.current = false;
+    setShakeId(null);
+  }, []);
 
-  const handLength = radius * 0.55;
+  function center(index: number) {
+    const { row, col } = getSnakePos(index, cols);
+    return {
+      x: col * cellW + cellW / 2,
+      y: row * (cellH + rowGap) + cellH / 2,
+    };
+  }
+
+  const allPts = Array.from({ length: total }, (_, i) => center(i));
+  const gridMidX = gridW / 2;
+  const fullBody = buildBodyPath(allPts, gridMidX, cellW);
+  const tracedBody =
+    connected.length >= 2
+      ? buildBodyPath(
+          allPts.slice(0, connected.length),
+          gridMidX,
+          cellW,
+        )
+      : '';
+
+  // Head direction (facing toward the 2nd dot)
+  const headAngle =
+    allPts.length >= 2
+      ? Math.atan2(allPts[1].y - allPts[0].y, allPts[1].x - allPts[0].x) *
+        (180 / Math.PI)
+      : 0;
+
+  // Tail direction
+  const tailAngle =
+    allPts.length >= 2
+      ? Math.atan2(
+          allPts[total - 1].y - allPts[total - 2].y,
+          allPts[total - 1].x - allPts[total - 2].x,
+        ) *
+        (180 / Math.PI)
+      : 0;
+
+  const headPt = allPts[0];
+  const tailPt = allPts[total - 1];
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-8 shadow-md">
-      <div className="flex justify-center" ref={containerRef}>
-        <div className="relative" style={{ width: size, height: size }}>
+      <div
+        className="mx-auto"
+        ref={containerRef}
+        style={{ maxWidth: cols === MOBILE_COLS ? 260 : undefined }}
+      >
+        <div className="relative" style={{ width: '100%', height: gridH }}>
           <svg
-            width={size}
-            height={size}
-            className="absolute inset-0"
-            style={{ pointerEvents: 'none' }}
+            className="absolute inset-0 pointer-events-none"
+            width={gridW}
+            height={gridH}
           >
-            {/* Connected lines */}
-            {connected.map((pos, i) => {
-              if (i === 0) return null;
-              const prev = getDotCoords(connected[i - 1], total, radius, cx, cy);
-              const curr = getDotCoords(pos, total, radius, cx, cy);
-              return (
-                <line
-                  key={`line-${i}`}
-                  x1={prev.x}
-                  y1={prev.y}
-                  x2={curr.x}
-                  y2={curr.y}
-                  stroke="#8B9D5F"
-                  strokeWidth={3}
-                  strokeLinecap="round"
-                  className="animate-in fade-in duration-300"
-                />
-              );
-            })}
+            {/* Full snake body — light green */}
+            <path
+              d={fullBody}
+              fill="none"
+              stroke="#b8de6f"
+              strokeWidth={bodyW}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
 
-            {/* Closing line when done */}
-            {isAllConnected && total > 1 && (() => {
-              const last = getDotCoords(connected[total - 1], total, radius, cx, cy);
-              const first = getDotCoords(connected[0], total, radius, cx, cy);
-              return (
-                <line
-                  x1={last.x}
-                  y1={last.y}
-                  x2={first.x}
-                  y2={first.y}
-                  stroke="#8B9D5F"
-                  strokeWidth={3}
-                  strokeLinecap="round"
-                  className="animate-in fade-in duration-500"
-                />
-              );
-            })()}
-
-            {/* Clock hand pointing to next dot */}
-            {handAngle !== null && (
-              <>
-                <line
-                  x1={cx}
-                  y1={cy}
-                  x2={cx + handLength * Math.cos(handAngle * Math.PI / 180)}
-                  y2={cy + handLength * Math.sin(handAngle * Math.PI / 180)}
-                  stroke="#D97706"
-                  strokeWidth={3}
-                  strokeLinecap="round"
-                  opacity={0.6}
-                  className="transition-all duration-500 ease-in-out"
-                />
-                <circle cx={cx} cy={cy} r={5} fill="#D97706" opacity={0.6} />
-              </>
+            {/* Traced portion — darker green */}
+            {tracedBody && (
+              <path
+                d={tracedBody}
+                fill="none"
+                stroke="#5a8a0a"
+                strokeWidth={bodyW}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             )}
+
+            {/* Snake scales pattern (subtle dashes on the body) */}
+            <path
+              d={fullBody}
+              fill="none"
+              stroke="#a0cc5a"
+              strokeWidth={bodyW * 0.6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray={`${dotR * 0.8} ${dotR * 1.6}`}
+              opacity={0.3}
+            />
+
+            {/* Snake tail — narrows away from the body */}
+            <g
+              transform={`translate(${tailPt.x},${tailPt.y}) rotate(${tailAngle})`}
+            >
+              <polygon
+                points={`${dotR + 2},-7 ${dotR + 2},7 ${dotR + 24},0`}
+                fill="#b8de6f"
+              />
+              <polygon
+                points={`${dotR + 6},-4 ${dotR + 6},4 ${dotR + 22},0`}
+                fill="#9cc44e"
+              />
+            </g>
+
+            {/* Snake head */}
+            <g
+              transform={`translate(${headPt.x},${headPt.y}) rotate(${headAngle})`}
+            >
+              {/* Head shape — slightly larger ellipse */}
+              <ellipse
+                cx={2}
+                cy={0}
+                rx={dotR + 8}
+                ry={dotR + 4}
+                fill="#4a7a0a"
+              />
+              {/* Eyes — white circles with black pupils */}
+              <circle cx={dotR * 0.4} cy={-dotR * 0.45} r={4.5} fill="white" />
+              <circle cx={dotR * 0.4} cy={dotR * 0.45} r={4.5} fill="white" />
+              <circle
+                cx={dotR * 0.55}
+                cy={-dotR * 0.45}
+                r={2.5}
+                fill="#111"
+              />
+              <circle
+                cx={dotR * 0.55}
+                cy={dotR * 0.45}
+                r={2.5}
+                fill="#111"
+              />
+              {/* Tongue — red fork, starts at ellipse edge */}
+              <path
+                d={`M ${dotR + 10} 0 L ${dotR + 22} 0 L ${dotR + 28} -6 M ${dotR + 22} 0 L ${dotR + 28} 6`}
+                fill="none"
+                stroke="#cc0000"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+              />
+            </g>
           </svg>
 
-          {/* Dot buttons */}
-          {sortedDots.map((dot) => {
-            const coords = getDotCoords(dot.position, total, radius, cx, cy);
-            const isConnected = connected.includes(dot.position);
-            const isNext = dot.position === nextExpected;
+          {/* Letter dots on the snake body */}
+          {sortedDots.map((dot, index) => {
+            const pos = center(index);
+            const isConnected = connected.includes(index);
+            const isNext = index === nextExpected && !completed;
             const isShaking = shakeId === dot.id;
 
             return (
               <button
                 key={dot.id}
-                onClick={() => handleDotClick(dot.position, dot.id)}
+                onClick={() => handleDotClick(index, dot.id)}
+                disabled={completed && !isConnected}
                 className={`
-                  absolute flex flex-col items-center justify-center rounded-full
-                  font-bold transition-all duration-200
-                  ${isConnected
-                    ? 'bg-[#8B9D5F] text-white border-2 border-[#6B7D3F] shadow-lg scale-105'
-                    : isNext && !completed
-                    ? 'bg-amber-100 text-amber-800 border-2 border-amber-400 shadow-md animate-pulse'
-                    : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-gray-400 shadow-sm'
+                  absolute rounded-full flex items-center justify-center
+                  font-bold text-sm md:text-base transition-all duration-200
+                  select-none z-10
+                  ${
+                    isConnected
+                      ? 'bg-[#3d5f06] text-white border-2 border-[#2a4204] shadow-sm'
+                      : isNext
+                        ? 'bg-yellow-100 text-yellow-900 border-2 border-yellow-400 shadow-lg animate-pulse'
+                        : 'bg-white/90 text-gray-600 border-2 border-[#b8de6f] hover:border-[#8FC412] hover:bg-white'
                   }
                   ${isShaking ? 'animate-shake' : ''}
-                  ${completed && !isConnected ? 'opacity-50' : ''}
                 `}
                 style={{
-                  width: dotRadius * 2,
-                  height: dotRadius * 2,
-                  left: coords.x - dotRadius,
-                  top: coords.y - dotRadius,
+                  width: dotR * 2,
+                  height: dotR * 2,
+                  left: pos.x - dotR,
+                  top: pos.y - dotR,
                 }}
-                disabled={completed}
               >
-                <span className={`leading-none ${size < 360 ? 'text-[10px]' : 'text-xs'}`}>
-                  {dot.label}
-                </span>
-                <span className={`font-extrabold leading-none ${size < 360 ? 'text-sm' : 'text-base'}`}>
-                  {dot.position}
-                </span>
+                {dot.label}
               </button>
             );
           })}
-
-          {/* Center completion indicator */}
-          {completed && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-[#8FC412] text-white rounded-full w-20 h-20 flex items-center justify-center shadow-xl animate-in zoom-in duration-500">
-                <span className="text-3xl">✓</span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Progress text */}
-      <div className="text-center mt-4">
+      {/* Progress + controls */}
+      <div className="flex items-center justify-between mt-6">
+        <div className="flex gap-3">
+          {connected.length > 0 && !completed && (
+            <Button variant="outline" onClick={handleReset} className="gap-2">
+              <RotateCcw className="w-4 h-4" />
+              {t('exercise.reset')}
+            </Button>
+          )}
+        </div>
+
         {!completed ? (
           <p className="text-sm text-gray-500">
             {connected.length} / {total}

@@ -26,7 +26,8 @@ export type ExerciseType =
   | 'reading_text'         // Reading text with optional audio
   | 'true_false'           // True/False sentences with ✓/✗ buttons
   | 'personal_choice'      // Interactive personal preference (no right/wrong)
-  | 'connect_dots';        // Connect dots in order (clock-style number sequence)
+  | 'connect_dots'         // Connect dots in order (snake-style alphabet sequence)
+  | 'alphabet_maze';       // Interactive letter grid — tap letters in alphabetical order
 
 // Base exercise interface
 export interface BaseExercise {
@@ -358,6 +359,14 @@ export interface ConnectDotsExercise extends BaseExercise {
   }[];
 }
 
+export interface AlphabetMazeExercise extends BaseExercise {
+  type: 'alphabet_maze';
+  grid: string[][];
+  correctPath: { row: number; col: number }[];
+  startImageUrl?: string;
+  endImageUrl?: string;
+}
+
 export interface TableFillExercise extends BaseExercise {
   type: 'table_fill';
   paragraphs: {
@@ -407,6 +416,7 @@ export type Exercise =
   | TrueFalseExercise
   | PersonalChoiceExercise
   | ConnectDotsExercise
+  | AlphabetMazeExercise
   | TableFillExercise;
 
 // Dialogue structure

@@ -1,5 +1,5 @@
 /**
- * EXERCISE TEMPLATES — Copy-paste templates for all 22 implemented exercise types/variants.
+ * EXERCISE TEMPLATES — Copy-paste templates for all 25 implemented exercise types/variants.
  *
  * HOW TO USE:
  * 1. Find the template for the type you need (use Ctrl+F on the type name)
@@ -9,11 +9,12 @@
  * 5. Update the `order` field to match the PDF sequence
  *
  * CATEGORIES:
- *   Section 1 — НОВИ ДУМИ       (illustrated_cards) ⭐ FREQUENT
+ *   Section 1 — НОВИ ДУМИ       (illustrated_cards, illustrated_cards_text_only) ⭐ FREQUENT
  *   Section 2 — ГРАМАТИКА        (grammar_visual, grammar_examples, grammar_table) ⭐ FREQUENT
  *   Section 3 — ДИАЛОЗИ / ТЕКСТ  (dialogues, reading_text) ⭐ FREQUENT
  *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, workbook_fill_blank_listening, multiple_choice, dropdown_match, word_order, drag_to_columns) ⭐ FREQUENT
  *   Section 5 — УПРАЖНЕНИЯ РЕДКИ (match_pairs, letter_choice, image_labeling, syllable_blocks, word_search, true_false, dialogue_builder, fill_with_images, personal_choice)
+ *   Section 6 — ИНТЕРАКТИВНИ / АЗБУКА (connect_dots, alphabet_maze)
  *
  * ID CONVENTIONS:
  *   Lesson exercises:  l0X-ex-NN        (e.g. l02-ex-01)
@@ -45,6 +46,8 @@ import type {
   DialogueBuilderExercise,
   FillWithImagesExercise,
   PersonalChoiceExercise,
+  ConnectDotsExercise,
+  AlphabetMazeExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -73,6 +76,38 @@ export const TEMPLATE_illustrated_cards = {
     { id: 'card1', imageUrl: '/assets/lesson-0X/novi-dumi-N-name/01-word.jpg', label: 'Дума' },
     // Card with sublabels (grammatical forms):
     { id: 'card2', imageUrl: '/assets/lesson-0X/novi-dumi-N-name/02-word.jpg', label: 'България', sublabels: ['българин', 'българка', 'българи'] },
+    // Add more cards...
+  ],
+} as IllustratedCardsExercise;
+
+/**
+ * illustrated_cards (TEXT-ONLY) — НОВИ ДУМИ без картинки.
+ * Ползва се когато нямаме изображения за новите думи.
+ * Картите показват само думата (+ превод при клик + TTS произношение).
+ * Кликнатите карти се оцветяват леко в зелено, за да знае ученикът кои е разгледал.
+ *
+ * КОГА ДА ПОЛЗВАШ:
+ *   - Международни думи, абстрактни понятия, думи без подходящи картинки
+ *   - Временно решение докато се набавят картинки (после добави imageUrl)
+ *
+ * БЕЛЕЖКИ:
+ *   - imageUrl: '' за всяка карта (компонентът скрива празните изображения)
+ *   - Без audioUrl → TTS произношение при клик
+ *   - sublabels работят нормално (за граматически форми)
+ */
+export const TEMPLATE_illustrated_cards_text_only = {
+  id: 'l0X-novi-dumi-NN',    // REPLACE: e.g. 'l00-novi-dumi-02'
+  type: 'illustrated_cards' as const,
+  title: 'НОВИ ДУМИ 1',      // REPLACE: 'НОВИ ДУМИ 2' etc.
+  instruction: 'Натиснете за произношение.',
+  order: 1,                  // REPLACE: PDF sequence number
+  cards: [
+    { id: 'card1', imageUrl: '', label: 'футбол' },
+    { id: 'card2', imageUrl: '', label: 'банан' },
+    { id: 'card3', imageUrl: '', label: 'кафе' },
+    { id: 'card4', imageUrl: '', label: 'такси' },
+    // With sublabels (grammatical forms):
+    // { id: 'card5', imageUrl: '', label: 'телефон', sublabels: ['телефони'] },
     // Add more cards...
   ],
 } as IllustratedCardsExercise;
@@ -713,3 +748,115 @@ export const TEMPLATE_personal_choice = {
     // Add more items...
   ],
 } as PersonalChoiceExercise;
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION 6 — ИНТЕРАКТИВНИ / АЗБУКА
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * connect_dots — Змия: проследи буквите по азбучен ред.
+ * Интерактивно упражнение: ученикът натиска буквите в правилен ред.
+ * Буквите са наредени като змия — зигзагообразен път с глава, тяло и опашка.
+ *
+ * ВИЗУАЛЕН ДИЗАЙН:
+ *   - Зелено тяло (дебела SVG линия) с глава (очи + език) и опашка
+ *   - Мобилно: 3 колони (вертикална змия, слиза надолу)
+ *   - Десктоп: 10 колони (хоризонтална змия)
+ *   - Кликнатите букви стават тъмнозелени, следващата пулсира в жълто
+ *   - Грешен клик → тресене (animate-shake)
+ *
+ * КОГА ДА ПОЛЗВАШ:
+ *   - Урок 0: Азбука — проследяване на буквите по ред
+ *   - Номера по ред (1→2→3→...)
+ *   - Всяка последователност, която трябва да се проследи
+ *
+ * БЕЛЕЖКИ:
+ *   - position определя реда (1-based)
+ *   - label е текстът, показван в кръгчето
+ *   - dots[] се сортират автоматично по position
+ *   - Няма points (информативно упражнение)
+ */
+export const TEMPLATE_connect_dots = {
+  id: 'l0X-ex-NN',            // REPLACE
+  type: 'connect_dots' as const,
+  instruction: 'Проследете змията! Натиснете буквите по азбучен ред.', // REPLACE
+  order: 1,                    // REPLACE
+  points: 0,
+  dots: [
+    { id: 'A', label: 'А', position: 1 },
+    { id: 'B', label: 'Б', position: 2 },
+    { id: 'V', label: 'В', position: 3 },
+    { id: 'G', label: 'Г', position: 4 },
+    { id: 'D', label: 'Д', position: 5 },
+    { id: 'E', label: 'Е', position: 6 },
+    // ... continue for all letters/items in the sequence
+    // Full Bulgarian alphabet has 30 letters (А→Я)
+  ],
+} as ConnectDotsExercise;
+
+/**
+ * alphabet_maze — Интерактивен лабиринт: намери пътя по азбучен ред.
+ * Решетка N×M с букви. Правилният път минава през 30 клетки (азбуката).
+ * Останалите клетки са „капани" — грешни букви.
+ *
+ * ВИЗУАЛЕН ДИЗАЙН:
+ *   - Пунктирана линия със стрелки показва общата посока на пътя
+ *   - Подсказва коя буква е следваща (пулсира в жълто)
+ *   - Верните клетки стават зелени, грешните се тресят
+ *   - Зелена линия следва прогреса
+ *   - Картинки отгоре (старт) и отдолу (финал) — опционални
+ *
+ * КОГА ДА ПОЛЗВАШ:
+ *   - Урок 0: Азбука — лабиринт с букви
+ *   - Всяка решетка, където ученикът трябва да следва път
+ *
+ * ДИЗАЙН НА РЕШЕТКАТА:
+ *   - 6×6 (36 клетки: 30 път + 6 капана) е добър баланс
+ *   - Пътят зигзагообразно минава през редовете
+ *   - Капаните са на „завоите" — букви, които приличат на верните
+ *   - correctPath[] трябва да съдържа само клетки, които са на пътя
+ *
+ * БЕЛЕЖКИ:
+ *   - grid[row][col] = буквата в тази клетка
+ *   - correctPath = масив от {row, col} в реда на натискане
+ *   - Клетки, които НЕ са в correctPath, се показват по-бледо (капани)
+ */
+export const TEMPLATE_alphabet_maze = {
+  id: 'l0X-ex-NN',            // REPLACE
+  type: 'alphabet_maze' as const,
+  title: 'УПРАЖНЕНИЕ NN',      // REPLACE
+  instruction: 'Намерете пътя в лабиринта.', // REPLACE
+  order: 1,                    // REPLACE
+  startImageUrl: '/assets/lesson-0X/exercise-NN/start.jpg',  // REPLACE or remove
+  endImageUrl: '/assets/lesson-0X/exercise-NN/end.jpg',      // REPLACE or remove
+  grid: [
+    // 6×6 example: path snakes through, 6 cells are traps
+    //               Col0   Col1   Col2   Col3   Col4   Col5
+    /* Row 0 → */ ['А',  'Б',  'В',  'Г',  'Д',  'Е'],
+    /* Row 1 ← */ ['В',  'К',  'Й',  'И',  'З',  'Ж'],   // (0)=trap
+    /* Row 2 → */ ['Г',  'Л',  'М',  'Н',  'О',  'П'],   // (0)=trap
+    /* Row 3 ← */ ['Х',  'Ф',  'У',  'Т',  'С',  'Р'],
+    /* Row 4 → */ ['Ц',  'Ч',  'Ш',  'Щ',  'Ъ',  'Я'],  // (5)=trap
+    /* Row 5 ← */ ['Л',  'О',  'Я',  'Ю',  'Ь',  'Р'],   // (0,1,5)=traps
+  ],
+  correctPath: [
+    // Row 0 → : А Б В Г Д Е
+    { row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 },
+    { row: 0, col: 3 }, { row: 0, col: 4 }, { row: 0, col: 5 },
+    // Row 1 ← : Ж З И Й К
+    { row: 1, col: 5 }, { row: 1, col: 4 }, { row: 1, col: 3 },
+    { row: 1, col: 2 }, { row: 1, col: 1 },
+    // Row 2 → : Л М Н О П
+    { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 3 },
+    { row: 2, col: 4 }, { row: 2, col: 5 },
+    // Row 3 ← : Р С Т У Ф Х
+    { row: 3, col: 5 }, { row: 3, col: 4 }, { row: 3, col: 3 },
+    { row: 3, col: 2 }, { row: 3, col: 1 }, { row: 3, col: 0 },
+    // Row 4 → : Ц Ч Ш Щ Ъ
+    { row: 4, col: 0 }, { row: 4, col: 1 }, { row: 4, col: 2 },
+    { row: 4, col: 3 }, { row: 4, col: 4 },
+    // Row 5 ← : Ь Ю Я
+    { row: 5, col: 4 }, { row: 5, col: 3 }, { row: 5, col: 2 },
+  ],
+} as AlphabetMazeExercise;

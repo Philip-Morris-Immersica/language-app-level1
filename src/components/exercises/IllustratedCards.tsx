@@ -17,6 +17,7 @@ interface IllustratedCardsProps {
 export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
+  const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const t = useT();
   const { lang } = useLanguage();
@@ -46,6 +47,7 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
   const handleCardClick = (card: { id: string; label: string; sublabels?: string[] }) => {
     speak(card.label, card.sublabels);
     toggleTranslation(card.id);
+    setVisitedCards(prev => new Set(prev).add(card.id));
   };
 
   const handlePlayAudio = () => {
@@ -111,7 +113,11 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
           <div
             key={card.id}
             onClick={() => handleCardClick(card)}
-            className="relative bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95"
+            className={`relative rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
+              visitedCards.has(card.id)
+                ? 'bg-green-50 border-[#8FC412]/40'
+                : 'bg-white border-gray-200'
+            }`}
           >
             {/* Speaker icon */}
             <div className="absolute top-2 right-2 text-gray-400">

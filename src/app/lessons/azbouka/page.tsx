@@ -1,43 +1,67 @@
-import { BookOpen } from 'lucide-react';
 import { LessonLayout } from '@/components/layout/LessonLayout';
+import { LessonNav } from '@/components/layout/LessonNav';
+import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
+import { getNextLesson } from '@/content';
+import { LessonIntroText } from '@/components/LessonIntroText';
+import { T } from '@/components/T';
+import { LessonHeaderClient } from '@/components/LessonHeaderClient';
+import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
+import { VocabularyDrawer } from '@/components/VocabularyDrawer';
+import { CultureSection } from '@/components/CultureSection';
+import { GrammarReferenceSection } from '@/components/GrammarReferenceSection';
+import { lessonData } from '@/content/lessons/lesson-00';
 
 export default function AzboukaPage() {
+  const vocabulary = lessonData.content?.vocabulary || [];
+
   return (
     <LessonLayout>
-      <div className="min-h-[60vh] flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center space-y-6">
-          {/* Icon */}
-          <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-2xl bg-[#EEF7C8] flex items-center justify-center">
-              <BookOpen className="w-10 h-10 text-[#8FC412]" />
+      <div className="space-y-8">
+        <LessonHeaderClient
+          number={lessonData.number}
+          title={lessonData.title}
+          description={lessonData.description}
+          grammarTopics={lessonData.grammarTopics}
+        />
+
+        {lessonData.content?.introduction && (
+          <LessonIntroText text={lessonData.content.introduction} />
+        )}
+
+        {lessonData.content?.culturalNotes && lessonData.content.culturalNotes.length > 0 && (
+          <CultureSection notes={lessonData.content.culturalNotes} />
+        )}
+
+        <LessonExercisesProvider lessonId="lesson-00">
+          {lessonData.exercises && lessonData.exercises.length > 0 && (
+            <div className="space-y-8">
+              <h2 className="text-3xl font-bold text-bolt-blue">
+                <T k="lesson.exercises" />
+              </h2>
+              {lessonData.exercises.map((exercise: any, index: number) => (
+                <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
+              ))}
             </div>
-          </div>
+          )}
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#EEF7C8] border border-[#8FC412] text-[#5a7a00] text-sm font-semibold px-4 py-1.5 rounded-full">
-            Азбука
-          </div>
+          {lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0 && (
+            <GrammarReferenceSection notes={lessonData.content.grammarReference} />
+          )}
+        </LessonExercisesProvider>
 
-          {/* Title */}
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Съдържанието се подготвя</h1>
-            <p className="mt-2 text-gray-500 text-sm leading-relaxed">
-              Разделът за азбуката все още не е наличен. Работим по него — скоро ще бъде готов.
-            </p>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-100" />
-
-          {/* Back link */}
-          <a
-            href="/lessons/lesson-01"
-            className="inline-flex items-center gap-2 text-sm text-[#8FC412] font-medium hover:underline"
-          >
-            ← Обратно към уроците
-          </a>
-        </div>
+        <LessonNav
+          prevLesson={undefined}
+          nextLesson={getNextLesson(0)}
+          testAvailable={false}
+        />
       </div>
+
+      {vocabulary.length > 0 && (
+        <VocabularyDrawer
+          vocabulary={vocabulary}
+          lessonTitle={`${lessonData.number}. ${lessonData.title}`}
+        />
+      )}
     </LessonLayout>
   );
 }

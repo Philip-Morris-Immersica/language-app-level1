@@ -25,6 +25,7 @@ import { ReadingText } from './ReadingText';
 import { TrueFalse } from './TrueFalse';
 import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
+import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
 
 interface ExerciseRendererProps {
@@ -243,6 +244,17 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ConnectDots
           dots={exercise.dots}
+          onComplete={onComplete}
+        />
+      );
+
+    case 'alphabet_maze':
+      return wrap(
+        <AlphabetMaze
+          grid={exercise.grid}
+          correctPath={exercise.correctPath}
+          startImageUrl={exercise.startImageUrl}
+          endImageUrl={exercise.endImageUrl}
           onComplete={onComplete}
         />
       );

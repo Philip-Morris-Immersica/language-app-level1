@@ -66,6 +66,8 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 
 **УПРАЖНЕНИЯ — Редки (RARE):** `match_pairs`, `letter_choice`, `image_labeling`, `syllable_blocks`, `word_search`, `true_false`, `dialogue_builder`, `fill_with_images`
 
+**ИНТЕРАКТИВНИ / АЗБУКА:** `connect_dots` (змия — проследи буквите по ред), `alphabet_maze` (лабиринт — намери пътя по азбучен ред)
+
 **Not yet implemented (show placeholder):** `verb_conjugation`, `number_writing`, `dialogue_reading`, `text_comprehension`, `listening`
 
 ## Textbook → Exercise Type Mappings
@@ -87,6 +89,9 @@ Use these mappings when digitalizing textbook exercises:
 | "Попълнете таблицата" (род/мн.ч.) | `table_fill` |
 | "Какво обичате / Напишете какво обичате" | `personal_choice` (points: 0) |
 | Парични упражнения (цени, ресто) | `dropdown_match` (never free text) |
+| "Свържете/проследете буквите по ред" | `connect_dots` (змия) |
+| "Намерете пътя в лабиринта" | `alphabet_maze` (интерактивна решетка) |
+| Нови думи БЕЗ картинки (международни думи и др.) | `illustrated_cards` (imageUrl: '') |
 
 ## Creating Exercises — ALWAYS Use Templates
 

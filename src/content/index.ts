@@ -3,6 +3,7 @@ export * from './types';
 
 // Lesson metadata for navigation
 export const lessonsMetadata = [
+  { id: 'lesson-00', number: 0, title: 'Азбука', hasTest: false },
   { id: 'lesson-01', number: 1, title: 'Здравейте', hasTest: false },
   { id: 'lesson-02', number: 2, title: 'Закуска', hasTest: false },
   { id: 'lesson-03', number: 3, title: 'В ресторанта', hasTest: true, testId: 'test-a1-1' },
