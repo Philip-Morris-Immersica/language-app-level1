@@ -119,17 +119,19 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
             </div>
 
             {/* Image */}
-            <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
-              <div className="relative w-full h-[120px] md:h-[150px] bg-white">
-                <Image
-                  src={card.imageUrl}
-                  alt={card.label}
-                  fill
-                  className="object-contain rounded-lg"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                />
+            {card.imageUrl && (
+              <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
+                <div className="relative w-full h-[120px] md:h-[150px] bg-white">
+                  <Image
+                    src={card.imageUrl}
+                    alt={card.label}
+                    fill
+                    className="object-contain rounded-lg"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Label */}
             <div className="text-center">

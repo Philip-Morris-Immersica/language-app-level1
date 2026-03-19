@@ -13,8 +13,14 @@ interface ChecklistItem {
   isTrue: boolean;
 }
 
+interface ReadingTextImage {
+  imageUrl: string;
+  label: string;
+}
+
 interface ReadingTextProps {
   audioUrl?: string;
+  images?: ReadingTextImage[];
   paragraphs: string[];
   showDictionary?: boolean;
   checklist?: {
@@ -24,7 +30,7 @@ interface ReadingTextProps {
   onComplete?: (isCorrect: boolean) => void;
 }
 
-export function ReadingText({ audioUrl, paragraphs, showDictionary, checklist, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, images, paragraphs, showDictionary, checklist, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -62,7 +68,7 @@ export function ReadingText({ audioUrl, paragraphs, showDictionary, checklist, o
             <Button
               variant="outline"
               className="px-5 py-3 rounded-lg font-semibold text-base shadow-sm active:scale-95 transition-all flex items-center gap-2 border-2 border-amber-400 text-amber-700 hover:bg-amber-50"
-              onClick={() => {/* Future: navigate to dictionary */}}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-vocabulary-drawer'))}
             >
               <span className="text-lg">📖</span>
               {t('exercise.dictionary')}
@@ -86,6 +92,24 @@ export function ReadingText({ audioUrl, paragraphs, showDictionary, checklist, o
               )}
             </Button>
           )}
+        </div>
+      )}
+
+      {images && images.length > 0 && (
+        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+          {images.map((img, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <img
+                src={img.imageUrl}
+                alt={img.label}
+                className="w-full rounded-lg shadow-sm object-cover max-h-48"
+                loading="lazy"
+              />
+              {img.label && (
+                <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
+              )}
+            </div>
+          ))}
         </div>
       )}
 

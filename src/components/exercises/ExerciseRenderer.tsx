@@ -25,6 +25,7 @@ import { ReadingText } from './ReadingText';
 import { TrueFalse } from './TrueFalse';
 import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
+import { TableFill } from './TableFill';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -211,6 +212,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ReadingText
           audioUrl={exercise.audioUrl}
+          images={exercise.images}
           paragraphs={exercise.paragraphs}
           showDictionary={exercise.showDictionary}
           checklist={exercise.checklist}
@@ -242,6 +244,15 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <ConnectDots
           dots={exercise.dots}
           onComplete={onComplete}
+        />
+      );
+
+    case 'table_fill':
+      return wrap(
+        <TableFill
+          tables={exercise.tables}
+          onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 

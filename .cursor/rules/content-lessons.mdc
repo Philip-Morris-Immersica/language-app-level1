@@ -43,6 +43,16 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 - The `order` field must match the exact sequence in the PDF
 - Informational sections (НОВИ ДУМИ, ГРАМАТИКА, ДИАЛОЗИ) have no `points` field
 - Actual exercises have a `points` field
+- **`points` = number of blanks/questions, NOT number of sentences.** For `table_fill`, points = number of rows.
+- **Do NOT duplicate examples as interactive items.** If `isExample: true`, it must not count toward points.
+- Instructions must be **verbatim from the textbook** — do not rephrase or paraphrase.
+- When a lesson has **multiple sections of the same type**, always number them: НОВИ ДУМИ 1, НОВИ ДУМИ 2... / ГРАМАТИКА 1, 2... / ДИАЛОЗИ 1, 2...
+- All НОВИ ДУМИ sections must use instruction: `'Натиснете за произношение.'`
+- Dialogues: verify **every line** is complete and matches the textbook exactly.
+- **Currency rule:** лева → евро, стотинки → евроцента. All monetary exercises must use `dropdown` input (not free text).
+- Short fill-in-blank exercises (e.g., два/две, какъв/каква) → use `layout: 'two-column'`.
+- `content.ts` dialogues **must match** `exercises.ts` dialogues exactly (same lines, same prices, same currency).
+- Empty `imageUrl: ''` is safe — components (`IllustratedCards`, `GrammarWithExamples`) skip rendering when empty.
 
 ## Exercise Types — 5 Categories
 
@@ -52,11 +62,31 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 
 **ДИАЛОЗИ И ТЕКСТОВЕ (FREQUENT):** `dialogues`, `reading_text`
 
-**УПРАЖНЕНИЯ — Чести (FREQUENT):** `fill_in_blank`, `workbook_fill_blank`, `multiple_choice`, `dropdown_match`, `word_order`
+**УПРАЖНЕНИЯ — Чести (FREQUENT):** `fill_in_blank`, `workbook_fill_blank`, `multiple_choice`, `dropdown_match`, `word_order`, `table_fill`, `personal_choice`
 
 **УПРАЖНЕНИЯ — Редки (RARE):** `match_pairs`, `letter_choice`, `image_labeling`, `syllable_blocks`, `word_search`, `true_false`, `dialogue_builder`, `fill_with_images`
 
 **Not yet implemented (show placeholder):** `verb_conjugation`, `number_writing`, `dialogue_reading`, `text_comprehension`, `listening`
+
+## Textbook → Exercise Type Mappings
+
+Use these mappings when digitalizing textbook exercises:
+
+| Textbook pattern | Exercise type |
+|---|---|
+| "Подредете буквите" | `syllable_blocks` |
+| "Открийте скритите думи" | `word_search` |
+| "Подредете фразите" | `dialogue_builder` |
+| "Вярно или грешно" | `true_false` |
+| "Отговорете на въпросите" | `dropdown_match` |
+| "Напишете в правилната форма" | `workbook_fill_blank` |
+| Граматична таблица | `grammar_table` |
+| Нови думи с картинки | `illustrated_cards` |
+| Диалози | `dialogues` |
+| "Прочетете текста" | `reading_text` |
+| "Попълнете таблицата" (род/мн.ч.) | `table_fill` |
+| "Какво обичате / Напишете какво обичате" | `personal_choice` (points: 0) |
+| Парични упражнения (цени, ресто) | `dropdown_match` (never free text) |
 
 ## Creating Exercises — ALWAYS Use Templates
 

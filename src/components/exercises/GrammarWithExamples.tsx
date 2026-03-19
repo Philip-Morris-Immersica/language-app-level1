@@ -102,12 +102,14 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
             className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {/* Image */}
-            <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
-              <ImageWithFallback
-                src={example.imageUrl}
-                alt={example.lines ? example.lines[0] : example.text}
-              />
-            </div>
+            {example.imageUrl && (
+              <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
+                <ImageWithFallback
+                  src={example.imageUrl}
+                  alt={example.lines ? example.lines[0] : example.text}
+                />
+              </div>
+            )}
 
             {/* Text section */}
             <div className="mt-4 text-center space-y-2">

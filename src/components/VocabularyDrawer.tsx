@@ -58,6 +58,12 @@ export function VocabularyDrawer({ vocabulary, lessonTitle }: VocabularyDrawerPr
   }, [isOpen, close]);
 
   useEffect(() => {
+    const open = () => setIsOpen(true);
+    window.addEventListener('open-vocabulary-drawer', open);
+    return () => window.removeEventListener('open-vocabulary-drawer', open);
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
