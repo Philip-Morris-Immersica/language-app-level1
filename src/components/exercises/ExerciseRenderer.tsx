@@ -65,6 +65,12 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   // Sequential prefix: "1. НОВИ ДУМИ", "8. ГРАМАТИКА", "3. УПРАЖНЕНИЕ"
   const resolvedTitle = number != null ? `${number}. ${baseTitle}` : baseTitle;
 
+  /** Some child components only call onComplete(isCorrect); normalize to (correct, score). */
+  function wrapOneArgOnComplete(scoreIfCorrect: number) {
+    if (!onComplete) return undefined;
+    return (isCorrect: boolean) => onComplete(isCorrect, isCorrect ? scoreIfCorrect : 0);
+  }
+
   function wrap(component: React.ReactNode) {
     return (
       <div>
@@ -83,6 +89,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <WorkbookFillBlank
           sentences={exercise.sentences}
           layout={exercise.layout}
+          imageUrl={exercise.imageUrl}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
@@ -99,6 +106,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <DropdownMatch
           questions={exercise.questions}
+          imageUrl={exercise.imageUrl}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -110,14 +118,17 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           imageUrl={exercise.imageUrl}
           items={exercise.items}
           columns={exercise.columns}
-          onComplete={onComplete}
+          onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.items.length)}
         />
       );
 
     case 'letter_choice':
       return wrap(
         <LetterChoice
-          puzzles={exercise.puzzles}
+          puzzles={exercise.puzzles.map((p) => ({
+            ...p,
+            availableLetters: p.availableLetters ?? p.correctLetters,
+          }))}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -136,6 +147,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <SyllableBlocks
           puzzles={exercise.puzzles}
+          imageUrl={exercise.imageUrl}
           onComplete={onComplete}
         />
       );
@@ -217,7 +229,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           paragraphs={exercise.paragraphs}
           showDictionary={exercise.showDictionary}
           checklist={exercise.checklist}
-          onComplete={onComplete}
+          onComplete={wrapOneArgOnComplete(
+            exercise.checklist?.items.length ?? exercise.points ?? 1,
+          )}
         />
       );
 
@@ -225,6 +239,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <TrueFalse
           sentences={exercise.sentences}
+          imageUrl={exercise.imageUrl}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -244,7 +259,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ConnectDots
           dots={exercise.dots}
-          onComplete={onComplete}
+          onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.dots.length)}
         />
       );
 
@@ -255,7 +270,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           correctPath={exercise.correctPath}
           startImageUrl={exercise.startImageUrl}
           endImageUrl={exercise.endImageUrl}
-          onComplete={onComplete}
+          onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.correctPath.length)}
         />
       );
 

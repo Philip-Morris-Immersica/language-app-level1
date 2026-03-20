@@ -12,6 +12,23 @@ interface MatchPairsProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
+function isImagePath(s: string): boolean {
+  return (
+    (s.startsWith('/') || s.startsWith('http')) &&
+    /\.(jpg|jpeg|png|gif|webp)$/i.test((s.split('?')[0] ?? ''))
+  );
+}
+
+function MatchRightDisplay({ value }: { value: string }) {
+  if (isImagePath(value)) {
+    return (
+      // Public assets; sizes vary — keep flexible for touch targets
+      <img src={value} alt="" className="max-h-14 sm:max-h-16 w-auto mx-auto object-contain" />
+    );
+  }
+  return <span className="break-words">{value}</span>;
+}
+
 export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exercise.id);
@@ -103,14 +120,15 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
               onClick={() => handleRightClick(index)}
               disabled={isUsed || !selectedLeft}
               className={`
-                px-4 py-2 rounded-lg border-2 text-base font-medium min-h-[44px] shadow-sm
+                px-3 py-2 rounded-lg border-2 text-base font-medium min-h-[44px] min-w-[44px] shadow-sm
+                flex items-center justify-center
                 transition-all active:scale-95
                 ${isUsed ? 'opacity-30 cursor-not-allowed border-gray-300 bg-gray-100' : ''}
                 ${!selectedLeft && !isUsed ? 'opacity-50 cursor-not-allowed border-gray-300 bg-white' : ''}
                 ${selectedLeft && !isUsed ? 'border-[#6B7B3F] bg-white hover:border-[#8FC412] hover:bg-[#EEF7C8] cursor-pointer' : ''}
               `}
             >
-              {rightText}
+              <MatchRightDisplay value={rightText} />
             </button>
           );
         })}
@@ -144,13 +162,14 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                   onClick={() => handleLeftClick(pair.id)}
                   className={`
                     w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
+                    flex items-center justify-center min-h-[52px]
                     transition-all cursor-pointer
                     ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
                     ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
                     ${validationResult === null || validationResult === undefined ? 'border-[#6B7B3F] bg-white hover:bg-gray-50' : ''}
                   `}
                 >
-                  {matchedText}
+                  <MatchRightDisplay value={matchedText} />
                 </div>
               ) : (
                 <button

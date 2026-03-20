@@ -24,9 +24,10 @@ interface DropdownMatchProps {
   questions: DropdownQuestion[];
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
+  imageUrl?: string;
 }
 
-export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: DropdownMatchProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
@@ -69,6 +70,15 @@ export function DropdownMatch({ questions, onComplete, exerciseId }: DropdownMat
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {imageUrl ? (
+        <div className="mb-6 flex justify-center">
+          <img
+            src={imageUrl}
+            alt=""
+            className="max-w-full max-h-[min(420px,70vh)] w-auto rounded-lg shadow-md object-contain border border-gray-100"
+          />
+        </div>
+      ) : null}
       <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
         {questions.map((question) => (
           <div

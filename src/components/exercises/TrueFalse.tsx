@@ -13,13 +13,21 @@ interface TrueFalseSentence {
 
 interface TrueFalseProps {
   sentences: TrueFalseSentence[];
+  imageUrl?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
 
 type Answer = 'true' | 'false' | null;
 
-export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps) {
+function isImagePath(s: string): boolean {
+  return (
+    (s.startsWith('/') || s.startsWith('http')) &&
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(s.split('?')[0] ?? '')
+  );
+}
+
+export function TrueFalse({ sentences, imageUrl, onComplete, exerciseId }: TrueFalseProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
@@ -58,6 +66,15 @@ export function TrueFalse({ sentences, onComplete, exerciseId }: TrueFalseProps)
 
   return (
     <div className="space-y-2">
+      {imageUrl && isImagePath(imageUrl) && (
+        <div className="mb-4 rounded-xl border-2 border-gray-200 bg-gray-50 p-3 overflow-auto">
+          <img
+            src={imageUrl}
+            alt=""
+            className="max-h-[min(55vh,420px)] w-full max-w-2xl mx-auto object-contain"
+          />
+        </div>
+      )}
       {sentences.map((sentence, index) => {
         const answer = answers[sentence.id];
         const isAnsweredCorrectly = checked && (answer === 'true') === sentence.isTrue;

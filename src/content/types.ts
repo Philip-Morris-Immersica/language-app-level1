@@ -27,7 +27,8 @@ export type ExerciseType =
   | 'true_false'           // True/False sentences with ✓/✗ buttons
   | 'personal_choice'      // Interactive personal preference (no right/wrong)
   | 'connect_dots'         // Connect dots in order (snake-style alphabet sequence)
-  | 'alphabet_maze';       // Interactive letter grid — tap letters in alphabetical order
+  | 'alphabet_maze'        // Interactive letter grid — tap letters in alphabetical order
+  | 'table_fill';          // Dialogue paragraphs + fillable table cells (dropdowns)
 
 // Base exercise interface
 export interface BaseExercise {
@@ -159,6 +160,7 @@ export interface ListeningExercise extends BaseExercise {
 
 export interface SyllableBlocksExercise extends BaseExercise {
   type: 'syllable_blocks';
+  imageUrl?: string;
   puzzles: {
     id: string;
     syllables: string[];     // ['-РИ-', '-Я', '-ГА-', '-БЪЛ-']
@@ -262,6 +264,8 @@ export interface DialogueBuilderExercise extends BaseExercise {
 
 export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
+  /** Опционална референтна снимка (напр. карта от учебника). */
+  imageUrl?: string;
   questions: {
     id: string;
     left: string;            // 'Добро', 'аз'
@@ -285,6 +289,8 @@ export interface DragToColumnsExercise extends BaseExercise {
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  /** Опционална снимка (напр. карта за упр. 19). */
+  imageUrl?: string;
   listeningText?: string;
   sentences: {
     text: string;
@@ -324,6 +330,8 @@ export interface ReadingTextExercise extends BaseExercise {
 
 export interface TrueFalseExercise extends BaseExercise {
   type: 'true_false';
+  /** Опорна снимка (напр. карта от учебника). */
+  imageUrl?: string;
   sentences: {
     id: string;
     text: string;

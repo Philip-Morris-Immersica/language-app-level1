@@ -35,6 +35,7 @@ interface WordPuzzle {
 
 interface SyllableBlocksProps {
   puzzles: WordPuzzle[];
+  imageUrl?: string;
   onComplete?: (correct: boolean, score: number) => void;
 }
 
@@ -139,9 +140,18 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
   );
 }
 
-export function SyllableBlocks({ puzzles }: SyllableBlocksProps) {
+export function SyllableBlocks({ puzzles, imageUrl }: SyllableBlocksProps) {
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {imageUrl ? (
+        <div className="mb-6 flex justify-center">
+          <img
+            src={imageUrl}
+            alt=""
+            className="max-w-full max-h-[200px] w-auto rounded-lg border border-gray-100 object-contain opacity-90"
+          />
+        </div>
+      ) : null}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {puzzles.map(puzzle => (
           <PuzzleCard key={puzzle.id} puzzle={puzzle} />

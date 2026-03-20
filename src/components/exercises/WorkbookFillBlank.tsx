@@ -24,6 +24,7 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  imageUrl?: string;
   listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
@@ -41,6 +42,7 @@ function parseText(text: string): { type: 'text' | 'blank'; value: string }[] {
 export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
+  imageUrl,
   listeningText,
   onComplete,
   exerciseId,
@@ -387,6 +389,16 @@ export function WorkbookFillBlank({
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {imageUrl ? (
+        <div className="mb-6 flex justify-center">
+          <img
+            src={imageUrl}
+            alt=""
+            className="max-w-full max-h-[min(420px,55vh)] w-auto rounded-lg shadow-md border border-gray-100 object-contain"
+          />
+        </div>
+      ) : null}
+
       {listeningText && (
         <div className="mb-6 flex items-center gap-3">
           <Button
