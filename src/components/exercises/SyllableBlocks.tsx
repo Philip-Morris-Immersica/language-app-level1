@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -20,6 +20,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useT } from '@/i18n/useT';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface SyllableBlock {
   syllable: string;
@@ -39,6 +40,7 @@ interface SyllableBlocksProps {
   imageUrl?: string;
   columns?: number;
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
 function cleanSyllable(syllable: string): string {
@@ -85,7 +87,15 @@ function SortableBlock({ id, syllable }: { id: string; syllable: string }) {
 }
 
 // One puzzle card (independent DndContext per puzzle)
-function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
+function PuzzleCard({
+  puzzle,
+  showHint,
+  onCompleteChange,
+}: {
+  puzzle: WordPuzzle;
+  showHint?: boolean;
+  onCompleteChange?: (isCorrect: boolean) => void;
+}) {
   const t = useT();
   const [blocks, setBlocks] = useState<SyllableBlock[]>(() =>
     puzzle.syllables.map((syl, idx) => ({
@@ -116,6 +126,14 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
 
   const currentWord = blocks.map(b => b.syllable).join('');
   const isCorrect = currentWord.toLowerCase().replace(/\s/g, '') === puzzle.correctWord.toLowerCase().replace(/\s/g, '');
+
+  const prevCorrect = useRef(false);
+  useEffect(() => {
+    if (isCorrect !== prevCorrect.current) {
+      prevCorrect.current = isCorrect;
+      onCompleteChange?.(isCorrect);
+    }
+  }, [isCorrect, onCompleteChange]);
 
   return (
     <div className={`bg-white rounded-xl border-2 p-3 md:p-4 shadow-sm transition-colors ${isCorrect ? 'border-green-400 bg-green-50' : 'border-gray-300'}`}>
@@ -150,7 +168,7 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
         <p className="text-center text-xs font-bold text-green-600 mt-2">✓ {puzzle.correctWord}</p>
       )}
 
-      {!puzzle.imageUrl && !isCorrect && (
+      {!puzzle.imageUrl && !isCorrect && showHint && (
         <div className="text-center pt-2 border-t border-gray-200 mt-2">
           <p className="text-xs text-gray-400 italic">{t('exercise.correctAnswer')}</p>
           <p className="font-bold text-sm text-[#6B8543]">{puzzle.correctWord}</p>
@@ -167,23 +185,46 @@ const columnClasses: Record<number, string> = {
   4: 'grid-cols-2 md:grid-cols-4',
 };
 
-export function SyllableBlocks({ puzzles, imageUrl, columns }: SyllableBlocksProps) {
+export function SyllableBlocks({ puzzles, imageUrl, columns, exerciseId }: SyllableBlocksProps) {
   const gridClass = columns ? (columnClasses[columns] || `grid-cols-2 md:grid-cols-${columns}`) : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const s = savedState as { completed?: Record<string, boolean> } | undefined;
+
+  const [completed, setCompleted] = useState<Record<string, boolean>>(() => s?.completed ?? {});
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    saveState({ completed });
+  }, [completed, saveState]);
+
+  const handleCompleteChange = (puzzleId: string, isCorrect: boolean) => {
+    setCompleted(prev => {
+      if (prev[puzzleId] === isCorrect) return prev;
+      return { ...prev, [puzzleId]: isCorrect };
+    });
+  };
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-6 shadow-md">
-      {imageUrl ? (
-        <div className="mb-6 flex justify-center">
+      {imageUrl && (
+        <div className="mb-6">
           <img
             src={imageUrl}
             alt=""
-            className="max-w-full max-h-[200px] w-auto rounded-lg border border-gray-100 object-contain opacity-90"
+            className="w-full max-h-96 object-cover rounded-xl border border-gray-200 shadow-sm"
           />
         </div>
-      ) : null}
+      )}
       <div className={`grid ${gridClass} gap-3 md:gap-4`}>
         {puzzles.map(puzzle => (
-          <PuzzleCard key={puzzle.id} puzzle={puzzle} />
+          <PuzzleCard
+            key={puzzle.id}
+            puzzle={puzzle}
+            showHint={!imageUrl}
+            onCompleteChange={(isCorrect) => handleCompleteChange(puzzle.id, isCorrect)}
+          />
         ))}
       </div>
     </div>

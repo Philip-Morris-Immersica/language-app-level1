@@ -96,11 +96,15 @@ function getTier(pct: number): 'low' | 'mid' | 'high' {
   return 'high';
 }
 
-const tierMessages: Record<'low' | 'mid' | 'high', string> = {
-  low: 'Нужна е още практика. Прегледайте уроци 1, 2 и 3 отново и обърнете внимание на по-слабите компоненти.',
-  mid: 'Добро начало! Имате основни познания, но трябва да упражнявате повече някои компоненти.',
-  high: 'Отлично! Справяте се много добре с материала от уроци 1, 2 и 3. Продължавайте напред!',
-};
+function buildTierMessages(testTitle: string): Record<'low' | 'mid' | 'high', string> {
+  // Extract "урок 4" / "уроци 1, 2 и 3" from the title "Тест – ..."
+  const lessonLabel = testTitle.replace(/^Тест\s*[–-]\s*/i, '');
+  return {
+    low: `Нужна е още практика. Прегледайте ${lessonLabel} отново и обърнете внимание на по-слабите компоненти.`,
+    mid: 'Добро начало! Имате основни познания, но трябва да упражнявате повече някои компоненти.',
+    high: `Отлично! Справяте се много добре с материала от ${lessonLabel}. Продължавайте напред!`,
+  };
+}
 
 const tierColors: Record<'low' | 'mid' | 'high', { bg: string; border: string; text: string; bar: string }> = {
   low:  { bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-700',    bar: 'bg-red-400' },
@@ -115,7 +119,7 @@ interface TestScoreSummaryProps {
 export function TestScoreSummary({ testData }: TestScoreSummaryProps) {
   const { savedStates } = useExercisePersistenceContext();
   const t = useT();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   const sectionScores = testData.sections.map(section => ({
     section,
@@ -128,10 +132,12 @@ export function TestScoreSummary({ testData }: TestScoreSummaryProps) {
   const pct = totalMax > 0 ? Math.round((totalEarned / totalMax) * 100) : 0;
   const tier = getTier(pct);
   const colors = tierColors[tier];
+  const tierMessages = buildTierMessages(testData.title);
 
-  const hasSomeAnswers = sectionScores.some(s => s.earned > 0 || s.completed);
+  // Show as soon as any exercise state is saved (even before submission)
+  const hasAnyState = Object.keys(savedStates).length > 0;
 
-  if (!hasSomeAnswers) {
+  if (!hasAnyState) {
     return null;
   }
 

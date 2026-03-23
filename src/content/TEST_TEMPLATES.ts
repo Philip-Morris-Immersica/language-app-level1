@@ -83,10 +83,19 @@ export const TEMPLATE_LISTENING = `
 // ═══════════════════════════════════════════════════════════════════════════════
 // КОМПОНЕНТ СЛУШАНЕ (N т.)
 // hideText: true → текстът НЕ се вижда, има Play бутон под всяка картинка.
+//
+// ВАРИАНТ А (с говорители и снимки):
+//   images[] + paragraphs[] → всяка снимка получава собствен TTS бутон.
+//   Индексите съответстват: paragraphs[i] → images[i].
+//
+// ВАРИАНТ Б (без снимки — диалог между неназовани говорители):
+//   Пропуснете images[] изцяло; добавете целия текст в paragraphs[0].
+//   Компонентът ще покаже един глобален TTS бутон.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const listeningExercises: Exercise[] = [
-  // ─── Текст за слушане (скрит) ─────────────────────────────────────────────
+
+  // ─── ВАРИАНТ А: Текст за слушане СЪС снимки на говорителите ─────────────
   {
     id: 't0N-sl-text',                              // REPLACE N = test number
     type: 'reading_text',
@@ -105,6 +114,19 @@ export const listeningExercises: Exercise[] = [
       'Здравейте, аз съм ... .',
     ],
   } as ReadingTextExercise,
+
+  // ─── ВАРИАНТ Б: Текст за слушане БЕЗ снимки (диалог / разказ) ────────────
+  // {
+  //   id: 't0N-sl-text',
+  //   type: 'reading_text',
+  //   title: 'КОМПОНЕНТ СЛУШАНЕ',
+  //   instruction: 'Слушайте текста и отговорете на въпросите с ДА или НЕ.',
+  //   order: 1,
+  //   hideText: true,
+  //   paragraphs: [
+  //     'Целият текст за слушане е тук — един параграф, един TTS бутон.',
+  //   ],
+  // } as ReadingTextExercise,
 
   // ─── Вярно / Невярно ─────────────────────────────────────────────────────
   {
@@ -257,38 +279,115 @@ export const grammarExercises: Exercise[] = [
       { text: 'пет _______', blanks: [1], correctAnswers: ['5'], options: ['3', '5', '7', '9'] },
     ],
   } as WorkbookFillBlankExercise,
+
+  // ─── PATTERN: Контекстна картинка (2+ изображения над упражнението) ──────
+  //
+  // workbook_fill_blank поддържа само ЕДНО imageUrl.
+  // Ако имате 2+ картинки (напр. ЯМ + ПИЯ), вмъкнете reading_text ПРЕДИ упражнението:
+  //
+  // {
+  //   id: 't0N-gr-ctx',
+  //   type: 'reading_text',
+  //   order: 9,
+  //   noTranslation: true,
+  //   paragraphs: [],                                // ← няма текст, само картинки
+  //   images: [
+  //     { imageUrl: '/assets/test-a1-N/gramatika/image1.jpg', label: '' },
+  //     { imageUrl: '/assets/test-a1-N/gramatika/image2.jpg', label: '' },
+  //   ],
+  // } as ReadingTextExercise,
+  //
+  // После workbook_fill_blank НЕ получава imageUrl — снимките идват от контекста горе.
+
+  // ─── PATTERN: Подреди диалога (dialogue ordering) ────────────────────────
+  //
+  // НЕ използвайте dialogue_builder (не е scoreable).
+  // Използвайте workbook_fill_blank: студентите пишат номер в падащо меню.
+  // Първият ред е isExample: true (номер 1, даден).
+  //
+  // {
+  //   id: 't0N-gr-dialog',
+  //   type: 'workbook_fill_blank',
+  //   instruction: 'Подредете диалога. Напишете номера на репликите в правилен ред.',
+  //   order: 10,
+  //   points: 5,                                     // брой редове без примера
+  //   layout: 'single',
+  //   imageUrl: '/assets/test-a1-N/gramatika/context.jpg',
+  //   sentences: [
+  //     { text: '1. — Добър ден! (Примерен ред)', blanks: [], correctAnswers: [], isExample: true },
+  //     { text: '_______ — Добър ден! Имате ли ...?', blanks: [0], correctAnswers: ['2'], options: ['2','3','4','5','6'] },
+  //     { text: '_______ — Да, имаме.', blanks: [0], correctAnswers: ['3'], options: ['2','3','4','5','6'] },
+  //     // ... продължете за всеки ред
+  //   ],
+  // } as WorkbookFillBlankExercise,
 ];
 `;
 
-// ─── 3d. ПИСАНЕ: syllable_blocks с imageUrl per puzzle ──────────────────────
+// ─── 3d. ПИСАНЕ: syllable_blocks ─────────────────────────────────────────────
+//
+// ВАРИАНТ А — отделна картинка за всяка дума (default, test-a1-1 стил)
+// ВАРИАНТ Б — една споделена сцена отгоре, без imageUrl в пъзелите (test-a1-2 стил)
+//   Когато е налична само обща сцена (напр. кошница с продукти):
+//   1. Вмъкнете reading_text (noTranslation: true, images: [...], paragraphs: []) преди syllable_blocks.
+//   2. Премахнете imageUrl от всички puzzles.
+//   3. Буквите/сричките ТРЯБВА да са детерминирано разбъркани (НЕ random shuffle):
+//      → Преместете ПЪРВАТА буква/сричка в КРАЯ.
+//      Пример: 'домат' ['д','о','м','а','т'] → ['о','м','а','т','д']
 
 export const TEMPLATE_WRITING = `
 // ═══════════════════════════════════════════════════════════════════════════════
 // КОМПОНЕНТ ПИСАНЕ (N т.)
-// syllable_blocks с columns: 3 и imageUrl за всеки puzzle.
+// syllable_blocks с columns: 3.
 // Едносрични думи → отделни букви. Многосрични → срички.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const writingExercises: Exercise[] = [
+
+  // ─── ВАРИАНТ А: Индивидуална картинка за всяка дума ──────────────────────
   {
     id: 't0N-pi-spell',                             // REPLACE N
     type: 'syllable_blocks',
     instruction: 'Подредете буквите, за да получите думата на картинката.',
     order: 10,
     points: 17,                                      // REPLACE: 1 точка на puzzle
-    columns: 3,                                      // 3 колони × N реда
+    columns: 3,
     puzzles: [
-      // REPLACE: за всяка дума — imageUrl + разбъркани syllables + correctWord
-
-      // Примери за едносрична дума (отделни букви):
+      // Едносрична дума (отделни букви):
       { id: 'p-chay', imageUrl: '/assets/test-a1-N/pisane/chay.jpg',
         syllables: ['й', 'а', 'ч'], correctWord: 'чай' },
 
-      // Примери за многосрична дума (срички):
+      // Многосрична дума (срички):
       { id: 'p-kiselo-mlyako', imageUrl: '/assets/test-a1-N/pisane/kiselo-mlyako.jpg',
         syllables: ['ки', 'се', 'ло', 'мля', 'ко'], correctWord: 'кисело мляко' },
     ],
   } as SyllableBlocksExercise,
+
+  // ─── ВАРИАНТ Б: Споделена сцена отгоре, без индивидуални картинки ─────────
+  // 1. Показва голяма снимка на сцената (напр. кошница с продукти):
+  // {
+  //   id: 't0N-pi-img',
+  //   type: 'reading_text',
+  //   order: 10,
+  //   noTranslation: true,
+  //   paragraphs: [],
+  //   images: [{ imageUrl: '/assets/test-a1-N/pisane/scene.jpg', label: '' }],
+  // } as ReadingTextExercise,
+  //
+  // 2. Само блокчета с букви/срички, БЕЗ imageUrl:
+  // {
+  //   id: 't0N-pi-spell',
+  //   type: 'syllable_blocks',
+  //   instruction: 'Намерете продуктите в кошницата и наредете буквите, за да получите думата.',
+  //   order: 11,
+  //   points: 10,
+  //   columns: 3,
+  //   puzzles: [
+  //     // Детерминирано разбъркване: ПЪРВАТА буква/сричка → КЪМ КРАЯ
+  //     // 'домат' → ['д','о','м','а','т'] → scrambled: ['о','м','а','т','д']
+  //     { id: 'p-domat', syllables: ['о','м','а','т','д'], correctWord: 'домат' },
+  //     { id: 'p-limon', syllables: ['и','м','о','н','л'], correctWord: 'лимон' },
+  //   ],
+  // } as SyllableBlocksExercise,
 ];
 `;
 
@@ -323,16 +422,22 @@ const testFolderMap: Record<string, string> = {
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ██  TEMPLATE 5 — Score Tier Messages (for customization per test)
+// ██  TEMPLATE 5 — TestScoreSummary Behavior (automatic — no config needed)
 // ─────────────────────────────────────────────────────────────────────────────
 //
-// By default TestScoreSummary uses hardcoded messages referencing "уроци 1, 2 и 3".
-// For new tests, update the tierMessages object in TestScoreSummary.tsx or
-// make it dynamic based on testData. Current messages:
+// TestScoreSummary renders automatically at the bottom of every test page.
+// NO manual configuration is needed per test — it reads from testData.
 //
-// low  (0–50%):  "Нужна е още практика. Прегледайте уроци X отново и обърнете внимание на по-слабите компоненти."
-// mid  (51–75%): "Добро начало! Имате основни познания, но трябва да упражнявате повече някои компоненти."
-// high (76–100%): "Отлично! Справяте се много добре с материала от уроци X. Продължавайте напред!"
+// Behavior:
+// • Appears as soon as ANY exercise state is saved (not just after submission)
+// • Summary is EXPANDED by default — students see the breakdown immediately
+// • Per-section progress bars update in real time as answers are entered
+// • Sections below 50% are highlighted in red
+//
+// Tier messages are DYNAMIC — extracted from testData.title via buildTierMessages():
+// • low  (0–50%):   "Нужна е още практика. Прегледайте [label] отново ..."
+// • mid  (51–75%):  "Добро начало! Имате основни познания ..."
+// • high (76–100%): "Отлично! Справяте се много добре с материала от [label]."
 //
 // Score calculation per exercise type:
 // ┌─────────────────────┬────────────────────────────────────────────────────┐

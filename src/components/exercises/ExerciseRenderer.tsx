@@ -150,6 +150,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           imageUrl={exercise.imageUrl}
           columns={exercise.columns}
           onComplete={onComplete}
+          exerciseId={exercise.id}
         />
       );
 

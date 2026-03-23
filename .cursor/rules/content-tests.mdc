@@ -31,9 +31,10 @@ After creating the files, register the test in [src/content/index.ts](mdc:src/co
 ## Asset Paths
 
 Assets go in `/public/assets/test-a1-N/` with subfolders:
-- `slushane/` — listening section images
-- `chetene/` — reading section images
-- `pisane/` — writing section food/object images
+- `slushane/` — listening section images (speaker photos)
+- `chetene/` — reading section images (dialog photos, context images)
+- `gramatika/` — grammar section context images (decorative, shown above exercise)
+- `pisane/` — writing section images (individual food items OR shared basket/scene)
 
 Source files on developer machine:
 `C:\Users\Work Account\Desktop\CURSOR\a1-files\lessons\test-lessons-X-Y\`
@@ -68,6 +69,7 @@ Section ГОВОРЕНЕ is excluded from digital tests.
 
 - `reading_text` with **`hideText: true`** — text hidden, TTS Play button per image
 - Each image gets its own TTS button underneath (paragraphs[i] maps to images[i])
+- **If no speaker images exist** (e.g. dialogue between multiple unnamed speakers): omit `images` array entirely; use a single paragraph with the full listening text — the component will show one global TTS button
 - `true_false` with **`model`** — shows greyed-out example row before questions
 - Instruction: `'Слушайте текста и отговорете на въпросите с ДА или НЕ.'`
 
@@ -86,14 +88,37 @@ Section ГОВОРЕНЕ is excluded from digital tests.
 - Verb "съм": options = `['съм', 'си', 'е', 'сме', 'сте', 'са']` for every sentence
 - `word_order` and `multiple_choice` work the same as in lessons
 
+#### Grammar context images
+
+- `workbook_fill_blank` supports a single `imageUrl` field — shown above the sentences
+- **If an exercise needs 2+ context images** (e.g. ЯМ + ПИЯ with two illustrations): insert a `reading_text` with `noTranslation: true` immediately BEFORE the `workbook_fill_blank`. Set `paragraphs: []` and list all images in the `images` array. The `workbook_fill_blank` itself gets no `imageUrl`.
+- Context images live in `/public/assets/test-a1-N/gramatika/`
+
+#### Dialogue ordering exercise
+
+- **Use `workbook_fill_blank` (NOT `dialogue_builder`)** so it is scoreable
+- First line is `isExample: true` (number 1, given to the student)
+- Each remaining line gets a number dropdown: `options: ['2','3','4','5','6','7']`
+- Instruction: `'Подредете диалога. Напишете номера на репликите в правилен ред.'`
+- `layout: 'single'`, optional `imageUrl` for context photo
+
 ### ПИСАНЕ (Writing)
 
+Two valid patterns depending on available images:
+
+#### Pattern A — Individual images per puzzle (default, test-a1-1 style)
 - `syllable_blocks` with **`imageUrl` per puzzle** and **`columns: 3`**
 - Each puzzle card shows: image on top → scrambled letters below → green border on correct
 - No separate `illustrated_cards` exercise — images are embedded in puzzles
 - Single-word items: individual letter blocks (`['и', 'б', 'ц', 'а', 'н', 'а']`)
 - Multi-word items: syllable blocks (`['ки', 'се', 'ло', 'мля', 'ко']`)
 - No food labels shown — student must figure out the word from the image
+
+#### Pattern B — Single shared scene image (test-a1-2 style, when only one image exists)
+- Add a `reading_text` with `noTranslation: true` BEFORE the `syllable_blocks` — this shows the scene image prominently at the top (`paragraphs: []`, one image in `images` array)
+- The `syllable_blocks` puzzles have **NO `imageUrl`** — only letter/syllable blocks are shown
+- Instruction: e.g. `'Намерете продуктите в кошницата и наредете буквите, за да получите думата.'`
+- Scrambled letter order must be **fixed** (not random): move the first letter/syllable to the end. Example: `'домат'` → `['о', 'м', 'а', 'т', 'д']`
 
 ## metadata.ts Rules
 
@@ -140,22 +165,24 @@ The `TestScoreSummary` component ([src/components/TestScoreSummary.tsx](mdc:src/
 
 | Range | Color | Message (auto-translated via useTranslate) |
 |---|---|---|
-| 0–50% | 🔴 Red | "Нужна е още практика. Прегледайте уроци X отново и обърнете внимание на по-слабите компоненти." |
+| 0–50% | 🔴 Red | "Нужна е още практика. Прегледайте **[label]** отново и обърнете внимание на по-слабите компоненти." |
 | 51–75% | 🟡 Amber | "Добро начало! Имате основни познания, но трябва да упражнявате повече някои компоненти." |
-| 76–100% | 🟢 Green | "Отлично! Справяте се много добре с материала от уроци X. Продължавайте напред!" |
+| 76–100% | 🟢 Green | "Отлично! Справяте се много добре с материала от **[label]**. Продължавайте напред!" |
+
+The `[label]` placeholder is extracted automatically from `testData.title` via `buildTierMessages()` inside `TestScoreSummary.tsx` — **no manual changes needed per test**.
 
 ### Per-component breakdown
 
 - Progress bar + `earned/total` for each section with `maxPoints > 0`
 - Sections below 50% are highlighted in red with a "needs more practice" hint
-- Summary is collapsed by default, expands on click
-- Appears only after at least one exercise has been answered
+- Summary is **expanded by default** — students see the breakdown immediately
+- **Appears as soon as ANY exercise state is saved** (not just after submission or earned points)
 
 ### Rules for new tests
 
 - `totalPoints` in metadata MUST equal the sum of all section `maxPoints`
 - Sections with `maxPoints: 0` are excluded from the scoring breakdown
-- Tier messages can be customized per test by modifying `tierMessages` in TestScoreSummary
+- **Tier messages are automatic** — `buildTierMessages()` reads the lesson label from `testData.title`; no per-test configuration needed
 
 ## Creating Tests — ALWAYS Use Templates
 

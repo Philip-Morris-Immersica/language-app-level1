@@ -69,6 +69,8 @@ export function hasTestAfterLesson(lessonNumber: number) {
 // Map test IDs to content folder names
 const testFolderMap: Record<string, string> = {
   'test-a1-1': 'test-lessons-1-2-3',
+  'test-a1-2': 'test-lessons-4',
+  'test-a1-3': 'test-lessons-5-6',
 };
 
 export function getTestFolder(testId: string): string | undefined {
