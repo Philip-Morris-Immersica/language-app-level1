@@ -148,6 +148,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <SyllableBlocks
           puzzles={exercise.puzzles}
           imageUrl={exercise.imageUrl}
+          columns={exercise.columns}
           onComplete={onComplete}
         />
       );
@@ -228,6 +229,8 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           images={exercise.images}
           paragraphs={exercise.paragraphs}
           showDictionary={exercise.showDictionary}
+          hideText={exercise.hideText}
+          noTranslation={exercise.noTranslation}
           checklist={exercise.checklist}
           onComplete={wrapOneArgOnComplete(
             exercise.checklist?.items.length ?? exercise.points ?? 1,
@@ -240,6 +243,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <TrueFalse
           sentences={exercise.sentences}
           imageUrl={exercise.imageUrl}
+          model={exercise.model}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />

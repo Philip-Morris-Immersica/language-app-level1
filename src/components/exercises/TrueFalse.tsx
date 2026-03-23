@@ -11,9 +11,15 @@ interface TrueFalseSentence {
   isTrue: boolean;
 }
 
+interface TrueFalseModel {
+  text: string;
+  isTrue: boolean;
+}
+
 interface TrueFalseProps {
   sentences: TrueFalseSentence[];
   imageUrl?: string;
+  model?: TrueFalseModel;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
@@ -27,7 +33,7 @@ function isImagePath(s: string): boolean {
   );
 }
 
-export function TrueFalse({ sentences, imageUrl, onComplete, exerciseId }: TrueFalseProps) {
+export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }: TrueFalseProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
@@ -73,6 +79,22 @@ export function TrueFalse({ sentences, imageUrl, onComplete, exerciseId }: TrueF
             alt=""
             className="max-h-[min(55vh,420px)] w-full max-w-2xl mx-auto object-contain"
           />
+        </div>
+      )}
+      {model && (
+        <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-300 bg-gray-50 opacity-70">
+          <span className="text-gray-400 font-medium w-6 text-right shrink-0 text-[10px] italic leading-tight">
+            {t('exercise.model')}
+          </span>
+          <p className="flex-1 text-base text-gray-600 leading-snug italic">{model.text}</p>
+          <div className="flex gap-2 shrink-0">
+            <span className={`w-10 h-10 rounded-lg font-bold text-lg border-2 flex items-center justify-center ${
+              model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
+            }`}>✓</span>
+            <span className={`w-10 h-10 rounded-lg font-bold text-lg border-2 flex items-center justify-center ${
+              !model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
+            }`}>✗</span>
+          </div>
         </div>
       )}
       {sentences.map((sentence, index) => {

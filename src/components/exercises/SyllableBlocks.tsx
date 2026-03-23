@@ -31,11 +31,13 @@ interface WordPuzzle {
   syllables: string[];
   correctWord: string;
   hint?: string;
+  imageUrl?: string;
 }
 
 interface SyllableBlocksProps {
   puzzles: WordPuzzle[];
   imageUrl?: string;
+  columns?: number;
   onComplete?: (correct: boolean, score: number) => void;
 }
 
@@ -112,8 +114,21 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
     }
   };
 
+  const currentWord = blocks.map(b => b.syllable).join('');
+  const isCorrect = currentWord.toLowerCase().replace(/\s/g, '') === puzzle.correctWord.toLowerCase().replace(/\s/g, '');
+
   return (
-    <div className="bg-white rounded-xl border-2 border-gray-300 p-5 shadow-sm">
+    <div className={`bg-white rounded-xl border-2 p-3 md:p-4 shadow-sm transition-colors ${isCorrect ? 'border-green-400 bg-green-50' : 'border-gray-300'}`}>
+      {puzzle.imageUrl && (
+        <div className="flex justify-center mb-2">
+          <img
+            src={puzzle.imageUrl}
+            alt=""
+            className="w-full max-h-28 object-contain rounded-lg"
+            loading="lazy"
+          />
+        </div>
+      )}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -123,7 +138,7 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
           items={blocks.map(b => b.id)}
           strategy={horizontalListSortingStrategy}
         >
-          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6 min-h-[40px] md:min-h-[56px] items-center justify-center">
+          <div className="flex flex-wrap gap-1 md:gap-1.5 min-h-[36px] items-center justify-center">
             {blocks.map(block => (
               <SortableBlock key={block.id} id={block.id} syllable={block.syllable} />
             ))}
@@ -131,18 +146,32 @@ function PuzzleCard({ puzzle }: { puzzle: WordPuzzle }) {
         </SortableContext>
       </DndContext>
 
-      {/* Correct answer hint */}
-      <div className="text-center pt-3 border-t-2 border-gray-200">
-        <p className="text-xs text-gray-400 mb-1 italic">{t('exercise.correctAnswer')}</p>
-        <p className="font-bold text-lg text-[#6B8543]">{puzzle.correctWord}</p>
-      </div>
+      {isCorrect && (
+        <p className="text-center text-xs font-bold text-green-600 mt-2">✓ {puzzle.correctWord}</p>
+      )}
+
+      {!puzzle.imageUrl && !isCorrect && (
+        <div className="text-center pt-2 border-t border-gray-200 mt-2">
+          <p className="text-xs text-gray-400 italic">{t('exercise.correctAnswer')}</p>
+          <p className="font-bold text-sm text-[#6B8543]">{puzzle.correctWord}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-export function SyllableBlocks({ puzzles, imageUrl }: SyllableBlocksProps) {
+const columnClasses: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-2 md:grid-cols-3',
+  4: 'grid-cols-2 md:grid-cols-4',
+};
+
+export function SyllableBlocks({ puzzles, imageUrl, columns }: SyllableBlocksProps) {
+  const gridClass = columns ? (columnClasses[columns] || `grid-cols-2 md:grid-cols-${columns}`) : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
   return (
-    <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+    <div className="bg-white rounded-xl p-4 md:p-6 shadow-md">
       {imageUrl ? (
         <div className="mb-6 flex justify-center">
           <img
@@ -152,7 +181,7 @@ export function SyllableBlocks({ puzzles, imageUrl }: SyllableBlocksProps) {
           />
         </div>
       ) : null}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className={`grid ${gridClass} gap-3 md:gap-4`}>
         {puzzles.map(puzzle => (
           <PuzzleCard key={puzzle.id} puzzle={puzzle} />
         ))}

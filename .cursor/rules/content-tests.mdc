@@ -1,0 +1,173 @@
+---
+globs: src/content/tests/**
+---
+# Content & Tests Guide
+
+## Test vs Lesson — Key Differences
+
+Tests have **3 files only** (no `content.ts`, no `workbook.ts`):
+
+```
+src/content/tests/test-lessons-X-Y/
+  ├── metadata.ts     — id, number, afterLesson, title, totalPoints, introText
+  ├── exercises.ts    — ALL exercises grouped by section (listening, reading, grammar, writing)
+  └── index.ts        — assembles TestData with sections array
+```
+
+After creating the files, register the test in [src/content/index.ts](mdc:src/content/index.ts):
+- Add entry to `testFolderMap`
+- Verify the `navItems` array has the correct `label` for the sidebar
+
+## ID Naming Conventions
+
+| Element | Format | Example |
+|---|---|---|
+| Test | `test-a1-N` | `test-a1-1` |
+| Listening | `t0N-sl-xxx` | `t01-sl-text`, `t01-sl-tf` |
+| Reading | `t0N-ch-xxx` | `t01-ch-text`, `t01-ch-fill` |
+| Grammar | `t0N-gr-N` | `t01-gr-1`, `t01-gr-2` |
+| Writing | `t0N-pi-xxx` | `t01-pi-spell` |
+
+## Asset Paths
+
+Assets go in `/public/assets/test-a1-N/` with subfolders:
+- `slushane/` — listening section images
+- `chetene/` — reading section images
+- `pisane/` — writing section food/object images
+
+Source files on developer machine:
+`C:\Users\Work Account\Desktop\CURSOR\a1-files\lessons\test-lessons-X-Y\`
+
+## Test Structure — 4 Sections
+
+Every test has exactly 4 sections in this order:
+
+| Section | ID | Name | Typical types |
+|---|---|---|---|
+| 1. Слушане | `listening` | `КОМПОНЕНТ СЛУШАНЕ` | `reading_text` (hidden) + `true_false` |
+| 2. Четене | `reading` | `КОМПОНЕНТ ЧЕТЕНЕ` | `reading_text` (no translate) + `workbook_fill_blank` |
+| 3. Граматика | `grammar` | `КОМПОНЕНТ ГРАМАТИКА` | `workbook_fill_blank`, `word_order`, `multiple_choice` |
+| 4. Писане | `writing` | `КОМПОНЕНТ ПИСАНЕ` | `syllable_blocks` (with per-puzzle images) |
+
+Section ГОВОРЕНЕ is excluded from digital tests.
+
+## Test Coverage Map
+
+| Test ID | After lesson | Covers | Nav label |
+|---|---|---|---|
+| `test-a1-1` | 3 | Уроци 1, 2 и 3 | `уроци 1, 2 и 3` |
+| `test-a1-2` | 4 | Урок 4 | `урок 4` |
+| `test-a1-3` | 6 | Уроци 5 и 6 | `уроци 5 и 6` |
+| `test-a1-4` | 8 | Уроци 7 и 8 | `уроци 7 и 8` |
+| `test-a1-5` | 10 | Уроци 9 и 10 | `уроци 9 и 10` |
+| `test-a1-6` | 11 | Урок 11 | `урок 11` |
+
+## Test-Specific Exercise Rules
+
+### СЛУШАНЕ (Listening)
+
+- `reading_text` with **`hideText: true`** — text hidden, TTS Play button per image
+- Each image gets its own TTS button underneath (paragraphs[i] maps to images[i])
+- `true_false` with **`model`** — shows greyed-out example row before questions
+- Instruction: `'Слушайте текста и отговорете на въпросите с ДА или НЕ.'`
+
+### ЧЕТЕНЕ (Reading)
+
+- `reading_text` with **`noTranslation: true`** — no click-to-speak, no InlineTranslation
+- Students read the text themselves without AI assistance
+- `workbook_fill_blank` with **`options` on every sentence** — always dropdown, never free text
+- Each blank must have 3–4 distractor options from the same vocabulary domain
+
+### ГРАМАТИКА (Grammar)
+
+- **All `workbook_fill_blank` exercises MUST have `options`** — dropdown menus, not free text
+- Verb conjugation: options = all 6 forms of the verb (аз/ти/той-тя/ние/вие/те)
+- Numbers: options = 4 choices including the correct digit and plausible distractors (reversed digits, wrong magnitude)
+- Verb "съм": options = `['съм', 'си', 'е', 'сме', 'сте', 'са']` for every sentence
+- `word_order` and `multiple_choice` work the same as in lessons
+
+### ПИСАНЕ (Writing)
+
+- `syllable_blocks` with **`imageUrl` per puzzle** and **`columns: 3`**
+- Each puzzle card shows: image on top → scrambled letters below → green border on correct
+- No separate `illustrated_cards` exercise — images are embedded in puzzles
+- Single-word items: individual letter blocks (`['и', 'б', 'ц', 'а', 'н', 'а']`)
+- Multi-word items: syllable blocks (`['ки', 'се', 'ло', 'мля', 'ко']`)
+- No food labels shown — student must figure out the word from the image
+
+## metadata.ts Rules
+
+- `totalPoints` = sum of all section `maxPoints`
+- `introText` is required — 2–3 sentences explaining what the test covers, which lessons, which components
+- `introText` auto-translates via `useTranslate()` on the test page
+- `title` format: `'Тест – уроци X, Y и Z'` or `'Тест – урок X'`
+
+## index.ts Structure
+
+```typescript
+import type { TestData } from '@/content/types';
+import { metadata } from './metadata';
+import { listeningExercises, readingExercises, grammarExercises, writingExercises } from './exercises';
+
+export const testData: TestData = {
+  ...metadata,
+  sections: [
+    { id: 'listening', name: 'КОМПОНЕНТ СЛУШАНЕ', maxPoints: NN, exercises: listeningExercises },
+    { id: 'reading',   name: 'КОМПОНЕНТ ЧЕТЕНЕ',  maxPoints: NN, exercises: readingExercises },
+    { id: 'grammar',   name: 'КОМПОНЕНТ ГРАМАТИКА', maxPoints: NN, exercises: grammarExercises },
+    { id: 'writing',   name: 'КОМПОНЕНТ ПИСАНЕ',  maxPoints: NN, exercises: writingExercises },
+  ],
+};
+
+export default testData;
+```
+
+## Scoring & Results
+
+The `TestScoreSummary` component ([src/components/TestScoreSummary.tsx](mdc:src/components/TestScoreSummary.tsx)) renders automatically at the bottom of every test page inside `LessonExercisesProvider`.
+
+### How scores are calculated from saved state
+
+| Exercise type | Saved state fields | Score formula |
+|---|---|---|
+| `true_false` | `{ answers, checked }` | Count where `(answer === 'true') === sentence.isTrue` |
+| `workbook_fill_blank` | `{ answers, validation, isSubmitted }` | Count `validation[key] === true` |
+| `multiple_choice` | `{ selectedAnswers, isSubmitted }` | Count `selectedAnswers[i] === correctIndex` |
+| `word_order` | `{ questionStates, isSubmitted }` | Count `built.join(' ') === correctSentence` |
+| `syllable_blocks` | `{ completed }` | Count `completed[id] === true` |
+
+### 3 Performance Tiers
+
+| Range | Color | Message (auto-translated via useTranslate) |
+|---|---|---|
+| 0–50% | 🔴 Red | "Нужна е още практика. Прегледайте уроци X отново и обърнете внимание на по-слабите компоненти." |
+| 51–75% | 🟡 Amber | "Добро начало! Имате основни познания, но трябва да упражнявате повече някои компоненти." |
+| 76–100% | 🟢 Green | "Отлично! Справяте се много добре с материала от уроци X. Продължавайте напред!" |
+
+### Per-component breakdown
+
+- Progress bar + `earned/total` for each section with `maxPoints > 0`
+- Sections below 50% are highlighted in red with a "needs more practice" hint
+- Summary is collapsed by default, expands on click
+- Appears only after at least one exercise has been answered
+
+### Rules for new tests
+
+- `totalPoints` in metadata MUST equal the sum of all section `maxPoints`
+- Sections with `maxPoints: 0` are excluded from the scoring breakdown
+- Tier messages can be customized per test by modifying `tierMessages` in TestScoreSummary
+
+## Creating Tests — ALWAYS Use Templates
+
+When creating a new test, **always read `@TEST_TEMPLATES.ts` first**.
+Copy the relevant section template and replace only the content.
+
+## Registration Checklist
+
+When adding a new test:
+1. Create folder `src/content/tests/test-lessons-X-Y/`
+2. Create `metadata.ts`, `exercises.ts`, `index.ts`
+3. Copy images to `public/assets/test-a1-N/`
+4. Add to `testFolderMap` in [src/content/index.ts](mdc:src/content/index.ts)
+5. Verify `navItems` has the correct label
+6. Verify `totalPoints` = sum of section `maxPoints`

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Play, Pause, Check, X } from 'lucide-react';
+import { useState, useRef, useCallback } from 'react';
+import { Play, Pause, Square, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -23,6 +23,8 @@ interface ReadingTextProps {
   images?: ReadingTextImage[];
   paragraphs: string[];
   showDictionary?: boolean;
+  hideText?: boolean;
+  noTranslation?: boolean;
   checklist?: {
     instruction: string;
     items: ChecklistItem[];
@@ -30,7 +32,46 @@ interface ReadingTextProps {
   onComplete?: (isCorrect: boolean) => void;
 }
 
-export function ReadingText({ audioUrl, images, paragraphs, showDictionary, checklist, onComplete }: ReadingTextProps) {
+function TtsButton({ text, label }: { text: string; label?: string }) {
+  const t = useT();
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlay = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'bg-BG';
+    u.rate = 0.85;
+    u.onend = () => setIsPlaying(false);
+    u.onerror = () => setIsPlaying(false);
+    window.speechSynthesis.speak(u);
+    setIsPlaying(true);
+  }, [text, isPlaying]);
+
+  return (
+    <Button
+      onClick={handlePlay}
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
+        isPlaying
+          ? 'bg-red-500 hover:bg-red-600 text-white'
+          : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+      }`}
+    >
+      {isPlaying ? (
+        <><Square className="w-4 h-4" /> {t('exercise.stop')}</>
+      ) : (
+        <><Play className="w-4 h-4" /> {t('exercise.listen')}</>
+      )}
+    </Button>
+  );
+}
+
+export function ReadingText({ audioUrl, images, paragraphs, showDictionary, hideText, noTranslation, checklist, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -95,14 +136,35 @@ export function ReadingText({ audioUrl, images, paragraphs, showDictionary, chec
         </div>
       )}
 
-      {images && images.length > 0 && (
+      {hideText && images && images.length > 0 ? (
+        <div className={`grid gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2'}`}>
+          {images.map((img, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <img
+                src={img.imageUrl}
+                alt={img.label}
+                className="w-full rounded-lg shadow-sm object-contain max-h-72"
+                loading="lazy"
+              />
+              {img.label && (
+                <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
+              )}
+              {paragraphs[i] && (
+                <div className="mt-3">
+                  <TtsButton text={paragraphs[i]} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : !hideText && images && images.length > 0 ? (
         <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <img
                 src={img.imageUrl}
                 alt={img.label}
-                className="w-full rounded-lg shadow-sm object-cover max-h-48"
+                className="w-full rounded-lg shadow-sm object-contain max-h-72"
                 loading="lazy"
               />
               {img.label && (
@@ -111,40 +173,51 @@ export function ReadingText({ audioUrl, images, paragraphs, showDictionary, chec
             </div>
           ))}
         </div>
-      )}
+      ) : null}
 
-      {lang !== 'bg' && (
-        <p className="text-xs text-gray-400 text-center mb-4 italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
-
-      <div className="space-y-4">
-        {paragraphs.map((paragraph, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              const utterance = new SpeechSynthesisUtterance(paragraph);
-              utterance.lang = 'bg-BG';
-              utterance.rate = 0.85;
-              window.speechSynthesis.speak(utterance);
-
-              setRevealedParas(prev => {
-                const next = new Set(prev);
-                if (next.has(index)) next.delete(index);
-                else next.add(index);
-                return next;
-              });
-            }}
-            className="cursor-pointer hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99]"
-          >
-            <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-              {paragraph}
+      {hideText && (!images || images.length === 0) ? (
+        <div className="flex items-center gap-3 mb-2">
+          <TtsButton text={paragraphs.join('\n\n')} />
+        </div>
+      ) : hideText ? null : (
+        <>
+          {!noTranslation && lang !== 'bg' && (
+            <p className="text-xs text-gray-400 text-center mb-4 italic">
+              {t('exercise.tapToTranslate')}
             </p>
-            <InlineTranslation text={paragraph} visible={revealedParas.has(index)} />
+          )}
+
+          <div className="space-y-4">
+            {paragraphs.map((paragraph, index) => (
+              <div
+                key={index}
+                onClick={noTranslation ? undefined : () => {
+                  const utterance = new SpeechSynthesisUtterance(paragraph);
+                  utterance.lang = 'bg-BG';
+                  utterance.rate = 0.85;
+                  window.speechSynthesis.speak(utterance);
+
+                  setRevealedParas(prev => {
+                    const next = new Set(prev);
+                    if (next.has(index)) next.delete(index);
+                    else next.add(index);
+                    return next;
+                  });
+                }}
+                className={noTranslation
+                  ? 'rounded-lg p-2 -mx-2'
+                  : 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99]'
+                }
+              >
+                <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+                {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} />}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       {checklist && (
         <div className="mt-8 pt-6 border-t-2 border-gray-200">

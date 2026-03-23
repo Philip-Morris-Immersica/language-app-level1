@@ -16,6 +16,7 @@ import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 interface DropdownQuestion {
   id: string;
   left: string;
+  leftImageUrl?: string;
   options: string[];
   correctAnswer: string;
 }
@@ -80,43 +81,37 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
         </div>
       ) : null}
       <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
-        {questions.map((question) => (
-          <div
-            key={question.id}
-            className={`
-              bg-white rounded-xl border-2 p-4 md:p-4 transition-all
-              ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-              ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
-              ${validation[question.id] === null ? 'border-gray-300' : ''}
-            `}
-          >
-            <div className="flex items-center gap-2 flex-wrap">
-
-              {(() => {
-                const parts = question.left.split('…');
-                const hasSplit = parts.length === 2;
-                const before = hasSplit ? parts[0] : question.left;
-                const after = hasSplit ? parts[1] : '';
-
-                return (
-                  <>
-                    {before && (
-                      <span className="text-sm md:text-lg font-bold text-gray-800">
-                        {before.trim()}
-                      </span>
-                    )}
-
+        {questions.map((question) => {
+          const isImageMode = Boolean(question.leftImageUrl);
+          return (
+            <div
+              key={question.id}
+              className={`
+                bg-white rounded-xl border-2 transition-all
+                ${isImageMode ? 'p-3' : 'p-4 md:p-4'}
+                ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
+                ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                ${validation[question.id] === null || validation[question.id] === undefined ? 'border-gray-200' : ''}
+              `}
+            >
+              {/* ── Image-mode: thumbnail + dropdown side-by-side ── */}
+              {isImageMode ? (
+                <div className="flex items-center gap-3">
+                  <img
+                    src={question.leftImageUrl}
+                    alt={question.left}
+                    className="w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
+                  />
+                  <div className="flex-1 min-w-0">
                     {question.options.length === 0 ? (
-                      question.correctAnswer ? (
-                        <span className="text-sm md:text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
-                      ) : null
+                      <span className="text-base font-bold text-[#6B8543]">{question.correctAnswer}</span>
                     ) : (
                       <Select
                         value={answers[question.id] || ''}
                         onValueChange={(value) => handleSelect(question.id, value)}
                       >
                         <SelectTrigger className={`
-                          w-28 md:w-36 h-8 md:h-10 text-sm md:text-base font-semibold
+                          w-full h-10 text-sm sm:text-base font-semibold
                           ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
                           ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
                         `}>
@@ -124,40 +119,93 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                         </SelectTrigger>
                         <SelectContent>
                           {question.options.map((option) => (
-                            <SelectItem key={option} value={option} className="text-sm md:text-base">
+                            <SelectItem key={option} value={option} className="text-sm sm:text-base">
                               {option}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     )}
-
-                    {after && (
-                      <span className="text-sm md:text-lg font-bold text-gray-800">
-                        {after.trim()}
-                      </span>
-                    )}
-
                     {validation[question.id] === true && (
-                      <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
+                      <p className="mt-1 text-xs text-green-700 font-semibold flex items-center gap-1">
+                        <Check className="w-3 h-3" /> {question.correctAnswer}
+                      </p>
                     )}
-                    {validation[question.id] === false && (
-                      <X className="w-6 h-6 text-red-600 flex-shrink-0" />
+                    {isSubmitted && validation[question.id] === false && (
+                      <p className="mt-1 text-xs text-red-700 font-semibold flex items-center gap-1">
+                        <X className="w-3 h-3" /> {t('exercise.correctLabel')} {question.correctAnswer}
+                      </p>
                     )}
-                  </>
-                );
-              })()}
+                  </div>
+                </div>
+              ) : (
+                /* ── Text-mode: original layout ── */
+                <>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {(() => {
+                      const parts = question.left.split('…');
+                      const hasSplit = parts.length === 2;
+                      const before = hasSplit ? parts[0] : question.left;
+                      const after = hasSplit ? parts[1] : '';
+                      return (
+                        <>
+                          {before && (
+                            <span className="text-sm md:text-lg font-bold text-gray-800">
+                              {before.trim()}
+                            </span>
+                          )}
+                          {question.options.length === 0 ? (
+                            question.correctAnswer ? (
+                              <span className="text-sm md:text-lg font-bold text-[#6B8543]">{question.correctAnswer}</span>
+                            ) : null
+                          ) : (
+                            <Select
+                              value={answers[question.id] || ''}
+                              onValueChange={(value) => handleSelect(question.id, value)}
+                            >
+                              <SelectTrigger className={`
+                                w-28 md:w-36 h-8 md:h-10 text-sm md:text-base font-semibold
+                                ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
+                                ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                              `}>
+                                <SelectValue placeholder={t('exercise.selectOption')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {question.options.map((option) => (
+                                  <SelectItem key={option} value={option} className="text-sm md:text-base">
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+                          {after && (
+                            <span className="text-sm md:text-lg font-bold text-gray-800">
+                              {after.trim()}
+                            </span>
+                          )}
+                          {validation[question.id] === true && (
+                            <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
+                          )}
+                          {validation[question.id] === false && (
+                            <X className="w-6 h-6 text-red-600 flex-shrink-0" />
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+                  {isSubmitted && validation[question.id] === false && (
+                    <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
+                      <p className="text-sm text-yellow-800">
+                        <strong>{t('exercise.correctLabel')}</strong> {question.left.replace('…', question.correctAnswer)}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-
-            {isSubmitted && validation[question.id] === false && (
-              <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
-                <p className="text-sm text-yellow-800">
-                  <strong>{t('exercise.correctLabel')}</strong> {question.left.replace('…', question.correctAnswer)}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <Button

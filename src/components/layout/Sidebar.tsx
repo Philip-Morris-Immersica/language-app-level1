@@ -17,6 +17,11 @@ function LessonTitle({ title }: { title: string }) {
   return <>{translated}</>;
 }
 
+function TestLabel({ label }: { label: string }) {
+  const translated = useTranslate(label);
+  return <>{translated}</>;
+}
+
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const t = useT();
@@ -137,7 +142,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       >
                         <ClipboardCheck className="w-4 h-4" />
                       </span>
-                      <span className="flex-1 leading-snug">{t('nav.test')} {item.label}</span>
+                      <span className="flex-1 leading-snug">{t('nav.test')} – <TestLabel label={item.label} /></span>
                     </Link>
                   </li>
                 );

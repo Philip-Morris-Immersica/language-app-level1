@@ -161,11 +161,13 @@ export interface ListeningExercise extends BaseExercise {
 export interface SyllableBlocksExercise extends BaseExercise {
   type: 'syllable_blocks';
   imageUrl?: string;
+  columns?: number;
   puzzles: {
     id: string;
     syllables: string[];     // ['-РИ-', '-Я', '-ГА-', '-БЪЛ-']
     correctWord: string;     // 'БЪЛГАРИЯ'
     hint?: string;
+    imageUrl?: string;
   }[];
 }
 
@@ -268,9 +270,12 @@ export interface DropdownMatchExercise extends BaseExercise {
   imageUrl?: string;
   questions: {
     id: string;
-    left: string;            // 'Добро', 'аз'
-    options: string[];       // ['утро!', 'ден!', 'нощ!', 'вечер!']
-    correctAnswer: string;   // 'утро!'
+    /** Текстова подсказка (показва се само ако няма leftImageUrl). */
+    left: string;
+    /** Снимка вместо текстова подсказка — потребителят вижда картинката и избира думата. */
+    leftImageUrl?: string;
+    options: string[];
+    correctAnswer: string;
   }[];
 }
 
@@ -322,6 +327,8 @@ export interface ReadingTextExercise extends BaseExercise {
   }[];
   paragraphs: string[];
   showDictionary?: boolean;
+  hideText?: boolean;
+  noTranslation?: boolean;
   checklist?: {
     instruction: string;
     items: { id: string; text: string; isTrue: boolean }[];
@@ -332,6 +339,7 @@ export interface TrueFalseExercise extends BaseExercise {
   type: 'true_false';
   /** Опорна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  model?: { text: string; isTrue: boolean };
   sentences: {
     id: string;
     text: string;
@@ -517,6 +525,7 @@ export interface TestData {
   afterLesson: number;      // 3 (test appears after lesson 3)
   title: string;            // 'Тест А1.1'
   totalPoints: number;      // Total possible points
+  introText?: string;       // Intro paragraph shown before exercises
   sections: TestSection[];  // Listening, Reading, Grammar, Writing
 }
 

@@ -73,11 +73,13 @@ export function GrammarTable({
                   {tableTitle}
                 </th>
               </tr>
-              {/* Column headers */}
+              {/* Column headers — columns[0] labels the pronoun column; columns[1..] label the cells */}
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 w-16 md:w-20" />
-                  {columns.map((col, i) => (
+                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 w-16 md:w-20">
+                    {columns[0]}
+                  </th>
+                  {columns.slice(1).map((col, i) => (
                     <th
                       key={i}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0"

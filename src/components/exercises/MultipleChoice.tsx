@@ -24,6 +24,13 @@ function TranslatedLabel({ text }: { text: string }) {
   );
 }
 
+/** Split "Context sentences. Коя дума …?" into context + question parts. */
+function splitContextQuestion(text: string): { context: string | null; question: string } {
+  const idx = text.lastIndexOf('. \u041a\u043e\u044f '); // '. Коя '
+  if (idx === -1) return { context: null, question: text };
+  return { context: text.slice(0, idx + 1), question: text.slice(idx + 2) };
+}
+
 interface MultipleChoiceProps {
   exercise: MultipleChoiceExercise;
   onComplete?: (correct: boolean, score: number) => void;
@@ -118,12 +125,23 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
             );
           }
 
+          const { context, question: prompt } = splitContextQuestion(question.question);
+
           return (
             <div key={qIndex} className="space-y-4">
-              <p className="text-lg font-semibold text-gray-800">
-                {qIndex}. {question.question}
-                <TranslatedLabel text={question.question} />
-              </p>
+              <div className="space-y-1.5">
+                {context && (
+                  <p className="text-sm md:text-base text-gray-500 leading-relaxed">
+                    <span className="font-semibold text-gray-400 mr-1">{qIndex}.</span>
+                    {context}
+                  </p>
+                )}
+                <p className="text-base md:text-lg font-bold text-gray-800">
+                  {!context && <span className="mr-1">{qIndex}.</span>}
+                  {prompt}
+                  <TranslatedLabel text={prompt} />
+                </p>
+              </div>
 
               <div className="space-y-3 pl-4">
                 {question.options.map((option, oIndex) => {
