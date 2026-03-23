@@ -68,23 +68,23 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-02',
     type: 'dropdown_match',
-    instruction: 'Това е центърът на един град в България. За всяка икона изберете правилната дума за сградата (вижте картата).',
+    instruction: 'Вижте картата. За всяка снимка изберете правилната дума.',
     order: 3,
     points: 12,
     imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg',
     questions: [
-      { id: 'm1', left: 'Многоетажна жилищна сграда (горе вляво)', options: ['блок', 'хотел', 'банка', 'ресторант'], correctAnswer: 'блок' },
-      { id: 'm2', left: 'Виличка и лъжица', options: ['ресторант', 'кафе', 'кино', 'супермаркет'], correctAnswer: 'ресторант' },
-      { id: 'm3', left: 'Отворена книга (долу вляво)', options: ['библиотека', 'музей', 'училище', 'поща'], correctAnswer: 'библиотека' },
-      { id: 'm4', left: 'Академична шапка', options: ['университет', 'училище', 'община', 'театър'], correctAnswer: 'университет' },
-      { id: 'm5', left: 'Колони / античен фасад', options: ['музей', 'банка', 'болница', 'аптека'], correctAnswer: 'музей' },
-      { id: 'm6', left: 'Легло', options: ['хотел', 'блок', 'кафе', 'кино'], correctAnswer: 'хотел' },
-      { id: 'm7', left: 'Маски за театър', options: ['театър', 'кино', 'музей', 'поща'], correctAnswer: 'театър' },
-      { id: 'm8', left: 'Чаша на Хигия (змия)', options: ['аптека', 'болница', 'банка', 'поща'], correctAnswer: 'аптека' },
-      { id: 'm9', left: 'Червен кръст', options: ['болница', 'аптека', 'полиция', 'поща'], correctAnswer: 'болница' },
-      { id: 'm10', left: 'Киноплатно / клапа', options: ['кино', 'театър', 'кафе', 'ресторант'], correctAnswer: 'кино' },
-      { id: 'm11', left: 'Пареща чаша', options: ['кафе', 'ресторант', 'кино', 'банка'], correctAnswer: 'кафе' },
-      { id: 'm12', left: 'Количка за пазар', options: ['супермаркет', 'пазар', 'магазин', 'банка'], correctAnswer: 'супермаркет' },
+      { id: 'm1',  left: 'блок',        leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/04-blok.jpg',        options: ['блок', 'хотел', 'банка', 'ресторант'],          correctAnswer: 'блок' },
+      { id: 'm2',  left: 'ресторант',   leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/13-restorant.jpg',   options: ['ресторант', 'кафе', 'кино', 'супермаркет'],      correctAnswer: 'ресторант' },
+      { id: 'm3',  left: 'библиотека',  leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/03-biblioteka.jpg',  options: ['библиотека', 'музей', 'училище', 'поща'],        correctAnswer: 'библиотека' },
+      { id: 'm4',  left: 'университет', leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/15-universitet.jpg', options: ['университет', 'училище', 'община', 'театър'],    correctAnswer: 'университет' },
+      { id: 'm5',  left: 'музей',       leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/09-muzey.jpg',       options: ['музей', 'банка', 'болница', 'аптека'],           correctAnswer: 'музей' },
+      { id: 'm6',  left: 'хотел',       leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/12-hotel.jpg',       options: ['хотел', 'блок', 'кафе', 'кино'],                correctAnswer: 'хотел' },
+      { id: 'm7',  left: 'театър',      leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/10-teatar.jpg',      options: ['театър', 'кино', 'музей', 'поща'],               correctAnswer: 'театър' },
+      { id: 'm8',  left: 'аптека',      leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/01-apteka.jpg',      options: ['аптека', 'болница', 'банка', 'поща'],            correctAnswer: 'аптека' },
+      { id: 'm9',  left: 'болница',     leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/05-bolnitsa.jpg',    options: ['болница', 'аптека', 'полиция', 'поща'],          correctAnswer: 'болница' },
+      { id: 'm10', left: 'кино',        leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/08-kino.jpg',        options: ['кино', 'театър', 'кафе', 'ресторант'],           correctAnswer: 'кино' },
+      { id: 'm11', left: 'кафе',        leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/07-kafe.jpg',        options: ['кафе', 'ресторант', 'кино', 'банка'],            correctAnswer: 'кафе' },
+      { id: 'm12', left: 'супермаркет', leftImageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/14-supermarket.jpg', options: ['супермаркет', 'пазар', 'магазин', 'банка'],      correctAnswer: 'супермаркет' },
     ],
   } as DropdownMatchExercise,
 
@@ -117,21 +117,21 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-03',
     type: 'dropdown_match',
-    instruction: 'Това е центърът на едно село в България. Напишете имената на сградите. (Изберете според иконите на картата.)',
+    instruction: 'Вижте картата. За всяка снимка изберете правилната дума.',
     order: 5,
     points: 10,
     imageUrl: '/assets/lesson-05/05-upr-03-karta-selo/01-karta-selo-centar.jpg',
     questions: [
-      { id: 's1', left: 'Къща (пример в учебника)', options: ['къща', 'блок', 'училище', 'църква'], correctAnswer: 'къща' },
-      { id: 's2', left: 'Пързалка / люлки', options: ['детска площадка', 'парк', 'пазар', 'градина'], correctAnswer: 'детска площадка' },
-      { id: 's3', left: 'Паметник на кръговото', options: ['паметник', 'площад', 'община', 'църква'], correctAnswer: 'паметник' },
-      { id: 's4', left: 'Полумесец (религиозна сграда)', options: ['джамия', 'църква', 'училище', 'община'], correctAnswer: 'джамия' },
-      { id: 's5', left: 'Книга', options: ['училище', 'библиотека', 'община', 'поща'], correctAnswer: 'училище' },
-      { id: 's6', left: 'Мост над вода', options: ['мост', 'улица', 'парк', 'река'], correctAnswer: 'мост' },
-      { id: 's7', left: 'Вълни (вода)', options: ['река', 'мост', 'парк', 'площад'], correctAnswer: 'река' },
-      { id: 's8', left: 'Православен кръст', options: ['църква', 'джамия', 'община', 'пазар'], correctAnswer: 'църква' },
-      { id: 's9', left: 'Пощенски плик', options: ['поща', 'магазин', 'пазар', 'община'], correctAnswer: 'поща' },
-      { id: 's10', left: 'Знаме (администрация)', options: ['община', 'училище', 'полиция', 'банка'], correctAnswer: 'община' },
+      { id: 's1',  left: 'къща',            leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/04-kashta.jpg',            options: ['къща', 'блок', 'училище', 'църква'],                 correctAnswer: 'къща' },
+      { id: 's2',  left: 'детска площадка', leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/02-detska-ploshtadka.jpg', options: ['детска площадка', 'парк', 'пазар', 'детска градина'], correctAnswer: 'детска площадка' },
+      { id: 's3',  left: 'паметник',        leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/09-pametnik.jpg',           options: ['паметник', 'площад', 'община', 'църква'],             correctAnswer: 'паметник' },
+      { id: 's4',  left: 'джамия',          leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/03-dzhamiya.jpg',           options: ['джамия', 'църква', 'училище', 'община'],             correctAnswer: 'джамия' },
+      { id: 's5',  left: 'училище',         leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/14-uchilishte.jpg',         options: ['училище', 'библиотека', 'община', 'поща'],           correctAnswer: 'училище' },
+      { id: 's6',  left: 'мост',            leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/06-most.jpg',               options: ['мост', 'улица', 'парк', 'река'],                     correctAnswer: 'мост' },
+      { id: 's7',  left: 'река',            leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/13-reka.jpg',               options: ['река', 'мост', 'парк', 'площад'],                    correctAnswer: 'река' },
+      { id: 's8',  left: 'църква',          leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/15-tsarkva.jpg',            options: ['църква', 'джамия', 'община', 'пазар'],               correctAnswer: 'църква' },
+      { id: 's9',  left: 'поща',            leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/12-poshta.jpg',             options: ['поща', 'магазин', 'пазар', 'община'],               correctAnswer: 'поща' },
+      { id: 's10', left: 'община',          leftImageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/07-obshtina.jpg',           options: ['община', 'училище', 'полиция', 'банка'],            correctAnswer: 'община' },
     ],
   } as DropdownMatchExercise,
 
@@ -143,44 +143,42 @@ export const exercises: Exercise[] = [
     points: 10,
     imageUrl: '', // TODO: зелената таблица от учебника (стр. 46) — липсва като отделно изображение в IMAGE-MAPPING
     puzzles: [
-      { id: 'p1', syllables: ['РЕС-', '-ТО-', '-РАНТ'], correctWord: 'РЕСТОРАНТ' },
-      { id: 'p2', syllables: ['БОЛ-', '-НИ-', '-ЦА'], correctWord: 'БОЛНИЦА' },
-      { id: 'p3', syllables: ['СУ-', '-ПЕР-', '-МАР-', '-КЕТ'], correctWord: 'СУПЕРМАРКЕТ' },
-      { id: 'p4', syllables: ['У-', '-ЧИ-', '-ЛИ-', '-ЩЕ'], correctWord: 'УЧИЛИЩЕ' },
-      { id: 'p5', syllables: ['МУ-', '-ЗЕЙ'], correctWord: 'МУЗЕЙ' },
-      { id: 'p6', syllables: ['ПЛО-', '-ЩАД'], correctWord: 'ПЛОЩАД' },
-      { id: 'p7', syllables: ['БУ-', '-ЛЕ-', '-ВАРД'], correctWord: 'БУЛЕВАРД' },
-      { id: 'p8', syllables: ['МА-', '-ГА-', '-ЗИН'], correctWord: 'МАГАЗИН' },
-      { id: 'p9', syllables: ['ДЖА-', '-МИЯ'], correctWord: 'ДЖАМИЯ' },
-      { id: 'p10', syllables: ['ХО-', '-ТЕЛ'], correctWord: 'ХОТЕЛ' },
+      { id: 'p1',  syllables: ['-РАНТ', 'РЕС-',  '-ТО-'          ], correctWord: 'РЕСТОРАНТ'  },
+      { id: 'p2',  syllables: ['-ЦА',   '-НИ-',  'БОЛ-'          ], correctWord: 'БОЛНИЦА'    },
+      { id: 'p3',  syllables: ['-МАР-', '-КЕТ',  'СУ-',   '-ПЕР-'], correctWord: 'СУПЕРМАРКЕТ' },
+      { id: 'p4',  syllables: ['-ЩЕ',   '-ЛИ-',  'У-',    '-ЧИ-' ], correctWord: 'УЧИЛИЩЕ'   },
+      { id: 'p5',  syllables: ['-ЗЕЙ',  'МУ-'                    ], correctWord: 'МУЗЕЙ'      },
+      { id: 'p6',  syllables: ['-ЩАД',  'ПЛО-'                   ], correctWord: 'ПЛОЩАД'     },
+      { id: 'p7',  syllables: ['-ВАРД', '-ЛЕ-',  'БУ-'           ], correctWord: 'БУЛЕВАРД'   },
+      { id: 'p8',  syllables: ['-ЗИН',  'МА-',   '-ГА-'          ], correctWord: 'МАГАЗИН'    },
+      { id: 'p9',  syllables: ['-МИЯ',  'ДЖА-'                   ], correctWord: 'ДЖАМИЯ'     },
+      { id: 'p10', syllables: ['-ТЕЛ',  'ХО-'                    ], correctWord: 'ХОТЕЛ'      },
     ],
   } as SyllableBlocksExercise,
 
   {
     id: 'l05-ex-05',
-    type: 'reading_text',
+    type: 'true_false',
     title: 'УПРАЖНЕНИЕ 5',
-    instruction: 'Какво има в центъра на града? Вижте картата от упр. 2.',
+    instruction: 'Вижте картата на центъра на ГРАДА от упр. 2. Вярно или грешно?',
     order: 7,
-    images: [{ imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg', label: 'Карта — упр. 2' }],
-    paragraphs: [
-      'Има един ресторант, много блокове, ... — напишете останалата част на лист или в тетрадка според картата от упр. 2.',
+    imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg',
+    points: 12,
+    sentences: [
+      { id: 'l05-ex05-1',  text: 'Има блок.',        isTrue: true },
+      { id: 'l05-ex05-2',  text: 'Има ресторант.',    isTrue: true },
+      { id: 'l05-ex05-3',  text: 'Има аптека.',       isTrue: true },
+      { id: 'l05-ex05-4',  text: 'Има болница.',      isTrue: true },
+      { id: 'l05-ex05-5',  text: 'Има театър.',       isTrue: true },
+      { id: 'l05-ex05-6',  text: 'Има музей.',        isTrue: true },
+      { id: 'l05-ex05-7',  text: 'Има джамия.',       isTrue: false },
+      { id: 'l05-ex05-8',  text: 'Има мост.',         isTrue: false },
+      { id: 'l05-ex05-9',  text: 'Има река.',         isTrue: false },
+      { id: 'l05-ex05-10', text: 'Има поща.',         isTrue: false },
+      { id: 'l05-ex05-11', text: 'Има банка.',        isTrue: false },
+      { id: 'l05-ex05-12', text: 'Има паметник.',     isTrue: false },
     ],
-    showDictionary: true,
-  } as ReadingTextExercise,
-
-  {
-    id: 'l05-ex-06',
-    type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 6',
-    instruction: 'Какво има и какво няма в селото? Вижте картата от упр. 3.',
-    order: 8,
-    images: [{ imageUrl: '/assets/lesson-05/05-upr-03-karta-selo/01-karta-selo-centar.jpg', label: 'Карта — упр. 3' }],
-    paragraphs: [
-      'Има един площад, много къщи, ... Няма аптека, ... — допишете според картата от упр. 3.',
-    ],
-    showDictionary: true,
-  } as ReadingTextExercise,
+  } as TrueFalseExercise,
 
   {
     id: 'l05-dialozi-01',
@@ -248,6 +246,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-09',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Напишете адресите, като използвате съкратените форми.',
     order: 11,
     points: 2,
@@ -271,52 +270,64 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-ex-10',
-    type: 'workbook_fill_blank',
+    type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 10',
-    instruction:
-      'В учебника си правите лична визитка на хартия с вашите име, адрес (със съкращения) и телефон — направете го на лист или в тетрадка. Тук упражняваме същото по модел: попълнете визитката на Мария от диалога „ДИАЛОЗИ 1“ (б).',
+    instruction: 'Прочетете диалога (б) и попълнете визитката на Мария на хартия или в телефона. После напишете вашата собствена визитка по същия модел.',
     order: 12,
-    points: 3,
-    layout: 'single',
-    sentences: [
-      {
-        text: 'Име: _______',
-        blanks: [0],
-        correctAnswers: ['Мария'],
-        options: ['Мария', 'Абдул', 'Петър', 'Дора'],
-      },
-      {
-        text: 'Град: _______',
-        blanks: [0],
-        correctAnswers: ['София'],
-        options: ['София', 'Перник', 'Пловдив', 'Варна'],
-      },
-      {
-        text: 'Адрес със съкращения (както в диалога): _______',
-        blanks: [0],
-        correctAnswers: ['кв. „Младост“ 2, бл. 243, вх. А, ет. 2, ап. 5'],
-        options: [
-          'кв. „Младост“ 2, бл. 243, вх. А, ет. 2, ап. 5',
-          'жк „Люлин“ 7, бл. 704, вх. Б, ет. 4, ап. 12',
-          'ул. „Гурко“ 25',
-          'кв. „Лозенец“, бул. „Джеймс Баучър“, № 76',
-        ],
-      },
+    paragraphs: [
+      'Диалог (б): Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
+      '📋  Визитка — попълнете:',
+      'Име:  ___________________________',
+      'Град: ___________________________',
+      'Адрес: кв./жк ___________________',
+      '        бл. ___ , вх. ___ , ет. ___ , ап. ___',
+      'Тел.: ___________________________',
+      '✏️  Напишете отговорите на хартия или в телефона си.',
     ],
-  } as WorkbookFillBlankExercise,
+  } as ReadingTextExercise,
 
   {
     id: 'l05-ex-11',
-    type: 'reading_text',
+    type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 11',
-    instruction:
-      'В учебника: слушане и попълване на визитка в тетрадка. В приложението: попълнете визитката по текст (или четете на глас с партньор). Ако има запис от учителя — качете го в проекта и задайте audioUrl.',
+    instruction: 'Слушайте и попълнете визитката.',
     order: 13,
-    audioUrl: '', // TODO: опционален MP3 от учителя
-    paragraphs: [
-      'Текст за упражнение: „Аз се казвам Елена Иванова. Живея в Бургас, ул. „Александровска“ 14, ап. 3. Телефон: 0888 123 456.“ — препишете данните на визитка на лист; в класа може да се ползва и запис.',
+    points: 5,
+    layout: 'single',
+    listeningText: 'Казвам се Иван Колев. Аз съм учител по история. Живея в София, в жилищен комплекс „Люлин“ 3, блок 15, етаж 4, апартамент 16. Телефонът ми е 0888 234 567.',
+    sentences: [
+      {
+        text: 'Иван _______',
+        blanks: [0],
+        correctAnswers: ['Колев'],
+        options: ['Колев', 'Петров', 'Иванов', 'Георгиев'],
+      },
+      {
+        text: 'учител по _______',
+        blanks: [0],
+        correctAnswers: ['история'],
+        options: ['история', 'математика', 'български', 'физика'],
+      },
+      {
+        text: 'жк „Люлин“ _______, бл. 15',
+        blanks: [0],
+        correctAnswers: ['3'],
+        options: ['3', '7', '2', '5'],
+      },
+      {
+        text: 'ет. _______, ап. 16',
+        blanks: [0],
+        correctAnswers: ['4'],
+        options: ['4', '2', '3', '6'],
+      },
+      {
+        text: 'тел. _______',
+        blanks: [0],
+        correctAnswers: ['0888 234 567'],
+        options: ['0888 234 567', '0887 654 321', '0899 111 222', '0878 345 678'],
+      },
     ],
-  } as ReadingTextExercise,
+  } as WorkbookFillBlankExercise,
 
   {
     id: 'l05-gramatika-01',
@@ -455,34 +466,30 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-ex-16',
-    type: 'table_fill',
-    instruction: 'Напишете думите в правилната колона.',
+    type: 'drag_to_columns',
+    title: 'УПРАЖНЕНИЕ 16',
+    instruction: 'Поставете думите в правилната колона според определителния член.',
     order: 21,
     points: 14,
-    paragraphs: [],
-    tables: [
+    items: [
+      'булеварди', 'градове', 'джамии', 'кафета',
+      'кина', 'кюфтета', 'млека', 'мостове',
+      'площади', 'села', 'улици', 'училища',
+      'църкви', 'яйца',
+    ],
+    columns: [
       {
-        name: 'Множествено число — -те / -та',
-        columns: ['-те', '-та'],
-        rows: [
-          { label: 'булеварди', cells: [{ correctAnswers: ['булевардите'], options: ['булевардите', 'булеварда'] }, { correctAnswers: ['—'], options: ['—', 'булевардите'] }] },
-          { label: 'градове', cells: [{ correctAnswers: ['градовете'], options: ['градовете', 'градът'] }, { correctAnswers: ['—'], options: ['—', 'градовете'] }] },
-          { label: 'джамии', cells: [{ correctAnswers: ['джамиите'], options: ['джамиите', 'джамията'] }, { correctAnswers: ['—'], options: ['—', 'джамиите'] }] },
-          { label: 'кафета', cells: [{ correctAnswers: ['—'], options: ['—', 'кафетата'] }, { correctAnswers: ['кафетата'], options: ['кафетата', 'кафето'] }] },
-          { label: 'кина', cells: [{ correctAnswers: ['—'], options: ['—', 'кината'] }, { correctAnswers: ['кината'], options: ['кината', 'киното'] }] },
-          { label: 'кюфтета', cells: [{ correctAnswers: ['—'], options: ['—', 'кюфтетата'] }, { correctAnswers: ['кюфтетата'], options: ['кюфтетата', 'кюфтето'] }] },
-          { label: 'млека', cells: [{ correctAnswers: ['—'], options: ['—', 'млеката'] }, { correctAnswers: ['млеката'], options: ['млеката', 'млякото'] }] },
-          { label: 'мостове', cells: [{ correctAnswers: ['мостовете'], options: ['мостовете', 'мостът'] }, { correctAnswers: ['—'], options: ['—', 'мостовете'] }] },
-          { label: 'площади', cells: [{ correctAnswers: ['площадите'], options: ['площадите', 'площадът'] }, { correctAnswers: ['—'], options: ['—', 'площадите'] }] },
-          { label: 'села', cells: [{ correctAnswers: ['—'], options: ['—', 'селата'] }, { correctAnswers: ['селата'], options: ['селата', 'селото'] }] },
-          { label: 'улици', cells: [{ correctAnswers: ['улиците'], options: ['улиците', 'улицата'] }, { correctAnswers: ['—'], options: ['—', 'улиците'] }] },
-          { label: 'училища', cells: [{ correctAnswers: ['—'], options: ['—', 'училищата'] }, { correctAnswers: ['училищата'], options: ['училищата', 'училището'] }] },
-          { label: 'църкви', cells: [{ correctAnswers: ['църквите'], options: ['църквите', 'църквата'] }, { correctAnswers: ['—'], options: ['—', 'църквите'] }] },
-          { label: 'яйца', cells: [{ correctAnswers: ['—'], options: ['—', 'яйцата'] }, { correctAnswers: ['яйцата'], options: ['яйцата', 'яйцето'] }] },
-        ],
+        id: 'te',
+        title: '-те',
+        correctItems: ['булеварди', 'градове', 'джамии', 'мостове', 'площади', 'улици', 'църкви'],
+      },
+      {
+        id: 'ta',
+        title: '-та',
+        correctItems: ['кафета', 'кина', 'кюфтета', 'млека', 'села', 'училища', 'яйца'],
       },
     ],
-  } as TableFillExercise,
+  } as DragToColumnsExercise,
 
   {
     id: 'l05-ex-17',
@@ -505,7 +512,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Предлози за място',
-    instruction: 'Запознайте се с предлозите и примерите. Кутията „Театърът е:“ от учебника е предавана с примерните изрази по-долу.',
+    instruction: 'Запознайте се с предлозите и примерите.',
     order: 23,
     examples: [
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg', text: 'в — в кутията / в центъра', subtext: '' },
@@ -524,8 +531,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-18',
     type: 'true_false',
-    instruction:
-      'Вижте картата на града от упр. 2 и отбележете с Вярно или Грешно. (Отговорите подлежат на препроверка спрямо картата в учебника.)',
+    instruction: 'Вижте картата на ГРАДА от упр. 2 и отбележете с Вярно или Грешно.',
     order: 24,
     imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg',
     points: 9,
@@ -559,7 +565,7 @@ export const exercises: Exercise[] = [
         isExample: true,
       },
       {
-        text: '— Къде е джамията? | — Джамията е _______ до реката.',
+        text: '— Къде е джамията? | — Джамията е _______ до площада.',
         blanks: [0],
         correctAnswers: ['близо'],
         options: ['близо', 'далече', 'срещу', 'между'],
@@ -681,7 +687,7 @@ export const exercises: Exercise[] = [
         text: '_______ надясно и след пазара върви _______. (ти)',
         blanks: [0, 1],
         correctAnswers: ['Завий', 'направо'],
-        options: [['Завий', 'завийте', 'Вървете'], ['направо', 'наляво', 'назад']],
+        options: [['Завий', 'завийте', 'Вървете'], ['направо', 'наляво']],
       },
       {
         text: 'Вървете _______ и след 100 метра _______ наляво. (вие)',
@@ -704,19 +710,7 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  {
-    id: 'l05-ex-23',
-    type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 23',
-    instruction: 'Работете по двойки. Упражнявайте диалога, като използвате картата на града от упр. 2. Вие сте пред университета.',
-    order: 30,
-    images: [{ imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg', label: 'Карта — упр. 2' }],
-    paragraphs: [
-      'Модел: — Извинете, къде е хотелът? — …',
-      'Подгответе отговори с партньор, като ползвате картата от упр. 2 (стартирайте от университета).',
-    ],
-  } as ReadingTextExercise,
-
+  
   {
     id: 'l05-gramatika-06',
     type: 'grammar_table',
@@ -725,7 +719,7 @@ export const exercises: Exercise[] = [
     instruction: 'Бройни форми за хора.',
     order: 31,
     tableTitle: 'Число на съществителните (3)',
-    columns: ['Обобщение', 'Примери'],
+    columns: ['Обобщение', 'Форма', 'Изречения'],
     rows: [
       { pronoun: 'Ед. число', cells: ['един човек', 'Тук има един човек.'] },
       { pronoun: 'С число', cells: ['десет души', 'Колко души има тук?'] },
@@ -777,7 +771,7 @@ export const exercises: Exercise[] = [
     order: 34,
     paragraphs: [
       'Модел: 173 268 — сто седемдесет и три хиляди двеста шестдесет и осем.',
-      '1230, 2800, 86 493, 370 480, 2970, 18 490 567, 12 964 098, 4500, 987 435 000, 345, 12 359, 933, 284 590, 706 409, 54 030 …',
+      '1230, 2800, 86493, 370480, 2970, 18490567, 12964098, 4500, 987435000, 345, 12359, 933, 284590, 706409, 54030 …',
     ],
   } as ReadingTextExercise,
 
@@ -1000,5 +994,120 @@ export const exercises: Exercise[] = [
       { text: 'Къде има стара крепост? | _______', blanks: [0], correctAnswers: ['В Халеб.'], options: ['В Халеб.', 'В София.', 'Във Варна.', 'В Рибново.'] },
     ],
   } as WorkbookFillBlankExercise,
+
+
+  // ──────────────────────────────────────────────────────────
+  // РАБОТНА ТЕТРАДКА — Упражнения Урок 5
+  // ──────────────────────────────────────────────────────────
+
+  {
+    id: 'l05-wb-info',
+    type: 'grammar_examples',
+    title: 'РАБОТНА ТЕТРАДКА',
+    subtitle: 'Упражнения Урок 5',
+    instruction: 'Упражнения от работната тетрадка.',
+    order: 47,
+    examples: [],
+  } as GrammarExamplesExercise,
+
+  {
+    id: 'l05-wb-01',
+    type: 'workbook_fill_blank',
+    title: 'ТЕТРАДКА — УПР. 1',
+    instruction: 'Попълнете определителния член за единствено число.',
+    order: 48,
+    points: 14,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Паркът е близо до пазара.', blanks: [], isExample: true },
+      { text: 'Училище_______ е далече от блок_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Университет_______ е в център_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Джамия_______ е срещу църква_______.', blanks: [0, 1], correctAnswers: ['та', 'та'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Хотел_______ е на булевард_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Мост_______ е над река_______.', blanks: [0, 1], correctAnswers: ['ът', 'та'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Аптека_______ е до кафе_______.', blanks: [0, 1], correctAnswers: ['та', 'то'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Кино_______ е зад ресторант_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  {
+    id: 'l05-wb-02',
+    type: 'workbook_fill_blank',
+    title: 'ТЕТРАДКА — УПР. 2',
+    instruction: 'Попълнете определителния член за множествено число.',
+    order: 49,
+    points: 6,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Паметниците са в Пловдив.', blanks: [], isExample: true },
+      { text: 'Къде са момчета_______?', blanks: [0], correctAnswers: ['та'], options: ['те', 'та', 'о', 'ята'] },
+      { text: 'Как са учителки_______?', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
+      { text: 'Колко са пари_______?', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
+      { text: 'Кина_______ са в молове_______.', blanks: [0, 1], correctAnswers: ['та', 'те'], options: ['те', 'та', 'о', 'ята'] },
+      { text: 'Българи_______ обичат баница.', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  {
+    id: 'l05-wb-03',
+    type: 'workbook_fill_blank',
+    title: 'ТЕТРАДКА — УПР. 3',
+    instruction: 'Попълнете определителния член.',
+    order: 50,
+    points: 14,
+    layout: 'single',
+    sentences: [
+      {
+        text: 'Аз съм в училище „Васил Левски“. Училище_______ е на улица_______ между театър_______ и библиотека_______. В училище_______ има много учители.',
+        blanks: [0, 1, 2, 3, 4],
+        correctAnswers: ['то', 'та', 'а', 'та', 'то'],
+        options: ['а', 'та', 'то', 'те', 'ът'],
+      },
+      {
+        text: 'Ние сме в град Бургас. В град_______ има магазини, паметници, църкви. Магазини_______ и църкви_______ са близо до площад_______.',
+        blanks: [0, 1, 2, 3],
+        correctAnswers: ['а', 'те', 'те', 'а'],
+        options: ['а', 'та', 'то', 'те', 'ът'],
+      },
+      {
+        text: 'Той е в ресторант „Виктория“. Ресторант_______ е в център_______ на град_______ зад община_______. В ресторант_______ има много вкусна храна.',
+        blanks: [0, 1, 2, 3, 4],
+        correctAnswers: ['ът', 'а', 'а', 'та', 'а'],
+        options: ['а', 'та', 'то', 'те', 'ът'],
+      },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  {
+    id: 'l05-wb-04',
+    type: 'reading_text',
+    title: 'ТЕТРАДКА — УПР. 4',
+    instruction: 'Напишете числата с думи. (На хартия или в телефона.)',
+    order: 51,
+    paragraphs: [
+      'Модел: 1234 — хиляда двеста тридесет и четири',
+      '1.  2590',
+      '2.  17 012',
+      '3.  107 954',
+    ],
+  } as ReadingTextExercise,
+
+  {
+    id: 'l05-wb-05',
+    type: 'match_pairs',
+    title: 'ТЕТРАДКА — УПР. 5',
+    instruction: 'Свържете въпроса с правилния отговор.',
+    order: 52,
+    points: 6,
+    pairs: [
+      { left: 'Колко струва един килограм лук?', correctRight: 'Два лева.' },
+      { left: 'Нямате ли дребни?', correctRight: 'Не, имам само 20 лева.' },
+      { left: 'Искате ли торбичка?', correctRight: 'Не, благодаря, имам.' },
+      { left: 'Каква салата искате?', correctRight: 'Шопска, моля.' },
+      { left: 'Къде живеете?', correctRight: 'На булевард „Васил Левски“ 15.' },
+      { left: 'Извинете, къде е банката?', correctRight: 'Вървете направо и после завийте наляво.' },
+      { left: 'Има ли много хора в кафето?', correctRight: 'Не, само шест души.' },
+    ],
+  } as MatchPairsExercise,
 
 ];
