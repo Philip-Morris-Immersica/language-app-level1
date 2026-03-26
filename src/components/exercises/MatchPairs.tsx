@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { MatchPairsExercise } from '@/content/types';
@@ -79,14 +79,32 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
     setSelectedLeft(null);
   };
 
+  const handleReset = () => {
+    const rights = exercise.pairs.map(p => p.correctRight);
+    const shuffled = exercise.shuffledRights || [...rights].sort(() => Math.random() - 0.5);
+    setRightItems(shuffled);
+    setMatches({});
+    setSelectedLeft(null);
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ matches: {}, validation: {}, isSubmitted: false, rightItems: shuffled });
+  };
+
   const handleSubmit = () => {
     const newValidation: { [leftId: string]: boolean } = {};
     let correctCount = 0;
 
+    const validRightsForLeft = new Map<string, Set<string>>();
+    exercise.pairs.forEach(p => {
+      if (!validRightsForLeft.has(p.left)) validRightsForLeft.set(p.left, new Set());
+      validRightsForLeft.get(p.left)!.add(p.correctRight);
+    });
+
     exercise.pairs.forEach(pair => {
       const matchedIdx = matches[pair.id];
       const matchedText = matchedIdx !== undefined ? rightItems[matchedIdx] : undefined;
-      const isCorrect = matchedText === pair.correctRight;
+      const validSet = validRightsForLeft.get(pair.left);
+      const isCorrect = matchedText !== undefined && (validSet?.has(matchedText) ?? false);
       newValidation[pair.id] = isCorrect;
       if (isCorrect) correctCount++;
     });
@@ -222,6 +240,10 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
           className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
         </Button>
       </div>
 

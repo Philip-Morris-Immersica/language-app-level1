@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian, stopSpeaking } from '@/lib/tts';
 
 interface ChecklistItem {
   id: string;
@@ -22,6 +23,7 @@ interface ReadingTextProps {
   audioUrl?: string;
   images?: ReadingTextImage[];
   paragraphs: string[];
+  paragraphTranslations?: Record<string, string>[];
   showDictionary?: boolean;
   hideText?: boolean;
   noTranslation?: boolean;
@@ -32,24 +34,17 @@ interface ReadingTextProps {
   onComplete?: (isCorrect: boolean) => void;
 }
 
-function TtsButton({ text, label }: { text: string; label?: string }) {
+function TtsButton({ text }: { text: string }) {
   const t = useT();
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = useCallback(() => {
-    if (typeof window === 'undefined') return;
     if (isPlaying) {
-      window.speechSynthesis.cancel();
+      stopSpeaking();
       setIsPlaying(false);
       return;
     }
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'bg-BG';
-    u.rate = 0.85;
-    u.onend = () => setIsPlaying(false);
-    u.onerror = () => setIsPlaying(false);
-    window.speechSynthesis.speak(u);
+    speakBulgarian(text);
     setIsPlaying(true);
   }, [text, isPlaying]);
 
@@ -71,7 +66,7 @@ function TtsButton({ text, label }: { text: string; label?: string }) {
   );
 }
 
-export function ReadingText({ audioUrl, images, paragraphs, showDictionary, hideText, noTranslation, checklist, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -192,10 +187,7 @@ export function ReadingText({ audioUrl, images, paragraphs, showDictionary, hide
               <div
                 key={index}
                 onClick={noTranslation ? undefined : () => {
-                  const utterance = new SpeechSynthesisUtterance(paragraph);
-                  utterance.lang = 'bg-BG';
-                  utterance.rate = 0.85;
-                  window.speechSynthesis.speak(utterance);
+                  speakBulgarian(paragraph);
 
                   setRevealedParas(prev => {
                     const next = new Set(prev);
@@ -212,7 +204,7 @@ export function ReadingText({ audioUrl, images, paragraphs, showDictionary, hide
                 <p className="text-base md:text-lg text-gray-800 leading-relaxed">
                   {paragraph}
                 </p>
-                {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} />}
+                {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
               </div>
             ))}
           </div>

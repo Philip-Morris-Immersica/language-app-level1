@@ -25,7 +25,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-01',
     type: 'word_search',
-    instruction: 'Намерете думите в кръстословицата.',
+    instruction: 'Намерете скритите думи.',
     order: 1,
     points: 8,
     letterString: 'КРОАСАНБВВОДАШОКХЛЯБОСОКЧАЙМЕДЯЙЦЕБАНИЦАЗ',
@@ -71,7 +71,6 @@ export const exercises: Exercise[] = [
   // Упр. 3 – SKIP (per client)
 
   // ORDER 4: Упр. 4 – Какво пише на табелата? (Page 25)
-  // TODO: Needs sign image
   {
     id: 'l03-ex-04',
     type: 'multiple_choice',
@@ -81,6 +80,7 @@ export const exercises: Exercise[] = [
     questions: [
       {
         question: 'Какво пише на табелата?',
+        imageUrl: '/assets/lesson-03/novi-dumi-1/pushene-zabraneno.jpg',
         options: ['Пушенето забранено!', 'Добре дошли!', 'Отворено', 'Затворено'],
         correctIndex: 0,
       },
@@ -173,15 +173,21 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 8: Упр. 6 – Слушайте учителя и оградете числата (Page 26)
-  // TODO: Needs audio file
+  // ORDER 8: Упр. 6 – Слушайте и оградете правилните числа (Page 26)
   {
     id: 'l03-ex-06',
     type: 'multiple_choice',
-    instruction: 'Слушайте учителя и оградете правилните числа.',
+    instruction: 'Кое число чувате? Изберете правилния отговор.',
     order: 8,
-    points: 0,
-    questions: [],
+    points: 6,
+    questions: [
+      { question: 'двадесет и три',           options: ['13', '23', '32', '33'],  correctIndex: 1 },
+      { question: 'петдесет и седем',          options: ['47', '57', '67', '75'],  correctIndex: 1 },
+      { question: 'осемнадесет',               options: ['8',  '18', '80', '28'],  correctIndex: 1 },
+      { question: 'четиридесет и едно',        options: ['14', '41', '44', '31'],  correctIndex: 1 },
+      { question: 'седемдесет и шест',         options: ['66', '67', '76', '77'],  correctIndex: 2 },
+      { question: 'деветдесет и девет',        options: ['90', '91', '96', '99'],  correctIndex: 3 },
+    ],
   } as MultipleChoiceExercise,
 
   // ORDER 9: Упр. 7 – Напишете с думи (парични суми) (Page 26)
@@ -200,14 +206,17 @@ export const exercises: Exercise[] = [
       {
         text: '31,93 € — _______',
         blanks: [1], correctAnswers: ['тридесет и едно евро и деветдесет и три евроцента'],
+        options: ['тридесет и едно евро и деветдесет и три евроцента', 'тридесет и три евро и деветдесет и един евроцент', 'тридесет и девет евро и тринадесет евроцента'],
       },
       {
         text: '105,41 € — _______',
         blanks: [1], correctAnswers: ['сто и пет евро и четиридесет и един евроцент'],
+        options: ['сто и пет евро и четиридесет и един евроцент', 'сто четиридесет и едно евро и пет евроцента', 'сто и четири евро и петдесет и един евроцент'],
       },
       {
         text: '159,57 € — _______',
         blanks: [1], correctAnswers: ['сто петдесет и девет евро и петдесет и седем евроцента'],
+        options: ['сто петдесет и девет евро и петдесет и седем евроцента', 'сто и петдесет евро и деветдесет и седем евроцента', 'сто петдесет и седем евро и петдесет и девет евроцента'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -240,6 +249,7 @@ export const exercises: Exercise[] = [
       {
         text: '[20 €] + [5 €] + [1 €] + [20 ¢] + [5 ¢]\nИма _______',
         blanks: [1], correctAnswers: ['двадесет и шест евро и двадесет и пет евроцента'],
+        options: ['двадесет и шест евро и двадесет и пет евроцента', 'двадесет и пет евро и двадесет и шест евроцента', 'двадесет и едно евро и петдесет евроцента'],
         images: [
           '/assets/lesson-03/novi-dumi-2-currency/20-euro.gif',
           '/assets/lesson-03/novi-dumi-2-currency/5-euro.jpg',
@@ -251,6 +261,7 @@ export const exercises: Exercise[] = [
       {
         text: '[50 €] + [10 €] + [2 €] + [50 ¢] + [10 ¢] + [5 ¢]\nИма _______',
         blanks: [1], correctAnswers: ['шестдесет и две евро и шестдесет и пет евроцента'],
+        options: ['шестдесет и две евро и шестдесет и пет евроцента', 'шестдесет и пет евро и шестдесет и две евроцента', 'шестдесет и две евро и петдесет и пет евроцента'],
         images: [
           '/assets/lesson-03/novi-dumi-2-currency/50-euro.jpg',
           '/assets/lesson-03/novi-dumi-2-currency/10-euro.jpg',
@@ -263,6 +274,7 @@ export const exercises: Exercise[] = [
       {
         text: '[100 €] + [20 €] + [5 €] + [1 €] + [50 ¢] + [20 ¢] + [1 ¢]\nИма _______',
         blanks: [1], correctAnswers: ['сто двадесет и шест евро и седемдесет и един евроцент'],
+        options: ['сто двадесет и шест евро и седемдесет и един евроцент', 'сто и седемдесет евро и двадесет и шест евроцента', 'сто двадесет и един евро и седемдесет и шест евроцента'],
         images: [
           '/assets/lesson-03/novi-dumi-2-currency/100-euro.jpg',
           '/assets/lesson-03/novi-dumi-2-currency/20-euro.gif',
@@ -311,19 +323,19 @@ export const exercises: Exercise[] = [
       {
         id: 'a',
         lines: [
-          { speaker: 'Сервитьор', text: 'Добър ден. Какво обичате?' },
-          { speaker: 'Клиент',    text: 'Едно кафе, моля.' },
-          { speaker: 'Сервитьор', text: 'Късо или дълго?' },
-          { speaker: 'Клиент',    text: 'Дълго със захар и сметана.' },
-          { speaker: 'Сервитьор', text: 'Нещо за ядене?' },
-          { speaker: 'Клиент',    text: 'Да, един кроасан.' },
+          { speaker: 'Сервитьор', text: 'Добър ден. Какво обичате?', translations: { en: 'Good day. What would you like?', ar: 'مرحبًا. ماذا تحب أن تطلب؟', fr: 'Bonjour. Que désirez-vous ?', fa: 'روز بخیر. چه میل دارید؟', uk: 'Добрий день. Що бажаєте?', ru: 'Добрый день. Что желаете?' } },
+          { speaker: 'Клиент',    text: 'Едно кафе, моля.', translations: { en: 'A coffee, please.', ar: 'قهوة، من فضلك.', fr: 'Un café, s\'il vous plaît.', fa: 'یک قهوه، لطفاً.', uk: 'Каву, будь ласка.', ru: 'Кофе, пожалуйста.' } },
+          { speaker: 'Сервитьор', text: 'Късо или дълго?', translations: { en: 'Short or long?', ar: 'قصير أم طويل؟', fr: 'Court ou long ?', fa: 'کوتاه یا بلند؟', uk: 'Коротке чи довге?', ru: 'Короткое или длинное?' } },
+          { speaker: 'Клиент',    text: 'Дълго със захар и сметана.', translations: { en: 'Long with sugar and cream.', ar: 'طويل بالسكر والقشدة.', fr: 'Long avec sucre et crème.', fa: 'بلند با شکر و خامه.', uk: 'Довге з цукром і вершками.', ru: 'Длинное с сахаром и сливками.' } },
+          { speaker: 'Сервитьор', text: 'Нещо за ядене?', translations: { en: 'Something to eat?', ar: 'هل تريد شيئًا للأكل؟', fr: 'Quelque chose à manger ?', fa: 'چیزی برای خوردن؟', uk: 'Щось поїсти?', ru: 'Что-нибудь поесть?' } },
+          { speaker: 'Клиент',    text: 'Да, един кроасан.', translations: { en: 'Yes, a croissant.', ar: 'نعم، كرواسان.', fr: 'Oui, un croissant.', fa: 'بله، یک کروسان.', uk: 'Так, круасан.', ru: 'Да, круассан.' } },
         ],
       },
       {
         id: 'b',
         lines: [
-          { speaker: 'Клиент',    text: 'Извинете, колко струва един билков чай с мед?' },
-          { speaker: 'Сервитьор', text: '2,50 евро.' },
+          { speaker: 'Клиент',    text: 'Извинете, колко струва един билков чай с мед?', translations: { en: 'Excuse me, how much is a herbal tea with honey?', ar: 'عفوًا، كم يكلف شاي الأعشاب بالعسل؟', fr: 'Excusez-moi, combien coûte une tisane au miel ?', fa: 'ببخشید، یک چای گیاهی با عسل چقدر است؟', uk: 'Вибачте, скільки коштує трав\'яний чай з медом?', ru: 'Извините, сколько стоит травяной чай с мёдом?' } },
+          { speaker: 'Сервитьор', text: '2,50 евро.', translations: { en: '2.50 euros.', ar: '٢٫٥٠ يورو.', fr: '2,50 euros.', fa: '۲٫۵۰ یورو.', uk: '2,50 євро.', ru: '2,50 евро.' } },
         ],
       },
     ],
@@ -358,45 +370,45 @@ export const exercises: Exercise[] = [
       {
         id: 'a',
         lines: [
-          { speaker: 'Клиент',    text: 'Добър ден, господине. Свободно ли е?' },
-          { speaker: 'Господин',  text: 'Да, заповядайте.' },
+          { speaker: 'Клиент',    text: 'Добър ден, господине. Свободно ли е?', translations: { en: 'Good day, sir. Is this seat free?', ar: 'مرحبًا يا سيدي. هل المكان فارغ؟', fr: 'Bonjour, monsieur. C\'est libre ?', fa: 'روز بخیر، آقا. اینجا آزاد است؟', uk: 'Добрий день, пане. Вільно?', ru: 'Добрый день, господин. Свободно?' } },
+          { speaker: 'Господин',  text: 'Да, заповядайте.', translations: { en: 'Yes, please sit down.', ar: 'نعم، تفضل.', fr: 'Oui, je vous en prie.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
         ],
       },
       {
         id: 'b',
         lines: [
-          { speaker: 'Клиент',   text: 'Извинете, свободно ли е?' },
-          { speaker: 'Госпожа',  text: 'Не, съжалявам, заето е.' },
+          { speaker: 'Клиент',   text: 'Извинете, свободно ли е?', translations: { en: 'Excuse me, is this seat free?', ar: 'عفوًا، هل المكان فارغ؟', fr: 'Excusez-moi, c\'est libre ?', fa: 'ببخشید، اینجا آزاد است؟', uk: 'Вибачте, вільно?', ru: 'Извините, свободно?' } },
+          { speaker: 'Госпожа',  text: 'Не, съжалявам, заето е.', translations: { en: 'No, sorry, it\'s taken.', ar: 'لا، آسفة، المكان مشغول.', fr: 'Non, désolée, c\'est occupé.', fa: 'نه، متأسفم، اشغال است.', uk: 'Ні, вибачте, зайнято.', ru: 'Нет, извините, занято.' } },
         ],
       },
       {
         id: 'c',
         imageUrl: '/assets/lesson-03/dialogues-2/menu.jpg',
         lines: [
-          { speaker: 'Клиент',    text: 'Едно меню, ако обичате.' },
-          { speaker: 'Сервитьор', text: 'Да, разбира се.' },
+          { speaker: 'Клиент',    text: 'Едно меню, ако обичате.', translations: { en: 'A menu, please.', ar: 'قائمة الطعام، من فضلك.', fr: 'Un menu, s\'il vous plaît.', fa: 'یک منو، لطفاً.', uk: 'Меню, будь ласка.', ru: 'Меню, пожалуйста.' } },
+          { speaker: 'Сервитьор', text: 'Да, разбира се.', translations: { en: 'Yes, of course.', ar: 'نعم، بالطبع.', fr: 'Oui, bien sûr.', fa: 'بله، البته.', uk: 'Так, звісно.', ru: 'Да, конечно.' } },
         ],
       },
       {
         id: 'd',
         imageUrl: '/assets/lesson-03/dialogues-2/restorant-finikiya.jpg',
         lines: [
-          { speaker: 'Сервитьор', text: 'Какво обичате?' },
-          { speaker: 'Клиент',    text: 'Може ли една супа и една мусака?' },
-          { speaker: 'Сервитьор', text: 'Хляб искате ли?' },
-          { speaker: 'Клиент',    text: 'Не, благодаря.' },
-          { speaker: 'Сервитьор', text: 'Нещо за пиене?' },
-          { speaker: 'Клиент',    text: 'Един айрян, моля.' },
-          { speaker: 'Сервитьор', text: 'А десерт?' },
-          { speaker: 'Клиент',    text: 'О, да, един сладолед.' },
+          { speaker: 'Сервитьор', text: 'Какво обичате?', translations: { en: 'What would you like?', ar: 'ماذا تحب أن تطلب؟', fr: 'Que désirez-vous ?', fa: 'چه میل دارید؟', uk: 'Що бажаєте?', ru: 'Что желаете?' } },
+          { speaker: 'Клиент',    text: 'Може ли една супа и една мусака?', translations: { en: 'Can I have a soup and a moussaka?', ar: 'هل يمكنني طلب حساء وموساكا؟', fr: 'Puis-je avoir une soupe et une moussaka ?', fa: 'می‌توانم یک سوپ و یک موساکا داشته باشم؟', uk: 'Можна суп і мусаку?', ru: 'Можно суп и мусаку?' } },
+          { speaker: 'Сервитьор', text: 'Хляб искате ли?', translations: { en: 'Would you like bread?', ar: 'هل تريد خبزًا؟', fr: 'Voulez-vous du pain ?', fa: 'نان می‌خواهید؟', uk: 'Хліб бажаєте?', ru: 'Хлеб желаете?' } },
+          { speaker: 'Клиент',    text: 'Не, благодаря.', translations: { en: 'No, thank you.', ar: 'لا، شكرًا.', fr: 'Non, merci.', fa: 'نه، ممنون.', uk: 'Ні, дякую.', ru: 'Нет, спасибо.' } },
+          { speaker: 'Сервитьор', text: 'Нещо за пиене?', translations: { en: 'Something to drink?', ar: 'هل تريد شيئًا للشرب؟', fr: 'Quelque chose à boire ?', fa: 'چیزی برای نوشیدن؟', uk: 'Щось випити?', ru: 'Что-нибудь попить?' } },
+          { speaker: 'Клиент',    text: 'Един айрян, моля.', translations: { en: 'An ayran, please.', ar: 'عيران واحد، من فضلك.', fr: 'Un ayran, s\'il vous plaît.', fa: 'یک دوغ، لطفاً.', uk: 'Айран, будь ласка.', ru: 'Айран, пожалуйста.' } },
+          { speaker: 'Сервитьор', text: 'А десерт?', translations: { en: 'And dessert?', ar: 'وحلويات؟', fr: 'Et un dessert ?', fa: 'و دسر؟', uk: 'А десерт?', ru: 'А десерт?' } },
+          { speaker: 'Клиент',    text: 'О, да, един сладолед.', translations: { en: 'Oh yes, an ice cream.', ar: 'أوه، نعم، آيس كريم.', fr: 'Oh oui, une glace.', fa: 'اوه، بله، یک بستنی.', uk: 'О, так, морозиво.', ru: 'О, да, мороженое.' } },
         ],
       },
       {
         id: 'e',
         imageUrl: '/assets/lesson-03/dialogues-2/smetka.jpg',
         lines: [
-          { speaker: 'Клиент',    text: 'Може ли сметката?' },
-          { speaker: 'Сервитьор', text: 'Да, заповядайте.' },
+          { speaker: 'Клиент',    text: 'Може ли сметката?', translations: { en: 'Can I have the bill?', ar: 'هل يمكنني الحصول على الفاتورة؟', fr: 'L\'addition, s\'il vous plaît.', fa: 'می‌توانم صورتحساب را داشته باشم؟', uk: 'Можна рахунок?', ru: 'Можно счёт?' } },
+          { speaker: 'Сервитьор', text: 'Да, заповядайте.', translations: { en: 'Yes, here you are.', ar: 'نعم، تفضل.', fr: 'Oui, voilà.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
         ],
       },
     ],
@@ -428,6 +440,21 @@ export const exercises: Exercise[] = [
           'Не, благодаря.',
           'Може ли сметката?',
           'Да, разбира се.',
+        ],
+        alternateOrders: [
+          [
+            'Добър ден.',
+            'Добър ден.',
+            'Може ли едно меню?',
+            'Да, заповядайте.',
+            'Искам една салата и едно шишче.',
+            'Нещо за пиене?',
+            'Не, благодаря.',
+            'Искате ли хляб?',
+            'Да, една филия.',
+            'Може ли сметката?',
+            'Да, разбира се.',
+          ],
         ],
       },
     ],
@@ -550,7 +577,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-16',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете глагола пия в правилната му форма.',
+    instruction: 'Попълнете глагола пия в правилната му форма.',
     order: 19,
     points: 8,
     layout: 'single',
@@ -602,7 +629,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-17',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете глагола ям в правилната му форма.',
+    instruction: 'Попълнете глагола ям в правилната му форма.',
     order: 20,
     points: 8,
     layout: 'single',
@@ -675,12 +702,12 @@ export const exercises: Exercise[] = [
       {
         id: 'a',
         lines: [
-          { speaker: 'A', text: 'Какво закусваш?' },
-          { speaker: 'Б', text: 'Сутрин ям сандвич и пия кафе.' },
-          { speaker: 'A', text: 'Какво обядваш?' },
-          { speaker: 'Б', text: 'На обяд ям риба и салата и пия сок.' },
-          { speaker: 'A', text: 'Какво вечеряш?' },
-          { speaker: 'Б', text: 'Вечер ям макарони и пия айрян.' },
+          { speaker: 'A', text: 'Какво закусваш?', translations: { en: 'What do you have for breakfast?', ar: 'ماذا تتناول على الفطور؟', fr: 'Qu\'est-ce que tu prends au petit-déjeuner ?', fa: 'صبحانه چه می‌خوری؟', uk: 'Що ти снідаєш?', ru: 'Что ты ешь на завтрак?' } },
+          { speaker: 'Б', text: 'Сутрин ям сандвич и пия кафе.', translations: { en: 'In the morning I eat a sandwich and drink coffee.', ar: 'في الصباح آكل ساندويتش وأشرب قهوة.', fr: 'Le matin, je mange un sandwich et je bois du café.', fa: 'صبح ساندویچ می‌خورم و قهوه می‌نوشم.', uk: 'Вранці я їм сандвіч і п\'ю каву.', ru: 'Утром я ем сэндвич и пью кофе.' } },
+          { speaker: 'A', text: 'Какво обядваш?', translations: { en: 'What do you have for lunch?', ar: 'ماذا تتناول على الغداء؟', fr: 'Qu\'est-ce que tu manges à midi ?', fa: 'ناهار چه می‌خوری؟', uk: 'Що ти обідаєш?', ru: 'Что ты ешь на обед?' } },
+          { speaker: 'Б', text: 'На обяд ям риба и салата и пия сок.', translations: { en: 'For lunch I eat fish and salad and drink juice.', ar: 'على الغداء آكل سمكًا وسلطة وأشرب عصيرًا.', fr: 'À midi, je mange du poisson et de la salade et je bois du jus.', fa: 'ناهار ماهی و سالاد می‌خورم و آبمیوه می‌نوشم.', uk: 'На обід я їм рибу і салат і п\'ю сік.', ru: 'На обед я ем рыбу и салат и пью сок.' } },
+          { speaker: 'A', text: 'Какво вечеряш?', translations: { en: 'What do you have for dinner?', ar: 'ماذا تتناول على العشاء؟', fr: 'Qu\'est-ce que tu manges le soir ?', fa: 'شام چه می‌خوری؟', uk: 'Що ти вечеряєш?', ru: 'Что ты ешь на ужин?' } },
+          { speaker: 'Б', text: 'Вечер ям макарони и пия айрян.', translations: { en: 'In the evening I eat pasta and drink ayran.', ar: 'في المساء آكل معكرونة وأشرب عيران.', fr: 'Le soir, je mange des pâtes et je bois de l\'ayran.', fa: 'عصر ماکارونی می‌خورم و دوغ می‌نوشم.', uk: 'Увечері я їм макарони і п\'ю айран.', ru: 'Вечером я ем макароны и пью айран.' } },
         ],
       },
     ],
@@ -704,6 +731,10 @@ export const exercises: Exercise[] = [
         text: 'Аз обядвам _______ и _______.',
         blanks: [2, 4],
         correctAnswers: ['макарони', 'портокалов сок'],
+        acceptableAnswers: [
+          ['макарони', 'супа', 'мусака', 'риба', 'салата'],
+          ['портокалов сок', 'айрян', 'вода', 'кока-кола', 'минерална вода'],
+        ],
         options: [
           ['макарони', 'супа', 'мусака', 'риба', 'салата'],
           ['портокалов сок', 'айрян', 'вода', 'кока-кола', 'минерална вода'],
@@ -713,6 +744,10 @@ export const exercises: Exercise[] = [
         text: 'Аз вечерям _______ и _______.',
         blanks: [2, 4],
         correctAnswers: ['салата', 'вода'],
+        acceptableAnswers: [
+          ['салата', 'шишче', 'кебапче', 'риба', 'пица'],
+          ['вода', 'айрян', 'сок', 'чай', 'кафе'],
+        ],
         options: [
           ['салата', 'шишче', 'кебапче', 'риба', 'пица'],
           ['вода', 'айрян', 'сок', 'чай', 'кафе'],
@@ -758,10 +793,10 @@ export const exercises: Exercise[] = [
     order: 25,
     points: 5,
     questions: [
-      { id: 'q1', left: 'Какво искате за обяд?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам супа.' },
-      { id: 'q2', left: 'Какво искате за вечеря?',   options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам мусака.' },
+      { id: 'q1', left: 'Какво искате за обяд?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам супа.', alternateCorrectAnswers: ['Искам мусака.', 'Искам шишче.'] },
+      { id: 'q2', left: 'Какво искате за вечеря?',   options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам мусака.', alternateCorrectAnswers: ['Искам супа.', 'Искам шишче.'] },
       { id: 'q3', left: 'Какво искате за пиене?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам вода.' },
-      { id: 'q4', left: 'Какво искате за ядене?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам шишче.' },
+      { id: 'q4', left: 'Какво искате за ядене?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам шишче.', alternateCorrectAnswers: ['Искам супа.', 'Искам мусака.'] },
       { id: 'q5', left: 'Какво искате за десерт?',   options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам сладолед.' },
     ],
   } as DropdownMatchExercise,
@@ -857,7 +892,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-27',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете един, една, едно или много пред думите.',
+    instruction: 'Напишете един (м.р.), една (ж.р.), едно (ср.р.) или много пред думите.',
     order: 30,
     points: 14,
     layout: 'two-column',

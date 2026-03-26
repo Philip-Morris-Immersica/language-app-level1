@@ -53,6 +53,8 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 - Short fill-in-blank exercises (e.g., два/две, какъв/каква) → use `layout: 'two-column'`.
 - `content.ts` dialogues **must match** `exercises.ts` dialogues exactly (same lines, same prices, same currency).
 - Empty `imageUrl: ''` is safe — components (`IllustratedCards`, `GrammarWithExamples`) skip rendering when empty.
+- **`grammar_table` alignment rule:** `columns.length` MUST equal `cells.length` for every row. The `pronoun` field renders in the first column automatically (with an empty header). Do NOT include the pronoun column label in `columns` — it causes header misalignment.
+- **Instruction text must match the actual exercise type.** If the exercise uses dropdowns, the instruction should say "Изберете" (Select), not "Напишете" (Write). Match the verb to the interaction: Select → dropdown, Write → text input, Arrange → drag-and-drop.
 
 ## Exercise Types — 5 Categories
 
@@ -92,6 +94,34 @@ Use these mappings when digitalizing textbook exercises:
 | "Свържете/проследете буквите по ред" | `connect_dots` (змия) |
 | "Намерете пътя в лабиринта" | `alphabet_maze` (интерактивна решетка) |
 | Нови думи БЕЗ картинки (международни думи и др.) | `illustrated_cards` (imageUrl: '') |
+
+## Automatic UI Behaviors (no action needed in content files)
+
+The following behaviors are built into the exercise components — content authors don't need to do anything extra:
+
+- **Options are shuffled** — `WorkbookFillBlank` shuffles `options[]` on render so the correct answer isn't always first.
+- **Letters are shuffled** — `LetterChoice` shuffles the letter pool on render.
+- **Reset button** — All exercise components with "Check answers" also show a "Reset" button.
+- **TTS** — All components use `speakBulgarian()` from `@/lib/tts` with automatic voice selection.
+
+## Alternative Correct Answers
+
+When an exercise has **multiple valid answers** for the same question:
+
+**`dropdown_match`** — use `alternateCorrectAnswers`:
+```ts
+{ id: 'q2', left: 'Добър', options: [...], correctAnswer: 'ден!', alternateCorrectAnswers: ['вечер!'] }
+```
+
+**`dialogue_builder`** — use `alternateOrders` on the section:
+```ts
+{ id: 'в.', givenFirstLine: '...', sentences: [...], alternateOrders: [[...], [...]] }
+```
+
+**`workbook_fill_blank`** — use `acceptableAnswers`:
+```ts
+{ text: '...', correctAnswers: ['тя е украинка.'], acceptableAnswers: [['тя е украинка', 'тя е украинка.']] }
+```
 
 ## Creating Exercises — ALWAYS Use Templates
 

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian } from '@/lib/tts';
 
 interface GrammarTableProps {
   tableTitle?: string;
@@ -26,12 +27,7 @@ export function GrammarTable({
   const t = useT();
 
   const toggleRow = (idx: number) => {
-    const utterance = new SpeechSynthesisUtterance(
-      [rows[idx].pronoun, ...rows[idx].cells].join(', ')
-    );
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
+    speakBulgarian([rows[idx].pronoun, ...rows[idx].cells].join(', '));
 
     setRevealedRows(prev => {
       const next = new Set(prev);
@@ -73,13 +69,10 @@ export function GrammarTable({
                   {tableTitle}
                 </th>
               </tr>
-              {/* Column headers — columns[0] labels the pronoun column; columns[1..] label the cells */}
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 w-16 md:w-20">
-                    {columns[0]}
-                  </th>
-                  {columns.slice(1).map((col, i) => (
+                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]" />
+                  {columns.map((col, i) => (
                     <th
                       key={i}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0"
@@ -102,7 +95,7 @@ export function GrammarTable({
                     onClick={() => toggleRow(rIdx)}
                     className={`cursor-pointer hover:bg-[#edf5e4] transition-colors ${rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
                   >
-                    <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100">
+                    <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]">
                       {row.pronoun}
                     </td>
                     {row.cells.map((cell, cIdx) => (

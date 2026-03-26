@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Check, X, Play, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { speakBulgarian } from '@/lib/tts';
 
 interface WorkbookSentence {
   text: string;
@@ -60,6 +61,24 @@ export function WorkbookFillBlank({
     saveState({ answers, validation, isSubmitted });
   }, [answers, validation, isSubmitted]);
 
+  const shuffledSentences = useMemo(() => {
+    return sentences.map(s => {
+      if (!s.options || s.isExample) return s;
+      const shuffle = <T,>(arr: T[]): T[] => {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
+      if (Array.isArray(s.options[0])) {
+        return { ...s, options: (s.options as string[][]).map(opts => shuffle(opts)) };
+      }
+      return { ...s, options: shuffle(s.options as string[]) };
+    });
+  }, []);
+
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
     if (isSubmitted) {
       setIsSubmitted(false);
@@ -70,6 +89,13 @@ export function WorkbookFillBlank({
       current[blankIdx] = value;
       return { ...prev, [sentenceIdx]: current };
     });
+  };
+
+  const handleReset = () => {
+    setAnswers({});
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ answers: {}, validation: {}, isSubmitted: false });
   };
 
   const handleSubmit = () => {
@@ -368,9 +394,9 @@ export function WorkbookFillBlank({
   };
 
   // Split sentences for two-column layout: first half left, second half right
-  const half = Math.ceil(sentences.length / 2);
-  const leftSentences = sentences.slice(0, half);
-  const rightSentences = sentences.slice(half);
+  const half = Math.ceil(shuffledSentences.length / 2);
+  const leftSentences = shuffledSentences.slice(0, half);
+  const rightSentences = shuffledSentences.slice(half);
 
   const allFilled = sentences.every((s, idx) => {
     if (s.isExample || s.blanks.length === 0) return true;
@@ -379,12 +405,7 @@ export function WorkbookFillBlank({
   });
 
   const speakText = (text: string) => {
-    if (typeof window === 'undefined') return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'bg-BG';
-    u.rate = 0.85;
-    window.speechSynthesis.speak(u);
+    speakBulgarian(text);
   };
 
   return (
@@ -430,7 +451,7 @@ export function WorkbookFillBlank({
         <div className="space-y-3">
           {(() => {
             let numCounter = 0;
-            return sentences.map((s, i) => {
+            return shuffledSentences.map((s, i) => {
               const isEx = s.isExample || s.blanks.length === 0;
               if (!isEx) numCounter++;
               return renderQAStackedSentence(s, i, numCounter);
@@ -439,7 +460,7 @@ export function WorkbookFillBlank({
         </div>
       ) : layout === 'qa-split' ? (
         <div className="space-y-1">
-          {sentences.map((s, i) => renderQASentence(s, i))}
+          {shuffledSentences.map((s, i) => renderQASentence(s, i))}
         </div>
       ) : layout === 'two-column' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
@@ -452,16 +473,22 @@ export function WorkbookFillBlank({
         </div>
       ) : (
         <div className="space-y-2">
-          {sentences.map((s, i) => renderSentence(s, i))}
+          {shuffledSentences.map((s, i) => renderSentence(s, i))}
         </div>
       )}
 
-      <Button
-        onClick={handleSubmit}
-        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-      >
-        {t('exercise.checkAnswers')}
-      </Button>
+      <div className="flex gap-3 mt-6">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+        >
+          {t('exercise.checkAnswers')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">

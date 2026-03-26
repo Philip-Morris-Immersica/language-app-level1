@@ -8,6 +8,7 @@ import type { IllustratedCardsExercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian } from '@/lib/tts';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -34,18 +35,9 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
     });
   };
 
-  const speak = (label: string, sublabels?: string[]) => {
-    window.speechSynthesis.cancel();
-    const parts = [label, ...(sublabels || [])];
-    const text = parts.join('. ');
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
-  };
-
   const handleCardClick = (card: { id: string; label: string; sublabels?: string[] }) => {
-    speak(card.label, card.sublabels);
+    const parts = [card.label, ...(card.sublabels || [])];
+    speakBulgarian(parts.join('. '));
     toggleTranslation(card.id);
     setVisitedCards(prev => new Set(prev).add(card.id));
   };

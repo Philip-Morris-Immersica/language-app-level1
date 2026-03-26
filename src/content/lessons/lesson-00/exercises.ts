@@ -34,7 +34,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'Гг', cells: ['Г г', 'Галя'] },
       { pronoun: 'Дд', cells: ['Д д', 'Дилма'] },
       { pronoun: 'Ее', cells: ['Е е', 'Емил'] },
-      { pronoun: 'Жж', cells: ['Ж ж', 'Жала'] },
+      { pronoun: 'Жж', cells: ['Ж ж', 'Жасмин'] },
       { pronoun: 'Зз', cells: ['З з', 'Зара'] },
       { pronoun: 'Ии', cells: ['И и', 'Ибрахим'] },
       { pronoun: 'Йй', cells: ['Й й', 'Йоана'] },
@@ -200,7 +200,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l00-ex-03',
     type: 'image_labeling',
-    instruction: 'Свържете държавите и знамената.',
+    instruction: 'Изберете правилната държава за всяко знаме.',
     order: 4,
     points: 10,
     displayType: 'flags',
@@ -239,7 +239,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l00-ex-05',
     type: 'image_labeling',
-    instruction: 'Напишете имената на континентите.',
+    instruction: 'Изберете имената на континентите.',
     order: 5,
     points: 5,
     images: [
@@ -261,7 +261,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l00-ex-06',
     type: 'image_labeling',
-    instruction: 'Напишете думите под картинките.',
+    instruction: 'Изберете думите под картинките.',
     order: 6,
     points: 5,
     images: [

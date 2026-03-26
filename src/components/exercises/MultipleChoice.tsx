@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import Image from 'next/image';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useT } from '@/i18n/useT';
@@ -60,6 +61,13 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
 
   const isExampleQuestion = (q: { question: string }) =>
     /\(ПРИМЕР\)/i.test(q.question) || /\(EXAMPLE\)/i.test(q.question);
+
+  const handleReset = () => {
+    setSelectedAnswers({});
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ selectedAnswers: {}, validation: {}, isSubmitted: false });
+  };
 
   const handleSubmit = () => {
     const newValidation: { [key: number]: boolean } = {};
@@ -129,6 +137,11 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
 
           return (
             <div key={qIndex} className="space-y-4">
+              {question.imageUrl && (
+                <div className="relative w-full max-w-xs mx-auto aspect-[4/3] rounded-lg overflow-hidden border border-gray-200">
+                  <Image src={question.imageUrl} alt="" fill className="object-contain" />
+                </div>
+              )}
               <div className="space-y-1.5">
                 {context && (
                   <p className="text-sm md:text-base text-gray-500 leading-relaxed">
@@ -203,12 +216,18 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
         })}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-      >
-        {t('exercise.check')}
-      </Button>
+      <div className="flex gap-3 mt-8">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+        >
+          {t('exercise.check')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">

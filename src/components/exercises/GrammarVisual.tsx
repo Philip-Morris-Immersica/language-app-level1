@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian } from '@/lib/tts';
 
 interface PronounVisual {
   pronoun: string;
@@ -25,10 +26,7 @@ export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
   const t = useT();
 
   const handleClick = (index: number, text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
+    speakBulgarian(text);
 
     setRevealed(prev => {
       const next = new Set(prev);

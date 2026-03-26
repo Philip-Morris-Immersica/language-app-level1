@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
@@ -69,6 +69,13 @@ export function WordSearch({
   const handleRemoveWord = (word: string) => {
     if (isSubmitted) return;
     setFoundWords(foundWords.filter(w => w !== word));
+  };
+
+  const handleReset = () => {
+    setFoundWords([]);
+    setIsSubmitted(false);
+    setClickedWrong(null);
+    saveState({ foundWords: [], isSubmitted: false });
   };
 
   const handleSubmit = () => {
@@ -158,15 +165,18 @@ export function WordSearch({
         </div>
       </div>
 
-      {/* Submit button */}
-      {!isSubmitted && (
+      <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
           className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
-      )}
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {/* Results */}
       {isSubmitted && (

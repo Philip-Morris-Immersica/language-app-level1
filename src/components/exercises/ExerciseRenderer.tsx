@@ -229,6 +229,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           audioUrl={exercise.audioUrl}
           images={exercise.images}
           paragraphs={exercise.paragraphs}
+          paragraphTranslations={exercise.paragraphTranslations}
           showDictionary={exercise.showDictionary}
           hideText={exercise.hideText}
           noTranslation={exercise.noTranslation}
@@ -283,6 +284,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <TableFill
           tables={exercise.tables}
+          paragraphs={exercise.paragraphs}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />

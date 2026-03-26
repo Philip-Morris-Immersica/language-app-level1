@@ -26,6 +26,7 @@ interface Section {
   id: string;
   givenFirstLine: string;
   sentences: string[];
+  alternateOrders?: string[][];
 }
 
 interface SectionState {
@@ -174,7 +175,9 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
   const handleCheck = (sectionId: string) => {
     const section = sections.find(s => s.id === sectionId)!;
     const current = sectionStates[sectionId].items.map(i => i.text);
-    const correct = current.every((text, idx) => text === section.sentences[idx]);
+    const matchesOrder = (order: string[]) => current.every((text, idx) => text === order[idx]);
+    const correct = matchesOrder(section.sentences) ||
+      (section.alternateOrders ?? []).some(matchesOrder);
     setSectionStates(prev => ({
       ...prev,
       [sectionId]: { ...prev[sectionId], checked: true, correct },

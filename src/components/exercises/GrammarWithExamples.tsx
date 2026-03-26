@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian } from '@/lib/tts';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -72,10 +73,7 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
       ? example.lines.join(' ')
       : [example.text, example.subtext].filter(Boolean).join(' ');
 
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
+    speakBulgarian(textToSpeak);
 
     setRevealed(prev => {
       const next = new Set(prev);

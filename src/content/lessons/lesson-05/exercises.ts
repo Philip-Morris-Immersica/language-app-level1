@@ -337,7 +337,7 @@ export const exercises: Exercise[] = [
     instruction: 'Глагол ЖИВЕЯ в сегашно време — прегледайте таблицата и примера.',
     order: 14,
     tableTitle: 'Живея (живе–)',
-    columns: ['Лице', 'Форма'],
+    columns: ['Форма'],
     rows: [
       { pronoun: 'аз', cells: ['живея'] },
       { pronoun: 'ти', cells: ['живееш'] },
@@ -393,7 +393,7 @@ export const exercises: Exercise[] = [
     instruction: 'Членуване — единствено число.',
     order: 17,
     tableTitle: 'Определителна стативна форма (ед.ч.)',
-    columns: ['Род', 'Окончание', 'Примери'],
+    columns: ['Окончание', 'Примери'],
     rows: [
       { pronoun: 'м.р. (а)', cells: ['-ът / -а', 'пазарът / в центъра'] },
       { pronoun: 'м.р. (б)', cells: ['-ят / -я', 'учителят / при учителя'] },
@@ -455,7 +455,7 @@ export const exercises: Exercise[] = [
     instruction: 'Членуване в множествено число.',
     order: 20,
     tableTitle: 'Мн.ч. с определителен член',
-    columns: ['Род', 'Член', 'Примери'],
+    columns: ['Член', 'Примери'],
     rows: [
       { pronoun: 'м.р.', cells: ['-те', 'пазарите, градовете'] },
       { pronoun: 'ж.р.', cells: ['-те', 'банките, улиците'] },
@@ -719,7 +719,7 @@ export const exercises: Exercise[] = [
     instruction: 'Бройни форми за хора.',
     order: 31,
     tableTitle: 'Число на съществителните (3)',
-    columns: ['Обобщение', 'Форма', 'Изречения'],
+    columns: ['Форма', 'Изречения'],
     rows: [
       { pronoun: 'Ед. число', cells: ['един човек', 'Тук има един човек.'] },
       { pronoun: 'С число', cells: ['десет души', 'Колко души има тук?'] },
@@ -752,7 +752,7 @@ export const exercises: Exercise[] = [
     instruction: 'Хиляда до милиард. Пример: 1 234 567 = един милион двеста тридесет и четири хиляди петстотин шестдесет и седем.',
     order: 33,
     tableTitle: 'Бройни числителни',
-    columns: ['Число', 'Дума'],
+    columns: ['Дума'],
     rows: [
       { pronoun: '1 000', cells: ['хиляда'] },
       { pronoun: '2 000', cells: ['две хиляди'] },

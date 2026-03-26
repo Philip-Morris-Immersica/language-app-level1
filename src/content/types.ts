@@ -56,6 +56,7 @@ export interface MultipleChoiceExercise extends BaseExercise {
   type: 'multiple_choice';
   questions: {
     question: string;
+    imageUrl?: string;
     options: string[];      // ["един", "една", "едно"]
     correctIndex: number;
   }[];
@@ -250,6 +251,7 @@ export interface DialoguesExercise extends BaseExercise {
     lines: {
       speaker?: string;
       text: string;
+      translations?: Record<string, string>;
     }[];
   }[];
 }
@@ -261,6 +263,7 @@ export interface DialogueBuilderExercise extends BaseExercise {
     id: string;                  // 'а.', 'б.', etc.
     givenFirstLine: string;      // The locked first line shown to the user
     sentences: string[];         // All sentences in CORRECT order (first = givenFirstLine)
+    alternateOrders?: string[][]; // Additional valid orderings (each array = full sentence list)
   }[];
 }
 
@@ -276,6 +279,7 @@ export interface DropdownMatchExercise extends BaseExercise {
     leftImageUrl?: string;
     options: string[];
     correctAnswer: string;
+    alternateCorrectAnswers?: string[];
   }[];
 }
 
@@ -326,6 +330,7 @@ export interface ReadingTextExercise extends BaseExercise {
     label: string;
   }[];
   paragraphs: string[];
+  paragraphTranslations?: Record<string, string>[];
   showDictionary?: boolean;
   hideText?: boolean;
   noTranslation?: boolean;

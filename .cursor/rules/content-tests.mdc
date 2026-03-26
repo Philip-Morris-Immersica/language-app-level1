@@ -184,6 +184,14 @@ The `[label]` placeholder is extracted automatically from `testData.title` via `
 - Sections with `maxPoints: 0` are excluded from the scoring breakdown
 - **Tier messages are automatic** — `buildTierMessages()` reads the lesson label from `testData.title`; no per-test configuration needed
 
+## Automatic UI Behaviors (inherited from exercise components)
+
+These are built into the exercise components and apply to tests automatically:
+
+- **Options are shuffled** — `WorkbookFillBlank` shuffles `options[]` on render
+- **Reset button** — All exercise components show a "Reset" button alongside "Check"
+- **TTS** — Components use `speakBulgarian()` from `@/lib/tts` with automatic voice selection
+
 ## Creating Tests — ALWAYS Use Templates
 
 When creating a new test, **always read `@TEST_TEMPLATES.ts` first**.

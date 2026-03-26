@@ -11,6 +11,21 @@ function getCacheKey(text: string, lang: string) {
   return `${CACHE_PREFIX}${lang}_${hash}`;
 }
 
+function postProcess(text: string, lang: string): string {
+  if (lang === 'en') {
+    text = text.replace(/\bi\b/g, 'I');
+    text = text.replace(/\boil\b/gi, 'butter');
+    text = text.replace(/\bOil\b/g, 'Butter');
+    text = text.replace(/\bpercent\b/gi, 'one hundred');
+    text = text.replace(/\bIrish\b/g, 'ayran');
+    text = text.replace(/\bYAM\b/g, 'EAT');
+    text = text.replace(/\bPIYA\b/g, 'DRINK');
+    text = text.replace(/^Can the bill\?$/i, 'Can I have the bill?');
+    if (/^three$/i.test(text)) text = 'ice cream';
+  }
+  return text;
+}
+
 async function translateText(text: string, targetLang: string): Promise<string> {
   const cacheKey = getCacheKey(text, targetLang);
   const cached = localStorage.getItem(cacheKey);
@@ -21,7 +36,8 @@ async function translateText(text: string, targetLang: string): Promise<string> 
     const res = await fetch(url);
     if (!res.ok) return text;
     const data = await res.json();
-    const translated: string = data[0]?.map((chunk: [string]) => chunk[0]).join('') ?? text;
+    let translated: string = data[0]?.map((chunk: [string]) => chunk[0]).join('') ?? text;
+    translated = postProcess(translated, targetLang);
     localStorage.setItem(cacheKey, translated);
     return translated;
   } catch {

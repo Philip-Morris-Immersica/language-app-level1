@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import {
@@ -12,6 +12,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian } from '@/lib/tts';
+
+interface Paragraph {
+  speaker?: string;
+  text: string;
+}
 
 interface TableCell {
   correctAnswers: string[];
@@ -31,12 +39,15 @@ interface Table {
 
 interface TableFillProps {
   tables: Table[];
+  paragraphs?: Paragraph[];
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
 
-export function TableFill({ tables, onComplete, exerciseId }: TableFillProps) {
+export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableFillProps) {
   const t = useT();
+  const { lang } = useLanguage();
+  const [revealedParas, setRevealedParas] = useState<Set<number>>(new Set());
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
 
@@ -59,6 +70,13 @@ export function TableFill({ tables, onComplete, exerciseId }: TableFillProps) {
       setIsSubmitted(false);
       setValidation({});
     }
+  };
+
+  const handleReset = () => {
+    setAnswers({});
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ answers: {}, validation: {}, isSubmitted: false });
   };
 
   const handleSubmit = () => {
@@ -97,6 +115,34 @@ export function TableFill({ tables, onComplete, exerciseId }: TableFillProps) {
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-8 shadow-md space-y-6">
+      {paragraphs && paragraphs.length > 0 && (
+        <div className="space-y-4">
+          {lang !== 'bg' && (
+            <p className="text-xs text-gray-400 text-center italic">{t('exercise.tapToTranslate')}</p>
+          )}
+          {paragraphs.map((para, i) => (
+            <div
+              key={i}
+              onClick={() => {
+                speakBulgarian(para.text);
+                setRevealedParas(prev => {
+                  const next = new Set(prev);
+                  if (next.has(i)) next.delete(i); else next.add(i);
+                  return next;
+                });
+              }}
+              className="cursor-pointer hover:bg-gray-50 rounded-lg p-3 -mx-1 transition-colors active:scale-[0.99]"
+            >
+              {para.speaker && (
+                <p className="text-xs font-bold text-[#0279C3] mb-1">{para.speaker}</p>
+              )}
+              <p className="text-base md:text-lg text-gray-800 leading-relaxed">{para.text}</p>
+              <InlineTranslation text={para.text} visible={revealedParas.has(i)} />
+            </div>
+          ))}
+        </div>
+      )}
+
       {tables.map((table, ti) => (
         <div key={ti}>
           {table.name && (
@@ -184,12 +230,18 @@ export function TableFill({ tables, onComplete, exerciseId }: TableFillProps) {
         </div>
       ))}
 
-      <Button
-        onClick={handleSubmit}
-        className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-      >
-        {t('exercise.checkAnswers')}
-      </Button>
+      <div className="flex gap-3 mt-6">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+        >
+          {t('exercise.checkAnswers')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">

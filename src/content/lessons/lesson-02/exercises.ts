@@ -27,7 +27,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-01',
     type: 'image_labeling',
-    instruction: 'Напишете думите под картинките.',
+    instruction: 'Изберете думите под картинките.',
     order: 1,
     points: 4,
     images: [
@@ -388,14 +388,14 @@ export const exercises: Exercise[] = [
       positiveAnswer: 'Да, пия чай с мед.',
       negativeAnswer: 'Не, пия чай без мед.',
     },
-    blankOptions: ['с', 'без'],
+    blankOptions: ['с', 'със', 'без'],
     items: [
       {
         id: 'sugar-coffee',
         question: 'Искате ли захар в кафето?',
         positiveTemplate: 'Да, пия кафе ___ захар.',
         negativeTemplate: 'Не, пия кафе ___ захар.',
-        positiveBlank: 'с',
+        positiveBlank: 'със',
         negativeBlank: 'без',
       },
       {
@@ -469,13 +469,13 @@ export const exercises: Exercise[] = [
         id: 'ima',
         title: 'ИМА',
         icon: '✓',
-        correctItems: ['хляб', 'масло', 'мед', 'кафе', 'яйце'],
+        correctItems: ['хляб', 'масло', 'мед', 'кафе', 'салам'],
       },
       {
         id: 'nyama',
         title: 'НЯМА',
         icon: '✗',
-        correctItems: ['пица', 'салам', 'баница', 'кисело мляко', 'захар'],
+        correctItems: ['пица', 'яйце', 'баница', 'кисело мляко', 'захар'],
       },
     ],
   } as DragToColumnsExercise,
@@ -513,7 +513,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-18',
     type: 'match_pairs',
-    instruction: 'Свържете думите по модела: един, една или едно?',
+    instruction: 'Свържете думите по модела: един (м.р.), една (ж.р.) или едно (ср.р.)?',
     order: 27,
     points: 6,
     pairs: [
@@ -531,7 +531,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-19',
     type: 'drag_to_columns',
-    instruction: 'Изберете правилната форма: един, една или едно?',
+    instruction: 'Изберете правилната форма: един (м.р.), една (ж.р.) или едно (ср.р.)?',
     order: 28,
     points: 18,
     items: [
@@ -737,6 +737,32 @@ export const exercises: Exercise[] = [
       'Амал е от Ирак. За закуска тя много обича чай със захар, сок от портокал, сандвич с масло, сирене и домат. Не обича мед, салам и кашкавал.',
       'Наталия е от Украйна. За закуска тя обича мляко с кафе и плодове. Не обича сирене и кашкавал.',
       'Амал и Наталия обичат баница.',
+    ],
+    paragraphTranslations: [
+      {
+        en: 'Amal is from Iraq. For breakfast she really likes tea with sugar, orange juice, a sandwich with butter, cheese and tomato. She doesn\'t like honey, salami and yellow cheese.',
+        ar: 'أمل من العراق. على الفطور هي تحب كثيرًا الشاي بالسكر وعصير البرتقال وساندويتش بالزبدة والجبن والطماطم. لا تحب العسل والسلامي والقشقوان.',
+        fr: 'Amal est d\'Irak. Pour le petit-déjeuner, elle aime beaucoup le thé avec du sucre, le jus d\'orange, un sandwich avec du beurre, du fromage et de la tomate. Elle n\'aime pas le miel, le salami et le fromage jaune.',
+        fa: 'امل از عراق است. برای صبحانه او خیلی چای با شکر، آب پرتقال، ساندویچ با کره، پنیر و گوجه‌فرنگی دوست دارد. عسل، سالامی و پنیر زرد دوست ندارد.',
+        uk: 'Амаль з Іраку. На сніданок вона дуже любить чай з цукром, апельсиновий сік, сандвіч з маслом, сиром і помідором. Не любить мед, салямі та кашкавал.',
+        ru: 'Амаль из Ирака. На завтрак она очень любит чай с сахаром, апельсиновый сок, бутерброд с маслом, сыром и помидором. Не любит мёд, салями и кашкавал.',
+      },
+      {
+        en: 'Natalia is from Ukraine. For breakfast she likes milk with coffee and fruit. She doesn\'t like cheese and yellow cheese.',
+        ar: 'ناتاليا من أوكرانيا. على الفطور هي تحب الحليب مع القهوة والفواكه. لا تحب الجبن والقشقوان.',
+        fr: 'Natalia est d\'Ukraine. Pour le petit-déjeuner, elle aime le lait avec du café et des fruits. Elle n\'aime pas le fromage et le fromage jaune.',
+        fa: 'ناتالیا از اوکراین است. برای صبحانه شیر با قهوه و میوه دوست دارد. پنیر و پنیر زرد دوست ندارد.',
+        uk: 'Наталія з України. На сніданок вона любить молоко з кавою та фрукти. Не любить сирене та кашкавал.',
+        ru: 'Наталия из Украины. На завтрак она любит молоко с кофе и фрукты. Не любит сыр и кашкавал.',
+      },
+      {
+        en: 'Amal and Natalia like banitsa.',
+        ar: 'أمل وناتاليا تحبان البانيتسا.',
+        fr: 'Amal et Natalia aiment la banitsa.',
+        fa: 'امل و ناتالیا بانیتسا دوست دارند.',
+        uk: 'Амаль і Наталія люблять баницю.',
+        ru: 'Амаль и Наталия любят баницу.',
+      },
     ],
     checklist: {
       instruction: 'Вярно или грешно?',

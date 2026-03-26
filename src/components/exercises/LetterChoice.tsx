@@ -221,19 +221,31 @@ function PuzzleCard({
     }
   };
 
-  // Remaining letters not yet placed
-  const getRemainingLetters = (): string[] => {
-    const counts: Record<string, number> = {};
-    puzzle.correctLetters.forEach(l => { counts[l] = (counts[l] || 0) + 1; });
-    slotContents.forEach(l => { if (l) counts[l] = (counts[l] || 0) - 1; });
-    const result: string[] = [];
-    Object.entries(counts).forEach(([letter, n]) => {
-      for (let i = 0; i < n; i++) result.push(letter);
-    });
-    return result;
-  };
+  const shuffledOrder = useRef<string[] | null>(null);
+  if (!shuffledOrder.current) {
+    const letters = [...puzzle.correctLetters];
+    for (let i = letters.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [letters[i], letters[j]] = [letters[j], letters[i]];
+    }
+    shuffledOrder.current = letters;
+  }
 
-  const remainingLetters = getRemainingLetters();
+  const remainingLetters = (() => {
+    const placed: Record<string, number> = {};
+    slotContents.forEach(l => { if (l) placed[l] = (placed[l] || 0) + 1; });
+    const result: string[] = [];
+    const available: Record<string, number> = {};
+    puzzle.correctLetters.forEach(l => { available[l] = (available[l] || 0) + 1; });
+    for (const letter of shuffledOrder.current!) {
+      const remaining = (available[letter] || 0) - (placed[letter] || 0);
+      if (remaining > 0) {
+        result.push(letter);
+        placed[letter] = (placed[letter] || 0) + 1;
+      }
+    }
+    return result;
+  })();
 
     // Render the word — fixed chars + droppable blanks
   const renderWord = () => {
@@ -384,6 +396,13 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
     });
   };
 
+  const handleReset = () => {
+    setSlotContents(Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)])));
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ slotContents: Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)])), validation: {}, isSubmitted: false });
+  };
+
   const handleSubmit = () => {
     const newValidation: { [key: string]: boolean } = {};
     let correct = 0;
@@ -424,12 +443,18 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
         ))}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-      >
-        {t('exercise.checkAnswers')}
-      </Button>
+      <div className="flex gap-3 mt-6">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+        >
+          {t('exercise.checkAnswers')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">

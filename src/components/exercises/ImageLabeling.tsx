@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Check, X } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { ImageLabelingExercise } from '@/content/types';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { speakBulgarian } from '@/lib/tts';
 
 interface ImageLabelingProps {
   exercise: ImageLabelingExercise;
@@ -28,17 +29,10 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
     saveState({ selectedLabels, validation, isSubmitted, flippedCards });
   }, [selectedLabels, validation, isSubmitted, flippedCards]);
 
-  const speak = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
-  };
-
   const handleCardClick = (imageId: string, correctLabel: string) => {
     setFlippedCards(prev => ({ ...prev, [imageId]: !prev[imageId] }));
     if (!flippedCards[imageId]) {
-      speak(correctLabel);
+      speakBulgarian(correctLabel);
     }
   };
 
@@ -48,6 +42,14 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
       setIsSubmitted(false);
       setValidation({});
     }
+  };
+
+  const handleReset = () => {
+    setSelectedLabels({});
+    setValidation({});
+    setIsSubmitted(false);
+    setFlippedCards({});
+    saveState({ selectedLabels: {}, validation: {}, isSubmitted: false, flippedCards: {} });
   };
 
   const handleSubmit = () => {
@@ -225,12 +227,18 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
         })}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="mt-4 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
-      >
-        {t('exercise.check')}
-      </Button>
+      <div className="flex gap-3 mt-6">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+        >
+          {t('exercise.check')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="mt-6 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">

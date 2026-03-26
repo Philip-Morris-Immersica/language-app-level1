@@ -6,14 +6,10 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
 import type { VocabularyItem } from '@/content/types';
+import { speakBulgarian } from '@/lib/tts';
 
 function speak(text: string) {
-  if (typeof window === 'undefined') return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'bg-BG';
-  u.rate = 0.85;
-  window.speechSynthesis.speak(u);
+  speakBulgarian(text);
 }
 
 function VocabRow({ item }: { item: VocabularyItem }) {

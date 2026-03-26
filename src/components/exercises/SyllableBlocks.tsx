@@ -97,12 +97,17 @@ function PuzzleCard({
   onCompleteChange?: (isCorrect: boolean) => void;
 }) {
   const t = useT();
-  const [blocks, setBlocks] = useState<SyllableBlock[]>(() =>
-    puzzle.syllables.map((syl, idx) => ({
+  const [blocks, setBlocks] = useState<SyllableBlock[]>(() => {
+    const arr = puzzle.syllables.map((syl, idx) => ({
       syllable: cleanSyllable(syl),
       id: `${puzzle.id}-${idx}`,
-    }))
-  );
+    }));
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  });
 
   // MouseSensor: starts drag after 10px movement (desktop)
   // TouchSensor: starts drag after 200ms hold + 5px tolerance (mobile – prevents scroll conflicts)

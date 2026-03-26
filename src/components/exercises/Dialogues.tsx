@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { speakBulgarian, stopSpeaking } from '@/lib/tts';
 
 interface DialogueLine {
   speaker?: string;
   text: string;
+  translations?: Record<string, string>;
 }
 
 interface DialogueSection {
@@ -65,7 +67,7 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
 
     if (audioUrl) return;
 
-    window.speechSynthesis.cancel();
+    stopSpeaking();
 
     if (speakingSection === section.id) {
       setSpeakingSection(null);
@@ -73,14 +75,8 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
     }
 
     const fullText = section.lines.map(l => l.text).join('. ');
-    const utterance = new SpeechSynthesisUtterance(fullText);
-    utterance.lang = 'bg-BG';
-    utterance.rate = 0.85;
-    utterance.onend = () => setSpeakingSection(null);
-    utterance.onerror = () => setSpeakingSection(null);
-
     setSpeakingSection(section.id);
-    window.speechSynthesis.speak(utterance);
+    speakBulgarian(fullText);
   };
 
   const useTTS = !audioUrl;
@@ -159,7 +155,7 @@ export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
                       <p className="text-base md:text-lg text-gray-800 leading-relaxed">
                         {line.text}
                       </p>
-                      <InlineTranslation text={line.text} visible={isRevealed} />
+                      <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
                     </div>
                   </div>
                 ))}

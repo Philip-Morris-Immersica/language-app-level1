@@ -5,6 +5,7 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Button } from '@/components/ui/button';
+import { speakBulgarian } from '@/lib/tts';
 
 interface PersonalChoiceProps {
   model?: {
@@ -30,12 +31,7 @@ type ItemState =
   | { phase: 'done'; preference: 'positive' | 'negative'; correct: boolean };
 
 function speak(text: string) {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'bg-BG';
-  u.rate = 0.85;
-  window.speechSynthesis.speak(u);
+  speakBulgarian(text);
 }
 
 function SentenceWithBlank({

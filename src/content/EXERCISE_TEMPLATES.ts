@@ -177,6 +177,11 @@ export const TEMPLATE_grammar_examples = {
 /**
  * grammar_table — Таблица за спрежение/склонение.
  * Не е упражнение — няма points.
+ *
+ * ⚠️ columns.length MUST equal cells.length per row!
+ *   `pronoun` = first column (auto-rendered, NO header needed).
+ *   `columns` = headers for the DATA columns only.
+ *   Do NOT put the pronoun label in columns — causes header misalignment.
  */
 export const TEMPLATE_grammar_table = {
   id: 'l0X-gramatika-NN',    // REPLACE
@@ -186,7 +191,7 @@ export const TEMPLATE_grammar_table = {
   instruction: 'Запознайте се с глагол съм – сегашно време', // REPLACE
   order: 1,                   // REPLACE
   tableTitle: 'Сегашно време – съм',  // REPLACE or remove
-  columns: ['(+)', '(–)', '(?)'],     // REPLACE column headers
+  columns: ['(+)', '(–)', '(?)'],     // REPLACE — must match cells.length per row!
   rows: [
     { pronoun: 'аз',  cells: ['съм', 'не съм', 'ли съм'] },
     { pronoun: 'ти',  cells: ['си',  'не си',  'ли си']  },
@@ -421,10 +426,10 @@ export const TEMPLATE_dropdown_match = {
   points: 4,                  // REPLACE
   questions: [
     { id: 'q1', left: 'Добро',  options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'утро!'  },
-    { id: 'q2', left: 'Добър',  options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'ден!'   },
+    { id: 'q2', left: 'Добър',  options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'ден!', alternateCorrectAnswers: ['вечер!'] },
     { id: 'q3', left: 'Лека',   options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'нощ!'   },
-    { id: 'q4', left: 'Добър',  options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'вечер!' },
-    // Add more pairs...
+    { id: 'q4', left: 'Добър',  options: ['утро!', 'ден!', 'нощ!', 'вечер!'], correctAnswer: 'вечер!', alternateCorrectAnswers: ['ден!'] },
+    // alternateCorrectAnswers: use when multiple answers are valid for the same left text
   ],
 } as DropdownMatchExercise;
 
@@ -662,6 +667,8 @@ export const TEMPLATE_dialogue_builder = {
         'Аз също.',
         'Приятен ден!',
       ],
+      // alternateOrders: use when dialogue can be validly arranged in more than one way
+      // alternateOrders: [['Добър ден!', 'Как сте?', ...], ['Добър ден!', ...]],
     },
     // Add more dialogue sections...
   ],

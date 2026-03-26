@@ -89,6 +89,24 @@ exercise.correctAnswer  → "Правилен отговор:"
 exercise.readInPairs    → "Прочетете диалозите по двойки"
 ```
 
+## TTS (Text-to-Speech)
+
+Always use the shared utility — never create `SpeechSynthesisUtterance` directly:
+```tsx
+import { speakBulgarian, stopSpeaking } from '@/lib/tts';
+
+// Speak Bulgarian text (auto-selects best voice, handles mobile)
+speakBulgarian('Здравейте!');
+
+// Stop any current speech
+stopSpeaking();
+```
+
+The utility (`src/lib/tts.ts`) handles:
+- Voice selection (prefers Google female voice)
+- Mobile Safari workaround (resume after background)
+- Graceful fallback when no Bulgarian voice is available
+
 ## State Persistence
 
 Use `useExercisePersistence` to save/restore exercise state across page navigations:

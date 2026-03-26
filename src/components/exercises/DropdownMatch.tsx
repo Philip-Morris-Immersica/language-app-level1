@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import {
@@ -19,6 +19,7 @@ interface DropdownQuestion {
   leftImageUrl?: string;
   options: string[];
   correctAnswer: string;
+  alternateCorrectAnswers?: string[];
 }
 
 interface DropdownMatchProps {
@@ -50,13 +51,22 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
     }
   };
 
+  const handleReset = () => {
+    setAnswers({});
+    setValidation({});
+    setIsSubmitted(false);
+    saveState({ answers: {}, validation: {}, isSubmitted: false });
+  };
+
   const handleSubmit = () => {
     const newValidation: { [key: string]: boolean } = {};
     let correctCount = 0;
     const gradedQuestions = questions.filter(q => q.options.length > 0);
 
     gradedQuestions.forEach(q => {
-      const isCorrect = answers[q.id]?.toLowerCase() === q.correctAnswer.toLowerCase();
+      const userAnswer = answers[q.id]?.toLowerCase();
+      const allCorrect = [q.correctAnswer, ...(q.alternateCorrectAnswers ?? [])];
+      const isCorrect = allCorrect.some(a => a.toLowerCase() === userAnswer);
       newValidation[q.id] = isCorrect;
       if (isCorrect) correctCount++;
     });
@@ -197,7 +207,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                   {isSubmitted && validation[question.id] === false && (
                     <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
                       <p className="text-sm text-yellow-800">
-                        <strong>{t('exercise.correctLabel')}</strong> {question.left.replace('…', question.correctAnswer)}
+                        <strong>{t('exercise.correctLabel')}</strong> {question.left.includes('…') ? question.left.replace('…', question.correctAnswer) : `${question.left} ${question.correctAnswer}`}
                       </p>
                     </div>
                   )}
@@ -208,12 +218,18 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
         })}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
-      >
-        {t('exercise.checkAnswers')}
-      </Button>
+      <div className="flex gap-3 mt-6">
+        <Button
+          onClick={handleSubmit}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+        >
+          {t('exercise.checkAnswers')}
+        </Button>
+        <Button variant="outline" onClick={handleReset} className="text-base font-semibold px-6 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg border-2">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
+      </div>
 
       {isSubmitted && (
         <div className="mt-6 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
