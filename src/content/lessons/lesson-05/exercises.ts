@@ -331,6 +331,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-01',
+    instructionKey: 'grammar.l05.g1.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
     subtitle: '→ Граматика – Сегашно време (12)',
@@ -387,6 +388,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-02',
+    instructionKey: 'grammar.l05.g2.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     subtitle: '→ Граматика – Членуване на съществителните (4)',
@@ -395,10 +397,10 @@ export const exercises: Exercise[] = [
     tableTitle: 'Определителна стативна форма (ед.ч.)',
     columns: ['Окончание', 'Примери'],
     rows: [
-      { pronoun: 'м.р. (а)', cells: ['-ът / -а', 'пазарът / в центъра'] },
-      { pronoun: 'м.р. (б)', cells: ['-ят / -я', 'учителят / при учителя'] },
-      { pronoun: 'ж.р.', cells: ['-та', 'банката, улицата, пощата'] },
-      { pronoun: 'ср.р.', cells: ['-то', 'кафето, училището, селото'] },
+      { pronoun: 'мъжки род (а)', cells: ['-ът / -а', 'пазарът / в центъра'] },
+      { pronoun: 'мъжки род (б)', cells: ['-ят / -я', 'учителят / при учителя'] },
+      { pronoun: 'женски род', cells: ['-та', 'банката, улицата, пощата'] },
+      { pronoun: 'среден род', cells: ['-то', 'кафето, училището, селото'] },
     ],
     notes: ['Площадът е в центъра.'],
   } as GrammarTableExercise,
@@ -449,6 +451,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-03',
+    instructionKey: 'grammar.l05.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     subtitle: 'Множествено число — член',
@@ -457,9 +460,9 @@ export const exercises: Exercise[] = [
     tableTitle: 'Мн.ч. с определителен член',
     columns: ['Член', 'Примери'],
     rows: [
-      { pronoun: 'м.р.', cells: ['-те', 'пазарите, градовете'] },
-      { pronoun: 'ж.р.', cells: ['-те', 'банките, улиците'] },
-      { pronoun: 'ср.р.', cells: ['-та', 'кафетата, училищата'] },
+      { pronoun: 'мъжки род', cells: ['-те', 'пазарите, градовете'] },
+      { pronoun: 'женски род', cells: ['-те', 'банките, улиците'] },
+      { pronoun: 'среден род', cells: ['-та', 'кафетата, училищата'] },
     ],
     notes: ['Магазините са в центъра.'],
   } as GrammarTableExercise,
@@ -509,6 +512,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-04',
+    instructionKey: 'grammar.l05.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Предлози за място',
@@ -626,6 +630,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-05',
+    instructionKey: 'grammar.l05.g5.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 5',
     subtitle: 'Повелително наклонение — посока',
@@ -713,6 +718,7 @@ export const exercises: Exercise[] = [
   
   {
     id: 'l05-gramatika-06',
+    instructionKey: 'grammar.l05.g6.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 6',
     subtitle: 'Човек, души, хора',
@@ -746,6 +752,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-gramatika-07',
+    instructionKey: 'grammar.l05.g7.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 7',
     subtitle: 'Големи числа',

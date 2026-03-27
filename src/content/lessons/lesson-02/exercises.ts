@@ -113,6 +113,7 @@ export const exercises: Exercise[] = [
   // ORDER 5: ГРАМАТИКА 1 – Какво е това? (NOT AN EXERCISE!)
   {
     id: 'l02-gramatika-01',
+    instructionKey: 'grammar.l02.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
     instruction: 'Запознайте се с въпроса и отговора за предмети',
@@ -149,6 +150,7 @@ export const exercises: Exercise[] = [
   // ORDER 7: ГРАМАТИКА 2 – Обичам / не обичам (NOT AN EXERCISE!)
   {
     id: 'l02-gramatika-02',
+    instructionKey: 'grammar.l02.g2.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Обичам / не обичам',
@@ -210,6 +212,7 @@ export const exercises: Exercise[] = [
   // ORDER 13: ГРАМАТИКА 3 – Глагол ИСКАМ – Сегашно време
   {
     id: 'l02-gramatika-03',
+    instructionKey: 'grammar.l02.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     instruction: 'Запознайте се с глагола ИСКАМ – сегашно време. Кликнете върху ред, за да чуете произношението.',
@@ -302,6 +305,7 @@ export const exercises: Exercise[] = [
   // ORDER 19: ГРАМАТИКА 4 – С / Без (предлози)
   {
     id: 'l02-gramatika-04',
+    instructionKey: 'grammar.l02.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'С / Без',
@@ -438,6 +442,7 @@ export const exercises: Exercise[] = [
   // ORDER 23: ГРАМАТИКА 5 – Има / Няма
   {
     id: 'l02-gramatika-05',
+    instructionKey: 'grammar.l02.g5.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 5',
     subtitle: 'Има / Няма',
@@ -489,6 +494,7 @@ export const exercises: Exercise[] = [
   // ORDER 26: ГРАМАТИКА 6 – Род на съществителните (един/една/едно)
   {
     id: 'l02-gramatika-06',
+    instructionKey: 'grammar.l02.g6.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 6',
     subtitle: 'Граматика – Род на съществителните (2)',
@@ -513,7 +519,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-18',
     type: 'match_pairs',
-    instruction: 'Свържете думите по модела: един (м.р.), една (ж.р.) или едно (ср.р.)?',
+    instruction: 'Свържете думите по модела: един (мъжки род), една (женски род) или едно (среден род)?',
     order: 27,
     points: 6,
     pairs: [
@@ -531,7 +537,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-19',
     type: 'drag_to_columns',
-    instruction: 'Изберете правилната форма: един (м.р.), една (ж.р.) или едно (ср.р.)?',
+    instruction: 'Изберете правилната форма: един (мъжки род), една (женски род) или едно (среден род)?',
     order: 28,
     points: 18,
     items: [
@@ -565,6 +571,7 @@ export const exercises: Exercise[] = [
   // ORDER 29: ГРАМАТИКА 7 – Бройни числителни 0–10
   {
     id: 'l02-gramatika-07',
+    instructionKey: 'grammar.l02.g7.instruction',
     type: 'illustrated_cards',
     title: 'ГРАМАТИКА 7',
     instruction: 'Запознайте се с числата от 0 до 10. Натиснете за произношение.',

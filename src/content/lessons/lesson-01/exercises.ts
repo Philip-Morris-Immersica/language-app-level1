@@ -179,6 +179,7 @@ export const exercises: Exercise[] = [
   // ORDER 8: ГРАМАТИКА 1 - Personal pronouns (Page 11, top) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-01',
+    instructionKey: 'grammar.l01.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
     subtitle: 'Граматика – Лични местоимения (8)',
@@ -211,6 +212,7 @@ export const exercises: Exercise[] = [
   // ORDER 10: ГРАМАТИКА 2 - Verb СЪМ (Page 11, bottom) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-02',
+    instructionKey: 'grammar.l01.g2.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Глагол СЪМ',
@@ -327,6 +329,7 @@ export const exercises: Exercise[] = [
   // ORDER 15: ГРАМАТИКА 3 - Аз съм / Аз не съм (Page 13) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-03',
+    instructionKey: 'grammar.l01.g3.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
     subtitle: 'Аз съм / Аз не съм',
@@ -410,6 +413,7 @@ export const exercises: Exercise[] = [
   // ORDER 14: ГРАМАТИКА 4 - Questions & Answers (Page 13) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-04',
+    instructionKey: 'grammar.l01.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Въпроси и отговори',
@@ -586,6 +590,7 @@ export const exercises: Exercise[] = [
   // ORDER 19: ГРАМАТИКА 5 - Сегашно време – съм (Page 14) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-05',
+    instructionKey: 'grammar.l01.g5.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
     instruction: 'Запознайте се с глагол съм – сегашно време',

@@ -37,11 +37,14 @@ interface ExerciseRendererProps {
 interface ExerciseHeaderProps {
   title: string;
   instruction: string;
+  instructionKey?: string;
 }
 
-function ExerciseHeader({ title, instruction }: ExerciseHeaderProps) {
+function ExerciseHeader({ title, instruction, instructionKey }: ExerciseHeaderProps) {
+  const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedInstruction = useTranslate(instruction);
+  const displayInstruction = instructionKey ? t(instructionKey) : translatedInstruction;
   return (
     <div className="mb-5 pb-4 border-b border-gray-100">
       <h3 className="text-[#0279C3] font-bold text-xl md:text-2xl leading-tight">
@@ -49,7 +52,7 @@ function ExerciseHeader({ title, instruction }: ExerciseHeaderProps) {
       </h3>
       {instruction && (
         <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
-          {translatedInstruction}
+          {displayInstruction}
         </p>
       )}
     </div>
@@ -74,7 +77,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   function wrap(component: React.ReactNode) {
     return (
       <div>
-        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} />
+        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} />
         {component}
       </div>
     );

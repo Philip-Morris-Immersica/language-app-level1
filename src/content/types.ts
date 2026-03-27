@@ -36,6 +36,7 @@ export interface BaseExercise {
   type: ExerciseType;
   title?: string;           // Optional display title, e.g. "НОВИ ДУМИ 1". Falls back to "УПРАЖНЕНИЕ N".
   instruction: string;      // e.g., "Напишете личните местоимения."
+  instructionKey?: string;  // Key into UI_TRANSLATIONS for a pre-translated instruction (overrides dynamic translation).
   points?: number;          // For scoring
   order: number;
 }
@@ -121,6 +122,7 @@ export interface IllustratedCardsExercise extends BaseExercise {
     label: string;         // "Добро утро!", "Здравей!" etc.
     sublabels?: string[];  // Additional text lines (e.g., ["българин", "българка", "българи"])
     audioUrl?: string;     // Individual audio for card
+    translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
   displayMode?: 'grid' | 'presentation';  // For different display modes
 }

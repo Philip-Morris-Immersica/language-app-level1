@@ -27,7 +27,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-01',
     type: 'image_labeling',
-    instruction: 'Напишете думите под картинките.',
+    instruction: 'Изберете думите под картинките.',
     order: 1,
     points: 4,
     displayType: 'default',
@@ -48,24 +48,24 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с новите думи. Натиснете за произношение.',
     order: 2,
     cards: [
-      { id: 'riba',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/01-riba.jpg',          label: 'риба' },
-      { id: 'pile',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/02-pile.jpg',          label: 'пиле' },
-      { id: 'pileshko-meso', imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/03-pileshko-meso.jpg', label: 'пилешко месо' },
-      { id: 'teleshko-meso', imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/04-teleshko-meso.jpg', label: 'телешко месо' },
-      { id: 'svinsko-meso',  imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/05-svinsko-meso.jpg',  label: 'свинско месо' },
-      { id: 'shunka',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/06-shunka.jpg',        label: 'шунка' },
-      { id: 'bob',           imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/07-bob.jpg',           label: 'боб' },
-      { id: 'oriz',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/08-oriz.jpg',          label: 'ориз' },
-      { id: 'leshta',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/09-leshta.jpg',        label: 'леща' },
-      { id: 'brashno',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/10-brashno.jpg',       label: 'брашно' },
-      { id: 'grah',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/11-grah.jpg',          label: 'грах' },
-      { id: 'maslini',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/12-maslini.jpg',       label: 'маслини' },
-      { id: 'biskviti',      imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/13-biskviti.jpg',      label: 'бисквити' },
-      { id: 'bonboni',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/14-bonboni.jpg',       label: 'бонбони' },
-      { id: 'yadki',         imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/15-yadki.jpg',         label: 'ядки' },
-      { id: 'sol',           imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/16-sol.jpg',           label: 'сол' },
-      { id: 'olio',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/17-olio.jpg',          label: 'олио' },
-      { id: 'otset',         imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/18-otset.jpg',         label: 'оцет' },
+      { id: 'riba',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/01-riba.jpg',          label: 'риба',          translations: { en: 'fish', ar: 'سمك', fr: 'poisson', fa: 'ماهی', uk: 'риба', ru: 'рыба' } },
+      { id: 'pile',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/02-pile.jpg',          label: 'пиле',          translations: { en: 'chicken', ar: 'دجاج', fr: 'poulet', fa: 'مرغ', uk: 'курка', ru: 'курица' } },
+      { id: 'pileshko-meso', imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/03-pileshko-meso.jpg', label: 'пилешко месо',  translations: { en: 'chicken meat', ar: 'لحم دجاج', fr: 'viande de poulet', fa: 'گوشت مرغ', uk: 'куряче м\'ясо', ru: 'куриное мясо' } },
+      { id: 'teleshko-meso', imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/04-teleshko-meso.jpg', label: 'телешко месо',  translations: { en: 'veal', ar: 'لحم عجل', fr: 'viande de veau', fa: 'گوشت گوساله', uk: 'теляче м\'ясо', ru: 'телятина' } },
+      { id: 'svinsko-meso',  imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/05-svinsko-meso.jpg',  label: 'свинско месо',  translations: { en: 'pork', ar: 'لحم خنزير', fr: 'viande de porc', fa: 'گوشت خوک', uk: 'свинина', ru: 'свинина' } },
+      { id: 'shunka',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/06-shunka.jpg',        label: 'шунка',         translations: { en: 'ham', ar: 'لحم مقدد', fr: 'jambon', fa: 'ژامبون', uk: 'шинка', ru: 'ветчина' } },
+      { id: 'bob',           imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/07-bob.jpg',           label: 'боб',           translations: { en: 'beans', ar: 'فاصوليا', fr: 'haricots', fa: 'لوبیا', uk: 'квасоля', ru: 'фасоль' } },
+      { id: 'oriz',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/08-oriz.jpg',          label: 'ориз',          translations: { en: 'rice', ar: 'أرز', fr: 'riz', fa: 'برنج', uk: 'рис', ru: 'рис' } },
+      { id: 'leshta',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/09-leshta.jpg',        label: 'леща',          translations: { en: 'lentils', ar: 'عدس', fr: 'lentilles', fa: 'عدس', uk: 'сочевиця', ru: 'чечевица' } },
+      { id: 'brashno',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/10-brashno.jpg',       label: 'брашно',        translations: { en: 'flour', ar: 'دقيق', fr: 'farine', fa: 'آرد', uk: 'борошно', ru: 'мука' } },
+      { id: 'grah',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/11-grah.jpg',          label: 'грах',          translations: { en: 'peas', ar: 'بازلاء', fr: 'pois', fa: 'نخود فرنگی', uk: 'горох', ru: 'горох' } },
+      { id: 'maslini',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/12-maslini.jpg',       label: 'маслини',       translations: { en: 'olives', ar: 'زيتون', fr: 'olives', fa: 'زیتون', uk: 'маслини', ru: 'оливки' } },
+      { id: 'biskviti',      imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/13-biskviti.jpg',      label: 'бисквити',      translations: { en: 'biscuits', ar: 'بسكويت', fr: 'biscuits', fa: 'بیسکویت', uk: 'печиво', ru: 'печенье' } },
+      { id: 'bonboni',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/14-bonboni.jpg',       label: 'бонбони',       translations: { en: 'candies', ar: 'حلوى', fr: 'bonbons', fa: 'آبنبات', uk: 'цукерки', ru: 'конфеты' } },
+      { id: 'yadki',         imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/15-yadki.jpg',         label: 'ядки',          translations: { en: 'nuts', ar: 'مكسرات', fr: 'noix', fa: 'آجیل', uk: 'горіхи', ru: 'орехи' } },
+      { id: 'sol',           imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/16-sol.jpg',           label: 'сол',           translations: { en: 'salt', ar: 'ملح', fr: 'sel', fa: 'نمک', uk: 'сіль', ru: 'соль' } },
+      { id: 'olio',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/17-olio.jpg',          label: 'олио',          translations: { en: 'sunflower oil', ar: 'زيت', fr: 'huile', fa: 'روغن', uk: 'олія', ru: 'масло растительное' } },
+      { id: 'otset',         imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/18-otset.jpg',         label: 'оцет',          translations: { en: 'vinegar', ar: 'خل', fr: 'vinaigre', fa: 'سرکه', uk: 'оцет', ru: 'уксус' } },
     ],
   } as IllustratedCardsExercise,
 
@@ -96,7 +96,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-03',
     type: 'word_search',
-    instruction: 'Колко думи можете да намерите? Напишете ги.',
+    instruction: 'Колко думи можете да намерите? Изберете ги.',
     order: 4,
     points: 11,
     letterString: 'пилешкомесомаслинисолзахароцетлещабоббонбонишункаориз',
@@ -164,21 +164,21 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с плодовете. Натиснете за произношение.',
     order: 6,
     cards: [
-      { id: 'yabalka',   imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/01-yabalka.jpg',   label: 'ябълка' },
-      { id: 'krusha',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/02-krusha.jpg',    label: 'круша' },
-      { id: 'yagoda',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/03-yagoda.jpg',    label: 'ягода' },
-      { id: 'cheresha',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/04-cheresha.jpg',  label: 'череша' },
-      { id: 'sliva',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/05-sliva.jpg',     label: 'слива' },
-      { id: 'praskova',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/06-praskova.jpg',  label: 'праскова' },
-      { id: 'kaisiya',   imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/07-kaisiya.jpg',   label: 'кайсия' },
-      { id: 'grozde',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/08-grozde.jpg',    label: 'грозде' },
-      { id: 'papesh',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/09-papesh.jpg',    label: 'пъпеш' },
-      { id: 'dinya',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/10-dinya.jpg',     label: 'диня' },
-      { id: 'banan',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/11-banan.jpg',     label: 'банан' },
-      { id: 'limon',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/12-limon.jpg',     label: 'лимон' },
-      { id: 'portokal',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/13-portokal.jpg',  label: 'портокал' },
-      { id: 'greipfrut', imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/14-greipfrut.jpg', label: 'грейпфрут' },
-      { id: 'smokinya',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/15-smokinya.jpg',  label: 'смокиня' },
+      { id: 'yabalka',   imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/01-yabalka.jpg',   label: 'ябълка',    translations: { en: 'apple', ar: 'تفاحة', fr: 'pomme', fa: 'سیب', uk: 'яблуко', ru: 'яблоко' } },
+      { id: 'krusha',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/02-krusha.jpg',    label: 'круша',     translations: { en: 'pear', ar: 'كمثرى', fr: 'poire', fa: 'گلابی', uk: 'груша', ru: 'груша' } },
+      { id: 'yagoda',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/03-yagoda.jpg',    label: 'ягода',     translations: { en: 'strawberry', ar: 'فراولة', fr: 'fraise', fa: 'توت‌فرنگی', uk: 'полуниця', ru: 'клубника' } },
+      { id: 'cheresha',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/04-cheresha.jpg',  label: 'череша',    translations: { en: 'cherry', ar: 'كرز', fr: 'cerise', fa: 'گیلاس', uk: 'черешня', ru: 'черешня' } },
+      { id: 'sliva',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/05-sliva.jpg',     label: 'слива',     translations: { en: 'plum', ar: 'برقوق', fr: 'prune', fa: 'آلو', uk: 'слива', ru: 'слива' } },
+      { id: 'praskova',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/06-praskova.jpg',  label: 'праскова',  translations: { en: 'peach', ar: 'خوخ', fr: 'pêche', fa: 'هلو', uk: 'персик', ru: 'персик' } },
+      { id: 'kaisiya',   imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/07-kaisiya.jpg',   label: 'кайсия',    translations: { en: 'apricot', ar: 'مشمش', fr: 'abricot', fa: 'زردآلو', uk: 'абрикос', ru: 'абрикос' } },
+      { id: 'grozde',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/08-grozde.jpg',    label: 'грозде',    translations: { en: 'grapes', ar: 'عنب', fr: 'raisin', fa: 'انگور', uk: 'виноград', ru: 'виноград' } },
+      { id: 'papesh',    imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/09-papesh.jpg',    label: 'пъпеш',     translations: { en: 'melon', ar: 'شمام', fr: 'melon', fa: 'طالبی', uk: 'диня', ru: 'дыня' } },
+      { id: 'dinya',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/10-dinya.jpg',     label: 'диня',      translations: { en: 'watermelon', ar: 'بطيخ', fr: 'pastèque', fa: 'هندوانه', uk: 'кавун', ru: 'арбуз' } },
+      { id: 'banan',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/11-banan.jpg',     label: 'банан',     translations: { en: 'banana', ar: 'موز', fr: 'banane', fa: 'موز', uk: 'банан', ru: 'банан' } },
+      { id: 'limon',     imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/12-limon.jpg',     label: 'лимон',     translations: { en: 'lemon', ar: 'ليمون', fr: 'citron', fa: 'لیمو', uk: 'лимон', ru: 'лимон' } },
+      { id: 'portokal',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/13-portokal.jpg',  label: 'портокал',  translations: { en: 'orange', ar: 'برتقال', fr: 'orange', fa: 'پرتقال', uk: 'апельсин', ru: 'апельсин' } },
+      { id: 'greipfrut', imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/14-greipfrut.jpg', label: 'грейпфрут', translations: { en: 'grapefruit', ar: 'جريب فروت', fr: 'pamplemousse', fa: 'گریپ‌فروت', uk: 'грейпфрут', ru: 'грейпфрут' } },
+      { id: 'smokinya',  imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/15-smokinya.jpg',  label: 'смокиня',   translations: { en: 'fig', ar: 'تين', fr: 'figue', fa: 'انجیر', uk: 'інжір', ru: 'инжир' } },
     ],
   } as IllustratedCardsExercise,
 
@@ -201,14 +201,14 @@ export const exercises: Exercise[] = [
         columns: ['един', 'една', 'много'],
         rows: [
           { label: 'банан',    cells: [{ correctAnswers: ['банан'], options: ['банан', '—'] }, { correctAnswers: ['—'], options: ['—', 'банан'] }, { correctAnswers: ['банани'], options: ['банани', 'банана', 'банане'] }] },
-          { label: 'лимон',    cells: [{ correctAnswers: ['лимон'], options: ['лимон', '—'] }, { correctAnswers: ['—'], options: ['—', 'лимон'] }, { correctAnswers: ['лимони'], options: ['лимони', 'лимона', 'лимоне'] }] },
-          { label: 'портокал', cells: [{ correctAnswers: ['портокал'], options: ['портокал', '—'] }, { correctAnswers: ['—'], options: ['—', 'портокал'] }, { correctAnswers: ['портокали'], options: ['портокали', 'портокала', 'портокале'] }] },
-          { label: 'пъпеш',   cells: [{ correctAnswers: ['пъпеш'], options: ['пъпеш', '—'] }, { correctAnswers: ['—'], options: ['—', 'пъпеш'] }, { correctAnswers: ['пъпеши'], options: ['пъпеши', 'пъпеша', 'пъпеше'] }] },
-          { label: 'плод',     cells: [{ correctAnswers: ['плод'], options: ['плод', '—'] }, { correctAnswers: ['—'], options: ['—', 'плод'] }, { correctAnswers: ['плодове'], options: ['плодове', 'плоди', 'плода'] }] },
-          { label: 'диня',     cells: [{ correctAnswers: ['—'], options: ['—', 'диня'] }, { correctAnswers: ['диня'], options: ['диня', '—'] }, { correctAnswers: ['дини'], options: ['дини', 'динии', 'диние'] }] },
           { label: 'кайсия',   cells: [{ correctAnswers: ['—'], options: ['—', 'кайсия'] }, { correctAnswers: ['кайсия'], options: ['кайсия', '—'] }, { correctAnswers: ['кайсии'], options: ['кайсии', 'кайсие', 'кайсиа'] }] },
+          { label: 'лимон',    cells: [{ correctAnswers: ['лимон'], options: ['лимон', '—'] }, { correctAnswers: ['—'], options: ['—', 'лимон'] }, { correctAnswers: ['лимони'], options: ['лимони', 'лимона', 'лимоне'] }] },
           { label: 'круша',    cells: [{ correctAnswers: ['—'], options: ['—', 'круша'] }, { correctAnswers: ['круша'], options: ['круша', '—'] }, { correctAnswers: ['круши'], options: ['круши', 'крушие', 'крушиа'] }] },
+          { label: 'портокал', cells: [{ correctAnswers: ['портокал'], options: ['портокал', '—'] }, { correctAnswers: ['—'], options: ['—', 'портокал'] }, { correctAnswers: ['портокали'], options: ['портокали', 'портокала', 'портокале'] }] },
           { label: 'слива',    cells: [{ correctAnswers: ['—'], options: ['—', 'слива'] }, { correctAnswers: ['слива'], options: ['слива', '—'] }, { correctAnswers: ['сливи'], options: ['сливи', 'сливие', 'сливиа'] }] },
+          { label: 'пъпеш',   cells: [{ correctAnswers: ['пъпеш'], options: ['пъпеш', '—'] }, { correctAnswers: ['—'], options: ['—', 'пъпеш'] }, { correctAnswers: ['пъпеши'], options: ['пъпеши', 'пъпеша', 'пъпеше'] }] },
+          { label: 'диня',     cells: [{ correctAnswers: ['—'], options: ['—', 'диня'] }, { correctAnswers: ['диня'], options: ['диня', '—'] }, { correctAnswers: ['дини'], options: ['дини', 'динии', 'диние'] }] },
+          { label: 'плод',     cells: [{ correctAnswers: ['плод'], options: ['плод', '—'] }, { correctAnswers: ['—'], options: ['—', 'плод'] }, { correctAnswers: ['плодове'], options: ['плодове', 'плоди', 'плода'] }] },
           { label: 'смокиня',  cells: [{ correctAnswers: ['—'], options: ['—', 'смокиня'] }, { correctAnswers: ['смокиня'], options: ['смокиня', '—'] }, { correctAnswers: ['смокини'], options: ['смокини', 'смокиние', 'смокиниа'] }] },
           { label: 'праскова', cells: [{ correctAnswers: ['—'], options: ['—', 'праскова'] }, { correctAnswers: ['праскова'], options: ['праскова', '—'] }, { correctAnswers: ['праскови'], options: ['праскови', 'прасковие', 'прасковиа'] }] },
           { label: 'ябълка',   cells: [{ correctAnswers: ['—'], options: ['—', 'ябълка'] }, { correctAnswers: ['ябълка'], options: ['ябълка', '—'] }, { correctAnswers: ['ябълки'], options: ['ябълки', 'ябълкие', 'ябълкиа'] }] },
@@ -252,18 +252,18 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се със зеленчуците. Натиснете за произношение.',
     order: 9,
     cards: [
-      { id: 'domat',       imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/01-domat.jpg',       label: 'домат' },
-      { id: 'krastavitsa', imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/02-krastavitsa.jpg', label: 'краставица' },
-      { id: 'morkov',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/03-morkov.jpg',      label: 'морков' },
-      { id: 'zele',        imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/04-zele.jpg',        label: 'зеле' },
-      { id: 'chushka',     imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/05-chushka.jpg',     label: 'чушка' },
-      { id: 'kartof',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/06-kartof.jpg',      label: 'картоф' },
-      { id: 'tikvichka',   imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/07-tikvichka.jpg',   label: 'тиквичка' },
-      { id: 'gaba',        imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/08-gaba.jpg',        label: 'гъба' },
-      { id: 'spanak',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/09-spanak.jpg',      label: 'спанак' },
-      { id: 'marulya',     imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/10-marulya.jpg',     label: 'маруля' },
-      { id: 'luk',         imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/11-luk.jpg',         label: 'лук' },
-      { id: 'chesun',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/12-chesun.jpg',      label: 'чесън' },
+      { id: 'domat',       imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/01-domat.jpg',       label: 'домат',       translations: { en: 'tomato', ar: 'طماطم', fr: 'tomate', fa: 'گوجه‌فرنگی', uk: 'помідор', ru: 'помидор' } },
+      { id: 'krastavitsa', imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/02-krastavitsa.jpg', label: 'краставица',  translations: { en: 'cucumber', ar: 'خيار', fr: 'concombre', fa: 'خیار', uk: 'огірок', ru: 'огурец' } },
+      { id: 'morkov',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/03-morkov.jpg',      label: 'морков',      translations: { en: 'carrot', ar: 'جزر', fr: 'carotte', fa: 'هویج', uk: 'морква', ru: 'морковь' } },
+      { id: 'zele',        imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/04-zele.jpg',        label: 'зеле',        translations: { en: 'cabbage', ar: 'ملفوف', fr: 'chou', fa: 'کلم', uk: 'капуста', ru: 'капуста' } },
+      { id: 'chushka',     imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/05-chushka.jpg',     label: 'чушка',       translations: { en: 'pepper', ar: 'فلفل', fr: 'poivron', fa: 'فلفل دلمه‌ای', uk: 'перець', ru: 'перец' } },
+      { id: 'kartof',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/06-kartof.jpg',      label: 'картоф',      translations: { en: 'potato', ar: 'بطاطس', fr: 'pomme de terre', fa: 'سیب‌زمینی', uk: 'картопля', ru: 'картофель' } },
+      { id: 'tikvichka',   imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/07-tikvichka.jpg',   label: 'тиквичка',    translations: { en: 'zucchini', ar: 'كوسا', fr: 'courgette', fa: 'کدو سبز', uk: 'кабачок', ru: 'кабачок' } },
+      { id: 'gaba',        imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/08-gaba.jpg',        label: 'гъба',        translations: { en: 'mushroom', ar: 'فطر', fr: 'champignon', fa: 'قارچ', uk: 'гриб', ru: 'гриб' } },
+      { id: 'spanak',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/09-spanak.jpg',      label: 'спанак',      translations: { en: 'spinach', ar: 'سبانخ', fr: 'épinard', fa: 'اسفناج', uk: 'шпинат', ru: 'шпинат' } },
+      { id: 'marulya',     imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/10-marulya.jpg',     label: 'маруля',      translations: { en: 'lettuce', ar: 'خس', fr: 'laitue', fa: 'کاهو', uk: 'салат', ru: 'салат' } },
+      { id: 'luk',         imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/11-luk.jpg',         label: 'лук',         translations: { en: 'onion', ar: 'بصل', fr: 'oignon', fa: 'پیاز', uk: 'цибуля', ru: 'лук' } },
+      { id: 'chesun',      imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/12-chesun.jpg',      label: 'чесън',       translations: { en: 'garlic', ar: 'ثوم', fr: 'ail', fa: 'سیر', uk: 'часник', ru: 'чеснок' } },
     ],
   } as IllustratedCardsExercise,
 
@@ -341,16 +341,17 @@ export const exercises: Exercise[] = [
   // ORDER 13: ГРАМАТИКА 1 – какъв/каква/какво/какви (Page 37)
   {
     id: 'l04-gramatika-01',
+    instructionKey: 'grammar.l04.g1.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 1',
     subtitle: 'Граматика – Видове въпроси (14)',
     instruction: 'Запознайте се с въпросителните думи какъв, каква, какво, какви.',
     order: 13,
     examples: [
-      { imageUrl: '', text: '– Какъв чай обичате?', subtext: '– Черен чай. (м.р.)' },
-      { imageUrl: '', text: '– Каква пица обичате?', subtext: '– Пица с домати и гъби. (ж.р.)' },
-      { imageUrl: '', text: '– Какво месо обичате?', subtext: '– Пилешко и телешко. (ср.р.)' },
-      { imageUrl: '', text: '– Какви плодове обичате?', subtext: '– Ябълки и портокали. (мн.ч.)' },
+      { imageUrl: '', text: '– Какъв чай обичате?', subtext: '– Черен чай.\nмъжки род' },
+      { imageUrl: '', text: '– Каква пица обичате?', subtext: '– Пица с домати и гъби.\nженски род' },
+      { imageUrl: '', text: '– Какво месо обичате?', subtext: '– Пилешко и телешко.\nсреден род' },
+      { imageUrl: '', text: '– Какви плодове обичате?', subtext: '– Ябълки и портокали.\nмножествено число' },
     ],
   } as GrammarExamplesExercise,
 
@@ -412,6 +413,7 @@ export const exercises: Exercise[] = [
   // ORDER 16: ГРАМАТИКА 2 – Бройни числителни 100–1000 (Page 38)
   {
     id: 'l04-gramatika-02',
+    instructionKey: 'grammar.l04.g2.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Граматика – Бройни числителни (1)',
@@ -454,25 +456,22 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 18: Упр. 15 – Слушайте и напишете числата (Page 38)
-  // TODO: needs audio file
+  // ORDER 18: Упр. 15 – Кое число чувате? (Page 38)
   {
     id: 'l04-ex-15',
-    type: 'workbook_fill_blank',
+    type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Слушайте и напишете числата.',
+    instruction: 'Кое число чувате? Изберете правилния отговор.',
     order: 18,
     points: 5,
-    layout: 'two-column' as const,
-    sentences: [
-      { text: '102', blanks: [], correctAnswers: [], isExample: true },
-      { text: '_______', blanks: [0], correctAnswers: ['215'], options: ['215', '315', '150', '512', '710'] },
-      { text: '_______', blanks: [0], correctAnswers: ['315'], options: ['215', '315', '150', '512', '710'] },
-      { text: '_______', blanks: [0], correctAnswers: ['150'], options: ['215', '315', '150', '512', '710'] },
-      { text: '_______', blanks: [0], correctAnswers: ['512'], options: ['215', '315', '150', '512', '710'] },
-      { text: '_______', blanks: [0], correctAnswers: ['710'], options: ['215', '315', '150', '512', '710'] },
+    questions: [
+      { question: 'двеста и петнадесет',       options: ['215', '315', '150', '512', '710'], correctIndex: 0 },
+      { question: 'триста и петнадесет',        options: ['215', '315', '150', '512', '710'], correctIndex: 1 },
+      { question: 'сто и петдесет',             options: ['215', '315', '150', '512', '710'], correctIndex: 2 },
+      { question: 'петстотин и дванадесет',     options: ['215', '315', '150', '512', '710'], correctIndex: 3 },
+      { question: 'седемстотин и десет',        options: ['215', '315', '150', '512', '710'], correctIndex: 4 },
     ],
-  } as WorkbookFillBlankExercise,
+  } as MultipleChoiceExercise,
 
   // ─────────────────────────────────────────────────────────────────────────
   // СТРАНИЦА 39
@@ -486,14 +485,14 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с мерките и теглата. Натиснете за произношение.',
     order: 19,
     cards: [
-      { id: '1kg',      imageUrl: '', label: '1 кг = един килограм = едно кило' },
-      { id: '05kg',     imageUrl: '', label: '0,5 кг = половин килограм = половин кило' },
-      { id: '15kg',     imageUrl: '', label: '1,5 кг = едно кило и половина' },
-      { id: '250g',     imageUrl: '', label: '250 гр = четвърт кило = 250 грама' },
-      { id: '1l',       imageUrl: '', label: '1 л = един литър' },
-      { id: '2l',       imageUrl: '', label: '2 л = два литра' },
-      { id: 'butilka',  imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/01-butilka.jpg', label: 'бутилка' },
-      { id: 'paket',    imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/02-paket.jpg',   label: 'пакет' },
+      { id: '1kg',      imageUrl: '', label: '1 кг = един килограм = едно кило',              translations: { en: '1 kg = one kilogram = one kilo', ar: '1 كجم = كيلوغرام واحد = كيلو واحد', fr: '1 kg = un kilogramme = un kilo', fa: '۱ کیلوگرم = یک کیلوگرم = یک کیلو', uk: '1 кг = один кілограм = одне кіло', ru: '1 кг = один килограмм = одно кило' } },
+      { id: '05kg',     imageUrl: '', label: '0,5 кг = половин килограм = половин кило',      translations: { en: '0.5 kg = half a kilogram = half a kilo', ar: '0.5 كجم = نصف كيلوغرام', fr: '0,5 kg = un demi-kilo', fa: '۰٫۵ کیلوگرم = نیم کیلو', uk: '0,5 кг = пів кіло', ru: '0,5 кг = полкило' } },
+      { id: '15kg',     imageUrl: '', label: '1,5 кг = едно кило и половина',                 translations: { en: '1.5 kg = one and a half kilos', ar: '1.5 كجم = كيلو ونصف', fr: '1,5 kg = un kilo et demi', fa: '۱٫۵ کیلوگرم = یک و نیم کیلو', uk: '1,5 кг = півтора кіло', ru: '1,5 кг = полтора кило' } },
+      { id: '250g',     imageUrl: '', label: '250 гр = четвърт кило = 250 грама',             translations: { en: '250 g = a quarter kilo = 250 grams', ar: '250 غ = ربع كيلو = 250 غرام', fr: '250 g = un quart de kilo = 250 grammes', fa: '۲۵۰ گرم = یک چهارم کیلو', uk: '250 г = чверть кіло = 250 грамів', ru: '250 г = четверть кило = 250 граммов' } },
+      { id: '1l',       imageUrl: '', label: '1 л = един литър',                               translations: { en: '1 l = one liter', ar: '1 لتر = لتر واحد', fr: '1 l = un litre', fa: '۱ لیتر = یک لیتر', uk: '1 л = один літр', ru: '1 л = один литр' } },
+      { id: '2l',       imageUrl: '', label: '2 л = два литра',                                translations: { en: '2 l = two liters', ar: '2 لتر = لتران', fr: '2 l = deux litres', fa: '۲ لیتر = دو لیتر', uk: '2 л = два літри', ru: '2 л = два литра' } },
+      { id: 'butilka',  imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/01-butilka.jpg', label: 'бутилка', translations: { en: 'bottle', ar: 'زجاجة', fr: 'bouteille', fa: 'بطری', uk: 'пляшка', ru: 'бутылка' } },
+      { id: 'paket',    imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/02-paket.jpg',   label: 'пакет',   translations: { en: 'package', ar: 'عبوة', fr: 'paquet', fa: 'بسته', uk: 'пакет', ru: 'пакет' } },
     ],
   } as IllustratedCardsExercise,
 
@@ -501,7 +500,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-16',
     type: 'dropdown_match',
-    instruction: 'Отговорете на въпросите, като използвате информацията от упр. 13.',
+    instruction: 'Отговорете на въпросите, като използвате информацията от упр. 15.',
     order: 20,
     points: 7,
     questions: [
@@ -518,6 +517,7 @@ export const exercises: Exercise[] = [
   // ORDER 21: ГРАМАТИКА 3 – Числителното два/две (Page 39)
   {
     id: 'l04-gramatika-03',
+    instructionKey: 'grammar.l04.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     subtitle: 'Граматика – Число на съществителните (3)',
@@ -526,18 +526,18 @@ export const exercises: Exercise[] = [
     tableTitle: 'Числителното два / две',
     columns: ['един / една / едно', 'два / две'],
     rows: [
-      { pronoun: 'м.р.', cells: ['един лимон',  'два лимона'] },
-      { pronoun: 'ж.р.', cells: ['една ябълка', 'две ябълки'] },
-      { pronoun: 'ср.р.', cells: ['едно кафе',  'две кафета'] },
+      { pronoun: 'мъжки род', cells: ['един лимон',  'два лимона'] },
+      { pronoun: 'женски род', cells: ['една ябълка', 'две ябълки'] },
+      { pronoun: 'среден род', cells: ['едно кафе',  'две кафета'] },
     ],
-    notes: ['два лимона (бройна форма) ≠ много лимони (мн.ч.)'],
+    notes: ['два лимона (бройна форма) ≠ много лимони (множествено число)'],
   } as GrammarTableExercise,
 
   // ORDER 22: Упр. 17 – Подчертайте правилната форма: два или две (Page 39)
   {
     id: 'l04-ex-17',
     type: 'workbook_fill_blank',
-    instruction: 'Подчертайте правилната форма: два или две.',
+    instruction: 'Изберете правилната форма: два (мъжки род) или две (женски род / среден род).',
     order: 22,
     points: 12,
     layout: 'two-column' as const,
@@ -561,7 +561,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-18',
     type: 'workbook_fill_blank',
-    instruction: 'Изберете правилната форма: два или две.',
+    instruction: 'Изберете правилната форма: два (мъжки род) или две (женски род / среден род).',
     order: 23,
     points: 13,
     layout: 'two-column' as const,
@@ -583,11 +583,11 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 24: Упр. 19 – Свържете колонките (купувам) (Page 39)
+  // ORDER 24: Упр. 19 – Свържете лицата с формата на купувам (Page 39)
   {
     id: 'l04-ex-19',
     type: 'dropdown_match',
-    instruction: 'Свържете колонките.',
+    instruction: 'Свържете лицата с правилната форма на глагола.',
     order: 24,
     points: 8,
     questions: [
@@ -627,6 +627,7 @@ export const exercises: Exercise[] = [
   // ORDER 26: ГРАМАТИКА 4 – Наречия евтино/скъпо (Page 40)
   {
     id: 'l04-gramatika-04',
+    instructionKey: 'grammar.l04.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Граматика – Наречия (13)',
@@ -664,7 +665,6 @@ export const exercises: Exercise[] = [
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
     instruction: 'Прочетете диалозите. Натиснете за произношение.',
-    audioUrl: '/assets/lesson-04/audio/17-urok-4-dialozi.mp3',
     imageUrl: '/assets/lesson-04/10-dialozi/kartofi-1-50lv.jpg',
     order: 28,
     sections: [
@@ -723,16 +723,23 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 41 – ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ
   // ─────────────────────────────────────────────────────────────────────────
 
-  // ORDER 29: Упр. 24 – Оградете числата, които чуете (Page 41)
-  // TODO: needs audio file — shown as "not yet implemented" until audio is available
+  // ORDER 29: Упр. 24 – Чуйте числото и изберете верния отговор (Page 41)
   {
     id: 'l04-ex-24',
-    type: 'listening',
+    type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 24',
-    instruction: 'Оградете числата, които чуете. Ако ги оградите правилно, ще получите буква от азбуката. Коя е тя?',
+    instruction: 'Кое число чувате? Изберете правилния отговор.',
     order: 29,
-    points: 0,
-  } as Exercise,
+    points: 6,
+    questions: [
+      { question: 'триста и двадесет', options: ['320', '230', '302', '220'], correctIndex: 0 },
+      { question: 'четиристотин и петдесет', options: ['540', '450', '415', '405'], correctIndex: 1 },
+      { question: 'шестстотин и седемнадесет', options: ['670', '617', '716', '607'], correctIndex: 1 },
+      { question: 'осемстотин и тридесет и три', options: ['803', '833', '383', '830'], correctIndex: 1 },
+      { question: 'сто и четиридесет и пет', options: ['154', '415', '145', '514'], correctIndex: 2 },
+      { question: 'деветстотин и деветдесет и девет', options: ['990', '909', '999', '899'], correctIndex: 2 },
+    ],
+  } as MultipleChoiceExercise,
 
   // Упр. 25 – SKIP (per client)
 
@@ -869,7 +876,7 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 37: Упр. 33 – Прочетете текста (Юлия) (Page 42)
+  // ORDER 37: Упр. 33 – Прочетете текста (Елена) (Page 42)
   {
     id: 'l04-ex-33',
     type: 'reading_text',
@@ -883,11 +890,11 @@ export const exercises: Exercise[] = [
       { imageUrl: '/assets/lesson-04/14-tekstove-snimki/03-krastavitsi.jpg', label: 'краставици' },
     ],
     paragraphs: [
-      'За закуска Юлия яде плодове, сандвич със сирене, домати и маслини или филия с масло и сладко от череши. Пие кафе с мляко без захар. Тя обядва салата и супа или спагети със зеленчуци. Пие минерална вода или сок от портокал. Юлия вечеря риба с пържени картофи или пица със зеленчуци и пие газирана вода.',
+      'За закуска Елена яде плодове, сандвич със сирене, домати и маслини или филия с масло и сладко от череши. Пие кафе с мляко без захар. Тя обядва салата и супа или спагети със зеленчуци. Пие минерална вода или сок от портокал. Елена вечеря риба с пържени картофи или пица със зеленчуци и пие газирана вода.',
     ],
   } as ReadingTextExercise,
 
-  // ORDER 38: Упр. 34 – Довършете изреченията (Юлия) (Page 42)
+  // ORDER 38: Упр. 34 – Довършете изреченията (Елена) (Page 42)
   {
     id: 'l04-ex-34',
     type: 'workbook_fill_blank',
@@ -896,12 +903,12 @@ export const exercises: Exercise[] = [
     points: 6,
     layout: 'single' as const,
     sentences: [
-      { text: 'За закуска Юлия пие _______.',  blanks: [4], correctAnswers: ['кафе с мляко без захар'],                      options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
-      { text: 'Юлия закусва _______.',          blanks: [2], correctAnswers: ['плодове, сандвич със сирене, домати и маслини'], options: ['плодове, сандвич със сирене, домати и маслини', 'салата и супа', 'риба с пържени картофи'] },
-      { text: 'За обяд Юлия пие _______.',      blanks: [4], correctAnswers: ['минерална вода или сок от портокал'],            options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
-      { text: 'Юлия обядва _______.',            blanks: [2], correctAnswers: ['салата и супа или спагети със зеленчуци'],       options: ['салата и супа или спагети със зеленчуци', 'плодове, сандвич със сирене', 'риба с пържени картофи или пица'] },
-      { text: 'За вечеря Юлия пие _______.',    blanks: [4], correctAnswers: ['газирана вода'],                                options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
-      { text: 'Юлия вечеря _______.',            blanks: [2], correctAnswers: ['риба с пържени картофи или пица със зеленчуци'], options: ['риба с пържени картофи или пица със зеленчуци', 'салата и супа', 'плодове, сандвич със сирене'] },
+      { text: 'За закуска Елена пие _______.',  blanks: [4], correctAnswers: ['кафе с мляко без захар'],                      options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
+      { text: 'Елена закусва _______.',          blanks: [2], correctAnswers: ['плодове, сандвич със сирене, домати и маслини'], options: ['плодове, сандвич със сирене, домати и маслини', 'салата и супа', 'риба с пържени картофи'] },
+      { text: 'За обяд Елена пие _______.',      blanks: [4], correctAnswers: ['минерална вода или сок от портокал'],            options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
+      { text: 'Елена обядва _______.',            blanks: [2], correctAnswers: ['салата и супа или спагети със зеленчуци'],       options: ['салата и супа или спагети със зеленчуци', 'плодове, сандвич със сирене', 'риба с пържени картофи или пица'] },
+      { text: 'За вечеря Елена пие _______.',    blanks: [4], correctAnswers: ['газирана вода'],                                options: ['кафе с мляко без захар', 'минерална вода или сок от портокал', 'газирана вода'] },
+      { text: 'Елена вечеря _______.',            blanks: [2], correctAnswers: ['риба с пържени картофи или пица със зеленчуци'], options: ['риба с пържени картофи или пица със зеленчуци', 'салата и супа', 'плодове, сандвич със сирене'] },
     ],
   } as WorkbookFillBlankExercise,
 

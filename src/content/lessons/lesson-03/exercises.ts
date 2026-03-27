@@ -94,6 +94,7 @@ export const exercises: Exercise[] = [
   // ORDER 5: ГРАМАТИКА 1 – Бройни числителни 10–100 (Page 26)
   {
     id: 'l03-gramatika-01',
+    instructionKey: 'grammar.l03.g1.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
     subtitle: 'Граматика – Бройни числителни (1)',
@@ -463,6 +464,7 @@ export const exercises: Exercise[] = [
   // ORDER 16: ГРАМАТИКА 2а – Сегашно време Е група: пия (Page 28)
   {
     id: 'l03-gramatika-02a',
+    instructionKey: 'grammar.l03.g2a.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Граматика – Сегашно време (12)',
@@ -483,6 +485,7 @@ export const exercises: Exercise[] = [
   // ORDER 17: ГРАМАТИКА 2б – Сегашно време Е група: ям (Page 28)
   {
     id: 'l03-gramatika-02b',
+    instructionKey: 'grammar.l03.g2b.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с глагола ЯМ в сегашно време. Натиснете върху ред за произношение.',
@@ -769,6 +772,7 @@ export const exercises: Exercise[] = [
   // ORDER 24: ГРАМАТИКА 3 – Глагол → Съществително (Page 30)
   {
     id: 'l03-gramatika-03',
+    instructionKey: 'grammar.l03.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     instruction: 'Запознайте се с връзката глагол → съществително.',
@@ -804,6 +808,7 @@ export const exercises: Exercise[] = [
   // ORDER 26: ГРАМАТИКА 4 – Число на съществителните (Page 30)
   {
     id: 'l03-gramatika-04',
+    instructionKey: 'grammar.l03.g4.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Граматика – Число на съществителните (3)',
@@ -817,9 +822,9 @@ export const exercises: Exercise[] = [
     tableTitle: 'Число на съществителните',
     columns: ['един / една / едно', 'много'],
     rows: [
-      { pronoun: 'м.р.', cells: ['сандвич, сок',  'сандвичи, сокове'] },
-      { pronoun: 'ж.р.', cells: ['супа, филия',   'супи, филии'] },
-      { pronoun: 'ср.р.', cells: ['кафе, масло',  'кафета, масла'] },
+      { pronoun: 'мъжки род', cells: ['сандвич, сок',  'сандвичи, сокове'] },
+      { pronoun: 'женски род', cells: ['супа, филия',   'супи, филии'] },
+      { pronoun: 'среден род', cells: ['кафе, масло',  'кафета, масла'] },
     ],
     notes: [
       'Внимание! яйце – яйца',
@@ -892,7 +897,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-27',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете един (м.р.), една (ж.р.), едно (ср.р.) или много пред думите.',
+    instruction: 'Напишете един (мъжки род), една (женски род), едно (среден род) или много пред думите.',
     order: 30,
     points: 14,
     layout: 'two-column',
