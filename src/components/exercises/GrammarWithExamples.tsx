@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -63,9 +63,10 @@ interface GrammarWithExamplesProps {
   subtitle?: string;
   disableTts?: boolean;
   examples: GrammarExample[];
+  exerciseId?: string;
 }
 
-export function GrammarWithExamples({ subtitle, examples, disableTts }: GrammarWithExamplesProps) {
+export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
   const t = useT();
@@ -75,7 +76,10 @@ export function GrammarWithExamples({ subtitle, examples, disableTts }: GrammarW
       const textToSpeak = example.lines
         ? example.lines.join(' ')
         : [example.text, example.subtext].filter(Boolean).join(' ');
-      speakBulgarian(textToSpeak);
+      const audioPath = exerciseId
+        ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-card-${index}`)
+        : '';
+      playTtsAudio(audioPath, textToSpeak);
     }
 
     setRevealed(prev => {

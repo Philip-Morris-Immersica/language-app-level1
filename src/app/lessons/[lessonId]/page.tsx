@@ -129,6 +129,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <VocabularyDrawer
           vocabulary={vocabulary}
           lessonTitle={`${metadata.number}. ${metadata.title}`}
+          lessonId={lessonId}
         />
       )}
     </LessonLayout>

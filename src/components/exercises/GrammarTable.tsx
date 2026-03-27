@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface GrammarTableProps {
   tableTitle?: string;
@@ -12,6 +12,7 @@ interface GrammarTableProps {
   rows?: { pronoun: string; cells: string[] }[];
   notes?: string[];
   subtitle?: string;
+  exerciseId?: string;
 }
 
 export function GrammarTable({
@@ -20,6 +21,7 @@ export function GrammarTable({
   rows = [],
   notes = [],
   subtitle,
+  exerciseId,
 }: GrammarTableProps) {
   const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
   const [revealedNotes, setRevealedNotes] = useState<Set<number>>(new Set());
@@ -28,8 +30,12 @@ export function GrammarTable({
 
   const toggleRow = (idx: number) => {
     const isNumericPronoun = /^\d[\d\s]*$/.test(rows[idx].pronoun.trim());
-    const parts = isNumericPronoun ? rows[idx].cells : [rows[idx].pronoun, ...rows[idx].cells];
-    speakBulgarian(parts.join(', '));
+    const speakableCells = rows[idx].cells.filter(c => !c.trim().startsWith('-'));
+    const parts = isNumericPronoun ? speakableCells : [rows[idx].pronoun, ...speakableCells];
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx}`)
+      : '';
+    playTtsAudio(audioPath, parts.join('. '));
 
     setRevealedRows(prev => {
       const next = new Set(prev);

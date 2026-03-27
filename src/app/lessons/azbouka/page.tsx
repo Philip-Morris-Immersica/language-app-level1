@@ -61,6 +61,7 @@ export default function AzboukaPage() {
         <VocabularyDrawer
           vocabulary={vocabulary}
           lessonTitle={`${lessonData.number}. ${lessonData.title}`}
+          lessonId="lesson-00"
         />
       )}
     </LessonLayout>

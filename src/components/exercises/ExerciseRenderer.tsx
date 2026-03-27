@@ -144,7 +144,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(<ImageLabeling exercise={exercise} onComplete={onComplete} />);
 
     case 'illustrated_cards':
-      return wrap(<IllustratedCards exercise={exercise} onComplete={onComplete} />);
+      return wrap(<IllustratedCards exercise={exercise} onComplete={onComplete} exerciseId={exercise.id} />);
 
     case 'syllable_blocks':
       return wrap(
@@ -183,6 +183,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           examples={exercise.examples}
           disableTts={exercise.disableTts}
+          exerciseId={exercise.id}
         />
       );
 
@@ -194,6 +195,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           rows={exercise.rows}
           notes={exercise.notes}
           subtitle={exercise.subtitle}
+          exerciseId={exercise.id}
         />
       );
 
@@ -203,6 +205,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           audioUrl={exercise.audioUrl}
           sections={exercise.sections}
+          exerciseId={exercise.id}
         />
       );
 
@@ -238,6 +241,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           hideText={exercise.hideText}
           noTranslation={exercise.noTranslation}
           checklist={exercise.checklist}
+          exerciseId={exercise.id}
           onComplete={wrapOneArgOnComplete(
             exercise.checklist?.items.length ?? exercise.points ?? 1,
           )}

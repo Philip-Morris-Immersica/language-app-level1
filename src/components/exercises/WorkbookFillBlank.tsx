@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Check, X, Play, RotateCcw } from 'lucide-react';
+import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
-import { speakBulgarian } from '@/lib/tts';
+import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface WorkbookSentence {
   text: string;
@@ -413,7 +413,10 @@ export function WorkbookFillBlank({
   });
 
   const speakText = (text: string) => {
-    speakBulgarian(text);
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'listening', exerciseId)
+      : '';
+    playTtsAudio(audioPath, text);
   };
 
   return (
@@ -429,28 +432,15 @@ export function WorkbookFillBlank({
       ) : null}
 
       {listeningText && (
-        <div className="mb-6 space-y-3">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              onClick={() => speakText(listeningText)}
-              className="flex items-center gap-2 border-2 border-[#8FC412] text-[#4a6b1f] hover:bg-[#EEF7C8] px-5 py-3 rounded-lg font-semibold min-h-[48px]"
-            >
-              <Play className="w-5 h-5 fill-current" />
-              🔊 Слушайте текста
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => speakText(listeningText)}
-              className="text-gray-400 hover:text-[#4a6b1f]"
-              title="Слушай отново"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </Button>
-          </div>
-          <div className="rounded-lg border-2 border-[#8FC412] bg-[#f4faee] px-5 py-4">
-            <p className="text-sm md:text-base text-gray-800 leading-relaxed">{listeningText}</p>
+        <div className="mb-6">
+          <div
+            onClick={() => speakText(listeningText)}
+            className="rounded-lg border-2 border-[#8FC412] bg-[#f4faee] px-5 py-4 cursor-pointer hover:bg-[#edf5e4] transition-colors active:scale-[0.99]"
+          >
+            <p className="text-sm md:text-base text-gray-800 leading-relaxed flex items-start gap-2">
+              <span className="text-[#4a6b1f] mt-0.5 shrink-0">🔊</span>
+              {listeningText}
+            </p>
           </div>
         </div>
       )}

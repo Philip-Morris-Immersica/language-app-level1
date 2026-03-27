@@ -43,14 +43,14 @@ if (typeof window !== 'undefined' && window.speechSynthesis) {
   getBulgarianVoice();
 }
 
-function cleanForTTS(raw: string): string {
+export function cleanForTTS(raw: string): string {
   return raw
+    .replace(/\s*\/\s*/g, ', ')
+    .replace(/\s*[–—]\s*/g, ', ')
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
     .replace(/[=→⇒]/g, ', ')
+    .replace(/!/g, '.')
     .replace(/[€¢№]/g, '')
-    .replace(/\(м\.р\.\)/g, '(мъжки род)')
-    .replace(/\(ж\.р\.\)/g, '(женски род)')
-    .replace(/\(ср\.р\.\)/g, '(среден род)')
-    .replace(/\(мн\.ч\.\)/g, '(множествено число)')
     .replace(/\bм\.р\./g, 'мъжки род')
     .replace(/\bж\.р\./g, 'женски род')
     .replace(/\bср\.р\./g, 'среден род')
@@ -101,4 +101,52 @@ export function stopSpeaking(): void {
 
 export function isTtsAvailable(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;
+}
+
+// ---------------------------------------------------------------------------
+// TTS Audio file helpers (pre-generated MP3 via Google Cloud TTS)
+// ---------------------------------------------------------------------------
+
+let currentAudio: HTMLAudioElement | null = null;
+
+export function getTtsAudioPath(
+  exerciseId: string,
+  category: 'words' | 'dialogues' | 'grammar' | 'texts' | 'listening',
+  filename: string,
+): string {
+  const match = exerciseId.match(/^l(\d+)/);
+  if (!match) return '';
+  return `/assets/lesson-${match[1]}/audio/tts/${category}/${filename}.mp3`;
+}
+
+export function playTtsAudio(
+  audioUrl: string,
+  fallbackText?: string,
+  rate?: number,
+): void {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+
+  if (!audioUrl) {
+    if (fallbackText) speakBulgarian(fallbackText, rate);
+    return;
+  }
+
+  const audio = new Audio(audioUrl);
+  currentAudio = audio;
+  audio.onended = () => { currentAudio = null; };
+  audio.play().catch(() => {
+    currentAudio = null;
+    if (fallbackText) speakBulgarian(fallbackText, rate);
+  });
+}
+
+export function stopTtsAudio(): void {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  stopSpeaking();
 }

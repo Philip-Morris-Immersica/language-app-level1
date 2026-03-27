@@ -1,0 +1,387 @@
+import fs from 'fs';
+import path from 'path';
+import { cleanForTTS } from '@/lib/tts';
+
+// ---------------------------------------------------------------------------
+// Config
+// ---------------------------------------------------------------------------
+const PROJECT_ROOT = path.resolve(__dirname, '..');
+
+// ---------------------------------------------------------------------------
+// Parse CLI arguments
+// ---------------------------------------------------------------------------
+function parseArg(name: string): string | undefined {
+  const flag = process.argv.find(a => a.startsWith(`--${name}`));
+  if (!flag) return undefined;
+  if (flag.includes('=')) return flag.split('=')[1];
+  const idx = process.argv.indexOf(flag);
+  return process.argv[idx + 1];
+}
+
+const lessonNum = parseArg('lesson');
+if (!lessonNum) {
+  console.error('Usage: tsx scripts/generate-tts.ts --lesson 04 [--model gemini|chirp]');
+  process.exit(1);
+}
+
+const modelFlag = parseArg('model') || 'gemini';
+const USE_GEMINI = modelFlag === 'gemini';
+
+const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
+const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
+const GEMINI_MODEL = 'gemini-2.5-pro-tts';
+const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
+const SPEAKING_RATE = 0.85; // Chirp only
+
+// Chirp: 10 req/s; Gemini: 10 req/min
+const REQUEST_DELAY_MS = USE_GEMINI ? 6500 : 110;
+const MAX_RETRIES = 3;
+
+const LESSON_ID = `lesson-${lessonNum.padStart(2, '0')}`;
+const OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', LESSON_ID, 'audio', 'tts');
+
+// Per-lesson exclude lists
+const READING_TEXT_EXCLUDE = new Set(
+  lessonNum === '05' ? ['l05-ex-10', 'l05-wb-00', 'l05-wb-04'] : [],
+);
+const SKIP_FULL_TEXT = new Set(
+  lessonNum === '05' ? ['l05-ex-25'] : [],
+);
+
+const GRAMMAR_LABELS = new Set([
+  'мъжки род', 'женски род', 'среден род', 'множествено число',
+  'м.р.', 'ж.р.', 'ср.р.', 'мн.ч.',
+]);
+
+// ---------------------------------------------------------------------------
+// Text cleaning
+// ---------------------------------------------------------------------------
+function cleanForGeminiTTS(raw: string): string {
+  return raw
+    .replace(/^[–—]\s*/gm, '')
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const clean = USE_GEMINI ? cleanForGeminiTTS : cleanForTTS;
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+interface VocabularyItem { id: string; bulgarian: string; }
+interface DialogueSpeaker { name: string; text: string; }
+interface Dialogue { id: string; speakers: DialogueSpeaker[]; }
+interface LessonContent { vocabulary: VocabularyItem[]; dialogues: Dialogue[]; }
+
+interface Exercise {
+  id: string;
+  type: string;
+  disableTts?: boolean;
+  audioUrl?: string;
+  listeningText?: string;
+  voiceGender?: 'male' | 'female';
+  paragraphs?: string[];
+  rows?: { pronoun: string; cells: string[] }[];
+  examples?: { text: string; subtext?: string; lines?: string[] }[];
+  sections?: { id: string; lines: { text: string; speaker?: string }[] }[];
+}
+
+interface TtsJob {
+  category: string;
+  filename: string;
+  text: string;
+  voice: string;
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+function ensureDir(dirPath: string): void {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+// ---------------------------------------------------------------------------
+// Auth + Synthesize
+// ---------------------------------------------------------------------------
+let cachedToken: { token: string; expiry: number } | null = null;
+
+async function getAccessToken(): Promise<string> {
+  if (cachedToken && Date.now() < cachedToken.expiry - 60_000) {
+    return cachedToken.token;
+  }
+  const { GoogleAuth } = await import('google-auth-library');
+  const auth = new GoogleAuth({
+    keyFile: path.join(PROJECT_ROOT, 'service-account.json'),
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+  });
+  const client = await auth.getClient();
+  const res = await client.getAccessToken();
+  if (!res.token) throw new Error('Failed to get access token');
+  cachedToken = { token: res.token, expiry: Date.now() + 3500_000 };
+  return res.token;
+}
+
+async function synthesizeGeminiOnce(text: string, voice: string): Promise<Buffer> {
+  const token = await getAccessToken();
+  const saJson = JSON.parse(fs.readFileSync(path.join(PROJECT_ROOT, 'service-account.json'), 'utf8'));
+  const body = {
+    input: { text, prompt: GEMINI_PROMPT },
+    voice: { languageCode: 'bg-BG', name: voice, modelName: GEMINI_MODEL },
+    audioConfig: { audioEncoding: 'MP3' },
+  };
+  const res = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'x-goog-user-project': saJson.project_id,
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    if (res.status === 429) {
+      const retryMatch = errText.match(/retry.{0,5}([\d.]+)\s*s/i);
+      const waitSec = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) + 2 : 60;
+      throw { retryable: true, waitMs: waitSec * 1000, message: `Rate limited, wait ${waitSec}s` };
+    }
+    throw new Error(`Cloud TTS API error ${res.status}: ${errText.slice(0, 300)}`);
+  }
+  const json = (await res.json()) as { audioContent: string };
+  return Buffer.from(json.audioContent, 'base64');
+}
+
+async function synthesizeGemini(text: string, voice: string): Promise<Buffer> {
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      return await synthesizeGeminiOnce(text, voice);
+    } catch (err: unknown) {
+      const isRetryable = typeof err === 'object' && err !== null && 'retryable' in err;
+      if (isRetryable && attempt < MAX_RETRIES - 1) {
+        const waitMs = (err as { waitMs: number }).waitMs;
+        process.stdout.write(` [rate-limited, waiting ${Math.round(waitMs / 1000)}s]`);
+        await sleep(waitMs);
+        continue;
+      }
+      throw err instanceof Error ? err : new Error(String((err as { message?: string }).message || err));
+    }
+  }
+  throw new Error('Max retries exceeded');
+}
+
+async function synthesizeChirp(text: string, voice: string): Promise<Buffer> {
+  const API_KEY = process.env.GOOGLE_TTS_API_KEY;
+  if (!API_KEY) throw new Error('Missing GOOGLE_TTS_API_KEY');
+  const body = {
+    input: { text },
+    voice: { languageCode: 'bg-BG', name: voice },
+    audioConfig: { audioEncoding: 'MP3', speakingRate: SPEAKING_RATE },
+  };
+  const res = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`Cloud TTS API error ${res.status}: ${await res.text()}`);
+  const json = (await res.json()) as { audioContent: string };
+  return Buffer.from(json.audioContent, 'base64');
+}
+
+const synthesize = USE_GEMINI ? synthesizeGemini : synthesizeChirp;
+
+// ---------------------------------------------------------------------------
+// Dialogue voice mapping
+// ---------------------------------------------------------------------------
+const SPEAKER_VOICE_MAP: Record<string, string> = {
+  'клиент': FEMALE_VOICE,
+  'продавач': MALE_VOICE,
+};
+
+function getDialogueVoice(speaker: string | undefined, lineIndex: number): string {
+  if (speaker) {
+    const mapped = SPEAKER_VOICE_MAP[speaker.toLowerCase()];
+    if (mapped) return mapped;
+  }
+  return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
+}
+
+function stripGrammarLabels(subtext: string): string {
+  return subtext.split('\n').filter(line => !GRAMMAR_LABELS.has(line.trim())).join('\n');
+}
+
+// ---------------------------------------------------------------------------
+// Collect jobs
+// ---------------------------------------------------------------------------
+function collectVocabularyJobs(content: LessonContent): TtsJob[] {
+  return content.vocabulary.map(item => ({
+    category: 'words',
+    filename: `${item.id}.mp3`,
+    text: clean(item.bulgarian),
+    voice: FEMALE_VOICE,
+  }));
+}
+
+function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
+    for (const section of ex.sections!) {
+      for (let i = 0; i < section.lines.length; i++) {
+        const line = section.lines[i];
+        const rawText = line.text.replace(/^—\s*/, '');
+        jobs.push({
+          category: 'dialogues',
+          filename: `${ex.id}-${section.id}-line-${i}.mp3`,
+          text: clean(rawText),
+          voice: getDialogueVoice(line.speaker, i),
+        });
+      }
+    }
+  }
+  return jobs;
+}
+
+function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'grammar_table' && e.rows)) {
+    for (let i = 0; i < ex.rows!.length; i++) {
+      const row = ex.rows![i];
+      const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
+      const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
+      const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-row-${i}.mp3`,
+        text: clean(parts.join('. ')),
+        voice: FEMALE_VOICE,
+      });
+    }
+  }
+  return jobs;
+}
+
+function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'grammar_examples' && !e.disableTts && e.examples)) {
+    for (let i = 0; i < ex.examples!.length; i++) {
+      const card = ex.examples![i];
+      let parts: string;
+      if (card.lines) {
+        parts = card.lines.join(' ');
+      } else {
+        const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
+        parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
+      }
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-card-${i}.mp3`,
+        text: clean(parts),
+        voice: FEMALE_VOICE,
+      });
+    }
+  }
+  return jobs;
+}
+
+function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'reading_text' && e.paragraphs && !READING_TEXT_EXCLUDE.has(e.id))) {
+    const paragraphs = ex.paragraphs!;
+    const voice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
+    for (let i = 0; i < paragraphs.length; i++) {
+      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice });
+    }
+    const fullText = clean(paragraphs.join('\n'));
+    if (paragraphs.length > 0 && fullText.length < 2000 && !SKIP_FULL_TEXT.has(ex.id)) {
+      jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice });
+    }
+  }
+  return jobs;
+}
+
+function collectListeningJobs(exercises: Exercise[]): TtsJob[] {
+  return exercises
+    .filter(e => e.listeningText)
+    .map(e => ({ category: 'listening', filename: `${e.id}.mp3`, text: clean(e.listeningText!), voice: FEMALE_VOICE }));
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+async function main() {
+  const modelLabel = USE_GEMINI ? 'Gemini 2.5 Pro TTS' : 'Chirp3-HD';
+  console.log(`\nGenerating TTS audio for ${LESSON_ID} [model: ${modelLabel}]\n`);
+
+  const contentModule = await import(`../src/content/lessons/${LESSON_ID}/content`);
+  const exercisesModule = await import(`../src/content/lessons/${LESSON_ID}/exercises`);
+
+  const content: LessonContent = contentModule.content;
+  const exercises: Exercise[] = exercisesModule.exercises;
+
+  const jobs: TtsJob[] = [
+    ...collectVocabularyJobs(content),
+    ...collectDialogueJobs(exercises),
+    ...collectGrammarTableJobs(exercises),
+    ...collectGrammarExampleJobs(exercises),
+    ...collectReadingTextJobs(exercises),
+    ...collectListeningJobs(exercises),
+  ];
+
+  console.log(`Total jobs: ${jobs.length}\n`);
+
+  const categories = [...new Set(jobs.map(j => j.category))];
+  for (const cat of categories) {
+    ensureDir(path.join(OUTPUT_BASE, cat));
+  }
+
+  let generated = 0;
+  let skipped = 0;
+  let failed = 0;
+  let totalChars = 0;
+
+  for (let i = 0; i < jobs.length; i++) {
+    const job = jobs[i];
+    const outPath = path.join(OUTPUT_BASE, job.category, job.filename);
+
+    if (fs.existsSync(outPath)) {
+      skipped++;
+      continue;
+    }
+
+    const progress = `[${i + 1}/${jobs.length}]`;
+    process.stdout.write(`${progress} ${job.category}/${job.filename} ...`);
+
+    try {
+      const mp3 = await synthesize(job.text, job.voice);
+      fs.writeFileSync(outPath, mp3);
+      totalChars += job.text.length;
+      generated++;
+      process.stdout.write(` OK (${mp3.length} bytes)\n`);
+    } catch (err) {
+      failed++;
+      process.stdout.write(` FAILED\n`);
+      console.error(`  Error: ${err instanceof Error ? err.message : err}`);
+    }
+
+    await sleep(REQUEST_DELAY_MS);
+  }
+
+  console.log(`\n--- Summary ---`);
+  console.log(`Model: ${modelLabel}`);
+  console.log(`Generated: ${generated}`);
+  console.log(`Skipped (already exist): ${skipped}`);
+  console.log(`Failed: ${failed}`);
+  console.log(`Total characters sent: ${totalChars}`);
+  console.log(`Output: ${OUTPUT_BASE}\n`);
+}
+
+main().catch(err => {
+  console.error('Fatal error:', err);
+  process.exit(1);
+});

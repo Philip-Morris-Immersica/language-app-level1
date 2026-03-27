@@ -45,7 +45,6 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 1',
     instruction: 'Натиснете за произношение.',
     order: 2,
-    audioUrl: '/assets/lesson-05/audio/22-urok-5-novi-dumi-1.mp3',
     cards: [
       { id: 'apteka', imageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/01-apteka.jpg', label: 'аптека' },
       { id: 'banka', imageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/02-banka.jpg', label: 'банка' },
@@ -94,10 +93,9 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 2',
     instruction: 'Натиснете за произношение.',
     order: 4,
-    audioUrl: '/assets/lesson-05/audio/23-urok-5-novi-dumi-2.mp3',
     cards: [
-      { id: 'dg', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/01-detska-gradina.jpg', label: 'детска градина' },
-      { id: 'dp', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/02-detska-ploshtadka.jpg', label: 'детска площадка' },
+      { id: 'detska-gradina', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/01-detska-gradina.jpg', label: 'детска градина' },
+      { id: 'detska-ploshtadka', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/02-detska-ploshtadka.jpg', label: 'детска площадка' },
       { id: 'dzhamiya', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/03-dzhamiya.jpg', label: 'джамия' },
       { id: 'kashta', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/04-kashta.jpg', label: 'къща' },
       { id: 'magazin', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/05-magazin.jpg', label: 'магазин' },
@@ -184,9 +182,8 @@ export const exercises: Exercise[] = [
     id: 'l05-dialozi-01',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
-    instruction: 'Прочетете диалозите.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 9,
-    audioUrl: '/assets/lesson-05/audio/24-urok-5-dialozi-1.mp3',
     sections: [
       {
         id: 'a',
@@ -291,7 +288,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-11',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 11',
-    instruction: 'Слушайте и попълнете визитката.',
+    instruction: 'Натиснете текста, за да чуете произношението. Попълнете визитката.',
     order: 13,
     points: 5,
     layout: 'single',
@@ -520,7 +517,7 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с предлозите и примерите.',
     order: 23,
     examples: [
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg', text: 'в — в кутията / в центъра', subtext: '' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg', text: 'в — в кутията, в центъра', subtext: '' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/02-na.jpg', text: 'на — на масата', subtext: '' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/03-do.jpg', text: 'до — до кутията', subtext: '' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/04-pred.jpg', text: 'пред — пред кутията', subtext: '' },
@@ -529,7 +526,7 @@ export const exercises: Exercise[] = [
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/07-sreshtu.jpg', text: 'срещу — срещу кутията', subtext: '' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/08-blizo-do.jpg', text: 'близо до — близо до кутията', subtext: '' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/09-daleche-ot.jpg', text: 'далече от — далече от кутията', subtext: '' },
-      { imageUrl: '', text: 'Примери: Театърът е в центъра, до музея, пред университета, зад аптеката, близо до хотела, между аптеката и университета, срещу болницата, далече от библиотеката.', subtext: 'Внимание: Аз съм на улицата. / Аз съм на улица „Иван Вазов“.' },
+      { imageUrl: '', text: 'Примери: Театърът е в центъра, до музея, пред университета, зад аптеката, близо до хотела, между аптеката и университета, срещу болницата, далече от библиотеката.', subtext: 'Внимание: Аз съм на улицата. Аз съм на улица „Иван Вазов“.' },
     ],
   } as GrammarExamplesExercise,
 
@@ -612,10 +609,9 @@ export const exercises: Exercise[] = [
     id: 'l05-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
-    instruction: 'Прочетете диалога.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 26,
     imageUrl: '/assets/lesson-05/28-dialozi-2-posoka-karta/01-turisti-s-karta.jpg',
-    audioUrl: '/assets/lesson-05/audio/25-urok-5-dialog-2.mp3',
     sections: [
       {
         id: 'a',
@@ -635,12 +631,12 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 5',
     subtitle: 'Повелително наклонение — посока',
-    instruction: 'Форми за указване на посока (вие / Вие и ти).',
+    instruction: 'Форми за указване на посока — вие, Вие и ти.',
     order: 27,
     examples: [
-      { imageUrl: '', text: 'Вървете направо! (вие, Вие) / Върви направо! (ти)', subtext: '' },
-      { imageUrl: '', text: 'Завийте наляво! (вие, Вие) / Завий наляво! (ти)', subtext: '' },
-      { imageUrl: '', text: 'Завийте надясно! (вие, Вие) / Завий надясно! (ти)', subtext: '' },
+      { imageUrl: '', text: '', lines: ['Вие — Вървете направо.', 'Ти — Върви направо.'], subtext: '' },
+      { imageUrl: '', text: '', lines: ['Вие — Завийте наляво.', 'Ти — Завий наляво.'], subtext: '' },
+      { imageUrl: '', text: '', lines: ['Вие — Завийте надясно.', 'Ти — Завий надясно.'], subtext: '' },
     ],
   } as GrammarExamplesExercise,
 
@@ -728,9 +724,9 @@ export const exercises: Exercise[] = [
     tableTitle: 'Число на съществителните (3)',
     columns: ['Форма', 'Изречения'],
     rows: [
-      { pronoun: 'Ед. число', cells: ['един човек', 'Тук има един човек.'] },
-      { pronoun: 'С число', cells: ['десет души', 'Колко души има тук?'] },
-      { pronoun: 'Общо', cells: ['много / малко хора', 'Тук няма много хора.'] },
+      { pronoun: 'Единствено число', cells: ['един човек', 'Тук има един човек.'] },
+      { pronoun: 'Множествено число', cells: ['десет души', 'Колко души има тук?'] },
+      { pronoun: 'Общо', cells: ['много, малко хора', 'Тук няма много хора.'] },
     ],
   } as GrammarTableExercise,
 
@@ -779,7 +775,10 @@ export const exercises: Exercise[] = [
     order: 34,
     paragraphs: [
       'Модел: 173 268 — сто седемдесет и три хиляди двеста шестдесет и осем.',
-      '1230, 2800, 86493, 370480, 2970, 18490567, 12964098, 4500, 987435000, 345, 12359, 933, 284590, 706409, 54030 …',
+      '1230. 2800. 86493. 370480.',
+      '2970. 18490567. 12964098. 4500.',
+      '987435000. 345. 12359. 933.',
+      '284590. 706409. 54030.',
     ],
   } as ReadingTextExercise,
 
@@ -847,7 +846,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-29',
     type: 'workbook_fill_blank',
-    instruction: 'Слушайте текста и попълнете празните места.',
+    instruction: 'Натиснете текста, за да чуете произношението. Попълнете празните места.',
     order: 38,
     points: 5,
     layout: 'single',
@@ -891,7 +890,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 32',
     instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
     order: 40,
-    audioUrl: '/assets/lesson-05/audio/26-urok-5-tekstove-32.mp3',
+    audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-32-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/44-tekstove-shtarkel-darvo/01-shtarkel-v-gnezdo.jpg', label: '' }],
     paragraphs: [
       'Село Нови извор е в полето, близо до Турция. В селото живеят 300 души – баби и дядовци. В селото няма деца, няма и училище. Няма магазин, кафе и ресторант. Има една църква и река с мост. В реката има много риба.',
@@ -905,7 +904,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 33',
     instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
     order: 41,
-    audioUrl: '/assets/lesson-05/audio/27-urok-5-tekstove-33.mp3',
+    audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-33-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/44-tekstove-shtarkel-darvo/02-darvo-akvarel.jpg', label: '' }],
     paragraphs: [
       'Село Рибново е в планината, близо до Гърция. В селото живеят 2500 души. В Рибново има едно училище с много ученици и учители и една детска градина. В Рибново има община, джамия, един ресторант и много кафета. В планината над селото има гора с много дървета. Под дърветата има гъби и ягоди.',
@@ -961,7 +960,8 @@ export const exercises: Exercise[] = [
     title: 'ОТ ПЪРВО ЛИЦЕ — Упражнение 36',
     instruction: 'Прочетете текста за София и Халеб (Алепо). Извадете непознатите думи и проверете превода им в речника.',
     order: 44,
-    audioUrl: '/assets/lesson-05/audio/28-urok-5-tekstove-36.mp3',
+    voiceGender: 'male',
+    audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-36-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/45-ot-parvo-litse-krepost-haleb/01-krepost-haleb-zalez.jpg', label: '' }],
     paragraphs: [
       'Аз съм Мохамед. Аз съм от Халеб. Сега живея в София.',

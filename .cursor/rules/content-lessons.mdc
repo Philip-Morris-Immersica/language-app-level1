@@ -29,7 +29,8 @@ After creating the files, register the lesson in [src/content/index.ts](mdc:src/
 ## Asset Paths
 
 Assets go in `/public/assets/lesson-XX/` with descriptive subfolders:
-- `audio/` — MP3/WAV files
+- `audio/tts/` — generated TTS MP3 files (see `tts-audio` rule)
+- `audio/` — other audio files
 - `exercise-NN-name/` — images for a specific exercise
 - `novi-dumi-N-name/` — vocabulary card images
 - `gramatika-N/` — grammar section images
@@ -102,7 +103,7 @@ The following behaviors are built into the exercise components — content autho
 - **Options are shuffled** — `WorkbookFillBlank` shuffles `options[]` on render so the correct answer isn't always first.
 - **Letters are shuffled** — `LetterChoice` shuffles the letter pool on render.
 - **Reset button** — All exercise components with "Check answers" also show a "Reset" button.
-- **TTS** — All components use `speakBulgarian()` from `@/lib/tts` with automatic voice selection.
+- **TTS** — Components prefer pre-generated MP3 via `getTtsAudioPath()`, with browser `speakBulgarian()` as fallback. See `tts-audio` rule for generation details.
 
 ## Alternative Correct Answers
 

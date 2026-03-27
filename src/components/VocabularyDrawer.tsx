@@ -6,20 +6,19 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
 import type { VocabularyItem } from '@/content/types';
-import { speakBulgarian } from '@/lib/tts';
+import { playTtsAudio } from '@/lib/tts';
 
-function speak(text: string) {
-  speakBulgarian(text);
-}
-
-function VocabRow({ item }: { item: VocabularyItem }) {
+function VocabRow({ item, lessonId }: { item: VocabularyItem; lessonId?: string }) {
   const { lang } = useLanguage();
   const translated = useTranslate(item.bulgarian);
   const showTranslation = lang !== 'bg' && translated !== item.bulgarian;
 
   return (
     <button
-      onClick={() => speak(item.bulgarian)}
+      onClick={() => {
+        const audioPath = lessonId ? `/assets/${lessonId}/audio/tts/words/${item.id}.mp3` : '';
+        playTtsAudio(audioPath, item.bulgarian);
+      }}
       className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#EEF7C8] transition-colors text-left group cursor-pointer"
     >
       <Volume2 className="w-4 h-4 text-gray-400 group-hover:text-[#8FC412] shrink-0 transition-colors" />
@@ -36,9 +35,10 @@ function VocabRow({ item }: { item: VocabularyItem }) {
 interface VocabularyDrawerProps {
   vocabulary: VocabularyItem[];
   lessonTitle?: string;
+  lessonId?: string;
 }
 
-export function VocabularyDrawer({ vocabulary, lessonTitle }: VocabularyDrawerProps) {
+export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: VocabularyDrawerProps) {
   const t = useT();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -126,7 +126,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle }: VocabularyDrawerPr
         <div className="flex-1 overflow-y-auto px-2 py-2">
           <div className="divide-y divide-gray-50">
             {vocabulary.map((item) => (
-              <VocabRow key={item.id} item={item} />
+              <VocabRow key={item.id} item={item} lessonId={lessonId} />
             ))}
           </div>
         </div>

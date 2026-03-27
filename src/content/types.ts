@@ -39,6 +39,7 @@ export interface BaseExercise {
   instructionKey?: string;  // Key into UI_TRANSLATIONS for a pre-translated instruction (overrides dynamic translation).
   points?: number;          // For scoring
   order: number;
+  voiceGender?: 'male' | 'female';
 }
 
 // Specific exercise interfaces

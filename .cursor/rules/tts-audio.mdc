@@ -1,0 +1,106 @@
+---
+globs: scripts/generate-tts.ts,src/lib/tts.ts,public/assets/**/audio/tts/**
+---
+# TTS Audio Generation
+
+## Quick Start
+
+Generate audio for a lesson:
+```bash
+npm run tts:generate -- --lesson 04 --model gemini
+```
+
+## Model: Gemini 2.5 Pro TTS (recommended)
+
+- **API:** Google Cloud TTS via OAuth (`texttospeech.googleapis.com/v1/text:synthesize`)
+- **Auth:** Service account (`service-account.json` in project root, gitignored)
+- **Model name:** `gemini-2.5-pro-tts`
+- **Prompt:** `"Read aloud in a warm, welcoming tone."`
+- **Output:** MP3
+- **Rate limit:** ~10 req/min → script uses 6.5s delay between requests
+- **Voices:** `Achernar` (female, default), `Charon` (male, for Продавач in dialogues)
+
+### Why Gemini over Chirp3-HD
+
+Chirp3-HD (`bg-BG-Chirp3-HD-*`) has accent/stress issues on Bulgarian words. Gemini 2.5 Pro TTS produces more natural pronunciation with correct stress patterns.
+
+## Fallback Model: Chirp3-HD
+
+```bash
+npm run tts:generate -- --lesson 05 --model chirp
+```
+- Uses API key (`GOOGLE_TTS_API_KEY` in `.env.local`)
+- Voices: `bg-BG-Chirp3-HD-Achernar`, `bg-BG-Chirp3-HD-Charon`
+- Speaking rate: 0.85
+- Rate limit: 10 req/s
+
+## File Structure
+
+```
+public/assets/lesson-XX/audio/tts/
+  words/         — {vocabularyItemId}.mp3
+  dialogues/     — {exerciseId}-{sectionId}-line-{index}.mp3
+  grammar/       — {exerciseId}-row-{index}.mp3  (tables)
+                   {exerciseId}-card-{index}.mp3  (examples)
+  texts/         — {exerciseId}-p-{index}.mp3     (per paragraph)
+                   {exerciseId}-full.mp3           (full text, <2000 chars)
+  listening/     — {exerciseId}.mp3
+```
+
+## What Gets Generated
+
+| Category | Source | Voice |
+|---|---|---|
+| Vocabulary | `content.vocabulary[].bulgarian` | Female |
+| Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker (see map below) |
+| Grammar tables | `exercises[type=grammar_table].rows[]` | Female |
+| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female |
+| Reading texts | `exercises[type=reading_text].paragraphs[]` | Female (or male if `voiceGender: 'male'`) |
+| Listening | `exercises[].listeningText` | Female |
+
+## What Does NOT Get Generated
+
+- Interactive exercises (fill_blank, dropdown, drag, etc.)
+- Cards with `disableTts: true`
+- Exercises in per-lesson exclude lists (e.g., workbook exercises)
+
+## Speaker Voice Map (Dialogues)
+
+| Speaker | Voice |
+|---|---|
+| Клиент | Female (Achernar) |
+| Продавач | Male (Charon) |
+| Fallback | Alternating by line index (even=female, odd=male) |
+
+When adding new lessons with different speakers, update `SPEAKER_VOICE_MAP` in [generate-tts.ts](mdc:scripts/generate-tts.ts).
+
+## Text Cleaning
+
+Two cleaning functions exist:
+- **`cleanForGeminiTTS()`** (Gemini): Light touch — strips leading dashes, removes parenthetical labels
+- **`cleanForTTS()`** (Chirp): Aggressive — converts slashes/dashes to commas, removes exclamation marks, strips parentheses
+
+## Adding a New Lesson — Checklist
+
+1. Ensure `content.ts` and `exercises.ts` are complete for the lesson
+2. Check for special cases: `voiceGender: 'male'` on exercises, `disableTts: true` on cards
+3. Add any lesson-specific excludes to `READING_TEXT_EXCLUDE` or `SKIP_FULL_TEXT` in generate-tts.ts
+4. If dialogues have new speaker roles, add them to `SPEAKER_VOICE_MAP`
+5. Run: `npm run tts:generate -- --lesson XX --model gemini`
+6. Script skips existing files — safe to re-run after fixing issues
+7. To regenerate specific files, delete them first, then re-run
+8. Verify in browser: `npm run dev` → navigate to lesson
+
+## Convention-Based Audio Paths
+
+Components use `getTtsAudioPath()` from [src/lib/tts.ts](mdc:src/lib/tts.ts) to construct paths by convention:
+```
+/assets/lesson-{num}/audio/tts/{category}/{filename}.mp3
+```
+No manual `audioUrl` needed for vocabulary, dialogues, or grammar — the path is derived from exercise ID. Reading texts use `audioUrl` in exercises.ts pointing to the `-full.mp3` file.
+
+## Dependencies
+
+- `google-auth-library` (devDependency) — OAuth token generation from service account
+- `dotenv-cli` — loads `.env.local` for the script
+- `tsx` — runs TypeScript scripts directly

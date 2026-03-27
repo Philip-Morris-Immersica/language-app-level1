@@ -6,6 +6,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-01',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Напишете личните местоимения.',
     order: 1,
     points: 5,
@@ -55,6 +56,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-02',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 2',
     instruction: 'Напишете правилната положителна форма на глагола СЪМ (+).',
     order: 2,
     points: 5,
@@ -103,6 +105,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-03',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 3',
     instruction: 'Напишете правилната отрицателна форма на глагола СЪМ (-).',
     order: 3,
     points: 5,
@@ -151,6 +154,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-04',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Напишете правилната въпросителна форма на глагола СЪМ (?) и отговорите на въпросите.',
     order: 4,
     points: 5,
@@ -214,6 +218,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-05',
     type: 'word_order',
+    title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Напишете въпросите.',
     order: 5,
     points: 4,
@@ -245,6 +250,7 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'l01-wb-06',
     type: 'dropdown_match',
+    title: 'УПРАЖНЕНИЕ 6',
     instruction: 'Напишете поздравите.',
     order: 6,
     points: 2,

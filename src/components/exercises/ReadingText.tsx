@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian, stopSpeaking } from '@/lib/tts';
+import { speakBulgarian, stopSpeaking, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface ChecklistItem {
   id: string;
@@ -31,6 +31,7 @@ interface ReadingTextProps {
     instruction: string;
     items: ChecklistItem[];
   };
+  exerciseId?: string;
   onComplete?: (isCorrect: boolean) => void;
 }
 
@@ -66,7 +67,7 @@ function TtsButton({ text }: { text: string }) {
   );
 }
 
-export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -187,7 +188,10 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
               <div
                 key={index}
                 onClick={noTranslation ? undefined : () => {
-                  speakBulgarian(paragraph);
+                  const audioPath = exerciseId
+                    ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${index}`)
+                    : '';
+                  playTtsAudio(audioPath, paragraph);
 
                   setRevealedParas(prev => {
                     const next = new Set(prev);

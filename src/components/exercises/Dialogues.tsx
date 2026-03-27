@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Play, Pause } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { Volume2 } from 'lucide-react';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian, stopSpeaking } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio, speakBulgarian, stopTtsAudio } from '@/lib/tts';
 
 interface DialogueLine {
   speaker?: string;
@@ -25,150 +24,108 @@ interface DialoguesProps {
   subtitle?: string;
   audioUrl?: string;
   sections: DialogueSection[];
+  exerciseId?: string;
 }
 
-export function Dialogues({ subtitle, audioUrl, sections }: DialoguesProps) {
+export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
   const t = useT();
   const { lang } = useLanguage();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speakingSection, setSpeakingSection] = useState<string | null>(null);
+  const [playingLine, setPlayingLine] = useState<string | null>(null);
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Audio file playback (when audioUrl is provided)
-  const handlePlayAudio = () => {
-    if (!audioUrl) return;
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } else {
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      audio.onended = () => setIsPlaying(false);
-      audio.onerror = () => setIsPlaying(false);
-      audio.play();
-      setIsPlaying(true);
-    }
-  };
-
-  // TTS for a section (when no audioUrl) + toggle translation
-  const handleSectionClick = (section: DialogueSection) => {
+  const toggleSection = (sectionId: string) => {
     setRevealedSections(prev => {
       const next = new Set(prev);
-      if (next.has(section.id)) next.delete(section.id);
-      else next.add(section.id);
+      if (next.has(sectionId)) next.delete(sectionId);
+      else next.add(sectionId);
       return next;
     });
+  };
 
-    if (audioUrl) return;
+  const handleLineClick = (e: React.MouseEvent, section: DialogueSection, lineIndex: number) => {
+    e.stopPropagation();
+    const line = section.lines[lineIndex];
+    const lineKey = `${section.id}-line-${lineIndex}`;
 
-    stopSpeaking();
-
-    if (speakingSection === section.id) {
-      setSpeakingSection(null);
+    if (playingLine === lineKey) {
+      stopTtsAudio();
+      setPlayingLine(null);
       return;
     }
 
-    const fullText = section.lines.map(l => l.text).join('. ');
-    setSpeakingSection(section.id);
-    speakBulgarian(fullText);
+    setPlayingLine(lineKey);
+    const audioFile = exerciseId ? `${exerciseId}-${section.id}-line-${lineIndex}` : '';
+    const audioPath = audioFile
+      ? getTtsAudioPath(exerciseId!, 'dialogues', audioFile)
+      : '';
+    const rawText = line.text.replace(/^—\s*/, '');
+    playTtsAudio(audioPath, rawText);
+    setTimeout(() => setPlayingLine(null), 3000);
   };
-
-  const useTTS = !audioUrl;
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {/* Audio file button */}
-      {audioUrl && (
-        <div className="flex justify-end mb-6">
-          <Button
-            onClick={handlePlayAudio}
-            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
-          >
-            {isPlaying ? (
-              <>
-                <Pause className="w-5 h-5" />
-                {t('exercise.stop')}
-              </>
-            ) : (
-              <>
-                <Play className="w-5 h-5" />
-                {t('exercise.listen')}
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-
       {lang !== 'bg' && (
         <p className="text-xs text-gray-400 text-center mb-4 italic">
           {t('exercise.tapToTranslate')}
         </p>
       )}
 
-      {/* Dialogue sections */}
       <div className="space-y-6">
         {sections.map((section) => {
-          const isSpeaking = speakingSection === section.id;
           const isRevealed = revealedSections.has(section.id);
           return (
             <div
               key={section.id}
-              onClick={() => handleSectionClick(section)}
-              className={`
-                bg-white rounded-xl border-2 p-6 shadow-sm transition-all cursor-pointer active:scale-[0.99]
-                ${isSpeaking
-                  ? 'border-[#8FC412] bg-[#f4faee] scale-[1.01]'
-                  : 'border-gray-200 hover:border-[#8FC412] hover:bg-[#f9fdf2]'
-                }
-              `}
+              className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#8FC412]/50"
             >
-              {/* Section label + speaking indicator */}
-              <div className="flex items-center gap-2 mb-4">
+              <div
+                onClick={() => toggleSection(section.id)}
+                className="flex items-center gap-2 mb-4 cursor-pointer"
+              >
                 <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#8FC412] text-white">
                   {section.id}
                 </span>
-                {isSpeaking && (
-                  <span className="flex gap-0.5 items-end h-4">
-                    {[1, 2, 3].map(i => (
-                      <span
-                        key={i}
-                        className="w-1 bg-[#8FC412] rounded-full animate-bounce"
-                        style={{ height: `${8 + i * 4}px`, animationDelay: `${i * 0.15}s` }}
-                      />
-                    ))}
-                  </span>
-                )}
               </div>
 
-              {/* Dialogue lines */}
               <div className="space-y-3">
-                {section.lines.map((line, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <span className="text-2xl text-gray-400 leading-none mt-1">–</span>
-                    <div>
-                      <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                        {line.text}
-                      </p>
-                      <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
+                {section.lines.map((line, index) => {
+                  const lineKey = `${section.id}-line-${index}`;
+                  const isLinePlaying = playingLine === lineKey;
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => handleLineClick(e, section, index)}
+                      className={`flex items-start gap-3 rounded-lg px-3 py-2 -mx-3 cursor-pointer transition-colors active:scale-[0.99] ${
+                        isLinePlaying
+                          ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                          : 'hover:bg-gray-50 border border-transparent'
+                      }`}
+                    >
+                      <Volume2 className={`w-4 h-4 mt-1.5 shrink-0 transition-colors ${
+                        isLinePlaying ? 'text-[#8FC412]' : 'text-gray-300'
+                      }`} />
+                      <div className="flex-1">
+                        <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                          {line.speaker && (
+                            <span className="font-bold text-[#0279C3] mr-1">{line.speaker}:</span>
+                          )}
+                          {line.text}
+                        </p>
+                        <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Note at bottom */}
-      <div className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
-        <p className="text-sm text-gray-700 text-center italic">
-          {useTTS ? t('exercise.clickToRead') : t('exercise.readInPairs')}
+      <div className="mt-8 p-4 rounded-lg bg-[#f4faee] border-2 border-[#8FC412]/40">
+        <p className="text-sm text-gray-600 text-center">
+          {t('exercise.clickLineToListen')}
         </p>
       </div>
     </div>

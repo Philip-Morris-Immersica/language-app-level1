@@ -1,25 +1,23 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Volume2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Volume2 } from 'lucide-react';
 import type { IllustratedCardsExercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
 }
 
-export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export function IllustratedCards({ exercise, onComplete, exerciseId }: IllustratedCardsProps) {
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const t = useT();
   const { lang } = useLanguage();
 
@@ -37,61 +35,16 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
 
   const handleCardClick = (card: { id: string; label: string; sublabels?: string[] }) => {
     const parts = [card.label, ...(card.sublabels || [])];
-    speakBulgarian(parts.join('. '));
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'words', card.id)
+      : '';
+    playTtsAudio(audioPath, parts.join('. '));
     toggleTranslation(card.id);
     setVisitedCards(prev => new Set(prev).add(card.id));
   };
 
-  const handlePlayAudio = () => {
-    if (!exercise.audioUrl) return;
-
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } else {
-      const audio = new Audio(exercise.audioUrl);
-      audioRef.current = audio;
-      
-      audio.onended = () => setIsPlaying(false);
-      audio.onerror = () => {
-        console.error('Audio failed to load');
-        setIsPlaying(false);
-      };
-      
-      audio.play();
-      setIsPlaying(true);
-    }
-  };
-
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-8 shadow-md">
-      {/* Audio button */}
-      {exercise.audioUrl && (
-        <div className="flex justify-end mb-4">
-          <Button
-            onClick={handlePlayAudio}
-            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
-          >
-            {isPlaying ? (
-              <>
-                <Pause className="w-5 h-5" />
-                {t('exercise.stop')}
-              </>
-            ) : (
-              <>
-                <Play className="w-5 h-5" />
-                {t('exercise.listen')}
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-
       {/* Tap hint for non-Bulgarian users */}
       {lang !== 'bg' && (
         <p className="text-xs text-gray-400 text-center mb-3 italic">
