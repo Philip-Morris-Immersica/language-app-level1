@@ -544,7 +544,7 @@ export const exercises: Exercise[] = [
     sentences: [
       { text: '_______ килограма',  blanks: [0], correctAnswers: ['два'],  options: ['два', 'две'] },
       { text: '_______ портокала',  blanks: [0], correctAnswers: ['два'],  options: ['два', 'две'] },
-      { text: '_______ лева',       blanks: [0], correctAnswers: ['два'],  options: ['два', 'две'] },
+      { text: '_______ евро',       blanks: [0], correctAnswers: ['две'],  options: ['два', 'две'] },
       { text: '_______ бутилки',    blanks: [0], correctAnswers: ['две'],  options: ['два', 'две'] },
       { text: '_______ дини',       blanks: [0], correctAnswers: ['две'],  options: ['два', 'две'] },
       { text: '_______ картофа',    blanks: [0], correctAnswers: ['два'],  options: ['два', 'две'] },

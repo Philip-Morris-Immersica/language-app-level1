@@ -1,12 +1,14 @@
 'use client';
 
-import { ClipboardCheck } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowLeft, ArrowRight, ClipboardCheck } from 'lucide-react';
 import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
 import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
 import type { TestData } from '@/content/types';
 import { TestScoreSummary } from '@/components/TestScoreSummary';
+import { getNextLessonAfterTest } from '@/content';
 
 function TranslatedText({ text }: { text: string }) {
   const translated = useTranslate(text);
@@ -71,14 +73,31 @@ export function TestPageClient({ testData, testId }: TestPageClientProps) {
         <TestScoreSummary testData={testData} />
       </LessonExercisesProvider>
 
-      {/* Back link */}
+      {/* Navigation buttons */}
       <div className="border-t border-gray-100 pt-6">
-        <a
-          href="/lessons/lesson-01"
-          className="inline-flex items-center gap-2 text-sm text-[#8FC412] font-medium hover:underline"
-        >
-          ← <TranslatedText text="Обратно към уроците" />
-        </a>
+        <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
+          <Link
+            href="/level/a1"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <TranslatedText text="Към нивo A1" />
+          </Link>
+
+          {(() => {
+            const next = getNextLessonAfterTest(testId);
+            if (!next) return null;
+            return (
+              <Link
+                href={`/lessons/${next.id}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#0279C3] text-white hover:bg-[#026aa8] shadow-sm transition-all"
+              >
+                <TranslatedText text={`Урок ${next.number}: ${next.title}`} />
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            );
+          })()}
+        </div>
       </div>
     </div>
   );

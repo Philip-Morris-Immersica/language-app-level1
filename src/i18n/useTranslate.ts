@@ -22,6 +22,23 @@ function postProcess(text: string, lang: string): string {
     text = text.replace(/\bPIYA\b/g, 'DRINK');
     text = text.replace(/^Can the bill\?$/i, 'Can I have the bill?');
     if (/^three$/i.test(text)) text = 'ice cream';
+    text = text.replace(/\blove\b/g, 'like');
+    text = text.replace(/\bLove\b/g, 'Like');
+    text = text.replace(/M\.Sc\./g, '(masc.)');
+    text = text.replace(/\bg\.r\.\b/gi, '(fem.)');
+    text = text.replace(/\bsr\.r\.\b/gi, '(neut.)');
+    text = text.replace(/Mm M m Mohammed/gi, 'garlic');
+    text = text.replace(/\bshop salad\b/gi, 'Shopska salad');
+    text = text.replace(/\bhypermarket\b/gi, 'city');
+    text = text.replace(/\bparticiple\b/gi, 'definite article');
+    if (/^It doesn't like salami\.?$/i.test(text)) text = 'supermarket';
+    if (/^coffee$/i.test(text)) text = 'café';
+    if (/^answer the questions\.?$/i.test(text)) text = 'apartment';
+    text = text.replace(/\bs\. = /gi, '');
+    text = text.replace(/\bsq\. = /gi, '');
+    text = text.replace(/\bEd\. number\b/gi, 'Singular');
+    text = text.replace(/\bWith number\b/gi, 'Counting');
+    text = text.replace(/\bBy the number of/gi, 'Counting');
   }
   return text;
 }

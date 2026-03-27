@@ -20,6 +20,7 @@ export const listeningExercises: Exercise[] = [
     instruction: 'Слушайте текста и отговорете на въпросите с ДА или НЕ.',
     order: 1,
     hideText: true,
+    listeningText: 'Филип живее в голям град в малък апартамент. Апартаментът му е в центъра на града. Там има много магазини, училища, университети, ресторанти и кафета. Близо до апартамента на Филип има красив парк. Филип много обича парка. Той е студент и учи медицина в голям университет. Университетът е зад парка. Филип е добър студент, учи много. Вечер работи в едно кафе. Много е зает. Родителите му живеят в малко село, далече от града. Те не работят, пенсионери са.',
     paragraphs: [
       'Филип живее в голям град в малък апартамент. Апартаментът му е в центъра на града. Там има много магазини, училища, университети, ресторанти и кафета. Близо до апартамента на Филип има красив парк. Филип много обича парка. Той е студент и учи медицина в голям университет. Университетът е зад парка. Филип е добър студент, учи много. Вечер работи в едно кафе. Много е зает. Родителите му живеят в малко село, далече от града. Те не работят, пенсионери са.',
     ],
@@ -102,7 +103,7 @@ export const grammarExercises: Exercise[] = [
     id: 't03-gr-1',
     type: 'workbook_fill_blank',
     title: 'КОМПОНЕНТ ГРАМАТИКА',
-    instruction: 'Напишете правилната форма: ДВЕ или ДВА.',
+    instruction: 'Изберете правилната форма: ДВЕ или ДВА.',
     order: 5,
     points: 12,
     layout: 'two-column',
@@ -226,7 +227,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't03-gr-6a',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете правилните форми на глаголите.',
+    instruction: 'Изберете правилните форми на глаголите.',
     order: 10,
     points: 7,
     layout: 'two-column',
@@ -246,7 +247,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't03-gr-6b',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете правилните форми на глаголите.',
+    instruction: 'Изберете правилните форми на глаголите.',
     order: 11,
     points: 7,
     layout: 'two-column',
@@ -266,7 +267,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't03-gr-6v',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете правилните форми на глаголите.',
+    instruction: 'Изберете правилните форми на глаголите.',
     order: 12,
     points: 7,
     layout: 'two-column',
@@ -286,7 +287,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't03-gr-6g',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете правилните форми на глаголите.',
+    instruction: 'Изберете правилните форми на глаголите.',
     order: 13,
     points: 7,
     layout: 'two-column',
@@ -320,7 +321,7 @@ export const writingExercises: Exercise[] = [
     columns: 3,
     imageUrl: '/assets/test-a1-3/pisane/semeystvo-imena.jpg',
     puzzles: [
-      { id: 'p-mayka',      syllables: ['к', 'а', 'й', 'а', 'м'],       correctWord: 'майка' },
+      { id: 'p-mayka',      syllables: ['май', 'ка'],                    correctWord: 'майка' },
       { id: 'p-bashta',     syllables: ['а', 'щ', 'а', 'б'],             correctWord: 'баща' },
       { id: 'p-dyado',      syllables: ['о', 'я', 'д', 'д'],             correctWord: 'дядо' },
       { id: 'p-baba',       syllables: ['а', 'б', 'а', 'б'],             correctWord: 'баба' },

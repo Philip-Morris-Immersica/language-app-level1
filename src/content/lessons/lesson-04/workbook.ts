@@ -49,7 +49,7 @@ export const workbookExercises: Exercise[] = [
     points: 11,
     layout: 'two-column' as const,
     sentences: [
-      { text: 'два лева', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'две евро', blanks: [], correctAnswers: [], isExample: true },
       { text: '_______ бисквити',   blanks: [0], correctAnswers: ['две'], options: ['два', 'две'] },
       { text: '_______ бонбона',    blanks: [0], correctAnswers: ['два'], options: ['два', 'две'] },
       { text: '_______ тиквички',   blanks: [0], correctAnswers: ['две'], options: ['два', 'две'] },
@@ -69,7 +69,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l04-wb-03',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Напишете множественото число.',
+    instruction: 'Попълнете множественото число.',
     order: 3,
     points: 7,
     layout: 'two-column' as const,
@@ -80,7 +80,7 @@ export const workbookExercises: Exercise[] = [
         blanks: [1, 2], correctAnswers: ['малини', '—'],
         options: [
           ['малини', 'малина', 'малине'],
-          ['—'],
+          ['—', 'малина'],
         ],
       },
       {
@@ -96,7 +96,7 @@ export const workbookExercises: Exercise[] = [
         blanks: [1, 2], correctAnswers: ['пилета', '—'],
         options: [
           ['пилета', 'пили', 'пиле'],
-          ['—'],
+          ['—', 'пилета'],
         ],
       },
       {
@@ -120,7 +120,7 @@ export const workbookExercises: Exercise[] = [
         blanks: [1, 2], correctAnswers: ['масла', '—'],
         options: [
           ['масла', 'маслета', 'масли'],
-          ['—'],
+          ['—', 'масла'],
         ],
       },
       {
@@ -128,7 +128,7 @@ export const workbookExercises: Exercise[] = [
         blanks: [1, 2], correctAnswers: ['марули', '—'],
         options: [
           ['марули', 'марулие', 'маруле'],
-          ['—'],
+          ['—', 'марули'],
         ],
       },
     ],
@@ -139,7 +139,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l04-wb-04',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 4',
-    instruction: 'Напишете числата с думи.',
+    instruction: 'Изберете числата с думи.',
     order: 4,
     points: 7,
     layout: 'two-column' as const,
@@ -160,7 +160,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l04-wb-05',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 5',
-    instruction: 'Напишете с думи.',
+    instruction: 'Изберете с думи.',
     order: 5,
     points: 6,
     layout: 'single' as const,

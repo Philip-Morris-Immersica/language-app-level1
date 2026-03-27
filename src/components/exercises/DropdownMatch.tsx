@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -29,10 +29,27 @@ interface DropdownMatchProps {
   imageUrl?: string;
 }
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: DropdownMatchProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
+
+  const shuffledOptionsMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    questions.forEach(q => {
+      map[q.id] = shuffleArray(q.options);
+    });
+    return map;
+  }, [questions]);
   const [answers, setAnswers] = useState<{ [key: string]: string }>(() => s?.answers ?? {});
   const [validation, setValidation] = useState<{ [key: string]: boolean | null }>(() => s?.validation ?? {});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
@@ -128,7 +145,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                           <SelectValue placeholder={t('exercise.selectOption')} />
                         </SelectTrigger>
                         <SelectContent>
-                          {question.options.map((option) => (
+                          {(shuffledOptionsMap[question.id] ?? question.options).map((option) => (
                             <SelectItem key={option} value={option} className="text-sm sm:text-base">
                               {option}
                             </SelectItem>
@@ -181,7 +198,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                                 <SelectValue placeholder={t('exercise.selectOption')} />
                               </SelectTrigger>
                               <SelectContent>
-                                {question.options.map((option) => (
+                                {(shuffledOptionsMap[question.id] ?? question.options).map((option) => (
                                   <SelectItem key={option} value={option} className="text-sm md:text-base">
                                     {option}
                                   </SelectItem>
@@ -207,7 +224,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                   {isSubmitted && validation[question.id] === false && (
                     <div className="mt-3 p-2 rounded bg-yellow-50 border border-yellow-200">
                       <p className="text-sm text-yellow-800">
-                        <strong>{t('exercise.correctLabel')}</strong> {question.left.includes('…') ? question.left.replace('…', question.correctAnswer) : `${question.left} ${question.correctAnswer}`}
+                        <strong>{t('exercise.correctLabel')}</strong> {question.correctAnswer}
                       </p>
                     </div>
                   )}

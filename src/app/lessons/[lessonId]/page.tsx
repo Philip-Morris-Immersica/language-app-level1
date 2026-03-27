@@ -67,6 +67,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       <div className="space-y-8">
         {/* Lesson header — translatable client component */}
         <LessonHeaderClient
+          lessonId={lessonId}
           number={metadata.number}
           title={metadata.title}
           description={lessonData.description}

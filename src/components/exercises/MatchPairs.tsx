@@ -168,8 +168,8 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
               <span className="text-base font-semibold text-gray-700">{index + 1}.</span>
             </div>
 
-            <div className="flex-shrink-0 w-24 md:w-32">
-              <span className="text-base md:text-lg font-medium text-gray-800">
+            <div className="flex-shrink-0 w-28 md:w-40 lg:w-48">
+              <span className="text-sm md:text-base font-medium text-gray-800 leading-snug">
                 {pair.left}
               </span>
             </div>
@@ -223,7 +223,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
       {/* Desktop: pairs left, word pool right */}
       <div className="hidden md:grid md:grid-cols-[1fr_auto] md:gap-8 md:items-start">
         <div>{pairsList}</div>
-        <div className="w-48 lg:w-56 sticky top-4">{wordPool}</div>
+        <div className="w-56 lg:w-72 sticky top-4">{wordPool}</div>
       </div>
 
       {/* Mobile: pairs on top, word pool below */}

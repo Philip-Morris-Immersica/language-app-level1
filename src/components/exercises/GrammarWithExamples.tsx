@@ -54,26 +54,29 @@ interface GrammarExample {
   text: string;
   subtext?: string;
   lines?: string[];
+  translations?: Record<string, string>;
 }
 
 interface GrammarWithExamplesProps {
   order?: number;
   title?: string;
   subtitle?: string;
+  disableTts?: boolean;
   examples: GrammarExample[];
 }
 
-export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesProps) {
+export function GrammarWithExamples({ subtitle, examples, disableTts }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
   const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
-    const textToSpeak = example.lines
-      ? example.lines.join(' ')
-      : [example.text, example.subtext].filter(Boolean).join(' ');
-
-    speakBulgarian(textToSpeak);
+    if (!disableTts) {
+      const textToSpeak = example.lines
+        ? example.lines.join(' ')
+        : [example.text, example.subtext].filter(Boolean).join(' ');
+      speakBulgarian(textToSpeak);
+    }
 
     setRevealed(prev => {
       const next = new Set(prev);
@@ -136,7 +139,7 @@ export function GrammarWithExamples({ subtitle, examples }: GrammarWithExamplesP
                   <p className="text-base md:text-lg font-bold text-gray-800">
                     <HighlightPrepositions text={example.text} />
                   </p>
-                  <InlineTranslation text={example.text} visible={revealed.has(index)} />
+                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
                   {example.subtext && (
                     <>
                       <p className="text-sm md:text-base text-gray-600 italic">

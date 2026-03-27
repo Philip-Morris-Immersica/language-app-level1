@@ -25,7 +25,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-01',
     type: 'image_labeling',
-    instruction: 'Знаете ли тези места? Напишете в кои градове се намират.',
+    instruction: 'Знаете ли тези места? Изберете в кои градове се намират.',
     order: 1,
     points: 5,
     displayType: 'default',
@@ -227,19 +227,20 @@ export const exercises: Exercise[] = [
     title: 'Адресни съкращения',
     instruction: 'Запомнете съкратените форми.',
     order: 10,
+    disableTts: true,
     examples: [
-      { imageUrl: '', text: 'гр. = град', subtext: '' },
-      { imageUrl: '', text: 'с. = село', subtext: '' },
-      { imageUrl: '', text: 'кв. = квартал', subtext: '' },
-      { imageUrl: '', text: 'жк = жилищен комплекс', subtext: '' },
-      { imageUrl: '', text: 'ул. = улица', subtext: '' },
-      { imageUrl: '', text: 'бул. = булевард', subtext: '' },
-      { imageUrl: '', text: '№ = номер', subtext: '' },
-      { imageUrl: '', text: 'бл. = блок', subtext: '' },
-      { imageUrl: '', text: 'вх. = вход', subtext: '' },
-      { imageUrl: '', text: 'ет. = етаж', subtext: '' },
-      { imageUrl: '', text: 'ап. = апартамент', subtext: '' },
-      { imageUrl: '', text: 'тел. = телефон', subtext: '' },
+      { imageUrl: '', text: 'гр. = град', subtext: '', translations: { en: 'city', ar: 'مدينة', fr: 'ville', fa: 'شهر', uk: 'місто', ru: 'город' } },
+      { imageUrl: '', text: 'с. = село', subtext: '', translations: { en: 'village', ar: 'قرية', fr: 'village', fa: 'روستا', uk: 'село', ru: 'село' } },
+      { imageUrl: '', text: 'кв. = квартал', subtext: '', translations: { en: 'neighborhood', ar: 'حي', fr: 'quartier', fa: 'محله', uk: 'район', ru: 'квартал' } },
+      { imageUrl: '', text: 'жк = жилищен комплекс', subtext: '', translations: { en: 'residential complex', ar: 'مجمع سكني', fr: 'complexe résidentiel', fa: 'مجتمع مسکونی', uk: 'житловий комплекс', ru: 'жилой комплекс' } },
+      { imageUrl: '', text: 'ул. = улица', subtext: '', translations: { en: 'street', ar: 'شارع', fr: 'rue', fa: 'خیابان', uk: 'вулиця', ru: 'улица' } },
+      { imageUrl: '', text: 'бул. = булевард', subtext: '', translations: { en: 'boulevard', ar: 'شارع رئيسي', fr: 'boulevard', fa: 'بلوار', uk: 'бульвар', ru: 'бульвар' } },
+      { imageUrl: '', text: '№ = номер', subtext: '', translations: { en: 'number', ar: 'رقم', fr: 'numéro', fa: 'شماره', uk: 'номер', ru: 'номер' } },
+      { imageUrl: '', text: 'бл. = блок', subtext: '', translations: { en: 'block', ar: 'مبنى', fr: 'bloc', fa: 'بلوک', uk: 'блок', ru: 'блок' } },
+      { imageUrl: '', text: 'вх. = вход', subtext: '', translations: { en: 'entrance', ar: 'مدخل', fr: 'entrée', fa: 'ورودی', uk: 'під\'їзд', ru: 'подъезд' } },
+      { imageUrl: '', text: 'ет. = етаж', subtext: '', translations: { en: 'floor', ar: 'طابق', fr: 'étage', fa: 'طبقه', uk: 'поверх', ru: 'этаж' } },
+      { imageUrl: '', text: 'ап. = апартамент', subtext: '', translations: { en: 'apartment', ar: 'شقة', fr: 'appartement', fa: 'آپارتمان', uk: 'квартира', ru: 'квартира' } },
+      { imageUrl: '', text: 'тел. = телефон', subtext: '', translations: { en: 'phone', ar: 'هاتف', fr: 'téléphone', fa: 'تلفن', uk: 'телефон', ru: 'телефон' } },
     ],
   } as GrammarExamplesExercise,
 
@@ -247,7 +248,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-09',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 9',
-    instruction: 'Напишете адресите, като използвате съкратените форми.',
+    instruction: 'Изберете адресите, като използвате съкратените форми.',
     order: 11,
     points: 2,
     layout: 'single',
@@ -443,9 +444,9 @@ export const exercises: Exercise[] = [
       'пазар', 'пица', 'поща', 'ресторант', 'сандвич', 'село', 'училище', 'учителка', 'хляб', 'център', 'яйце',
     ],
     columns: [
-      { id: 't-a', title: '-ът / -a', correctItems: ['град', 'пазар', 'център', 'ресторант', 'кино', 'сандвич', 'хляб'] },
+      { id: 't-a', title: '-ът / -a', correctItems: ['град', 'пазар', 'център', 'ресторант', 'сандвич', 'хляб'] },
       { id: 'ta', title: '-та', correctItems: ['аптека', 'банка', 'болница', 'къща', 'учителка', 'поща', 'пица'] },
-      { id: 'to', title: '-то', correctItems: ['кафе', 'капучино', 'масло', 'мляко', 'село', 'училище', 'яйце'] },
+      { id: 'to', title: '-то', correctItems: ['кафе', 'капучино', 'кино', 'масло', 'мляко', 'село', 'училище', 'яйце'] },
     ],
   } as DragToColumnsExercise,
 
@@ -785,7 +786,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-26',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете правилната форма на милион.',
+    instruction: 'Изберете правилната форма на милион.',
     order: 35,
     points: 4,
     layout: 'single',
@@ -846,13 +847,12 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-29',
     type: 'workbook_fill_blank',
-    instruction:
-      'Пълен текст за опора: Град Пловдив е в южната част на България. В Пловдив живеят 348 000 души. В Пловдив има Стария град, много университети и музеи, има античен театър и амфитеатър. Попълнете празните места (бутонът „Слушайте“ използва синтезатор на реч; запис от учителя е по избор).',
+    instruction: 'Слушайте текста и попълнете празните места.',
     order: 38,
     points: 5,
     layout: 'single',
     listeningText:
-      'Град Пловдив е в южната част на България. В Пловдив живеят 348 000 души. В Пловдив има Стария град, много университети и музеи, има античен театър и амфитеатър.',
+      'Град Пловдив е в южната част на България. В Пловдив живеят триста четиридесет и осем хиляди души. В Пловдив има Стария град, много университети и музеи, има античен театър и амфитеатър.',
     imageUrl: '/assets/lesson-05/41-upr-29-plovdiv-stari-grad/01-ulitsa-stariya-plovdiv.jpg',
     sentences: [
       {
@@ -1009,13 +1009,12 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-wb-info',
-    type: 'grammar_examples',
+    type: 'reading_text',
     title: 'РАБОТНА ТЕТРАДКА',
-    subtitle: 'Упражнения Урок 5',
-    instruction: 'Упражнения от работната тетрадка.',
+    instruction: 'Упражнения от работната тетрадка за Урок 5.',
     order: 47,
-    examples: [],
-  } as GrammarExamplesExercise,
+    paragraphs: ['Упражненията по-долу са от работната тетрадка. Попълнете правилните отговори.'],
+  } as ReadingTextExercise,
 
   {
     id: 'l05-wb-01',
@@ -1028,10 +1027,10 @@ export const exercises: Exercise[] = [
     sentences: [
       { text: 'Паркът е близо до пазара.', blanks: [], isExample: true },
       { text: 'Училище_______ е далече от блок_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Университет_______ е в център_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Университет_______ е в център_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], acceptableAnswers: [['ът', 'а'], ['а']], options: ['а', 'та', 'то', 'ят', 'ът'] },
       { text: 'Джамия_______ е срещу църква_______.', blanks: [0, 1], correctAnswers: ['та', 'та'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Хотел_______ е на булевард_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Мост_______ е над река_______.', blanks: [0, 1], correctAnswers: ['ът', 'та'], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Хотел_______ е на булевард_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], acceptableAnswers: [['ът', 'а'], ['а']], options: ['а', 'та', 'то', 'ят', 'ът'] },
+      { text: 'Мост_______ е над река_______.', blanks: [0, 1], correctAnswers: ['ът', 'та'], acceptableAnswers: [['ът', 'а'], ['та']], options: ['а', 'та', 'то', 'ят', 'ът'] },
       { text: 'Аптека_______ е до кафе_______.', blanks: [0, 1], correctAnswers: ['та', 'то'], options: ['а', 'та', 'то', 'ят', 'ът'] },
       { text: 'Кино_______ е зад ресторант_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
     ],
@@ -1080,6 +1079,7 @@ export const exercises: Exercise[] = [
         text: 'Той е в ресторант „Виктория“. Ресторант_______ е в център_______ на град_______ зад община_______. В ресторант_______ има много вкусна храна.',
         blanks: [0, 1, 2, 3, 4],
         correctAnswers: ['ът', 'а', 'а', 'та', 'а'],
+        acceptableAnswers: [['ът', 'а'], ['а'], ['а'], ['та'], ['а']],
         options: ['а', 'та', 'то', 'те', 'ът'],
       },
     ],
@@ -1107,8 +1107,8 @@ export const exercises: Exercise[] = [
     order: 52,
     points: 6,
     pairs: [
-      { left: 'Колко струва един килограм лук?', correctRight: 'Два лева.' },
-      { left: 'Нямате ли дребни?', correctRight: 'Не, имам само 20 лева.' },
+      { left: 'Колко струва един килограм лук?', correctRight: 'Две евро.' },
+      { left: 'Нямате ли дребни?', correctRight: 'Не, имам само 20 евро.' },
       { left: 'Искате ли торбичка?', correctRight: 'Не, благодаря, имам.' },
       { left: 'Каква салата искате?', correctRight: 'Шопска, моля.' },
       { left: 'Къде живеете?', correctRight: 'На булевард „Васил Левски“ 15.' },

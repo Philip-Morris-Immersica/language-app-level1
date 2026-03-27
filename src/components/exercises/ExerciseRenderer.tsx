@@ -182,6 +182,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <GrammarWithExamples
           subtitle={exercise.subtitle}
           examples={exercise.examples}
+          disableTts={exercise.disableTts}
         />
       );
 

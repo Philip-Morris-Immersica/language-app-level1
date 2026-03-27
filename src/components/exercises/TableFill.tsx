@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -65,7 +65,27 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
     `${tableIdx}-${rowIdx}-${cellIdx}`;
 
   const handleSelect = (key: string, value: string) => {
-    setAnswers(prev => ({ ...prev, [key]: value }));
+    setAnswers(prev => {
+      const next = { ...prev, [key]: value };
+
+      if (value !== '—') {
+        const parts = key.split('-').map(Number);
+        const [ti, ri, ci] = parts;
+        const row = tables[ti]?.rows[ri];
+        if (row) {
+          row.cells.forEach((otherCell, otherCi) => {
+            if (otherCi === ci) return;
+            const hasWord = otherCell.options.some(o => o !== '—');
+            const hasDash = otherCell.options.includes('—');
+            if (hasWord && hasDash && otherCell.correctAnswers.includes('—')) {
+              next[cellKey(ti, ri, otherCi)] = '—';
+            }
+          });
+        }
+      }
+
+      return next;
+    });
     if (isSubmitted) {
       setIsSubmitted(false);
       setValidation({});
@@ -112,6 +132,26 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
   );
 
   const correctCount = Object.values(validation).filter(v => v === true).length;
+
+  const shuffledOptions = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    tables.forEach((table, ti) => {
+      table.rows.forEach((row, ri) => {
+        row.cells.forEach((cell, ci) => {
+          const key = cellKey(ti, ri, ci);
+          if (cell.options.length > 1) {
+            const arr = [...cell.options];
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            map[key] = arr;
+          }
+        });
+      });
+    });
+    return map;
+  }, [tables]);
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-8 shadow-md space-y-6">
@@ -204,7 +244,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                                 <SelectValue placeholder="—" />
                               </SelectTrigger>
                               <SelectContent>
-                                {cell.options.map((opt) => (
+                                {(shuffledOptions[key] || cell.options).map((opt) => (
                                   <SelectItem key={opt} value={opt} className="text-xs md:text-sm">
                                     {opt}
                                   </SelectItem>

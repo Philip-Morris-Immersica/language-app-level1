@@ -27,7 +27,9 @@ export function GrammarTable({
   const t = useT();
 
   const toggleRow = (idx: number) => {
-    speakBulgarian([rows[idx].pronoun, ...rows[idx].cells].join(', '));
+    const isNumericPronoun = /^\d[\d\s]*$/.test(rows[idx].pronoun.trim());
+    const parts = isNumericPronoun ? rows[idx].cells : [rows[idx].pronoun, ...rows[idx].cells];
+    speakBulgarian(parts.join(', '));
 
     setRevealedRows(prev => {
       const next = new Set(prev);
@@ -71,11 +73,11 @@ export function GrammarTable({
               </tr>
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]" />
+                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]">{'\u00A0'}</th>
                   {columns.map((col, i) => (
                     <th
                       key={i}
-                      className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0"
+                      className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap"
                     >
                       {col}
                     </th>

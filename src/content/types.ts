@@ -197,11 +197,13 @@ export interface GrammarExamplesExercise extends BaseExercise {
   type: 'grammar_examples';
   title: string;             // 'ГРАМАТИКА 2'
   subtitle?: string;         // 'Глагол СЪМ'
+  disableTts?: boolean;      // Skip TTS on card click (for abbreviation cards etc.)
   examples: {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
     subtext?: string;        // 'Аз съм от Сирия.'
     lines?: string[];        // Multiple equal-weight lines (replaces text/subtext display when provided)
+    translations?: Record<string, string>;
   }[];
 }
 

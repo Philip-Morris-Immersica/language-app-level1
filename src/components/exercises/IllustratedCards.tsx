@@ -139,6 +139,7 @@ export function IllustratedCards({ exercise, onComplete }: IllustratedCardsProps
               <InlineTranslation
                 text={card.label}
                 visible={revealedCards.has(card.id)}
+                translations={card.translations}
               />
               {/* Sublabels */}
               {card.sublabels && card.sublabels.length > 0 && (

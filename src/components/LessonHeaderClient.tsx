@@ -1,9 +1,12 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
+import { markLessonVisited } from '@/lib/progress';
 
 interface LessonHeaderClientProps {
+  lessonId: string;
   number: number;
   title: string;
   description?: string;
@@ -19,10 +22,14 @@ function TranslatedTag({ topic }: { topic: string }) {
   );
 }
 
-export function LessonHeaderClient({ number, title, description, grammarTopics }: LessonHeaderClientProps) {
+export function LessonHeaderClient({ lessonId, number, title, description, grammarTopics }: LessonHeaderClientProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedDescription = useTranslate(description ?? '');
+
+  useEffect(() => {
+    markLessonVisited(lessonId);
+  }, [lessonId]);
 
   return (
     <div className="py-4">

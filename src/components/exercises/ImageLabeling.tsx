@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,15 @@ interface ImageLabelingProps {
   onComplete?: (correct: boolean, score: number) => void;
 }
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exercise.id);
@@ -23,6 +32,11 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
   const [flippedCards, setFlippedCards] = useState<{ [imageId: string]: boolean }>(() => s?.flippedCards ?? {});
   const mounted = useRef(false);
+
+  const shuffledOptions = useMemo(
+    () => exercise.options ? shuffleArray(exercise.options) : undefined,
+    [exercise.options],
+  );
 
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
@@ -178,14 +192,14 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
               </div>
 
               {/* Label selection */}
-              {exercise.options ? (
+              {shuffledOptions ? (
                 <select
                   value={selectedLabel || ''}
                   onChange={(e) => handleSelect(image.id, e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 >
                   <option value="">{t('exercise.selectOption')}</option>
-                  {exercise.options.map((option) => (
+                  {shuffledOptions.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>

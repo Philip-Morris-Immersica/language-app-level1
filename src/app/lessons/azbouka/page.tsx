@@ -18,6 +18,7 @@ export default function AzboukaPage() {
     <LessonLayout>
       <div className="space-y-8">
         <LessonHeaderClient
+          lessonId="lesson-00"
           number={lessonData.number}
           title={lessonData.title}
           description={lessonData.description}

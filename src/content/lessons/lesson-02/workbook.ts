@@ -7,7 +7,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l02-wb-01',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 1',
-    instruction: 'Напишете ЕДИН (м.р.), ЕДНА (ж.р.) или ЕДНО (ср.р.).',
+    instruction: 'Напишете ЕДИН (мъжки род), ЕДНА (женски род) или ЕДНО (среден род).',
     order: 1,
     points: 11,
     layout: 'two-column',

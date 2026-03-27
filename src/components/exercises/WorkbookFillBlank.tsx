@@ -14,6 +14,7 @@ interface WorkbookSentence {
   acceptableAnswers?: string[][];
   options?: string[] | string[][];
   isExample?: boolean;
+  images?: string[];
 }
 
 function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx: number): string[] {
@@ -138,11 +139,18 @@ export function WorkbookFillBlank({
       <div
         key={sIdx}
         className={`
-          flex flex-wrap items-baseline gap-x-1 gap-y-1 py-2
+          flex flex-wrap items-center gap-x-1 gap-y-1 py-2
           ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}
         `}
       >
-        <span className="font-semibold text-gray-500 mr-1 shrink-0">{sIdx + 1}.</span>
+        <span className="font-semibold text-gray-500 mr-1 shrink-0 self-baseline">{sIdx + 1}.</span>
+        {sentence.images && sentence.images.length > 0 && (
+          <img
+            src={sentence.images[0]}
+            alt=""
+            className="w-10 h-10 md:w-14 md:h-14 rounded object-cover shrink-0 mr-1"
+          />
+        )}
         {segments.map((seg, segIdx) => {
           if (seg.type === 'blank') {
             const bIdx = blankCounter++;

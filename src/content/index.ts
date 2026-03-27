@@ -76,3 +76,30 @@ const testFolderMap: Record<string, string> = {
 export function getTestFolder(testId: string): string | undefined {
   return testFolderMap[testId];
 }
+
+const testNextLessonMap: Record<string, string> = {
+  'test-a1-1': 'lesson-04',
+  'test-a1-2': 'lesson-05',
+  'test-a1-3': 'lesson-07',
+  'test-a1-4': 'lesson-09',
+  'test-a1-5': 'lesson-11',
+};
+
+export function getNextLessonAfterTest(testId: string) {
+  const nextId = testNextLessonMap[testId];
+  if (!nextId) return undefined;
+  return lessonsMetadata.find(l => l.id === nextId);
+}
+
+/**
+ * Total interactive exercises per lesson (exercises + workbook with points > 0).
+ * Used by the sidebar to compute completion %. Update when adding lesson content.
+ */
+export const lessonExerciseCounts: Record<string, number> = {
+  'lesson-00': 3,
+  'lesson-01': 21,
+  'lesson-02': 22,
+  'lesson-03': 25,
+  'lesson-04': 31,
+  'lesson-05': 30,
+};

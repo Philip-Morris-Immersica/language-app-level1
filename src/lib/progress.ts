@@ -262,6 +262,81 @@ export function resetProgress(): void {
   }
 }
 
+// ── Visited-lesson tracking (lightweight, separate key) ──
+const VISITED_KEY = 'visited-lessons';
+
+export function markLessonVisited(lessonId: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const visited: string[] = JSON.parse(localStorage.getItem(VISITED_KEY) || '[]');
+    if (!visited.includes(lessonId)) {
+      visited.push(lessonId);
+      localStorage.setItem(VISITED_KEY, JSON.stringify(visited));
+    }
+  } catch { /* ignore */ }
+}
+
+export function getVisitedLessons(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    return JSON.parse(localStorage.getItem(VISITED_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+export interface LessonProgressSummary {
+  visited: boolean;
+  exercisesDone: number;
+  completed: boolean;
+}
+
+export interface TestProgressSummary {
+  completed: boolean;
+  score: number;
+  maxScore: number;
+}
+
+/**
+ * Returns a map of lessonId → progress summary.
+ * Merges the lightweight visited-lessons key with the main progress store.
+ */
+export function getAllLessonProgressMap(): Record<string, LessonProgressSummary> {
+  const progress = getUserProgress();
+  const visitedList = getVisitedLessons();
+  const map: Record<string, LessonProgressSummary> = {};
+
+  for (const id of visitedList) {
+    map[id] = { visited: true, exercisesDone: 0, completed: false };
+  }
+
+  for (const [id, lp] of Object.entries(progress.lessons)) {
+    const exercisesDone = (lp.exercisesProgress?.length ?? 0) + (lp.workbookProgress?.length ?? 0);
+    map[id] = {
+      visited: true,
+      exercisesDone,
+      completed: lp.completed,
+    };
+  }
+
+  return map;
+}
+
+export function getAllTestProgressMap(): Record<string, TestProgressSummary> {
+  const progress = getUserProgress();
+  const map: Record<string, TestProgressSummary> = {};
+
+  for (const [id, tp] of Object.entries(progress.tests)) {
+    map[id] = {
+      completed: tp.completed,
+      score: tp.score,
+      maxScore: tp.maxScore,
+    };
+  }
+
+  return map;
+}
+
 // Export progress data (for backup or migration)
 export function exportProgress(): string {
   const progress = getUserProgress();
