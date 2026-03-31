@@ -94,6 +94,16 @@ export function PersonalChoice({ model, blankOptions, items, onComplete }: Perso
   const { lang } = useLanguage();
   const [states, setStates] = useState<Record<string, ItemState>>({});
   const [selections, setSelections] = useState<Record<string, string>>({});
+  const [modelTranslationVisible, setModelTranslationVisible] = useState(false);
+  const [revealedQuestions, setRevealedQuestions] = useState<Set<string>>(new Set());
+
+  const toggleQuestionTranslation = useCallback((id: string) => {
+    setRevealedQuestions(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
   const completedRef = useRef(false);
 
   const getState = (id: string): ItemState => states[id] ?? { phase: 'choose' };
@@ -149,7 +159,7 @@ export function PersonalChoice({ model, blankOptions, items, onComplete }: Perso
       {model && (
         <div
           className="bg-[#f0f7ff] border border-[#0279C3]/20 rounded-xl p-4 md:p-5 cursor-pointer"
-          onClick={() => speak(`${model.question} ${model.positiveAnswer}`)}
+          onClick={() => { speak(`${model.question} ${model.positiveAnswer}`); setModelTranslationVisible(v => !v); }}
         >
           <p className="text-xs font-semibold text-[#0279C3] uppercase tracking-wide mb-2">
             {t('exercise.model')}
@@ -165,9 +175,9 @@ export function PersonalChoice({ model, blankOptions, items, onComplete }: Perso
           </p>
           {lang !== 'bg' && (
             <div className="mt-2 space-y-0.5">
-              <InlineTranslation text={`${model.question}`} visible className="mt-0" />
-              <InlineTranslation text={model.positiveAnswer} visible className="mt-0" />
-              <InlineTranslation text={model.negativeAnswer} visible className="mt-0" />
+              <InlineTranslation text={model.question} visible={modelTranslationVisible} className="mt-0" />
+              <InlineTranslation text={model.positiveAnswer} visible={modelTranslationVisible} className="mt-0" />
+              <InlineTranslation text={model.negativeAnswer} visible={modelTranslationVisible} className="mt-0" />
             </div>
           )}
         </div>
@@ -207,13 +217,13 @@ export function PersonalChoice({ model, blankOptions, items, onComplete }: Perso
                 <div className="flex-1">
                   <p
                     className="text-base md:text-lg font-bold text-gray-800 cursor-pointer"
-                    onClick={() => speak(item.question)}
+                    onClick={() => { speak(item.question); toggleQuestionTranslation(item.id); }}
                   >
                     – {item.question}
                   </p>
                   <InlineTranslation
                     text={item.question}
-                    visible={state.phase !== 'choose'}
+                    visible={revealedQuestions.has(item.id) || state.phase !== 'choose'}
                     className="mb-1"
                   />
                 </div>

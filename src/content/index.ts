@@ -102,4 +102,5 @@ export const lessonExerciseCounts: Record<string, number> = {
   'lesson-03': 25,
   'lesson-04': 31,
   'lesson-05': 30,
+  'lesson-06': 32,
 };

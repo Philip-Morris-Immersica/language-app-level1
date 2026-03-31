@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+# Cost & Token Optimization
+
+## Model Recommendations
+- **Sonnet 4.6 Thinking** — for most tasks: lessons, corrections, feedback, audio, debugging
+- **Opus 4.6 Thinking** — ONLY for: new exercise types, new component architecture, complex refactoring
+- When creating a lesson plan, ALWAYS label each step with the recommended model (Opus / Sonnet)
+
+## Session Management (ALWAYS follow)
+- One topic = one chat. One lesson = one chat for content work.
+- After completing a task (plan done, implementation done, review done), ALWAYS say:
+  "Тази задача е готова. За следващата стъпка препоръчвам нов чат: 'Продължавам работата по урок X. Прегледай exercises.ts и content.ts. Следващата задача: [...]'"
+- At 20+ messages, ALWAYS add a reminder: "Чатът стана дълъг — нов чат ще спести токени и ще работи по-бързо."
+- NEVER ignore these reminders — they are critical for the user's budget.
+
+## End-of-Response Checklist (append to EVERY response)
+At the end of EVERY response, silently check and act on:
+1. **Message count** — if 20+, add: "⚠️ Чат: ~[N] съобщения — препоръчвам нов чат."
+2. **Task type** — if new component / new architecture / complex refactor was done, add: "💡 Следващата сложна задача → отвори нов чат с Opus."
+3. **Phase complete** — if a major phase ended (plan / implementation / review / audio), add the new-chat reminder above.
+4. **Model check** — if the current task warranted Opus but Sonnet was used, note it.
+Only surface items that apply — do NOT add the checklist header if nothing applies.
+
+## Lesson Workflow
+The standard lesson workflow uses SEPARATE chats:
+1. **Chat 1 (Opus → Sonnet):** Plan + implementation
+2. **Chat 2 (Sonnet):** Review + corrections from feedback
+3. **Chat 3 (Sonnet):** Audio generation via `npm run tts:generate -- --lesson XX --model gemini`
+4. **Chat 4 (Sonnet):** Grammar reference + final polish
+After finishing each phase, remind the user to start a new chat for the next phase.
+
+## Audio Generation
+- Generate audio AFTER lesson content is reviewed and finalized.
+- Use the batch script: `npm run tts:generate -- --lesson XX --model gemini`
+- NEVER generate MP3 files one by one — the script handles everything automatically.
+- Only modify `scripts/generate-tts.ts` if new speaker roles or exercise types need TTS.
+
+## Feedback & Corrections
+- Content-specific feedback: separate chat per lesson.
+- Systemic changes (same fix across lessons): provide a concrete example from a fixed lesson, then apply everywhere.
+
+## General Efficiency
+- Check `.cursor/rules/` BEFORE exploring the codebase — patterns are documented there.
+- Do not re-read files already in context.
+- Group related edits when practical.
+- For repetitive changes: do the first one carefully, then batch the rest.
+- Prefer text over screenshots when the issue is text-based.
+
+## Transparency
+- Before a complex task, briefly estimate scope.
+- If a simpler approach exists, suggest it before starting.

@@ -95,8 +95,6 @@ export function GrammarTable({
 
           <tbody>
             {rows.map((row, rIdx) => {
-              const fullPhrase = [row.pronoun, ...row.cells].join(' ');
-              const totalCols = (columns.length || row.cells.length) + 1;
               return (
                 <React.Fragment key={rIdx}>
                   <tr
@@ -117,12 +115,17 @@ export function GrammarTable({
                   </tr>
                   {revealedRows.has(rIdx) && lang !== 'bg' && (
                     <tr className="bg-[#e8f4fd]">
-                      <td
-                        colSpan={totalCols}
-                        className="py-1.5 px-3 md:px-5 border-b border-b-gray-100"
-                      >
-                        <InlineTranslation text={fullPhrase} visible={true} className="mt-0" />
+                      <td className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 text-center">
+                        <InlineTranslation text={row.pronoun} visible={true} className="mt-0" />
                       </td>
+                      {row.cells.map((cell, cIdx) => (
+                        <td
+                          key={cIdx}
+                          className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 last:border-r-0 text-center"
+                        >
+                          <InlineTranslation text={cell} visible={true} className="mt-0" />
+                        </td>
+                      ))}
                     </tr>
                   )}
                 </React.Fragment>
@@ -150,8 +153,14 @@ export function GrammarTable({
 
       {/* Subtitle */}
       {subtitle && (
-        <div className="p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
+        <div
+          onClick={() => toggleNote(-1)}
+          className="p-4 rounded-lg bg-white border-2 border-[#8B9D5F] cursor-pointer hover:bg-[#f4faee] transition-colors"
+        >
           <p className="text-sm text-gray-700 text-center italic">{subtitle}</p>
+          {lang !== 'bg' && (
+            <InlineTranslation text={subtitle} visible={revealedNotes.has(-1)} className="mt-1" />
+          )}
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { ImageLightbox } from '@/components/ImageLightbox';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -66,8 +67,22 @@ interface GrammarWithExamplesProps {
   exerciseId?: string;
 }
 
+function BoldLine({ text }: { text: string }) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1
+          ? <span key={i} className="font-extrabold text-[#2d5a1b]">{part}</span>
+          : <span key={i}>{part}</span>
+      )}
+    </>
+  );
+}
+
 export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  const [subtitleVisible, setSubtitleVisible] = useState(false);
   const { lang } = useLanguage();
   const t = useT();
 
@@ -108,32 +123,49 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
           >
             {/* Image */}
             {example.imageUrl && (
-              <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
-                <ImageWithFallback
-                  src={example.imageUrl}
-                  alt={example.lines ? example.lines[0] : example.text}
-                />
+              <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
+                  <div className="relative w-full h-56 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-white">
+                    <ImageWithFallback
+                      src={example.imageUrl}
+                      alt={example.lines ? example.lines[0] : example.text}
+                    />
+                  </div>
+                </ImageLightbox>
               </div>
             )}
 
             {/* Text section */}
-            <div className="mt-4 text-center space-y-2">
+            <div className="mt-4 text-center space-y-2 w-full">
               {example.lines ? (
                 <>
+                  {example.text && (
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#5a8a3c] mb-3 pb-2 border-b border-gray-100">
+                      {example.text}
+                    </p>
+                  )}
                   {example.lines.map((line, lineIndex) => {
-                    const isPositive = line.startsWith('✓');
-                    const isNegative = line.startsWith('✗');
+                    if (line === '') return <div key={lineIndex} className="h-2" />;
+                    const plainLine = line.replace(/\*\*(.+?)\*\*/g, '$1');
+                    const isPositive = plainLine.startsWith('✓');
+                    const isNegative = plainLine.startsWith('✗');
+                    const isWarning = plainLine.startsWith('⚠️');
+                    const isSentence = /^(Аз|Той|Тя|Ние|Вие|Те|Имам|Нямам|Това|–)\s/.test(plainLine);
                     const colorClass = isPositive
                       ? 'text-green-700'
                       : isNegative
                       ? 'text-red-600'
+                      : isWarning
+                      ? 'text-amber-700 font-extrabold'
+                      : isSentence
+                      ? 'text-[#0279C3] font-semibold'
                       : 'text-gray-800';
                     return (
                       <div key={lineIndex}>
                         <p className={`text-base md:text-lg font-bold ${colorClass}`}>
-                          {line}
+                          <BoldLine text={line} />
                         </p>
-                        <InlineTranslation text={line} visible={revealed.has(index)} />
+                        {plainLine && <InlineTranslation text={plainLine} visible={revealed.has(index)} />}
                       </div>
                     );
                   })}
@@ -160,11 +192,17 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
       </div>
 
       {/* Note at bottom */}
-      <div className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
-        <p className="text-sm text-gray-700 text-center italic">
-          {subtitle || 'Граматика – Глагол СЪМ'}
-        </p>
-      </div>
+      {subtitle && (
+        <div
+          onClick={() => setSubtitleVisible(v => !v)}
+          className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] cursor-pointer hover:bg-[#f4faee] transition-colors"
+        >
+          <p className="text-sm text-gray-700 text-center italic">{subtitle}</p>
+          {lang !== 'bg' && (
+            <InlineTranslation text={subtitle} visible={subtitleVisible} className="mt-1" />
+          )}
+        </div>
+      )}
     </div>
   );
 }
