@@ -360,6 +360,7 @@ export interface TrueFalseExercise extends BaseExercise {
 export interface PersonalChoiceExercise extends BaseExercise {
   type: 'personal_choice';
   title: string;
+  imageUrls?: string[];
   model?: {
     question: string;
     positiveAnswer: string;

@@ -262,6 +262,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     case 'personal_choice':
       return wrap(
         <PersonalChoice
+          imageUrls={exercise.imageUrls}
           model={exercise.model}
           items={exercise.items}
           blankOptions={exercise.blankOptions}

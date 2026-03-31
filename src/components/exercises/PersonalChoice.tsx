@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { speakBulgarian } from '@/lib/tts';
 
 interface PersonalChoiceProps {
+  imageUrls?: string[];
   model?: {
     question: string;
     positiveAnswer: string;
@@ -89,7 +90,7 @@ function SentenceWithBlank({
   );
 }
 
-export function PersonalChoice({ model, blankOptions, items, onComplete }: PersonalChoiceProps) {
+export function PersonalChoice({ imageUrls, model, blankOptions, items, onComplete }: PersonalChoiceProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [states, setStates] = useState<Record<string, ItemState>>({});
@@ -156,6 +157,19 @@ export function PersonalChoice({ model, blankOptions, items, onComplete }: Perso
 
   return (
     <div className="space-y-5">
+      {imageUrls && imageUrls.length > 0 && (
+        <div className="flex flex-wrap gap-3 justify-center">
+          {imageUrls.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt=""
+              className="rounded-xl shadow-sm max-h-[280px] object-contain"
+            />
+          ))}
+        </div>
+      )}
+
       {model && (
         <div
           className="bg-[#f0f7ff] border border-[#0279C3]/20 rounded-xl p-4 md:p-5 cursor-pointer"

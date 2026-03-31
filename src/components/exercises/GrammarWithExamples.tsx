@@ -56,6 +56,7 @@ interface GrammarExample {
   subtext?: string;
   lines?: string[];
   translations?: Record<string, string>;
+  zoomable?: boolean;
 }
 
 interface GrammarWithExamplesProps {
@@ -123,16 +124,25 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
           >
             {/* Image */}
             {example.imageUrl && (
-              <div className="w-full" onClick={(e) => e.stopPropagation()}>
-                <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
-                  <div className="relative w-full h-56 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-white">
-                    <ImageWithFallback
-                      src={example.imageUrl}
-                      alt={example.lines ? example.lines[0] : example.text}
-                    />
-                  </div>
-                </ImageLightbox>
-              </div>
+              example.zoomable ? (
+                <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                  <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
+                    <div className="relative w-full h-56 md:h-72 lg:h-80 rounded-lg overflow-hidden bg-white">
+                      <ImageWithFallback
+                        src={example.imageUrl}
+                        alt={example.lines ? example.lines[0] : example.text}
+                      />
+                    </div>
+                  </ImageLightbox>
+                </div>
+              ) : (
+                <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
+                  <ImageWithFallback
+                    src={example.imageUrl}
+                    alt={example.lines ? example.lines[0] : example.text}
+                  />
+                </div>
+              )
             )}
 
             {/* Text section */}

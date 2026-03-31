@@ -16,6 +16,13 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { speakBulgarian } from '@/lib/tts';
 
+const COLUMN_KEY_MAP: Record<string, string> = {
+  'мъжки': 'grammar.masculine',
+  'женски': 'grammar.feminine',
+  'среден': 'grammar.neuter',
+  'множествено': 'grammar.plural',
+};
+
 interface Paragraph {
   speaker?: string;
   text: string;
@@ -201,7 +208,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                       key={ci}
                       className="border border-gray-200 px-3 py-2 text-center font-bold text-[#0279C3]"
                     >
-                      {col}
+                      {COLUMN_KEY_MAP[col] ? t(COLUMN_KEY_MAP[col]) : col}
                     </th>
                   ))}
                 </tr>
