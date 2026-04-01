@@ -103,7 +103,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-03',
     type: 'syllable_blocks',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Подредете буквите в думи.',
+    instruction: 'Влачете буквите и ги подредете, за да съставите думи.',
     order: 4,
     points: 8,
     puzzles: [
@@ -1505,7 +1505,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-35',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текста.',
     order: 41,
     imageUrl: '/assets/lesson-06/10-tekstove-upr-35/01-semeystvo-park-pet-chlena.jpg',
     paragraphs: [
@@ -1538,7 +1538,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-37',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 37',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текста.',
     order: 43,
     paragraphs: [
       'Аз работя в „Каритас"',
@@ -1604,7 +1604,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-39',
     type: 'reading_text',
     title: 'ОТ ПЪРВО ЛИЦЕ',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текста.',
     order: 45,
     imageUrl: '/assets/lesson-06/11-ot-parvo-litse/01-uchenitsi-v-klas.jpg',
     paragraphs: [
@@ -1621,7 +1621,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-42',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 42',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текста.',
     order: 46,
     paragraphs: [
       'Аз съм едно сирийско момиче. Казвам се Илаф Хабаба. В България съм от две години и вече знам каква е разликата между сирийското и българското семейство.',

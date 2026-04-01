@@ -8,6 +8,15 @@
  * 4. Replace all REPLACE comments with actual content
  * 5. Update the `order` field to match the PDF sequence
  *
+ * ИНСТРУКЦИИ (ВАЖНО):
+ * - Винаги завършвайте instruction текста с точка.
+ * - Описвайте и функционалността (какво да натисне), и задачата (какво се очаква).
+ *   Пример: „Подредете фразите, за да получите диалог. Първата фраза е в зелено."
+ * - За граматични дисплеи: добавяйте „Натиснете за произношение." ако има аудио.
+ * - Използвайте instructionKey + ui.ts за предварително превеждане на 7 езика.
+ * - НЕ добавяйте „Непознатите думи потърсете в речника." — вече е премахнато навсякъде.
+ * - „евроцента" (не „евроцент") за всички суми завършващи на 1 (освен самото „1 евроцент").
+ *
  * CATEGORIES:
  *   Section 1 — НОВИ ДУМИ       (illustrated_cards, illustrated_cards_text_only) ⭐ FREQUENT
  *   Section 2 — ГРАМАТИКА        (grammar_visual, grammar_examples, grammar_table) ⭐ FREQUENT
@@ -258,7 +267,7 @@ export const TEMPLATE_reading_text = {
   id: 'l0X-ex-NN',           // REPLACE
   type: 'reading_text' as const,
   title: 'ТЕКСТОВЕ',          // REPLACE or remove
-  instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.', // REPLACE
+  instruction: 'Слушайте и прочетете текста.', // REPLACE — НЕ добавяйте "Непознатите думи потърсете в речника."
   audioUrl: '/assets/lesson-0X/audio/text-NN.wav', // REPLACE or remove
   order: 1,                   // REPLACE
   paragraphs: [
@@ -435,6 +444,9 @@ export const TEMPLATE_dropdown_match = {
 
 /**
  * word_order — Наредба на думи в изречение (tap to add/remove).
+ * ВАЖНО: Думите в `words` трябва да са максимално разбъркани —
+ * компонентът ги показва ТОЧНО в реда от масива (без shuffle).
+ * Ако има повече от един верен ред, добавете `alternateCorrectSentences`.
  */
 export const TEMPLATE_word_order = {
   id: 'l0X-wb-NN',           // REPLACE
@@ -468,7 +480,9 @@ export const TEMPLATE_word_order = {
  *     колона 2 е центрирана отдолу
  *
  * БЕЛЕЖКИ:
- *   - items[] се разбъркват автоматично
+ *   - items[] се разбъркват автоматично от компонента
+ *   - Въпреки shuffle-а, подреждайте items[] предварително смесени между категориите
+ *     (НЕ всички от група А, после всички от група Б — чай, хляб, кафе, сирене...)
  *   - Всяка дума от items[] трябва да е в точно един correctItems[]
  *   - icon е по избор (emoji пред заглавието на колоната)
  *   - При 3 колони инструкцията автоматично казва "наляво, надясно или надолу"
@@ -600,12 +614,14 @@ export const TEMPLATE_image_labeling = {
 
 /**
  * syllable_blocks — Наредба на срички за съставяне на дума.
- * Потребителят tap-ва сричките в правилен ред.
+ * Потребителят влачи сричките в правилен ред.
+ * ВАЖНО: Сричките в `syllables` трябва да са максимално разбъркани —
+ * компонентът ги показва ТОЧНО в реда от масива (без shuffle).
  */
 export const TEMPLATE_syllable_blocks = {
   id: 'l0X-ex-NN',           // REPLACE
   type: 'syllable_blocks' as const,
-  instruction: 'Подредете блокчетата в думи.',  // REPLACE
+  instruction: 'Влачете сричките и ги подредете, за да съставите думи.',  // REPLACE
   order: 1,                   // REPLACE
   points: 8,                  // REPLACE
   puzzles: [
@@ -632,6 +648,8 @@ export const TEMPLATE_word_search = {
 
 /**
  * true_false — Вярно / Невярно за всяко твърдение.
+ * БЕЛЕЖКА: При checklist (reading_text с checklist.items) и true_false упражнения,
+ * подреждайте верните и грешните СМЕСЕНИ (не първо всички верни, после всички грешни).
  */
 export const TEMPLATE_true_false = {
   id: 'l0X-ex-NN',           // REPLACE

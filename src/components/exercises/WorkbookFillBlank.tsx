@@ -184,7 +184,7 @@ export function WorkbookFillBlank({
                   }
                 `}
               >
-                <option value="">——</option>
+                <option value="">—</option>
                 {opts.map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}

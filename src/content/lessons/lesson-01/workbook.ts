@@ -185,7 +185,7 @@ export const workbookExercises: Exercise[] = [
         ],
       },
       {
-        text: 'Ние бежанци _______ ? | Да, _______ бежанци.',
+        text: 'Ние бежанци _______ ? | Да, бежанци _______.',
         blanks: [1, 2],
         correctAnswers: ['ли сме', 'сме'],
         options: [
@@ -241,6 +241,7 @@ export const workbookExercises: Exercise[] = [
       {
         words: ['Владимир', 'и', 'Полина', 'българи', 'ли', 'са', '?'],
         correctSentence: 'Владимир и Полина българи ли са ?',
+        alternateCorrectSentences: ['Полина и Владимир българи ли са ?'],
         hint: 'Да, Владимир и Полина са българи.',
       },
     ],

@@ -36,9 +36,8 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
     if (s?.questionStates && Object.keys(s.questionStates).length > 0) return;
     const initialStates: typeof questionStates = {};
     exercise.questions.forEach((question, index) => {
-      const shuffled = [...question.words].sort(() => Math.random() - 0.5);
       initialStates[index] = {
-        available: shuffled,
+        available: [...question.words],
         built: [],
         validation: null,
       };
@@ -100,8 +99,9 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
     let correctCount = 0;
 
     exercise.questions.forEach((question, index) => {
-      const builtSentence = questionStates[index].built.join(' ');
-      const isCorrect = builtSentence.toLowerCase().trim() === question.correctSentence.toLowerCase().trim();
+      const builtSentence = questionStates[index].built.join(' ').toLowerCase().trim();
+      const allValid = [question.correctSentence, ...(question.alternateCorrectSentences ?? [])];
+      const isCorrect = allValid.some(s => builtSentence === s.toLowerCase().trim());
       newStates[index] = {
         ...newStates[index],
         validation: isCorrect,

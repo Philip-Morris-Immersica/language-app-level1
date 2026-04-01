@@ -88,6 +88,27 @@ export const content: LessonContent = {
         uk: 'Болгари використовують кирилицю, і більшість написів написані нею. Написи вздовж міжнародних автомагістралей, в аеропортах, великих містах та курортах також написані латинськими літерами.',
       },
     },
+    {
+      id: 'uppercase-lowercase',
+      title: {
+        bg: 'Главни и малки букви',
+        en: 'Uppercase and Lowercase Letters',
+        fr: 'Lettres majuscules et minuscules',
+        ar: 'الحروف الكبيرة والصغيرة',
+        fa: 'حروف بزرگ و کوچک',
+        ru: 'Прописные и строчные буквы',
+        uk: 'Великі та малі літери',
+      },
+      content: {
+        bg: 'Българските букви имат малка и голяма форма. Голямата буква се използва в началото на изречението. С голяма буква започват и имена — на хора, празници, географски понятия (държави, градове, планини, морета) и институции. Останалите букви в тези думи са малки. Буквите се изписват различно в печатна и в ръкописна форма.',
+        en: 'Bulgarian letters have lowercase and uppercase forms. A capital letter is used at the beginning of a sentence. Names also start with a capital letter — names of people, holidays, geographical terms (countries, cities, mountains, seas) and institutions. The remaining letters in these words are lowercase. Letters are written differently in printed and handwritten form.',
+        fr: 'Les lettres bulgares ont une forme minuscule et majuscule. La majuscule est utilisée au début de la phrase. Les noms commencent aussi par une majuscule — noms de personnes, fêtes, termes géographiques (pays, villes, montagnes, mers) et institutions. Les autres lettres de ces mots sont en minuscule. Les lettres s\'écrivent différemment en forme imprimée et manuscrite.',
+        ar: 'الحروف البلغارية لها شكل صغير وكبير. يُستخدم الحرف الكبير في بداية الجملة. تبدأ الأسماء أيضاً بحرف كبير — أسماء الأشخاص، الأعياد، المصطلحات الجغرافية (الدول، المدن، الجبال، البحار) والمؤسسات. باقي الحروف في هذه الكلمات صغيرة. تُكتب الحروف بشكل مختلف في الطباعة وبخط اليد.',
+        fa: 'حروف بلغاری دارای شکل کوچک و بزرگ هستند. حرف بزرگ در ابتدای جمله استفاده می‌شود. اسامی نیز با حرف بزرگ شروع می‌شوند — اسامی اشخاص، تعطیلات، اصطلاحات جغرافیایی (کشورها، شهرها، کوه‌ها، دریاها) و مؤسسات. بقیه حروف در این کلمات کوچک هستند. حروف به شکل متفاوتی در چاپ و دست‌خط نوشته می‌شوند.',
+        ru: 'Болгарские буквы имеют строчную и прописную форму. Прописная буква используется в начале предложения. С прописной буквы начинаются также имена — имена людей, праздников, географические названия (стран, городов, гор, морей) и учреждений. Остальные буквы в этих словах строчные. Буквы пишутся по-разному в печатной и рукописной форме.',
+        uk: 'Болгарські літери мають малу та велику форму. Велика літера використовується на початку речення. З великої літери починаються також імена — імена людей, свята, географічні назви (країн, міст, гір, морів) та установ. Решта літер у цих словах малі. Літери пишуться по-різному у друкованій та рукописній формі.',
+      },
+    },
   ],
 
   grammarReference: [

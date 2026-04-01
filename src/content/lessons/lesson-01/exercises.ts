@@ -8,7 +8,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l01-ex-01',
     type: 'image_labeling',
-    instruction: 'Кликнете върху знамето за да видите думата и чуете произношението.',
+    instruction: 'Кликнете върху знамето, за да видите думата и чуете произношението.',
     order: 1,
     points: 9,
     displayType: 'flags',
@@ -99,7 +99,7 @@ export const exercises: Exercise[] = [
       // Row 3: Countries with sublabels
       { id: 'iran',        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg',        label: 'Иран',        sublabels: ['иранец', 'иранка', 'иранци'] },
       { id: 'morocco',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg',     label: 'Мароко',      sublabels: ['мароканец', 'мароканка', 'мароканци'] },
-      { id: 'afghanistan', imageUrl: '/assets/lesson-01/novi-dumi-2-countries/afghanistan.jpg', label: 'Афганистан',  sublabels: ['афганистанец', 'афганистанка', 'афганистанци'] },
+      { id: 'afghanistan', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-afghanistan.jpg', label: 'Афганистан',  sublabels: ['афганистанец', 'афганистанка', 'афганистанци'] },
     ]
   } as IllustratedCardsExercise,
 
@@ -107,7 +107,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l01-ex-04',
     type: 'syllable_blocks',
-    instruction: 'Подредете блокчетата в думи.',
+    instruction: 'Влачете сричките и ги подредете, за да съставите думи.',
     order: 3,
     points: 8,
     puzzles: [
@@ -127,7 +127,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l01-ex-05',
     type: 'fill_in_blank',
-    instruction: 'Напишете името на вашата страна.',
+    instruction: 'Напишете името на Вашата страна.',
     order: 4,
     points: 1,
     freeText: true,
@@ -216,7 +216,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Глагол СЪМ',
-    instruction: 'Запознайте се с формите на глагола съм с лични местоимения: аз съм, ти си, той/тя е...',
+    instruction: 'Запознайте се с формите на глагола „съм".',
     order: 10,
     examples: [
       { 
@@ -241,7 +241,7 @@ export const exercises: Exercise[] = [
       },
       { 
         imageUrl: '/assets/lesson-01/gramatika-1-pronouns/nie-sme-mohamed-bana.jpg', 
-        text: 'Ние сме Мохамед и Баня.', 
+        text: 'Ние сме Мохамед и Бана.', 
         subtext: 'Ние сме от Сирия.' 
       },
       { 
@@ -417,7 +417,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Въпроси и отговори',
-    instruction: 'Запознайте се с въпросителни изречения. Кликнете върху картинката за да чуете.',
+    instruction: 'Запознайте се с въпросителните изречения. Кликнете върху картинката, за да ги чуете.',
     order: 14,
     examples: [
       {
@@ -593,7 +593,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g5.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
-    instruction: 'Запознайте се с глагол съм – сегашно време',
+    instruction: 'Запознайте се с глагола „съм" в сегашно време.',
     order: 19,
     tableTitle: 'Сегашно време – съм',
     columns: ['(+)', '(–)', '(?)'],
@@ -618,7 +618,7 @@ export const exercises: Exercise[] = [
     id: 'l01-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
-    instruction: 'Натиснете секцията за автоматично прочитане',
+    instruction: 'Натиснете секцията за автоматично прочитане.',
     order: 20,
     sections: [
       {
@@ -667,7 +667,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-17',
     type: 'dialogue_builder',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Подредете фразите, за да получите диалози.',
+    instruction: 'Подредете фразите, за да получите диалози. Първата фраза е посочена в зелено.',
     order: 21,
     sections: [
       {
@@ -685,15 +685,14 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'б.',
-        givenFirstLine: 'Добро утро!',
+        givenFirstLine: 'Добро утро.',
         sentences: [
-          'Добро утро!',
-          'Добро утро!',
-          'Аз съм учителят. А Вие?',
-          'Аз съм Ана.',
+          'Добро утро.',
           'Аз съм Георги. А Вие?',
+          'Аз съм Ана.',
+          'Аз съм учител. А Вие?',
           'Аз също.',
-          'Довиждане!',
+          'Довиждане.',
           'Довиждане.',
         ],
       },
@@ -805,7 +804,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-22',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
+    instruction: 'Слушайте и прочетете текста.',
     audioUrl: '/assets/lesson-01/audio/text-22.wav',
     order: 22,
     paragraphs: [
@@ -841,7 +840,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-24',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Слушайте и прочетете текста. Непознатите думи потърсете в речника.',
+    instruction: 'Слушайте и прочетете текста.',
     audioUrl: '/assets/lesson-01/audio/text-20.wav',
     order: 24,
     paragraphs: [
@@ -913,62 +912,62 @@ export const exercises: Exercise[] = [
     listeningText: 'Иван и Катя са от България. Те са българи. Те са учители. Софиян и София са от Ирак. Те са бежанци. Те не са учители. Лилит е от Сирия. Тя е учителка. Азар е от Афганистан. Той е бежанец.',
     sentences: [
       {
-        text: 'Иван и Катя са от _.',
-        blanks: [0],
+        text: 'Иван и Катя са от _______.',
+        blanks: [5],
         correctAnswers: ['България'],
         options: ['България', 'Сирия', 'Ирак'],
       },
       {
-        text: 'Те са _.',
-        blanks: [0],
+        text: 'Те са _______.',
+        blanks: [2],
         correctAnswers: ['българи'],
         options: ['българи', 'сирийци', 'иракчани'],
       },
       {
-        text: 'Те са _.',
-        blanks: [0],
+        text: 'Те са _______.',
+        blanks: [2],
         correctAnswers: ['учители'],
         options: ['учители', 'бежанци', 'студенти'],
       },
       {
-        text: 'Софиян и София са от _.',
-        blanks: [0],
+        text: 'Софиян и София са от _______.',
+        blanks: [5],
         correctAnswers: ['Ирак'],
         options: ['Ирак', 'България', 'Сирия'],
       },
       {
-        text: 'Те са _.',
-        blanks: [0],
+        text: 'Те са _______.',
+        blanks: [2],
         correctAnswers: ['бежанци'],
         options: ['бежанци', 'учители', 'българи'],
       },
       {
-        text: 'Те _ учители.',
-        blanks: [0],
+        text: 'Те _______ учители.',
+        blanks: [1],
         correctAnswers: ['не са'],
         options: ['не са', 'са', 'сме'],
       },
       {
-        text: 'Лилит е от _.',
-        blanks: [0],
+        text: 'Лилит е от _______.',
+        blanks: [3],
         correctAnswers: ['Сирия'],
         options: ['Сирия', 'Ирак', 'Афганистан'],
       },
       {
-        text: 'Тя е _.',
-        blanks: [0],
+        text: 'Тя е _______.',
+        blanks: [2],
         correctAnswers: ['учителка'],
         options: ['учителка', 'бежанка', 'иранка'],
       },
       {
-        text: 'Азар е от _.',
-        blanks: [0],
+        text: 'Азар е от _______.',
+        blanks: [3],
         correctAnswers: ['Афганистан'],
         options: ['Афганистан', 'Сирия', 'България'],
       },
       {
-        text: 'Той е _.',
-        blanks: [0],
+        text: 'Той е _______.',
+        blanks: [2],
         correctAnswers: ['бежанец'],
         options: ['бежанец', 'учител', 'българин'],
       },

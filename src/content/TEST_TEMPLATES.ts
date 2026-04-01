@@ -358,7 +358,7 @@ export const writingExercises: Exercise[] = [
 
       // Многосрична дума (срички):
       { id: 'p-kiselo-mlyako', imageUrl: '/assets/test-a1-N/pisane/kiselo-mlyako.jpg',
-        syllables: ['ки', 'се', 'ло', 'мля', 'ко'], correctWord: 'кисело мляко' },
+        syllables: ['мля', 'ко', 'ки', 'се', 'ло'], correctWord: 'кисело мляко' },
     ],
   } as SyllableBlocksExercise,
 

@@ -38,12 +38,14 @@ interface ExerciseHeaderProps {
   title: string;
   instruction: string;
   instructionKey?: string;
+  subtitle?: string;
 }
 
-function ExerciseHeader({ title, instruction, instructionKey }: ExerciseHeaderProps) {
+function ExerciseHeader({ title, instruction, instructionKey, subtitle }: ExerciseHeaderProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedInstruction = useTranslate(instruction);
+  const translatedSubtitle = useTranslate(subtitle ?? '');
   const displayInstruction = instructionKey ? t(instructionKey) : translatedInstruction;
   return (
     <div className="mb-5 pb-4 border-b border-gray-100">
@@ -53,6 +55,11 @@ function ExerciseHeader({ title, instruction, instructionKey }: ExerciseHeaderPr
       {instruction && (
         <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
           {displayInstruction}
+        </p>
+      )}
+      {subtitle && (
+        <p className="text-gray-400 text-xs mt-1">
+          {translatedSubtitle}
         </p>
       )}
     </div>
@@ -74,10 +81,12 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     return (isCorrect: boolean) => onComplete(isCorrect, isCorrect ? scoreIfCorrect : 0);
   }
 
+  const subtitle = 'subtitle' in exercise ? (exercise as any).subtitle as string | undefined : undefined;
+
   function wrap(component: React.ReactNode) {
     return (
       <div>
-        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} />
+        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
         {component}
       </div>
     );

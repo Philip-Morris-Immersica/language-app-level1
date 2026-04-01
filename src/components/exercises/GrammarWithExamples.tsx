@@ -83,7 +83,6 @@ function BoldLine({ text }: { text: string }) {
 
 export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const [subtitleVisible, setSubtitleVisible] = useState(false);
   const { lang } = useLanguage();
   const t = useT();
 
@@ -201,18 +200,6 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
         ))}
       </div>
 
-      {/* Note at bottom */}
-      {subtitle && (
-        <div
-          onClick={() => setSubtitleVisible(v => !v)}
-          className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] cursor-pointer hover:bg-[#f4faee] transition-colors"
-        >
-          <p className="text-sm text-gray-700 text-center italic">{subtitle}</p>
-          {lang !== 'bg' && (
-            <InlineTranslation text={subtitle} visible={subtitleVisible} className="mt-1" />
-          )}
-        </div>
-      )}
     </div>
   );
 }

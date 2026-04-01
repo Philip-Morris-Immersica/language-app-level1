@@ -80,8 +80,8 @@ export const exercises: Exercise[] = [
     order: 3,
     points: 8,
     items: [
-      'чай', 'кафе', 'сок', 'мляко',
-      'хляб', 'сирене', 'масло', 'яйце',
+      'хляб', 'чай', 'сирене', 'кафе',
+      'масло', 'сок', 'яйце', 'мляко',
     ],
     columns: [
       {
@@ -116,7 +116,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l02.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
-    instruction: 'Запознайте се с въпроса и отговора за предмети',
+    instruction: 'Запознайте се с въпроса и отговора. Натиснете за произношение.',
     order: 5,
     pronouns: [
       {
@@ -154,7 +154,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Обичам / не обичам',
-    instruction: 'Запознайте се с глагола обичам – всички лица',
+    instruction: 'Запознайте се с глагола ОБИЧАМ. Натиснете за произношение.',
     order: 7,
     examples: [
       {
@@ -308,7 +308,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l02.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'С / Без',
+    subtitle: 'С / Без — Когато думата след „с" започва със „с" или „з", предлогът става „със" (за благозвучие). Например: „кафе с мляко", „кафе със захар", „омлет със сол".',
     instruction: 'Запознайте се с предлозите „с" и „без". Натиснете за произношение.',
     order: 19,
     examples: [
@@ -468,13 +468,13 @@ export const exercises: Exercise[] = [
     order: 24,
     points: 10,
     imageUrl: '/assets/lesson-02/exercise-16/masa-s-zakuska.jpg',
-    items: ['хляб', 'масло', 'мед', 'кафе', 'яйце', 'пица', 'салам', 'баница', 'кисело мляко', 'захар'],
+    items: ['хляб', 'масло', 'мед', 'чай', 'яйце', 'пица', 'салам', 'баница', 'кисело мляко', 'захар'],
     columns: [
       {
         id: 'ima',
         title: 'ИМА',
         icon: '✓',
-        correctItems: ['хляб', 'масло', 'мед', 'кафе', 'салам'],
+        correctItems: ['хляб', 'масло', 'мед', 'чай', 'салам'],
       },
       {
         id: 'nyama',
@@ -693,7 +693,7 @@ export const exercises: Exercise[] = [
       // — б. —
       { text: 'б.', blanks: [], correctAnswers: [], isExample: true },
       { text: '– Здравейте.', blanks: [], correctAnswers: [], isExample: true },
-      { text: '– _______.', blanks: [0], correctAnswers: ['Здравейте'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'], acceptableAnswers: [['здравейте', 'Здравейте']] },
+      { text: '– _______.', blanks: [0], correctAnswers: ['Здравейте'], options: ['без', 'е', 'Здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
       { text: '– _______ ли капучино?', blanks: [0], correctAnswers: ['Има'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'], acceptableAnswers: [['има', 'Има']] },
       { text: '– Не, _______.', blanks: [1], correctAnswers: ['няма'], options: ['без', 'е', 'здравейте', 'има', 'ли', 'няма', 'с', 'това', 'утро'] },
       // — в. —
@@ -718,14 +718,14 @@ export const exercises: Exercise[] = [
       instruction: 'Какво има на масата? Маркирайте с ✓ или ✗.',
       items: [
         { id: 'tf1',  text: 'кроасан',                    isTrue: true },
-        { id: 'tf2',  text: 'кафе със захар',             isTrue: true },
-        { id: 'tf3',  text: 'чай с мед',                  isTrue: true },
-        { id: 'tf4',  text: 'сандвич със салам и сирене',  isTrue: true },
-        { id: 'tf5',  text: 'сандвич с кашкавал',          isTrue: true },
         { id: 'tf6',  text: 'баница',                      isTrue: false },
+        { id: 'tf2',  text: 'кафе със захар',             isTrue: true },
         { id: 'tf7',  text: 'кафе с мляко',               isTrue: false },
+        { id: 'tf3',  text: 'чай с мед',                  isTrue: true },
         { id: 'tf8',  text: 'чай без захар',              isTrue: false },
+        { id: 'tf4',  text: 'сандвич със салам и сирене',  isTrue: true },
         { id: 'tf9',  text: 'филия с масло',              isTrue: false },
+        { id: 'tf5',  text: 'сандвич с кашкавал',          isTrue: true },
         { id: 'tf10', text: 'сок',                         isTrue: false },
       ],
     },
@@ -736,7 +736,7 @@ export const exercises: Exercise[] = [
     id: 'l02-ex-26',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текста.',
     order: 36,
     points: 5,
     showDictionary: true,

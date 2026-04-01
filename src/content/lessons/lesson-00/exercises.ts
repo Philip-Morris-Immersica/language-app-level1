@@ -1,7 +1,6 @@
 import type {
   Exercise,
   GrammarTableExercise,
-  ConnectDotsExercise,
   AlphabetMazeExercise,
   ImageLabelingExercise,
   IllustratedCardsExercise,
@@ -26,7 +25,7 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с буквите на българската азбука.',
     order: 1,
     tableTitle: 'Кирилицата',
-    columns: ['Ръкописна', 'Име'],
+    columns: ['Печатна', 'Име'],
     rows: [
       { pronoun: 'Аа', cells: ['А а', 'Ана'] },
       { pronoun: 'Бб', cells: ['Б б', 'Борис'] },
@@ -67,63 +66,7 @@ export const exercises: Exercise[] = [
   } as GrammarTableExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 2: Упражнение 1 — Свържете буквите (connect-the-dots) (Page 6, bottom)
-  // Учебник: Свържете буквите от азбуката, за да нарисувате две фигури:
-  //   Фигура 1 (главни букви А→Я) → ПЕПЕРУДА (butterfly)
-  //   Фигура 2 (малки букви а→я) → ЦВЕТЕ (flower)
-  // TODO: connect_dots типът трябва да се разшири за да поддържа:
-  //   - Две отделни групи точки (две фигури)
-  //   - 2D координати (x, y) за всяка точка
-  //   - SVG рендериране на линията при свързване
-  //   - Разкриване на фигурата (пеперуда/цвете) при завършване
-  //   Сега dots[] съдържат само подредени букви без координати.
-  //   Предложение: нов тип alphabet_connect_dots с:
-  //     figures: [{ name: 'ПЕПЕРУДА', dots: [{label, x, y}] }, ...]
-  // imageUrl: '' // TODO: трябва SVG шаблон за контурите на фигурите
-  // audioUrl: '' // НЯМА аудио за този урок
-  // ═══════════════════════════════════════════════════════════════════
-  {
-    id: 'l00-ex-01',
-    type: 'connect_dots',
-    instruction: 'Проследете змията! Натиснете буквите по азбучен ред.',
-    order: 2,
-    points: 0,
-    dots: [
-      { id: 'A', label: 'А', position: 1 },
-      { id: 'B', label: 'Б', position: 2 },
-      { id: 'V', label: 'В', position: 3 },
-      { id: 'G', label: 'Г', position: 4 },
-      { id: 'D', label: 'Д', position: 5 },
-      { id: 'E', label: 'Е', position: 6 },
-      { id: 'Zh', label: 'Ж', position: 7 },
-      { id: 'Z', label: 'З', position: 8 },
-      { id: 'I', label: 'И', position: 9 },
-      { id: 'Y', label: 'Й', position: 10 },
-      { id: 'K', label: 'К', position: 11 },
-      { id: 'L', label: 'Л', position: 12 },
-      { id: 'M', label: 'М', position: 13 },
-      { id: 'N', label: 'Н', position: 14 },
-      { id: 'O', label: 'О', position: 15 },
-      { id: 'P', label: 'П', position: 16 },
-      { id: 'R', label: 'Р', position: 17 },
-      { id: 'S', label: 'С', position: 18 },
-      { id: 'T', label: 'Т', position: 19 },
-      { id: 'U', label: 'У', position: 20 },
-      { id: 'F', label: 'Ф', position: 21 },
-      { id: 'H', label: 'Х', position: 22 },
-      { id: 'Ts', label: 'Ц', position: 23 },
-      { id: 'Ch', label: 'Ч', position: 24 },
-      { id: 'Sh', label: 'Ш', position: 25 },
-      { id: 'Sht', label: 'Щ', position: 26 },
-      { id: 'Ah', label: 'Ъ', position: 27 },
-      { id: 'Soft', label: 'Ь', position: 28 },
-      { id: 'Yu', label: 'Ю', position: 29 },
-      { id: 'Ya', label: 'Я', position: 30 },
-    ],
-  } as ConnectDotsExercise,
-
-  // ═══════════════════════════════════════════════════════════════════
-  // ORDER 3: Упражнение 2 — Лабиринт (Page 7, top)
+  // ORDER 2: Упражнение 1 — Лабиринт (Page 7, top)
   // 6×6 решетка: 30 букви на правилния път + 6 капана.
   // Пунктирана линия със стрелки показва посоката.
   // Ученикът tap-ва клетки в азбучен ред А→Б→В→...→Я.
@@ -131,9 +74,9 @@ export const exercises: Exercise[] = [
   {
     id: 'l00-ex-02',
     type: 'alphabet_maze',
-    title: 'УПРАЖНЕНИЕ 2',
+    title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Намерете пътя в лабиринта.',
-    order: 3,
+    order: 2,
     startImageUrl: '/assets/lesson-00/exercise-02-maze/01-momiche-s-koshnitsa.jpg',
     endImageUrl: '/assets/lesson-00/exercise-02-maze/02-gabi.jpg',
     grid: [
@@ -191,7 +134,7 @@ export const exercises: Exercise[] = [
   } as AlphabetMazeExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 4: Упражнения 3+4 комбинирани — Държави, знамена и столици
+  // ORDER 3: Упражнения 3+4 комбинирани — Държави, знамена и столици
   // (Page 7 bottom + Page 8 top)
   // Учебник: Упр. 3 "Свържете държавите и знамената" + Упр. 4 "Напишете столиците"
   // Обединени: знаме → държава (столица) в един dropdown.
@@ -201,7 +144,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-03',
     type: 'image_labeling',
     instruction: 'Изберете правилната държава за всяко знаме.',
-    order: 4,
+    order: 3,
     points: 10,
     displayType: 'flags',
     images: [
@@ -231,7 +174,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 5: Упражнение 5 — Континенти (Page 8, middle-left)
+  // ORDER 4: Упражнение 5 — Континенти (Page 8, middle-left)
   // Учебник: Напишете имената на континентите.
   // Банка с думи: Австралия, Азия, Америка, Африка, Европа
   // Австралия е дадена като пример.
@@ -240,7 +183,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-05',
     type: 'image_labeling',
     instruction: 'Изберете имената на континентите.',
-    order: 5,
+    order: 4,
     points: 5,
     images: [
       { id: 'avstraliya', imageUrl: '/assets/lesson-00/exercise-05-continents/01-avstraliya.jpg', correctLabel: 'Австралия' },
@@ -253,7 +196,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 6: Упражнение 6 — Храни (Page 8, middle-right)
+  // ORDER 5: Упражнение 6 — Храни (Page 8, middle-right)
   // Учебник: Напишете думите под картинките.
   // Банка с думи: пица, сандвич, спагети, хамбургер, шоколад
   // Шоколад е дадена като пример.
@@ -262,7 +205,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-06',
     type: 'image_labeling',
     instruction: 'Изберете думите под картинките.',
-    order: 6,
+    order: 5,
     points: 5,
     images: [
       { id: 'pitsa', imageUrl: '/assets/lesson-00/exercise-06-food/01-pitsa.jpg', correctLabel: 'пица' },
@@ -275,7 +218,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 7: Упражнение 7 — Международни думи (Page 8, bottom-left)
+  // ORDER 6: Упражнение 7 — Международни думи (Page 8, bottom-left)
   // Учебник: Знаете ли тези думи?
   // Информационна секция — разпознаване на международни думи в кирилица.
   // Няма points — целта е запознаване с познати думи на кирилица.
@@ -286,7 +229,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: 'Натиснете за произношение.',
-    order: 7,
+    order: 6,
     cards: [
       { id: 'futbol', imageUrl: '', label: 'футбол' },
       { id: 'banan', imageUrl: '', label: 'банан' },
@@ -303,7 +246,7 @@ export const exercises: Exercise[] = [
   } as IllustratedCardsExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 8: Упражнение 8 — Училищни принадлежности (Page 8, bottom-right)
+  // ORDER 7: Упражнение 8 — Училищни принадлежности (Page 8, bottom-right)
   // Учебник: Прочетете думите и ги запомнете.
   // Информационна секция — речникови карти с картинки.
   // Няма points — целта е запознаване.
@@ -313,7 +256,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: 'Натиснете за произношение.',
-    order: 8,
+    order: 7,
     cards: [
       { id: 'uchebnik', imageUrl: '/assets/lesson-00/novi-dumi-2-school/01-uchebnik.jpg', label: 'учебник' },
       { id: 'tetradka', imageUrl: '/assets/lesson-00/novi-dumi-2-school/02-tetradka.jpg', label: 'тетрадка' },

@@ -477,7 +477,7 @@ export const writingExercises: Exercise[] = [
   {
     id: 't02-pi-spell',
     type: 'syllable_blocks',
-    instruction: 'Наредете буквите, за да получите думата.',
+    instruction: 'Влачете буквите и ги подредете, за да получите думата.',
     order: 14,
     points: 10,
     columns: 3,

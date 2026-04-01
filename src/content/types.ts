@@ -79,6 +79,7 @@ export interface WordOrderExercise extends BaseExercise {
   questions: {
     words: string[];        // Shuffled words
     correctSentence: string; // Correct order
+    alternateCorrectSentences?: string[];
     hint?: string;
   }[];
 }

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
@@ -13,6 +14,11 @@ interface GrammarTableProps {
   notes?: string[];
   subtitle?: string;
   exerciseId?: string;
+}
+
+function TranslatedTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
+  const translated = useTranslate(text);
+  return <th className={className} colSpan={colSpan}>{translated}</th>;
 }
 
 export function GrammarTable({
@@ -70,23 +76,21 @@ export function GrammarTable({
           {tableTitle && (
             <thead>
               <tr>
-                <th
-                  colSpan={columns.length + 1}
+                <TranslatedTh
+                  text={tableTitle}
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
-                >
-                  {tableTitle}
-                </th>
+                  colSpan={columns.length + 1}
+                />
               </tr>
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
                   <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]">{'\u00A0'}</th>
                   {columns.map((col, i) => (
-                    <th
+                    <TranslatedTh
                       key={i}
+                      text={col}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap"
-                    >
-                      {col}
-                    </th>
+                    />
                   ))}
                 </tr>
               )}
@@ -151,18 +155,6 @@ export function GrammarTable({
         </div>
       )}
 
-      {/* Subtitle */}
-      {subtitle && (
-        <div
-          onClick={() => toggleNote(-1)}
-          className="p-4 rounded-lg bg-white border-2 border-[#8B9D5F] cursor-pointer hover:bg-[#f4faee] transition-colors"
-        >
-          <p className="text-sm text-gray-700 text-center italic">{subtitle}</p>
-          {lang !== 'bg' && (
-            <InlineTranslation text={subtitle} visible={revealedNotes.has(-1)} className="mt-1" />
-          )}
-        </div>
-      )}
     </div>
   );
 }

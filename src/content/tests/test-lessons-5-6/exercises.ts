@@ -315,13 +315,13 @@ export const writingExercises: Exercise[] = [
   {
     id: 't03-pi-spell',
     type: 'syllable_blocks',
-    instruction: 'Подредете буквите/сричките, за да получите думата.',
+    instruction: 'Влачете буквите/сричките и ги подредете, за да получите думата.',
     order: 14,
     points: 10,
     columns: 3,
     imageUrl: '/assets/test-a1-3/pisane/semeystvo-imena.jpg',
     puzzles: [
-      { id: 'p-mayka',      syllables: ['май', 'ка'],                    correctWord: 'майка' },
+      { id: 'p-mayka',      syllables: ['ка', 'май'],                    correctWord: 'майка' },
       { id: 'p-bashta',     syllables: ['а', 'щ', 'а', 'б'],             correctWord: 'баща' },
       { id: 'p-dyado',      syllables: ['о', 'я', 'д', 'д'],             correctWord: 'дядо' },
       { id: 'p-baba',       syllables: ['а', 'б', 'а', 'б'],             correctWord: 'баба' },

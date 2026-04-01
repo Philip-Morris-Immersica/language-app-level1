@@ -39,8 +39,8 @@ function getText(translations: Record<string, string>, lang: string): string {
   return translations[lang] || translations['en'] || translations['bg'] || '';
 }
 
-function NoteAccordion({ note, lang }: { note: GrammarNote; lang: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+function NoteAccordion({ note, lang, defaultOpen = false }: { note: GrammarNote; lang: string; defaultOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const title = getText(note.title, lang);
   const content = getText(note.content, lang);
 
@@ -68,7 +68,8 @@ function NoteAccordion({ note, lang }: { note: GrammarNote; lang: string }) {
 }
 
 export function GrammarReferenceSection({ notes }: GrammarReferenceSectionProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const singleNote = notes?.length === 1;
+  const [isOpen, setIsOpen] = useState(singleNote);
   const { lang } = useLanguage();
 
   if (!notes || notes.length === 0) return null;
@@ -96,7 +97,7 @@ export function GrammarReferenceSection({ notes }: GrammarReferenceSectionProps)
         <div className="overflow-hidden">
           <div className="px-5 pb-5 pt-1 space-y-3 border-t border-indigo-200">
             {notes.map((note) => (
-              <NoteAccordion key={note.id} note={note} lang={lang} />
+              <NoteAccordion key={note.id} note={note} lang={lang} defaultOpen={singleNote} />
             ))}
           </div>
         </div>

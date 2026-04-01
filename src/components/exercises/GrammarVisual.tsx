@@ -257,12 +257,6 @@ export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
         ))}
       </div>
 
-      {/* Note at bottom */}
-      <div className="mt-8 p-4 rounded-lg bg-white border-2 border-[#8B9D5F]">
-        <p className="text-sm text-gray-700 text-center italic">
-          {subtitle || 'Граматика – Лични местоимения'}
-        </p>
-      </div>
     </div>
   );
 }

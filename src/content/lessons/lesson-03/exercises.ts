@@ -54,17 +54,17 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-02',
     type: 'syllable_blocks',
-    instruction: 'Подредете буквите, за да получите думи.',
+    instruction: 'Влачете буквите и ги подредете, за да получите думи.',
     order: 3,
     points: 7,
     puzzles: [
-      { id: 'p1', syllables: ['Е', 'К', 'Ф', 'А'], correctWord: 'КАФЕ' },
-      { id: 'p2', syllables: ['И', 'А', 'Г', 'И', 'Ц', 'Р'], correctWord: 'ЦИГАРИ' },
-      { id: 'p3', syllables: ['А', 'Й', 'Ч'], correctWord: 'ЧАЙ' },
-      { id: 'p4', syllables: ['О', 'С', 'К', 'Ъ'], correctWord: 'КЪСО' },
-      { id: 'p5', syllables: ['Т', 'М', 'А', 'С', 'Е', 'А', 'Н'], correctWord: 'СМЕТАНА' },
-      { id: 'p6', syllables: ['Р', 'Е', 'Ч', 'Е', 'Н'], correctWord: 'ЧЕРЕН' },
-      { id: 'p7', syllables: ['В', 'И', 'Л', 'О', 'К', 'Б'], correctWord: 'БИЛКОВ' },
+      { id: 'p1', syllables: ['Е', 'Ф', 'А', 'К'], correctWord: 'КАФЕ' },
+      { id: 'p2', syllables: ['Р', 'А', 'И', 'Ц', 'Г', 'И'], correctWord: 'ЦИГАРИ' },
+      { id: 'p3', syllables: ['Й', 'Ч', 'А'], correctWord: 'ЧАЙ' },
+      { id: 'p4', syllables: ['Ъ', 'К', 'О', 'С'], correctWord: 'КЪСО' },
+      { id: 'p5', syllables: ['А', 'Н', 'Т', 'Е', 'А', 'С', 'М'], correctWord: 'СМЕТАНА' },
+      { id: 'p6', syllables: ['Н', 'Р', 'Е', 'Ч', 'Е'], correctWord: 'ЧЕРЕН' },
+      { id: 'p7', syllables: ['О', 'К', 'В', 'Б', 'Л', 'И'], correctWord: 'БИЛКОВ' },
     ],
   } as SyllableBlocksExercise,
 
@@ -124,6 +124,7 @@ export const exercises: Exercise[] = [
       { pronoun: '100', cells: ['сто'] },
     ],
     notes: [
+      'Там, където има две форми, и двете са правилни и се използват.',
       '21 – двадесет и едно',
       '121 – сто двадесет и едно',
     ],
@@ -178,7 +179,8 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-06',
     type: 'multiple_choice',
-    instruction: 'Кое число чувате? Изберете правилния отговор.',
+    instructionKey: 'exercise.l03.ex06.instruction',
+    instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
     order: 8,
     points: 6,
     questions: [
@@ -207,12 +209,12 @@ export const exercises: Exercise[] = [
       {
         text: '31,93 € — _______',
         blanks: [1], correctAnswers: ['тридесет и едно евро и деветдесет и три евроцента'],
-        options: ['тридесет и едно евро и деветдесет и три евроцента', 'тридесет и три евро и деветдесет и един евроцент', 'тридесет и девет евро и тринадесет евроцента'],
+        options: ['тридесет и едно евро и деветдесет и три евроцента', 'тридесет и три евро и деветдесет и един евроцента', 'тридесет и девет евро и тринадесет евроцента'],
       },
       {
         text: '105,41 € — _______',
-        blanks: [1], correctAnswers: ['сто и пет евро и четиридесет и един евроцент'],
-        options: ['сто и пет евро и четиридесет и един евроцент', 'сто четиридесет и едно евро и пет евроцента', 'сто и четири евро и петдесет и един евроцент'],
+        blanks: [1], correctAnswers: ['сто и пет евро и четиридесет и един евроцента'],
+        options: ['сто и пет евро и четиридесет и един евроцента', 'сто четиридесет и едно евро и пет евроцента', 'сто и четири евро и петдесет и един евроцента'],
       },
       {
         text: '159,57 € — _______',
@@ -274,8 +276,8 @@ export const exercises: Exercise[] = [
       },
       {
         text: '[100 €] + [20 €] + [5 €] + [1 €] + [50 ¢] + [20 ¢] + [1 ¢]\nИма _______',
-        blanks: [1], correctAnswers: ['сто двадесет и шест евро и седемдесет и един евроцент'],
-        options: ['сто двадесет и шест евро и седемдесет и един евроцент', 'сто и седемдесет евро и двадесет и шест евроцента', 'сто двадесет и един евро и седемдесет и шест евроцента'],
+        blanks: [1], correctAnswers: ['сто двадесет и шест евро и седемдесет и един евроцента'],
+        options: ['сто двадесет и шест евро и седемдесет и един евроцента', 'сто и седемдесет евро и двадесет и шест евроцента', 'сто двадесет и един евро и седемдесет и шест евроцента'],
         images: [
           '/assets/lesson-03/novi-dumi-2-currency/100-euro.jpg',
           '/assets/lesson-03/novi-dumi-2-currency/20-euro.gif',
@@ -440,7 +442,7 @@ export const exercises: Exercise[] = [
           'Нещо за пиене?',
           'Не, благодаря.',
           'Може ли сметката?',
-          'Да, разбира се.',
+          'Да, заповядайте сметката.',
         ],
         alternateOrders: [
           [
@@ -454,7 +456,7 @@ export const exercises: Exercise[] = [
             'Искате ли хляб?',
             'Да, една филия.',
             'Може ли сметката?',
-            'Да, разбира се.',
+            'Да, заповядайте сметката.',
           ],
         ],
       },
@@ -772,13 +774,12 @@ export const exercises: Exercise[] = [
   // ORDER 24: ГРАМАТИКА 3 – Глагол → Съществително (Page 30)
   {
     id: 'l03-gramatika-03',
-    instructionKey: 'grammar.l03.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    instruction: 'Запознайте се с връзката глагол → съществително.',
+    instruction: '',
     order: 24,
     tableTitle: 'Глагол → Съществително',
-    columns: ['глагол', 'съществително'],
+    columns: [],
     rows: [
       { pronoun: '1', cells: ['закусвам', 'закуска'] },
       { pronoun: '2', cells: ['обядвам',  'обяд'] },
@@ -1073,7 +1074,7 @@ export const exercises: Exercise[] = [
     id: 'l03-ex-31',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текстовете. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Прочетете текстовете.',
     order: 33,
     showDictionary: true,
     images: [

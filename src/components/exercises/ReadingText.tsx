@@ -103,8 +103,7 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
         <div className="flex justify-end gap-2 mb-6">
           {showDictionary && (
             <Button
-              variant="outline"
-              className="px-5 py-3 rounded-lg font-semibold text-base shadow-sm active:scale-95 transition-all flex items-center gap-2 border-2 border-amber-400 text-amber-700 hover:bg-amber-50"
+              className="px-5 py-3 md:px-6 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white"
               onClick={() => window.dispatchEvent(new CustomEvent('open-vocabulary-drawer'))}
             >
               <span className="text-lg">📖</span>
@@ -114,7 +113,7 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
           {audioUrl && (
             <Button
               onClick={handlePlayAudio}
-              className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+              className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
             >
               {isPlaying ? (
                 <>
