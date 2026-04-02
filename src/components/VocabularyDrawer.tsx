@@ -75,10 +75,10 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
       {/* Floating button — bottom-left, mirroring the chatbot on the right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 left-5 z-40 w-14 h-14 bg-[#0279C3] hover:bg-[#025f9a] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 border-2 border-white"
+        className="fixed bottom-5 left-5 z-40 w-14 h-14 md:w-16 md:h-16 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 border-2 border-white"
         aria-label={t('exercise.dictionary')}
       >
-        <BookOpen className="w-6 h-6" />
+        <BookOpen className="w-6 h-6 md:w-7 md:h-7" />
       </button>
 
       {/* Backdrop */}
