@@ -58,7 +58,7 @@ export function ChatbotWidget() {
             setIsOpen(true);
             setIsPulsing(false);
           }}
-          className="fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden border-2 border-white ring-4 ring-[#8FC412]/40 focus:outline-none focus:ring-4 focus:ring-[#8FC412]/60"
+          className="fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden border-2 border-white ring-[3px] ring-[#8FC412] focus:outline-none focus:ring-[3px] focus:ring-[#8FC412]"
           aria-label="Open AI chat assistant"
         >
           <img
