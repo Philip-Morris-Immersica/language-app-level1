@@ -127,7 +127,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                   <img
                     src={question.leftImageUrl}
                     alt={question.left}
-                    className="w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
                   />
                   <div className="flex-1 min-w-0">
                     {question.options.length === 0 ? (

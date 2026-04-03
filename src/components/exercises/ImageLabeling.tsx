@@ -175,14 +175,14 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
               `}
             >
               {/* Image or Emoji */}
-              <div className="flex items-center justify-center mb-4 min-h-[120px]">
+              <div className="flex items-center justify-center mb-4 min-h-[190px]">
                 {image.imageUrl?.startsWith('http') || image.imageUrl?.startsWith('/') ? (
                   <Image
                     src={image.imageUrl}
                     alt="Flag"
-                    width={200}
-                    height={120}
-                    className="max-w-full h-auto max-h-[120px] rounded-lg shadow-md"
+                    width={190}
+                    height={190}
+                    className="w-[190px] h-[190px] object-contain rounded-lg shadow-md"
                   />
                 ) : (
                   <div className="text-8xl">
