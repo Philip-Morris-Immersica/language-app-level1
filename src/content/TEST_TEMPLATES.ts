@@ -15,6 +15,13 @@
  * ║  • No content.ts or workbook.ts — all exercises live in exercises.ts        ║
  * ║  • 4 sections: СЛУШАНЕ → ЧЕТЕНЕ → ГРАМАТИКА → ПИСАНЕ                        ║
  * ║  • ГОВОРЕНЕ is excluded from digital tests                                  ║
+ * ║                                                                             ║
+ * ║  Content rules (same as EXERCISE_TEMPLATES):                                ║
+ * ║  • Бланки: минимум 3 underscores (_______). Regex: /(_{3,})/               ║
+ * ║  • Подточки: кирилица (а., б., в.), НЕ латиница (a., b., c.)              ║
+ * ║  • true_false: смесвайте верни и грешни (не групирани)                      ║
+ * ║  • word_order: добавете alternateCorrectSentences при 2+ верни реда         ║
+ * ║  • „евроцента" (не „евроцент")                                              ║
  * ╚══════════════════════════════════════════════════════════════════════════════╝
  */
 

@@ -16,6 +16,10 @@
  * - Използвайте instructionKey + ui.ts за предварително превеждане на 7 езика.
  * - НЕ добавяйте „Непознатите думи потърсете в речника." — вече е премахнато навсякъде.
  * - „евроцента" (не „евроцент") за всички суми завършващи на 1 (освен самото „1 евроцент").
+ * - Бланките в текста ВИНАГИ с минимум 3 underscores: _______ (7 е стандарт).
+ *   Regex в WorkbookFillBlank е /(_{3,})/ — по-малко от 3 underscores няма да се разпознае.
+ * - Подточки и идентификатори на диалози — ВИНАГИ на кирилица: а., б., в., г. (НЕ a., b., c.).
+ * - Учтива форма „Вашата", „Вие" — с главна буква. Запетая пред „за да" е задължителна.
  *
  * CATEGORIES:
  *   Section 1 — НОВИ ДУМИ       (illustrated_cards, illustrated_cards_text_only) ⭐ FREQUENT
@@ -458,6 +462,7 @@ export const TEMPLATE_word_order = {
     {
       words: ['Откъде', 'е', 'Хасан', '?'],     // REPLACE — shuffled words shown to user
       correctSentence: 'Откъде е Хасан ?',       // REPLACE — correct order (spaces around ?)
+      alternateCorrectSentences: ['Хасан откъде е ?'],  // REPLACE or remove — other valid orderings
       hint: 'Хасан е от Сирия.',                 // REPLACE or remove
     },
     // Add more sentences...
