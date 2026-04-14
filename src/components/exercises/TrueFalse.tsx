@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
@@ -82,18 +83,18 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
         </div>
       )}
       {model && (
-        <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-300 bg-gray-50 opacity-70">
+          <div className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-300 bg-gray-50 opacity-70">
           <span className="text-gray-400 font-medium w-6 text-right shrink-0 text-[10px] italic leading-tight">
             {t('exercise.model')}
           </span>
           <p className="flex-1 text-base text-gray-600 leading-snug italic">{model.text}</p>
           <div className="flex gap-2 shrink-0">
-            <span className={`w-10 h-10 rounded-lg font-bold text-lg border-2 flex items-center justify-center ${
+            <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center ${
               model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
-            }`}>✓</span>
-            <span className={`w-10 h-10 rounded-lg font-bold text-lg border-2 flex items-center justify-center ${
+            }`}>да</span>
+            <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center ${
               !model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
-            }`}>✗</span>
+            }`}>не</span>
           </div>
         </div>
       )}
@@ -116,10 +117,10 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
             </span>
             <p className="flex-1 text-base text-gray-800 leading-snug">{sentence.text}</p>
             <div className="flex gap-2 shrink-0">
-              {/* ✓ button */}
+              {/* да button */}
               <button
                 onClick={() => handleSelect(sentence.id, 'true')}
-                className={`w-10 h-10 rounded-lg font-bold text-lg border-2 transition-all
+                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all
                   ${answer === 'true'
                     ? checked
                       ? sentence.isTrue
@@ -129,12 +130,12 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
                     : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
                   }`}
               >
-                ✓
+                да
               </button>
-              {/* ✗ button */}
+              {/* не button */}
               <button
                 onClick={() => handleSelect(sentence.id, 'false')}
-                className={`w-10 h-10 rounded-lg font-bold text-lg border-2 transition-all
+                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all
                   ${answer === 'false'
                     ? checked
                       ? !sentence.isTrue
@@ -144,7 +145,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
                     : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
                   }`}
               >
-                ✗
+                не
               </button>
             </div>
           </div>
@@ -173,11 +174,10 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
         >
           {t('exercise.check')}
         </Button>
-        {checked && (
-          <Button onClick={handleReset} variant="outline">
-            {t('exercise.reset')}
-          </Button>
-        )}
+        <Button onClick={handleReset} variant="outline">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          {t('exercise.reset')}
+        </Button>
       </div>
     </div>
   );

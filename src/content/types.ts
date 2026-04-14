@@ -204,6 +204,7 @@ export interface GrammarExamplesExercise extends BaseExercise {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
     subtext?: string;        // 'Аз съм от Сирия.'
+    label?: string;          // Visual-only badge (e.g. 'Какъв — мъжки род') — not read by TTS
     lines?: string[];        // Multiple equal-weight lines (replaces text/subtext display when provided)
     translations?: Record<string, string>;
   }[];
@@ -219,6 +220,8 @@ export interface GrammarTableExercise extends BaseExercise {
     pronoun: string;
     cells: string[];
   }[];
+  notes?: string[];
+  boldColumns?: number[];
   illustrations?: {
     imageUrl: string;
     singularLabel: string;

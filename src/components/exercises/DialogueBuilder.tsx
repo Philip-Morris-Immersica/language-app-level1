@@ -257,16 +257,6 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
 
             {/* Action buttons */}
             <div className="flex gap-3 justify-start">
-              {state.checked && !state.correct && (
-                <Button
-                  variant="outline"
-                  onClick={() => handleReset(section.id)}
-                  className="flex items-center gap-2 border-gray-300 text-gray-600"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  {t('exercise.incorrect')}
-                </Button>
-              )}
               {state.checked && state.correct ? (
                 <Button
                   disabled
@@ -282,6 +272,16 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   {t('exercise.check')}
+                </Button>
+              )}
+              {!(state.checked && state.correct) && (
+                <Button
+                  variant="outline"
+                  onClick={() => handleReset(section.id)}
+                  className="flex items-center gap-2 border-gray-300 text-gray-600"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  {t('exercise.reset')}
                 </Button>
               )}
             </div>

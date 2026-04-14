@@ -10,19 +10,33 @@ Generate audio for a lesson:
 npm run tts:generate -- --lesson 04 --model gemini
 ```
 
-## Model: Gemini 2.5 Pro TTS (recommended)
+## Model Strategy: Flash for Words, Pro for Sentences
 
+Two Gemini TTS models are used depending on content type:
+
+### gemini-2.5-flash-tts (single words / short phrases)
+- **Use for:** Vocabulary (`words/`), grammar table rows (`grammar/`), grammar table notes
+- **Prompt:** `"make sure the word is clearly in Bulgarian with the right pronunciation"`
+- **Why:** Better pronunciation accuracy for isolated words
+
+### gemini-2.5-pro-tts (connected text)
+- **Use for:** Dialogues, reading texts, listening, grammar examples (full sentences), personal choice models
+- **Prompt:** `"Read aloud in a warm, welcoming tone."`
+- **Why:** More natural intonation and flow for sentences and paragraphs
+
+### Override: `GRAMMAR_TABLE_PRO_ROWS`
+Some grammar table rows need Pro instead of Flash (e.g. multi-syllable numbers like "хиляда"). Add the row key to this `Set` in `generate-tts.ts`.
+
+### Common settings
 - **API:** Google Cloud TTS via OAuth (`texttospeech.googleapis.com/v1/text:synthesize`)
 - **Auth:** Service account (`service-account.json` in project root, gitignored)
-- **Model name:** `gemini-2.5-pro-tts`
-- **Prompt:** `"Read aloud in a warm, welcoming tone."`
 - **Output:** MP3
 - **Rate limit:** ~10 req/min → script uses 6.5s delay between requests
 - **Voices:** `Achernar` (female, default), `Charon` (male, for Продавач in dialogues)
 
 ### Why Gemini over Chirp3-HD
 
-Chirp3-HD (`bg-BG-Chirp3-HD-*`) has accent/stress issues on Bulgarian words. Gemini 2.5 Pro TTS produces more natural pronunciation with correct stress patterns.
+Chirp3-HD (`bg-BG-Chirp3-HD-*`) has accent/stress issues on Bulgarian words. Gemini TTS produces more natural pronunciation with correct stress patterns.
 
 ## Fallback Model: Chirp3-HD
 
@@ -42,21 +56,25 @@ public/assets/lesson-XX/audio/tts/
   dialogues/     — {exerciseId}-{sectionId}-line-{index}.mp3
   grammar/       — {exerciseId}-row-{index}.mp3  (tables)
                    {exerciseId}-card-{index}.mp3  (examples)
+                   {exerciseId}-note-{index}.mp3  (table notes)
   texts/         — {exerciseId}-p-{index}.mp3     (per paragraph)
                    {exerciseId}-full.mp3           (full text, <2000 chars)
+                   {exerciseId}-model.mp3          (personal_choice model)
   listening/     — {exerciseId}.mp3
 ```
 
 ## What Gets Generated
 
-| Category | Source | Voice |
-|---|---|---|
-| Vocabulary | `content.vocabulary[].bulgarian` | Female |
-| Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker (see map below) |
-| Grammar tables | `exercises[type=grammar_table].rows[]` | Female |
-| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female |
-| Reading texts | `exercises[type=reading_text].paragraphs[]` | Female (or male if `voiceGender: 'male'`) |
-| Listening | `exercises[].listeningText` | Female |
+| Category | Source | Voice | Model |
+|---|---|---|---|
+| Vocabulary | `content.vocabulary[].bulgarian` | Female | Flash |
+| Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker | Pro |
+| Grammar tables | `exercises[type=grammar_table].rows[]` | Female | Flash (or Pro via override) |
+| Grammar table notes | `exercises[type=grammar_table].notes[]` | Female | Flash |
+| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female | Pro |
+| Reading texts | `exercises[type=reading_text].paragraphs[]` | Female/male | Pro |
+| Listening | `exercises[].listeningText` | Female | Pro |
+| Personal choice models | `exercises[type=personal_choice].model` | Female | Pro |
 
 ## What Does NOT Get Generated
 

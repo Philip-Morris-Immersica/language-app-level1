@@ -205,6 +205,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           notes={exercise.notes}
           subtitle={exercise.subtitle}
           exerciseId={exercise.id}
+          boldColumns={exercise.boldColumns}
         />
       );
 
@@ -271,6 +272,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     case 'personal_choice':
       return wrap(
         <PersonalChoice
+          exerciseId={exercise.id}
           imageUrls={exercise.imageUrls}
           model={exercise.model}
           items={exercise.items}

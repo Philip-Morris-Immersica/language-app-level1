@@ -14,6 +14,7 @@ interface GrammarTableProps {
   notes?: string[];
   subtitle?: string;
   exerciseId?: string;
+  boldColumns?: number[];
 }
 
 function TranslatedTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
@@ -28,6 +29,7 @@ export function GrammarTable({
   notes = [],
   subtitle,
   exerciseId,
+  boldColumns = [],
 }: GrammarTableProps) {
   const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
   const [revealedNotes, setRevealedNotes] = useState<Set<number>>(new Set());
@@ -79,7 +81,7 @@ export function GrammarTable({
                 <TranslatedTh
                   text={tableTitle}
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
-                  colSpan={columns.length + 1}
+                  colSpan={columns.length > 0 ? columns.length + 1 : (rows[0]?.cells.length ?? 0) + 1}
                 />
               </tr>
               {columns.length > 0 && (
@@ -111,7 +113,7 @@ export function GrammarTable({
                     {row.cells.map((cell, cIdx) => (
                       <td
                         key={cIdx}
-                        className="py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 font-medium"
+                        className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${boldColumns.includes(cIdx) ? 'font-bold text-[#2d5a1b]' : 'font-medium'}`}
                       >
                         {cell}
                       </td>

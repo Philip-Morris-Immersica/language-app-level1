@@ -191,7 +191,7 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-05',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 5',
-    instruction: 'Попълнете колонките, като използвате думите от списъка. В третата колонка напишете думите в мн.ч.',
+    instruction: 'Изберете "един" или "една" и попълнете множественото число на думата.',
     order: 7,
     points: 13,
     paragraphs: [],
@@ -276,7 +276,7 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-08',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 8',
-    instruction: 'Попълнете колонките, като използвате думите от списъка. В третата колонка напишете думите в мн.ч.',
+    instruction: 'Изберете "един" или "една" и попълнете множественото число на думата.',
     order: 10,
     points: 8,
     paragraphs: [],
@@ -348,10 +348,10 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с въпросителните думи какъв, каква, какво, какви.',
     order: 13,
     examples: [
-      { imageUrl: '', text: '– Какъв чай обичате?', subtext: '– Черен чай.\nмъжки род' },
-      { imageUrl: '', text: '– Каква пица обичате?', subtext: '– Пица с домати и гъби.\nженски род' },
-      { imageUrl: '', text: '– Какво месо обичате?', subtext: '– Пилешко и телешко.\nсреден род' },
-      { imageUrl: '', text: '– Какви плодове обичате?', subtext: '– Ябълки и портокали.\nмножествено число' },
+      { imageUrl: '', text: 'Какъв чай обичате?', subtext: 'Черен чай.', label: 'Какъв — мъжки род' },
+      { imageUrl: '', text: 'Каква пица обичате?', subtext: 'Пица с домати и гъби.', label: 'Каква — женски род' },
+      { imageUrl: '', text: 'Какво месо обичате?', subtext: 'Пилешко и телешко.', label: 'Какво — среден род' },
+      { imageUrl: '', text: 'Какви плодове обичате?', subtext: 'Ябълки и портокали.', label: 'Какви — множествено число' },
     ],
   } as GrammarExamplesExercise,
 
@@ -392,13 +392,13 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 38
   // ─────────────────────────────────────────────────────────────────────────
 
-  // ORDER 15: Упр. 13 – Разгледайте продуктите в супермаркета (Page 38)
+  // ORDER 19: Упр. 13 – Разгледайте продуктите в супермаркета (Page 38)
   {
     id: 'l04-ex-13',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Разгледайте продуктите в супермаркета и техните цени.',
-    order: 15,
+    order: 19,
     images: [
       { imageUrl: '/assets/lesson-04/06-upr-13-supermarket/supermarket-illustration.jpg', label: 'Супермаркет' },
     ],
@@ -410,7 +410,7 @@ export const exercises: Exercise[] = [
     ],
   } as ReadingTextExercise,
 
-  // ORDER 16: ГРАМАТИКА 2 – Бройни числителни 100–1000 (Page 38)
+  // ORDER 15: ГРАМАТИКА 2 – Бройни числителни 100–1000 (Page 38)
   {
     id: 'l04-gramatika-02',
     instructionKey: 'grammar.l04.g2.instruction',
@@ -418,7 +418,7 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 2',
     subtitle: 'Граматика – Бройни числителни (1)',
     instruction: 'Запознайте се с числата от 100 до 1000. Натиснете върху ред за произношение.',
-    order: 16,
+    order: 15,
     tableTitle: 'Бройни числителни 100–1000',
     columns: [],
     rows: [
@@ -439,12 +439,12 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarTableExercise,
 
-  // ORDER 17: Упр. 14 – Свържете числата с думите (Page 38)
+  // ORDER 16: Упр. 14 – Свържете числата с думите (Page 38)
   {
     id: 'l04-ex-14',
     type: 'dropdown_match',
     instruction: 'Свържете числата с думите.',
-    order: 17,
+    order: 16,
     points: 6,
     questions: [
       { id: 'q1', left: '105', options: ['сто и пет', 'сто и осемнадесет', 'двеста петдесет и три', 'триста шестдесет и осем', 'петстотин двадесет и две', 'осемстотин тридесет и три'], correctAnswer: 'сто и пет' },
@@ -456,13 +456,13 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 18: Упр. 15 – Кое число чувате? (Page 38)
+  // ORDER 17: Упр. 15 – Кое число е изписано с букви? (Page 38)
   {
     id: 'l04-ex-15',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Кое число чувате? Изберете правилния отговор.',
-    order: 18,
+    instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
+    order: 17,
     points: 5,
     questions: [
       { question: 'двеста и петнадесет',       options: ['215', '315', '150', '512', '710'], correctIndex: 0 },
@@ -477,20 +477,20 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 39
   // ─────────────────────────────────────────────────────────────────────────
 
-  // ORDER 19: НОВИ ДУМИ 4 – Мерки и тегла (Page 39)
+  // ORDER 18: НОВИ ДУМИ 4 – Мерки и тегла (Page 39)
   {
     id: 'l04-novi-dumi-04',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     instruction: 'Запознайте се с мерките и теглата. Натиснете за произношение.',
-    order: 19,
+    order: 18,
     cards: [
-      { id: '1kg',      imageUrl: '', label: '1 кг = един килограм = едно кило',              translations: { en: '1 kg = one kilogram = one kilo', ar: '1 كجم = كيلوغرام واحد = كيلو واحد', fr: '1 kg = un kilogramme = un kilo', fa: '۱ کیلوگرم = یک کیلوگرم = یک کیلو', uk: '1 кг = один кілограм = одне кіло', ru: '1 кг = один килограмм = одно кило' } },
-      { id: '05kg',     imageUrl: '', label: '0,5 кг = половин килограм = половин кило',      translations: { en: '0.5 kg = half a kilogram = half a kilo', ar: '0.5 كجم = نصف كيلوغرام', fr: '0,5 kg = un demi-kilo', fa: '۰٫۵ کیلوگرم = نیم کیلو', uk: '0,5 кг = пів кіло', ru: '0,5 кг = полкило' } },
-      { id: '15kg',     imageUrl: '', label: '1,5 кг = едно кило и половина',                 translations: { en: '1.5 kg = one and a half kilos', ar: '1.5 كجم = كيلو ونصف', fr: '1,5 kg = un kilo et demi', fa: '۱٫۵ کیلوگرم = یک و نیم کیلو', uk: '1,5 кг = півтора кіло', ru: '1,5 кг = полтора кило' } },
-      { id: '250g',     imageUrl: '', label: '250 гр = четвърт кило = 250 грама',             translations: { en: '250 g = a quarter kilo = 250 grams', ar: '250 غ = ربع كيلو = 250 غرام', fr: '250 g = un quart de kilo = 250 grammes', fa: '۲۵۰ گرم = یک چهارم کیلو', uk: '250 г = чверть кіло = 250 грамів', ru: '250 г = четверть кило = 250 граммов' } },
-      { id: '1l',       imageUrl: '', label: '1 л = един литър',                               translations: { en: '1 l = one liter', ar: '1 لتر = لتر واحد', fr: '1 l = un litre', fa: '۱ لیتر = یک لیتر', uk: '1 л = один літр', ru: '1 л = один литр' } },
-      { id: '2l',       imageUrl: '', label: '2 л = два литра',                                translations: { en: '2 l = two liters', ar: '2 لتر = لتران', fr: '2 l = deux litres', fa: '۲ لیتر = دو لیتر', uk: '2 л = два літри', ru: '2 л = два литра' } },
+      { id: '1kg',      imageUrl: '', label: '1 кг — Един килограм/едно кило',              translations: { en: '1 kg — one kilogram / one kilo', ar: '1 كجم — كيلوغرام واحد', fr: '1 kg — un kilogramme / un kilo', fa: '۱ کیلوگرم — یک کیلوگرم', uk: '1 кг — один кілограм / одне кіло', ru: '1 кг — один килограмм / одно кило' } },
+      { id: '05kg',     imageUrl: '', label: '0,5 кг — Половин килограм/половин кило',      translations: { en: '0.5 kg — half a kilogram / half a kilo', ar: '0.5 كجم — نصف كيلوغرام', fr: '0,5 kg — un demi-kilogramme', fa: '۰٫۵ کیلوگرم — نیم کیلو', uk: '0,5 кг — пів кілограма / пів кіло', ru: '0,5 кг — полкилограмма / полкило' } },
+      { id: '15kg',     imageUrl: '', label: '1,5 кг — Килограм/кило и половина',           translations: { en: '1.5 kg — one and a half kilos', ar: '1.5 كجم — كيلو ونصف', fr: '1,5 kg — un kilo et demi', fa: '۱٫۵ کیلوگرم — یک و نیم کیلو', uk: '1,5 кг — півтора кіло', ru: '1,5 кг — полтора кило' } },
+      { id: '250g',     imageUrl: '', label: '250 гр — Четвърт килограм/кило. Двеста и петдесет грама', translations: { en: '250 g — a quarter kilo. 250 grams', ar: '250 غ — ربع كيلو. مئتان وخمسون غراماً', fr: '250 g — un quart de kilo. 250 grammes', fa: '۲۵۰ گرم — یک چهارم کیلو', uk: '250 г — чверть кіло. 250 грамів', ru: '250 г — четверть кило. 250 граммов' } },
+      { id: '1l',       imageUrl: '', label: '1 л. — Един литър',                            translations: { en: '1 l — one litre', ar: '1 لتر — لتر واحد', fr: '1 l — un litre', fa: '۱ لیتر — یک لیتر', uk: '1 л — один літр', ru: '1 л — один литр' } },
+      { id: '2l',       imageUrl: '', label: '2 л. — Два литра',                             translations: { en: '2 l — two litres', ar: '2 لتر — لتران', fr: '2 l — deux litres', fa: '۲ لیتر — دو لیتر', uk: '2 л — два літри', ru: '2 л — два литра' } },
       { id: 'butilka',  imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/01-butilka.jpg', label: 'бутилка', translations: { en: 'bottle', ar: 'زجاجة', fr: 'bouteille', fa: 'بطری', uk: 'пляшка', ru: 'бутылка' } },
       { id: 'paket',    imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/02-paket.jpg',   label: 'пакет',   translations: { en: 'package', ar: 'عبوة', fr: 'paquet', fa: 'بسته', uk: 'пакет', ru: 'пакет' } },
     ],
@@ -500,7 +500,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-16',
     type: 'dropdown_match',
-    instruction: 'Отговорете на въпросите, като използвате информацията от упр. 15.',
+    instruction: 'Отговорете на въпросите, като използвате информацията от предишното упражнение.',
     order: 20,
     points: 7,
     questions: [
@@ -530,6 +530,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'женски род', cells: ['една ябълка', 'две ябълки'] },
       { pronoun: 'среден род', cells: ['едно кафе',  'две кафета'] },
     ],
+    boldColumns: [1],
     notes: ['два лимона (бройна форма) ≠ много лимони (множествено число)'],
   } as GrammarTableExercise,
 
@@ -634,8 +635,8 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с наречията евтино и скъпо.',
     order: 26,
     examples: [
-      { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/01-kafe-evtino.jpg', text: '1,00 € – Евтино е.', subtext: 'Не е скъпо.' },
-      { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/02-kafe-skupo.jpg',  text: '2,50 € – Скъпо е.', subtext: 'Не е евтино.' },
+      { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/01-kafe-evtino.jpg', text: 'Едно евро. Евтино е.', subtext: 'Не е скъпо.' },
+      { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/02-kafe-skupo.jpg',  text: 'Две евро и петдесет цента. Скъпо е.', subtext: 'Не е евтино.' },
       { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/03-sirene-skupo.jpg', text: '– Евтино ли е?', subtext: '– Не, не е евтино.' },
       { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/04-sirene-ne-skupo.jpg', text: '– Скъпо ли е?', subtext: '– Не, не е скъпо.' },
     ],
@@ -695,7 +696,7 @@ export const exercises: Exercise[] = [
           { speaker: 'Продавач', text: 'Искате ли торбичка?' },
           { speaker: 'Клиент',   text: 'Да, моля.' },
           { speaker: 'Продавач', text: 'Пет евро и двадесет евроцента.' },
-          { speaker: 'Клиент',   text: 'Заповядайте, точно.' },
+          { speaker: 'Клиент',   text: 'Заповядайте, имам точната сума.' },
         ],
       },
       {
@@ -710,7 +711,7 @@ export const exercises: Exercise[] = [
           { speaker: 'Клиент',   text: 'Ето, десет евро.' },
           { speaker: 'Продавач', text: 'Нямате ли дребни?' },
           { speaker: 'Клиент',   text: 'Не, нямам.' },
-          { speaker: 'Продавач', text: 'Рестото — четири евро.' },
+          { speaker: 'Продавач', text: 'Рестото. Четири евро.' },
         ],
       },
     ],
@@ -728,7 +729,7 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-24',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 24',
-    instruction: 'Кое число чувате? Изберете правилния отговор.',
+    instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
     order: 29,
     points: 6,
     questions: [

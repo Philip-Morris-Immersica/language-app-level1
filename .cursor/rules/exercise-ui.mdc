@@ -34,14 +34,18 @@ Multi-answer exercises (many fields at once):
 </Button>
 ```
 
-### Reset button — LEFT aligned, next to check
+### Reset button — LEFT aligned, next to check, ALWAYS visible
+
+The reset button must be **always visible** (not hidden behind a condition like `checked` or `!isCorrect`). Users should be able to restart at any point — before or after checking answers.
 
 ```tsx
 <Button variant="outline" onClick={handleReset} className="...">
-  <RotateCcw className="w-4 h-4" />
+  <RotateCcw className="w-4 h-4 mr-2" />
   {t('exercise.reset')}
 </Button>
 ```
+
+**Exception:** Progressive puzzle components (`ConnectDots`, `AlphabetMaze`) show reset only when `progress > 0` — this is correct since there's nothing to reset at step 0.
 
 ### Audio buttons (Listen / Stop) — RIGHT aligned
 
@@ -91,21 +95,28 @@ exercise.readInPairs    → "Прочетете диалозите по двой
 
 ## TTS (Text-to-Speech)
 
-Always use the shared utility — never create `SpeechSynthesisUtterance` directly:
+### Pre-generated audio (preferred)
+Components should use `playTtsAudio()` which tries an MP3 file first, then falls back to browser TTS:
+```tsx
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+
+const audioPath = exerciseId
+  ? getTtsAudioPath(exerciseId, 'words', cardId)
+  : '';
+playTtsAudio(audioPath, fallbackText);
+```
+
+### Browser TTS fallback
+For cases without pre-generated audio, use the shared utility:
 ```tsx
 import { speakBulgarian, stopSpeaking } from '@/lib/tts';
-
-// Speak Bulgarian text (auto-selects best voice, handles mobile)
 speakBulgarian('Здравейте!');
-
-// Stop any current speech
 stopSpeaking();
 ```
 
-The utility (`src/lib/tts.ts`) handles:
-- Voice selection (prefers Google female voice)
-- Mobile Safari workaround (resume after background)
-- Graceful fallback when no Bulgarian voice is available
+### Model strategy (see `tts-audio` rule for details)
+- **Flash** (`gemini-2.5-flash-tts`) — single words, grammar table rows/notes
+- **Pro** (`gemini-2.5-pro-tts`) — sentences, dialogues, reading texts, personal choice models
 
 ## State Persistence
 

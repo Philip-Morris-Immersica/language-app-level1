@@ -134,7 +134,7 @@ export const grammarExercises: Exercise[] = [
     id: 't02-gr-ctx1',
     type: 'reading_text',
     title: 'КОМПОНЕНТ ГРАМАТИКА',
-    instruction: 'Поставете глаголите ЯМ и ПИЯ в правилната форма.',
+    instruction: '',
     order: 7,
     noTranslation: true,
     images: [
@@ -227,7 +227,7 @@ export const grammarExercises: Exercise[] = [
     layout: 'two-column',
     imageUrl: '/assets/test-a1-2/gramatika/yabalka.jpg',
     sentences: [
-      { text: 'една краставица — краставици', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'една краставица — много краставици', blanks: [], correctAnswers: [], isExample: true },
       {
         text: '_____ домат — _____',
         blanks: [0, 3],
@@ -424,27 +424,27 @@ export const grammarExercises: Exercise[] = [
     points: 6,
     questions: [
       {
-        words: ['меню', 'ли', 'едно', 'може', '?'],
+        words: ['меню', 'ли', 'едно', 'Може', '?'],
         correctSentence: 'Може ли едно меню ?',
       },
       {
-        words: ['струва', 'пица', 'колко', '„Маргарита"', '?'],
+        words: ['струва', 'пица', 'Колко', '„Маргарита"', '?'],
         correctSentence: 'Колко струва пица „Маргарита" ?',
       },
       {
-        words: ['е', 'съжалявам,', 'заето', '.'],
+        words: ['е', 'Съжалявам,', 'заето', '.'],
         correctSentence: 'Съжалявам, заето е .',
       },
       {
-        words: ['за', 'нещо', 'пиене', '?'],
+        words: ['за', 'Нещо', 'пиене', '?'],
         correctSentence: 'Нещо за пиене ?',
       },
       {
-        words: ['евро', '5', 'сметката', 'е', '.'],
+        words: ['евро', '5', 'Сметката', 'е', '.'],
         correctSentence: 'Сметката е 5 евро .',
       },
       {
-        words: ['ето', 'точно', 'парите', '.'],
+        words: ['Ето', 'точно', 'парите', '.'],
         correctSentence: 'Ето точно парите .',
       },
     ],
@@ -464,7 +464,7 @@ export const writingExercises: Exercise[] = [
     id: 't02-pi-img',
     type: 'reading_text',
     title: 'КОМПОНЕНТ ПИСАНЕ',
-    instruction: 'Разгледайте кошницата и наредете буквите, за да получите думата.',
+    instruction: '',
     order: 13,
     noTranslation: true,
     images: [
@@ -482,26 +482,16 @@ export const writingExercises: Exercise[] = [
     points: 10,
     columns: 3,
     puzzles: [
-      // яйца  → й,ц,а,я  (я накрая)
-      { id: 'p-yaytsa',      syllables: ['й', 'ц', 'а', 'я'],           correctWord: 'яйца' },
-      // хляб  → л,я,б,х  (х накрая)
-      { id: 'p-hlyab',       syllables: ['л', 'я', 'б', 'х'],           correctWord: 'хляб' },
-      // банани → на,ни,ба  (ба накрая)
-      { id: 'p-banani',      syllables: ['на', 'ни', 'ба'],             correctWord: 'банани' },
-      // мляко → л,я,к,о,м  (м накрая)
-      { id: 'p-mlyako',      syllables: ['л', 'я', 'к', 'о', 'м'],     correctWord: 'мляко' },
-      // патладжан → лад,жан,пат  (пат накрая)
-      { id: 'p-patladjan',   syllables: ['лад', 'жан', 'пат'],          correctWord: 'патладжан' },
-      // маруля → ру,ля,ма  (ма накрая)
-      { id: 'p-marulya',     syllables: ['ру', 'ля', 'ма'],             correctWord: 'маруля' },
-      // краставица → та,ви,ца,крас  (крас накрая)
-      { id: 'p-krastavitsa', syllables: ['та', 'ви', 'ца', 'крас'],     correctWord: 'краставица' },
-      // домат → о,м,а,т,д  (д накрая)
-      { id: 'p-domat',       syllables: ['о', 'м', 'а', 'т', 'д'],     correctWord: 'домат' },
-      // лимон → и,м,о,н,л  (л накрая)
-      { id: 'p-limon',       syllables: ['и', 'м', 'о', 'н', 'л'],     correctWord: 'лимон' },
-      // ябълка → бъл,ка,я  (я накрая)
-      { id: 'p-yabylka',     syllables: ['бъл', 'ка', 'я'],             correctWord: 'ябълка' },
+      { id: 'p-yaytsa',      syllables: ['ц', 'я', 'а', 'й'],           correctWord: 'яйца' },
+      { id: 'p-hlyab',       syllables: ['я', 'б', 'х', 'л'],           correctWord: 'хляб' },
+      { id: 'p-banani',      syllables: ['ни', 'ба', 'на'],             correctWord: 'банани' },
+      { id: 'p-mlyako',      syllables: ['к', 'о', 'м', 'л', 'я'],     correctWord: 'мляко' },
+      { id: 'p-patladjan',   syllables: ['жан', 'пат', 'лад'],          correctWord: 'патладжан' },
+      { id: 'p-marulya',     syllables: ['ля', 'ма', 'ру'],             correctWord: 'маруля' },
+      { id: 'p-krastavitsa', syllables: ['ви', 'ца', 'крас', 'та'],     correctWord: 'краставица' },
+      { id: 'p-domat',       syllables: ['м', 'т', 'а', 'д', 'о'],     correctWord: 'домат' },
+      { id: 'p-limon',       syllables: ['о', 'л', 'н', 'м', 'и'],     correctWord: 'лимон' },
+      { id: 'p-yabylka',     syllables: ['ка', 'я', 'бъл'],             correctWord: 'ябълка' },
     ],
   } as SyllableBlocksExercise,
 ];

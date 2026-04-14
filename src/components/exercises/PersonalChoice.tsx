@@ -5,9 +5,10 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Button } from '@/components/ui/button';
-import { speakBulgarian } from '@/lib/tts';
+import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface PersonalChoiceProps {
+  exerciseId?: string;
   imageUrls?: string[];
   model?: {
     question: string;
@@ -90,7 +91,7 @@ function SentenceWithBlank({
   );
 }
 
-export function PersonalChoice({ imageUrls, model, blankOptions, items, onComplete }: PersonalChoiceProps) {
+export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, items, onComplete }: PersonalChoiceProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [states, setStates] = useState<Record<string, ItemState>>({});
@@ -173,7 +174,12 @@ export function PersonalChoice({ imageUrls, model, blankOptions, items, onComple
       {model && (
         <div
           className="bg-[#f0f7ff] border border-[#0279C3]/20 rounded-xl p-4 md:p-5 cursor-pointer"
-          onClick={() => { speak(`${model.question} ${model.positiveAnswer}`); setModelTranslationVisible(v => !v); }}
+          onClick={() => {
+            const modelText = `${model.question} ${model.positiveAnswer} ${model.negativeAnswer}`;
+            const audioPath = exerciseId ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-model`) : '';
+            playTtsAudio(audioPath, modelText);
+            setModelTranslationVisible(v => !v);
+          }}
         >
           <p className="text-xs font-semibold text-[#0279C3] uppercase tracking-wide mb-2">
             {t('exercise.model')}

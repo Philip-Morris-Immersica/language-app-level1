@@ -54,6 +54,7 @@ interface GrammarExample {
   imageUrl: string;
   text: string;
   subtext?: string;
+  label?: string;
   lines?: string[];
   translations?: Record<string, string>;
   zoomable?: boolean;
@@ -96,6 +97,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
         : '';
       playTtsAudio(audioPath, textToSpeak);
     }
+    // label is intentionally excluded from TTS — it is visual only
 
     setRevealed(prev => {
       const next = new Set(prev);
@@ -192,6 +194,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
                       </p>
                       <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
                     </>
+                  )}
+                  {example.label && (
+                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
+                      {example.label}
+                    </p>
                   )}
                 </>
               )}

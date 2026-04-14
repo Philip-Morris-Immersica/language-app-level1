@@ -1,7 +1,7 @@
 import type { LessonContent } from '@/content/types';
 
 export const content: LessonContent = {
-  introduction: `В четвъртия урок ще отидем в супермаркета и на пазара! Ще научите имената на хранителни продукти, плодове и зеленчуци. Ще можете да пазарувате, да питате за цената и да плащате. Ще се запознаете с числата от 100 до 1000, с глагола „купувам" и с въпросителните думи какъв/каква/какво/какви.\n\nУрокът включва нови думи за храни, плодове и зеленчуци, граматика за бройни числителни и род на съществителните, диалози от пазара и текстове за четене.`,
+  introduction: `В четвъртия урок ще отидем в супермаркета и на пазара! Ще научите имената на хранителни продукти, плодове и зеленчуци. Ще можете да пазарувате, да питате за цената и да плащате. Ще се запознаете с числата от 100 до 1000, с глагола „купувам" и с въпросителните думи какъв/каква/какво/какви.`,
 
   sections: [],
 
@@ -37,7 +37,7 @@ export const content: LessonContent = {
         { name: 'Продавач', text: 'Заповядайте. Нещо друго?' },
         { name: 'Клиент', text: 'Не, благодаря. Колко е всичко?' },
         { name: 'Продавач', text: 'Пет евро и двадесет евроцента.' },
-        { name: 'Клиент', text: 'Заповядайте, точно.' },
+        { name: 'Клиент', text: 'Заповядайте, имам точната сума.' },
         { name: 'Продавач', text: 'Благодаря! Приятен ден!' },
         { name: 'Клиент', text: 'Благодаря, също!' },
       ],
@@ -70,6 +70,12 @@ export const content: LessonContent = {
     { id: 'voda', bulgarian: 'вода', translations: { en: 'water', fr: 'eau', ar: 'ماء', fa: 'آب', ru: 'вода', uk: 'вода' } },
     { id: 'grah', bulgarian: 'грах', translations: { en: 'green peas', fr: 'petits pois', ar: 'بازلاء', fa: 'نخود سبز', ru: 'горох', uk: 'горох' } },
     { id: 'gram', bulgarian: 'грам', translations: { en: 'gram', fr: 'gramme', ar: 'غرام', fa: 'گرم', ru: 'грамм', uk: 'грам' } },
+    { id: '1kg',  bulgarian: 'един килограм, едно кило',             translations: { en: 'one kilogram / one kilo',          ar: 'كيلوغرام واحد',           fr: 'un kilogramme / un kilo',        fa: 'یک کیلوگرم',               ru: 'один килограмм / одно кило',  uk: 'один кілограм / одне кіло' } },
+    { id: '05kg', bulgarian: 'половин килограм, половин кило',        translations: { en: 'half a kilogram / half a kilo',     ar: 'نصف كيلوغرام',            fr: 'un demi-kilogramme',             fa: 'نیم کیلوگرم',              ru: 'полкилограмма / полкило',     uk: 'пів кілограма / пів кіло' } },
+    { id: '15kg', bulgarian: 'едно кило и половина',                  translations: { en: 'one and a half kilos',              ar: 'كيلو ونصف',               fr: 'un kilo et demi',                fa: 'یک و نیم کیلو',            ru: 'полтора кило',                uk: 'півтора кіло' } },
+    { id: '250g', bulgarian: 'двеста и петдесет грама, четвърт кило', translations: { en: '250 grams / a quarter kilo',        ar: 'مئتان وخمسون غراماً / ربع كيلو', fr: '250 grammes / un quart de kilo', fa: 'دویست و پنجاه گرم / یک چهارم کیلو', ru: '250 граммов / четверть кило', uk: '250 грамів / чверть кіло' } },
+    { id: '1l',   bulgarian: 'един литър',                            translations: { en: 'one litre',                         ar: 'لتر واحد',                fr: 'un litre',                       fa: 'یک لیتر',                  ru: 'один литр',                   uk: 'один літр' } },
+    { id: '2l',   bulgarian: 'два литра',                             translations: { en: 'two litres',                        ar: 'لتران',                   fr: 'deux litres',                    fa: 'دو لیتر',                  ru: 'два литра',                   uk: 'два літри' } },
     { id: 'greypfrut', bulgarian: 'грейпфрут', translations: { en: 'grapefruit', fr: 'pamplemousse', ar: 'جريب فروت', fa: 'گریپ‌فروت', ru: 'грейпфрут', uk: 'грейпфрут' } },
     { id: 'grozde', bulgarian: 'грозде', translations: { en: 'grapes', fr: 'raisin', ar: 'عنب', fa: 'انگور', ru: 'виноград', uk: 'виноград' } },
     { id: 'gaba', bulgarian: 'гъба', translations: { en: 'mushroom', fr: 'champignon', ar: 'فطر', fa: 'قارچ', ru: 'гриб', uk: 'гриб' } },
@@ -146,6 +152,7 @@ export const content: LessonContent = {
     { id: 'chushka', bulgarian: 'чушка', translations: { en: 'pepper', fr: 'poivron', ar: 'فلفل', fa: 'فلفل دلمه‌ای', ru: 'перец', uk: 'перець' } },
     { id: 'shunka', bulgarian: 'шунка', translations: { en: 'ham', fr: 'jambon', ar: 'لحم خنزير مدخّن', fa: 'ژامبون', ru: 'ветчина', uk: 'шинка' } },
     { id: 'yabalka', bulgarian: 'ябълка', translations: { en: 'apple', fr: 'pomme', ar: 'تفاحة', fa: 'سیب', ru: 'яблоко', uk: 'яблуко' } },
+    { id: 'yadki', bulgarian: 'ядки', translations: { en: 'nuts', fr: 'noix', ar: 'مكسرات', fa: 'آجیل', ru: 'орехи', uk: 'горіхи' } },
     { id: 'yagoda', bulgarian: 'ягода', translations: { en: 'strawberry', fr: 'fraise', ar: 'فراولة', fa: 'توت‌فرنگی', ru: 'клубника', uk: 'полуниця' } },
     { id: 'yaytse', bulgarian: 'яйце', translations: { en: 'egg', fr: 'œuf', ar: 'بيضة', fa: 'تخم‌مرغ', ru: 'яйцо', uk: 'яйце' } },
   ],

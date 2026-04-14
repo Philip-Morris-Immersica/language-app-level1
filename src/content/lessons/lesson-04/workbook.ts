@@ -74,63 +74,14 @@ export const workbookExercises: Exercise[] = [
     points: 7,
     layout: 'two-column' as const,
     sentences: [
-      { text: 'банан — банани — банана', blanks: [], correctAnswers: [], isExample: true },
-      {
-        text: 'малина — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['малини', '—'],
-        options: [
-          ['малини', 'малина', 'малине'],
-          ['—', 'малина'],
-        ],
-      },
-      {
-        text: 'домат — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['домати', 'домата'],
-        options: [
-          ['домати', 'домата', 'домате'],
-          ['домата', 'домати', '—'],
-        ],
-      },
-      {
-        text: 'пиле — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['пилета', '—'],
-        options: [
-          ['пилета', 'пили', 'пиле'],
-          ['—', 'пилета'],
-        ],
-      },
-      {
-        text: 'лимон — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['лимони', 'лимона'],
-        options: [
-          ['лимони', 'лимона', 'лимоне'],
-          ['лимона', 'лимони', '—'],
-        ],
-      },
-      {
-        text: 'плод — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['плодове', 'плода'],
-        options: [
-          ['плодове', 'плоди', 'плода'],
-          ['плода', 'плодове', '—'],
-        ],
-      },
-      {
-        text: 'масло — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['масла', '—'],
-        options: [
-          ['масла', 'маслета', 'масли'],
-          ['—', 'масла'],
-        ],
-      },
-      {
-        text: 'маруля — _______ — _______',
-        blanks: [1, 2], correctAnswers: ['марули', '—'],
-        options: [
-          ['марули', 'марулие', 'маруле'],
-          ['—', 'марули'],
-        ],
-      },
+      { text: 'банан — банани', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'малина — _______', blanks: [1], correctAnswers: ['малини'],  options: ['малини', 'малина', 'малине'] },
+      { text: 'домат — _______',  blanks: [1], correctAnswers: ['домати'],  options: ['домати', 'домата', 'домате'] },
+      { text: 'пиле — _______',   blanks: [1], correctAnswers: ['пилета'],  options: ['пилета', 'пили', 'пиле'] },
+      { text: 'лимон — _______',  blanks: [1], correctAnswers: ['лимони'],  options: ['лимони', 'лимона', 'лимоне'] },
+      { text: 'плод — _______',   blanks: [1], correctAnswers: ['плодове'], options: ['плодове', 'плоди', 'плода'] },
+      { text: 'масло — _______',  blanks: [1], correctAnswers: ['масла'],   options: ['масла', 'маслета', 'масли'] },
+      { text: 'маруля — _______', blanks: [1], correctAnswers: ['марули'],  options: ['марули', 'марулие', 'маруле'] },
     ],
   } as WorkbookFillBlankExercise,
 

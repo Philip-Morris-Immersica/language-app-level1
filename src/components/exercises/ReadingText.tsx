@@ -204,9 +204,17 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
                   : 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99]'
                 }
               >
-                <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                  {paragraph}
-                </p>
+                {paragraph.includes('\n') ? (
+                  paragraph.split('\n').map((line, li) => (
+                    <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                      {line}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                    {paragraph}
+                  </p>
+                )}
                 {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
               </div>
             ))}

@@ -31,6 +31,13 @@ const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
+const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
+const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
+
+// Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers)
+const GRAMMAR_TABLE_PRO_ROWS = new Set([
+  'l04-gramatika-02-row-9', // хиляда
+]);
 const SPEAKING_RATE = 0.85; // Chirp only
 
 // Chirp: 10 req/s; Gemini: 10 req/min
@@ -85,6 +92,8 @@ interface Exercise {
   rows?: { pronoun: string; cells: string[] }[];
   examples?: { text: string; subtext?: string; lines?: string[] }[];
   sections?: { id: string; lines: { text: string; speaker?: string }[] }[];
+  notes?: string[];
+  model?: { question: string; positiveAnswer: string; negativeAnswer: string };
 }
 
 interface TtsJob {
@@ -92,6 +101,8 @@ interface TtsJob {
   filename: string;
   text: string;
   voice: string;
+  model: string;
+  prompt: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -128,12 +139,12 @@ async function getAccessToken(): Promise<string> {
   return res.token;
 }
 
-async function synthesizeGeminiOnce(text: string, voice: string): Promise<Buffer> {
+async function synthesizeGeminiOnce(text: string, voice: string, model: string, prompt: string): Promise<Buffer> {
   const token = await getAccessToken();
   const saJson = JSON.parse(fs.readFileSync(path.join(PROJECT_ROOT, 'service-account.json'), 'utf8'));
   const body = {
-    input: { text, prompt: GEMINI_PROMPT },
-    voice: { languageCode: 'bg-BG', name: voice, modelName: GEMINI_MODEL },
+    input: { text, prompt },
+    voice: { languageCode: 'bg-BG', name: voice, modelName: model },
     audioConfig: { audioEncoding: 'MP3' },
   };
   const res = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize', {
@@ -158,10 +169,10 @@ async function synthesizeGeminiOnce(text: string, voice: string): Promise<Buffer
   return Buffer.from(json.audioContent, 'base64');
 }
 
-async function synthesizeGemini(text: string, voice: string): Promise<Buffer> {
+async function synthesizeGemini(text: string, voice: string, model: string, prompt: string): Promise<Buffer> {
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
-      return await synthesizeGeminiOnce(text, voice);
+      return await synthesizeGeminiOnce(text, voice, model, prompt);
     } catch (err: unknown) {
       const isRetryable = typeof err === 'object' && err !== null && 'retryable' in err;
       if (isRetryable && attempt < MAX_RETRIES - 1) {
@@ -194,7 +205,9 @@ async function synthesizeChirp(text: string, voice: string): Promise<Buffer> {
   return Buffer.from(json.audioContent, 'base64');
 }
 
-const synthesize = USE_GEMINI ? synthesizeGemini : synthesizeChirp;
+const synthesize = USE_GEMINI
+  ? (text: string, voice: string, model: string, prompt: string) => synthesizeGemini(text, voice, model, prompt)
+  : (text: string, voice: string, _model: string, _prompt: string) => synthesizeChirp(text, voice);
 
 // ---------------------------------------------------------------------------
 // Dialogue voice mapping
@@ -225,6 +238,8 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
     filename: `${item.id}.mp3`,
     text: clean(item.bulgarian),
     voice: FEMALE_VOICE,
+    model: GEMINI_FLASH_MODEL,
+    prompt: GEMINI_WORD_PROMPT,
   }));
 }
 
@@ -240,6 +255,8 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
           voice: getDialogueVoice(line.speaker, i),
+          model: GEMINI_MODEL,
+          prompt: GEMINI_PROMPT,
         });
       }
     }
@@ -255,11 +272,27 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
       const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
       const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
       const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
+      const rowKey = `${ex.id}-row-${i}`;
+      const useProForRow = GRAMMAR_TABLE_PRO_ROWS.has(rowKey);
       jobs.push({
         category: 'grammar',
-        filename: `${ex.id}-row-${i}.mp3`,
+        filename: `${rowKey}.mp3`,
         text: clean(parts.join('. ')),
         voice: FEMALE_VOICE,
+        model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+      });
+    }
+    if (ex.notes) {
+      ex.notes.forEach((note, ni) => {
+        jobs.push({
+          category: 'grammar',
+          filename: `${ex.id}-note-${ni}.mp3`,
+          text: clean(note),
+          voice: FEMALE_VOICE,
+          model: GEMINI_FLASH_MODEL,
+          prompt: GEMINI_WORD_PROMPT,
+        });
       });
     }
   }
@@ -283,6 +316,8 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         filename: `${ex.id}-card-${i}.mp3`,
         text: clean(parts),
         voice: FEMALE_VOICE,
+        model: GEMINI_MODEL,
+        prompt: GEMINI_PROMPT,
       });
     }
   }
@@ -295,11 +330,11 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     const paragraphs = ex.paragraphs!;
     const voice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     for (let i = 0; i < paragraphs.length; i++) {
-      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice });
+      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
     const fullText = clean(paragraphs.join('\n'));
     if (paragraphs.length > 0 && fullText.length < 2000 && !SKIP_FULL_TEXT.has(ex.id)) {
-      jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice });
+      jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
   }
   return jobs;
@@ -308,14 +343,31 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
 function collectListeningJobs(exercises: Exercise[]): TtsJob[] {
   return exercises
     .filter(e => e.listeningText)
-    .map(e => ({ category: 'listening', filename: `${e.id}.mp3`, text: clean(e.listeningText!), voice: FEMALE_VOICE }));
+    .map(e => ({ category: 'listening', filename: `${e.id}.mp3`, text: clean(e.listeningText!), voice: FEMALE_VOICE, model: GEMINI_MODEL, prompt: GEMINI_PROMPT }));
+}
+
+function collectPersonalChoiceJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'personal_choice' && e.model)) {
+    const { question, positiveAnswer, negativeAnswer } = ex.model!;
+    const modelText = clean(`${question} ${positiveAnswer} ${negativeAnswer}`);
+    jobs.push({
+      category: 'texts',
+      filename: `${ex.id}-model.mp3`,
+      text: modelText,
+      voice: FEMALE_VOICE,
+      model: GEMINI_MODEL,
+      prompt: GEMINI_PROMPT,
+    });
+  }
+  return jobs;
 }
 
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  const modelLabel = USE_GEMINI ? 'Gemini 2.5 Pro TTS' : 'Chirp3-HD';
+  const modelLabel = USE_GEMINI ? 'Gemini TTS (Pro + Flash)' : 'Chirp3-HD';
   console.log(`\nGenerating TTS audio for ${LESSON_ID} [model: ${modelLabel}]\n`);
 
   const contentModule = await import(`../src/content/lessons/${LESSON_ID}/content`);
@@ -331,6 +383,7 @@ async function main() {
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectListeningJobs(exercises),
+    ...collectPersonalChoiceJobs(exercises),
   ];
 
   console.log(`Total jobs: ${jobs.length}\n`);
@@ -358,7 +411,7 @@ async function main() {
     process.stdout.write(`${progress} ${job.category}/${job.filename} ...`);
 
     try {
-      const mp3 = await synthesize(job.text, job.voice);
+      const mp3 = await synthesize(job.text, job.voice, job.model, job.prompt);
       fs.writeFileSync(outPath, mp3);
       totalChars += job.text.length;
       generated++;

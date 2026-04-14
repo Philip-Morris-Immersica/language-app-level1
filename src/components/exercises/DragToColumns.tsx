@@ -448,13 +448,23 @@ export function DragToColumns({
       {/* Action buttons */}
       <div className="flex gap-3 mt-4">
         {!submitted ? (
-          <Button
-            onClick={handleSubmit}
-            disabled={!allItemsPlaced}
-            className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            {t('exercise.check')}
-          </Button>
+          <>
+            <Button
+              onClick={handleSubmit}
+              disabled={!allItemsPlaced}
+              className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              {t('exercise.check')}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              className="px-4 py-3 rounded-lg font-semibold text-base active:scale-95 transition-all"
+              title={t('exercise.reset')}
+            >
+              <RotateCcw className="w-4 h-4" />
+            </Button>
+          </>
         ) : (
           <>
             <div
@@ -464,16 +474,14 @@ export function DragToColumns({
             >
               {isCorrect ? `✓ ${t('exercise.excellent')}` : `✗ ${t('exercise.incorrect')}`}
             </div>
-            {!isCorrect && (
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                className="px-5 py-3 rounded-lg font-semibold text-base active:scale-95 transition-all"
-              >
-                <RotateCcw className="w-4 h-4" />
-                {t('exercise.reset')}
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              className="px-5 py-3 rounded-lg font-semibold text-base active:scale-95 transition-all"
+            >
+              <RotateCcw className="w-4 h-4" />
+              {t('exercise.reset')}
+            </Button>
           </>
         )}
       </div>
