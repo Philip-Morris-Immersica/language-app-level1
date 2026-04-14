@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { ImageLabelingExercise } from '@/content/types';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
-import { speakBulgarian } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface ImageLabelingProps {
   exercise: ImageLabelingExercise;
@@ -46,7 +46,8 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   const handleCardClick = (imageId: string, correctLabel: string) => {
     setFlippedCards(prev => ({ ...prev, [imageId]: !prev[imageId] }));
     if (!flippedCards[imageId]) {
-      speakBulgarian(correctLabel);
+      const audioPath = getTtsAudioPath(exercise.id, 'words', imageId);
+      playTtsAudio(audioPath, correctLabel);
     }
   };
 

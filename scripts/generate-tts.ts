@@ -102,6 +102,7 @@ interface Exercise {
   notes?: string[];
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
   cards?: { id: string; label: string; sublabels?: string[] }[];
+  pronouns?: { pronoun: string }[];
 }
 
 interface TtsJob {
@@ -270,6 +271,24 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/** grammar_visual — one MP3 per pronoun tile (same convention as other grammar clips). */
+function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'grammar_visual' && e.pronouns)) {
+    for (let i = 0; i < ex.pronouns!.length; i++) {
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-pronoun-${i}.mp3`,
+        text: clean(ex.pronouns![i].pronoun),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
@@ -417,6 +436,7 @@ async function main() {
     ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
     ...collectDialogueJobs(exercises),
+    ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),

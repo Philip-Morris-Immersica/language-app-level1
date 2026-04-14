@@ -183,6 +183,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <GrammarVisual
           subtitle={exercise.subtitle}
           pronouns={exercise.pronouns}
+          exerciseId={exercise.id}
         />
       );
 

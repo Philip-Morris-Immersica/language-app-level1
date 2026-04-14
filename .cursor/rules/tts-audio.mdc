@@ -72,6 +72,7 @@ public/assets/lesson-XX/audio/tts/
 | Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker | Pro |
 | Grammar tables | `exercises[type=grammar_table].rows[]` | Female | Flash (or Pro via override) |
 | Grammar table notes | `exercises[type=grammar_table].notes[]` | Female | Flash |
+| Grammar visual (pronouns) | `exercises[type=grammar_visual].pronouns[]` | Female | Flash (`{exerciseId}-pronoun-{i}.mp3`) |
 | Grammar examples | `exercises[type=grammar_examples].examples[]` | Female | Pro |
 | Reading texts | `exercises[type=reading_text].paragraphs[]` | Female/male | Pro |
 | Listening | `exercises[].listeningText` | Female | Pro |

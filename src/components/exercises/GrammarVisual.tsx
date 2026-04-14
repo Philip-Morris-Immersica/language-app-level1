@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface PronounVisual {
   pronoun: string;
@@ -18,15 +18,19 @@ interface GrammarVisualProps {
   title?: string;
   subtitle?: string;
   pronouns: PronounVisual[];
+  exerciseId?: string;
 }
 
-export function GrammarVisual({ subtitle, pronouns }: GrammarVisualProps) {
+export function GrammarVisual({ subtitle, pronouns, exerciseId }: GrammarVisualProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
   const t = useT();
 
   const handleClick = (index: number, text: string) => {
-    speakBulgarian(text);
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-pronoun-${index}`)
+      : '';
+    playTtsAudio(audioPath, text);
 
     setRevealed(prev => {
       const next = new Set(prev);
