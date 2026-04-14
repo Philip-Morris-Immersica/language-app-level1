@@ -19,10 +19,14 @@ function parseArg(name: string): string | undefined {
 }
 
 const lessonNum = parseArg('lesson');
-if (!lessonNum) {
+const testNum = parseArg('test');
+if (!lessonNum && !testNum) {
   console.error('Usage: tsx scripts/generate-tts.ts --lesson 04 [--model gemini|chirp]');
+  console.error('       tsx scripts/generate-tts.ts --test 4 [--model gemini|chirp]');
   process.exit(1);
 }
+const IS_TEST = !!testNum;
+// --test accepts the folder suffix: e.g. --test 4 → test-lessons-4, --test 1-2-3 → test-lessons-1-2-3
 
 const modelFlag = parseArg('model') || 'gemini';
 const USE_GEMINI = modelFlag === 'gemini';
@@ -44,8 +48,11 @@ const SPEAKING_RATE = 0.85; // Chirp only
 const REQUEST_DELAY_MS = USE_GEMINI ? 6500 : 110;
 const MAX_RETRIES = 3;
 
-const LESSON_ID = `lesson-${lessonNum.padStart(2, '0')}`;
-const OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', LESSON_ID, 'audio', 'tts');
+const CONTENT_ID = IS_TEST
+  ? `test-lessons-${testNum}`
+  : `lesson-${lessonNum!.padStart(2, '0')}`;
+// ASSET_DIR is resolved at runtime after loading metadata for tests
+let OUTPUT_BASE = '';
 
 // Per-lesson exclude lists
 const READING_TEXT_EXCLUDE = new Set(
@@ -388,16 +395,26 @@ function collectPersonalChoiceJobs(exercises: Exercise[]): TtsJob[] {
 // ---------------------------------------------------------------------------
 async function main() {
   const modelLabel = USE_GEMINI ? 'Gemini TTS (Pro + Flash)' : 'Chirp3-HD';
-  console.log(`\nGenerating TTS audio for ${LESSON_ID} [model: ${modelLabel}]\n`);
+  console.log(`\nGenerating TTS audio for ${CONTENT_ID} [model: ${modelLabel}]\n`);
 
-  const contentModule = await import(`../src/content/lessons/${LESSON_ID}/content`);
-  const exercisesModule = await import(`../src/content/lessons/${LESSON_ID}/exercises`);
+  let content: LessonContent | null = null;
+  let exercises: Exercise[];
 
-  const content: LessonContent = contentModule.content;
-  const exercises: Exercise[] = exercisesModule.exercises;
+  if (IS_TEST) {
+    const metaModule = await import(`../src/content/tests/${CONTENT_ID}/metadata`);
+    const testModule = await import(`../src/content/tests/${CONTENT_ID}/exercises`);
+    exercises = testModule.exercises as Exercise[];
+    OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', metaModule.metadata.id, 'audio', 'tts');
+  } else {
+    const contentModule = await import(`../src/content/lessons/${CONTENT_ID}/content`);
+    const exercisesModule = await import(`../src/content/lessons/${CONTENT_ID}/exercises`);
+    content = contentModule.content as LessonContent;
+    exercises = exercisesModule.exercises as Exercise[];
+    OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', CONTENT_ID, 'audio', 'tts');
+  }
 
   const jobs: TtsJob[] = [
-    ...collectVocabularyJobs(content),
+    ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarTableJobs(exercises),
@@ -456,4 +473,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('
+  console.error('Fatal error:', err);
+  process.exit(1);
+});

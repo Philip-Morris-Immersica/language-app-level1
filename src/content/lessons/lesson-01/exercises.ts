@@ -32,7 +32,6 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: 'Запознайте се с новите думи и изрази',
-    audioUrl: '/assets/lesson-01/audio/new-words-01.mp3',
     order: 5,
     cards: [
       { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
@@ -303,7 +302,6 @@ export const exercises: Exercise[] = [
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
     instruction: 'Изслушайте диалозите и се опитайте да ги прочетете.',
-    audioUrl: '/assets/lesson-01/audio/dialogues-01.wav',
     order: 13,
     sections: [
       {
@@ -805,7 +803,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста.',
-    audioUrl: '/assets/lesson-01/audio/text-22.wav',
+    audioUrl: '/assets/lesson-01/audio/tts/texts/l01-ex-22-full.mp3',
     order: 22,
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
@@ -841,7 +839,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста.',
-    audioUrl: '/assets/lesson-01/audio/text-20.wav',
+    audioUrl: '/assets/lesson-01/audio/tts/texts/l01-ex-24-full.mp3',
     order: 24,
     paragraphs: [
       'Аз съм Бала от Мали. Мали е в Африка. Аз съм бежанец. Сега съм в България, в София.',
@@ -878,6 +876,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 18',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
+    audioUrl: '/assets/lesson-01/audio/tts/texts/l01-ex-18-full.mp3',
     order: 26,
     points: 9,
     paragraphs: [

@@ -68,6 +68,7 @@ public/assets/lesson-XX/audio/tts/
 | Category | Source | Voice | Model |
 |---|---|---|---|
 | Vocabulary | `content.vocabulary[].bulgarian` | Female | Flash |
+| Illustrated cards | `exercises[type=illustrated_cards].cards[]` (label + sublabels) | Female | Flash |
 | Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker | Pro |
 | Grammar tables | `exercises[type=grammar_table].rows[]` | Female | Flash (or Pro via override) |
 | Grammar table notes | `exercises[type=grammar_table].notes[]` | Female | Flash |
