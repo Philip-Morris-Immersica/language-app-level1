@@ -98,6 +98,15 @@ Two cleaning functions exist:
 - **`cleanForGeminiTTS()`** (Gemini): Light touch — strips leading dashes, removes parenthetical labels
 - **`cleanForTTS()`** (Chirp): Aggressive — converts slashes/dashes to commas, removes exclamation marks, strips parentheses
 
+## Git LFS — Audio Files
+
+All `*.mp3` files are tracked via **Git LFS** (configured in `.gitattributes`).  
+**No special workflow needed** — `git add`, `git commit`, `git push` work exactly as normal.  
+LFS is transparent to agents and developers. GitHub stores the audio separately, keeping the repo fast.
+
+> Never commit `.mp3` files outside of the normal `git add -A` + `git push` flow.  
+> Never manually move or rename audio files outside of the TTS script — paths are convention-based.
+
 ## Adding a New Lesson — Checklist
 
 1. Ensure `content.ts` and `exercises.ts` are complete for the lesson
@@ -108,6 +117,7 @@ Two cleaning functions exist:
 6. Script skips existing files — safe to re-run after fixing issues
 7. To regenerate specific files, delete them first, then re-run
 8. Verify in browser: `npm run dev` → navigate to lesson
+9. Commit and push: `git add -A` → `git commit` → `git push` (LFS handles MP3s automatically)
 
 ## Convention-Based Audio Paths
 
