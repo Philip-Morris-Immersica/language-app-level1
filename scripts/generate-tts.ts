@@ -94,6 +94,7 @@ interface Exercise {
   sections?: { id: string; lines: { text: string; speaker?: string }[] }[];
   notes?: string[];
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
+  cards?: { id: string; label: string; sublabels?: string[] }[];
 }
 
 interface TtsJob {
@@ -243,6 +244,25 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
   }));
 }
 
+/** Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01). */
+function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
+    for (const card of ex.cards!) {
+      const parts = [card.label, ...(card.sublabels || [])];
+      jobs.push({
+        category: 'words',
+        filename: `${card.id}.mp3`,
+        text: clean(parts.join('. ')),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
@@ -378,6 +398,7 @@ async function main() {
 
   const jobs: TtsJob[] = [
     ...collectVocabularyJobs(content),
+    ...collectIllustratedCardJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarTableJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
@@ -435,6 +456,4 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+  console.error('
