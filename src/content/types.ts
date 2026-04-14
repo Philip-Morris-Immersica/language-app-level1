@@ -220,7 +220,7 @@ export interface GrammarTableExercise extends BaseExercise {
     pronoun: string;
     cells: string[];
   }[];
-  notes?: string[];
+  notes?: string[];          // Text notes shown below the table
   boldColumns?: number[];
   illustrations?: {
     imageUrl: string;
@@ -228,7 +228,6 @@ export interface GrammarTableExercise extends BaseExercise {
     pluralLabel: string;
     pluralCount?: number;    // how many times to repeat the image for plural (default 3)
   }[];
-  notes?: string[];          // Text notes shown below the table
 }
 
 export interface FillWithImagesExercise extends BaseExercise {
@@ -259,6 +258,8 @@ export interface DialoguesExercise extends BaseExercise {
     imageUrl?: string;
     lines: {
       speaker?: string;
+      /** TTS only: pick male/female voice (two males in a row use Charon + Fenrir). Not shown in UI. */
+      voiceGender?: 'male' | 'female';
       text: string;
       translations?: Record<string, string>;
     }[];
@@ -333,6 +334,7 @@ export interface LetterChoiceExercise extends BaseExercise {
 
 export interface ReadingTextExercise extends BaseExercise {
   type: 'reading_text';
+  subtitle?: string;
   audioUrl?: string;
   images?: {
     imageUrl: string;

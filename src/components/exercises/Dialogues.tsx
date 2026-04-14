@@ -9,6 +9,8 @@ import { getTtsAudioPath, playTtsAudio, speakBulgarian, stopTtsAudio } from '@/l
 
 interface DialogueLine {
   speaker?: string;
+  /** TTS generation only; not rendered */
+  voiceGender?: 'male' | 'female';
   text: string;
   translations?: Record<string, string>;
 }

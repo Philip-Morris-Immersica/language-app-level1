@@ -307,18 +307,18 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Здравейте, аз съм Хасан.' },
-          { text: 'Здравейте, аз съм Иван.' },
-          { text: 'Приятно ми е!' },
-          { text: 'Приятно ми е!' },
+          { text: 'Здравейте, аз съм Хасан.', voiceGender: 'male' },
+          { text: 'Здравейте, аз съм Иван.', voiceGender: 'male' },
+          { text: 'Приятно ми е!', voiceGender: 'male' },
+          { text: 'Приятно ми е!', voiceGender: 'male' },
         ]
       },
       {
         id: 'б.',
         lines: [
-          { text: 'Откъде сте?' },
-          { text: 'Аз съм от България. А Вие?' },
-          { text: 'Аз съм от Мароко.' },
+          { text: 'Откъде сте?', voiceGender: 'female' },
+          { text: 'Аз съм от България. А Вие?', voiceGender: 'male' },
+          { text: 'Аз съм от Мароко.', voiceGender: 'male' },
         ]
       },
     ]
@@ -622,39 +622,39 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Здравей, как си?' },
-          { text: 'Благодаря, добре. А ти?' },
-          { text: 'Много добре.' },
+          { text: 'Здравей, как си?', voiceGender: 'male' },
+          { text: 'Благодаря, добре. А ти?', voiceGender: 'female' },
+          { text: 'Много добре.', voiceGender: 'male' },
         ],
       },
       {
         id: 'б.',
         lines: [
-          { text: 'Здравейте! Как сте?' },
-          { text: 'Много добре. А Вие?' },
-          { text: 'Аз също, благодаря.' },
-          { text: 'Приятен ден!' },
-          { text: 'Приятен ден!' },
+          { text: 'Здравейте! Как сте?', voiceGender: 'female' },
+          { text: 'Много добре. А Вие?', voiceGender: 'male' },
+          { text: 'Аз също, благодаря.', voiceGender: 'female' },
+          { text: 'Приятен ден!', voiceGender: 'male' },
+          { text: 'Приятен ден!', voiceGender: 'female' },
         ],
       },
       {
         id: 'в.',
         lines: [
-          { text: 'Добър вечер! Как сте?' },
-          { text: 'Добре. А Вие как сте?' },
-          { text: 'Добре. Приятна вечер!' },
-          { text: 'Благодаря, подобно.' },
+          { text: 'Добър вечер! Как сте?', voiceGender: 'male' },
+          { text: 'Добре. А Вие как сте?', voiceGender: 'female' },
+          { text: 'Добре. Приятна вечер!', voiceGender: 'male' },
+          { text: 'Благодаря, подобно.', voiceGender: 'female' },
         ],
       },
       {
         id: 'г.',
         lines: [
-          { text: 'Здравей, Мохамед! Как си?' },
-          { text: 'Чудесно!' },
-          { text: 'Как са Хади и Камал?' },
-          { text: 'Добре са.' },
-          { text: 'Довиждане! Всичко хубаво!' },
-          { text: 'Благодаря, подобно.' },
+          { text: 'Здравей, Мохамед! Как си?', voiceGender: 'male' },
+          { text: 'Чудесно!', voiceGender: 'male' },
+          { text: 'Как са Хади и Камал?', voiceGender: 'male' },
+          { text: 'Добре са.', voiceGender: 'male' },
+          { text: 'Довиждане! Всичко хубаво!', voiceGender: 'male' },
+          { text: 'Благодаря, подобно.', voiceGender: 'male' },
         ],
       },
     ],

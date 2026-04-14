@@ -33,6 +33,8 @@ const USE_GEMINI = modelFlag === 'gemini';
 
 const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
+/** Second male timbre for dialogues with two men (Gemini only; Chirp reuses Charon). */
+const MALE_VOICE_ALT = USE_GEMINI ? 'Fenrir' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
@@ -41,6 +43,8 @@ const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the 
 // Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers)
 const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l04-gramatika-02-row-9', // хиляда
+  'l05-gramatika-07-row-0', // хиляда (l05)
+  'l05-gramatika-07-row-4', // един милиард (l05)
 ]);
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -98,7 +102,7 @@ interface Exercise {
   paragraphs?: string[];
   rows?: { pronoun: string; cells: string[] }[];
   examples?: { text: string; subtext?: string; lines?: string[] }[];
-  sections?: { id: string; lines: { text: string; speaker?: string }[] }[];
+  sections?: { id: string; lines: { text: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
   notes?: string[];
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
   cards?: { id: string; label: string; sublabels?: string[] }[];
@@ -234,6 +238,21 @@ function getDialogueVoice(speaker: string | undefined, lineIndex: number): strin
   return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
 }
 
+/** Per-section counter so two male lines get Charon / Fenrir alternation. */
+function dialogueLineVoice(
+  line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
+  lineIndex: number,
+  maleTurn: { n: number },
+): string {
+  if (line.voiceGender === 'female') return FEMALE_VOICE;
+  if (line.voiceGender === 'male') {
+    const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
+    maleTurn.n++;
+    return v;
+  }
+  return getDialogueVoice(line.speaker, lineIndex);
+}
+
 function stripGrammarLabels(subtext: string): string {
   return subtext.split('\n').filter(line => !GRAMMAR_LABELS.has(line.trim())).join('\n');
 }
@@ -293,6 +312,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
     for (const section of ex.sections!) {
+      const maleTurn = { n: 0 };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         const rawText = line.text.replace(/^—\s*/, '');
@@ -300,7 +320,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: getDialogueVoice(line.speaker, i),
+          voice: dialogueLineVoice(line, i, maleTurn),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
@@ -352,7 +372,8 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
       const card = ex.examples![i];
       let parts: string;
       if (card.lines) {
-        parts = card.lines.join(' ');
+        // Strip speaker labels like "Вие:" / "Ти:" at line start before joining for TTS
+        parts = card.lines.map(l => l.replace(/^\s*\S+:\s+/, '')).join(' ');
       } else {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
         parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
