@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian, stopSpeaking, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { speakBulgarian, stopSpeaking, stopTtsAudio, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 
 interface ChecklistItem {
   id: string;
@@ -35,19 +35,38 @@ interface ReadingTextProps {
   onComplete?: (isCorrect: boolean) => void;
 }
 
-function TtsButton({ text }: { text: string }) {
+function TtsButton({
+  text,
+  exerciseId,
+  paragraphIndex = 0,
+  useFullAudio,
+}: {
+  text: string;
+  exerciseId?: string;
+  paragraphIndex?: number;
+  /** When multiple paragraphs are read as one block, use the `-full` MP3 if generated */
+  useFullAudio?: boolean;
+}) {
   const t = useT();
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = useCallback(() => {
     if (isPlaying) {
       stopSpeaking();
+      stopTtsAudio();
       setIsPlaying(false);
+      return;
+    }
+    if (exerciseId) {
+      const stem = useFullAudio ? `${exerciseId}-full` : `${exerciseId}-p-${paragraphIndex}`;
+      const audioPath = getTtsAudioPath(exerciseId, 'texts', stem);
+      playTtsAudio(audioPath, text, undefined, () => setIsPlaying(false));
+      setIsPlaying(true);
       return;
     }
     speakBulgarian(text);
     setIsPlaying(true);
-  }, [text, isPlaying]);
+  }, [text, isPlaying, exerciseId, paragraphIndex, useFullAudio]);
 
   return (
     <Button
@@ -146,7 +165,7 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
               )}
               {paragraphs[i] && (
                 <div className="mt-3">
-                  <TtsButton text={paragraphs[i]} />
+                  <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} />
                 </div>
               )}
             </div>
@@ -172,7 +191,11 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
 
       {hideText && (!images || images.length === 0) ? (
         <div className="flex items-center gap-3 mb-2">
-          <TtsButton text={paragraphs.join('\n\n')} />
+          <TtsButton
+            text={paragraphs.join('\n\n')}
+            exerciseId={exerciseId}
+            useFullAudio={paragraphs.length > 1}
+          />
         </div>
       ) : hideText ? null : (
         <>

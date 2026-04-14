@@ -114,15 +114,23 @@ export function getTtsAudioPath(
   category: 'words' | 'dialogues' | 'grammar' | 'texts' | 'listening',
   filename: string,
 ): string {
-  const match = exerciseId.match(/^l(\d+)/);
-  if (!match) return '';
-  return `/assets/lesson-${match[1]}/audio/tts/${category}/${filename}.mp3`;
+  const lessonMatch = exerciseId.match(/^l(\d+)/);
+  if (lessonMatch) return `/assets/lesson-${lessonMatch[1]}/audio/tts/${category}/${filename}.mp3`;
+
+  const testMatch = exerciseId.match(/^t(\d+)/);
+  if (testMatch) {
+    const testNum = parseInt(testMatch[1], 10);
+    return `/assets/test-a1-${testNum}/audio/tts/${category}/${filename}.mp3`;
+  }
+
+  return '';
 }
 
 export function playTtsAudio(
   audioUrl: string,
   fallbackText?: string,
   rate?: number,
+  onPlaybackEnd?: () => void,
 ): void {
   if (currentAudio) {
     currentAudio.pause();
@@ -136,10 +144,15 @@ export function playTtsAudio(
 
   const audio = new Audio(audioUrl);
   currentAudio = audio;
-  audio.onended = () => { currentAudio = null; };
+  const finish = () => {
+    currentAudio = null;
+    onPlaybackEnd?.();
+  };
+  audio.onended = finish;
   audio.play().catch(() => {
     currentAudio = null;
     if (fallbackText) speakBulgarian(fallbackText, rate);
+    onPlaybackEnd?.();
   });
 }
 
