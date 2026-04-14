@@ -32,7 +32,11 @@ Some grammar table rows need Pro instead of Flash (e.g. multi-syllable numbers l
 - **Auth:** Service account (`service-account.json` in project root, gitignored)
 - **Output:** MP3
 - **Rate limit:** ~10 req/min → script uses 6.5s delay between requests
-- **Voices:** `Achernar` (female, default), `Charon` (male), `Fenrir` (second male timbre when two men alternate in dialogues with `voiceGender: 'male'`)
+- **Voices:**
+  - `Achernar` — female (default)
+  - `Despina` — second female (when two women alternate in dialogues)
+  - `Charon` — male
+  - `Achird` — second male (when two men alternate in dialogues)
 
 ### Why Gemini over Chirp3-HD
 
@@ -96,7 +100,9 @@ public/assets/lesson-XX/audio/tts/
 
 In `exercises.ts`, each dialogue line may set `voiceGender: 'male' | 'female'` (TTS only; not shown in the UI). When set, it overrides the fallback alternation so a **male** line always uses a male voice.
 
-**Two men in a row:** the script alternates **`Charon`** and **`Fenrir`** (Gemini TTS). Chirp mode has only one Bulgarian male preset, so both map to Chirp Charon.
+**Two men in a row:** the script alternates **`Charon`** and **`Achird`** (Gemini TTS). Chirp mode has only one Bulgarian male preset, so both map to Chirp Charon.
+
+**Two women in a row:** the script alternates **`Achernar`** and **`Despina`** (Gemini TTS).
 
 When adding new lessons with different speakers, update `SPEAKER_VOICE_MAP` in [generate-tts.ts](mdc:scripts/generate-tts.ts) and/or add `voiceGender` on lines where roles are clear.
 

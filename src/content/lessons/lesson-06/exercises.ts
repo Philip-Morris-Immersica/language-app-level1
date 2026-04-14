@@ -14,6 +14,7 @@ import type {
   TableFillExercise,
   ReadingTextExercise,
   TrueFalseExercise,
+  MultipleChoiceExercise,
 } from '@/content/types';
 
 // Урок 6 — по клиент НЕ се дигитализират:
@@ -107,14 +108,14 @@ export const exercises: Exercise[] = [
     order: 4,
     points: 8,
     puzzles: [
-      { id: 'цеда',   syllables: ['ЦЕ', 'ДА'],       correctWord: 'ДЕЦА'   },
-      { id: 'щаба',   syllables: ['ЩА', 'БА'],        correctWord: 'БАЩА'  },
-      { id: 'старсе', syllables: ['СТА', 'СЕ', 'Р'],  correctWord: 'СЕСТРА' },
-      { id: 'абаб',   syllables: ['А', 'БА', 'Б'],    correctWord: 'БАБА'  },
-      { id: 'кайма',  syllables: ['КАЙ', 'МА'],       correctWord: 'МАЙКА' },
-      { id: 'дояд',   syllables: ['ДО', 'ЯД'],        correctWord: 'ДЯДО'  },
-      { id: 'тбар',   syllables: ['Т', 'БРА'],        correctWord: 'БРАТ'  },
-      { id: 'нси',    syllables: ['НС', 'И'],         correctWord: 'СИН'   },
+      { id: 'деца',   syllables: ['Е', 'Ц', 'А', 'Д'],          correctWord: 'ДЕЦА'   },
+      { id: 'баща',   syllables: ['А', 'Щ', 'А', 'Б'],          correctWord: 'БАЩА'  },
+      { id: 'сестра', syllables: ['Е', 'С', 'Т', 'Р', 'А', 'С'], correctWord: 'СЕСТРА' },
+      { id: 'баба',   syllables: ['А', 'Б', 'А', 'Б'],          correctWord: 'БАБА'  },
+      { id: 'майка',  syllables: ['А', 'Й', 'К', 'А', 'М'],     correctWord: 'МАЙКА' },
+      { id: 'дядо',   syllables: ['Я', 'Д', 'О', 'Д'],          correctWord: 'ДЯДО'  },
+      { id: 'брат',   syllables: ['Р', 'А', 'Т', 'Б'],          correctWord: 'БРАТ'  },
+      { id: 'син',    syllables: ['И', 'Н', 'С'],               correctWord: 'СИН'   },
     ],
   } as SyllableBlocksExercise,
 
@@ -404,7 +405,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-04',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Граматика – Кратки притежателни местоимения (9)',
     instruction: 'Запознайте се с кратките притежателни местоимения.',
     order: 13,
     tableTitle: 'Кратки притежателни местоимения',
@@ -476,8 +476,8 @@ export const exercises: Exercise[] = [
       {
         text: 'Ивана има брат. Брат ___ е студент.',
         blanks: [0],
-        correctAnswers: ['му'],
-        options: ['му', 'й', 'ти', 'им', 'ни'],
+        correctAnswers: ['й'],
+        options: ['й', 'му', 'ти', 'им', 'ни'],
       },
       {
         text: 'Ала е женен. Жена ___ е българка.',
@@ -531,8 +531,8 @@ export const exercises: Exercise[] = [
       {
         text: 'Това е _______ ми.',
         blanks: [0],
-        correctAnswers: ['бабата'],
-        options: ['бабата', 'баба', 'бабата ми', 'бабе'],
+        correctAnswers: ['баба'],
+        options: ['баба', 'бабата', 'бабата ми', 'бабе'],
       },
       {
         text: 'Къде е _______ ти?',
@@ -549,8 +549,8 @@ export const exercises: Exercise[] = [
       {
         text: '_______ му е учителка.',
         blanks: [0],
-        correctAnswers: ['Жената'],
-        options: ['Жената', 'Жена', 'Жени', 'Женките'],
+        correctAnswers: ['Жена'],
+        options: ['Жена', 'Жената', 'Жени', 'Женките'],
       },
       {
         text: '_______ й са в Бургас.',
@@ -567,8 +567,8 @@ export const exercises: Exercise[] = [
       {
         text: '_______ му е тук.',
         blanks: [0],
-        correctAnswers: ['Дядото'],
-        options: ['Дядото', 'Дядо', 'Дядовци', 'Дяда'],
+        correctAnswers: ['Дядо'],
+        options: ['Дядо', 'Дядото', 'Дядовци', 'Дяда'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -689,13 +689,31 @@ export const exercises: Exercise[] = [
   // SKIP Упр. 13 — Прочетете диалозите по двойки (по клиент)
   // SKIP Упр. 14 — Работете по двойки, прочетете диалозите и отговаряйте за себе си (по клиент)
 
-  // ORDER 20: ГРАМАТИКА 6 – Семейно дърво (Page 58)
+  // ORDER 20: НОВИ ДУМИ 2 – Съпруг, леля, чичо, внук (Page 58)
+  {
+    id: 'l06-novi-dumi-02',
+    type: 'illustrated_cards',
+    title: 'НОВИ ДУМИ 2',
+    instruction: 'Натиснете за произношение.',
+    order: 20,
+    cards: [
+      { id: 'saprug',   imageUrl: '', label: 'съпруг',   sublabels: ['= мъж'] },
+      { id: 'sapruga',  imageUrl: '', label: 'съпруга',  sublabels: ['= жена'] },
+      { id: 'saprouzi', imageUrl: '', label: 'съпрузи',  sublabels: ['= мъж и жена'] },
+      { id: 'chicho',   imageUrl: '', label: 'чичо',     sublabels: ['чичовци'] },
+      { id: 'lelya',    imageUrl: '', label: 'леля',     sublabels: ['лели'] },
+      { id: 'vnuk',     imageUrl: '', label: 'внук',     sublabels: ['внуци'] },
+      { id: 'vnuchka',  imageUrl: '', label: 'внучка',   sublabels: ['внучки'] },
+    ],
+  } as IllustratedCardsExercise,
+
+  // ORDER 21: ГРАМАТИКА 6 – Семейно дърво (Page 58)
   {
     id: 'l06-gramatika-06',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 6',
-    instruction: 'Запознайте се с родословното дърво.',
-    order: 20,
+    instruction: 'Запознайте се с родословното дърво. Кликнете върху снимката, за да се увеличи.',
+    order: 21,
     examples: [
       {
         imageUrl: '/assets/lesson-06/05-gramatika-6-semeino-darvo/01-semeino-darvo.png',
@@ -708,24 +726,6 @@ export const exercises: Exercise[] = [
       },
     ],
   } as GrammarExamplesExercise,
-
-  // ORDER 21: НОВИ ДУМИ 2 – Съпруг, леля, чичо, внук (Page 58)
-  {
-    id: 'l06-novi-dumi-02',
-    type: 'illustrated_cards',
-    title: 'НОВИ ДУМИ 2',
-    instruction: 'Натиснете за произношение.',
-    order: 21,
-    cards: [
-      { id: 'saprug',   imageUrl: '', label: 'съпруг',   sublabels: ['= мъж'] },
-      { id: 'sapruga',  imageUrl: '', label: 'съпруга',  sublabels: ['= жена'] },
-      { id: 'saprouzi', imageUrl: '', label: 'съпрузи',  sublabels: ['= мъж и жена'] },
-      { id: 'chicho',   imageUrl: '', label: 'чичо',     sublabels: ['чичовци'] },
-      { id: 'lelya',    imageUrl: '', label: 'леля' },
-      { id: 'vnuk',     imageUrl: '', label: 'внук',     sublabels: ['внуци'] },
-      { id: 'vnuchka',  imageUrl: '', label: 'внучка' },
-    ],
-  } as IllustratedCardsExercise,
 
   // ORDER 22: Упр. 15 – Попълнете семейни връзки (Page 58)
   {
@@ -823,7 +823,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Трансформирайте изреченията според модела. Използвайте родословното дърво.',
+    instruction: 'Трансформирайте изреченията според модела.',
     order: 24,
     points: 6,
     layout: 'qa-split',
@@ -955,19 +955,19 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 28: Упр. 21 – Попълнете таблицата (прилагателни, родове) (Page 60)
+  // ORDER 28: Упр. 21+22 – Попълнете таблицата (прилагателни, родове) (Page 60) — обединени
   {
     id: 'l06-ex-21',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 21',
     instruction: 'Попълнете формите на прилагателните.',
     order: 28,
-    points: 5,
+    points: 10,
     paragraphs: [],
     tables: [
       {
         name: 'Модел: стар, стара, старо, стари',
-        columns: ['мъжки', 'женски', 'среден', 'множествено'],
+        columns: ['мъжки род', 'женски род', 'среден род', 'множествено число'],
         rows: [
           {
             label: 'хубав__',
@@ -1014,27 +1014,8 @@ export const exercises: Exercise[] = [
               { correctAnswers: ['слаби'], options: ['слаба', 'слабо', 'слаби'] },
             ],
           },
-        ],
-      },
-    ],
-  } as TableFillExercise,
-
-  // ORDER 29: Упр. 22 – Довършете списъка по модела (Page 60)
-  {
-    id: 'l06-ex-22',
-    type: 'table_fill',
-    title: 'УПРАЖНЕНИЕ 22',
-    instruction: 'Довършете списъка по модела.',
-    order: 29,
-    points: 5,
-    paragraphs: [],
-    tables: [
-      {
-        name: 'Модел: умен, умна, умно, умни',
-        columns: ['мъжки', 'женски', 'среден', 'множествено'],
-        rows: [
           {
-            label: '1',
+            label: 'грозен',
             cells: [
               { correctAnswers: ['грозен'],  options: ['грозен', 'грозна', 'грозно', 'грозни'] },
               { correctAnswers: ['грозна'],  options: ['грозен', 'грозна', 'грозно', 'грозни'] },
@@ -1043,7 +1024,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '2',
+            label: 'нисък',
             cells: [
               { correctAnswers: ['нисък'],  options: ['нисък', 'ниска', 'ниско', 'ниски'] },
               { correctAnswers: ['ниска'],  options: ['нисък', 'ниска', 'ниско', 'ниски'] },
@@ -1052,7 +1033,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '3',
+            label: 'пълен',
             cells: [
               { correctAnswers: ['пълен'],  options: ['пълен', 'пълна', 'пълно', 'пълни'] },
               { correctAnswers: ['пълна'],  options: ['пълен', 'пълна', 'пълно', 'пълни'] },
@@ -1061,7 +1042,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '4',
+            label: 'малък',
             cells: [
               { correctAnswers: ['малък'],   options: ['малък', 'малка', 'малко', 'малки'] },
               { correctAnswers: ['малка'],   options: ['малък', 'малка', 'малко', 'малки'] },
@@ -1070,7 +1051,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '5',
+            label: 'голям',
             cells: [
               { correctAnswers: ['голям'],   options: ['голям', 'голяма', 'голямо', 'големи'] },
               { correctAnswers: ['голяма'],  options: ['голям', 'голяма', 'голямо', 'големи'] },
@@ -1083,13 +1064,13 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-  // ORDER 30: Упр. 23 – Подчертайте правилната форма на прилагателните (Page 60)
+  // ORDER 29: Упр. 23 – Подчертайте правилната форма на прилагателните (Page 60)
   {
     id: 'l06-ex-23',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 23',
     instruction: 'Изберете правилната форма на прилагателните.',
-    order: 30,
+    order: 29,
     points: 7,
     // Модел: Милена е (хубав, хубава, хубаво, хубави). → хубава
     questions: [
@@ -1103,13 +1084,13 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 31: Упр. 24 – Довършете изреченията (прилагателни, антоними) (Page 60)
+  // ORDER 30: Упр. 24 – Довършете изреченията (прилагателни, антоними) (Page 60)
   {
     id: 'l06-ex-24',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 24',
     instruction: 'Довършете изреченията.',
-    order: 31,
+    order: 30,
     points: 7,
     layout: 'single',
     sentences: [
@@ -1164,65 +1145,37 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 32: Упр. 25 – Опишете хората от картинките (Page 60)
-  // TODO: Упр. 25 е свободно описание — personal_choice е приближение; студентите избират и описват.
+  // ORDER 31: Упр. 25 – Опишете хората от картинките (Page 60)
   {
     id: 'l06-ex-25',
-    type: 'personal_choice',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 25',
-    instruction: 'Опишете хората от картинките.',
-    order: 32,
-    points: 0,
-    imageUrls: [
-      '/assets/lesson-06/08-upr-25-chetiri-personazha/01-georgi-i-ivo.jpg',
-      '/assets/lesson-06/08-upr-25-chetiri-personazha/02-vasil-i-nikolay.jpg',
+    instruction: 'Изберете правилните прилагателни. Модел: Георги е стар, висок и слаб.',
+    order: 31,
+    points: 3,
+    images: [
+      { imageUrl: '/assets/lesson-06/08-upr-25-chetiri-personazha/01-georgi-i-ivo.jpg', label: 'Георги и Иво' },
+      { imageUrl: '/assets/lesson-06/08-upr-25-chetiri-personazha/02-vasil-i-nikolay.jpg', label: 'Васил и Николай' },
     ],
-    model: {
-      question: 'Как изглежда Георги?',
-      positiveAnswer: 'Георги е стар, висок и слаб.',
-      negativeAnswer: 'Георги е стар, висок и слаб.',
-    },
-    blankOptions: ['стар', 'млад', 'висок', 'нисък', 'слаб', 'пълен', 'умен', 'красив', 'добър', 'работлив'],
-    items: [
-      {
-        id: 'ivo',
-        question: 'Как изглежда Иво? (вижте картинката)',
-        positiveTemplate: 'Иво е ___.',
-        negativeTemplate: 'Иво не е ___.',
-        positiveBlank: 'млад',
-        negativeBlank: 'стар',
-      },
-      {
-        id: 'vasil',
-        question: 'Как изглежда Васил? (вижте картинката)',
-        positiveTemplate: 'Васил е ___.',
-        negativeTemplate: 'Васил не е ___.',
-        positiveBlank: 'висок',
-        negativeBlank: 'нисък',
-      },
-      {
-        id: 'nikolay',
-        question: 'Как изглежда Николай? (вижте картинката)',
-        positiveTemplate: 'Николай е ___.',
-        negativeTemplate: 'Николай не е ___.',
-        positiveBlank: 'слаб',
-        negativeBlank: 'пълен',
-      },
+    questions: [
+      { id: 'q1', left: 'Иво е',    options: ['млад', 'стар', 'висок', 'нисък', 'слаб', 'пълен'],   correctAnswer: 'млад'   },
+      { id: 'q2', left: 'Васил е',  options: ['висок', 'нисък', 'млад', 'стар', 'слаб', 'пълен'],   correctAnswer: 'висок'  },
+      { id: 'q3', left: 'Николай е', options: ['пълен', 'слаб', 'млад', 'стар', 'висок', 'нисък'],  correctAnswer: 'пълен'  },
     ],
-  } as PersonalChoiceExercise,
+  } as DropdownMatchExercise,
 
   // ──────────────────────────────────────────────────────────
   // СТРАНИЦА 61
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 33: ГРАМАТИКА 8 – Работя (И-група) + Уча (Page 61)
+  // ORDER 32: ГРАМАТИКА 8 – Работя (И-група) + Уча (Page 61)
   {
     id: 'l06-gramatika-08',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 8',
     subtitle: 'Граматика – Сегашно време (12)',
     instruction: 'Запознайте се с глагола РАБОТЯ — И-група.',
-    order: 33,
+    order: 32,
     tableTitle: 'Сегашно време — И група',
     columns: ['(+)', '(–)'],
     rows: [
@@ -1241,13 +1194,13 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarTableExercise,
 
-  // ORDER 34: Упр. 26 – Напишете окончанията на глаголите (Page 61)
+  // ORDER 33: Упр. 26 – Сложете глагола РАБОТЯ в правилната форма (Page 61)
   {
     id: 'l06-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
-    instruction: 'Напишете окончанията на глаголите.',
-    order: 34,
+    instruction: 'Сложете глагола РАБОТЯ в правилната форма.',
+    order: 33,
     points: 6,
     layout: 'single',
     sentences: [
@@ -1296,13 +1249,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 35: Упр. 27 – Сложете глагола уча в правилна форма (Page 61)
+  // ORDER 34: Упр. 27 – Сложете глагола УЧА в правилната форма (Page 61)
   {
     id: 'l06-ex-27',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 27',
-    instruction: 'Сложете глагола уча в правилната форма.',
-    order: 35,
+    instruction: 'Сложете глагола УЧА в правилната форма.',
+    order: 34,
     points: 6,
     layout: 'single',
     sentences: [
@@ -1351,13 +1304,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 36: ДИАЛОГ 3 (а) (Page 61)
+  // ORDER 35: ДИАЛОГ 3 (а) (Page 61)
   {
     id: 'l06-dialozi-03',
     type: 'dialogues',
     title: 'ДИАЛОГ 3',
     instruction: 'Изслушайте диалога и се опитайте да го прочетете.',
-    order: 36,
+    order: 35,
     sections: [
       {
         id: 'а.',
@@ -1372,14 +1325,14 @@ export const exercises: Exercise[] = [
   // SKIP Упр. 28 — Прочетете диалога по двойки (по клиент)
   // SKIP Упр. 29 — Работете по двойки по модела (по клиент)
 
-  // ORDER 37: ГРАМАТИКА 9 – Кой е това? (Page 61)
+  // ORDER 36: ГРАМАТИКА 9 – Кой е това? (Page 61)
   {
     id: 'l06-gramatika-09',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 9',
     subtitle: 'Граматика – Показателни местоимения (10)',
     instruction: 'Запознайте се с показателните местоимения.',
-    order: 37,
+    order: 36,
     examples: [
       {
         imageUrl: '',
@@ -1407,45 +1360,36 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 62 — ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 38: Упр. 31 – Прочетете текста (Мохамед) (Page 62)
+  // ORDER 37: Упр. 31+33 – Прочетете текстовете (Мохамед + Бана) (Page 62) — обединени
   {
     id: 'l06-ex-31',
     type: 'reading_text',
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
-    instruction: 'Прочетете текста.',
-    order: 38,
-    imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/01-semeystvo-tekst-mohamed.jpg',
+    instruction: 'Прочетете текстовете.',
+    order: 37,
+    images: [
+      { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/01-semeystvo-tekst-mohamed.jpg', label: 'Мохамед' },
+      { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/02-bana-i-detsa.jpg', label: 'Бана' },
+    ],
     paragraphs: [
       'Това е брат ми. Казва се Ибрахим. Той е на 42 години. Бизнесмен е. Има фурна за арабски хляб в София. Женен е. Има шест деца. Жена му не работи.',
       'Това е сестра ми. Казва се Сара. Тя е на 26 години. Студентка е по икономика в един голям университет в Ирак. Не е омъжена, но има годеник.',
       'Това е майка ми. Тя се казва Джуди. На 63 години е. Живее в София със семейството на брат ми. Тя има много внуци.',
       'Това е баща ми. Казва се Юсеф. Той е на 70 години. Сега е в Ирак, живее със сестра ми в Багдад.',
       'Това съм аз. Името ми е Мохамед. В България съм от една година. Сега уча български език.',
+      'Казвам се Бана. От Сирия съм. На 28 години съм. Омъжена съм. Имам 2 деца. Не работя, гледам децата вкъщи. Ходя на курс по български език.',
     ],
   } as ReadingTextExercise,
 
   // SKIP Упр. 32 — Опишете семейството си по модела на текста (по клиент)
 
-  // ORDER 39: Упр. 33 – Прочетете текста (Бана) (Page 62)
-  {
-    id: 'l06-ex-33',
-    type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 33',
-    instruction: 'Прочетете текста и разкажете за себе си по модела.',
-    order: 39,
-    imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/02-bana-i-detsa.jpg',
-    paragraphs: [
-      'Казвам се Бана. От Сирия съм. На 28 години съм. Омъжена съм. Имам 2 деца. Не работя, гледам децата вкъщи. Ходя на курс по български език.',
-    ],
-  } as ReadingTextExercise,
-
-  // ORDER 40: Упр. 34 – Слушайте текста и попълнете (Мустафа) (Page 62)
+  // ORDER 38: Упр. 34 – Слушайте текста и попълнете (Мустафа) (Page 62)
   {
     id: 'l06-ex-34',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 34',
     instruction: 'Слушайте текста и попълнете празните места. Разкажете за друг човек по модела.',
-    order: 40,
+    order: 38,
     points: 7,
     layout: 'single',
     imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/03-worn-mazh-portret.jpg',
@@ -1466,8 +1410,8 @@ export const exercises: Exercise[] = [
       {
         text: 'На _______ години е.',
         blanks: [0],
-        correctAnswers: ['25'],
-        options: ['25', '42', '28', '30', '70'],
+        correctAnswers: ['двайсет и пет'],
+        options: ['двайсет и пет', 'четирийсет и две', 'двайсет и осем', 'тридесет', 'седемдесет'],
       },
       {
         text: 'Не е _______.',
@@ -1500,60 +1444,60 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 63 — ТЕКСТОВЕ
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 41: Упр. 35 – „България е хубава страна" (Page 63)
+  // ORDER 39: Упр. 35 – „България е хубава страна" (Page 63)
   {
     id: 'l06-ex-35',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     instruction: 'Прочетете текста.',
-    order: 41,
-    imageUrl: '/assets/lesson-06/10-tekstove-upr-35/01-semeystvo-park-pet-chlena.jpg',
+    order: 39,
+    textTitle: 'България е хубава страна',
+    images: [{ imageUrl: '/assets/lesson-06/10-tekstove-upr-35/01-semeystvo-park-pet-chlena.jpg', label: '' }],
     paragraphs: [
-      'България е хубава страна',
-      'Аз съм Виталий, а жена ми е Ирина. Ние сме украинци. Имаме три деца. Сега всички сме в България. Родителите ми са в Украйна, а сестра ми и семейството й са в Германия. Липсват ми много.',
-      'Живеем в София на квартира в квартал близо до планината Витоша. Тя е много красива.',
+      'Аз съм Виталий, а жена ми е Ирина. Ние сме украинци. Имаме три деца. Сега сме в България, в Украйна има война. Родителите ми не са тук. Те са в Украйна. Сестра ми и семейството й са в Полша. Много ми липсват.',
+      'Живеем в София на квартира. Близо до града е планината Витоша, тя е висока и красива.',
     ],
   } as ReadingTextExercise,
 
-  // ORDER 42: Упр. 36 – Вярно или не? (Page 63)
+  // ORDER 40: Упр. 36 – Вярно или не? (Page 63)
   {
     id: 'l06-ex-36',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 36',
     instruction: 'Вярно или не?',
-    order: 42,
+    order: 40,
     points: 5,
     model: { text: 'Виталий и Ирина са от Украйна.', isTrue: true },
     sentences: [
       { id: 's1', text: 'Те имат три деца.',                       isTrue: true  },
       { id: 's2', text: 'Те живеят на квартира.',                  isTrue: true  },
       { id: 's3', text: 'Родителите на Виталий са в София.',       isTrue: false },
-      { id: 's4', text: 'Сестрата на Виталий е в България.',       isTrue: false },
-      { id: 's5', text: 'Витоша е красива.',                       isTrue: true  },
+      { id: 's4', text: 'Сестрата на Виталий е в Полша.',          isTrue: true  },
+      { id: 's5', text: 'Витоша е висока и красива.',              isTrue: true  },
     ],
   } as TrueFalseExercise,
 
-  // ORDER 43: Упр. 37 – „Аз работя в „Каритас"" (Page 63)
+  // ORDER 41: Упр. 37 – „Аз работя в „Каритас"" (Page 63)
   {
     id: 'l06-ex-37',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 37',
     instruction: 'Прочетете текста.',
-    order: 43,
+    order: 41,
+    textTitle: 'Аз работя в „Каритас"',
     paragraphs: [
-      'Аз работя в „Каритас"',
       'Казвам се Борис. Аз съм от София, женен съм и имам две малки деца – едно момче и едно момиче. На 30 години съм. Жена ми е учителка по български език в голямо училище.',
-      'Работя в „Каритас". Обичам работата с бежанци. Вече имам много приятели от различни страни.',
+      'Работя в „Каритас". Обичам работата с бежанци. Вече имам много приятели от различни страни: Сирия, Иран, Ирак, Палестина, Афганистан, Украйна.',
     ],
   } as ReadingTextExercise,
 
-  // ORDER 44: Упр. 38 – Отговорете на въпросите (Page 63)
+  // ORDER 42: Упр. 38 – Отговорете на въпросите (Page 63)
   {
     id: 'l06-ex-38',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 38',
     instruction: 'Отговорете на въпросите.',
-    order: 44,
+    order: 42,
     points: 6,
     questions: [
       {
@@ -1599,14 +1543,14 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 64 — ОТ ПЪРВО ЛИЦЕ
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 45: Упр. 39 – „Кусай и Мохамед" (Page 64)
+  // ORDER 43: Упр. 39 – „Кусай и Мохамед" (Page 64)
   {
     id: 'l06-ex-39',
     type: 'reading_text',
     title: 'ОТ ПЪРВО ЛИЦЕ',
     instruction: 'Прочетете текста.',
-    order: 45,
-    imageUrl: '/assets/lesson-06/11-ot-parvo-litse/01-uchenitsi-v-klas.jpg',
+    order: 43,
+    images: [{ imageUrl: '/assets/lesson-06/11-ot-parvo-litse/01-uchenitsi-v-klas.jpg', label: '' }],
     paragraphs: [
       'Ние сме две момчета от Сирия. Казваме се Кусай и Мохамед. Учим в Ливанското училище в София, а през лятото ходим на курс по български език.',
       'Ние сме бежанци и живеем в България от 2022 година. Харесваме България, защото има добри хора и хубави празници. Големите празници са Баба Марта, Коледа и Великден. Тук празнуваме също сирийските празници Рамазан Байрам и Курбан Байрам.',
@@ -1616,13 +1560,45 @@ export const exercises: Exercise[] = [
   // SKIP Упр. 40 — Разкажете за Кусай и Мохамед (по клиент)
   // SKIP Упр. 41 — Отговорете на въпросите (по клиент)
 
-  // ORDER 46: Упр. 42 – „Илаф Хабаба" (Page 64)
+  // ORDER 44: NEW – Въпроси за Кусай и Мохамед
+  {
+    id: 'l06-ex-39b',
+    type: 'multiple_choice',
+    title: 'УПРАЖНЕНИЕ',
+    instruction: 'Отговорете на въпросите.',
+    order: 44,
+    points: 4,
+    questions: [
+      {
+        question: 'Откъде са Кусай и Мохамед?',
+        options: ['От Сирия', 'От Ирак', 'От Афганистан', 'От Палестина'],
+        correctIndex: 0,
+      },
+      {
+        question: 'Къде учат в София?',
+        options: ['В иракското училище', 'В ливанското училище', 'В българско училище', 'Не учат в училище'],
+        correctIndex: 1,
+      },
+      {
+        question: 'На какъв курс ходят през лятото?',
+        options: ['По английски език', 'По арабски език', 'По български език', 'По немски език'],
+        correctIndex: 2,
+      },
+      {
+        question: 'Кой празник не е сред големите празници в България?',
+        options: ['Баба Марта', 'Коледа', 'Великден', 'Хелоуин'],
+        correctIndex: 3,
+      },
+    ],
+  } as MultipleChoiceExercise,
+
+  // ORDER 45: Упр. 42 – „Илаф Хабаба" (Page 64)
   {
     id: 'l06-ex-42',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 42',
     instruction: 'Прочетете текста.',
-    order: 46,
+    order: 45,
     paragraphs: [
       'Аз съм едно сирийско момиче. Казвам се Илаф Хабаба. В България съм от две години и вече знам каква е разликата между сирийското и българското семейство.',
       'Сирийското семейство има много деца – от три до осем, а българското семейство обикновено има едно или две. Българските родители дават голяма свобода на децата си.',
@@ -1632,5 +1608,37 @@ export const exercises: Exercise[] = [
 
   // SKIP Упр. 43 — Разкажете за Илаф (по клиент)
   // SKIP Упр. 44 — Съгласни ли сте с Илаф? (по клиент)
+
+  // ORDER 46: NEW – Въпроси за Илаф Хабаба
+  {
+    id: 'l06-ex-42b',
+    type: 'multiple_choice',
+    title: 'УПРАЖНЕНИЕ',
+    instruction: 'Отговорете на въпросите.',
+    order: 46,
+    points: 4,
+    questions: [
+      {
+        question: 'Откъде е Илаф Хабаба?',
+        options: ['От Германия', 'От Франция', 'От Ирак', 'От Сирия'],
+        correctIndex: 3,
+      },
+      {
+        question: 'От колко време е в България?',
+        options: ['От две години', 'От десет години', 'От пет години', 'От осем години'],
+        correctIndex: 0,
+      },
+      {
+        question: 'Колко деца има обикновено в българското семейство?',
+        options: ['Едно или две', 'От три до осем', 'От пет до десет', 'Много'],
+        correctIndex: 0,
+      },
+      {
+        question: 'Какво дават българските родители на децата си?',
+        options: ['Свобода', 'Зеленчуци', 'Риба', 'Приятели'],
+        correctIndex: 0,
+      },
+    ],
+  } as MultipleChoiceExercise,
 
 ];

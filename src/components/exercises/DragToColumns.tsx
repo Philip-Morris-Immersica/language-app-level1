@@ -36,10 +36,12 @@ function ColumnDropZone({
   column,
   submitted,
   compact,
+  onRemove,
 }: {
   column: Column;
   submitted: boolean;
   compact?: boolean;
+  onRemove?: (item: string) => void;
 }) {
   const displayTitle = compact ? shortenTitle(column.title) : column.title;
   return (
@@ -55,8 +57,17 @@ function ColumnDropZone({
       <div className={`space-y-1.5 ${compact ? 'min-h-[60px]' : 'min-h-[80px]'}`}>
         {column.items.map((item, index) => (
           <div key={index} className="relative">
-            <div className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-center font-medium text-gray-700">
+            <div
+              className={`bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-center font-medium text-gray-700 ${
+                !submitted && onRemove ? 'cursor-pointer hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all' : ''
+              }`}
+              onClick={() => !submitted && onRemove && onRemove(item)}
+              title={!submitted && onRemove ? 'Натиснете, за да върнете' : undefined}
+            >
               {item}
+              {!submitted && onRemove && (
+                <span className="ml-1.5 text-gray-400 text-xs">↩</span>
+              )}
             </div>
             {submitted && (
               <div className="absolute -right-1.5 -top-1.5">
@@ -259,6 +270,22 @@ export function DragToColumns({
     setResetKey(prev => prev + 1);
   };
 
+  const handleRemoveFromColumn = (columnId: string, item: string) => {
+    if (submitted) return;
+    setColumns((prev) =>
+      prev.map((col) =>
+        col.id === columnId
+          ? { ...col, items: col.items.filter((i) => i !== item) }
+          : col
+      )
+    );
+    setShuffledItems((prev) => {
+      const next = [...prev];
+      next.splice(currentIndex, 0, item);
+      return next;
+    });
+  };
+
   const swipeCardProps = {
     onTouchStart: handleTouchStart,
     onTouchMove: handleTouchMove,
@@ -328,7 +355,7 @@ export function DragToColumns({
                   <span className="text-2xl text-gray-400">⬅️</span>
                   <span className="text-base font-bold text-gray-800">{columns[0]?.title}</span>
                 </div>
-                {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} />}
+                {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} onRemove={(item) => handleRemoveFromColumn(columns[0].id, item)} />}
               </div>
 
               {/* Center: card + hint + down arrow */}
@@ -360,7 +387,7 @@ export function DragToColumns({
                   <span className="text-base font-bold text-gray-800">{columns[1]?.title}</span>
                   <span className="text-2xl text-gray-400">➡️</span>
                 </div>
-                {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} />}
+                {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} onRemove={(item) => handleRemoveFromColumn(columns[1].id, item)} />}
               </div>
             </div>
 
@@ -368,7 +395,7 @@ export function DragToColumns({
             {isMultiColumn && columns[2] && (
               <div className="flex justify-center mt-4">
                 <div className="w-full max-w-xs">
-                  <ColumnDropZone column={columns[2]} submitted={submitted} />
+                  <ColumnDropZone column={columns[2]} submitted={submitted} onRemove={(item) => handleRemoveFromColumn(columns[2].id, item)} />
                 </div>
               </div>
             )}
@@ -384,7 +411,7 @@ export function DragToColumns({
                   <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{shortenTitle(columns[0]?.title ?? '')}</span>
                   <span className="text-lg text-gray-400">⬅️</span>
                 </div>
-                {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} compact />}
+                {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} compact onRemove={(item) => handleRemoveFromColumn(columns[0].id, item)} />}
               </div>
 
               {/* Center: card */}
@@ -415,14 +442,14 @@ export function DragToColumns({
                   <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{shortenTitle(columns[1]?.title ?? '')}</span>
                   <span className="text-lg text-gray-400">➡️</span>
                 </div>
-                {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} compact />}
+                {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} compact onRemove={(item) => handleRemoveFromColumn(columns[1].id, item)} />}
               </div>
             </div>
 
             {/* Third column drop zone below on mobile — centered, fits between the side columns */}
             {isMultiColumn && columns[2] && (
               <div className="max-w-[50%] mx-auto mt-1">
-                <ColumnDropZone column={columns[2]} submitted={submitted} compact />
+                <ColumnDropZone column={columns[2]} submitted={submitted} compact onRemove={(item) => handleRemoveFromColumn(columns[2].id, item)} />
               </div>
             )}
           </div>
@@ -439,7 +466,12 @@ export function DragToColumns({
           {/* Show final columns */}
           <div className={`grid gap-4 mx-auto mb-6 ${isMultiColumn ? 'grid-cols-2 md:grid-cols-3 max-w-3xl' : 'grid-cols-2 max-w-lg'}`}>
             {columns.map((column) => (
-              <ColumnDropZone key={column.id} column={column} submitted={submitted} />
+              <ColumnDropZone
+                key={column.id}
+                column={column}
+                submitted={submitted}
+                onRemove={!submitted ? (item) => handleRemoveFromColumn(column.id, item) : undefined}
+              />
             ))}
           </div>
         </>

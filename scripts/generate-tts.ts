@@ -32,19 +32,23 @@ const modelFlag = parseArg('model') || 'gemini';
 const USE_GEMINI = modelFlag === 'gemini';
 
 const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
+/** Second female voice for dialogues with two women (Gemini only; Chirp reuses Achernar). */
+const FEMALE_VOICE_ALT = USE_GEMINI ? 'Despina' : 'bg-BG-Chirp3-HD-Achernar';
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
-/** Second male timbre for dialogues with two men (Gemini only; Chirp reuses Charon). */
-const MALE_VOICE_ALT = USE_GEMINI ? 'Fenrir' : 'bg-BG-Chirp3-HD-Charon';
+/** Second male voice for dialogues with two men (Gemini only; Chirp reuses Charon). */
+const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
 
-// Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers)
+// Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers, tricky pronunciation)
 const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l04-gramatika-02-row-9', // хиляда
   'l05-gramatika-07-row-0', // хиляда (l05)
   'l05-gramatika-07-row-4', // един милиард (l05)
+  'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
+  'l06-gramatika-08-row-6', // вие работите / не работите
 ]);
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -76,6 +80,7 @@ const GRAMMAR_LABELS = new Set([
 // ---------------------------------------------------------------------------
 function cleanForGeminiTTS(raw: string): string {
   return raw
+    .replace(/\*\*/g, '')          // strip markdown bold markers (e.g. **това**)
     .replace(/^[–—]\s*/gm, '')
     .replace(/\s*\([^)]*\)\s*/g, ' ')
     .replace(/\s+/g, ' ')
@@ -99,6 +104,7 @@ interface Exercise {
   audioUrl?: string;
   listeningText?: string;
   voiceGender?: 'male' | 'female';
+  textTitle?: string;
   paragraphs?: string[];
   rows?: { pronoun: string; cells: string[] }[];
   examples?: { text: string; subtext?: string; lines?: string[] }[];
@@ -238,13 +244,18 @@ function getDialogueVoice(speaker: string | undefined, lineIndex: number): strin
   return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
 }
 
-/** Per-section counter so two male lines get Charon / Fenrir alternation. */
+/** Per-section counters so consecutive same-gender lines get voice alternation. */
 function dialogueLineVoice(
   line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
   lineIndex: number,
   maleTurn: { n: number },
+  femaleTurn: { n: number },
 ): string {
-  if (line.voiceGender === 'female') return FEMALE_VOICE;
+  if (line.voiceGender === 'female') {
+    const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
+    femaleTurn.n++;
+    return v;
+  }
   if (line.voiceGender === 'male') {
     const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
     maleTurn.n++;
@@ -313,6 +324,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
     for (const section of ex.sections!) {
       const maleTurn = { n: 0 };
+      const femaleTurn = { n: 0 };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         const rawText = line.text.replace(/^—\s*/, '');
@@ -320,7 +332,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, maleTurn),
+          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
@@ -399,7 +411,9 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     for (let i = 0; i < paragraphs.length; i++) {
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
-    const fullText = clean(paragraphs.join('\n'));
+    // Prepend textTitle (if present) to the full reading for TTS continuity
+    const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
+    const fullText = clean(titlePrefix + paragraphs.join('\n'));
     if (paragraphs.length > 0 && fullText.length < 2000 && !SKIP_FULL_TEXT.has(ex.id)) {
       jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }

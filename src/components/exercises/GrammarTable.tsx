@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Volume2 } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
@@ -64,11 +65,10 @@ export function GrammarTable({
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
-      {lang !== 'bg' && (
-        <p className="text-xs text-gray-400 text-center italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
+      <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
+        <Volume2 className="w-3 h-3" />
+        {t('exercise.tapRowToHear')}
+      </p>
 
       {/* Conjugation table */}
       <div className="overflow-x-auto">
@@ -107,8 +107,11 @@ export function GrammarTable({
                     onClick={() => toggleRow(rIdx)}
                     className={`cursor-pointer hover:bg-[#edf5e4] transition-colors ${rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
                   >
-                    <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]">
-                      {row.pronoun}
+                    <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 min-w-[5rem] md:min-w-[7rem]">
+                      <div className="flex items-center justify-between gap-1">
+                        <span>{row.pronoun}</span>
+                        <Volume2 className="w-3.5 h-3.5 text-[#8FC412] opacity-60 flex-shrink-0" />
+                      </div>
                     </td>
                     {row.cells.map((cell, cIdx) => (
                       <td

@@ -21,6 +21,7 @@ interface ReadingTextImage {
 
 interface ReadingTextProps {
   audioUrl?: string;
+  textTitle?: string;
   images?: ReadingTextImage[];
   paragraphs: string[];
   paragraphTranslations?: Record<string, string>[];
@@ -86,7 +87,7 @@ function TtsButton({
   );
 }
 
-export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -148,6 +149,12 @@ export function ReadingText({ audioUrl, images, paragraphs, paragraphTranslation
             </Button>
           )}
         </div>
+      )}
+
+      {textTitle && (
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+          {textTitle}
+        </h2>
       )}
 
       {hideText && images && images.length > 0 ? (

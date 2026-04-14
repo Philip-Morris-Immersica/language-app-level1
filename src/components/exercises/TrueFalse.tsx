@@ -57,7 +57,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
   const handleCheck = () => {
     setChecked(true);
     const correct = sentences.filter(s =>
-      (answers[s.id] === 'true') === s.isTrue
+      answers[s.id] != null && (answers[s.id] === 'true') === s.isTrue
     ).length;
     onComplete?.(correct === sentences.length, correct);
   };
@@ -68,7 +68,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
   };
 
   const allAnswered = sentences.every(s => answers[s.id] != null);
-  const correctCount = sentences.filter(s => (answers[s.id] === 'true') === s.isTrue).length;
+  const correctCount = sentences.filter(s => answers[s.id] != null && (answers[s.id] === 'true') === s.isTrue).length;
   const allCorrect = checked && correctCount === sentences.length;
 
   return (
@@ -100,7 +100,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
       )}
       {sentences.map((sentence, index) => {
         const answer = answers[sentence.id];
-        const isAnsweredCorrectly = checked && (answer === 'true') === sentence.isTrue;
+        const isAnsweredCorrectly = checked && answer != null && (answer === 'true') === sentence.isTrue;
         const isAnsweredWrongly = checked && answer != null && (answer === 'true') !== sentence.isTrue;
 
         return (
@@ -170,7 +170,8 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
       <div className="flex gap-3 pt-2">
         <Button
           onClick={handleCheck}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white"
+          disabled={!allAnswered}
+          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           {t('exercise.check')}
         </Button>

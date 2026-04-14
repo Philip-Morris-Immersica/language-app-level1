@@ -281,6 +281,11 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Масив от снимки с подписи, показвани над въпросите. */
+  images?: {
+    imageUrl: string;
+    label: string;
+  }[];
   questions: {
     id: string;
     /** Текстова подсказка (показва се само ако няма leftImageUrl). */
@@ -336,6 +341,7 @@ export interface ReadingTextExercise extends BaseExercise {
   type: 'reading_text';
   subtitle?: string;
   audioUrl?: string;
+  textTitle?: string;         // Bold heading rendered above paragraphs
   images?: {
     imageUrl: string;
     label: string;

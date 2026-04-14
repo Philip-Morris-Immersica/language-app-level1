@@ -222,7 +222,7 @@ export function SyllableBlocks({ puzzles, imageUrl, columns, exerciseId }: Sylla
           <PuzzleCard
             key={puzzle.id}
             puzzle={puzzle}
-            showHint={!imageUrl}
+            showHint={false}
             onCompleteChange={(isCorrect) => handleCompleteChange(puzzle.id, isCorrect)}
           />
         ))}

@@ -126,9 +126,14 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
 
   const wordPool = (
     <div>
-      <p className="text-sm font-medium text-gray-600 mb-3">
+      <p className="text-sm font-medium text-gray-600 mb-1">
         {t('exercise.chooseAnswer')}
       </p>
+      {!selectedLeft && (
+        <p className="text-xs text-gray-400 italic mb-3">
+          {t('exercise.selectLeftFirst')}
+        </p>
+      )}
       <div className="flex flex-wrap gap-2">
         {rightItems.map((rightText, index) => {
           const isUsed = matchedIndices.has(index);
@@ -136,13 +141,13 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
             <button
               key={index}
               onClick={() => handleRightClick(index)}
-              disabled={isUsed || !selectedLeft}
+              disabled={isUsed}
               className={`
                 px-3 py-2 rounded-lg border-2 text-base font-medium min-h-[44px] min-w-[44px] shadow-sm
                 flex items-center justify-center
                 transition-all active:scale-95
                 ${isUsed ? 'opacity-30 cursor-not-allowed border-gray-300 bg-gray-100' : ''}
-                ${!selectedLeft && !isUsed ? 'opacity-50 cursor-not-allowed border-gray-300 bg-white' : ''}
+                ${!selectedLeft && !isUsed ? 'border-gray-300 bg-white text-gray-500' : ''}
                 ${selectedLeft && !isUsed ? 'border-[#6B7B3F] bg-white hover:border-[#8FC412] hover:bg-[#EEF7C8] cursor-pointer' : ''}
               `}
             >

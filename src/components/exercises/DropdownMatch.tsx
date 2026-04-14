@@ -27,6 +27,7 @@ interface DropdownMatchProps {
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
   imageUrl?: string;
+  images?: { imageUrl: string; label: string }[];
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -38,7 +39,7 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
-export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, images }: DropdownMatchProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
@@ -107,6 +108,24 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
           />
         </div>
       ) : null}
+
+      {images && images.length > 0 && (
+        <div className={`grid gap-4 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'}`}>
+          {images.map((img, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <img
+                src={img.imageUrl}
+                alt={img.label}
+                className="w-full rounded-lg shadow-sm object-contain max-h-56 border border-gray-100"
+                loading="lazy"
+              />
+              {img.label && (
+                <span className="mt-2 text-sm font-semibold text-gray-700 text-center">{img.label}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
       <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
         {questions.map((question) => {
           const isImageMode = Boolean(question.leftImageUrl);
@@ -127,7 +146,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl }: D
                   <img
                     src={question.leftImageUrl}
                     alt={question.left}
-                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
+                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
                   />
                   <div className="flex-1 min-w-0">
                     {question.options.length === 0 ? (

@@ -119,6 +119,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <DropdownMatch
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
+          images={exercise.images}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -245,6 +246,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ReadingText
           audioUrl={exercise.audioUrl}
+          textTitle={exercise.textTitle}
           images={exercise.images}
           paragraphs={exercise.paragraphs}
           paragraphTranslations={exercise.paragraphTranslations}

@@ -260,6 +260,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-11-ref',
     type: 'grammar_examples',
+    disableTts: true,
     title: 'УПРАЖНЕНИЕ 11',
     subtitle: 'Какво искат и какво не искат Али и Сара?',
     instruction: 'Разгледайте какво искат и какво не искат Али и Сара. Кликнете за произношение.',
@@ -336,44 +337,44 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: '– Обичате ли шоколад?' },
-          { text: '– Да, обичам. А Вие?' },
-          { text: '– Аз също.' },
+          { text: '– Обичате ли шоколад?', voiceGender: 'female' },
+          { text: '– Да, обичам. А Вие?', voiceGender: 'male' },
+          { text: '– Аз също.', voiceGender: 'female' },
         ],
       },
       {
         id: 'б.',
         lines: [
-          { text: '– Обичаш ли баница?' },
-          { text: '– Да, много. А ти?' },
-          { text: '– Аз също.' },
+          { text: '– Обичаш ли баница?', voiceGender: 'female' },
+          { text: '– Да, много. А ти?', voiceGender: 'male' },
+          { text: '– Аз също.', voiceGender: 'female' },
         ],
       },
       {
         id: 'в.',
         lines: [
-          { text: '– Обичате ли чай?' },
-          { text: '– Да, обичам.' },
-          { text: '– А мляко?' },
-          { text: '– Не, не обичам.' },
+          { text: '– Обичате ли чай?', voiceGender: 'female' },
+          { text: '– Да, обичам.', voiceGender: 'male' },
+          { text: '– А мляко?', voiceGender: 'female' },
+          { text: '– Не, не обичам.', voiceGender: 'male' },
         ],
       },
       {
         id: 'г.',
         lines: [
-          { text: '– Искате ли кафе?' },
-          { text: '– Да.' },
-          { text: '– С мляко?' },
-          { text: '– Не, без мляко.' },
+          { text: '– Искате ли кафе?', voiceGender: 'female' },
+          { text: '– Да.', voiceGender: 'male' },
+          { text: '– С мляко?', voiceGender: 'female' },
+          { text: '– Не, без мляко.', voiceGender: 'male' },
         ],
       },
       {
         id: 'д.',
         lines: [
-          { text: '– Искаш ли сок?' },
-          { text: '– Да, искам.' },
-          { text: '– А кроасан?' },
-          { text: '– Не, не искам.' },
+          { text: '– Искаш ли сок?', voiceGender: 'female' },
+          { text: '– Да, искам.', voiceGender: 'male' },
+          { text: '– А кроасан?', voiceGender: 'female' },
+          { text: '– Не, не искам.', voiceGender: 'male' },
         ],
       },
     ],
@@ -710,6 +711,7 @@ export const exercises: Exercise[] = [
     instruction: 'Слушайте текста и прочетете. Какво има на масата?',
     order: 35,
     points: 10,
+    audioUrl: '/assets/lesson-02/audio/tts/texts/l02-ex-25-full.mp3',
     paragraphs: [
       'Има един кроасан и едно кафе със захар.',
       'Има един чай с мед, един сандвич със салам и сирене и един сандвич с кашкавал.',
@@ -740,6 +742,7 @@ export const exercises: Exercise[] = [
     order: 36,
     points: 5,
     showDictionary: true,
+    audioUrl: '/assets/lesson-02/audio/tts/texts/l02-ex-26-full.mp3',
     paragraphs: [
       'Амал е от Ирак. За закуска тя много обича чай със захар, сок от портокал, сандвич с масло, сирене и домат. Не обича мед, салам и кашкавал.',
       'Наталия е от Украйна. За закуска тя обича мляко с кафе и плодове. Не обича сирене и кашкавал.',
