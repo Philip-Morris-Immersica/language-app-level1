@@ -7,6 +7,7 @@ import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { TtsHint } from '@/components/TtsHint';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -109,7 +110,8 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {lang !== 'bg' && (
+      {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
+      {lang !== 'bg' && disableTts && (
         <p className="text-xs text-gray-400 text-center mb-4 italic">
           {t('exercise.tapToTranslate')}
         </p>

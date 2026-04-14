@@ -6,6 +6,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Button } from '@/components/ui/button';
 import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { TtsHint } from '@/components/TtsHint';
 
 interface PersonalChoiceProps {
   exerciseId?: string;
@@ -158,6 +159,8 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
 
   return (
     <div className="space-y-5">
+      <TtsHint messageKey="exercise.tapCardToHear" />
+
       {imageUrls && imageUrls.length > 0 && (
         <div className="flex flex-wrap gap-3 justify-center">
           {imageUrls.map((url, i) => (

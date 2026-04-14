@@ -7,6 +7,7 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { speakBulgarian, stopSpeaking, stopTtsAudio, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { TtsHint } from '@/components/TtsHint';
 
 interface ChecklistItem {
   id: string;
@@ -206,11 +207,7 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
         </div>
       ) : hideText ? null : (
         <>
-          {!noTranslation && lang !== 'bg' && (
-            <p className="text-xs text-gray-400 text-center mb-4 italic">
-              {t('exercise.tapToTranslate')}
-            </p>
-          )}
+          <TtsHint messageKey="exercise.tapTextToHear" />
 
           <div className="space-y-4">
             {paragraphs.map((paragraph, index) => (

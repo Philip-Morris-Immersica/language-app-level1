@@ -234,6 +234,9 @@ const synthesize = USE_GEMINI
 const SPEAKER_VOICE_MAP: Record<string, string> = {
   'клиент': FEMALE_VOICE,
   'продавач': MALE_VOICE,
+  'сервитьор': MALE_VOICE,
+  'господин': MALE_VOICE,
+  'госпожа': FEMALE_VOICE,
 };
 
 function getDialogueVoice(speaker: string | undefined, lineIndex: number): string {
