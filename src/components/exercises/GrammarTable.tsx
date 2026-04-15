@@ -11,7 +11,7 @@ import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 interface GrammarTableProps {
   tableTitle?: string;
   columns?: string[];
-  rows?: { pronoun: string; cells: string[] }[];
+  rows?: { pronoun: string; cells: string[]; pronunciations?: Record<string, string> }[];
   notes?: string[];
   subtitle?: string;
   exerciseId?: string;
@@ -124,17 +124,33 @@ export function GrammarTable({
                   </tr>
                   {revealedRows.has(rIdx) && lang !== 'bg' && (
                     <tr className="bg-[#e8f4fd]">
-                      <td className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 text-center">
-                        <InlineTranslation text={row.pronoun} visible={true} className="mt-0" />
-                      </td>
-                      {row.cells.map((cell, cIdx) => (
+                      {row.pronunciations ? (
                         <td
-                          key={cIdx}
-                          className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 last:border-r-0 text-center"
+                          colSpan={row.cells.length + 1}
+                          className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 text-center"
                         >
-                          <InlineTranslation text={cell} visible={true} className="mt-0" />
+                          <InlineTranslation
+                            text={row.pronoun}
+                            visible={true}
+                            translations={row.pronunciations}
+                            className="mt-0"
+                          />
                         </td>
-                      ))}
+                      ) : (
+                        <>
+                          <td className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 text-center">
+                            <InlineTranslation text={row.pronoun} visible={true} className="mt-0" />
+                          </td>
+                          {row.cells.map((cell, cIdx) => (
+                            <td
+                              key={cIdx}
+                              className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 last:border-r-0 text-center"
+                            >
+                              <InlineTranslation text={cell} visible={true} className="mt-0" />
+                            </td>
+                          ))}
+                        </>
+                      )}
                     </tr>
                   )}
                 </React.Fragment>

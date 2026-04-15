@@ -219,6 +219,7 @@ export interface GrammarTableExercise extends BaseExercise {
   rows?: {
     pronoun: string;
     cells: string[];
+    pronunciations?: Record<string, string>;
   }[];
   notes?: string[];          // Text notes shown below the table
   boldColumns?: number[];
