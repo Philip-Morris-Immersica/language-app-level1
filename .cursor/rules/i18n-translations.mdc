@@ -12,6 +12,20 @@ globs: src/i18n/**
 
 **Never translate** exercise content (words, sentences, correct answers) — always stays Bulgarian.
 
+### When to pre-translate vs auto-translate
+
+| Content | Method | Why |
+|---|---|---|
+| Grammar instructions | `instructionKey` + `ui.ts` | Contains linguistic terms that auto-translate mangles |
+| Complex interaction instructions | `instructionKey` + `ui.ts` | Describes app-specific actions (drag, swipe, column) |
+| Grammar notes with terminology | `instructionKey` + `ui.ts` | Bulgarian grammar terms need expert translation |
+| Simple exercise instructions | `useTranslate()` (auto) | Short, standard phrases translate well |
+| Exercise titles (НОВИ ДУМИ, etc.) | `useTranslate()` (auto) | Simple labels |
+| Lesson titles & descriptions | `useTranslate()` (auto) | General text |
+| Culture section text | `useTranslate()` (auto) | Long narrative text |
+
+**Rule of thumb:** If the instruction contains Bulgarian linguistic terminology (род, член, спрежение, множествено число) or describes a non-obvious interaction, pre-translate it.
+
 ## Adding a new UI string
 
 Edit [src/i18n/ui.ts](mdc:src/i18n/ui.ts). Add one line in the correct section:

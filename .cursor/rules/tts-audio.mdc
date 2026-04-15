@@ -112,6 +112,15 @@ Two cleaning functions exist:
 - **`cleanForGeminiTTS()`** (Gemini): Light touch — strips leading dashes, removes parenthetical labels
 - **`cleanForTTS()`** (Chirp): Aggressive — converts slashes/dashes to commas, removes exclamation marks, strips parentheses
 
+## Content Rules for TTS Quality
+
+These rules in **content files** directly affect audio quality:
+- **Numbers as words** in `listeningText` and `reading_text.paragraphs` — write „седемдесет и шест" not „76". TTS reads digits unnaturally.
+- **Period, not dash** between sums — `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`. Dashes confuse pacing.
+- **No markdown** in text fields — TTS reads asterisks, brackets etc. Keep text clean.
+- **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
+- **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
+
 ## Git LFS — Audio Files
 
 All `*.mp3` files are tracked via **Git LFS** (configured in `.gitattributes`).  

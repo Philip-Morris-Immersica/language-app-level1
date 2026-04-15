@@ -98,6 +98,32 @@ Use these mappings when digitalizing textbook exercises:
 | "Намерете пътя в лабиринта" | `alphabet_maze` (интерактивна решетка) |
 | Нови думи БЕЗ картинки (международни думи и др.) | `illustrated_cards` (imageUrl: '') |
 
+## Content Quality Standards (from feedback on lessons 0–6)
+
+See `content-quality-checklist` rule for the FULL checklist. Key rules to remember here:
+
+- **Instructions adapted for digital:** Do NOT copy textbook instructions verbatim. The textbook is paper — our platform is interactive. Every instruction must describe what the user does IN THE APP (dropdown → „Изберете", drag → „Плъзнете", etc.). Remove paper references: „по двойки", „на хартия", „в тетрадката".
+- **No component shuffle:** `word_order.words[]`, `syllable_blocks.syllables[]`, `dialogue_builder.sentences[]` — the component does NOT shuffle. Elements show EXACTLY in array order. Arrange them maximally scrambled when defining the content.
+- **Mix true/false:** In `true_false` and checklist exercises, interleave correct and incorrect items (never group all correct first).
+- **Numbers as words for TTS:** In `listeningText` and text paragraphs meant for audio, write numbers as words (76 → „седемдесет и шест") so TTS pronounces them correctly.
+- **First word capitalized:** Every sentence in options, true_false items, and table cells must start with a capital letter.
+- **No definite article with possessives:** „баба" not „бабата" when preceded by a possessive pronoun (моята баба).
+- **Review section:** Title is „Преговор", subtitle is „Упражнения за затвърждаване на наученото". Never use „от работната тетрадка".
+- **Grammar table subtitle → subtext:** Explanatory text goes as grey subtext under the exercise title, never as a separate boxed block.
+- **textTitle for reading_text:** When a text has a title (e.g. „България е хубава страна"), set `textTitle` to show it bold above the paragraphs.
+- **showDictionary for reading_text:** Set `showDictionary: true` on reading exercises with real vocabulary (not on test exercises with `noTranslation`).
+- **НОВИ ДУМИ before exercises:** Vocabulary sections must come BEFORE exercises that use those words. If a reading text uses new vocabulary, place the text AFTER the НОВИ ДУМИ section.
+- **Grammar rule before practice:** If an exercise applies a grammar rule (e.g. articles), the rule must be shown BEFORE the exercise.
+
+### Pre-translation (`instructionKey`) rules
+
+Grammar instructions and complex exercise instructions MUST be pre-translated via `instructionKey` in `ui.ts`. Auto-translation (`useTranslate`) is NOT reliable for:
+- Linguistic terminology (род, член, спрежение, множествено число...)
+- Instructions describing new interaction patterns (drag, swipe, column sorting...)
+- Grammar notes with Bulgarian-specific examples
+
+Simple, repetitive instructions (e.g. „Попълнете празните места.") can use auto-translation.
+
 ## Automatic UI Behaviors (no action needed in content files)
 
 The following behaviors are built into the exercise components — content authors don't need to do anything extra:

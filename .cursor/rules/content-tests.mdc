@@ -184,6 +184,15 @@ The `[label]` placeholder is extracted automatically from `testData.title` via `
 - Sections with `maxPoints: 0` are excluded from the scoring breakdown
 - **Tier messages are automatic** — `buildTierMessages()` reads the lesson label from `testData.title`; no per-test configuration needed
 
+## Test Content Quality (from feedback on tests A1.1–A1.3)
+
+- **First word capitalized** — every sentence in grammar exercises, true_false, and word_order options must start with a capital letter.
+- **Syllable scrambling** — in `syllable_blocks`, letters/syllables must be TRULY scrambled (not just slightly rearranged). Move first letter/syllable to end, then shuffle further.
+- **Remove redundant instructions** — if the exercise is self-explanatory (e.g. only images with dropdowns), remove the instruction text.
+- **Dialogue on new lines** — in `reading_text` containing dialogues, each reply = separate paragraph.
+- **„Вярно/Грешно"** — use these instead of „Да/Не" for true_false questions about text comprehension.
+- **Mixed true/false** — interleave correct and incorrect answers; never group all „Вярно" first.
+
 ## Automatic UI Behaviors (inherited from exercise components)
 
 These are built into the exercise components and apply to tests automatically:
