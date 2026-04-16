@@ -121,14 +121,12 @@ These rules in **content files** directly affect audio quality:
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
 
-## Git LFS — Audio Files
+## Audio Files in Git
 
-All `*.mp3` files are tracked via **Git LFS** (configured in `.gitattributes`).  
-**No special workflow needed** — `git add`, `git commit`, `git push` work exactly as normal.  
-LFS is transparent to agents and developers. GitHub stores the audio separately, keeping the repo fast.
+MP3 files are stored as **regular binary files** in Git (NOT LFS). Vercel does not fetch LFS objects during build, so LFS caused all audio to be deployed as broken pointer files. Total audio is ~28 MB — acceptable for Git.
 
-> Never commit `.mp3` files outside of the normal `git add -A` + `git push` flow.  
-> Never manually move or rename audio files outside of the TTS script — paths are convention-based.
+> Never manually move or rename audio files outside of the TTS script — paths are convention-based.  
+> WAV and OGG files remain in LFS (`.gitattributes`).
 
 ## Adding a New Lesson — Checklist
 

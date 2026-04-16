@@ -49,6 +49,15 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-4', // един милиард (l05)
   'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // вие работите / не работите
+  'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
+  'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
+  'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
+  'l08-gramatika-02-row-3', // хубави → хубавите, малки → малките, зелени → зелените
+]);
+
+// Grammar table note files that need Pro model instead of Flash (full sentences, not isolated words)
+const GRAMMAR_TABLE_PRO_NOTES = new Set([
+  'l07-gramatika-01-note-0', // "Дата: 10 август 2023 г. = десети август две хиляди двайсет и трета година" — full sentence
 ]);
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -366,13 +375,15 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
     }
     if (ex.notes) {
       ex.notes.forEach((note, ni) => {
+        const noteKey = `${ex.id}-note-${ni}`;
+        const useProForNote = GRAMMAR_TABLE_PRO_NOTES.has(noteKey);
         jobs.push({
           category: 'grammar',
-          filename: `${ex.id}-note-${ni}.mp3`,
+          filename: `${noteKey}.mp3`,
           text: clean(note),
           voice: FEMALE_VOICE,
-          model: GEMINI_FLASH_MODEL,
-          prompt: GEMINI_WORD_PROMPT,
+          model: useProForNote ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+          prompt: useProForNote ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
         });
       });
     }
@@ -412,6 +423,7 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     const paragraphs = ex.paragraphs!;
     const voice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     for (let i = 0; i < paragraphs.length; i++) {
+      if (!paragraphs[i].trim()) continue;
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
     // Prepend textTitle (if present) to the full reading for TTS continuity
