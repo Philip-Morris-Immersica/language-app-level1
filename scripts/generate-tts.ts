@@ -84,6 +84,9 @@ const GRAMMAR_LABELS = new Set([
   'м.р.', 'ж.р.', 'ср.р.', 'мн.ч.',
 ]);
 
+/** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
+const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako']);
+
 // ---------------------------------------------------------------------------
 // Text cleaning
 // ---------------------------------------------------------------------------
@@ -115,12 +118,14 @@ interface Exercise {
   voiceGender?: 'male' | 'female';
   textTitle?: string;
   paragraphs?: string[];
+  paragraphVoiceGenders?: ('male' | 'female')[];
   rows?: { pronoun: string; cells: string[] }[];
-  examples?: { text: string; subtext?: string; lines?: string[] }[];
+  examples?: { text: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female' }[];
   sections?: { id: string; lines: { text: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
   notes?: string[];
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
-  cards?: { id: string; label: string; sublabels?: string[] }[];
+  cards?: { id: string; label: string; sublabels?: string[]; ttsIncludeSublabels?: boolean }[];
+  images?: { id: string; correctLabel: string }[];
   pronouns?: { pronoun: string }[];
 }
 
@@ -284,26 +289,61 @@ function stripGrammarLabels(subtext: string): string {
 // Collect jobs
 // ---------------------------------------------------------------------------
 function collectVocabularyJobs(content: LessonContent): TtsJob[] {
-  return content.vocabulary.map(item => ({
-    category: 'words',
-    filename: `${item.id}.mp3`,
-    text: clean(item.bulgarian),
-    voice: FEMALE_VOICE,
-    model: GEMINI_FLASH_MODEL,
-    prompt: GEMINI_WORD_PROMPT,
-  }));
+  return content.vocabulary.map(item => {
+    const usePro = VOCAB_USE_PRO_IDS.has(item.id);
+    return {
+      category: 'words',
+      filename: `${item.id}.mp3`,
+      text: clean(item.bulgarian),
+      voice: FEMALE_VOICE,
+      model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+      prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+    };
+  });
 }
 
-/** Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01). */
+/**
+ * Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01).
+ * Pro + warm prompt: short phrases sound more natural than Flash (stress/intonation on e.g. „Добър ден!“).
+ */
 function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
     for (const card of ex.cards!) {
-      const parts = [card.label, ...(card.sublabels || [])];
+      const parts = card.ttsIncludeSublabels
+        ? [card.label, ...(card.sublabels || [])]
+        : [card.label];
       jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(parts.join('. ')),
+        voice: FEMALE_VOICE,
+        model: GEMINI_MODEL,
+        prompt: GEMINI_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
+/**
+ * Image labeling uses `words/{image.id}.mp3` (same convention as IllustratedCards).
+ * Skip ids already covered by illustrated_cards — those clips are generated there (label-only by default).
+ * Remaining images (e.g. a flag with no vocabulary card) get their own `words/{id}.mp3`.
+ */
+function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
+  const illustratedIds = new Set<string>();
+  for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
+    for (const c of ex.cards!) illustratedIds.add(c.id);
+  }
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'image_labeling' && e.images)) {
+    for (const img of ex.images!) {
+      if (illustratedIds.has(img.id)) continue;
+      jobs.push({
+        category: 'words',
+        filename: `${img.id}.mp3`,
+        text: clean(img.correctLabel),
         voice: FEMALE_VOICE,
         model: GEMINI_FLASH_MODEL,
         prompt: GEMINI_WORD_PROMPT,
@@ -404,11 +444,12 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
         parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
       }
+      const voice = card.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
       jobs.push({
         category: 'grammar',
         filename: `${ex.id}-card-${i}.mp3`,
         text: clean(parts),
-        voice: FEMALE_VOICE,
+        voice,
         model: GEMINI_MODEL,
         prompt: GEMINI_PROMPT,
       });
@@ -421,16 +462,25 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'reading_text' && e.paragraphs && !READING_TEXT_EXCLUDE.has(e.id))) {
     const paragraphs = ex.paragraphs!;
-    const voice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
+    const perPara = ex.paragraphVoiceGenders;
+    const defaultVoice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
+    const usePerPara = perPara && perPara.length === paragraphs.length;
     for (let i = 0; i < paragraphs.length; i++) {
       if (!paragraphs[i].trim()) continue;
+      const voice = usePerPara
+        ? (perPara![i] === 'male' ? MALE_VOICE : FEMALE_VOICE)
+        : defaultVoice;
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(paragraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
-    // Prepend textTitle (if present) to the full reading for TTS continuity
-    const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
-    const fullText = clean(titlePrefix + paragraphs.join('\n'));
-    if (paragraphs.length > 0 && fullText.length < 2000 && !SKIP_FULL_TEXT.has(ex.id)) {
-      jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
+    // No `-full.mp3` when per-paragraph voices are set (mixed or explicit); UI uses sequential „Слушай“ instead
+    const skipFull = SKIP_FULL_TEXT.has(ex.id) || !!usePerPara;
+    if (!skipFull) {
+      const voice = defaultVoice;
+      const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
+      const fullText = clean(titlePrefix + paragraphs.join('\n'));
+      if (paragraphs.length > 0 && fullText.length < 2000) {
+        jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
+      }
     }
   }
   return jobs;
@@ -485,6 +535,7 @@ async function main() {
   const jobs: TtsJob[] = [
     ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
+    ...collectImageLabelingJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
