@@ -95,6 +95,8 @@ const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako']);
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene', // lesson 3 — Пушенето забранено!
+  '20-cent', // lesson 3 НОВИ ДУМИ 2 — двадесет евроцента
+  '200-euro', // lesson 3 НОВИ ДУМИ 2 — двеста евро
 ]);
 
 /** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
