@@ -59,6 +59,11 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
 const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l07-gramatika-01-note-0', // "Дата: 10 август 2023 г. = десети август две хиляди двайсет и трета година" — full sentence
 ]);
+
+/** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
+const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
+  'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
+};
 const SPEAKING_RATE = 0.85; // Chirp only
 
 // Chirp: 10 req/s; Gemini: 10 req/min
@@ -416,10 +421,11 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
       const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
       const rowKey = `${ex.id}-row-${i}`;
       const useProForRow = GRAMMAR_TABLE_PRO_ROWS.has(rowKey);
+      const rowSource = GRAMMAR_TABLE_ROW_TTS_TEXT[rowKey] ?? parts.join('. ');
       jobs.push({
         category: 'grammar',
         filename: `${rowKey}.mp3`,
-        text: clean(parts.join('. ')),
+        text: clean(rowSource),
         voice: FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
         prompt: useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
