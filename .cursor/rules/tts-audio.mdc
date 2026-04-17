@@ -168,15 +168,35 @@ No `git lfs track`, no `git lfs migrate`, no special commands. Just plain git.
 - ❌ Do **not** run `git lfs migrate import --include="*.mp3"`
 - ❌ Do **not** rename/move MP3 files manually — paths are derived by `getTtsAudioPath()` from exercise/vocabulary IDs
 
-### Sanity check before pushing audio
+### Sanity check before pushing audio — ALWAYS RUN THIS
 
 ```bash
-git check-attr filter -- public/assets/lesson-04/audio/tts/words/banan.mp3
-# Expected output:
-#   public/assets/lesson-04/audio/tts/words/banan.mp3: filter: unspecified
+npm run check:audio
 ```
 
-If it says `filter: lfs`, stop and remove `*.mp3` from `.gitattributes` before committing.
+Expected output:
+```
+✓ .gitattributes does not route *.mp3 through LFS
+✓ All N tracked *.mp3 files are real binaries (no LFS pointers)
+```
+
+If it fails, the script prints exactly how to fix it. Do NOT push until it passes.
+
+**Automatic protection:** `npm run build` (and therefore every Vercel deploy)
+runs `check:audio` as `prebuild`. A broken MP3 will fail the build instead of
+shipping a silent site.
+
+### If `check:audio` reports LFS pointers
+
+This happens when MP3 blobs in git history are still pointer files (typically
+from an earlier LFS experiment). Fix:
+
+```bash
+git add --renormalize -- "public/assets/**/*.mp3"
+git commit -m "fix(audio): renormalize MP3s out of LFS"
+git push
+npm run check:audio   # must now pass
+```
 
 ## Adding a New Lesson — Checklist
 
@@ -188,7 +208,8 @@ If it says `filter: lfs`, stop and remove `*.mp3` from `.gitattributes` before c
 6. Script skips existing files — safe to re-run after fixing issues
 7. To regenerate specific files, delete them first, then re-run
 8. Verify in browser: `npm run dev` → navigate to lesson
-9. Commit and push: `git add -A` → `git commit` → `git push`. MP3 files are plain Git blobs — no LFS commands needed. See **Audio Files in Git** above.
+9. Run `npm run check:audio` — **must** print `✓ All N tracked *.mp3 files are real binaries`. If it fails, see **Audio Files in Git** above.
+10. Commit and push: `git add -A` → `git commit` → `git push`. MP3 files are plain Git blobs — no LFS commands needed.
 
 ## Convention-Based Audio Paths
 
