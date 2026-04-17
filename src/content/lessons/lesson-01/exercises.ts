@@ -221,7 +221,8 @@ export const exercises: Exercise[] = [
       { 
         imageUrl: '/assets/lesson-01/gramatika-1-pronouns/az-sam-mohamed.jpg', 
         text: 'Аз съм Мохамед.', 
-        subtext: 'Аз съм от Сирия.' 
+        subtext: 'Аз съм от Сирия.',
+        voiceGender: 'male',
       },
       { 
         imageUrl: '/assets/lesson-01/gramatika-1-pronouns/ti-si-haled.jpg', 
@@ -241,7 +242,8 @@ export const exercises: Exercise[] = [
       { 
         imageUrl: '/assets/lesson-01/gramatika-1-pronouns/nie-sme-mohamed-bana.jpg', 
         text: 'Ние сме Мохамед и Бана.', 
-        subtext: 'Ние сме от Сирия.' 
+        subtext: 'Ние сме от Сирия.',
+        voiceGender: 'male',
       },
       { 
         imageUrl: '/assets/lesson-01/gramatika-1-pronouns/vye-ste-dzhamil-mariam.jpg', 
@@ -342,6 +344,7 @@ export const exercises: Exercise[] = [
           'Аз съм арабин.',
           'Аз съм бежанец от Сирия.',
         ],
+        voiceGender: 'male',
       },
       {
         imageUrl: '/assets/lesson-01/gramatika-3/tala.jpg',
@@ -360,6 +363,7 @@ export const exercises: Exercise[] = [
           'Ние сме араби.',
           'Ние сме бежанци от Сирия.',
         ],
+        voiceGender: 'male',
       },
       {
         imageUrl: '/assets/lesson-01/gramatika-3/georgi-uchitel.jpg',
@@ -369,6 +373,7 @@ export const exercises: Exercise[] = [
           'Аз съм учител.',
           'Аз не съм бежанец.',
         ],
+        voiceGender: 'male',
       },
       {
         imageUrl: '/assets/lesson-01/gramatika-3/petya-uchitelka.jpg',
@@ -387,6 +392,7 @@ export const exercises: Exercise[] = [
           'Ние сме учители.',
           'Ние не сме бежанци.',
         ],
+        voiceGender: 'male',
       },
     ],
   } as GrammarExamplesExercise,
@@ -425,6 +431,7 @@ export const exercises: Exercise[] = [
           '– Българин ли сте?',
           '– Да, аз съм българин.',
         ],
+        voiceGender: 'male',
       },
       {
         imageUrl: '/assets/lesson-01/gramatika-4/uchitel-li-ste.png',
@@ -433,6 +440,7 @@ export const exercises: Exercise[] = [
           '– Учител ли сте?',
           '– Не, не съм учител.',
         ],
+        voiceGender: 'male',
       },
     ],
   } as GrammarExamplesExercise,
@@ -803,7 +811,6 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста.',
-    audioUrl: '/assets/lesson-01/audio/tts/texts/l01-ex-22-full.mp3',
     order: 22,
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
@@ -811,6 +818,7 @@ export const exercises: Exercise[] = [
       'Тя е Ава. Тя е иранка. Той е Омар. Той е иранец. Те са от Иран. Сега са в България.',
       'Ага е кюрд, Лава е кюрдка. Те са кюрди, бежанци от Сирия. Сега са в България.',
     ],
+    paragraphVoiceGenders: ['male', 'female', 'male', 'female'],
   } as ReadingTextExercise,
 
   // ORDER 26: УПРАЖНЕНИЕ 21 (Textbook ex. 21) - True/False based on text above
@@ -839,7 +847,6 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     instruction: 'Слушайте и прочетете текста.',
-    audioUrl: '/assets/lesson-01/audio/tts/texts/l01-ex-24-full.mp3',
     order: 24,
     paragraphs: [
       'Аз съм Бала от Мали. Мали е в Африка. Аз съм бежанец. Сега съм в България, в София.',
@@ -847,6 +854,7 @@ export const exercises: Exercise[] = [
       'Ара е учителка от Афганистан. Сега тя е бежанка в България.',
       'Карим и Ахмед са алжирци. Те също са бежанци. Сега са в Харманли.',
     ],
+    paragraphVoiceGenders: ['male', 'female', 'male', 'female'],
   } as ReadingTextExercise,
 
   // ORDER 28: УПРАЖНЕНИЕ 23 (Textbook ex. 23) - Answer questions with dropdown

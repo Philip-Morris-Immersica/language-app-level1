@@ -90,10 +90,10 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
           <p className="flex-1 text-base text-gray-600 leading-snug italic">{model.text}</p>
           <div className="flex gap-2 shrink-0">
             <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center ${
-              model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
+              model.isTrue ? 'bg-gray-200 border-gray-400 text-green-700' : 'bg-white border-gray-300 text-green-600'
             }`}>да</span>
             <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center ${
-              !model.isTrue ? 'bg-[#8FC412] border-[#8FC412] text-white' : 'bg-white border-gray-300 text-gray-300'
+              !model.isTrue ? 'bg-gray-200 border-gray-400 text-red-700' : 'bg-white border-gray-300 text-red-600'
             }`}>не</span>
           </div>
         </div>
@@ -117,32 +117,34 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
             </span>
             <p className="flex-1 text-base text-gray-800 leading-snug">{sentence.text}</p>
             <div className="flex gap-2 shrink-0">
-              {/* да button */}
+              {/* да — зелен шрифт; при избор (преди Check) — сив фон, за да се чете „да“ */}
               <button
+                type="button"
                 onClick={() => handleSelect(sentence.id, 'true')}
-                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all
+                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all flex items-center justify-center
                   ${answer === 'true'
                     ? checked
                       ? sentence.isTrue
-                        ? 'bg-green-500 border-green-500 text-white'
-                        : 'bg-red-500 border-red-500 text-white'
-                      : 'bg-[#8FC412] border-[#8FC412] text-white scale-105'
-                    : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
+                        ? 'bg-green-100 border-green-500 text-green-800'
+                        : 'bg-red-100 border-red-500 text-red-800'
+                      : 'bg-gray-200 border-gray-400 text-green-700 scale-105'
+                    : 'bg-white border-gray-300 text-green-600 hover:border-green-400 hover:bg-gray-50'
                   }`}
               >
                 да
               </button>
-              {/* не button */}
+              {/* не — червен шрифт; при избор — сив фон */}
               <button
+                type="button"
                 onClick={() => handleSelect(sentence.id, 'false')}
-                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all
+                className={`w-10 h-10 rounded-lg font-bold text-base border-2 transition-all flex items-center justify-center
                   ${answer === 'false'
                     ? checked
                       ? !sentence.isTrue
-                        ? 'bg-green-500 border-green-500 text-white'
-                        : 'bg-red-500 border-red-500 text-white'
-                      : 'bg-[#8FC412] border-[#8FC412] text-white scale-105'
-                    : 'bg-white border-gray-300 text-gray-500 hover:border-[#8FC412] hover:text-[#8FC412]'
+                        ? 'bg-green-100 border-green-500 text-red-700'
+                        : 'bg-red-100 border-red-500 text-red-800'
+                      : 'bg-gray-200 border-gray-400 text-red-700 scale-105'
+                    : 'bg-white border-gray-300 text-red-600 hover:border-red-400 hover:bg-gray-50'
                   }`}
               >
                 не

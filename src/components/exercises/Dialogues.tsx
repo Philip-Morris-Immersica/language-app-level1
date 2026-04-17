@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { Volume2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Volume2, Play, Square } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { getTtsAudioPath, playTtsAudio, speakBulgarian, stopTtsAudio } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio, stopTtsAudio } from '@/lib/tts';
 
 interface DialogueLine {
   speaker?: string;
@@ -33,7 +34,24 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [playingLine, setPlayingLine] = useState<string | null>(null);
+  const [playingSection, setPlayingSection] = useState<string | null>(null);
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const sectionPlaybackRef = useRef<{ cancelled: boolean } | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (sectionPlaybackRef.current) sectionPlaybackRef.current.cancelled = true;
+      stopTtsAudio();
+    };
+  }, []);
+
+  const stopSectionPlayback = () => {
+    if (sectionPlaybackRef.current) sectionPlaybackRef.current.cancelled = true;
+    sectionPlaybackRef.current = null;
+    stopTtsAudio();
+    setPlayingSection(null);
+    setPlayingLine(null);
+  };
 
   const toggleSection = (sectionId: string) => {
     setRevealedSections(prev => {
@@ -46,6 +64,7 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
 
   const handleLineClick = (e: React.MouseEvent, section: DialogueSection, lineIndex: number) => {
     e.stopPropagation();
+    if (playingSection) stopSectionPlayback();
     const line = section.lines[lineIndex];
     const lineKey = `${section.id}-line-${lineIndex}`;
 
@@ -61,8 +80,49 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
       ? getTtsAudioPath(exerciseId!, 'dialogues', audioFile)
       : '';
     const rawText = line.text.replace(/^—\s*/, '');
-    playTtsAudio(audioPath, rawText);
-    setTimeout(() => setPlayingLine(null), 3000);
+    playTtsAudio(audioPath, rawText, undefined, () => setPlayingLine(null));
+  };
+
+  const handlePlaySection = (e: React.MouseEvent, section: DialogueSection) => {
+    e.stopPropagation();
+    if (playingSection === section.id) {
+      stopSectionPlayback();
+      return;
+    }
+    if (playingSection || playingLine) stopSectionPlayback();
+    if (!exerciseId) return;
+
+    const token = { cancelled: false };
+    sectionPlaybackRef.current = token;
+    setPlayingSection(section.id);
+
+    const playNext = (i: number) => {
+      if (token.cancelled) return;
+      if (i >= section.lines.length) {
+        if (sectionPlaybackRef.current === token) sectionPlaybackRef.current = null;
+        setPlayingSection(null);
+        setPlayingLine(null);
+        return;
+      }
+      const line = section.lines[i];
+      const lineKey = `${section.id}-line-${i}`;
+      setPlayingLine(lineKey);
+      const audioPath = getTtsAudioPath(
+        exerciseId,
+        'dialogues',
+        `${exerciseId}-${section.id}-line-${i}`,
+      );
+      const rawText = line.text.replace(/^—\s*/, '');
+      playTtsAudio(audioPath, rawText, undefined, () => {
+        if (token.cancelled) return;
+        // Small gap between lines so the dialogue feels natural
+        window.setTimeout(() => {
+          if (!token.cancelled) playNext(i + 1);
+        }, 350);
+      });
+    };
+
+    playNext(0);
   };
 
   return (
@@ -81,13 +141,29 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
               key={section.id}
               className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#8FC412]/50"
             >
-              <div
-                onClick={() => toggleSection(section.id)}
-                className="flex items-center gap-2 mb-4 cursor-pointer"
-              >
-                <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#8FC412] text-white">
-                  {section.id}
-                </span>
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div
+                  onClick={() => toggleSection(section.id)}
+                  className="flex items-center gap-2 cursor-pointer flex-1"
+                >
+                  <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#8FC412] text-white">
+                    {section.id}
+                  </span>
+                </div>
+                <Button
+                  onClick={(e) => handlePlaySection(e, section)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
+                    playingSection === section.id
+                      ? 'bg-red-500 hover:bg-red-600 text-white'
+                      : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+                  }`}
+                >
+                  {playingSection === section.id ? (
+                    <><Square className="w-4 h-4" /> {t('exercise.stop')}</>
+                  ) : (
+                    <><Play className="w-4 h-4" /> {t('exercise.listen')}</>
+                  )}
+                </Button>
               </div>
 
               <div className="space-y-3">

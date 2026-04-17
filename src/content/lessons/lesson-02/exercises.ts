@@ -156,6 +156,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Обичам / не обичам',
     instruction: 'Запознайте се с глагола ОБИЧАМ. Натиснете за произношение.',
     order: 7,
+    showLikeDislike: true,
     examples: [
       {
         imageUrl: '/assets/lesson-02/gramatika-2-obicham/az-kafe-chay.jpg',
@@ -260,7 +261,6 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-11-ref',
     type: 'grammar_examples',
-    disableTts: true,
     title: 'УПРАЖНЕНИЕ 11',
     subtitle: 'Какво искат и какво не искат Али и Сара?',
     instruction: 'Разгледайте какво искат и какво не искат Али и Сара. Кликнете за произношение.',
@@ -268,16 +268,32 @@ export const exercises: Exercise[] = [
     examples: [
       {
         imageUrl: '/assets/lesson-02/exercise-11/ali.jpg',
+        voiceGender: 'male',
         lines: [
-          '✓ вода, баница, хляб, салам, кроасан',
-          '✗ прясно мляко, кафе, кисело мляко',
+          '✓ Искам вода.',
+          '✓ Искам баница.',
+          '✓ Искам хляб.',
+          '✓ Искам салам.',
+          '✓ Искам кроасан.',
+          '',
+          '✗ Не искам прясно мляко.',
+          '✗ Не искам кафе.',
+          '✗ Не искам кисело мляко.',
         ],
       },
       {
         imageUrl: '/assets/lesson-02/exercise-11/sara.jpg',
+        voiceGender: 'female',
         lines: [
-          '✓ прясно мляко, баница, хляб, кафе',
-          '✗ вода, салам, кисело мляко, кроасан',
+          '✓ Искам прясно мляко.',
+          '✓ Искам баница.',
+          '✓ Искам хляб.',
+          '✓ Искам кафе.',
+          '',
+          '✗ Не искам вода.',
+          '✗ Не искам салам.',
+          '✗ Не искам кисело мляко.',
+          '✗ Не искам кроасан.',
         ],
       },
     ],

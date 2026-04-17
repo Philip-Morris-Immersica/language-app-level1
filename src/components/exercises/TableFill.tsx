@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { Check, X, RotateCcw } from 'lucide-react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { Check, X, RotateCcw, Play, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import {
@@ -14,7 +14,7 @@ import {
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian } from '@/lib/tts';
+import { speakBulgarian, getTtsAudioPath, playTtsAudio, stopTtsAudio } from '@/lib/tts';
 
 const COLUMN_KEY_MAP: Record<string, string> = {
   'мъжки': 'grammar.masculine',
@@ -55,6 +55,9 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
   const t = useT();
   const { lang } = useLanguage();
   const [revealedParas, setRevealedParas] = useState<Set<number>>(new Set());
+  const [sequentialPlaying, setSequentialPlaying] = useState(false);
+  const [playingParaIndex, setPlayingParaIndex] = useState<number | null>(null);
+  const seqRef = useRef<{ cancelled: boolean } | null>(null);
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
 
@@ -98,6 +101,52 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
       setValidation({});
     }
   };
+
+  const stopSequentialPlayback = useCallback(() => {
+    if (seqRef.current) seqRef.current.cancelled = true;
+    seqRef.current = null;
+    stopTtsAudio();
+    setSequentialPlaying(false);
+    setPlayingParaIndex(null);
+  }, []);
+
+  const handleSequentialListen = () => {
+    if (!exerciseId || !paragraphs?.length) return;
+    if (sequentialPlaying) {
+      stopSequentialPlayback();
+      return;
+    }
+    const token = { cancelled: false };
+    seqRef.current = token;
+    setSequentialPlaying(true);
+
+    const playNext = (i: number) => {
+      if (token.cancelled) return;
+      if (!paragraphs || i >= paragraphs.length) {
+        if (seqRef.current === token) seqRef.current = null;
+        setSequentialPlaying(false);
+        setPlayingParaIndex(null);
+        return;
+      }
+      const p = paragraphs[i];
+      setPlayingParaIndex(i);
+      const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
+      playTtsAudio(audioPath, p.text, undefined, () => {
+        if (token.cancelled) return;
+        window.setTimeout(() => {
+          if (!token.cancelled) playNext(i + 1);
+        }, 400);
+      });
+    };
+    playNext(0);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (seqRef.current) seqRef.current.cancelled = true;
+      stopTtsAudio();
+    };
+  }, []);
 
   const handleReset = () => {
     setAnswers({});
@@ -164,6 +213,31 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
     <div className="bg-white rounded-xl p-4 md:p-8 shadow-md space-y-6">
       {paragraphs && paragraphs.length > 0 && (
         <div className="space-y-4">
+          {exerciseId && (
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                onClick={handleSequentialListen}
+                className={`px-5 py-2.5 rounded-lg font-semibold text-sm md:text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                  sequentialPlaying
+                    ? 'bg-red-500 hover:bg-red-600 text-white'
+                    : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+                }`}
+              >
+                {sequentialPlaying ? (
+                  <>
+                    <Square className="w-4 h-4 md:w-5 md:h-5" />
+                    {t('exercise.stop')}
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 md:w-5 md:h-5" />
+                    {t('exercise.listen')}
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
           {lang !== 'bg' && (
             <p className="text-xs text-gray-400 text-center italic">{t('exercise.tapToTranslate')}</p>
           )}
@@ -171,14 +245,25 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
             <div
               key={i}
               onClick={() => {
-                speakBulgarian(para.text);
+                if (sequentialPlaying) stopSequentialPlayback();
+                if (exerciseId) {
+                  const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
+                  setPlayingParaIndex(i);
+                  playTtsAudio(audioPath, para.text, undefined, () => setPlayingParaIndex(null));
+                } else {
+                  speakBulgarian(para.text);
+                }
                 setRevealedParas(prev => {
                   const next = new Set(prev);
                   if (next.has(i)) next.delete(i); else next.add(i);
                   return next;
                 });
               }}
-              className="cursor-pointer hover:bg-gray-50 rounded-lg p-3 -mx-1 transition-colors active:scale-[0.99]"
+              className={`cursor-pointer rounded-lg p-3 -mx-1 transition-colors active:scale-[0.99] ${
+                playingParaIndex === i
+                  ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                  : 'hover:bg-gray-50 border border-transparent'
+              }`}
             >
               {para.speaker && (
                 <p className="text-xs font-bold text-[#0279C3] mb-1">{para.speaker}</p>

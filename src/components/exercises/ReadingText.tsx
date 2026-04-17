@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { Play, Pause, Square, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -18,12 +19,14 @@ interface ChecklistItem {
 interface ReadingTextImage {
   imageUrl: string;
   label: string;
+  ttsWordId?: string;
 }
 
 interface ReadingTextProps {
   audioUrl?: string;
   textTitle?: string;
   images?: ReadingTextImage[];
+  imageFlashcards?: boolean;
   paragraphs: string[];
   paragraphTranslations?: Record<string, string>[];
   showDictionary?: boolean;
@@ -88,7 +91,7 @@ function TtsButton({
   );
 }
 
-export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -97,6 +100,89 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
   const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>({});
   const [checkSubmitted, setCheckSubmitted] = useState(false);
   const completedRef = useRef(false);
+
+  /** Sequential „Слушай“ (paragraph p-0, then p-1, …) when no single `audioUrl` full file */
+  const [sequentialPlaying, setSequentialPlaying] = useState(false);
+  const [playingParaIndex, setPlayingParaIndex] = useState<number | null>(null);
+  const seqRef = useRef<{ cancelled: boolean } | null>(null);
+  const [flippedVocabImages, setFlippedVocabImages] = useState<Record<number, boolean>>({});
+
+  const stopSequentialPlayback = useCallback(() => {
+    if (seqRef.current) seqRef.current.cancelled = true;
+    seqRef.current = null;
+    stopTtsAudio();
+    setSequentialPlaying(false);
+    setPlayingParaIndex(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (seqRef.current) seqRef.current.cancelled = true;
+      stopTtsAudio();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const showSequentialListen =
+    !!exerciseId &&
+    paragraphs.length > 0 &&
+    !audioUrl &&
+    !hideText;
+
+  const handleSequentialListen = () => {
+    if (sequentialPlaying) {
+      stopSequentialPlayback();
+      return;
+    }
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+    if (!exerciseId) return;
+    const token = { cancelled: false };
+    seqRef.current = token;
+    setSequentialPlaying(true);
+
+    const playNext = (i: number) => {
+      if (token.cancelled) return;
+      if (i >= paragraphs.length) {
+        if (seqRef.current === token) seqRef.current = null;
+        setSequentialPlaying(false);
+        setPlayingParaIndex(null);
+        return;
+      }
+      const p = paragraphs[i];
+      setPlayingParaIndex(i);
+      const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
+      playTtsAudio(audioPath, p, undefined, () => {
+        if (token.cancelled) return;
+        window.setTimeout(() => {
+          if (!token.cancelled) playNext(i + 1);
+        }, 400);
+      });
+    };
+    playNext(0);
+  };
+
+  const handleVocabImageClick = (index: number, label: string, ttsWordId?: string) => {
+    if (sequentialPlaying) stopSequentialPlayback();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+    const wasFlipped = flippedVocabImages[index];
+    setFlippedVocabImages(prev => ({ ...prev, [index]: !prev[index] }));
+    if (wasFlipped) return;
+    if (exerciseId && ttsWordId) {
+      const audioPath = getTtsAudioPath(exerciseId, 'words', ttsWordId);
+      playTtsAudio(audioPath, label);
+    } else {
+      speakBulgarian(label);
+    }
+  };
 
   const handlePlayAudio = () => {
     if (!audioUrl) return;
@@ -120,7 +206,7 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {(audioUrl || showDictionary) && (
+      {(audioUrl || showDictionary || showSequentialListen) && (
         <div className="flex justify-end gap-2 mb-6">
           {showDictionary && (
             <Button
@@ -139,6 +225,28 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
               {isPlaying ? (
                 <>
                   <Pause className="w-5 h-5" />
+                  {t('exercise.stop')}
+                </>
+              ) : (
+                <>
+                  <Play className="w-5 h-5" />
+                  {t('exercise.listen')}
+                </>
+              )}
+            </Button>
+          )}
+          {showSequentialListen && (
+            <Button
+              onClick={handleSequentialListen}
+              className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                sequentialPlaying
+                  ? 'bg-red-500 hover:bg-red-600 text-white'
+                  : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+              }`}
+            >
+              {sequentialPlaying ? (
+                <>
+                  <Square className="w-5 h-5" />
                   {t('exercise.stop')}
                 </>
               ) : (
@@ -179,6 +287,62 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
             </div>
           ))}
         </div>
+      ) : !hideText && images && images.length > 0 && imageFlashcards ? (
+        <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+          {images.map((img, i) => {
+            const isFlipped = flippedVocabImages[i];
+            return (
+              <div
+                key={i}
+                className="perspective-1000 h-48 md:h-52"
+                style={{ perspective: '1000px' }}
+              >
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleVocabImageClick(i, img.label, img.ttsWordId);
+                    }
+                  }}
+                  onClick={() => handleVocabImageClick(i, img.label, img.ttsWordId)}
+                  className="relative w-full h-full cursor-pointer transition-transform duration-500 preserve-3d"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  }}
+                >
+                  <div
+                    className="absolute w-full h-full backface-hidden bg-white rounded-xl p-3 shadow-md flex items-center justify-center border border-gray-200"
+                    style={{ backfaceVisibility: 'hidden' }}
+                  >
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={img.imageUrl}
+                        alt={img.label}
+                        fill
+                        className="object-contain rounded-lg"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="absolute w-full h-full backface-hidden bg-[#8FC412] rounded-xl p-4 shadow-md flex items-center justify-center"
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)',
+                    }}
+                  >
+                    <p className="text-base md:text-lg font-bold text-white text-center px-2 leading-snug">
+                      {img.label}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       ) : !hideText && images && images.length > 0 ? (
         <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
           {images.map((img, i) => (
@@ -214,10 +378,16 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
               <div
                 key={index}
                 onClick={noTranslation ? undefined : () => {
+                  if (sequentialPlaying) stopSequentialPlayback();
+                  if (audioRef.current) {
+                    audioRef.current.pause();
+                    setIsPlaying(false);
+                  }
                   const audioPath = exerciseId
                     ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${index}`)
                     : '';
-                  playTtsAudio(audioPath, paragraph);
+                  setPlayingParaIndex(index);
+                  playTtsAudio(audioPath, paragraph, undefined, () => setPlayingParaIndex(null));
 
                   setRevealedParas(prev => {
                     const next = new Set(prev);
@@ -228,7 +398,11 @@ export function ReadingText({ audioUrl, textTitle, images, paragraphs, paragraph
                 }}
                 className={noTranslation
                   ? 'rounded-lg p-2 -mx-2'
-                  : 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99]'
+                  : `cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
+                      playingParaIndex === index
+                        ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                        : 'hover:bg-gray-50 border border-transparent'
+                    }`
                 }
               >
                 {paragraph.includes('\n') ? (

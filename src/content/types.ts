@@ -123,6 +123,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
     imageUrl: string;      // Path to illustration
     label: string;         // "Добро утро!", "Здравей!" etc.
     sublabels?: string[];  // Additional text lines (e.g., ["българин", "българка", "българи"])
+    /** If true, TTS joins label + sublabels in one clip; default is label only (country name etc.). */
+    ttsIncludeSublabels?: boolean;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
@@ -200,6 +202,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
   title: string;             // 'ГРАМАТИКА 2'
   subtitle?: string;         // 'Глагол СЪМ'
   disableTts?: boolean;      // Skip TTS on card click (for abbreviation cards etc.)
+  /** Show a green Heart before `text` and a red HeartCrack before `subtext` (like/dislike cards, e.g. „обичам / не обичам“). */
+  showLikeDislike?: boolean;
   examples: {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
@@ -207,6 +211,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
     label?: string;          // Visual-only badge (e.g. 'Какъв — мъжки род') — not read by TTS
     lines?: string[];        // Multiple equal-weight lines (replaces text/subtext display when provided)
     translations?: Record<string, string>;
+    /** TTS only: male (Charon) vs default female (Achernar). */
+    voiceGender?: 'male' | 'female';
   }[];
 }
 
@@ -341,13 +347,20 @@ export interface LetterChoiceExercise extends BaseExercise {
 export interface ReadingTextExercise extends BaseExercise {
   type: 'reading_text';
   subtitle?: string;
+  /** One MP3 for entire text; omit when using per-paragraph TTS + sequential „Слушай“ only. */
   audioUrl?: string;
   textTitle?: string;         // Bold heading rendered above paragraphs
   images?: {
     imageUrl: string;
     label: string;
+    /** Stem for `words/{ttsWordId}.mp3` in the lesson TTS folder (flip-card audio). */
+    ttsWordId?: string;
   }[];
+  /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
+  imageFlashcards?: boolean;
   paragraphs: string[];
+  /** Parallel to `paragraphs`: per-paragraph TTS voice (Gemini). If set with same length as paragraphs, `-full.mp3` is not generated. */
+  paragraphVoiceGenders?: ('male' | 'female')[];
   paragraphTranslations?: Record<string, string>[];
   showDictionary?: boolean;
   hideText?: boolean;
@@ -414,6 +427,8 @@ export interface TableFillExercise extends BaseExercise {
     text: string;
     imageUrl?: string;
   }[];
+  /** Per paragraph TTS voice (Gemini Pro); same length as `paragraphs` when set */
+  paragraphVoiceGenders?: ('male' | 'female')[];
   tables: {
     name: string;
     columns: string[];

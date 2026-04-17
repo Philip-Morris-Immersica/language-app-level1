@@ -50,10 +50,12 @@ export function GrammarVisual({ subtitle, pronouns, exerciseId }: GrammarVisualP
 
       {/* Visual grid for pronouns */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-        {pronouns.map((item, index) => (
+        {pronouns.map((item, index) => {
+          const speakText = [item.pronoun, item.description].filter(Boolean).join(' ');
+          return (
           <div
             key={index}
-            onClick={() => handleClick(index, item.pronoun)}
+            onClick={() => handleClick(index, speakText)}
             className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center justify-center"
           >
             {/* Image placeholder or actual image */}
@@ -258,7 +260,8 @@ export function GrammarVisual({ subtitle, pronouns, exerciseId }: GrammarVisualP
               </>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>

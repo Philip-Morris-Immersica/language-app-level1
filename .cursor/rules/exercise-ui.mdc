@@ -116,7 +116,22 @@ stopSpeaking();
 
 ### Model strategy (see `tts-audio` rule for details)
 - **Flash** (`gemini-2.5-flash-tts`) — single words, grammar table rows/notes
-- **Pro** (`gemini-2.5-pro-tts`) — sentences, dialogues, reading texts, personal choice models
+- **Pro** (`gemini-2.5-pro-tts`) — sentences, dialogues, reading texts, personal choice models, illustrated_cards
+
+### Dialogue playback (`Dialogues.tsx`) — two modes, one component
+Every `dialogues` exercise automatically gets both modes (no config needed):
+1. **Single line** — click a line to hear it once.
+2. **Whole section** — "Слушай / Listen" button in each section header plays all lines in order with a short gap; turns red ("Спри / Stop") while active.
+
+### Reading text playback (`ReadingText.tsx`)
+- **With `audioUrl`** — one green „Слушай“ plays the single `-full.mp3` (or legacy path).
+- **Without `audioUrl`** but with `exerciseId` + visible paragraphs — „Слушай“ plays **`p-0` → `p-1` → …** in order (400 ms gap); red „Спри“ stops. Use when `paragraphVoiceGenders` matches paragraph count (mixed voices — no single full file).
+- **Tap paragraph** — always plays that paragraph’s `-p-{i}.mp3` only.
+
+Rules when authoring `dialogues`:
+- Do **not** add an `audioUrl` — per-line MP3 paths are convention-based.
+- Prefer explicit `voiceGender: 'male' | 'female'` on each line so the generator picks Charon/Achird vs Achernar/Despina correctly (see `tts-audio` rule).
+- The component lives in [Dialogues.tsx](mdc:src/components/exercises/Dialogues.tsx); changes there propagate to all lessons.
 
 ## State Persistence
 

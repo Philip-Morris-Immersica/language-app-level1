@@ -41,6 +41,9 @@ const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
+/** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
+const GEMINI_BG_WORD_STRESS_PROMPT =
+  'Bulgarian food name. Speak with native word stress (ударение) on the correct syllable in each word.';
 
 // Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers, tricky pronunciation)
 const GRAMMAR_TABLE_PRO_ROWS = new Set([
@@ -97,6 +100,15 @@ const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene', // lesson 3 — Пушенето забранено!
 ]);
 
+/** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
+const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>(['shopska-salata', 'sarmi', 'baklava']);
+
+/** Optional per-id prompt override (Pro) when generic stress prompt is not enough. */
+const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
+  baklava:
+    'Bulgarian word баклава (layered pastry dessert). Stress must fall on the first syllable: БА — кла — ва.',
+};
+
 /** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
 const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'tsigari', // lesson 3 — цигари (ударение на -га-)
@@ -135,7 +147,7 @@ interface Exercise {
   listeningText?: string;
   voiceGender?: 'male' | 'female';
   textTitle?: string;
-  paragraphs?: string[];
+  paragraphs?: string[] | { text: string; speaker?: string }[];
   paragraphVoiceGenders?: ('male' | 'female')[];
   rows?: { pronoun: string; cells: string[] }[];
   examples?: { text: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female' }[];
@@ -355,6 +367,33 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
  * Skip ids already covered by illustrated_cards — those clips are generated there (label-only by default).
  * Remaining images (e.g. a flag with no vocabulary card) get their own `words/{id}.mp3`.
  */
+/** reading_text — optional `images[].ttsWordId` + `label` for flip-card word clips (`words/{ttsWordId}.mp3`). */
+function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'reading_text' && e.images)) {
+    for (const img of ex.images!) {
+      const raw = img as { label?: string; ttsWordId?: string };
+      const id = raw.ttsWordId?.trim();
+      const label = raw.label?.trim();
+      if (!id || !label) continue;
+      const useProStress = READING_TEXT_IMAGE_STRESS_IDS.has(id);
+      const stressPrompt =
+        useProStress && READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID[id]
+          ? READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID[id]
+          : GEMINI_BG_WORD_STRESS_PROMPT;
+      jobs.push({
+        category: 'words',
+        filename: `${id}.mp3`,
+        text: clean(label),
+        voice: FEMALE_VOICE,
+        model: useProStress ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: useProStress ? stressPrompt : GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   const illustratedIds = new Set<string>();
   for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
@@ -491,10 +530,33 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+function collectTableFillParagraphJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'table_fill')) {
+    const paras = (ex as Exercise & { paragraphs?: { text: string }[] }).paragraphs;
+    if (!paras?.length) continue;
+    const genders = (ex as Exercise).paragraphVoiceGenders;
+    for (let i = 0; i < paras.length; i++) {
+      const t = paras[i].text?.trim();
+      if (!t) continue;
+      const voice = genders?.[i] === 'male' ? MALE_VOICE : FEMALE_VOICE;
+      jobs.push({
+        category: 'texts',
+        filename: `${ex.id}-p-${i}.mp3`,
+        text: clean(t),
+        voice,
+        model: GEMINI_MODEL,
+        prompt: GEMINI_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'reading_text' && e.paragraphs && !READING_TEXT_EXCLUDE.has(e.id))) {
-    const paragraphs = ex.paragraphs!;
+    const paragraphs = ex.paragraphs as string[];
     const perPara = ex.paragraphVoiceGenders;
     const defaultVoice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     const usePerPara = perPara && perPara.length === paragraphs.length;
@@ -568,12 +630,14 @@ async function main() {
   const jobs: TtsJob[] = [
     ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
+    ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
+    ...collectTableFillParagraphJobs(exercises),
     ...collectListeningJobs(exercises),
     ...collectPersonalChoiceJobs(exercises),
   ];

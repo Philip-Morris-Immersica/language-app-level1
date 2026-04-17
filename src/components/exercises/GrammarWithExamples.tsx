@@ -8,6 +8,7 @@ import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -59,6 +60,8 @@ interface GrammarExample {
   lines?: string[];
   translations?: Record<string, string>;
   zoomable?: boolean;
+  /** TTS generation only — which voice reads the card (see generate-tts.ts). */
+  voiceGender?: 'male' | 'female';
 }
 
 interface GrammarWithExamplesProps {
@@ -66,6 +69,7 @@ interface GrammarWithExamplesProps {
   title?: string;
   subtitle?: string;
   disableTts?: boolean;
+  showLikeDislike?: boolean;
   examples: GrammarExample[];
   exerciseId?: string;
 }
@@ -83,15 +87,17 @@ function BoldLine({ text }: { text: string }) {
   );
 }
 
-export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId }: GrammarWithExamplesProps) {
+export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
   const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
+      const stripGrammarLinePrefix = (l: string) =>
+        l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[✓✗]\s*/, '');
       const textToSpeak = example.lines
-        ? example.lines.join(' ')
+        ? example.lines.filter(l => l.trim() !== '').map(stripGrammarLinePrefix).join(' ')
         : [example.text, example.subtext].filter(Boolean).join(' ');
       const audioPath = exerciseId
         ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-card-${index}`)
@@ -160,6 +166,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
                   {example.lines.map((line, lineIndex) => {
                     if (line === '') return <div key={lineIndex} className="h-2" />;
                     const plainLine = line.replace(/\*\*(.+?)\*\*/g, '$1');
+                    const translationSource = plainLine.replace(/^\s*[✓✗]\s*/, '');
                     const isPositive = plainLine.startsWith('✓');
                     const isNegative = plainLine.startsWith('✗');
                     const isWarning = plainLine.startsWith('⚠️');
@@ -178,10 +185,34 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, exerciseId
                         <p className={`text-base md:text-lg font-bold ${colorClass}`}>
                           <BoldLine text={line} />
                         </p>
-                        {plainLine && <InlineTranslation text={plainLine} visible={revealed.has(index)} />}
+                        {translationSource.trim() && (
+                          <InlineTranslation text={translationSource} visible={revealed.has(index)} />
+                        )}
                       </div>
                     );
                   })}
+                </>
+              ) : showLikeDislike && example.subtext ? (
+                <>
+                  <div className="flex items-center justify-center gap-2">
+                    <ThumbsUp className="w-5 h-5 md:w-6 md:h-6 fill-green-600 text-green-600 flex-shrink-0" />
+                    <p className="text-base md:text-lg font-bold text-gray-800">
+                      <HighlightPrepositions text={example.text} />
+                    </p>
+                  </div>
+                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
+                  <div className="flex items-center justify-center gap-2 mt-2">
+                    <ThumbsDown className="w-5 h-5 md:w-6 md:h-6 fill-red-500 text-red-500 flex-shrink-0" />
+                    <p className="text-sm md:text-base text-gray-600 italic">
+                      <HighlightPrepositions text={example.subtext} />
+                    </p>
+                  </div>
+                  <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
+                  {example.label && (
+                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
+                      {example.label}
+                    </p>
+                  )}
                 </>
               ) : (
                 <>

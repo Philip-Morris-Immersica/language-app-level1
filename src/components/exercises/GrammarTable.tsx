@@ -54,7 +54,12 @@ export function GrammarTable({
     });
   };
 
-  const toggleNote = (idx: number) => {
+  const handleNoteClick = (idx: number, note: string) => {
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
+      : '';
+    playTtsAudio(audioPath, note);
+
     setRevealedNotes(prev => {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx);
@@ -166,10 +171,13 @@ export function GrammarTable({
           {notes.map((note, i) => (
             <div
               key={i}
-              onClick={() => toggleNote(i)}
+              onClick={() => handleNoteClick(i, note)}
               className="border-2 border-[#7ab356] rounded-lg px-5 py-3 bg-[#f4faee] text-center cursor-pointer hover:bg-[#edf5e4] transition-colors"
             >
-              <p className="text-sm md:text-base font-semibold text-gray-800">{note}</p>
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-sm md:text-base font-semibold text-gray-800">{note}</p>
+                <Volume2 className="w-3.5 h-3.5 text-[#8FC412] opacity-60 flex-shrink-0" />
+              </div>
               <InlineTranslation text={note} visible={revealedNotes.has(i)} />
             </div>
           ))}

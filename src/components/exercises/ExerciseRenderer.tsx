@@ -194,6 +194,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           examples={exercise.examples}
           disableTts={exercise.disableTts}
+          showLikeDislike={exercise.showLikeDislike}
           exerciseId={exercise.id}
         />
       );
@@ -248,6 +249,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           audioUrl={exercise.audioUrl}
           textTitle={exercise.textTitle}
           images={exercise.images}
+          imageFlashcards={exercise.imageFlashcards}
           paragraphs={exercise.paragraphs}
           paragraphTranslations={exercise.paragraphTranslations}
           showDictionary={exercise.showDictionary}
