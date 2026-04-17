@@ -129,12 +129,54 @@ These rules in **content files** directly affect audio quality:
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
 
-## Audio Files in Git
+## Audio Files in Git — IMPORTANT, READ BEFORE TOUCHING `.gitattributes`
 
-MP3 files are stored as **regular binary files** in Git (NOT LFS). Vercel does not fetch LFS objects during build, so LFS caused all audio to be deployed as broken pointer files. Total audio is ~28 MB — acceptable for Git.
+### The rule (non-negotiable)
 
-> Never manually move or rename audio files outside of the TTS script — paths are convention-based.  
-> WAV and OGG files remain in LFS (`.gitattributes`).
+**MP3 files are committed as regular Git blobs. NOT Git LFS.**
+
+### Why (so nobody "fixes" this again)
+
+Vercel's build process does **not** run `git lfs fetch` by default. If MP3s are tracked by LFS, the deployed site serves LFS pointer text files instead of real audio → every „Слушай" button plays a broken file. We hit this bug already and rolled back. Total MP3 size is ~30 MB — this is fine in regular Git and does not justify LFS.
+
+### What `.gitattributes` must look like
+
+```gitattributes
+# *.mp3 is NOT listed here — on purpose
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+```
+
+- `*.mp3` → **must NOT** appear with `filter=lfs`
+- `*.wav` and `*.ogg` stay in LFS (source/intermediate files, not shipped to prod)
+
+### How to commit TTS output (the only correct flow)
+
+```bash
+npm run tts:generate -- --lesson XX --model gemini
+git add -A
+git commit -m "feat(lesson-XX): TTS audio"
+git push
+```
+
+No `git lfs track`, no `git lfs migrate`, no special commands. Just plain git.
+
+### Do NOT do any of these
+
+- ❌ Do **not** run `git lfs track "*.mp3"`
+- ❌ Do **not** add `*.mp3 filter=lfs …` to `.gitattributes`
+- ❌ Do **not** run `git lfs migrate import --include="*.mp3"`
+- ❌ Do **not** rename/move MP3 files manually — paths are derived by `getTtsAudioPath()` from exercise/vocabulary IDs
+
+### Sanity check before pushing audio
+
+```bash
+git check-attr filter -- public/assets/lesson-04/audio/tts/words/banan.mp3
+# Expected output:
+#   public/assets/lesson-04/audio/tts/words/banan.mp3: filter: unspecified
+```
+
+If it says `filter: lfs`, stop and remove `*.mp3` from `.gitattributes` before committing.
 
 ## Adding a New Lesson — Checklist
 
@@ -146,7 +188,7 @@ MP3 files are stored as **regular binary files** in Git (NOT LFS). Vercel does n
 6. Script skips existing files — safe to re-run after fixing issues
 7. To regenerate specific files, delete them first, then re-run
 8. Verify in browser: `npm run dev` → navigate to lesson
-9. Commit and push: `git add -A` → `git commit` → `git push` — **MP3 are normal Git blobs** (not LFS), so Vercel deploys real audio files
+9. Commit and push: `git add -A` → `git commit` → `git push`. MP3 files are plain Git blobs — no LFS commands needed. See **Audio Files in Git** above.
 
 ## Convention-Based Audio Paths
 
