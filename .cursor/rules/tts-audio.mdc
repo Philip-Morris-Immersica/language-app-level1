@@ -20,7 +20,7 @@ Two Gemini TTS models are used depending on content type:
 - **Why:** Better pronunciation accuracy for isolated words
 
 ### gemini-2.5-pro-tts (connected text)
-- **Use for:** Dialogues, reading texts, listening, grammar examples (full sentences), personal choice models
+- **Use for:** Dialogues, reading texts, listening, grammar examples (full sentences), personal choice models, **illustrated_cards** (greeting phrases like „Добър ден!“ — natural stress/intonation)
 - **Prompt:** `"Read aloud in a warm, welcoming tone."`
 - **Why:** More natural intonation and flow for sentences and paragraphs
 
@@ -72,13 +72,14 @@ public/assets/lesson-XX/audio/tts/
 | Category | Source | Voice | Model |
 |---|---|---|---|
 | Vocabulary | `content.vocabulary[].bulgarian` | Female | Flash |
-| Illustrated cards | `exercises[type=illustrated_cards].cards[]` (label + sublabels) | Female | Flash |
+| Illustrated cards | `exercises[type=illustrated_cards].cards[]` — **`label` only**; set `ttsIncludeSublabels: true` to join sublabels into one clip | Female (Achernar) | **Pro** (`Read aloud in a warm, welcoming tone.`) — better intonation on short phrases than Flash |
+| Image labeling | `words/{image.id}.mp3` for images **not** covered by an illustrated card with the same `id` (e.g. a flag-only country) | Female | Flash |
 | Dialogues | `exercises[type=dialogues].sections[].lines[]` | Per speaker | Pro |
 | Grammar tables | `exercises[type=grammar_table].rows[]` | Female | Flash (or Pro via override) |
 | Grammar table notes | `exercises[type=grammar_table].notes[]` | Female | Flash |
 | Grammar visual (pronouns) | `exercises[type=grammar_visual].pronouns[]` | Female | Flash (`{exerciseId}-pronoun-{i}.mp3`) |
-| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female | Pro |
-| Reading texts | `exercises[type=reading_text].paragraphs[]` | Female/male | Pro |
+| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female by default; set `voiceGender: 'male'` on a card for Charon (e.g. lines spoken by a male character) | Pro |
+| Reading texts | `exercises[type=reading_text].paragraphs[]` | Female by default; `voiceGender` on exercise for all paragraphs; or `paragraphVoiceGenders[]` (same length as `paragraphs`) for per-paragraph voice — then **no** `-full.mp3`; UI uses sequential „Слушай“ | Pro |
 | Listening | `exercises[].listeningText` | Female | Pro |
 | Personal choice models | `exercises[type=personal_choice].model` | Female | Pro |
 
@@ -105,6 +106,13 @@ In `exercises.ts`, each dialogue line may set `voiceGender: 'male' | 'female'` (
 **Two women in a row:** the script alternates **`Achernar`** and **`Despina`** (Gemini TTS).
 
 When adding new lessons with different speakers, update `SPEAKER_VOICE_MAP` in [generate-tts.ts](mdc:scripts/generate-tts.ts) and/or add `voiceGender` on lines where roles are clear.
+
+### Playback in the UI
+The [Dialogues.tsx](mdc:src/components/exercises/Dialogues.tsx) component gives every dialogue exercise **two** controls for free:
+- **Per-line click** — plays a single MP3.
+- **Per-section "Слушай / Listen" button** — plays all lines in the section back-to-back with a 350 ms gap (red "Спри / Stop" while active).
+
+Both modes rely on the same `dialogues/{exerciseId}-{sectionId}-line-{i}.mp3` files, so just running `npm run tts:generate -- --lesson XX --model gemini` is enough — no extra audio assets needed. See also the `exercise-ui` rule.
 
 ## Text Cleaning
 
@@ -138,7 +146,7 @@ MP3 files are stored as **regular binary files** in Git (NOT LFS). Vercel does n
 6. Script skips existing files — safe to re-run after fixing issues
 7. To regenerate specific files, delete them first, then re-run
 8. Verify in browser: `npm run dev` → navigate to lesson
-9. Commit and push: `git add -A` → `git commit` → `git push` (LFS handles MP3s automatically)
+9. Commit and push: `git add -A` → `git commit` → `git push` — **MP3 are normal Git blobs** (not LFS), so Vercel deploys real audio files
 
 ## Convention-Based Audio Paths
 
