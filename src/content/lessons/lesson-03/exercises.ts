@@ -690,9 +690,9 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с храненията през деня. Натиснете за произношение.',
     order: 21,
     cards: [
-      { id: 'sutrin',   imageUrl: '/assets/lesson-03/novi-dumi-4-meals/sutrin.jpg',   label: 'сутрин', sublabels: ['ям сутрин = закусвам', 'закуска'] },
-      { id: 'na-obqd',  imageUrl: '/assets/lesson-03/novi-dumi-4-meals/na-obyd.jpg',  label: 'на обяд', sublabels: ['ям на обяд = обядвам', 'обяд'] },
-      { id: 'vecher',   imageUrl: '/assets/lesson-03/novi-dumi-4-meals/vecher.jpg',   label: 'вечер', sublabels: ['ям вечер = вечерям', 'вечеря'] },
+      { id: 'sutrin',   imageUrl: '/assets/lesson-03/novi-dumi-4-meals/sutrin.jpg',   label: 'сутрин', sublabels: ['ям сутрин = закусвам', 'закуска'], ttsIncludeSublabels: true },
+      { id: 'na-obqd',  imageUrl: '/assets/lesson-03/novi-dumi-4-meals/na-obyd.jpg',  label: 'на обяд', sublabels: ['ям на обяд = обядвам', 'обяд'], ttsIncludeSublabels: true },
+      { id: 'vecher',   imageUrl: '/assets/lesson-03/novi-dumi-4-meals/vecher.jpg',   label: 'вечер', sublabels: ['ям вечер = вечерям', 'вечеря'], ttsIncludeSublabels: true },
     ],
   } as IllustratedCardsExercise,
 

@@ -335,10 +335,12 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
       const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
       const prompt = useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT;
+      // "=" is read as „равно“ by TTS; use pause/comma (UI may keep = for learners)
+      const joined = parts.join('. ').replace(/\s*=\s*/g, ', ');
       jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
-        text: clean(parts.join('. ')),
+        text: clean(joined),
         voice: FEMALE_VOICE,
         model,
         prompt,
