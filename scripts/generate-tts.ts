@@ -87,6 +87,12 @@ const GRAMMAR_LABELS = new Set([
 /** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
 const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako']);
 
+/** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
+const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
+  'tsigari', // lesson 3 — цигари
+  'pushene', // lesson 3 — Пушенето забранено!
+]);
+
 // ---------------------------------------------------------------------------
 // Text cleaning
 // ---------------------------------------------------------------------------
@@ -126,7 +132,7 @@ interface Exercise {
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
   cards?: { id: string; label: string; sublabels?: string[]; ttsIncludeSublabels?: boolean }[];
   images?: { id: string; correctLabel: string }[];
-  pronouns?: { pronoun: string }[];
+  pronouns?: { pronoun: string; description?: string }[];
 }
 
 interface TtsJob {
@@ -313,13 +319,14 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       const parts = card.ttsIncludeSublabels
         ? [card.label, ...(card.sublabels || [])]
         : [card.label];
+      const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
       jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(parts.join('. ')),
         voice: FEMALE_VOICE,
         model: GEMINI_MODEL,
-        prompt: GEMINI_PROMPT,
+        prompt: useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT,
       });
     }
   }
@@ -353,18 +360,23 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
-/** grammar_visual — one MP3 per pronoun tile (same convention as other grammar clips). */
+/** grammar_visual — one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
 function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'grammar_visual' && e.pronouns)) {
     for (let i = 0; i < ex.pronouns!.length; i++) {
+      const tile = ex.pronouns![i];
+      const desc = tile.description?.trim();
+      const parts = desc ? [tile.pronoun, desc] : [tile.pronoun];
+      const fullText = parts.join(' ');
+      const usePro = !!desc;
       jobs.push({
         category: 'grammar',
         filename: `${ex.id}-pronoun-${i}.mp3`,
-        text: clean(ex.pronouns![i].pronoun),
+        text: clean(fullText),
         voice: FEMALE_VOICE,
-        model: GEMINI_FLASH_MODEL,
-        prompt: GEMINI_WORD_PROMPT,
+        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
       });
     }
   }
@@ -438,8 +450,11 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
       const card = ex.examples![i];
       let parts: string;
       if (card.lines) {
-        // Strip speaker labels like "Вие:" / "Ти:" at line start before joining for TTS
-        parts = card.lines.map(l => l.replace(/^\s*\S+:\s+/, '')).join(' ');
+        // Strip speaker labels, ✓/✗ markers, skip blank spacer lines
+        parts = card.lines
+          .filter(l => l.trim() !== '')
+          .map(l => l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[✓✗]\s*/, ''))
+          .join(' ');
       } else {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
         parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
