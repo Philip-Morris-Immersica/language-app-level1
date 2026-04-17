@@ -94,8 +94,12 @@ const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako']);
 
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
-  'tsigari', // lesson 3 — цигари
   'pushene', // lesson 3 — Пушенето забранено!
+]);
+
+/** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
+const ILLUSTRATED_CARD_FLASH_IDS = new Set([
+  'tsigari', // lesson 3 — цигари (ударение на -га-)
 ]);
 
 // ---------------------------------------------------------------------------
@@ -324,14 +328,17 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       const parts = card.ttsIncludeSublabels
         ? [card.label, ...(card.sublabels || [])]
         : [card.label];
+      const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
       const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
+      const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
+      const prompt = useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT;
       jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(parts.join('. ')),
         voice: FEMALE_VOICE,
-        model: GEMINI_MODEL,
-        prompt: useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT,
+        model,
+        prompt,
       });
     }
   }
