@@ -102,6 +102,7 @@ const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
 /** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
 const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'tsigari', // lesson 3 — цигари (ударение на -га-)
+  'shishche', // lesson 3 НОВИ ДУМИ 3 — шишче
 ]);
 
 // ---------------------------------------------------------------------------
