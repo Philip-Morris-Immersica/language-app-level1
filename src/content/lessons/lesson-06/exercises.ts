@@ -676,7 +676,7 @@ export const exercises: Exercise[] = [
         id: 'б.',
         lines: [
           { text: '– На колко години си?' },
-          { text: '– На 40.' },
+          { text: '– На 40.', ttsText: '– На четиридесет.' },
           { text: '– На колко години е жена ти?' },
           { text: '– Жена ми е на 37 години.' },
           { text: '– Къде е тя сега?' },
@@ -700,10 +700,10 @@ export const exercises: Exercise[] = [
       { id: 'saprug',   imageUrl: '', label: 'съпруг',   sublabels: ['= мъж'] },
       { id: 'sapruga',  imageUrl: '', label: 'съпруга',  sublabels: ['= жена'] },
       { id: 'saprouzi', imageUrl: '', label: 'съпрузи',  sublabels: ['= мъж и жена'] },
-      { id: 'chicho',   imageUrl: '', label: 'чичо',     sublabels: ['чичовци'] },
-      { id: 'lelya',    imageUrl: '', label: 'леля',     sublabels: ['лели'] },
-      { id: 'vnuk',     imageUrl: '', label: 'внук',     sublabels: ['внуци'] },
-      { id: 'vnuchka',  imageUrl: '', label: 'внучка',   sublabels: ['внучки'] },
+      { id: 'chicho',   imageUrl: '', label: 'чичо' },
+      { id: 'lelya',    imageUrl: '', label: 'леля' },
+      { id: 'vnuk',     imageUrl: '', label: 'внук' },
+      { id: 'vnuchka',  imageUrl: '', label: 'внучка' },
     ],
   } as IllustratedCardsExercise,
 
@@ -926,6 +926,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Граматика – Род и число на прилагателните (5)',
     instruction: 'Запознайте се с рода на прилагателните.',
     order: 27,
+    ttsFlash: true,
     examples: [
       {
         imageUrl: '/assets/lesson-06/07-gramatika-7-prilagatelni-roda/01-hubav-mazh.jpg',
@@ -1388,7 +1389,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-34',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 34',
-    instruction: 'Слушайте текста и попълнете празните места. Разкажете за друг човек по модела.',
+    instruction: 'Слушайте текста и попълнете данните за Мустафа.',
     order: 38,
     points: 7,
     layout: 'single',

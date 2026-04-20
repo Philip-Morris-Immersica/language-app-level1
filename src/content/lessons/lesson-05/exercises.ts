@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Exercise,
   ImageLabelingExercise,
   IllustratedCardsExercise,
@@ -158,7 +158,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-05',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 5',
-    instruction: 'Вижте картата на центъра на ГРАДА от упр. 2. Вярно или грешно?',
+    instruction: 'Вижте картата на центъра на ГРАДА от упр. 2. Кои от следните места има на картата? Вярно или грешно?',
     order: 7,
     imageUrl: '/assets/lesson-05/03-upr-02-karta-grad/01-karta-grad-centar.jpg',
     points: 12,
@@ -196,14 +196,14 @@ export const exercises: Exercise[] = [
         id: 'б',
         lines: [
           { text: '— Къде живее Мария?' },
-          { text: '— Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.' },
+          { text: '— Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.', ttsText: 'Тя живее в София, в квартал Младост 2, блок 243, вход А, етаж 2, апартамент 5.' },
         ],
       },
       {
         id: 'в',
         lines: [
           { text: '— Къде живее Абдул?' },
-          { text: '— Той живее в жк „Люлин“ 7, бл. 704, вх. Б, ет. 4, ап. 12.' },
+          { text: '— Той живее в жк „Люлин“ 7, бл. 704, вх. Б, ет. 4, ап. 12.', ttsText: 'Той живее в жилищен квартал Люлин 7, блок 704, вход Б, етаж 4, апартамент 12.' },
         ],
       },
       {
@@ -224,20 +224,20 @@ export const exercises: Exercise[] = [
     title: 'Адресни съкращения',
     instruction: 'Запомнете съкратените форми.',
     order: 10,
-    disableTts: true,
+    ttsFlash: true,
     examples: [
-      { imageUrl: '', text: 'гр. = град', subtext: '', translations: { en: 'city', ar: 'مدينة', fr: 'ville', fa: 'شهر', uk: 'місто', ru: 'город' } },
-      { imageUrl: '', text: 'с. = село', subtext: '', translations: { en: 'village', ar: 'قرية', fr: 'village', fa: 'روستا', uk: 'село', ru: 'село' } },
-      { imageUrl: '', text: 'кв. = квартал', subtext: '', translations: { en: 'neighborhood', ar: 'حي', fr: 'quartier', fa: 'محله', uk: 'район', ru: 'квартал' } },
-      { imageUrl: '', text: 'жк = жилищен комплекс', subtext: '', translations: { en: 'residential complex', ar: 'مجمع سكني', fr: 'complexe résidentiel', fa: 'مجتمع مسکونی', uk: 'житловий комплекс', ru: 'жилой комплекс' } },
-      { imageUrl: '', text: 'ул. = улица', subtext: '', translations: { en: 'street', ar: 'شارع', fr: 'rue', fa: 'خیابان', uk: 'вулиця', ru: 'улица' } },
-      { imageUrl: '', text: 'бул. = булевард', subtext: '', translations: { en: 'boulevard', ar: 'شارع رئيسي', fr: 'boulevard', fa: 'بلوار', uk: 'бульвар', ru: 'бульвар' } },
-      { imageUrl: '', text: '№ = номер', subtext: '', translations: { en: 'number', ar: 'رقم', fr: 'numéro', fa: 'شماره', uk: 'номер', ru: 'номер' } },
-      { imageUrl: '', text: 'бл. = блок', subtext: '', translations: { en: 'block', ar: 'مبنى', fr: 'bloc', fa: 'بلوک', uk: 'блок', ru: 'блок' } },
-      { imageUrl: '', text: 'вх. = вход', subtext: '', translations: { en: 'entrance', ar: 'مدخل', fr: 'entrée', fa: 'ورودی', uk: 'під\'їзд', ru: 'подъезд' } },
-      { imageUrl: '', text: 'ет. = етаж', subtext: '', translations: { en: 'floor', ar: 'طابق', fr: 'étage', fa: 'طبقه', uk: 'поверх', ru: 'этаж' } },
-      { imageUrl: '', text: 'ап. = апартамент', subtext: '', translations: { en: 'apartment', ar: 'شقة', fr: 'appartement', fa: 'آپارتمان', uk: 'квартира', ru: 'квартира' } },
-      { imageUrl: '', text: 'тел. = телефон', subtext: '', translations: { en: 'phone', ar: 'هاتف', fr: 'téléphone', fa: 'تلفن', uk: 'телефон', ru: 'телефон' } },
+      { imageUrl: '', text: 'гр. = град', subtext: '', translations: { en: 'city', ar: 'مدينة', fr: 'ville', fa: 'شهر', uk: 'місто', ru: 'город' }, ttsText: 'град' },
+      { imageUrl: '', text: 'с. = село', subtext: '', translations: { en: 'village', ar: 'قرية', fr: 'village', fa: 'روستا', uk: 'село', ru: 'село' }, ttsText: 'село' },
+      { imageUrl: '', text: 'кв. = квартал', subtext: '', translations: { en: 'neighborhood', ar: 'حي', fr: 'quartier', fa: 'محله', uk: 'район', ru: 'квартал' }, ttsText: 'квартал' },
+      { imageUrl: '', text: 'жк = жилищен комплекс', subtext: '', translations: { en: 'residential complex', ar: 'مجمع سكني', fr: 'complexe résidentiel', fa: 'مجتمع مسکونی', uk: 'житловий комплекс', ru: 'жилой комплекс' }, ttsText: 'жилищен комплекс' },
+      { imageUrl: '', text: 'ул. = улица', subtext: '', translations: { en: 'street', ar: 'شارع', fr: 'rue', fa: 'خیابان', uk: 'вулиця', ru: 'улица' }, ttsText: 'улица' },
+      { imageUrl: '', text: 'бул. = булевард', subtext: '', translations: { en: 'boulevard', ar: 'شارع رئيسي', fr: 'boulevard', fa: 'بلوار', uk: 'бульвар', ru: 'бульвар' }, ttsText: 'булевард' },
+      { imageUrl: '', text: '№ = номер', subtext: '', translations: { en: 'number', ar: 'رقم', fr: 'numéro', fa: 'شماره', uk: 'номер', ru: 'номер' }, ttsText: 'номер' },
+      { imageUrl: '', text: 'бл. = блок', subtext: '', translations: { en: 'block', ar: 'مبنى', fr: 'bloc', fa: 'بلوک', uk: 'блок', ru: 'блок' }, ttsText: 'блок' },
+      { imageUrl: '', text: 'вх. = вход', subtext: '', translations: { en: 'entrance', ar: 'مدخل', fr: 'entrée', fa: 'ورودی', uk: 'під\'їзд', ru: 'подъезд' }, ttsText: 'вход' },
+      { imageUrl: '', text: 'ет. = етаж', subtext: '', translations: { en: 'floor', ar: 'طابق', fr: 'étage', fa: 'طبقه', uk: 'поверх', ru: 'этаж' }, ttsText: 'етаж' },
+      { imageUrl: '', text: 'ап. = апартамент', subtext: '', translations: { en: 'apartment', ar: 'شقة', fr: 'appartement', fa: 'آپارتمان', uk: 'квартира', ru: 'квартира' }, ttsText: 'апартамент' },
+      { imageUrl: '', text: 'тел. = телефон', subtext: '', translations: { en: 'phone', ar: 'هاتف', fr: 'téléphone', fa: 'تلفن', uk: 'телефон', ru: 'телефон' }, ttsText: 'телефон' },
     ],
   } as GrammarExamplesExercise,
 
@@ -268,20 +268,20 @@ export const exercises: Exercise[] = [
 
   {
     id: 'l05-ex-10',
-    type: 'reading_text',
+    type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 10',
-    instruction: 'Прочетете диалог (б) от упр. 8 и попълнете визитката на Мария. После напишете Вашата собствена визитка по същия модел.',
+    instruction: 'Изслушайте диалог (б) и попълнете визитката на Мария Петрова.',
     order: 12,
-    paragraphs: [
-      'Диалог (б): Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
-      '📋  Визитка — попълнете:',
-      'Име:  ___________________________',
-      'Град: ___________________________',
-      'Адрес: кв./жк ___________________',
-      '        бл. ___ , вх. ___ , ет. ___ , ап. ___',
-      'Тел.: ___________________________',
+    layout: 'single',
+    points: 3,
+    listeningText: 'Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
+    sentences: [
+      { text: 'Мария Петрова', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Град: _______', blanks: [0], correctAnswers: ['София'] },
+      { text: 'кв./жк: _______', blanks: [0], correctAnswers: ['Младост 2'], acceptableAnswers: [['Младост 2', '„Младост“ 2']] },
+      { text: 'бл. _______, вх. _______, ет. _______, ап. _______', blanks: [0, 1, 2, 3], correctAnswers: ['243', 'А', '2', '5'] },
     ],
-  } as ReadingTextExercise,
+  } as WorkbookFillBlankExercise,
 
   {
     id: 'l05-ex-11',
@@ -515,15 +515,15 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с предлозите и примерите.',
     order: 23,
     examples: [
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg', text: 'в — в кутията, в центъра', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/02-na.jpg', text: 'на — на масата', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/03-do.jpg', text: 'до — до кутията', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/04-pred.jpg', text: 'пред — пред кутията', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/05-zad.jpg', text: 'зад — зад кутията', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/06-mezhdu.jpg', text: 'между — между две кутии', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/07-sreshtu.jpg', text: 'срещу — срещу кутията', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/08-blizo-do.jpg', text: 'близо до — близо до кутията', subtext: '' },
-      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/09-daleche-ot.jpg', text: 'далече от — далече от кутията', subtext: '' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg',         text: 'в — в кутията, в центъра',    subtext: '', ttsText: 'в. в кутията, в центъра.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/02-na.jpg',         text: 'на — на масата',              subtext: '', ttsText: 'на. на масата.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/03-do.jpg',         text: 'до — до кутията',             subtext: '', ttsText: 'до. до кутията.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/04-pred.jpg',       text: 'пред — пред кутията',         subtext: '', ttsText: 'пред. пред кутията.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/05-zad.jpg',        text: 'зад — зад кутията',           subtext: '', ttsText: 'зад. зад кутията.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/06-mezhdu.jpg',     text: 'между — между две кутии',     subtext: '', ttsText: 'между. между две кутии.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/07-sreshtu.jpg',    text: 'срещу — срещу кутията',      subtext: '', ttsText: 'срещу. срещу кутията.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/08-blizo-do.jpg',   text: 'близо до — близо до кутията', subtext: '', ttsText: 'близо до. близо до кутията.' },
+      { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/09-daleche-ot.jpg', text: 'далече от — далече от кутията', subtext: '', ttsText: 'далече от. далече от кутията.' },
       {
         imageUrl: '',
         text: 'Театърът е:',
@@ -630,7 +630,7 @@ export const exercises: Exercise[] = [
         lines: [
           { text: '— Извинете, къде е общината?' },
           { text: '— Вървете направо, след банката завийте наляво.' },
-          { text: '— А супермаркет „Била“?' },
+          { text: '— А супермаркет „Била“?', ttsText: '- А супермаркет Билла?' },
           { text: '— Вървете направо и след 20 метра завийте надясно.' },
         ],
       },
@@ -792,6 +792,13 @@ export const exercises: Exercise[] = [
       '2970. 18490567. 12964098. 4500.',
       '987435000. 345. 12359. 933.',
       '284590. 706409. 54030.',
+    ],
+    ttsParagraphs: [
+      'Модел. сто седемдесет и три хиляди двеста шестдесет и осем.',
+      'хиляда двеста и тридесет. две хиляди осемстотин. осемдесет и шест хиляди четиристотин деветдесет и три. триста и седемдесет хиляди четиристотин и осемдесет.',
+      'две хиляди деветстотин и седемдесет. осемнадесет милиона четиристотин деветдесет хиляди петстотин шестдесет и седем. дванадесет милиона деветстотин шестдесет и четири хиляди деветдесет и осем. четири хиляди и петстотин.',
+      'деветстотин осемдесет и седем милиона четиристотин тридесет и пет хиляди. триста четиридесет и пет. дванадесет хиляди триста петдесет и девет. деветстотин тридесет и три.',
+      'двеста осемдесет и четири хиляди петстотин и деветдесет. седемстотин и шест хиляди четиристотин и девет. петдесет и четири хиляди и тридесет.',
     ],
   } as ReadingTextExercise,
 
@@ -984,6 +991,13 @@ export const exercises: Exercise[] = [
       'В Алепо има стара крепост и много стари къщи.',
       'В София има много паркове.',
     ],
+    ttsParagraphs: [
+      'Аз съм Мохамед. Аз съм от Алепо. Сега живея в София.',
+      'София е в България, Алепо е в Сирия. София и Алепо са големи градове: в София живеят около един милион двеста хиляди души, в Алепо. два милиона деветдесет и осем хиляди. София е столица, Алепо. не е. Столицата на Сирия е Дамаск.',
+      'В София и Алепо има големи улици. В София има метро, а в Алепо. няма.',
+      'В Алепо има стара крепост и много стари къщи.',
+      'В София има много паркове.',
+    ],
     showDictionary: true,
   } as ReadingTextExercise,
 
@@ -1015,121 +1029,5 @@ export const exercises: Exercise[] = [
       { text: 'Къде има стара крепост? | _______', blanks: [0], correctAnswers: ['В Алепо.'], options: ['В Алепо.', 'В София.', 'Във Варна.', 'В Рибново.'] },
     ],
   } as WorkbookFillBlankExercise,
-
-
-  // ──────────────────────────────────────────────────────────
-  // РАБОТНА ТЕТРАДКА — Упражнения Урок 5
-  // ──────────────────────────────────────────────────────────
-
-  {
-    id: 'l05-wb-info',
-    type: 'reading_text',
-    title: 'Преговор',
-    subtitle: 'Упражнения за затвърждаване на наученото',
-    instruction: 'Упражнения от работната тетрадка за Урок 5.',
-    order: 47,
-    paragraphs: ['Упражненията по-долу са от работната тетрадка. Попълнете правилните отговори.'],
-  } as ReadingTextExercise,
-
-  {
-    id: 'l05-wb-01',
-    type: 'workbook_fill_blank',
-    
-    instruction: 'Попълнете определителния член за единствено число.',
-    order: 48,
-    points: 14,
-    layout: 'two-column',
-    sentences: [
-      { text: 'Паркът е близо до пазара.', blanks: [], isExample: true },
-      { text: 'Училище_______ е далече от блок_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Университет_______ е в център_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], acceptableAnswers: [['ът', 'а'], ['а']], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Джамия_______ е срещу църква_______.', blanks: [0, 1], correctAnswers: ['та', 'та'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Хотел_______ е на булевард_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], acceptableAnswers: [['ът', 'а'], ['а']], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Мост_______ е над река_______.', blanks: [0, 1], correctAnswers: ['ът', 'та'], acceptableAnswers: [['ът', 'а'], ['та']], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Аптека_______ е до кафе_______.', blanks: [0, 1], correctAnswers: ['та', 'то'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-      { text: 'Кино_______ е зад ресторант_______.', blanks: [0, 1], correctAnswers: ['то', 'а'], options: ['а', 'та', 'то', 'ят', 'ът'] },
-    ],
-  } as WorkbookFillBlankExercise,
-
-  {
-    id: 'l05-wb-02',
-    type: 'workbook_fill_blank',
-    
-    instruction: 'Попълнете определителния член за множествено число.',
-    order: 49,
-    points: 6,
-    layout: 'two-column',
-    sentences: [
-      { text: 'Паметниците са в Пловдив.', blanks: [], isExample: true },
-      { text: 'Къде са момчета_______?', blanks: [0], correctAnswers: ['та'], options: ['те', 'та', 'о', 'ята'] },
-      { text: 'Как са учителки_______?', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
-      { text: 'Колко са пари_______?', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
-      { text: 'Кина_______ са в молове_______.', blanks: [0, 1], correctAnswers: ['та', 'те'], options: ['те', 'та', 'о', 'ята'] },
-      { text: 'Българи_______ обичат баница.', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'о', 'ята'] },
-    ],
-  } as WorkbookFillBlankExercise,
-
-  {
-    id: 'l05-wb-03',
-    type: 'workbook_fill_blank',
-    
-    instruction: 'Попълнете определителния член.',
-    order: 50,
-    points: 14,
-    layout: 'single',
-    sentences: [
-      {
-        text: 'Аз съм в училище „Васил Левски“. Училище_______ е на улица_______ между театър_______ и библиотека_______. В училище_______ има много учители.',
-        blanks: [0, 1, 2, 3, 4],
-        correctAnswers: ['то', 'та', 'а', 'та', 'то'],
-        options: ['а', 'та', 'то', 'те', 'ът'],
-      },
-      {
-        text: 'Ние сме в град Бургас. В град_______ има магазини, паметници, църкви. Магазини_______ и църкви_______ са близо до площад_______.',
-        blanks: [0, 1, 2, 3],
-        correctAnswers: ['а', 'те', 'те', 'а'],
-        options: ['а', 'та', 'то', 'те', 'ът'],
-      },
-      {
-        text: 'Той е в ресторант „Виктория“. Ресторант_______ е в център_______ на град_______ зад община_______. В ресторант_______ има много вкусна храна.',
-        blanks: [0, 1, 2, 3, 4],
-        correctAnswers: ['ът', 'а', 'а', 'та', 'а'],
-        acceptableAnswers: [['ът', 'а'], ['а'], ['а'], ['та'], ['а']],
-        options: ['а', 'та', 'то', 'те', 'ът'],
-      },
-    ],
-  } as WorkbookFillBlankExercise,
-
-  {
-    id: 'l05-wb-04',
-    type: 'reading_text',
-    
-    instruction: 'Напишете числата с думи. (На хартия или в телефона.)',
-    order: 51,
-    paragraphs: [
-      'Модел: 1234 — хиляда двеста тридесет и четири',
-      '1.  2590',
-      '2.  17 012',
-      '3.  107 954',
-    ],
-  } as ReadingTextExercise,
-
-  {
-    id: 'l05-wb-05',
-    type: 'match_pairs',
-    
-    instruction: 'Свържете въпроса с правилния отговор.',
-    order: 52,
-    points: 6,
-    pairs: [
-      { left: 'Колко струва един килограм лук?', correctRight: 'Две евро.' },
-      { left: 'Нямате ли дребни?', correctRight: 'Не, имам само 20 евро.' },
-      { left: 'Искате ли торбичка?', correctRight: 'Не, благодаря, имам.' },
-      { left: 'Каква салата искате?', correctRight: 'Шопска, моля.' },
-      { left: 'Къде живеете?', correctRight: 'На булевард „Васил Левски“ 15.' },
-      { left: 'Извинете, къде е банката?', correctRight: 'Вървете направо и после завийте наляво.' },
-      { left: 'Има ли много хора в кафето?', correctRight: 'Не, само шест души.' },
-    ],
-  } as MatchPairsExercise,
 
 ];

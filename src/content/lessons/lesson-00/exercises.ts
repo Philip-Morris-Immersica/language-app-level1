@@ -228,7 +228,7 @@ export const exercises: Exercise[] = [
     id: 'l00-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Натиснете за произношение.',
+    instruction: 'Познавате ли тези думи? Те са чуждици и звучат подобно в много езици.',
     order: 6,
     cards: [
       { id: 'futbol', imageUrl: '', label: 'футбол' },

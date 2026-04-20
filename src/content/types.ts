@@ -1,4 +1,4 @@
-// Exercise types matching real PDF content
+﻿// Exercise types matching real PDF content
 export type ExerciseType = 
   | 'fill_in_blank'        // Most common - fill missing words
   | 'workbook_fill_blank'  // Workbook fill-in with dropdowns and 2-column layout
@@ -125,6 +125,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
     sublabels?: string[];  // Additional text lines (e.g., ["българин", "българка", "българи"])
     /** If true, TTS joins label + sublabels in one clip; default is label only (country name etc.). */
     ttsIncludeSublabels?: boolean;
+    /** TTS-only text for this card (overrides label for audio; display text stays unchanged). */
+    ttsLabel?: string;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
@@ -202,6 +204,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
   title: string;             // 'ГРАМАТИКА 2'
   subtitle?: string;         // 'Глагол СЪМ'
   disableTts?: boolean;      // Skip TTS on card click (for abbreviation cards etc.)
+  /** Use Gemini Flash model for all cards in this exercise (better for isolated words). */
+  ttsFlash?: boolean;
   /** Show a green Heart before `text` and a red HeartCrack before `subtext` (like/dislike cards, e.g. „обичам / не обичам“). */
   showLikeDislike?: boolean;
   examples: {
@@ -213,6 +217,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
     translations?: Record<string, string>;
     /** TTS only: male (Charon) vs default female (Achernar). */
     voiceGender?: 'male' | 'female';
+    /** TTS only: alternative text for audio (e.g. only the full word, not the abbreviation). Display text stays unchanged. */
+    ttsText?: string;
   }[];
 }
 
@@ -228,6 +234,7 @@ export interface GrammarTableExercise extends BaseExercise {
     pronunciations?: Record<string, string>;
   }[];
   notes?: string[];          // Text notes shown below the table
+  ttsNotes?: string[];       // TTS-only text for notes (overrides notes[] for audio; display unchanged)
   boldColumns?: number[];
   illustrations?: {
     imageUrl: string;
@@ -268,6 +275,8 @@ export interface DialoguesExercise extends BaseExercise {
       /** TTS only: pick male/female voice (two males in a row use Charon + Fenrir). Not shown in UI. */
       voiceGender?: 'male' | 'female';
       text: string;
+      /** TTS only: alternative text for audio (e.g. expand abbreviations). Display text stays unchanged. */
+      ttsText?: string;
       translations?: Record<string, string>;
     }[];
   }[];
@@ -359,6 +368,8 @@ export interface ReadingTextExercise extends BaseExercise {
   /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
   imageFlashcards?: boolean;
   paragraphs: string[];
+  /** Parallel to `paragraphs`: alternative TTS-friendly text for each paragraph (e.g. spell out "€/кг." as "евро за килограм"). When set, TTS uses this text instead of `paragraphs`, but the displayed text remains unchanged. */
+  ttsParagraphs?: string[];
   /** Parallel to `paragraphs`: per-paragraph TTS voice (Gemini). If set with same length as paragraphs, `-full.mp3` is not generated. */
   paragraphVoiceGenders?: ('male' | 'female')[];
   paragraphTranslations?: Record<string, string>[];

@@ -397,7 +397,7 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-13',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 13',
-    instruction: 'Разгледайте продуктите в супермаркета и техните цени.',
+    instruction: 'Разгледайте продуктите в супермаркета и техните цени. Натиснете върху абзац, за да чуете произношението.',
     order: 19,
     images: [
       { imageUrl: '/assets/lesson-04/06-upr-13-supermarket/supermarket-illustration.jpg', label: 'Супермаркет' },
@@ -407,6 +407,12 @@ export const exercises: Exercise[] = [
       'краставици — 1,50 €/кг. домати — 1,80 €/кг. лук — 0,80 €/кг. зеле — 0,80 €/кг. картофи — 0,80 €/кг. чушки — 3,00 €/кг.',
       'хляб — 1,20 €. пиле — 4,00 €/кг. салам — 7,00 €/кг. масло — 3,50 €. сирене — 10,00 €/кг. кашкавал — 12,00 €/кг.',
       'кисело мляко — 0,90 €. брашно — 0,80 €/кг. олио — 1,60 €/л. оцет — 1,20 €. сладолед — 3,00 €. бисквити — 2,00 €. кока-кола — 1,80 €/л. минерална вода — 0,60 €/л.',
+    ],
+    ttsParagraphs: [
+      'ябълки — две евро за килограм. банани — две евро и двадесет цента за килограм. лимони — три евро за килограм. диня — едно евро за килограм. грозде — две евро и петдесет цента за килограм.',
+      'краставици — едно евро и петдесет цента за килограм. домати — едно евро и осемдесет цента за килограм. лук — осемдесет цента за килограм. зеле — осемдесет цента за килограм. картофи — осемдесет цента за килограм. чушки — три евро за килограм.',
+      'хляб — едно евро и двадесет цента. пиле — четири евро за килограм. салам — седем евро за килограм. масло — три евро и петдесет цента. сирене — десет евро за килограм. кашкавал — дванадесет евро за килограм.',
+      'кисело мляко — деветдесет цента. брашно — осемдесет цента за килограм. олио — едно евро и шестдесет цента за литър. оцет — едно евро и двадесет цента. сладолед — три евро. бисквити — две евро. кока-кола — едно евро и осемдесет цента за литър. минерална вода — шестдесет цента за литър.',
     ],
   } as ReadingTextExercise,
 
@@ -436,6 +442,10 @@ export const exercises: Exercise[] = [
     notes: [
       '265 – двеста шестдесет и пет',
       '1389 – хиляда триста осемдесет и девет',
+    ],
+    ttsNotes: [
+      'двеста шестдесет и пет',
+      'хиляда триста осемдесет и девет',
     ],
   } as GrammarTableExercise,
 
@@ -485,14 +495,14 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с мерките и теглата. Натиснете за произношение.',
     order: 18,
     cards: [
-      { id: '1kg',      imageUrl: '', label: '1 кг — Един килограм/едно кило',              translations: { en: '1 kg — one kilogram / one kilo', ar: '1 كجم — كيلوغرام واحد', fr: '1 kg — un kilogramme / un kilo', fa: '۱ کیلوگرم — یک کیلوگرم', uk: '1 кг — один кілограм / одне кіло', ru: '1 кг — один килограмм / одно кило' } },
-      { id: '05kg',     imageUrl: '', label: '0,5 кг — Половин килограм/половин кило',      translations: { en: '0.5 kg — half a kilogram / half a kilo', ar: '0.5 كجم — نصف كيلوغرام', fr: '0,5 kg — un demi-kilogramme', fa: '۰٫۵ کیلوگرم — نیم کیلو', uk: '0,5 кг — пів кілограма / пів кіло', ru: '0,5 кг — полкилограмма / полкило' } },
-      { id: '15kg',     imageUrl: '', label: '1,5 кг — Килограм/кило и половина',           translations: { en: '1.5 kg — one and a half kilos', ar: '1.5 كجم — كيلو ونصف', fr: '1,5 kg — un kilo et demi', fa: '۱٫۵ کیلوگرم — یک و نیم کیلو', uk: '1,5 кг — півтора кіло', ru: '1,5 кг — полтора кило' } },
-      { id: '250g',     imageUrl: '', label: '250 гр — Четвърт килограм/кило. Двеста и петдесет грама', translations: { en: '250 g — a quarter kilo. 250 grams', ar: '250 غ — ربع كيلو. مئتان وخمسون غراماً', fr: '250 g — un quart de kilo. 250 grammes', fa: '۲۵۰ گرم — یک چهارم کیلو', uk: '250 г — чверть кіло. 250 грамів', ru: '250 г — четверть кило. 250 граммов' } },
-      { id: '1l',       imageUrl: '', label: '1 л. — Един литър',                            translations: { en: '1 l — one litre', ar: '1 لتر — لتر واحد', fr: '1 l — un litre', fa: '۱ لیتر — یک لیتر', uk: '1 л — один літр', ru: '1 л — один литр' } },
-      { id: '2l',       imageUrl: '', label: '2 л. — Два литра',                             translations: { en: '2 l — two litres', ar: '2 لتر — لتران', fr: '2 l — deux litres', fa: '۲ لیتر — دو لیتر', uk: '2 л — два літри', ru: '2 л — два литра' } },
-      { id: 'butilka',  imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/01-butilka.jpg', label: 'бутилка', translations: { en: 'bottle', ar: 'زجاجة', fr: 'bouteille', fa: 'بطری', uk: 'пляшка', ru: 'бутылка' } },
-      { id: 'paket',    imageUrl: '/assets/lesson-04/07-novi-dumi-4-merki/02-paket.jpg',   label: 'пакет',   translations: { en: 'package', ar: 'عبوة', fr: 'paquet', fa: 'بسته', uk: 'пакет', ru: 'пакет' } },
+      { id: '1kg',     imageUrl: '', label: '1 кг — Един килограм/едно кило',              ttsLabel: 'един килограм, едно кило.',              translations: { en: '1 kg — one kilogram / one kilo', ar: '1 كجم — كيلوغرام واحد', fr: '1 kg — un kilogramme / un kilo', fa: '۱ کیلوگرم — یک کیلوگرم', uk: '1 кг — один кілограм / одне кіло', ru: '1 кг — один килограмм / одно кило' } },
+      { id: '05kg',    imageUrl: '', label: '0,5 кг — Половин килограм/половин кило',      ttsLabel: 'половин килограм, половин кило.',        translations: { en: '0.5 kg — half a kilogram / half a kilo', ar: '0.5 كجم — نصف كيلوغرام', fr: '0,5 kg — un demi-kilogramme', fa: '۰٫۵ کیلوگرم — نیم کیلو', uk: '0,5 кг — пів кілограма / пів кіло', ru: '0,5 кг — полкилограмма / полкило' } },
+      { id: '15kg',    imageUrl: '', label: '1,5 кг — Килограм/кило и половина',           ttsLabel: 'килограм и половина, кило и половина.', translations: { en: '1.5 kg — one and a half kilos', ar: '1.5 كجم — كيلو ونصف', fr: '1,5 kg — un kilo et demi', fa: '۱٫۵ کیلوگرم — یک و نیم کیلو', uk: '1,5 кг — півтора кіло', ru: '1,5 кг — полтора кило' } },
+      { id: '250g',    imageUrl: '', label: '250 гр — Четвърт килограм/кило. Двеста и петдесет грама', ttsLabel: 'четвърт килограм. двеста и петдесет грама.', translations: { en: '250 g — a quarter kilo. 250 grams', ar: '250 غ — ربع كيلو. مئتان وخمسون غراماً', fr: '250 g — un quart de kilo. 250 grammes', fa: '۲۵۰ گرم — یک چهارم کیلو', uk: '250 г — чверть кіло. 250 грамів', ru: '250 г — четверть кило. 250 граммов' } },
+      { id: '1l',      imageUrl: '', label: '1 л. — Един литър',                            ttsLabel: 'един литър.',                            translations: { en: '1 l — one litre', ar: '1 لتر — لتر واحد', fr: '1 l — un litre', fa: '۱ لیتر — یک لیتر', uk: '1 л — один літр', ru: '1 л — один литр' } },
+      { id: '2l',      imageUrl: '', label: '2 л. — Два литра',                             ttsLabel: 'два литра.',                             translations: { en: '2 l — two litres', ar: '2 لتر — لتران', fr: '2 l — deux litres', fa: '۲ لیتر — دو لیتر', uk: '2 л — два літри', ru: '2 л — два литра' } },
+      { id: 'butilka', imageUrl: '', label: 'бутилка', translations: { en: 'bottle', ar: 'زجاجة', fr: 'bouteille', fa: 'بطری', uk: 'пляшка', ru: 'бутылка' } },
+      { id: 'paket',   imageUrl: '', label: 'пакет',   translations: { en: 'package', ar: 'عبوة', fr: 'paquet', fa: 'بسته', uk: 'пакет', ru: 'пакет' } },
     ],
   } as IllustratedCardsExercise,
 
@@ -833,14 +843,14 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-30',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте и прочетете текста. Кликнете върху картите, за да чуете произношението им.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-30-full.mp3',
-    showDictionary: true,
+    imageFlashcards: true,
     order: 34,
     images: [
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/07-yabalki.jpg', label: 'ябълки' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/08-dini.jpg',    label: 'дини' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/09-grozde.jpg',  label: 'грозде' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/07-yabalki.jpg', label: 'ябълки',   ttsWordId: 'yabalki' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/08-dini.jpg',    label: 'дини',     ttsWordId: 'dini' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/09-grozde.jpg',  label: 'грозде',   ttsWordId: 'grozde' },
     ],
     paragraphs: [
       'Елена купува от супермаркета хляб, кисело и прясно мляко, месо, яйца, маслини, сирене, кашкавал и риба. От пазара купува плодове и зеленчуци. Тя много обича ябълки, праскови, череши, банани. Не обича ягоди. Обича всички зеленчуци без зеле и гъби. Тя яде много плодове и зеленчуци.',
@@ -881,14 +891,14 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-33',
     type: 'reading_text',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте и прочетете текста. Кликнете върху картите, за да чуете произношението им.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-33-full.mp3',
-    showDictionary: true,
+    imageFlashcards: true,
     order: 37,
     images: [
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/01-domati.jpg',     label: 'домати' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/02-morkovi.jpg',    label: 'моркови' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/03-krastavitsi.jpg', label: 'краставици' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/01-domati.jpg',      label: 'домати',     ttsWordId: 'domati' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/02-morkovi.jpg',     label: 'моркови',    ttsWordId: 'morkovi' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/03-krastavitsi.jpg', label: 'краставици', ttsWordId: 'krastavitsi' },
     ],
     paragraphs: [
       'За закуска Елена яде плодове, сандвич със сирене, домати и маслини или филия с масло и сладко от череши. Пие кафе с мляко без захар. Тя обядва салата и супа или спагети със зеленчуци. Пие минерална вода или сок от портокал. Елена вечеря риба с пържени картофи или пица със зеленчуци и пие газирана вода.',
@@ -922,15 +932,15 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-35',
     type: 'reading_text',
     title: 'ОТ ПЪРВО ЛИЦЕ',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте и прочетете текста. Кликнете върху картите, за да чуете произношението им.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-35-full.mp3',
     voiceGender: 'male',
-    showDictionary: true,
+    imageFlashcards: true,
     order: 39,
     images: [
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/04-chesun.jpg',   label: 'чесън' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/05-magdanoz.jpg', label: 'магданоз' },
-      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/06-luk.jpg',      label: 'лук' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/04-chesun.jpg',   label: 'чесън',    ttsWordId: 'chesan' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/05-magdanoz.jpg', label: 'магданоз', ttsWordId: 'magdanoz' },
+      { imageUrl: '/assets/lesson-04/14-tekstove-snimki/06-luk.jpg',      label: 'лук',      ttsWordId: 'luk' },
     ],
     paragraphs: [
       'Аз съм Карим от Ирак. Обичам арабска храна. Ние ядем много месо – агнешко, пилешко и риба. Не ядем свинско месо. Обичаме също много ориз, нахут, боб, леща и яхнии от различни зеленчуци със или без месо. Имаме едно много вкусно арабско ядене. Казва се долма, а на български – сарми или пълнени зеленчуци с ориз и кайма. Често след ядене пием кафе или черен чай със захар.',
@@ -959,12 +969,12 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-37',
     type: 'reading_text',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте и прочетете текста. Кликнете върху картата, за да чуете произношението.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-37-full.mp3',
-    showDictionary: true,
+    imageFlashcards: true,
     order: 41,
     images: [
-      { imageUrl: '/assets/lesson-04/15-ot-parvo-litse-upr-37/dyuner-maker.jpg', label: 'дюнер' },
+      { imageUrl: '/assets/lesson-04/15-ot-parvo-litse-upr-37/dyuner-maker.jpg', label: 'дюнер', ttsWordId: 'dyuner' },
     ],
     paragraphs: [
       'В България има арабски ресторанти. Там има вкусна арабска храна – салата табуле, супа леща, шиш, арабски хляб. Българите много обичат дюнери – от пилешко и телешко месо, с пържени картофи, салата и сос. Обичат и арабски десерти – баклава, локум, курабии. В България и Ирак ядат печено агнешко и пилешко със зеленчуци. Пият много чай, кафе и айрян, но в България има боза, а в Ирак няма.',

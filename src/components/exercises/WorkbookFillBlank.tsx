@@ -157,7 +157,7 @@ export function WorkbookFillBlank({
             const userVal = answers[sIdx]?.[bIdx] || '';
             const opts = getOptionsForBlank(sentence.options, bIdx);
 
-            if (isExample || opts.length === 0) {
+            if (isExample) {
               return (
                 <span
                   key={segIdx}
@@ -165,6 +165,23 @@ export function WorkbookFillBlank({
                 >
                   {sentence.correctAnswers[bIdx] || ''}
                 </span>
+              );
+            }
+
+            if (opts.length === 0) {
+              return (
+                <input
+                  key={segIdx}
+                  type="text"
+                  value={userVal}
+                  onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
+                  placeholder="..."
+                  className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-base font-medium focus:outline-none min-w-[6rem]
+                    ${isSubmitted
+                      ? valid ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
+                      : 'border-[#0279C3] focus:border-[#025a93]'
+                    }`}
+                />
               );
             }
 
