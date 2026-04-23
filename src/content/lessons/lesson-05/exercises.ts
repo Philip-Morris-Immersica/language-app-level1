@@ -43,7 +43,7 @@ export const exercises: Exercise[] = [
     id: 'l05-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 2,
     cards: [
       { id: 'apteka', imageUrl: '/assets/lesson-05/02-novi-dumi-1-mesta-v-grada/01-apteka.jpg', label: 'аптека' },
@@ -91,7 +91,7 @@ export const exercises: Exercise[] = [
     id: 'l05-novi-dumi-02',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 4,
     cards: [
       { id: 'detska-gradina', imageUrl: '/assets/lesson-05/04-novi-dumi-2-mesta/01-detska-gradina.jpg', label: 'детска градина' },
@@ -186,17 +186,17 @@ export const exercises: Exercise[] = [
     order: 9,
     sections: [
       {
-        id: 'а',
+        id: 'а', // NOTE: subpoints use Cyrillic letters а,б,в,г as required
         lines: [
           { text: '— Къде живееш?' },
-          { text: '— Аз живея в София, на улица „Гурко“ 25.' },
+          { text: '— Аз живея в София, на улица „Гурко“ 25.', ttsText: 'Аз живея в София, на улица Гурко двайсет и пет.' },
         ],
       },
       {
         id: 'б',
         lines: [
           { text: '— Къде живее Мария?' },
-          { text: '— Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.', ttsText: 'Тя живее в София, в квартал Младост 2, блок 243, вход А, етаж 2, апартамент 5.' },
+          { text: '— Мария живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.', ttsText: 'Мария живее в София, в квартал Младост 2, блок 243, вход А, етаж 2, апартамент 5.' },
         ],
       },
       {
@@ -274,7 +274,7 @@ export const exercises: Exercise[] = [
     order: 12,
     layout: 'single',
     points: 3,
-    listeningText: 'Тя живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
+    listeningText: 'Мария живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
     sentences: [
       { text: 'Мария Петрова', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Град: _______', blanks: [0], correctAnswers: ['София'] },
@@ -331,7 +331,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l05.g1.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
-    subtitle: '→ Граматика – Сегашно време (12)',
+    subtitle: '→ Граматика – Сегашно време',
     instruction: 'Глагол ЖИВЕЯ в сегашно време — прегледайте таблицата и примера.',
     order: 14,
     tableTitle: 'Живея (живе–)',
@@ -341,7 +341,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'ти', cells: ['живееш'] },
       { pronoun: 'той / тя / то', cells: ['живее'] },
       { pronoun: 'ние', cells: ['живеем'] },
-      { pronoun: 'вие', cells: ['живеете'] },
+      { pronoun: 'Вие', cells: ['живеете'] },
       { pronoun: 'те', cells: ['живеят'] },
     ],
     notes: ['Иван живее в София, на улица „Янтра“ 5.'],
@@ -388,16 +388,16 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l05.g2.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
-    subtitle: '→ Граматика – Членуване на съществителните (4)',
+    subtitle: 'Членуване на съществителните',
     instruction: 'Членуване — единствено число.',
     order: 17,
     tableTitle: 'Членуване в единствено число',
-    columns: ['Окончание', 'Примери'],
+    columns: ['Основна форма', 'Окончание', 'Примери'],
     rows: [
-      { pronoun: 'мъжки род (а)', cells: ['-ът / -а', 'пазарът / в центъра'] },
-      { pronoun: 'мъжки род (б)', cells: ['-ят / -я', 'учителят / при учителя'] },
-      { pronoun: 'женски род', cells: ['-та', 'банката, улицата, пощата'] },
-      { pronoun: 'среден род', cells: ['-то', 'кафето, училището, селото'] },
+      { pronoun: 'мъжки род (а)', cells: ['пазар, студент', '-**ът** / -**а**', 'пазар**ът** / в центъра'] },
+      { pronoun: 'мъжки род (б)', cells: ['учител, лекар', '-**ят** / -**я**', 'учител**ят** / при учителя'] },
+      { pronoun: 'женски род', cells: ['банка, улица', '-**та**', 'банка**та**, улица**та**'] },
+      { pronoun: 'среден род', cells: ['кафе, училище', '-**то**', 'кафе**то**, училище**то**'] },
     ],
     notes: ['Площадът е в центъра.'],
   } as GrammarTableExercise,
@@ -430,7 +430,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-15',
     type: 'drag_to_columns',
-    instruction: 'Плъзнете думата наляво или надясно, за да я поставите в правилната колона.',
+    instruction: 'Поставете думите в правилната колона.',
     order: 20,
     points: 21,
     imageUrl: '',
@@ -454,11 +454,11 @@ export const exercises: Exercise[] = [
     instruction: 'Членуване в множествено число.',
     order: 19,
     tableTitle: 'Членуване — множествено число',
-    columns: ['Член', 'Примери'],
+    columns: ['Основна форма (мн.ч.)', 'Член', 'С член'],
     rows: [
-      { pronoun: 'мъжки род', cells: ['-те', 'пазарите, градовете'] },
-      { pronoun: 'женски род', cells: ['-те', 'банките, улиците'] },
-      { pronoun: 'среден род', cells: ['-та', 'кафетата, училищата'] },
+      { pronoun: 'мъжки род', cells: ['пазари, градове', '-**те**', 'пазари**те**, градове**те**'] },
+      { pronoun: 'женски род', cells: ['банки, улици', '-**те**', 'банки**те**, улици**те**'] },
+      { pronoun: 'среден род', cells: ['кафета, училища', '-**та**', 'кафета**та**, училища**та**'] },
     ],
     notes: ['Магазините са в центъра.'],
   } as GrammarTableExercise,
@@ -649,8 +649,10 @@ export const exercises: Exercise[] = [
       { imageUrl: '', text: '', lines: ['Вие: Вървете направо.', 'Ти: Върви направо.'], subtext: '' },
       { imageUrl: '', text: '', lines: ['Вие: Завийте наляво.', 'Ти: Завий наляво.'], subtext: '' },
       { imageUrl: '', text: '', lines: ['Вие: Завийте надясно.', 'Ти: Завий надясно.'], subtext: '' },
-      { imageUrl: '', text: 'Напомняне: Използваме „вие", когато има няколко човека или когато говорим в учтива форма на един. Във втория случай „Вие" се пише с главна буква.', subtext: '' },
     ],
+    grammarHighlight: {
+      text: 'Използваме „вие", когато има няколко човека или когато говорим в учтива форма на един човек. Във втория случай „Вие" се пише с главна буква.',
+    },
   } as GrammarExamplesExercise,
 
   {
@@ -768,6 +770,13 @@ export const exercises: Exercise[] = [
     subtitle: 'Големи числа',
     instruction: 'Числата от 1000 до 1 000 000 000.',
     order: 33,
+    grammarHighlight: {
+      text: 'След две, три, четири или друга цифра и след думата „колко" казваме „милиона" или „милиарда". Когато говорим общо, без пояснения, казваме „милиони" или „милиарди".',
+      examples: [
+        'два милиона, шест милиарда',
+        'Милиони хора живеят в Европа.',
+      ],
+    },
     tableTitle: 'Числата от 1000 до 1 000 000 000',
     columns: ['Дума'],
     rows: [
@@ -854,7 +863,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-28',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 28',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 37,
     audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-28-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/40-upr-28-varna-plazh/01-plazh-more-varna.jpg', label: 'Плаж във Варна' }],
@@ -909,7 +918,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-32',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 32',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 40,
     audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-32-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/44-tekstove-shtarkel-darvo/01-shtarkel-v-gnezdo.jpg', label: '' }],
@@ -923,7 +932,7 @@ export const exercises: Exercise[] = [
     id: 'l05-ex-33',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 33',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 41,
     audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-33-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/44-tekstove-shtarkel-darvo/02-darvo-akvarel.jpg', label: '' }],
@@ -936,7 +945,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-34',
     type: 'true_false',
-    instruction: 'Вярно или не?',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 42,
     points: 8,
     sentences: [
@@ -957,7 +966,7 @@ export const exercises: Exercise[] = [
     instruction: 'Отговорете на въпросите.',
     order: 43,
     points: 5,
-    layout: 'qa-split',
+    layout: 'qa-stacked',
     sentences: [
       {
         text: 'Колко души живеят в Рибново и в Нови извор? | В Рибново _______, в Нови извор _______.',
@@ -978,11 +987,11 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-36',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ',
-    instruction: 'Прочетете текста.',
+    title: 'ПРЕГОВОР',
+    subtitle: 'Упражнения за затвърждаване на наученото',
+    instruction: 'Изслушайте текста и след това го прочетете сами. Попълнете празните места.',
     order: 44,
     voiceGender: 'male',
-    audioUrl: '/assets/lesson-05/audio/tts/texts/l05-ex-36-full.mp3',
     images: [{ imageUrl: '/assets/lesson-05/45-ot-parvo-litse-krepost-haleb/01-krepost-haleb-zalez.jpg', label: '' }],
     paragraphs: [
       'Аз съм Мохамед. Аз съм от Алепо. Сега живея в София.',
@@ -993,8 +1002,8 @@ export const exercises: Exercise[] = [
     ],
     ttsParagraphs: [
       'Аз съм Мохамед. Аз съм от Алепо. Сега живея в София.',
-      'София е в България, Алепо е в Сирия. София и Алепо са големи градове: в София живеят около един милион двеста хиляди души, в Алепо. два милиона деветдесет и осем хиляди. София е столица, Алепо. не е. Столицата на Сирия е Дамаск.',
-      'В София и Алепо има големи улици. В София има метро, а в Алепо. няма.',
+      'София е в България, Алепо е в Сирия. София и Алепо са големи градове: в София живеят около един милион двеста хиляди души, в Алепо два милиона деветдесет и осем хиляди. София е столица, Алепо не е. Столицата на Сирия е Дамаск.',
+      'В София и Алепо има големи улици. В София има метро, а в Алепо няма.',
       'В Алепо има стара крепост и много стари къщи.',
       'В София има много паркове.',
     ],
@@ -1004,7 +1013,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l05-ex-37',
     type: 'true_false',
-    instruction: 'Вярно или грешно?',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 45,
     points: 4,
     sentences: [
@@ -1021,7 +1030,7 @@ export const exercises: Exercise[] = [
     instruction: 'Отговорете на въпросите.',
     order: 46,
     points: 4,
-    layout: 'qa-split',
+    layout: 'qa-stacked',
     sentences: [
       { text: 'Кои са столиците на България и Сирия? | _______', blanks: [0], correctAnswers: ['София и Дамаск.'], options: ['София и Дамаск.', 'Пловдив и Алепо.', 'Варна и Дамаск.', 'Алепо и Варна.'] },
       { text: 'Колко души живеят в София и в Алепо? | _______', blanks: [0], correctAnswers: ['В София около 1 200 000, в Алепо 2 098 000.'], options: ['В София около 1 200 000, в Алепо 2 098 000.', '336 000 и 348 000.', '300 и 2500.', 'Никой.'] },

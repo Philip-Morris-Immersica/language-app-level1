@@ -10,10 +10,10 @@ import {
 export const testData: TestData = {
   ...metadata,
   sections: [
-    { id: 'listening', name: 'КОМПОНЕНТ СЛУШАНЕ', maxPoints: 8, exercises: listeningExercises },
-    { id: 'reading', name: 'КОМПОНЕНТ ЧЕТЕНЕ', maxPoints: 11, exercises: readingExercises },
-    { id: 'grammar', name: 'КОМПОНЕНТ ГРАМАТИКА', maxPoints: 63, exercises: grammarExercises },
-    { id: 'writing', name: 'КОМПОНЕНТ ПИСАНЕ', maxPoints: 17, exercises: writingExercises },
+    { id: 'listening', name: 'СЛУШАНЕ', maxPoints: 8, exercises: listeningExercises },
+    { id: 'reading', name: 'ЧЕТЕНЕ', maxPoints: 11, exercises: readingExercises },
+    { id: 'grammar', name: 'ГРАМАТИКА', maxPoints: 63, exercises: grammarExercises },
+    { id: 'writing', name: 'ПИСАНЕ', maxPoints: 17, exercises: writingExercises },
   ],
 };
 

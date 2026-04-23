@@ -30,6 +30,13 @@ export type ExerciseType =
   | 'alphabet_maze'        // Interactive letter grid — tap letters in alphabetical order
   | 'table_fill';          // Dialogue paragraphs + fillable table cells (dropdowns)
 
+// Grammar highlight info box — shown above exercise body as a green info panel
+export interface GrammarHighlight {
+  textKey?: string;    // Key in UI_TRANSLATIONS (pre-translated on 7 languages)
+  text?: string;       // Inline Bulgarian text (auto-translated via useTranslate)
+  examples?: string[]; // Optional example sentences displayed below the text
+}
+
 // Base exercise interface
 export interface BaseExercise {
   id: string;
@@ -40,6 +47,7 @@ export interface BaseExercise {
   points?: number;          // For scoring
   order: number;
   voiceGender?: 'male' | 'female';
+  grammarHighlight?: GrammarHighlight; // Optional green info box shown above exercise body
 }
 
 // Specific exercise interfaces
@@ -285,6 +293,7 @@ export interface DialoguesExercise extends BaseExercise {
 export interface DialogueBuilderExercise extends BaseExercise {
   type: 'dialogue_builder';
   title: string;
+  imageUrl?: string;
   sections: {
     id: string;                  // 'а.', 'б.', etc.
     givenFirstLine: string;      // The locked first line shown to the user

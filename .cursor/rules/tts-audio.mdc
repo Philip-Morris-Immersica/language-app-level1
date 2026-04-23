@@ -129,6 +129,31 @@ These rules in **content files** directly affect audio quality:
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
 
+## Known TTS Issues and Text Tricks
+
+Apply these text substitutions **in the content file** before regenerating TTS. They solve known pronunciation problems:
+
+| Problem | Fix in content text |
+|---|---|
+| Й (буква) чете се неправилно | Заменяй с „и кратко" в буквата на азбуката |
+| ь (ер малък) чете се неправилно | Заменяй с „ер малък" в буквата на азбуката |
+| „евроцента" → чете „евроцентър" | Пробвай „евроцента" (с думата) или регенерирай с PRO |
+| „1,5 кг" → произнася само „кило и половина" | В текст пиши „един килограм и половина" |
+| „с зеленчуци" → понякога чете „със" | Ако е благозвучие, пиши явно „със зеленчуци" |
+| Числа 2 098 000 и подобни | Изписвай с думи: „два милиона деветдесет и осем хиляди" |
+| „2022 г." → чете неправилно | Пиши „две хиляди двадесет и втора година" |
+| „двайсет и пети" (ред.число) | Пиши „двайсет и пет" (бройно) ако е адрес/номер |
+| „литъ" вместо „литър" | Регенерирай с PRO модел |
+| „два лиПра" вместо „два литра" | Регенерирай с PRO модел |
+| „четвърт" | Регенерирай с PRO модел |
+
+**Думи, изискващи PRO модел** (добавяй в `GRAMMAR_TABLE_PRO_ROWS` в `generate-tts.ts`):
+боб, литър, четвърт, хиляда, сандвич(а), кроасан, баклава, годеник, Каритас, добър, такси, Лейла, сина ми, мъжа ми, тя й, двайсет и пети.
+
+## Pause Behaviour (2nd click toggles audio)
+
+All components that play TTS audio implement **toggle on second click**: clicking the same element while audio plays should **stop** the audio (not restart it). Clicking a different element should stop the current audio and start the new one. This is implemented via `useAudioPlayer` hook in [src/lib/tts.ts](mdc:src/lib/tts.ts).
+
 ## Audio Files in Git — IMPORTANT, READ BEFORE TOUCHING `.gitattributes`
 
 ### The rule (non-negotiable)

@@ -71,7 +71,7 @@ export const exercises: Exercise[] = [
     id: 'l06-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 2,
     cards: [
       { id: 'semeystvo', imageUrl: '/assets/lesson-06/02-semeystvo-grupa/01-semeystvo-shest-dushi.jpg', label: 'Семейство' },
@@ -128,7 +128,7 @@ export const exercises: Exercise[] = [
     id: 'l06-dialozi-01',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
-    instruction: 'Изслушайте диалозите и се опитайте да ги прочетете.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 5,
     sections: [
       {
@@ -205,7 +205,7 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-01',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Сегашно време (12)',
+    subtitle: 'Граматика – Сегашно време',
     instruction: 'Запознайте се с глаголите ИМАМ и НЯМАМ.',
     order: 7,
     tableTitle: 'ИМАМ / НЯМАМ',
@@ -217,7 +217,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['има',   'няма']   },
       { pronoun: 'то',  cells: ['има',   'няма']   },
       { pronoun: 'ние', cells: ['имаме', 'нямаме'] },
-      { pronoun: 'вие', cells: ['имате', 'нямате'] },
+      { pronoun: 'Вие', cells: ['имате', 'нямате'] },
       { pronoun: 'те',  cells: ['имат',  'нямат']  },
     ],
   } as GrammarTableExercise,
@@ -408,7 +408,7 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с кратките притежателни местоимения.',
     order: 13,
     tableTitle: 'Кратки притежателни местоимения',
-    columns: ['Кратко притежателно'],
+    columns: [],
     rows: [
       { pronoun: 'аз',  cells: ['ми'] },
       { pronoun: 'ти',  cells: ['ти'] },
@@ -416,7 +416,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['й']  },
       { pronoun: 'то',  cells: ['му'] },
       { pronoun: 'ние', cells: ['ни'] },
-      { pronoun: 'вие', cells: ['ви'] },
+      { pronoun: 'Вие', cells: ['ви'] },
       { pronoun: 'те',  cells: ['им'] },
     ],
     notes: [
@@ -429,7 +429,7 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-04b',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Граматика – Кратки притежателни местоимения (9)',
+    subtitle: 'Граматика – Кратки притежателни местоимения',
     instruction: 'Употреба на кратките притежателни местоимения.',
     order: 14,
     examples: [
@@ -658,7 +658,7 @@ export const exercises: Exercise[] = [
     id: 'l06-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
-    instruction: 'Изслушайте диалозите и се опитайте да ги прочетете.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 19,
     sections: [
       {
@@ -694,7 +694,7 @@ export const exercises: Exercise[] = [
     id: 'l06-novi-dumi-02',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 20,
     cards: [
       { id: 'saprug',   imageUrl: '', label: 'съпруг',   sublabels: ['= мъж'] },
@@ -881,7 +881,7 @@ export const exercises: Exercise[] = [
     id: 'l06-novi-dumi-03',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 25,
     cards: [
       { id: 'mlad-star',         imageUrl: '/assets/lesson-06/06-novi-dumi-3-antonimi/01-mlad-star.jpg',        label: 'млад – стар'           },
@@ -1174,7 +1174,7 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-08',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 8',
-    subtitle: 'Граматика – Сегашно време (12)',
+    subtitle: 'Граматика – Сегашно време',
     instruction: 'Запознайте се с глагола РАБОТЯ — И-група.',
     order: 32,
     tableTitle: 'Сегашно време — И група',
@@ -1186,13 +1186,20 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['работи',    'не работи']    },
       { pronoun: 'то',  cells: ['работи',    'не работи']    },
       { pronoun: 'ние', cells: ['работим',   'не работим']   },
-      { pronoun: 'вие', cells: ['работите',  'не работите']  },
+      { pronoun: 'Вие', cells: ['работите',  'не работите']  },
       { pronoun: 'те',  cells: ['работят',   'не работят']   },
     ],
-    notes: [
-      '⚠️ Внимание! Аз уча — особена форма:',
-      'Аз уча, Ти учиш, Той/тя/то учи, Ние учим, Вие учите, Те учат',
-    ],
+    grammarHighlight: {
+      text: '⚠️ Внимание! Глаголът УЧА е с особена форма за 1-во лице:',
+      examples: [
+        'аз уча',
+        'ти учиш',
+        'той / тя / то учи',
+        'ние учим',
+        'Вие учите',
+        'те учат',
+      ],
+    },
   } as GrammarTableExercise,
 
   // ORDER 33: Упр. 26 – Сложете глагола РАБОТЯ в правилната форма (Page 61)
@@ -1310,7 +1317,7 @@ export const exercises: Exercise[] = [
     id: 'l06-dialozi-03',
     type: 'dialogues',
     title: 'ДИАЛОГ 3',
-    instruction: 'Изслушайте диалога и се опитайте да го прочетете.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 35,
     sections: [
       {
@@ -1366,7 +1373,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-31',
     type: 'reading_text',
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
-    instruction: 'Прочетете текстовете.',
+    instruction: 'Изслушайте текстовете и след това ги прочетете сами.',
     order: 37,
     images: [
       { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/01-semeystvo-tekst-mohamed.jpg', label: 'Мохамед' },
@@ -1389,12 +1396,12 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-34',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 34',
-    instruction: 'Слушайте текста и попълнете данните за Мустафа.',
+    instruction: 'Изслушайте текста и попълнете данните за Мустафа.',
     order: 38,
     points: 7,
     layout: 'single',
     imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/03-worn-mazh-portret.jpg',
-    listeningText: 'Казва се Мустафа. От Сирия е. На 25 години е. Не е женен. Няма деца. Работи на пазара. Учи английски език.',
+    listeningText: 'Казва се Мустафа. От Сирия е. На двайсет и пет години е. Не е женен. Няма деца. Работи на пазара. Учи английски език.',
     sentences: [
       {
         text: 'Казва се _______.',
@@ -1450,7 +1457,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-35',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 39,
     textTitle: 'България е хубава страна',
     images: [{ imageUrl: '/assets/lesson-06/10-tekstove-upr-35/01-semeystvo-park-pet-chlena.jpg', label: '' }],
@@ -1465,7 +1472,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-36',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 36',
-    instruction: 'Вярно или не?',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 40,
     points: 5,
     model: { text: 'Виталий и Ирина са от Украйна.', isTrue: true },
@@ -1483,7 +1490,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-37',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 37',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 41,
     textTitle: 'Аз работя в „Каритас"',
     paragraphs: [
@@ -1549,12 +1556,16 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-39',
     type: 'reading_text',
     title: 'ОТ ПЪРВО ЛИЦЕ',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 43,
     images: [{ imageUrl: '/assets/lesson-06/11-ot-parvo-litse/01-uchenitsi-v-klas.jpg', label: '' }],
     paragraphs: [
       'Ние сме две момчета от Сирия. Казваме се Кусай и Мохамед. Учим в Ливанското училище в София, а през лятото ходим на курс по български език.',
       'Ние сме бежанци и живеем в България от 2022 година. Харесваме България, защото има добри хора и хубави празници. Големите празници са Баба Марта, Коледа и Великден. Тук празнуваме също сирийските празници Рамазан Байрам и Курбан Байрам.',
+    ],
+    ttsParagraphs: [
+      'Ние сме две момчета от Сирия. Казваме се Кусай и Мохамед. Учим в Ливанското училище в София, а през лятото ходим на курс по български език.',
+      'Ние сме бежанци и живеем в България от две хиляди двадесет и втора година. Харесваме България, защото има добри хора и хубави празници. Големите празници са Баба Марта, Коледа и Великден. Тук празнуваме също сирийските празници Рамазан Байрам и Курбан Байрам.',
     ],
   } as ReadingTextExercise,
 
@@ -1598,7 +1609,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-42',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 42',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 45,
     paragraphs: [
       'Аз съм едно сирийско момиче. Казвам се Илаф Хабаба. В България съм от две години и вече знам каква е разликата между сирийското и българското семейство.',

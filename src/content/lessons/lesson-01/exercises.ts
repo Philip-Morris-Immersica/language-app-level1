@@ -31,7 +31,7 @@ export const exercises: Exercise[] = [
     id: 'l01-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Запознайте се с новите думи и изрази',
+    instruction: 'Натиснете за произношение.',
     order: 5,
     cards: [
       { id: 'morning', imageUrl: '/assets/lesson-01/novi-dumi-1-greetings/01-dobro-utro.jpg', label: 'Добро утро!' },
@@ -91,14 +91,14 @@ export const exercises: Exercise[] = [
       { id: 'bulgarka',  imageUrl: '/assets/lesson-01/novi-dumi-2-countries/bulgarka.jpg',  label: 'българка' },
       { id: 'bulgari',   imageUrl: '/assets/lesson-01/novi-dumi-2-countries/bulgari.jpg',   label: 'българи' },
       // Row 2: Countries with sublabels (male, female, plural) — order matches textbook
-      { id: 'iraq',        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iraq.jpg',        label: 'Ирак',        sublabels: ['иракчанин', 'иракчанка', 'иракчани'] },
-      { id: 'ukraine',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/ukraine.jpg',     label: 'Украйна',     sublabels: ['украинец', 'украинка', 'украинци'] },
-      { id: 'syria',       imageUrl: '/assets/lesson-01/novi-dumi-2-countries/syria.jpg',       label: 'Сирия',       sublabels: ['сириец', 'сирийка', 'сирийци'] },
-      { id: 'lebanon',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/lebanon.jpg',     label: 'Ливан',       sublabels: ['ливанец', 'ливанка', 'ливанци'] },
+      { id: 'iraq',        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iraq.jpg',        label: 'Ирак',        sublabels: ['иракчанин', 'иракчанка', 'иракчани'],           ttsIncludeSublabels: true },
+      { id: 'ukraine',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/ukraine.jpg',     label: 'Украйна',     sublabels: ['украинец', 'украинка', 'украинци'],             ttsIncludeSublabels: true },
+      { id: 'syria',       imageUrl: '/assets/lesson-01/novi-dumi-2-countries/syria.jpg',       label: 'Сирия',       sublabels: ['сириец', 'сирийка', 'сирийци'],                 ttsIncludeSublabels: true },
+      { id: 'lebanon',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/lebanon.jpg',     label: 'Ливан',       sublabels: ['ливанец', 'ливанка', 'ливанци'],                ttsIncludeSublabels: true },
       // Row 3: Countries with sublabels
-      { id: 'iran',        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg',        label: 'Иран',        sublabels: ['иранец', 'иранка', 'иранци'] },
-      { id: 'morocco',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg',     label: 'Мароко',      sublabels: ['мароканец', 'мароканка', 'мароканци'] },
-      { id: 'afghanistan', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-afghanistan.jpg', label: 'Афганистан',  sublabels: ['афганистанец', 'афганистанка', 'афганистанци'] },
+      { id: 'iran',        imageUrl: '/assets/lesson-01/novi-dumi-2-countries/iran.jpg',        label: 'Иран',        sublabels: ['иранец', 'иранка', 'иранци'],                   ttsIncludeSublabels: true },
+      { id: 'morocco',     imageUrl: '/assets/lesson-01/novi-dumi-2-countries/morocco.jpg',     label: 'Мароко',      sublabels: ['мароканец', 'мароканка', 'мароканци'],          ttsIncludeSublabels: true },
+      { id: 'afghanistan', imageUrl: '/assets/lesson-01/exercise-01-flags/flag-afghanistan.jpg', label: 'Афганистан',  sublabels: ['афганистанец', 'афганистанка', 'афганистанци'], ttsIncludeSublabels: true },
     ]
   } as IllustratedCardsExercise,
 
@@ -181,7 +181,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Лични местоимения (8)',
+    subtitle: 'Граматика – Лични местоимения',
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
     pronouns: [
@@ -303,7 +303,7 @@ export const exercises: Exercise[] = [
     id: 'l01-dialozi-01',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
-    instruction: 'Изслушайте диалозите и се опитайте да ги прочетете.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 13,
     sections: [
       {
@@ -610,7 +610,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'то',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'ние', cells: ['сме', 'не сме', 'ли сме'] },
-      { pronoun: 'вие', cells: ['сте', 'не сте', 'ли сте'] },
+      { pronoun: 'Вие', cells: ['сте', 'не сте', 'ли сте'] },
       { pronoun: 'те',  cells: ['са',  'не са',  'ли са']  },
     ],
     notes: [
@@ -624,7 +624,7 @@ export const exercises: Exercise[] = [
     id: 'l01-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
-    instruction: 'Натиснете секцията за автоматично прочитане.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 20,
     sections: [
       {
@@ -810,7 +810,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-22',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Слушайте и прочетете текста.',
+    instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 22,
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
@@ -825,7 +825,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l01-ex-23',
     type: 'true_false',
-    instruction: 'На база на текста по-горе, определете дали твърденията са верни или не.',
+    instruction: 'На база на текста по-горе, определете дали твърденията са верни, или не.',
     order: 23,
     points: 9,
     sentences: [
@@ -846,7 +846,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-24',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Слушайте и прочетете текста.',
+    instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 24,
     paragraphs: [
       'Аз съм Бала от Мали. Мали е в Африка. Аз съм бежанец. Сега съм в България, в София.',
@@ -893,7 +893,7 @@ export const exercises: Exercise[] = [
       'Амина и Карим са от Алжир. Те са бежанци. Те не са учители.',
     ],
     checklist: {
-      instruction: 'Вярно или грешно?',
+      instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
       items: [
         { id: 'c1', text: 'Мария е от България.', isTrue: true },
         { id: 'c2', text: 'Тя не е от София.', isTrue: false },
@@ -913,7 +913,7 @@ export const exercises: Exercise[] = [
     id: 'l01-ex-19',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 19',
-    instruction: 'Слушайте текста и попълнете празните места.',
+    instruction: 'Изслушайте текста и попълнете празните места.',
     order: 27,
     points: 10,
     listeningText: 'Иван и Катя са от България. Те са българи. Те са учители. Софиян и София са от Ирак. Те са бежанци. Те не са учители. Лилит е от Сирия. Тя е учителка. Азар е от Афганистан. Той е бежанец.',

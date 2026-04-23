@@ -231,6 +231,33 @@ function AlphabetCard({ t }: { t: (key: string) => string }) {
   );
 }
 
+function PlatformLegend({ t }: { t: (key: string) => string }) {
+  const items = [
+    { titleKey: 'legend.audio.title', textKey: 'legend.audio.text' },
+    { titleKey: 'legend.dictionary.title', textKey: 'legend.dictionary.text' },
+    { titleKey: 'legend.chatbot.title', textKey: 'legend.chatbot.text' },
+    { titleKey: 'legend.reset.title', textKey: 'legend.reset.text' },
+  ];
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 pb-10">
+      <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-gray-100 shadow-sm p-5 lg:p-6">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          {t('legend.title')}
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {items.map(({ titleKey, textKey }) => (
+            <div key={titleKey} className="flex flex-col gap-1">
+              <p className="font-semibold text-gray-700 text-sm">{t(titleKey)}</p>
+              <p className="text-xs text-gray-500 leading-relaxed">{t(textKey)}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TestCard({ testId, label, t }: { testId: string; label: string; t: (key: string) => string }) {
   return (
     <div className="rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50/30 overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col">
@@ -398,6 +425,9 @@ export function LevelMapClient() {
           })}
         </div>
       </div>
+
+      {/* Platform legend */}
+      <PlatformLegend t={t} />
     </div>
   );
 }

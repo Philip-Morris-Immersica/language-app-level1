@@ -45,7 +45,7 @@ export const exercises: Exercise[] = [
     id: 'l04-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Запознайте се с новите думи. Натиснете за произношение.',
+    instruction: '',
     order: 2,
     cards: [
       { id: 'riba',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/01-riba.jpg',          label: 'риба',          translations: { en: 'fish', ar: 'سمك', fr: 'poisson', fa: 'ماهی', uk: 'риба', ru: 'рыба' } },
@@ -96,7 +96,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-03',
     type: 'word_search',
-    instruction: 'Колко думи можете да намерите? Изберете ги.',
+    instruction: 'Колко думи можете да откриете?',
     order: 4,
     points: 11,
     letterString: 'пилешкомесомаслинисолзахароцетлещабоббонбонишункаориз',
@@ -161,7 +161,7 @@ export const exercises: Exercise[] = [
     id: 'l04-novi-dumi-02',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
-    instruction: 'Запознайте се с плодовете. Натиснете за произношение.',
+    instruction: '',
     order: 6,
     cards: [
       { id: 'yabalka',   imageUrl: '/assets/lesson-04/04-novi-dumi-2-plodove/01-yabalka.jpg',   label: 'ябълка',    translations: { en: 'apple', ar: 'تفاحة', fr: 'pomme', fa: 'سیب', uk: 'яблуко', ru: 'яблоко' } },
@@ -249,7 +249,7 @@ export const exercises: Exercise[] = [
     id: 'l04-novi-dumi-03',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
-    instruction: 'Запознайте се със зеленчуците. Натиснете за произношение.',
+    instruction: '',
     order: 9,
     cards: [
       { id: 'domat',       imageUrl: '/assets/lesson-04/05-novi-dumi-3-zelenchutsi/01-domat.jpg',       label: 'домат',       translations: { en: 'tomato', ar: 'طماطم', fr: 'tomate', fa: 'گوجه‌فرنگی', uk: 'помідор', ru: 'помидор' } },
@@ -328,7 +328,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-11',
     type: 'drag_to_columns',
-    instruction: 'Подредете думите в правилните колони.',
+    instruction: 'Поставете думите в правилната колона.',
     order: 12,
     points: 15,
     items: ['гъби', 'зеле', 'краставици', 'лимони', 'лук', 'моркови', 'портокали', 'праскови', 'сливи', 'смокини', 'спанак', 'тиквички', 'чесън', 'ябълки', 'ягоди'],
@@ -423,7 +423,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Граматика – Бройни числителни (1)',
-    instruction: 'Запознайте се с числата от 100 до 1000. Натиснете върху ред за произношение.',
+    instruction: 'Запознайте се с числата от 100 до 1000.',
     order: 15,
     tableTitle: 'Бройни числителни 100–1000',
     columns: [],
@@ -466,13 +466,13 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 17: Упр. 15 – Кое число е изписано с букви? (Page 38)
+  // ORDER 24.5: Упр. 15 – Кое число е изписано с букви? (Page 38) — moved after Упр. 19
   {
     id: 'l04-ex-15',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
-    order: 17,
+    order: 24.5,
     points: 5,
     questions: [
       { question: 'двеста и петнадесет',       options: ['215', '315', '150', '512', '710'], correctIndex: 0 },
@@ -492,12 +492,12 @@ export const exercises: Exercise[] = [
     id: 'l04-novi-dumi-04',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
-    instruction: 'Запознайте се с мерките и теглата. Натиснете за произношение.',
+    instruction: '',
     order: 18,
     cards: [
       { id: '1kg',     imageUrl: '', label: '1 кг — Един килограм/едно кило',              ttsLabel: 'един килограм, едно кило.',              translations: { en: '1 kg — one kilogram / one kilo', ar: '1 كجم — كيلوغرام واحد', fr: '1 kg — un kilogramme / un kilo', fa: '۱ کیلوگرم — یک کیلوگرم', uk: '1 кг — один кілограм / одне кіло', ru: '1 кг — один килограмм / одно кило' } },
       { id: '05kg',    imageUrl: '', label: '0,5 кг — Половин килограм/половин кило',      ttsLabel: 'половин килограм, половин кило.',        translations: { en: '0.5 kg — half a kilogram / half a kilo', ar: '0.5 كجم — نصف كيلوغرام', fr: '0,5 kg — un demi-kilogramme', fa: '۰٫۵ کیلوگرم — نیم کیلو', uk: '0,5 кг — пів кілограма / пів кіло', ru: '0,5 кг — полкилограмма / полкило' } },
-      { id: '15kg',    imageUrl: '', label: '1,5 кг — Килограм/кило и половина',           ttsLabel: 'килограм и половина, кило и половина.', translations: { en: '1.5 kg — one and a half kilos', ar: '1.5 كجم — كيلو ونصف', fr: '1,5 kg — un kilo et demi', fa: '۱٫۵ کیلوگرم — یک و نیم کیلو', uk: '1,5 кг — півтора кіло', ru: '1,5 кг — полтора кило' } },
+      { id: '15kg',    imageUrl: '', label: '1,5 кг — Един килограм и половина/едно кило и половина', ttsLabel: 'един килограм и половина, едно кило и половина.', translations: { en: '1.5 kg — one and a half kilos', ar: '1.5 كجم — كيلو ونصف', fr: '1,5 kg — un kilo et demi', fa: '۱٫۵ کیلوگرم — یک و نیم کیلو', uk: '1,5 кг — півтора кіло', ru: '1,5 кг — полтора кило' } },
       { id: '250g',    imageUrl: '', label: '250 гр — Четвърт килограм/кило. Двеста и петдесет грама', ttsLabel: 'четвърт килограм. двеста и петдесет грама.', translations: { en: '250 g — a quarter kilo. 250 grams', ar: '250 غ — ربع كيلو. مئتان وخمسون غراماً', fr: '250 g — un quart de kilo. 250 grammes', fa: '۲۵۰ گرم — یک چهارم کیلو', uk: '250 г — чверть кіло. 250 грамів', ru: '250 г — четверть кило. 250 граммов' } },
       { id: '1l',      imageUrl: '', label: '1 л. — Един литър',                            ttsLabel: 'един литър.',                            translations: { en: '1 l — one litre', ar: '1 لتر — لتر واحد', fr: '1 l — un litre', fa: '۱ لیتر — یک لیتر', uk: '1 л — один літр', ru: '1 л — один литр' } },
       { id: '2l',      imageUrl: '', label: '2 л. — Два литра',                             ttsLabel: 'два литра.',                             translations: { en: '2 l — two litres', ar: '2 لتر — لتران', fr: '2 l — deux litres', fa: '۲ لیتر — دو لیتر', uk: '2 л — два літри', ru: '2 л — два литра' } },
@@ -536,11 +536,10 @@ export const exercises: Exercise[] = [
     tableTitle: 'Числителното два / две',
     columns: ['един / една / едно', 'два / две'],
     rows: [
-      { pronoun: 'мъжки род', cells: ['един лимон',  'два лимона'] },
-      { pronoun: 'женски род', cells: ['една ябълка', 'две ябълки'] },
-      { pronoun: 'среден род', cells: ['едно кафе',  'две кафета'] },
+      { pronoun: 'мъжки род', cells: ['един лимон',  '**два** лимона'] },
+      { pronoun: 'женски род', cells: ['една ябълка', '**две** ябълки'] },
+      { pronoun: 'среден род', cells: ['едно кафе',  '**две** кафета'] },
     ],
-    boldColumns: [1],
     notes: ['два лимона (бройна форма) ≠ много лимони (множествено число)'],
   } as GrammarTableExercise,
 
@@ -695,7 +694,7 @@ export const exercises: Exercise[] = [
         lines: [
           { speaker: 'Клиент',   text: 'Искам две кила лимони, моля.' },
           { speaker: 'Продавач', text: 'Заповядайте. Шест евро.' },
-          { speaker: 'Клиент',   text: 'Мога ли да платя с карта?' },
+          { speaker: 'Клиент',   text: 'Мога ли да платя с карта?', ttsText: 'Мога ли да платя с банкова карта?' },
           { speaker: 'Продавач', text: 'Да, разбира се.' },
         ],
       },
@@ -861,7 +860,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-31',
     type: 'true_false',
-    instruction: 'Вярно или грешно?',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 35,
     points: 5,
     sentences: [
@@ -891,7 +890,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-33',
     type: 'reading_text',
-    instruction: 'Изслушайте и прочетете текста. Кликнете върху картите, за да чуете произношението им.',
+    instruction: 'Кликнете върху картинките, за да се запознаете с думите, и изслушайте текста. Прочетете го сами.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-33-full.mp3',
     imageFlashcards: true,
     order: 37,
@@ -932,7 +931,7 @@ export const exercises: Exercise[] = [
     id: 'l04-ex-35',
     type: 'reading_text',
     title: 'ОТ ПЪРВО ЛИЦЕ',
-    instruction: 'Изслушайте и прочетете текста. Кликнете върху картите, за да чуете произношението им.',
+    instruction: 'Кликнете върху картинките, за да се запознаете с думите, и изслушайте текста. Прочетете го сами.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-35-full.mp3',
     voiceGender: 'male',
     imageFlashcards: true,
@@ -951,7 +950,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-36',
     type: 'true_false',
-    instruction: 'Вярно или грешно?',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 40,
     points: 7,
     sentences: [
@@ -969,7 +968,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-37',
     type: 'reading_text',
-    instruction: 'Изслушайте и прочетете текста. Кликнете върху картата, за да чуете произношението.',
+    instruction: 'Кликнете върху картинките, за да се запознаете с думите, и изслушайте текста. Прочетете го сами.',
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-37-full.mp3',
     imageFlashcards: true,
     order: 41,

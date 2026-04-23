@@ -6,10 +6,11 @@ import type {
   WordOrderExercise,
   MultipleChoiceExercise,
   SyllableBlocksExercise,
+  DialogueBuilderExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// КОМПОНЕНТ СЛУШАНЕ (8 т.)
+// УПРАЖНЕНИЕ 1 — Слушане (8 т.)
 // hideText: true → текстът НЕ се вижда, има Play бутон.
 // Без картинки на говорители — текстът е диалог в ресторант.
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -18,10 +19,12 @@ export const listeningExercises: Exercise[] = [
   {
     id: 't02-sl-text',
     type: 'reading_text',
-    title: 'КОМПОНЕНТ СЛУШАНЕ',
-    instruction: 'Слушайте текста и отговорете на въпросите с ДА или НЕ.',
+    title: 'УПРАЖНЕНИЕ 1',
+    instruction: 'Изслушайте текста.',
     order: 1,
     hideText: true,
+    audioUrl: '/assets/test-a1-2/audio/tts/texts/t02-sl-text-full.mp3',
+    images: [{ imageUrl: '/assets/lesson-03/dialogues-2/restorant-finikiya.jpg', label: '' }],
     paragraphs: [
       'Надя, Невена и Адриан са в ресторант „София". Те обядват. Надя яде шопска салата и риба. Тя пие минерална вода. Надя не иска десерт. Невена яде мусака и таратор и пие сок от грозде. Тя много обича сладолед и иска сладолед за десерт. Адриан яде пица и пие айран. За десерт иска плодова салата. Адриан плаща 60 евро. Сметката е 55 евро и 5 евро за бакшиш. Надя, Невена и Адриан много обичат ресторант „София".',
     ],
@@ -30,7 +33,7 @@ export const listeningExercises: Exercise[] = [
   {
     id: 't02-sl-tf',
     type: 'true_false',
-    instruction: 'Слушайте текста и отговорете на въпросите с ДА или НЕ.',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 2,
     points: 8,
     model: { text: 'Надя, Невена и Адриан са в ресторант „София".', isTrue: true },
@@ -48,7 +51,7 @@ export const listeningExercises: Exercise[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// КОМПОНЕНТ ЧЕТЕНЕ (7 т.)
+// УПРАЖНЕНИЕ 3 — Четене (7 т.)
 // noTranslation: true → без превод, без click-to-speak.
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -57,8 +60,8 @@ export const readingExercises: Exercise[] = [
   {
     id: 't02-ch-text1',
     type: 'reading_text',
-    title: 'КОМПОНЕНТ ЧЕТЕНЕ',
-    instruction: 'Прочетете текста и изберете верния отговор.',
+    title: 'УПРАЖНЕНИЕ 3',
+    instruction: 'Прочетете текста.',
     order: 3,
     noTranslation: true,
     paragraphs: [
@@ -123,7 +126,7 @@ export const readingExercises: Exercise[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// КОМПОНЕНТ ГРАМАТИКА (52 т.)
+// УПРАЖНЕНИЯ 7–12 — Граматика (52 т.)
 // Всички workbook_fill_blank ЗАДЪЛЖИТЕЛНО имат options (падащо меню).
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -133,7 +136,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't02-gr-ctx1',
     type: 'reading_text',
-    title: 'КОМПОНЕНТ ГРАМАТИКА',
+    title: 'УПРАЖНЕНИЕ 7',
     instruction: '',
     order: 7,
     noTranslation: true,
@@ -227,7 +230,7 @@ export const grammarExercises: Exercise[] = [
     layout: 'two-column',
     imageUrl: '/assets/test-a1-2/gramatika/yabalka.jpg',
     sentences: [
-      { text: 'една краставица — много краставици', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'една краставица — много краставици', blanks: [], correctAnswers: [], isExample: true }, // model already has "много"
       {
         text: '_____ домат — _____',
         blanks: [0, 3],
@@ -360,60 +363,30 @@ export const grammarExercises: Exercise[] = [
   } as WorkbookFillBlankExercise,
 
   // ─── Упражнение 4: Подредете диалога (6 т.) ──────────────────────────────
-  // Всеки ред (освен първия) получава number dropdown 2–7.
   {
     id: 't02-gr-4',
-    type: 'workbook_fill_blank',
-    instruction: 'Подредете диалога. Изберете номера на репликите в правилен ред.',
+    type: 'dialogue_builder',
+    title: 'УПРАЖНЕНИЕ 11',
+    instruction: 'Наредете репликите в правилен ред.',
     order: 11,
     points: 6,
-    layout: 'single',
     imageUrl: '/assets/test-a1-2/gramatika/palachinki.jpg',
-    sentences: [
+    sections: [
       {
-        text: '1. – Здравейте, едно капучино без захар, моля.',
-        blanks: [],
-        correctAnswers: [],
-        isExample: true,
-      },
-      {
-        text: '___. – Нещо за ядене?',
-        blanks: [0],
-        correctAnswers: ['2'],
-        options: ['2', '3', '4', '5', '6', '7'],
-      },
-      {
-        text: '___. – Да. Има ли палачинки?',
-        blanks: [0],
-        correctAnswers: ['3'],
-        options: ['2', '3', '4', '5', '6', '7'],
-      },
-      {
-        text: '___. – Да, има палачинки с шоколад.',
-        blanks: [0],
-        correctAnswers: ['4'],
-        options: ['2', '3', '4', '5', '6', '7'],
-      },
-      {
-        text: '___. – Чудесно, една палачинка.',
-        blanks: [0],
-        correctAnswers: ['5'],
-        options: ['2', '3', '4', '5', '6', '7'],
-      },
-      {
-        text: '___. – Нещо друго?',
-        blanks: [0],
-        correctAnswers: ['6'],
-        options: ['2', '3', '4', '5', '6', '7'],
-      },
-      {
-        text: '___. – Не, благодаря. Това е всичко.',
-        blanks: [0],
-        correctAnswers: ['7'],
-        options: ['2', '3', '4', '5', '6', '7'],
+        id: 'а',
+        givenFirstLine: '– Здравейте, едно капучино без захар, моля.',
+        sentences: [
+          '– Здравейте, едно капучино без захар, моля.',
+          '– Нещо за ядене?',
+          '– Да. Има ли палачинки?',
+          '– Да, има палачинки с шоколад.',
+          '– Чудесно, една палачинка.',
+          '– Нещо друго?',
+          '– Не, благодаря. Това е всичко.',
+        ],
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DialogueBuilderExercise,
 
   // ─── Упражнение 5: Подредете думите в изречения (6 т.) ───────────────────
   {
@@ -452,7 +425,7 @@ export const grammarExercises: Exercise[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// КОМПОНЕНТ ПИСАНЕ (10 т.)
+// УПРАЖНЕНИЕ 13–14 — Писане (10 т.)
 // reading_text показва кошницата голяма веднъж в началото.
 // syllable_blocks — без imageUrl per puzzle (само буквени блокчета).
 // Буквите са в фиксиран ред (не случаен шъфъл): 1-вата буква/сричка накрая.
@@ -463,7 +436,7 @@ export const writingExercises: Exercise[] = [
   {
     id: 't02-pi-img',
     type: 'reading_text',
-    title: 'КОМПОНЕНТ ПИСАНЕ',
+    title: 'УПРАЖНЕНИЕ 13',
     instruction: '',
     order: 13,
     noTranslation: true,
@@ -477,7 +450,7 @@ export const writingExercises: Exercise[] = [
   {
     id: 't02-pi-spell',
     type: 'syllable_blocks',
-    instruction: 'Влачете буквите и ги подредете, за да получите думата.',
+    instruction: 'Подредете буквите/сричките, за да съставите дума или израз.',
     order: 14,
     points: 10,
     columns: 3,

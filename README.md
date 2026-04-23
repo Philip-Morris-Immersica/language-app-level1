@@ -1,6 +1,6 @@
 # Български език за бежанци — A1
 
-Interactive digital platform for learning Bulgarian, designed for refugees and migrants. A UNHCR initiative.
+Interactive digital platform for learning Bulgarian, designed for refugees. A UNHCR initiative.
 
 ## Quick Start
 

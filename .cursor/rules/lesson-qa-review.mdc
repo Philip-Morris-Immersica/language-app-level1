@@ -1,0 +1,93 @@
+---
+description: QA-review workflow for a finished lesson. Invoke when the user asks to review lesson NN, check a lesson for errors, or do a QA pass. Optimized for low token use — runs the deterministic linter first, then applies AI only where it adds signal.
+---
+# Lesson QA Review — Structured Agent Workflow
+
+Use this workflow when the user asks to review a finished lesson (e.g. „прегледай урок 7", „QA на урок 8"). Follow the phases in order — each later phase is more expensive in tokens, so fail-fast on early findings.
+
+## Phase 0 — Clarify scope (1 question max)
+
+Before starting, confirm with the user:
+- Which lesson? (e.g. `lesson-07` or just `7`)
+- Only main lesson, or also matching test? (Tests live in `src/content/tests/test-lessons-N/`.)
+
+Do NOT ask more questions. Proceed with defaults if user is vague (just the lesson, no test).
+
+## Phase 1 — Deterministic lint (ZERO tokens)
+
+Run the content linter. Treat its output as authoritative for everything it checks.
+
+```bash
+npm run content:lint -- --lesson NN
+```
+
+Report the findings to the user, grouped by exercise id. Note which errors are blockers vs warnings-for-discussion. Do NOT manually verify anything the linter already covers (duplicate ids, missing images, Latin dialogue ids, points/blanks mismatch, paper-book phrases, verb mismatch, lazy shuffle, true/false grouping, digits in listeningText, `grammar_table` alignment, `order` duplicates).
+
+## Phase 2 — Content integrity (targeted file reads)
+
+Read ONLY the files necessary to verify content. Never read `index.ts`, `metadata.ts`, or `workbook.ts` unless the user requested workbook review. For the main pass:
+
+1. **Read `exercises.ts`** — this is the primary source.
+2. **Read `content.ts`** — only if the lesson has dialogues (to cross-check them).
+
+Then perform these checks (each ≈ 1 sentence per finding, no filler prose):
+
+### 2a. Ordering within lesson
+- [ ] `order` values form a pedagogical sequence: НОВИ ДУМИ → ГРАМАТИКА → practice → ДИАЛОГ → text comprehension → test/review.
+- [ ] New vocabulary appears BEFORE the first exercise that uses it.
+- [ ] New grammar structure is introduced BEFORE exercises that drill it.
+
+### 2b. Instructions
+- [ ] Each `instruction` describes a DIGITAL action (Изберете / Плъзнете / Напишете / Свържете / Подредете) that matches the interaction type.
+- [ ] Complex or new-pattern instructions have an `instructionKey` registered in `src/locales/*/ui.ts` (all 7 languages).
+- [ ] No paper-book references survived the linter's `forbidden-phrases` rule (double-check anyway in case the phrase was rephrased).
+
+### 2c. Answer correctness
+- [ ] Every `correctAnswers[]` / `correctAnswer` / `correctForm` is grammatically valid (правилен род/член/лице).
+- [ ] Every ambiguous question has `alternateCorrectAnswers` / `acceptableAnswers` covering the alternate valid forms (e.g. „двайсет" + „двадесет", „полвин" + „половин", „четвърт" + „петнайсет").
+- [ ] Proper nouns localized to Bulgarian standard (Алепо, Ню Йорк, Багдад — not „Халеб", „New York", „Baghdad").
+
+### 2d. Text ↔ TTS consistency
+- [ ] The number-word form used in UI matches what TTS will read (one form per lesson: either „двайсет" OR „двадесет", not mixed).
+- [ ] `listeningText` has all numerals spelled out.
+- [ ] `ttsText` / `ttsLabel` / `ttsParagraphs` overrides exist wherever the displayed form differs from a natural spoken form (abbreviations, symbols, numbers).
+
+### 2e. Dialogue consistency (skip if no dialogues)
+- [ ] Every dialogue in `exercises.ts` appears identically in `content.ts` (same speakers, same lines).
+- [ ] Every dialogue line has `voiceGender` when the speaker's gender is clear.
+
+## Phase 3 — Structured report
+
+Output a single consolidated report in this format (keep it terse, no preamble):
+
+```
+# QA Review — lesson-NN
+
+## Blockers (must fix)
+- l07-ex-33  verb-mismatch: инструкция казва „Напишете", но всички options са dropdown → „Изберете"
+- l07-ex-17  points=6, но преброени 7 blanks (махни 1 blank или points=7)
+
+## Warnings (обсъждане)
+- l07-ex-35  true-false има 3 поредни true отговора (разбъркай)
+
+## Suggestions (optional)
+- l07-ex-12  „двайсет" срещу „двадесет" в l07-ex-20 — избери една форма
+
+## Passed checks
+- Dialogue consistency across content.ts & exercises.ts
+- НОВИ ДУМИ ordering
+- Grammar introduces before use
+```
+
+## Phase 4 — Ask, don't fix (unless told)
+
+Do NOT apply fixes automatically. Wait for user approval: „искаш ли да оправя всички blockers автоматично?" If yes, batch the fixes in one pass and re-run the linter to confirm.
+
+## What NOT to check (explicit skip list — saves tokens)
+
+- **Visual layout / component styling** — handled by shared templates, assume correct.
+- **TTS audio quality / pronunciation** — cannot be verified without listening; skip.
+- **Button behavior, navigation, scoring UI** — covered by templates and existing tests.
+- **Image aesthetics** — only check file existence (linter already does this); do NOT open images to judge them.
+- **Translation accuracy in ui.ts** — separate workflow; skip unless user asks.
+- **„Непознатите думи потърсете в речника."** — NOT enforced as hard rule (user is still deciding); flag only as a soft suggestion if present.

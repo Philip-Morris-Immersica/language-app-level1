@@ -1,0 +1,71 @@
+---
+globs: src/app/**,src/components/layout/**
+---
+# Platform UI Standards
+
+Standards for the home page, welcome screen, level map, and shared UI elements. Every rule below comes from UNHCR branding requirements and feedback on the platform (Обратна връзка 2).
+
+## Terminology
+
+- **Platform title:** „Български език за **бежанци** A1" — NOT „мигранти". This applies to `<title>`, OG tags, `metadata`, README.
+- **Level labels:** Always use **Latin letters** — A1, A2, B1, B2 (not А1, А2 with Cyrillic).
+
+## UNHCR Branding
+
+- **Primary color:** `#0072BC` (UNHCR blue). Use as primary action button color, link color, accent.
+- **Logo:** UNHCR logo should be visible and reasonably large (not tiny).
+- **Home button:** The UNHCR logo should act as a home button (link to `/`).
+- **Reference:** https://dataviz.unhcr.org/download/UNHCR_Data_Visualization_Guidelines.pdf (page 4 for color palette).
+
+## Welcome / Home Screen (after login)
+
+After the user logs in and arrives at the level selection screen:
+
+- Show: „Добре дошли, [Name]!" + „Изберете ниво:" + level cards (A1, A2, B1, B2).
+- Do NOT show: „Изберете ниво, за да продължите обучението си." (redundant subtitle).
+- Below the level cards: **Legend** (виж §Legend section).
+
+## Welcome Screen (before login)
+
+Text for the unauthenticated home page:
+
+```
+Добре дошли!
+Това е платформа за изучаване на български език.
+Тук ще намерите безплатни интерактивни уроци, упражнения и тестове за нивата А1, А2, B1 и B2.
+Желаем ви успех!
+```
+
+## Legend (Platform Guide)
+
+Location: bottom of the level-selection screen (after login), in [src/app/level/a1/LevelMapClient.tsx](mdc:src/app/level/a1/LevelMapClient.tsx) or a shared component.
+
+The legend explains the platform's interactive elements. It must be translated on all 7 languages via `ui.ts`. Contents:
+
+| Element | What to explain |
+|---|---|
+| 🔊 icon | Clicking it reads the word/phrase aloud |
+| Green „Слушай" button | Plays the full audio for a text or dialogue |
+| Dictionary icon | Opens the built-in dictionary for the current word |
+| Chatbot button | Opens the AI language assistant (external link) |
+| Grammar menu | Access to the grammar reference |
+| Culture menu | Access to culture & lifestyle notes |
+| Reset button | Resets all answers in the current exercise |
+
+Screenshot images in the legend stay universal (no translation needed); only the text labels are translated.
+
+## Audio UX Standard
+
+- **Toggle on 2nd click:** Clicking the same audio element while it is playing should **pause** the audio, not restart. Clicking a different element stops current audio and starts the new one.
+- **„Слушай" / „Спри"** button label switches during playback.
+- This behavior must be consistent across: `Dialogues`, `ReadingText`, `IllustratedCards`, `GrammarTable`, `GrammarWithExamples`.
+
+## Reset Button Standard
+
+Every interactive exercise must have a **Reset** button that clears all user answers and resets the exercise to its initial state. The button appears in the same action bar as the „Провери отговорите" button. Missing Reset = UI bug.
+
+## Info Box (Grammar Highlight)
+
+For grammar notes that need visual prominence (not just a subtitle), use the `GrammarHighlight` component. It renders as a **green rounded box with ℹ icon**. Translated via `textKey` in `ui.ts`.
+
+Example usage: the с/със rule (урок 2 упр. 12), the million/milliard rule (урок 5 упр. 31).

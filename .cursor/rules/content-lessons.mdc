@@ -46,9 +46,10 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 - Actual exercises have a `points` field
 - **`points` = number of blanks/questions, NOT number of sentences.** For `table_fill`, points = number of rows.
 - **Do NOT duplicate examples as interactive items.** If `isExample: true`, it must not count toward points.
-- Instructions must be **verbatim from the textbook** — do not rephrase or paraphrase.
+- Instructions must match the **digital-format standards** — see `content-quality-checklist.mdc` §A3 for the standardized instruction table per exercise type. Do NOT copy verbatim from the textbook; do NOT improvise new instructions for standard exercise types.
 - When a lesson has **multiple sections of the same type**, always number them: НОВИ ДУМИ 1, НОВИ ДУМИ 2... / ГРАМАТИКА 1, 2... / ДИАЛОЗИ 1, 2...
-- All НОВИ ДУМИ sections must use instruction: `'Натиснете за произношение.'`
+- All НОВИ ДУМИ sections in **уроци 0–1 and Азбука** must use instruction: `'Натиснете за произношение.'`
+- НОВИ ДУМИ sections in **уроци 2+** use **no instruction** (rely on card-level 🔊 icons only).
 - Dialogues: verify **every line** is complete and matches the textbook exactly.
 - **Currency rule:** лева → евро, стотинки → евроцента. All monetary exercises must use `dropdown` input (not free text).
 - Short fill-in-blank exercises (e.g., два/две, какъв/каква) → use `layout: 'two-column'`.
@@ -58,6 +59,20 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 - **Content guideline for TTS:** In dialogue lines with numbers/sums, prefer a **period** over a dash (e.g. `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`). The dash confuses TTS pronunciation and pacing.
 - **`grammar_table` alignment rule:** `columns.length` MUST equal `cells.length` for every row. The `pronoun` field renders in the first column automatically (with an empty header). Do NOT include the pronoun column label in `columns` — it causes header misalignment.
 - **Instruction text must match the actual exercise type.** If the exercise uses dropdowns, the instruction should say "Изберете" (Select), not "Напишете" (Write). Match the verb to the interaction: Select → dropdown, Write → text input, Arrange → drag-and-drop.
+
+## Grammar Info Box (`grammar_highlight`)
+
+For visually prominent grammar notes that need to stand out from the exercise body (e.g. the с/със rule in l2 ex 12, or the million/milliard rule in l5 ex 31), add a `grammarHighlight` object to the exercise:
+
+```ts
+grammarHighlight: {
+  textKey: 'exercise.sSusWith',  // key in ui.ts (pre-translated on 7 languages)
+  // OR inline text if translation will be auto:
+  // text: 'Когато дума след „с" ...',
+}
+```
+
+The component renders it as a green info box with an „ℹ" icon above the exercise body. Add the translation key to `src/i18n/ui.ts` on all 7 languages.
 
 ## Exercise Types — 5 Categories
 
@@ -130,7 +145,7 @@ The following behaviors are built into the exercise components — content autho
 
 - **Options are shuffled** — `WorkbookFillBlank` shuffles `options[]` on render so the correct answer isn't always first.
 - **Letters are shuffled** — `LetterChoice` shuffles the letter pool on render.
-- **Reset button** — All exercise components with "Check answers" also show a "Reset" button.
+- **Reset button** — ALL interactive exercise components show a "Reset" button. If a component is missing one, it is a bug — report/fix it.
 - **TTS** — Components prefer pre-generated MP3 via `getTtsAudioPath()`, with browser `speakBulgarian()` as fallback. See `tts-audio` rule for generation details.
 
 ## Alternative Correct Answers

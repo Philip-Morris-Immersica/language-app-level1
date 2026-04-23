@@ -191,7 +191,7 @@ export function TestScoreSummary({ testData }: TestScoreSummaryProps) {
                 return (
                   <div key={section.id} className="flex items-center gap-3">
                     <span className={`text-sm font-medium w-48 truncate ${needsWork ? 'text-red-600' : 'text-gray-700'}`}>
-                      <TranslatedText text={section.name.replace('КОМПОНЕНТ ', '')} />
+                      <TranslatedText text={section.name} />
                     </span>
                     <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div

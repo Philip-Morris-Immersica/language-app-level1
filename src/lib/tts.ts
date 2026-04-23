@@ -108,6 +108,7 @@ export function isTtsAvailable(): boolean {
 // ---------------------------------------------------------------------------
 
 let currentAudio: HTMLAudioElement | null = null;
+let currentAudioUrl: string | null = null;
 
 export function getTtsAudioPath(
   exerciseId: string,
@@ -135,6 +136,7 @@ export function playTtsAudio(
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
+    currentAudioUrl = null;
   }
 
   if (!audioUrl) {
@@ -144,22 +146,52 @@ export function playTtsAudio(
 
   const audio = new Audio(audioUrl);
   currentAudio = audio;
+  currentAudioUrl = audioUrl;
   const finish = () => {
     currentAudio = null;
+    currentAudioUrl = null;
     onPlaybackEnd?.();
   };
   audio.onended = finish;
   audio.play().catch(() => {
     currentAudio = null;
+    currentAudioUrl = null;
     if (fallbackText) speakBulgarian(fallbackText, rate);
     onPlaybackEnd?.();
   });
+}
+
+/**
+ * Toggle audio playback: if the same URL is already playing, pause it.
+ * If a different URL is playing, stop it and start the new one.
+ * Returns true if audio started playing, false if it was paused/stopped.
+ */
+export function toggleTtsAudio(
+  audioUrl: string,
+  fallbackText?: string,
+  rate?: number,
+  onPlaybackEnd?: () => void,
+): boolean {
+  if (currentAudio && currentAudioUrl === audioUrl) {
+    // Same audio — toggle pause/resume
+    if (currentAudio.paused) {
+      currentAudio.play().catch(() => {});
+      return true;
+    } else {
+      currentAudio.pause();
+      return false;
+    }
+  }
+  // Different or no audio — start fresh
+  playTtsAudio(audioUrl, fallbackText, rate, onPlaybackEnd);
+  return true;
 }
 
 export function stopTtsAudio(): void {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
+    currentAudioUrl = null;
   }
   stopSpeaking();
 }

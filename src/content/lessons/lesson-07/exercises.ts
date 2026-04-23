@@ -327,7 +327,7 @@ export const exercises: Exercise[] = [
     id: 'l07-dialozi-01',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
-    instruction: 'Натиснете реплика, за да чуете произношението. После повторете на глас.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     instructionKey: 'exercise.clickLineToListen',
     order: 12,
     sections: [
@@ -881,7 +881,7 @@ export const exercises: Exercise[] = [
     id: 'l07-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
-    instruction: 'Натиснете реплика, за да чуете произношението. После повторете на глас.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     instructionKey: 'exercise.clickLineToListen',
     order: 27,
     sections: [
@@ -1049,7 +1049,7 @@ export const exercises: Exercise[] = [
     id: 'l07-dialozi-03',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 3',
-    instruction: 'Натиснете реплика, за да чуете произношението. После повторете на глас.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     instructionKey: 'exercise.clickLineToListen',
     order: 31,
     sections: [
@@ -1242,7 +1242,7 @@ export const exercises: Exercise[] = [
     id: 'l07-dialozi-04',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 4',
-    instruction: 'Натиснете реплика, за да чуете произношението. После повторете на глас.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     instructionKey: 'exercise.clickLineToListen',
     order: 37,
     sections: [

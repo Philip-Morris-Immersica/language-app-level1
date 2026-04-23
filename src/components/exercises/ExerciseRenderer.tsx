@@ -27,6 +27,7 @@ import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
+import { GrammarHighlight } from './GrammarHighlight';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -87,6 +88,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     return (
       <div>
         <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
+        {exercise.grammarHighlight && <GrammarHighlight highlight={exercise.grammarHighlight} />}
         {component}
       </div>
     );

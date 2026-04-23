@@ -23,7 +23,7 @@ const sofiaSans = Sofia_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Български език за мигранти A1",
+  title: "Български език за бежанци A1",
   description: "Интерактивен дигитален учебник по български език - ниво A1",
 };
 

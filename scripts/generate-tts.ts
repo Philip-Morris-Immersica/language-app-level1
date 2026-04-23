@@ -47,11 +47,22 @@ const GEMINI_BG_WORD_STRESS_PROMPT =
 
 // Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers, tricky pronunciation)
 const GRAMMAR_TABLE_PRO_ROWS = new Set([
+  // Lesson 00 — Alphabet letters with tricky pronunciation
+  'l00-gramatika-01-row-0',  // А — Ана
+  'l00-gramatika-01-row-4',  // Д — Дилма
+  'l00-gramatika-01-row-11', // Л — Лейла (soft Л)
+  'l00-gramatika-01-row-12', // М — Мохамед
+  'l00-gramatika-01-row-19', // У — Уляна
+  'l00-gramatika-01-row-22', // Ц — Цветелина
+  'l03-gramatika-04-row-0', // сандвич, сок — Flash mispronounces loanwords
   'l04-gramatika-02-row-9', // хиляда
   'l05-gramatika-07-row-0', // хиляда (l05)
+  'l05-gramatika-07-row-1', // две хиляди (l05)
+  'l05-gramatika-07-row-2', // един милион (l05)
+  'l05-gramatika-07-row-3', // два милиона (l05)
   'l05-gramatika-07-row-4', // един милиард (l05)
   'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
-  'l06-gramatika-08-row-6', // вие работите / не работите
+  'l06-gramatika-08-row-6', // Вие работите / не работите
   'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
@@ -63,11 +74,15 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l07-gramatika-01-note-0',  // "Дата: 10 август 2023 г. = десети август две хиляди двайсет и трета година" — full sentence
   'l04-gramatika-02-note-0',  // "двеста шестдесет и пет"
   'l04-gramatika-02-note-1',  // "хиляда триста осемдесет и девет"
+  'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
 const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
+
+  'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
+  'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -100,6 +115,7 @@ const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset']);
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene', // lesson 3 — Пушенето забранено!
+  'bob',     // lesson 4 — боб (single short word, word prompt gives clearer stress)
 ]);
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */

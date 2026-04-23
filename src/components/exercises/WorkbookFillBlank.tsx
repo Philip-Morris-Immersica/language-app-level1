@@ -53,14 +53,23 @@ export function WorkbookFillBlank({
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
   const [answers, setAnswers] = useState<{ [key: string]: string[] }>(() => s?.answers ?? {});
-  const [validation, setValidation] = useState<{ [key: string]: boolean | null }>(() => s?.validation ?? {});
+  // blankValidation[sentenceIdx] = array of per-blank booleans (null = not evaluated / example)
+  const [blankValidation, setBlankValidation] = useState<{ [key: string]: (boolean | null)[] | null }>(() => s?.blankValidation ?? {});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
+
+  // Helper: is the whole sentence correct? (all blanks must be correct)
+  const sentenceValid = (sIdx: number): boolean | null => {
+    const bv = blankValidation[sIdx];
+    if (!bv || bv === null) return null;
+    if (bv.every(v => v === null)) return null;
+    return bv.every(v => v !== false);
+  };
   const mounted = useRef(false);
 
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
-    saveState({ answers, validation, isSubmitted });
-  }, [answers, validation, isSubmitted]);
+    saveState({ answers, blankValidation, isSubmitted });
+  }, [answers, blankValidation, isSubmitted]);
 
   const shuffledSentences = useMemo(() => {
     return sentences.map(s => {
@@ -83,7 +92,7 @@ export function WorkbookFillBlank({
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
     if (isSubmitted) {
       setIsSubmitted(false);
-      setValidation({});
+      setBlankValidation({});
     }
     setAnswers(prev => {
       const current = prev[sentenceIdx] ? [...prev[sentenceIdx]] : [];
@@ -94,24 +103,24 @@ export function WorkbookFillBlank({
 
   const handleReset = () => {
     setAnswers({});
-    setValidation({});
+    setBlankValidation({});
     setIsSubmitted(false);
-    saveState({ answers: {}, validation: {}, isSubmitted: false });
+    saveState({ answers: {}, blankValidation: {}, isSubmitted: false });
   };
 
   const handleSubmit = () => {
-    const newValidation: { [key: string]: boolean | null } = {};
+    const newBlankValidation: { [key: string]: (boolean | null)[] | null } = {};
     let correctCount = 0;
-    let totalBlanks = 0;
+    let totalSentences = 0;
 
     sentences.forEach((sentence, sIdx) => {
       if (sentence.isExample || sentence.blanks.length === 0) {
-        newValidation[sIdx] = null;
+        newBlankValidation[sIdx] = null;
         return;
       }
 
       const userAnswers = answers[sIdx] || [];
-      const isCorrect = sentence.correctAnswers.every((correct, bIdx) => {
+      const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
         const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
         if (sentence.acceptableAnswers?.[bIdx]) {
           return sentence.acceptableAnswers[bIdx].some(a => a.toLowerCase() === userVal);
@@ -119,21 +128,22 @@ export function WorkbookFillBlank({
         return userVal === correct.toLowerCase();
       });
 
-      newValidation[sIdx] = isCorrect;
-      if (isCorrect) correctCount++;
-      totalBlanks++;
+      newBlankValidation[sIdx] = blankResults;
+      if (blankResults.every(v => v)) correctCount++;
+      totalSentences++;
     });
 
-    setValidation(newValidation);
+    setBlankValidation(newBlankValidation);
     setIsSubmitted(true);
-    onComplete?.(correctCount === totalBlanks, correctCount);
+    onComplete?.(correctCount === totalSentences, correctCount);
   };
 
   const renderSentence = (sentence: WorkbookSentence, sIdx: number) => {
     const isExample = sentence.isExample || sentence.blanks.length === 0;
     const segments = parseText(sentence.text);
     let blankCounter = 0;
-    const valid = validation[sIdx];
+    const valid = sentenceValid(sIdx);
+    const blankValArr = blankValidation[sIdx];
 
     return (
       <div
@@ -156,6 +166,8 @@ export function WorkbookFillBlank({
             const bIdx = blankCounter++;
             const userVal = answers[sIdx]?.[bIdx] || '';
             const opts = getOptionsForBlank(sentence.options, bIdx);
+            // Per-blank validation: use individual blank result if available
+            const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
 
             if (isExample) {
               return (
@@ -177,8 +189,8 @@ export function WorkbookFillBlank({
                   onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
                   placeholder="..."
                   className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-base font-medium focus:outline-none min-w-[6rem]
-                    ${isSubmitted
-                      ? valid ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
+                    ${isSubmitted && blankOk !== null
+                      ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
                       : 'border-[#0279C3] focus:border-[#025a93]'
                     }`}
                 />
@@ -193,8 +205,8 @@ export function WorkbookFillBlank({
                 className={`
                   inline-block border-b-2 rounded px-1 py-0.5 text-base font-medium bg-white
                   focus:outline-none focus:ring-2 focus:ring-bolt-primary cursor-pointer
-                  ${isSubmitted
-                    ? valid
+                  ${isSubmitted && blankOk !== null
+                    ? blankOk
                       ? 'border-green-500 bg-green-50 text-green-700'
                       : 'border-red-400 bg-red-50 text-red-700'
                     : 'border-bolt-primary hover:border-bolt-primary-hover'
@@ -242,7 +254,8 @@ export function WorkbookFillBlank({
     const questionPart = parts[0]?.trim() || sentence.text;
     const answerPart = parts[1]?.trim() || '';
     const isExample = sentence.isExample || sentence.blanks.length === 0;
-    const valid = validation[sIdx];
+    const valid = sentenceValid(sIdx);
+    const blankValArr = blankValidation[sIdx];
 
     const renderPart = (text: string, blankOffset: number) => {
       const segments = parseText(text);
@@ -252,6 +265,7 @@ export function WorkbookFillBlank({
           const bIdx = blankCounter++;
           const userVal = answers[sIdx]?.[bIdx] || '';
           const opts = getOptionsForBlank(sentence.options, bIdx);
+          const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
           if (isExample) {
             return (
               <span key={segIdx} className="inline-block border-b-2 border-gray-400 min-w-[4rem] text-center text-sm px-1">
@@ -268,8 +282,8 @@ export function WorkbookFillBlank({
                 onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
                 placeholder="..."
                 className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-sm font-medium focus:outline-none min-w-[10rem] w-full max-w-[22rem]
-                  ${isSubmitted
-                    ? valid ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
+                  ${isSubmitted && blankOk !== null
+                    ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
                     : 'border-[#8FC412] focus:border-[#0279C3]'
                   }`}
               />
@@ -283,8 +297,8 @@ export function WorkbookFillBlank({
               className={`
                 inline-block border-b-2 rounded px-1 py-0.5 text-sm font-medium bg-white
                 focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
-                ${isSubmitted
-                  ? valid ? 'border-green-500 bg-green-50' : 'border-red-400 bg-red-50'
+                ${isSubmitted && blankOk !== null
+                  ? blankOk ? 'border-green-500 bg-green-50' : 'border-red-400 bg-red-50'
                   : 'border-bolt-primary'
                 }
               `}
@@ -324,7 +338,8 @@ export function WorkbookFillBlank({
     const questionPart = parts[0]?.trim() || sentence.text;
     const answerPart = parts[1]?.trim() || '';
     const isExample = sentence.isExample || sentence.blanks.length === 0;
-    const valid = validation[sIdx];
+    const valid = sentenceValid(sIdx);
+    const blankValArr = blankValidation[sIdx];
 
     const renderAnswerPart = (text: string) => {
       const segments = parseText(text);
@@ -334,6 +349,7 @@ export function WorkbookFillBlank({
           const bIdx = blankCounter++;
           const userVal = answers[sIdx]?.[bIdx] || '';
           const opts = getOptionsForBlank(sentence.options, bIdx);
+          const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
           if (isExample) {
             return (
               <span key={segIdx} className="font-bold text-[#4a6b1f]">
@@ -350,8 +366,8 @@ export function WorkbookFillBlank({
                 className={`
                   inline-block border-b-2 rounded px-1 py-0.5 text-sm md:text-base font-medium bg-white
                   focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
-                  ${isSubmitted
-                    ? valid ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700'
+                  ${isSubmitted && blankOk !== null
+                    ? blankOk ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700'
                     : 'border-[#8B9D5F]'
                   }
                 `}
@@ -372,8 +388,8 @@ export function WorkbookFillBlank({
               className={`
                 inline-block border-b-2 bg-transparent text-base font-medium
                 min-w-[8rem] max-w-[14rem] px-1 focus:outline-none
-                ${isSubmitted
-                  ? valid
+                ${isSubmitted && blankOk !== null
+                  ? blankOk
                     ? 'border-green-500 text-green-700'
                     : 'border-red-400 text-red-700'
                   : 'border-[#8B9D5F] focus:border-[#5a7030]'

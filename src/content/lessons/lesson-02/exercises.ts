@@ -44,7 +44,7 @@ export const exercises: Exercise[] = [
     id: 'l02-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ',
-    instruction: 'Запознайте се с новите думи',
+    instruction: '',
     order: 2,
     cards: [
       { id: 'voda',          imageUrl: '/assets/lesson-02/novi-dumi-1-food/01-voda.jpg',          label: 'вода' },
@@ -76,7 +76,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-02',
     type: 'drag_to_columns',
-    instruction: 'Подредете думите в двете колонки.',
+    instruction: 'Поставете думите в правилната колона.',
     order: 3,
     points: 8,
     items: [
@@ -103,7 +103,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-03',
     type: 'word_search',
-    instruction: 'Колко думи можете да намерите?',
+    instruction: 'Колко думи можете да откриете?',
     order: 4,
     points: 7,
     letterString: 'СИРЕНЕММАСЛОПЛХПФИЛИЯЛЧАЙЯЦКЯМЕДЙАОБАНИЦАСИКАФЕКР',
@@ -131,7 +131,8 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-04',
     type: 'image_labeling',
-    instruction: 'Какво е това? Изберете правилната дума: „Това е ___."',
+    instruction: 'Какво е това? Изберете правилната дума.',
+    subtitle: 'Под всяка картинка: „Това е ___."',
     order: 6,
     points: 8,
     images: [
@@ -154,7 +155,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Обичам / не обичам',
-    instruction: 'Запознайте се с глагола ОБИЧАМ. Натиснете за произношение.',
+    instruction: 'Запознайте се с глагола ОБИЧАМ.',
     order: 7,
     showLikeDislike: true,
     examples: [
@@ -216,8 +217,8 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l02.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    instruction: 'Запознайте се с глагола ИСКАМ – сегашно време. Кликнете върху ред, за да чуете произношението.',
-    subtitle: 'Граматика – Сегашно време (12)',
+    instruction: 'Запознайте се с глагола ИСКАМ – сегашно време.',
+    subtitle: 'Граматика – Сегашно време',
     order: 13,
     tableTitle: 'Сегашно време – искам',
     columns: [],
@@ -325,9 +326,16 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l02.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'С / Без — Когато думата след „с" започва със „с" или „з", предлогът става „със" (за благозвучие). Например: „кафе с мляко", „кафе със захар", „омлет със сол".',
-    instruction: 'Запознайте се с предлозите „с" и „без". Натиснете за произношение.',
+    instruction: 'Запознайте се с предлозите „с" и „без".',
     order: 19,
+    grammarHighlight: {
+      text: 'Когато думата след „с" също започва със „с" или „з", предлогът става „със" за благозвучие.',
+      examples: [
+        'Искам кафе с мляко.',
+        'Искам кафе със захар.',
+        'Искам омлет със сол.',
+      ],
+    },
     examples: [
       {
         imageUrl: '/assets/lesson-02/gramatika-4/kafe-bez-zahar.jpg',
@@ -347,7 +355,7 @@ export const exercises: Exercise[] = [
     id: 'l02-dialozi-01',
     type: 'dialogues',
     title: 'ДИАЛОЗИ',
-    instruction: 'Натиснете секцията за автоматично прочитане.',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 20,
     sections: [
       {
@@ -481,7 +489,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-16',
     type: 'drag_to_columns',
-    instruction: 'Разгледайте масата. Какво има и какво няма? Плъзнете думите в правилната колона.',
+    instruction: 'Разгледайте масата. Какво има и какво няма? Подредете думите в двете колонки.',
     order: 24,
     points: 10,
     imageUrl: '/assets/lesson-02/exercise-16/masa-s-zakuska.jpg',
@@ -515,7 +523,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_table',
     title: 'ГРАМАТИКА 6',
     subtitle: 'Граматика – Род на съществителните (2)',
-    instruction: 'Запознайте се с рода на съществителните. Натиснете върху ред за произношение.',
+    instruction: 'Запознайте се с рода на съществителните.',
     order: 26,
     tableTitle: 'Род на съществителните',
     columns: ['', 'Примери'],
@@ -591,7 +599,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l02.g7.instruction',
     type: 'illustrated_cards',
     title: 'ГРАМАТИКА 7',
-    instruction: 'Запознайте се с числата от 0 до 10. Натиснете за произношение.',
+    instruction: '',
     order: 29,
     cards: [
       { id: 'n1',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-01.jpg', label: 'едно' },
@@ -724,7 +732,7 @@ export const exercises: Exercise[] = [
     id: 'l02-ex-25',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 25',
-    instruction: 'Слушайте текста и прочетете. Какво има на масата?',
+    instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 35,
     points: 10,
     audioUrl: '/assets/lesson-02/audio/tts/texts/l02-ex-25-full.mp3',
@@ -754,7 +762,7 @@ export const exercises: Exercise[] = [
     id: 'l02-ex-26',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    instruction: 'Прочетете текста.',
+    instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 36,
     points: 5,
     showDictionary: true,
@@ -791,7 +799,7 @@ export const exercises: Exercise[] = [
       },
     ],
     checklist: {
-      instruction: 'Вярно или грешно?',
+      instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
       items: [
         { id: 'tf1', text: 'Амал обича чай със захар.',          isTrue: true },
         { id: 'tf2', text: 'Амал обича сок от портокал.',        isTrue: true },
@@ -807,7 +815,7 @@ export const exercises: Exercise[] = [
     id: 'l02-ex-29',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 29',
-    instruction: 'Слушайте текста и попълнете празните места.',
+    instruction: 'Изслушайте текста и попълнете празните места.',
     order: 38,
     points: 7,
     layout: 'single',
