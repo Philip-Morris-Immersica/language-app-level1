@@ -12,6 +12,7 @@ import { IllustratedCards } from './IllustratedCards';
 import { SyllableBlocks } from './SyllableBlocks';
 import { GrammarVisual } from './GrammarVisual';
 import { WordSearch } from './WordSearch';
+import { WordSearchGrid } from './WordSearchGrid';
 import { GrammarWithExamples } from './GrammarWithExamples';
 import { Dialogues } from './Dialogues';
 import { DialogueBuilder } from './DialogueBuilder';
@@ -28,6 +29,7 @@ import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
 import { GrammarHighlight } from './GrammarHighlight';
+import { MapWithLabels } from './MapWithLabels';
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -89,6 +91,14 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       <div>
         <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
         {exercise.grammarHighlight && <GrammarHighlight highlight={exercise.grammarHighlight} />}
+        {exercise.mapLabels && exercise.mapLabels.length > 0 && (
+          <MapWithLabels
+            imageUrl={(exercise as any).imageUrl ?? ''}
+            labels={exercise.mapLabels}
+            legendItems={exercise.mapLegend}
+            legendTitle="Легенда"
+          />
+        )}
         {component}
       </div>
     );
@@ -170,6 +180,18 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       );
 
     case 'word_search':
+      // Use new 2D grid component when hiddenWords is present
+      if (exercise.hiddenWords && exercise.hiddenWords.length > 0) {
+        return wrap(
+          <WordSearchGrid
+            hiddenWords={exercise.hiddenWords}
+            grid={exercise.grid}
+            allowDiagonal={exercise.allowDiagonal}
+            onComplete={onComplete}
+            exerciseId={exercise.id}
+          />
+        );
+      }
       return wrap(
         <WordSearch
           letterString={exercise.letterString}

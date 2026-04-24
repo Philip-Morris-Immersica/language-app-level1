@@ -37,6 +37,19 @@ export interface GrammarHighlight {
   examples?: string[]; // Optional example sentences displayed below the text
 }
 
+// Map label — overlaid text label on a map image
+export interface MapLabel {
+  x: number;    // percentage from left (0–100)
+  y: number;    // percentage from top (0–100)
+  name: string; // institution name in Bulgarian
+}
+
+// Map legend item — icon + name for the collapsible reference panel
+export interface MapLegendItem {
+  imageUrl: string;
+  name: string;
+}
+
 // Base exercise interface
 export interface BaseExercise {
   id: string;
@@ -48,6 +61,8 @@ export interface BaseExercise {
   order: number;
   voiceGender?: 'male' | 'female';
   grammarHighlight?: GrammarHighlight; // Optional green info box shown above exercise body
+  mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
+  mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
 }
 
 // Specific exercise interfaces
@@ -201,10 +216,14 @@ export interface GrammarVisualExercise extends BaseExercise {
 
 export interface WordSearchExercise extends BaseExercise {
   type: 'word_search';
-  letterString: string;      // 'ниетевиеазтойтоти'
-  correctWords: string[];    // ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти']
-  distractorWords?: string[]; // Optional distractor words to make it harder
+  letterString: string;       // Legacy: 'ниетевиеазтойтоти' (used if grid absent)
+  correctWords: string[];     // Legacy word list for old component
+  distractorWords?: string[]; // Legacy distractor words
   hint?: string;
+  // New 2D grid mode — when present, uses WordSearchGrid component
+  grid?: string[][];          // Pre-generated 2D grid (uppercase Cyrillic)
+  hiddenWords?: string[];     // Words hidden in the grid (used with grid)
+  allowDiagonal?: boolean;    // Allow diagonal word placement
 }
 
 export interface GrammarExamplesExercise extends BaseExercise {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, X, LogIn, LogOut, User, ChevronDown } from 'lucide-react';
+import { Menu, X, LogIn, LogOut, User, ChevronDown, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -115,19 +115,34 @@ export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
           )}
         </button>
 
-        {/* Center: UNHCR logo + title */}
-        <Link href="/" className="flex items-center gap-6 flex-1 min-w-0 justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/unhcr-logo.png"
-            alt="UNHCR"
-            style={{ height: '31px', width: 'auto', flexShrink: 0 }}
-          />
-          <div className="hidden sm:block h-9 w-px bg-white/40 flex-shrink-0" />
-          <span className="hidden sm:block text-white font-bold text-xl md:text-2xl leading-tight truncate uppercase tracking-wide">
-            {t('app.title')}
-          </span>
-        </Link>
+        {/* Center: Home icon + UNHCR logo + title */}
+        <div className="flex items-center gap-3 flex-1 min-w-0 justify-center">
+          {/* Blue home icon */}
+          <Link
+            href="/"
+            title={t('nav.home') || 'Начало'}
+            className="flex-shrink-0 p-1.5 rounded-lg hover:bg-white/20 transition-colors group"
+          >
+            <Home
+              className="text-[#0072BC] group-hover:text-[#005a8e] transition-colors"
+              style={{ width: 28, height: 28 }}
+            />
+          </Link>
+
+          {/* UNHCR logo + title */}
+          <Link href="/" className="flex items-center gap-4 min-w-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/unhcr-logo.png"
+              alt="UNHCR"
+              style={{ height: '31px', width: 'auto', flexShrink: 0 }}
+            />
+            <div className="hidden sm:block h-9 w-px bg-white/40 flex-shrink-0" />
+            <span className="hidden sm:block text-white font-bold text-xl md:text-2xl leading-tight truncate uppercase tracking-wide">
+              {t('app.title')}
+            </span>
+          </Link>
+        </div>
 
         {/* Right: language selector + profile/login */}
         <div className="flex items-center gap-1 flex-shrink-0">

@@ -1,6 +1,7 @@
 import type {
   Exercise,
   DragToColumnsExercise,
+  FillInBlankExercise,
   IllustratedCardsExercise,
   WordSearchExercise,
   SyllableBlocksExercise,
@@ -92,11 +93,12 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-02',
     type: 'word_search',
     title: 'УПРАЖНЕНИЕ 2',
-    instruction: 'Колко думи можете да откриете?',
+    instruction: 'Намерете скритите думи в таблицата.',
     order: 3,
     points: 8,
     letterString: 'ВЕБАБАДДЯДОЮСЪЕОЖМЗЕЩТМЕАБСЕЕЪНЬРТРЦЖАКАРЯБАЩАТАШВДЕТЕЦБЕЯОМЪЖАБДЖЕНАЩАОМАЙКАБЮЗБРАТАСЕСТРАДЪЩЕРЯШ',
     correctWords: ['БАБА', 'ДЯДО', 'БАЩА', 'ДЕТЕ', 'МАЙКА', 'БРАТ', 'СЕСТРА', 'ДЪЩЕРЯ'],
+    hiddenWords: ['БАБА', 'ДЯДО', 'БАЩА', 'ДЕТЕ', 'МАЙКА', 'БРАТ', 'СЕСТРА', 'ДЪЩЕРЯ'],
   } as WordSearchExercise,
 
   // ORDER 4: Упр. 3 – Подредете буквите в думи (Page 56)
@@ -1499,53 +1501,28 @@ export const exercises: Exercise[] = [
     ],
   } as ReadingTextExercise,
 
-  // ORDER 42: Упр. 38 – Отговорете на въпросите (Page 63)
+  // ORDER 42: Упр. 38 – Опишете се по модела (Page 63)
+  // Free-writing exercise — student describes themselves following the Boris text model.
+  // Uses freeText fill_in_blank so the platform saves the input without grading it.
   {
     id: 'l06-ex-38',
-    type: 'dropdown_match',
+    type: 'fill_in_blank',
     title: 'УПРАЖНЕНИЕ 38',
-    instruction: 'Отговорете на въпросите.',
+    instruction: 'Опишете се по модела. Напишете текст за себе си (3–5 изречения).',
     order: 42,
-    points: 6,
-    questions: [
+    points: 0,
+    freeText: true,
+    grammarHighlight: {
+      text: '📝 Модел: „Казвам се Борис. Аз съм от София, женен съм и имам две малки деца – едно момче и едно момиче. На 30 години съм. Жена ми е учителка по български език в голямо училище. Работя в „Каритас". Обичам работата с бежанци."',
+    },
+    sentences: [
       {
-        id: 'q1',
-        left: 'Колко деца има Борис?',
-        options: ['Две малки деца.', 'Едно дете.', 'Три деца.', 'Няма деца.'],
-        correctAnswer: 'Две малки деца.',
-      },
-      {
-        id: 'q2',
-        left: 'На колко години е Борис?',
-        options: ['На 30 години.', 'На 25 години.', 'На 40 години.', 'На 37 години.'],
-        correctAnswer: 'На 30 години.',
-      },
-      {
-        id: 'q3',
-        left: 'Женен ли е Борис?',
-        options: ['Да, женен е.', 'Не, не е женен.', 'Не знам.', 'Не е споменато.'],
-        correctAnswer: 'Да, женен е.',
-      },
-      {
-        id: 'q4',
-        left: 'Какво работи жена му?',
-        options: ['Учителка по български.', 'Работи в „Каритас".', 'Студентка.', 'Не работи.'],
-        correctAnswer: 'Учителка по български.',
-      },
-      {
-        id: 'q5',
-        left: 'Където работи Борис?',
-        options: ['В „Каритас".', 'В ресторант.', 'В банка.', 'В училище.'],
-        correctAnswer: 'В „Каритас".',
-      },
-      {
-        id: 'q6',
-        left: 'Откъде са приятелите му?',
-        options: ['От различни страни.', 'От България.', 'От Сирия.', 'От Украйна.'],
-        correctAnswer: 'От различни страни.',
+        text: 'Казвам се ___. Аз съм от ___. На ___ години съм. ___.',
+        blanks: [0, 1, 2, 3],
+        correctAnswers: [],
       },
     ],
-  } as DropdownMatchExercise,
+  } as FillInBlankExercise,
 
   // ──────────────────────────────────────────────────────────
   // СТРАНИЦА 64 — ОТ ПЪРВО ЛИЦЕ

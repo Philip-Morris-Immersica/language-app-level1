@@ -80,6 +80,7 @@ public/assets/lesson-XX/audio/tts/
 | Grammar visual (pronouns) | `exercises[type=grammar_visual].pronouns[]` | Female | Flash (`{exerciseId}-pronoun-{i}.mp3`) |
 | Grammar examples | `exercises[type=grammar_examples].examples[]` | Female by default; set `voiceGender: 'male'` on a card for Charon (e.g. lines spoken by a male character) | Pro |
 | Reading texts | `exercises[type=reading_text].paragraphs[]` | Female by default; `voiceGender` on exercise for all paragraphs; or `paragraphVoiceGenders[]` (same length as `paragraphs`) for per-paragraph voice — then **no** `-full.mp3`; UI uses sequential „Слушай“ | Pro |
+| Reading text images (flip cards) | `exercises[type=reading_text].images[]` when `ttsWordId` + `label` са зададени → `words/{ttsWordId}.mp3` | Female | Flash (Pro ако `ttsWordId` е в `READING_TEXT_IMAGE_STRESS_IDS`) |
 | Listening | `exercises[].listeningText` | Female | Pro |
 | Personal choice models | `exercises[type=personal_choice].model` | Female | Pro |
 
@@ -125,9 +126,10 @@ Two cleaning functions exist:
 These rules in **content files** directly affect audio quality:
 - **Numbers as words** in `listeningText` and `reading_text.paragraphs` — write „седемдесет и шест" not „76". TTS reads digits unnaturally.
 - **Period, not dash** between sums — `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`. Dashes confuse pacing.
-- **No markdown** in text fields — TTS reads asterisks, brackets etc. Keep text clean.
+- **No markdown** in text fields — TTS reads asterisks, brackets etc. Keep text clean. (Изключение: `grammar_table.cells` може да ползва `**bold**` за удебеляване на окончания — markdown се премахва преди TTS.)
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
+- **`reading_text` с илюстрации задължително с TTS** — ако урок смесва текст + нови думи (напр. урок 3 упр. 33, урок 4 упр. 34/37/39/41), всяка картинка в `images[]` трябва да има `ttsWordId` + `label`. Това произвежда `words/{ttsWordId}.mp3` и flip-card свири звук при клик. БЕЗ това картинките остават без звук.
 
 ## Known TTS Issues and Text Tricks
 

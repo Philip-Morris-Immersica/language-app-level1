@@ -43,7 +43,7 @@ Source files on developer machine:
 
 Every test has exactly 4 sections in this order:
 
-| Section | ID | Name | Typical types |
+| Section | ID | Section `name` (sidebar) | Typical types |
 |---|---|---|---|
 | 1. Слушане | `listening` | `КОМПОНЕНТ СЛУШАНЕ` | `reading_text` (hidden) + `true_false` |
 | 2. Четене | `reading` | `КОМПОНЕНТ ЧЕТЕНЕ` | `reading_text` (no translate) + `workbook_fill_blank` |
@@ -51,6 +51,29 @@ Every test has exactly 4 sections in this order:
 | 4. Писане | `writing` | `КОМПОНЕНТ ПИСАНЕ` | `syllable_blocks` (with per-puzzle images) |
 
 Section ГОВОРЕНЕ is excluded from digital tests.
+
+### ⚠️ CRITICAL: Exercise `title` vs. Section `name`
+
+Two different fields, often confused:
+
+| Field | Example value | Where shown |
+|---|---|---|
+| **Section `name`** (in `index.ts`) | `'КОМПОНЕНТ СЛУШАНЕ'` | Sidebar / navigation — allowed to keep the „КОМПОНЕНТ" format as a section heading |
+| **Exercise `title`** (per exercise in `exercises.ts`) | `'УПРАЖНЕНИЕ 1'`, `'УПРАЖНЕНИЕ 2'`... | Card header on the exercise page — MUST be „УПРАЖНЕНИЕ N" |
+
+**Never** set an exercise's `title` to „КОМПОНЕНТ СЛУШАНЕ" / „КОМПОНЕНТ ЧЕТЕНЕ" / „КОМПОНЕНТ ГРАМАТИКА" / „КОМПОНЕНТ ПИСАНЕ". Those are PDF labels; in the digital test the section name is shown separately in the sidebar and every exercise inside a section is numbered „УПРАЖНЕНИЕ 1" → „УПРАЖНЕНИЕ N" counting from the first exercise in THAT section.
+
+Example per section:
+
+```ts
+// listening exercises:
+{ id: 't01-sl-text', type: 'reading_text', title: 'УПРАЖНЕНИЕ 1', ... }
+{ id: 't01-sl-tf',   type: 'true_false',   title: 'УПРАЖНЕНИЕ 2', ... }
+
+// reading exercises (numbering restarts within section):
+{ id: 't01-ch-text', type: 'reading_text',        title: 'УПРАЖНЕНИЕ 1', ... }
+{ id: 't01-ch-fill', type: 'workbook_fill_blank', title: 'УПРАЖНЕНИЕ 2', ... }
+```
 
 ## Test Coverage Map
 
@@ -69,9 +92,10 @@ Section ГОВОРЕНЕ is excluded from digital tests.
 
 - `reading_text` with **`hideText: true`** — text hidden, TTS Play button per image
 - Each image gets its own TTS button underneath (paragraphs[i] maps to images[i])
-- **If no speaker images exist** (e.g. dialogue between multiple unnamed speakers): omit `images` array entirely; use a single paragraph with the full listening text — the component will show one global TTS button
+- **`images[]` задължително** — всяко listening упражнение ТРЯБВА да има поне една картинка за контекст (снимка на ситуация, говорител, сцена). Без картинка ученикът слуша „на тъмно" и инструкцията губи смисъл. Ако текстът е диалог между няколко безименни говорители и няма готови снимки, използвай една обща сцена/контекст от съответния урок (напр. ресторант, пазар, спирка).
+- **Standard instruction:** `'Изслушайте текста.'` (или за тест с последващ четене: `'Изслушайте текста и след това го прочетете сами.'`)
 - `true_false` with **`model`** — shows greyed-out example row before questions
-- Instruction: `'Слушайте текста и отговорете на въпросите с ДА или НЕ.'`
+- Instruction for true/false after listening: `'Слушайте текста и отговорете на въпросите с ДА или НЕ.'` (или „Вярно/Грешно" според стила на теста)
 
 ### ЧЕТЕНЕ (Reading)
 
@@ -184,14 +208,23 @@ The `[label]` placeholder is extracted automatically from `testData.title` via `
 - Sections with `maxPoints: 0` are excluded from the scoring breakdown
 - **Tier messages are automatic** — `buildTierMessages()` reads the lesson label from `testData.title`; no per-test configuration needed
 
-## Test Content Quality (from feedback on tests A1.1–A1.3)
+## Test Content Quality (from feedback on tests A1.1–A1.3 and A1.2/A1.3)
 
-- **First word capitalized** — every sentence in grammar exercises, true_false, and word_order options must start with a capital letter.
-- **Syllable scrambling** — in `syllable_blocks`, letters/syllables must be TRULY scrambled (not just slightly rearranged). Move first letter/syllable to end, then shuffle further.
+- **Exercise `title: 'УПРАЖНЕНИЕ N'`** — ЗАДЪЛЖИТЕЛНО за всяко упражнение в теста. НЕ „КОМПОНЕНТ СЛУШАНЕ/ЧЕТЕНЕ/ГРАМАТИКА/ПИСАНЕ" като заглавие на упражнение. Номерацията се рестартира във всеки section (виж §Test Structure).
+- **Listening упражнение задължително с `images[]`** — за контекст (виж §СЛУШАНЕ).
+- **Standard instructions per interaction** — виж `content-quality-checklist.mdc` §A3 таблица:
+  - Listening → `'Изслушайте текста.'`
+  - Reading → `'Прочетете текста.'`
+  - Reading след listening в тест от урок 3+ → `'Изслушайте текста и след това го прочетете сами.'`
+  - Word order → `'Поставете думите в правилния ред.'`
+  - Syllable blocks → `'Подредете буквите/сричките, за да съставите дума или израз.'`
+- **First word capitalized** — every sentence in grammar exercises, true_false, and word_order options must start with a capital letter. Especially важно при `dropdown_match` / `workbook_fill_blank` — арабски/персийски говорещи не винаги усещат границата главна/малка буква.
+- **Syllable scrambling** — in `syllable_blocks`, letters/syllables must be TRULY scrambled (not just slightly rearranged). Move first letter/syllable to end, then shuffle further. (Проверява се от линтера `shuffle-laziness`.)
 - **Remove redundant instructions** — if the exercise is self-explanatory (e.g. only images with dropdowns), remove the instruction text.
 - **Dialogue on new lines** — in `reading_text` containing dialogues, each reply = separate paragraph.
 - **„Вярно/Грешно"** — use these instead of „Да/Не" for true_false questions about text comprehension.
-- **Mixed true/false** — interleave correct and incorrect answers; never group all „Вярно" first.
+- **Mixed true/false** — interleave correct and incorrect answers; never group all „Вярно" first. (Проверява се от линтера `true-false-mix`.)
+- **Един глагол за интеракцията** — dropdown → „Изберете", drag → „Подредете", input → „Напишете". (Проверява се от линтера `verb-mismatch`.)
 
 ## Automatic UI Behaviors (inherited from exercise components)
 

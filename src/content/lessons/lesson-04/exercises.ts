@@ -54,9 +54,9 @@ export const exercises: Exercise[] = [
       { id: 'teleshko-meso', imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/04-teleshko-meso.jpg', label: 'телешко месо',  translations: { en: 'veal', ar: 'لحم عجل', fr: 'viande de veau', fa: 'گوشت گوساله', uk: 'теляче м\'ясо', ru: 'телятина' } },
       { id: 'svinsko-meso',  imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/05-svinsko-meso.jpg',  label: 'свинско месо',  translations: { en: 'pork', ar: 'لحم خنزير', fr: 'viande de porc', fa: 'گوشت خوک', uk: 'свинина', ru: 'свинина' } },
       { id: 'shunka',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/06-shunka.jpg',        label: 'шунка',         translations: { en: 'ham', ar: 'لحم مقدد', fr: 'jambon', fa: 'ژامبون', uk: 'шинка', ru: 'ветчина' } },
-      { id: 'bob',           imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/07-bob.jpg',           label: 'боб',           translations: { en: 'beans', ar: 'فاصوليا', fr: 'haricots', fa: 'لوبیا', uk: 'квасоля', ru: 'фасоль' } },
-      { id: 'oriz',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/08-oriz.jpg',          label: 'ориз',          translations: { en: 'rice', ar: 'أرز', fr: 'riz', fa: 'برنج', uk: 'рис', ru: 'рис' } },
-      { id: 'leshta',        imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/09-leshta.jpg',        label: 'леща',          translations: { en: 'lentils', ar: 'عدس', fr: 'lentilles', fa: 'عدس', uk: 'сочевиця', ru: 'чечевица' } },
+      { id: 'bob',           imageUrl: '/assets/lesson-04/exercise-05-nov-images/bob.png',           label: 'боб',           translations: { en: 'beans', ar: 'فاصوليا', fr: 'haricots', fa: 'لوبیا', uk: 'квасоля', ru: 'фасоль' } },
+      { id: 'oriz',          imageUrl: '/assets/lesson-04/exercise-05-nov-images/oriz.png',          label: 'ориз',          translations: { en: 'rice', ar: 'أرز', fr: 'riz', fa: 'برنج', uk: 'рис', ru: 'рис' } },
+      { id: 'leshta',        imageUrl: '/assets/lesson-04/exercise-05-nov-images/leshta.png',        label: 'леща',          translations: { en: 'lentils', ar: 'عدس', fr: 'lentilles', fa: 'عدس', uk: 'сочевиця', ru: 'чечевица' } },
       { id: 'brashno',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/10-brashno.jpg',       label: 'брашно',        translations: { en: 'flour', ar: 'دقيق', fr: 'farine', fa: 'آرد', uk: 'борошно', ru: 'мука' } },
       { id: 'grah',          imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/11-grah.jpg',          label: 'грах',          translations: { en: 'peas', ar: 'بازلاء', fr: 'pois', fa: 'نخود فرنگی', uk: 'горох', ru: 'горох' } },
       { id: 'maslini',       imageUrl: '/assets/lesson-04/02-novi-dumi-1-meso-hrani/12-maslini.jpg',       label: 'маслини',       translations: { en: 'olives', ar: 'زيتون', fr: 'olives', fa: 'زیتون', uk: 'маслини', ru: 'оливки' } },
@@ -96,11 +96,13 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-03',
     type: 'word_search',
-    instruction: 'Колко думи можете да откриете?',
+    instruction: 'Намерете скритите думи в таблицата.',
     order: 4,
     points: 11,
     letterString: 'пилешкомесомаслинисолзахароцетлещабоббонбонишункаориз',
     correctWords: ['пилешко', 'месо', 'маслини', 'сол', 'захар', 'оцет', 'леща', 'боб', 'бонбони', 'шунка', 'ориз'],
+    hiddenWords: ['ПИЛЕШКО', 'МЕСО', 'МАСЛИНИ', 'СОЛ', 'ЗАХАР', 'ОЦЕТ', 'ЛЕЩА', 'БОБ', 'БОНБОНИ', 'ШУНКА', 'ОРИЗ'],
+    allowDiagonal: true,
   } as WordSearchExercise,
 
   // ORDER 5: Упр. 4 – Довършете изреченията (Page 35)

@@ -56,6 +56,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   const matchedIndices = new Set(Object.values(matches));
 
   const handleLeftClick = (leftId: string) => {
+    if (!leftId) return;
     if (isSubmitted) {
       setIsSubmitted(false);
       setValidation({});
@@ -100,12 +101,13 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
       validRightsForLeft.get(p.left)!.add(p.correctRight);
     });
 
-    exercise.pairs.forEach(pair => {
-      const matchedIdx = matches[pair.id];
+    exercise.pairs.forEach((pair, index) => {
+      const pairId = pair.id || `pair-${index}`;
+      const matchedIdx = matches[pairId];
       const matchedText = matchedIdx !== undefined ? rightItems[matchedIdx] : undefined;
       const validSet = validRightsForLeft.get(pair.left);
       const isCorrect = matchedText !== undefined && (validSet?.has(matchedText) ?? false);
-      newValidation[pair.id] = isCorrect;
+      newValidation[pairId] = isCorrect;
       if (isCorrect) correctCount++;
     });
 
@@ -119,8 +121,8 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
     }
   };
 
-  const getMatchedText = (leftId: string) => {
-    const idx = matches[leftId];
+  const getMatchedText = (pairId: string) => {
+    const idx = matches[pairId];
     return idx !== undefined ? rightItems[idx] : undefined;
   };
 
@@ -162,13 +164,14 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
   const pairsList = (
     <div className="space-y-3">
       {exercise.pairs.map((pair, index) => {
-        const matchedText = getMatchedText(pair.id);
+        const pairId = pair.id || `pair-${index}`;
+        const matchedText = getMatchedText(pairId);
         const isMatched = matchedText !== undefined;
-        const isSelected = selectedLeft === pair.id;
-        const validationResult = validation[pair.id];
+        const isSelected = selectedLeft === pairId;
+        const validationResult = validation[pairId];
 
         return (
-          <div key={pair.id} className="flex items-center gap-3">
+          <div key={pairId} className="flex items-center gap-3">
             <div className="flex-shrink-0 w-8 text-center">
               <span className="text-base font-semibold text-gray-700">{index + 1}.</span>
             </div>
@@ -182,7 +185,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
             <div className="flex-1 min-w-0">
               {isMatched ? (
                 <div
-                  onClick={() => handleLeftClick(pair.id)}
+                  onClick={() => handleLeftClick(pairId)}
                   className={`
                     w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
                     flex items-center justify-center min-h-[52px]
@@ -196,7 +199,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                 </div>
               ) : (
                 <button
-                  onClick={() => handleLeftClick(pair.id)}
+                  onClick={() => handleLeftClick(pairId)}
                   className={`
                     w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
                     transition-all cursor-pointer

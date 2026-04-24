@@ -277,6 +277,15 @@ export const TEMPLATE_grammar_examples = {
  *   `pronoun` = first column (auto-rendered, NO header needed).
  *   `columns` = headers for the DATA columns only.
  *   Do NOT put the pronoun label in columns — causes header misalignment.
+ *
+ * УДЕБЕЛЯВАНЕ НА КЛЕТКИ — две средства, използвай правилното:
+ *   - `boldColumns: [1]`            → удебелява ЦЯЛАТА колона 1 (и заглавие, и всички клетки).
+ *                                      Пример: „два/две" (цялата колона е акцент).
+ *   - Inline `**word**` в cells[]   → удебелява САМО избрана дума/окончание в клетката.
+ *                                      Пример: за окончания на думи — „пазар**ът**",
+ *                                      „два лимон**а**", „две ябълк**и**".
+ *   Markdown в cells се рендира от GrammarTable.tsx; премахва се автоматично преди TTS.
+ *   НЕ слагай `boldColumns` когато искаш само окончания — таблицата става нечетлива.
  */
 export const TEMPLATE_grammar_table = {
   id: 'l0X-gramatika-NN',    // REPLACE
@@ -369,6 +378,14 @@ export const TEMPLATE_dialogues = {
  *       - omit `audioUrl`; [ReadingText.tsx](mdc:src/components/exercises/ReadingText.tsx) shows
  *         „Слушай“ that plays p-0, then p-1, … in order (like dialogues)
  *   - Otherwise: optional `audioUrl` for one-shot full listen + click paragraph for `-p-{i}`
+ *
+ * COMBINED EXERCISE (НОВИ ДУМИ + ТЕКСТ):
+ *   - Used for урок 3 упр. 33, урок 4 упр. 34/37/39/41, etc. — where flip-card
+ *     illustrations precede a reading text introducing the same vocabulary.
+ *   - STANDARD INSTRUCTION: „Кликнете върху картинките, за да се запознаете с думите, и изслушайте текста. Прочетете го сами."
+ *   - EVERY image in `images[]` MUST have `ttsWordId` + `label` so it gets its
+ *     own `words/{ttsWordId}.mp3`. Without `ttsWordId` the flip-card is silent.
+ *   - Set `imageFlashcards: true` to render the images as flip cards.
  */
 export const TEMPLATE_reading_text = {
   id: 'l0X-ex-NN',           // REPLACE
@@ -384,6 +401,12 @@ export const TEMPLATE_reading_text = {
   ],
   // Optional: male/female per paragraph (same length as paragraphs). Then no `-full`, UI uses sequential Listen.
   // paragraphVoiceGenders: ['male', 'female'],
+  // Optional: image flip-cards with TTS — EVERY image MUST have ttsWordId for audio.
+  // imageFlashcards: true,
+  // images: [
+  //   { imageUrl: '/assets/lesson-0X/novi-dumi-N/01-shopska.jpg', label: 'шопска салата', ttsWordId: 'shopska-salata' },
+  //   { imageUrl: '/assets/lesson-0X/novi-dumi-N/02-sarmi.jpg',   label: 'сарми',          ttsWordId: 'sarmi'          },
+  // ],
 } as ReadingTextExercise;
 
 

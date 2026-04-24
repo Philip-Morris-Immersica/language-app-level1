@@ -4,6 +4,7 @@ import type {
   IllustratedCardsExercise,
   DragToColumnsExercise,
   WordSearchExercise,
+  WordOrderExercise,
   GrammarVisualExercise,
   GrammarExamplesExercise,
   GrammarTableExercise,
@@ -103,11 +104,12 @@ export const exercises: Exercise[] = [
   {
     id: 'l02-ex-03',
     type: 'word_search',
-    instruction: 'Колко думи можете да откриете?',
+    instruction: 'Намерете скритите думи в таблицата.',
     order: 4,
     points: 7,
     letterString: 'СИРЕНЕММАСЛОПЛХПФИЛИЯЛЧАЙЯЦКЯМЕДЙАОБАНИЦАСИКАФЕКР',
     correctWords: ['СИРЕНЕ', 'МАСЛО', 'ФИЛИЯ', 'ЧАЙ', 'МЕД', 'БАНИЦА', 'КАФЕ'],
+    hiddenWords: ['СИРЕНЕ', 'МАСЛО', 'ФИЛИЯ', 'ЧАЙ', 'МЕД', 'БАНИЦА', 'КАФЕ'],
   } as WordSearchExercise,
 
   // ORDER 5: ГРАМАТИКА 1 – Какво е това? (NOT AN EXERCISE!)
@@ -203,13 +205,103 @@ export const exercises: Exercise[] = [
   } as GrammarExamplesExercise,
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ФАЗА 2 (стр. 19-21) — TODO
+  // ФАЗА 2 (стр. 19-21)
   // ─────────────────────────────────────────────────────────────────────────
   // ORDER 8:  l02-gramatika-table-01  grammar_table    Сегашно време А група
   // ORDER 9:  l02-ex-05               fill_with_images  Следвайте модела
-  // ORDER 10: l02-ex-06               word_order        Подредете думите
-  // ORDER 11: l02-ex-07               character_preferences  Ева и Ангел
+  // ORDER 10: l02-ex-06               word_order        Подредете думите  ✓ implemented below
+  // ORDER 11: l02-ex-07               workbook_fill_blank  Ева и Ангел     ✓ implemented below
   // ORDER 12: SKIPPED — l02-ex-08 was pair work ("Ангел обича ли баница?"), not feasible solo
+
+  // ORDER 10: Упражнение 6 – Подредете думите (Page 19)
+  {
+    id: 'l02-ex-06',
+    type: 'word_order',
+    instruction: 'Подредете думите в изречение по модела.',
+    order: 10,
+    points: 4,
+    grammarHighlight: { text: 'Модел: Ние обичаме сирене.' },
+    questions: [
+      {
+        words: ['ти', 'не', 'хляб', 'обичаш'],
+        correctSentence: 'Ти не обичаш хляб.',
+        alternateCorrectSentences: ['Ти не обичаш хляб'],
+      },
+      {
+        words: ['тя', 'кафе', 'обича'],
+        correctSentence: 'Тя обича кафе.',
+        alternateCorrectSentences: ['Тя обича кафе'],
+      },
+      {
+        words: ['те', 'не', 'масло', 'обичат'],
+        correctSentence: 'Те не обичат масло.',
+        alternateCorrectSentences: ['Те не обичат масло'],
+      },
+      {
+        words: ['вие', 'мед', 'обичате'],
+        correctSentence: 'Вие обичате мед.',
+        alternateCorrectSentences: ['Вие обичате мед'],
+      },
+    ],
+  } as WordOrderExercise,
+
+  // ORDER 11: Упражнение 7 – Какво обичат Ева и Ангел? (Page 19)
+  {
+    id: 'l02-ex-07',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 7',
+    instruction: 'Прочетете и попълнете изреченията за Ева и Ангел.',
+    order: 11,
+    points: 6,
+    layout: 'single',
+    grammarHighlight: {
+      text: '😊 = обича   😞 = не обича\n🧃 сок  ☕ кафе  🍵 чай  🥪 сандвич  🍞 хляб  🍫 шоколад',
+    },
+    sentences: [
+      {
+        text: 'Модел: Ева обича кафе. Тя не обича сок.',
+        blanks: [],
+        correctAnswers: [],
+        isExample: true,
+      },
+      {
+        text: 'Ангел обича _______.',
+        blanks: [0],
+        correctAnswers: ['сандвич'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+      {
+        text: 'Той не обича _______.',
+        blanks: [0],
+        correctAnswers: ['шоколад'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+      {
+        text: 'Ева обича _______.',
+        blanks: [0],
+        correctAnswers: ['чай'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+      {
+        text: 'Тя не обича _______.',
+        blanks: [0],
+        correctAnswers: ['кафе'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+      {
+        text: 'Ангел и Ева обичат _______.',
+        blanks: [0],
+        correctAnswers: ['хляб'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+      {
+        text: 'Те не обичат _______.',
+        blanks: [0],
+        correctAnswers: ['сок'],
+        options: ['сок', 'кафе', 'чай', 'сандвич', 'хляб', 'шоколад'],
+      },
+    ],
+  } as WorkbookFillBlankExercise,
 
   // ORDER 13: ГРАМАТИКА 3 – Глагол ИСКАМ – Сегашно време
   {

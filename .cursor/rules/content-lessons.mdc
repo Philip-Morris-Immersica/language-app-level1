@@ -58,6 +58,7 @@ Source files (PDFs, audio, images) are on the developer's machine at:
 - **`grammar_examples` label field:** Use `label` for visual-only annotations (e.g. `'Какъв — мъжки род'`). Shown as a green badge below the card content. **NOT read by TTS** — keeps audio clean while displaying grammatical info.
 - **Content guideline for TTS:** In dialogue lines with numbers/sums, prefer a **period** over a dash (e.g. `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`). The dash confuses TTS pronunciation and pacing.
 - **`grammar_table` alignment rule:** `columns.length` MUST equal `cells.length` for every row. The `pronoun` field renders in the first column automatically (with an empty header). Do NOT include the pronoun column label in `columns` — it causes header misalignment.
+- **`grammar_table` bolding — choose the right tool:** `boldColumns: [n]` bolds the ENTIRE column (header + cells). Inline `**word**` inside a cell bolds ONLY that word/ending (e.g. „пазар**ът**", „две ябълк**и**"). Use inline `**` when you want to highlight noun endings / articles per word — using `boldColumns` would make the table heavy and unreadable. Markdown is stripped before TTS.
 - **Instruction text must match the actual exercise type.** If the exercise uses dropdowns, the instruction should say "Изберете" (Select), not "Напишете" (Write). Match the verb to the interaction: Select → dropdown, Write → text input, Arrange → drag-and-drop.
 
 ## Grammar Info Box (`grammar_highlight`)

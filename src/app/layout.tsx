@@ -33,9 +33,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bg">
+    <html lang="bg" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${sofiaSans.variable} antialiased font-[family-name:var(--font-sofia-sans)]`}
+        suppressHydrationWarning
       >
         <LanguageProvider>
           <AuthProvider>

@@ -5,6 +5,8 @@ import { useT } from '@/i18n/useT';
 import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { getLetterAudioPath } from '@/lib/letterTTS';
+import { playTtsAudio } from '@/lib/tts';
 
 interface AlphabetMazeProps {
   grid: string[][];
@@ -60,6 +62,12 @@ export function AlphabetMaze({
     (r: number, c: number) => {
       if (completed || !currentTarget) return;
       if (r === currentTarget.row && c === currentTarget.col) {
+        // Correct click — play TTS for this letter/digit
+        const letter = grid[r][c];
+        const audioPath = getLetterAudioPath(letter);
+        if (audioPath) {
+          playTtsAudio(audioPath, letter);
+        }
         const next = step + 1;
         setStep(next);
         if (next === correctPath.length && !completedRef.current) {
@@ -72,7 +80,7 @@ export function AlphabetMaze({
         setTimeout(() => setShakeCell(null), 500);
       }
     },
-    [completed, currentTarget, step, correctPath.length, onComplete],
+    [completed, currentTarget, step, correctPath.length, onComplete, grid],
   );
 
   const handleReset = useCallback(() => {

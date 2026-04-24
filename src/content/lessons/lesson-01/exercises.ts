@@ -200,12 +200,13 @@ export const exercises: Exercise[] = [
   {
     id: 'l01-ex-06',
     type: 'word_search',
-    instruction: 'Намерете думите в текста. Изберете личните местоимения, които виждате.',
+    instruction: 'Намерете думите в таблицата. Изберете личните местоимения, които виждате.',
     order: 9,
     points: 7,
     letterString: 'ниетевиеазтойтоти',
     correctWords: ['ние', 'те', 'вие', 'аз', 'той', 'то', 'ти'],
     distractorWords: ['тя'],
+    hiddenWords: ['НИЕ', 'ТЕ', 'ВИЕ', 'АЗ', 'ТОЙ', 'ТО', 'ТИ'],
   } as WordSearchExercise,
 
   // ORDER 10: ГРАМАТИКА 2 - Verb СЪМ (Page 11, bottom) - NOT AN EXERCISE!
