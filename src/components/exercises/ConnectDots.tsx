@@ -4,11 +4,14 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useT } from '@/i18n/useT';
 import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { playTtsAudio } from '@/lib/tts';
 
 interface Dot {
   id: string;
   label: string;
   position: number;
+  /** Optional audio file path — played when the dot is tapped. */
+  audioUrl?: string;
 }
 
 interface ConnectDotsProps {
@@ -92,7 +95,8 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
   const gridH = rows * cellH + (rows - 1) * rowGap;
 
   const handleDotClick = useCallback(
-    (positionIndex: number, dotId: string) => {
+    (positionIndex: number, dot: Dot) => {
+      if (dot.audioUrl) playTtsAudio(dot.audioUrl, dot.label);
       if (completed) return;
       if (positionIndex === nextExpected) {
         const next = [...connected, positionIndex];
@@ -103,7 +107,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
           onComplete?.(true);
         }
       } else {
-        setShakeId(dotId);
+        setShakeId(dot.id);
         setTimeout(() => setShakeId(null), 500);
       }
     },
@@ -266,7 +270,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
             return (
               <button
                 key={dot.id}
-                onClick={() => handleDotClick(index, dot.id)}
+                onClick={() => handleDotClick(index, dot)}
                 disabled={completed && !isConnected}
                 className={`
                   absolute rounded-full flex items-center justify-center

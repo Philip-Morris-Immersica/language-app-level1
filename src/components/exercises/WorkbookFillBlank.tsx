@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface WorkbookSentence {
   text: string;
@@ -145,105 +146,101 @@ export function WorkbookFillBlank({
     const valid = sentenceValid(sIdx);
     const blankValArr = blankValidation[sIdx];
 
+    const imageEl = sentence.images && sentence.images.length > 0 ? (
+      <img
+        src={sentence.images[0]}
+        alt=""
+        className="w-24 h-24 md:w-36 md:h-36 rounded-lg object-contain shrink-0 bg-gray-50"
+      />
+    ) : null;
+
     return (
       <div
         key={sIdx}
-        className={`
-          flex flex-wrap items-center gap-x-1 gap-y-1 py-2
-          ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}
-        `}
+        className={`flex items-center gap-3 py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}
       >
-        <span className="font-semibold text-gray-500 mr-1 shrink-0 self-baseline">{sIdx + 1}.</span>
-        {sentence.images && sentence.images.length > 0 && (
-          <img
-            src={sentence.images[0]}
-            alt=""
-            className="w-10 h-10 md:w-14 md:h-14 rounded object-cover shrink-0 mr-1"
-          />
-        )}
-        {segments.map((seg, segIdx) => {
-          if (seg.type === 'blank') {
-            const bIdx = blankCounter++;
-            const userVal = answers[sIdx]?.[bIdx] || '';
-            const opts = getOptionsForBlank(sentence.options, bIdx);
-            // Per-blank validation: use individual blank result if available
-            const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
+        <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{sIdx + 1}.</span>
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">
+          {segments.map((seg, segIdx) => {
+            if (seg.type === 'blank') {
+              const bIdx = blankCounter++;
+              const userVal = answers[sIdx]?.[bIdx] || '';
+              const opts = getOptionsForBlank(sentence.options, bIdx);
+              const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
 
-            if (isExample) {
-              return (
-                <span
-                  key={segIdx}
-                  className="inline-block border-b-2 border-gray-400 min-w-[5rem] text-center text-sm"
-                >
-                  {sentence.correctAnswers[bIdx] || ''}
-                </span>
-              );
-            }
+              if (isExample) {
+                return (
+                  <span
+                    key={segIdx}
+                    className="inline-block border-b-2 border-gray-400 min-w-[5rem] text-center text-sm"
+                  >
+                    {sentence.correctAnswers[bIdx] || ''}
+                  </span>
+                );
+              }
 
-            if (opts.length === 0) {
+              if (opts.length === 0) {
+                return (
+                  <input
+                    key={segIdx}
+                    type="text"
+                    value={userVal}
+                    onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
+                    placeholder="..."
+                    className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-base font-medium focus:outline-none min-w-[6rem]
+                      ${isSubmitted && blankOk !== null
+                        ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
+                        : 'border-[#0279C3] focus:border-[#025a93]'
+                      }`}
+                  />
+                );
+              }
+
               return (
-                <input
+                <select
                   key={segIdx}
-                  type="text"
                   value={userVal}
                   onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-                  placeholder="..."
-                  className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-base font-medium focus:outline-none min-w-[6rem]
+                  className={`
+                    inline-block border-b-2 rounded px-1 py-0.5 text-base font-medium bg-white
+                    focus:outline-none focus:ring-2 focus:ring-bolt-primary cursor-pointer
                     ${isSubmitted && blankOk !== null
-                      ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
-                      : 'border-[#0279C3] focus:border-[#025a93]'
-                    }`}
-                />
+                      ? blankOk
+                        ? 'border-green-500 bg-green-50 text-green-700'
+                        : 'border-red-400 bg-red-50 text-red-700'
+                      : 'border-bolt-primary hover:border-bolt-primary-hover'
+                    }
+                  `}
+                >
+                  <option value="">—</option>
+                  {opts.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
               );
             }
 
             return (
-              <select
-                key={segIdx}
-                value={userVal}
-                onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
-                className={`
-                  inline-block border-b-2 rounded px-1 py-0.5 text-base font-medium bg-white
-                  focus:outline-none focus:ring-2 focus:ring-bolt-primary cursor-pointer
-                  ${isSubmitted && blankOk !== null
-                    ? blankOk
-                      ? 'border-green-500 bg-green-50 text-green-700'
-                      : 'border-red-400 bg-red-50 text-red-700'
-                    : 'border-bolt-primary hover:border-bolt-primary-hover'
-                  }
-                `}
-              >
-                <option value="">—</option>
-                {opts.map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
+              <span key={segIdx} className="text-base">
+                {seg.value}
+              </span>
             );
-          }
-
-          return (
-            <span key={segIdx} className="text-base">
-              {seg.value}
+          })}
+          {isSubmitted && !isExample && (
+            <span className="ml-1 shrink-0">
+              {valid
+                ? <Check className="w-4 h-4 text-green-600 inline" />
+                : <X className="w-4 h-4 text-red-500 inline" />
+              }
             </span>
-          );
-        })}
-
-        {/* Inline validation icon */}
-        {isSubmitted && !isExample && (
-          <span className="ml-1 shrink-0">
-            {valid
-              ? <Check className="w-4 h-4 text-green-600 inline" />
-              : <X className="w-4 h-4 text-red-500 inline" />
-            }
-          </span>
-        )}
-
-        {/* Show correct answer on wrong */}
-        {isSubmitted && valid === false && (
-          <span className="ml-2 text-sm text-red-600 italic">
-            ({sentence.correctAnswers.join(' / ')})
-          </span>
-        )}
+          )}
+          {isSubmitted && valid === false && (
+            <span className="ml-2 text-sm text-red-600 italic">
+              ({sentence.correctAnswers.join(' / ')})
+            </span>
+          )}
+        </div>
+        {imageEl}
       </div>
     );
   };
@@ -472,11 +469,15 @@ export function WorkbookFillBlank({
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {imageUrl ? (
         <div className="mb-6 flex justify-center">
-          <img
-            src={imageUrl}
-            alt=""
-            className="max-w-full max-h-[min(420px,55vh)] w-auto rounded-lg shadow-md border border-gray-100 object-contain"
-          />
+          <div className="w-full max-w-3xl md:max-w-4xl">
+            <ImageLightbox src={imageUrl} alt="">
+              <img
+                src={imageUrl}
+                alt=""
+                className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+              />
+            </ImageLightbox>
+          </div>
         </div>
       ) : null}
 
@@ -537,21 +538,30 @@ export function WorkbookFillBlank({
         </Button>
       </div>
 
-      {isSubmitted && (
-        <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">
-          <div className="flex items-center gap-2">
-            {Object.values(validation).filter(v => v !== null).every(v => v === true)
-              ? <Check className="w-5 h-5 text-green-600" />
-              : <X className="w-5 h-5 text-red-500" />
-            }
-            <p className="font-semibold text-gray-800">
-              {t('exercise.result')}{' '}
-              {Object.values(validation).filter(v => v === true).length} /{' '}
-              {Object.values(validation).filter(v => v !== null).length} {t('exercise.correct_n')}
-            </p>
+      {isSubmitted && (() => {
+        const allBlankResults = Object.values(blankValidation).flatMap(
+          (arr) => (Array.isArray(arr) ? arr : []),
+        );
+        const filledBlanks = allBlankResults.filter((v) => v !== null);
+        const correctCount = filledBlanks.filter((v) => v === true).length;
+        const totalCount = filledBlanks.length;
+        const allCorrect = totalCount > 0 && correctCount === totalCount;
+        return (
+          <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">
+            <div className="flex items-center gap-2">
+              {allCorrect ? (
+                <Check className="w-5 h-5 text-green-600" />
+              ) : (
+                <X className="w-5 h-5 text-red-500" />
+              )}
+              <p className="font-semibold text-gray-800">
+                {t('exercise.result')} {correctCount} / {totalCount}{' '}
+                {t('exercise.correct_n')}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

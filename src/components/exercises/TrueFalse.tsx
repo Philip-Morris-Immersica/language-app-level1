@@ -5,6 +5,7 @@ import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface TrueFalseSentence {
   id: string;
@@ -74,12 +75,16 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
   return (
     <div className="space-y-2">
       {imageUrl && isImagePath(imageUrl) && (
-        <div className="mb-4 rounded-xl border-2 border-gray-200 bg-gray-50 p-3 overflow-auto">
-          <img
-            src={imageUrl}
-            alt=""
-            className="max-h-[min(55vh,420px)] w-full max-w-2xl mx-auto object-contain"
-          />
+        <div className="mb-4 rounded-xl border-2 border-gray-200 bg-gray-50 p-3">
+          <div className="mx-auto w-full max-w-3xl md:max-w-4xl">
+            <ImageLightbox src={imageUrl} alt="">
+              <img
+                src={imageUrl}
+                alt=""
+                className="w-full h-auto rounded-lg object-contain block"
+              />
+            </ImageLightbox>
+          </div>
         </div>
       )}
       {model && (

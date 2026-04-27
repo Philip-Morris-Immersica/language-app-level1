@@ -5,107 +5,100 @@ import { Check, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
-import { generateWordSearchGrid, validateSelection } from '@/lib/wordSearchGrid';
+import {
+  generateHorizontalWordGrid,
+  findWordAtCell,
+  getWordCellKeys,
+} from '@/lib/wordSearchGrid';
 
 interface WordSearchGridProps {
   hiddenWords: string[];          // Words to hide in the grid
-  grid?: string[][];              // Optional pre-generated grid (overrides auto-gen)
-  allowDiagonal?: boolean;
+  grid?: string[][];              // Ignored (legacy prop, kept for backward compat)
+  allowDiagonal?: boolean;        // Ignored (legacy prop — horizontal-only now)
+  padding?: number;               // Filler letters on each side of word (default 1)
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
 
-interface FoundEntry {
-  word: string;
-  cells: string[]; // "row-col" strings
+interface SavedState {
+  foundWords?: string[];          // Array of word names (uppercase)
+  isSubmitted?: boolean;
 }
 
 export function WordSearchGrid({
   hiddenWords,
-  grid: propGrid,
-  allowDiagonal = false,
+  padding = 1,
   onComplete,
   exerciseId,
 }: WordSearchGridProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
-  const s = savedState as any;
+  const s = savedState as SavedState | undefined;
 
-  const directions = useMemo(
-    () => (allowDiagonal ? ['horizontal', 'vertical', 'diagonal'] as const : ['horizontal', 'vertical'] as const),
-    [allowDiagonal],
+  const { grid, placedWords, rows, cols } = useMemo(
+    () => generateHorizontalWordGrid(hiddenWords, padding),
+    [hiddenWords, padding],
   );
 
-  const { grid, placedWords } = useMemo(() => {
-    if (propGrid) {
-      return { grid: propGrid, placedWords: [] };
-    }
-    return generateWordSearchGrid(hiddenWords, 10, directions);
-  }, [hiddenWords, propGrid, directions]);
-
-  const [foundWords, setFoundWords] = useState<FoundEntry[]>(() => {
+  const [foundWords, setFoundWords] = useState<string[]>(() => {
     const saved = s?.foundWords ?? [];
-    return (saved as any[]).filter((f: any) => f?.word && Array.isArray(f?.cells));
+    return Array.isArray(saved) ? saved.filter((w): w is string => typeof w === 'string') : [];
   });
-  const [firstCell, setFirstCell] = useState<{ row: number; col: number } | null>(null);
   const [flashCells, setFlashCells] = useState<{ cells: string[]; valid: boolean } | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
   const mounted = useRef(false);
+  const flashTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!mounted.current) { mounted.current = true; return; }
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
     saveState({ foundWords, isSubmitted });
-  }, [foundWords, isSubmitted]);
+  }, [foundWords, isSubmitted, saveState]);
+
+  useEffect(() => {
+    return () => {
+      if (flashTimeout.current) clearTimeout(flashTimeout.current);
+    };
+  }, []);
+
+  const foundWordSet = useMemo(() => new Set(foundWords), [foundWords]);
 
   const foundCells = useMemo(() => {
     const set = new Set<string>();
-    foundWords.forEach(f => f.cells?.forEach(c => set.add(c)));
+    placedWords.forEach((pw) => {
+      if (foundWordSet.has(pw.word)) {
+        getWordCellKeys(pw).forEach((k) => set.add(k));
+      }
+    });
     return set;
-  }, [foundWords]);
+  }, [placedWords, foundWordSet]);
 
-  const foundWordNames = useMemo(() => new Set(foundWords.map(f => f.word.toUpperCase())), [foundWords]);
+  const handleCellClick = useCallback(
+    (row: number, col: number) => {
+      if (isSubmitted) return;
 
-  const flashTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+      const key = `${row}-${col}`;
+      const placed = findWordAtCell(placedWords, row, col);
 
-  const handleCellClick = useCallback((row: number, col: number) => {
-    if (isSubmitted) return;
-    const key = `${row}-${col}`;
+      if (placed && !foundWordSet.has(placed.word)) {
+        const cells = getWordCellKeys(placed);
+        setFoundWords((prev) => [...prev, placed.word]);
+        setFlashCells({ cells, valid: true });
+      } else if (!placed) {
+        setFlashCells({ cells: [key], valid: false });
+      }
+      // If already found word — do nothing (no flash)
 
-    if (!firstCell) {
-      setFirstCell({ row, col });
-      return;
-    }
-
-    // Second tap → validate
-    const result = validateSelection(grid, firstCell.row, firstCell.col, row, col, hiddenWords);
-    const cellsBetween = getCellsBetween(firstCell.row, firstCell.col, row, col);
-    setFirstCell(null);
-
-    if (result && !foundWordNames.has(result)) {
-      setFlashCells({ cells: cellsBetween, valid: true });
-      setFoundWords(prev => [...prev, { word: result, cells: cellsBetween }]);
-    } else {
-      setFlashCells({ cells: cellsBetween, valid: false });
-    }
-
-    if (flashTimeout.current) clearTimeout(flashTimeout.current);
-    flashTimeout.current = setTimeout(() => setFlashCells(null), 600);
-  }, [firstCell, grid, hiddenWords, foundWordNames, isSubmitted]);
-
-  function getCellsBetween(r1: number, c1: number, r2: number, c2: number): string[] {
-    const dr = Math.sign(r2 - r1);
-    const dc = Math.sign(c2 - c1);
-    const len = Math.max(Math.abs(r2 - r1), Math.abs(c2 - c1)) + 1;
-    const cells: string[] = [];
-    for (let i = 0; i < len; i++) {
-      cells.push(`${r1 + i * dr}-${c1 + i * dc}`);
-    }
-    return cells;
-  }
+      if (flashTimeout.current) clearTimeout(flashTimeout.current);
+      flashTimeout.current = setTimeout(() => setFlashCells(null), 500);
+    },
+    [placedWords, foundWordSet, isSubmitted],
+  );
 
   const handleReset = () => {
     setFoundWords([]);
-    setFirstCell(null);
     setFlashCells(null);
     setIsSubmitted(false);
     saveState({ foundWords: [], isSubmitted: false });
@@ -118,74 +111,96 @@ export function WordSearchGrid({
     onComplete?.(found === total, found);
   };
 
-  const gridSize = grid.length;
-
   function cellClass(row: number, col: number): string {
     const key = `${row}-${col}`;
     const isFound = foundCells.has(key);
-    const isFirst = firstCell?.row === row && firstCell?.col === col;
     const inFlash = flashCells?.cells.includes(key);
     const flashValid = flashCells?.valid;
 
-    if (inFlash && flashValid === false) return 'bg-red-200 text-red-800 border-red-300 scale-95';
-    if (inFlash && flashValid === true)  return 'bg-green-200 text-green-800 border-green-300 scale-105';
-    if (isFound)   return 'bg-[#8FC412]/20 text-[#4a6e00] border-[#8FC412] font-bold';
-    if (isFirst)   return 'bg-[#0279C3] text-white border-[#0279C3]';
+    if (inFlash && flashValid === false) {
+      return 'bg-red-200 text-red-800 border-red-300';
+    }
+    if (inFlash && flashValid === true) {
+      return 'bg-green-200 text-green-800 border-green-400 scale-105';
+    }
+    if (isFound) {
+      return 'bg-[#8FC412]/20 text-[#4a6e00] border-[#8FC412] font-bold';
+    }
     return 'bg-white hover:bg-[#EEF7C8] border-gray-300 text-gray-800 cursor-pointer active:scale-95';
   }
 
   const progress = `${foundWords.length}/${hiddenWords.length}`;
+  const hiddenWordsUpper = hiddenWords.map((w) => w.toUpperCase());
+
+  // Cell sizing: tighter for wider grids on mobile so they fit; larger on desktop.
+  // Mobile sizes are minimal-but-tappable; desktop sizes are ~1.4x larger.
+  const cellSizeClass =
+    cols <= 5
+      ? 'min-h-[44px] min-w-[44px] md:min-h-[60px] md:min-w-[60px] text-base md:text-2xl'
+      : cols <= 7
+        ? 'min-h-[40px] min-w-[40px] md:min-h-[56px] md:min-w-[56px] text-sm md:text-xl'
+        : 'min-h-[36px] min-w-[36px] md:min-h-[50px] md:min-w-[50px] text-sm md:text-lg';
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-6 shadow-md">
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start sm:justify-center">
         {/* Grid */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-shrink-0 mx-auto sm:mx-0">
           <div
             className="inline-grid gap-[3px] select-none"
-            style={{ gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`, width: '100%' }}
+            style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+            role="grid"
+            aria-label={t('exercise.findWords') || 'Find words'}
           >
             {grid.map((rowArr, row) =>
               rowArr.map((letter, col) => (
                 <button
                   key={`${row}-${col}`}
+                  type="button"
                   onClick={() => handleCellClick(row, col)}
+                  disabled={isSubmitted}
                   className={`
                     aspect-square flex items-center justify-center
-                    border-2 rounded text-xs sm:text-sm md:text-base font-bold
-                    transition-all duration-150 min-h-[32px]
+                    border-2 rounded font-bold uppercase
+                    transition-all duration-150
+                    ${cellSizeClass}
                     ${cellClass(row, col)}
                   `}
+                  aria-label={`${letter} (row ${row + 1}, column ${col + 1})`}
                 >
                   {letter}
                 </button>
-              ))
+              )),
             )}
           </div>
-          {firstCell && (
-            <p className="mt-2 text-xs text-[#0279C3] font-medium">
-              Начална буква избрана — кликнете на последната буква от думата.
+          {!isSubmitted && (
+            <p className="mt-2 text-xs text-gray-500 text-center sm:text-left">
+              Кликнете на която и да е буква от думата.
             </p>
           )}
         </div>
 
         {/* Word list */}
-        <div className="md:w-44 lg:w-52 flex-shrink-0">
+        <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
           <p className="text-sm font-semibold text-gray-600 mb-2">
             Намерени думи: {progress}
           </p>
-          <ul className="space-y-1.5">
-            {hiddenWords.map(word => {
-              const upper = word.toUpperCase();
-              const found = foundWordNames.has(upper);
+          <ul className="grid grid-cols-2 sm:grid-cols-1 gap-1.5">
+            {hiddenWordsUpper.map((word) => {
+              const found = foundWordSet.has(word);
               return (
-                <li key={word} className={`flex items-center gap-2 text-sm font-medium ${found ? 'text-green-700' : 'text-gray-500'}`}>
+                <li
+                  key={word}
+                  className={`flex items-center gap-2 text-sm font-medium ${
+                    found ? 'text-green-700' : 'text-gray-500'
+                  }`}
+                >
                   {found ? (
                     <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
                   ) : (
                     <span className="w-4 h-4 border-2 border-gray-300 rounded-sm flex-shrink-0 inline-block" />
                   )}
-                  {word}
+                  <span className={found ? 'line-through' : ''}>{word}</span>
                 </li>
               );
             })}
@@ -194,9 +209,10 @@ export function WordSearchGrid({
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-3 mt-5">
+      <div className="flex flex-wrap gap-3 mt-5 sm:justify-center">
         <Button
           onClick={handleSubmit}
+          disabled={isSubmitted}
           className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
@@ -214,14 +230,18 @@ export function WordSearchGrid({
       {isSubmitted && (
         <div className="mt-4 p-4 rounded-lg bg-white border-2 border-[#8B9D5F] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
-            {t('exercise.result')} {foundWords.length} / {hiddenWords.length} {t('exercise.correct_n')}
+            {t('exercise.result')} {foundWords.length} / {hiddenWords.length}{' '}
+            {t('exercise.correct_n')}
           </p>
           {foundWords.length < hiddenWords.length && (
             <div className="mt-2 flex flex-wrap gap-2">
-              {hiddenWords
-                .filter(w => !foundWordNames.has(w.toUpperCase()))
-                .map(w => (
-                  <span key={w} className="text-xs bg-yellow-100 border border-yellow-300 text-yellow-800 px-2 py-1 rounded font-semibold">
+              {hiddenWordsUpper
+                .filter((w) => !foundWordSet.has(w))
+                .map((w) => (
+                  <span
+                    key={w}
+                    className="text-xs bg-yellow-100 border border-yellow-300 text-yellow-800 px-2 py-1 rounded font-semibold"
+                  >
                     {w}
                   </span>
                 ))}

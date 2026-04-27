@@ -133,6 +133,24 @@ export function playTtsAudio(
   rate?: number,
   onPlaybackEnd?: () => void,
 ): void {
+  // Toggle: if the same audio is already playing, stop it (second click = pause).
+  // Components benefit from this without any per-component changes.
+  if (
+    currentAudio &&
+    currentAudioUrl === audioUrl &&
+    !currentAudio.paused &&
+    !currentAudio.ended
+  ) {
+    const cb = onPlaybackEnd;
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentAudioUrl = null;
+    cb?.();
+    return;
+  }
+
+  // Different URL (or no audio): stop the current one and play the new one.
   if (currentAudio) {
     currentAudio.pause();
     currentAudio = null;
@@ -148,14 +166,18 @@ export function playTtsAudio(
   currentAudio = audio;
   currentAudioUrl = audioUrl;
   const finish = () => {
-    currentAudio = null;
-    currentAudioUrl = null;
+    if (currentAudio === audio) {
+      currentAudio = null;
+      currentAudioUrl = null;
+    }
     onPlaybackEnd?.();
   };
   audio.onended = finish;
   audio.play().catch(() => {
-    currentAudio = null;
-    currentAudioUrl = null;
+    if (currentAudio === audio) {
+      currentAudio = null;
+      currentAudioUrl = null;
+    }
     if (fallbackText) speakBulgarian(fallbackText, rate);
     onPlaybackEnd?.();
   });
