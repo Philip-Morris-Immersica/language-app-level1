@@ -20,6 +20,7 @@ interface DropdownQuestion {
   options: string[];
   correctAnswer: string;
   alternateCorrectAnswers?: string[];
+  isExample?: boolean;
 }
 
 interface DropdownMatchProps {
@@ -79,7 +80,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
   const handleSubmit = () => {
     const newValidation: { [key: string]: boolean } = {};
     let correctCount = 0;
-    const gradedQuestions = questions.filter(q => q.options.length > 0);
+    const gradedQuestions = questions.filter(q => !q.isExample && q.options.length > 0);
 
     gradedQuestions.forEach(q => {
       const userAnswer = answers[q.id]?.toLowerCase();
@@ -129,6 +130,27 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
       <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
         {questions.map((question) => {
           const isImageMode = Boolean(question.leftImageUrl);
+
+          if (question.isExample) {
+            const parts = question.left.split('…');
+            const hasSplit = parts.length === 2;
+            const before = hasSplit ? parts[0] : question.left;
+            const after = hasSplit ? parts[1] : '';
+            return (
+              <div
+                key={question.id}
+                className="bg-gray-50 rounded-xl border-2 border-gray-200 p-4 opacity-70 italic"
+              >
+                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mr-2">Модел:</span>
+                <span className="text-sm md:text-base text-gray-600">
+                  {before.trim()}{before.trim() && ' '}
+                  <span className="font-bold text-[#4a6b1f] not-italic">{question.correctAnswer}</span>
+                  {after && ` ${after.trim()}`}
+                </span>
+              </div>
+            );
+          }
+
           return (
             <div
               key={question.id}
@@ -276,7 +298,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
               <X className="w-6 h-6 text-red-600" />
             )}
             <p className="text-base font-semibold text-gray-800">
-              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.filter(q => q.options.length > 0).length} {t('exercise.correct_n')}
+              {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.filter(q => !q.isExample && q.options.length > 0).length} {t('exercise.correct_n')}
             </p>
           </div>
         </div>

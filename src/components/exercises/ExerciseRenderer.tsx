@@ -44,6 +44,17 @@ interface ExerciseHeaderProps {
   subtitle?: string;
 }
 
+/** Converts **bold** markers in instruction strings to <strong> elements. */
+function renderInstructionText(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 function ExerciseHeader({ title, instruction, instructionKey, subtitle }: ExerciseHeaderProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
@@ -57,7 +68,7 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle }: Exerci
       </h3>
       {instruction && (
         <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
-          {displayInstruction}
+          {renderInstructionText(displayInstruction)}
         </p>
       )}
       {subtitle && (

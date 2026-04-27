@@ -339,6 +339,8 @@ export interface DropdownMatchExercise extends BaseExercise {
     options: string[];
     correctAnswer: string;
     alternateCorrectAnswers?: string[];
+    /** Ако true — въпросът е пример: показва се с готов отговор и не се брои за точки. */
+    isExample?: boolean;
   }[];
 }
 
@@ -419,6 +421,8 @@ export interface TrueFalseExercise extends BaseExercise {
     id: string;
     text: string;
     isTrue: boolean;
+    /** Ако true — твърдението е пример: показва се с готов отговор и не се брои за точки. */
+    isExample?: boolean;
   }[];
 }
 

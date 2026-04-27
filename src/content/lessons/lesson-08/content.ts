@@ -44,9 +44,9 @@ export const content: LessonContent = {
     {
       id: 'l08-dialozi-2-v',
       speakers: [
-        { name: 'Клиент', text: 'Как е якето?' },
-        { name: 'Продавач', text: 'Малко е. Може ли номер 48?' },
-        { name: 'Клиент', text: 'Да, разбира се.' },
+        { name: 'Продавач', text: 'Как е якето?' },
+        { name: 'Клиент', text: 'Малко е. Може ли номер 48?' },
+        { name: 'Продавач', text: 'Да, разбира се.' },
       ],
     },
   ],
@@ -126,7 +126,50 @@ export const content: LessonContent = {
     { id: 'zvanya', bulgarian: 'звъня, звъниш', translations: { en: 'to ring, to chime', fr: 'sonner', ar: 'يرنّ', fa: 'زنگ زدن', ru: 'звонить, звенеть', uk: 'дзвонити' } },
   ],
 
-  culturalNotes: [],
+  culturalNotes: [
+    {
+      id: 'l08-culture-01',
+      title: {
+        bg: 'Облеклото в България',
+        en: 'Clothing in Bulgaria',
+        fr: 'Les vêtements en Bulgarie',
+        ar: 'الملابس في بلغاريا',
+        fa: 'لباس در بلغارستان',
+        ru: 'Одежда в Болгарии',
+        uk: 'Одяг у Болгарії',
+      },
+      content: {
+        bg: 'Българите носят модерни западни дрехи. Обличат се внимателно дори за неофициални поводи.',
+        en: 'Bulgarians wear modern Western-style clothing. They dress with care, even for informal occasions.',
+        fr: "Les Bulgares portent des vêtements modernes de style occidental. Ils s'habillent avec soin, même pour des occasions informelles.",
+        ar: 'يرتدي البلغاريون ملابس حديثة بالنمط الغربي. يهتمون بمظهرهم حتى في المناسبات غير الرسمية.',
+        fa: 'بلغاری‌ها لباس‌های مدرن به سبک غربی می‌پوشند. آن‌ها حتی برای مناسبت‌های غیررسمی با دقت لباس می‌پوشند.',
+        ru: 'Болгары носят современную одежду западного стиля. Одеваются аккуратно даже для неформальных случаев.',
+        uk: 'Болгари носять сучасний одяг у западному стилі. Одягаються охайно навіть на неофіційні заходи.',
+      },
+    },
+    {
+      id: 'l08-culture-02',
+      title: {
+        bg: 'Народни носии',
+        en: 'Traditional Costumes',
+        fr: 'Costumes traditionnels',
+        ar: 'الأزياء الشعبية التقليدية',
+        fa: 'لباس‌های سنتی',
+        ru: 'Народные костюмы',
+        uk: 'Народні костюми',
+      },
+      content: {
+        bg: 'Традиционните български носии се носят само на фестивали и при изпълнение на народни танци.',
+        en: 'Traditional Bulgarian costumes are worn only at festivals and for dance performances.',
+        fr: 'Les costumes traditionnels bulgares sont portés uniquement lors de festivals et de spectacles de danse.',
+        ar: 'تُرتدى الأزياء الشعبية البلغارية التقليدية فقط في المهرجانات وعروض الرقص الشعبي.',
+        fa: 'لباس‌های سنتی بلغاری فقط در جشنواره‌ها و اجراهای رقص پوشیده می‌شوند.',
+        ru: 'Традиционные болгарские костюмы надевают только на фестивалях и при исполнении народных танцев.',
+        uk: 'Традиційні болгарські костюми носять лише на фестивалях та народних танцях.',
+      },
+    },
+  ],
 
   grammarReference: [],
 };

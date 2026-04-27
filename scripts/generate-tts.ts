@@ -133,6 +133,14 @@ const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'shishche', // lesson 3 НОВИ ДУМИ 3 — шишче
   '200-euro', // lesson 3 НОВИ ДУМИ 2 — двеста евро
   '20-cent', // lesson 3 НОВИ ДУМИ 2 — двадесет евроцента
+  // lesson 1 — НОВИ ДУМИ 1 (greetings); Pro + „warm" sounds overexcited for short phrases
+  'morning',
+  'day',
+  'evening',
+  'night',
+  'hello',
+  'hello_formal',
+  'goodbye',
 ]);
 
 // ---------------------------------------------------------------------------
@@ -389,9 +397,9 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
 }
 
 /**
- * Image labeling uses `words/{image.id}.mp3` (same convention as IllustratedCards).
- * Skip ids already covered by illustrated_cards — those clips are generated there (label-only by default).
- * Remaining images (e.g. a flag with no vocabulary card) get their own `words/{id}.mp3`.
+ * Image labeling: `words/{image.id}.mp3` unless `displayType === 'flags'` — then
+ * `words/{exerciseId}-flag-{image.id}.mp3` (country name / correctLabel only; Flash; no collision with НОВИ ДУМИ).
+ * For non-flags, skip ids already covered by illustrated_cards; those use `words/{id}.mp3` from card jobs.
  */
 /** reading_text — optional `images[].ttsWordId` + `label` for flip-card word clips (`words/{ttsWordId}.mp3`). */
 function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
@@ -427,7 +435,21 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   }
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'image_labeling' && e.images)) {
+    const isFlags = ex.displayType === 'flags';
     for (const img of ex.images!) {
+      // Flag exercises use a dedicated filename so TTS is only correctLabel (country name),
+      // not words/{id}.mp3 from НОВИ ДУМИ (e.g. country + demonyms when ttsIncludeSublabels is true).
+      if (isFlags) {
+        jobs.push({
+          category: 'words',
+          filename: `${ex.id}-flag-${img.id}.mp3`,
+          text: clean(img.correctLabel),
+          voice: FEMALE_VOICE,
+          model: GEMINI_FLASH_MODEL,
+          prompt: GEMINI_WORD_PROMPT,
+        });
+        continue;
+      }
       if (illustratedIds.has(img.id)) continue;
       jobs.push({
         category: 'words',

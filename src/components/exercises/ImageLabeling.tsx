@@ -46,7 +46,9 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   const handleCardClick = (imageId: string, correctLabel: string) => {
     setFlippedCards(prev => ({ ...prev, [imageId]: !prev[imageId] }));
     if (!flippedCards[imageId]) {
-      const audioPath = getTtsAudioPath(exercise.id, 'words', imageId);
+      const stem =
+        exercise.displayType === 'flags' ? `${exercise.id}-flag-${imageId}` : imageId;
+      const audioPath = getTtsAudioPath(exercise.id, 'words', stem);
       playTtsAudio(audioPath, correctLabel);
     }
   };

@@ -50,7 +50,7 @@ export const exercises: Exercise[] = [
     id: 'l07-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 2,
     cards: [
       { id: 'kalendar', imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/01-kalendar-yanuari.jpg', label: 'календар' },
@@ -106,7 +106,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     subtitle: 'Кой ден е днес?',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 4,
     cards: [
       { id: 'ponedelnik', imageUrl: '', label: 'понеделник' },
@@ -143,7 +143,7 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-04',
     type: 'syllable_blocks',
     title: 'УПРАЖНЕНИЕ 4',
-    instruction: 'Влачете сричките и ги подредете, за да съставите дните на седмицата.',
+    instruction: 'Подредете буквите/сричките, за да съставите дума или израз.',
     order: 6,
     points: 7,
     puzzles: [
@@ -166,7 +166,7 @@ export const exercises: Exercise[] = [
     id: 'l07-novi-dumi-03',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 7,
     cards: [
       { id: 'yanuari',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/01-lenta-mesetsi.jpg', label: 'януари'   },
@@ -364,7 +364,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     subtitle: 'Какво е времето днес?',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 13,
     cards: [
       { id: 'studeno',   imageUrl: '', label: 'Студено е.',  sublabels: ['0°C'] },
@@ -437,7 +437,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 5',
     subtitle: 'В България има четири сезона.',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 16,
     cards: [
       { id: 'prolet', imageUrl: '/assets/lesson-07/18-novi-dumi-5-sezoni-darva/01-prolet-darvo.jpg', label: 'пролет' },
@@ -667,7 +667,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Напишете колко е часът.',
     order: 23,
-    points: 6,
+    points: 7,
     layout: 'single',
     sentences: [
       {
@@ -742,7 +742,7 @@ export const exercises: Exercise[] = [
       },
       {
         images: ['/assets/lesson-07/26-upr-17-napishite-chasa/01-chas-01-55.jpg'],
-        text: 'Два без двайсет и пет.',
+        text: 'Два без пет.',
         blanks: [],
         correctAnswers: [],
         isExample: true,
@@ -847,13 +847,13 @@ export const exercises: Exercise[] = [
         text: '12:30 | _______',
         blanks: [1],
         correctAnswers: ['Дванайсет и половина.'],
-        acceptableAnswers: [['Дванайсет и тридесет.']],
+        acceptableAnswers: [['Дванайсет и тридесет.', 'Дванайсет и трийсет.']],
       },
       {
         text: '23:25 | _______',
         blanks: [1],
         correctAnswers: ['Единайсет и двайсет и пет през нощта.'],
-        acceptableAnswers: [['Дванайсет без тридесет и пет.']],
+        acceptableAnswers: [['Дванайсет без тридесет и пет.', 'Дванайсет без трийсет и пет.']],
       },
       {
         text: '16:45 | _______',
@@ -871,7 +871,7 @@ export const exercises: Exercise[] = [
         text: '20:35 | _______',
         blanks: [1],
         correctAnswers: ['Девет без двайсет и пет вечерта.'],
-        acceptableAnswers: [['Осем и трийсет и пет вечерта.']],
+        acceptableAnswers: [['Осем и трийсет и пет вечерта.', 'Осем и тридесет и пет вечерта.']],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -1089,7 +1089,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 6',
     subtitle: 'Посоки на света',
-    instruction: 'Натиснете за произношение.',
+    instruction: '',
     order: 32,
     cards: [
       { id: 'sever',       imageUrl: '', label: 'север'      },
@@ -1198,7 +1198,7 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-28',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 28',
-    instruction: 'Напишете глагола ОТИВАМ в правилната форма.',
+    instruction: 'Напишете глагола **отивам** в правилната форма.',
     order: 36,
     points: 5,
     layout: 'single',
@@ -1379,9 +1379,9 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-33',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 33',
-    instruction: 'Напишете какво е времето в България през различните сезони.',
+    instruction: 'Изберете думите, за да опишете времето в България през различните сезони.',
     order: 40,
-    points: 10,
+    points: 14,
     layout: 'single',
     sentences: [
       {
@@ -1425,7 +1425,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'ТЕКСТ',
     textTitle: 'Ибрахим',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 41,
     showDictionary: true,
     imageUrl: '/assets/lesson-07/49-tekst-ibrahim-vitosha/01-gora-esen.jpg',
@@ -1444,7 +1444,7 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-35',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 35',
-    instruction: 'Определете дали твърденията за текста са верни или не.',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
     order: 42,
     points: 7,
     sentences: [
@@ -1453,9 +1453,9 @@ export const exercises: Exercise[] = [
       { id: 's3', text: 'Ибрахим е учител.',                                   isTrue: true  },
       { id: 's4', text: 'Ибрахим работи в събота и неделя.',                  isTrue: false },
       { id: 's5', text: 'Той учи английски.',                                  isTrue: true  },
+      { id: 's8', text: 'Ибрахим не обича планината.',                         isTrue: false },
       { id: 's6', text: 'Витоша е красива планина.',                           isTrue: true  },
       { id: 's7', text: 'Ибрахим е зает от сутрин до вечер през седмицата.',  isTrue: true  },
-      { id: 's8', text: 'Ибрахим не обича планината.',                         isTrue: false },
     ],
   } as TrueFalseExercise,
 

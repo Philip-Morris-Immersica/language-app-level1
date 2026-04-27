@@ -11,6 +11,7 @@ interface TrueFalseSentence {
   id: string;
   text: string;
   isTrue: boolean;
+  isExample?: boolean;
 }
 
 interface TrueFalseModel {
@@ -55,12 +56,14 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
     }
   };
 
+  const gradedSentences = sentences.filter(s => !s.isExample);
+
   const handleCheck = () => {
     setChecked(true);
-    const correct = sentences.filter(s =>
+    const correct = gradedSentences.filter(s =>
       answers[s.id] != null && (answers[s.id] === 'true') === s.isTrue
     ).length;
-    onComplete?.(correct === sentences.length, correct);
+    onComplete?.(correct === gradedSentences.length, correct);
   };
 
   const handleReset = () => {
@@ -68,9 +71,9 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
     setChecked(false);
   };
 
-  const allAnswered = sentences.every(s => answers[s.id] != null);
-  const correctCount = sentences.filter(s => answers[s.id] != null && (answers[s.id] === 'true') === s.isTrue).length;
-  const allCorrect = checked && correctCount === sentences.length;
+  const allAnswered = gradedSentences.every(s => answers[s.id] != null);
+  const correctCount = gradedSentences.filter(s => answers[s.id] != null && (answers[s.id] === 'true') === s.isTrue).length;
+  const allCorrect = checked && correctCount === gradedSentences.length;
 
   return (
     <div className="space-y-2">
@@ -104,6 +107,26 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
         </div>
       )}
       {sentences.map((sentence, index) => {
+        if (sentence.isExample) {
+          return (
+            <div
+              key={sentence.id}
+              className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 bg-gray-50 opacity-70 italic"
+            >
+              <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide shrink-0 not-italic">Модел:</span>
+              <p className="flex-1 text-base text-gray-600 leading-snug">{sentence.text}</p>
+              <div className="flex gap-2 shrink-0">
+                <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center not-italic ${
+                  sentence.isTrue ? 'bg-green-100 border-green-400 text-green-800' : 'bg-white border-gray-300 text-green-600'
+                }`}>да</span>
+                <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center not-italic ${
+                  !sentence.isTrue ? 'bg-red-100 border-red-400 text-red-800' : 'bg-white border-gray-300 text-red-600'
+                }`}>не</span>
+              </div>
+            </div>
+          );
+        }
+
         const answer = answers[sentence.id];
         const isAnsweredCorrectly = checked && answer != null && (answer === 'true') === sentence.isTrue;
         const isAnsweredWrongly = checked && answer != null && (answer === 'true') !== sentence.isTrue;
@@ -122,7 +145,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
             </span>
             <p className="flex-1 text-base text-gray-800 leading-snug">{sentence.text}</p>
             <div className="flex gap-2 shrink-0">
-              {/* да — зелен шрифт; при избор (преди Check) — сив фон, за да се чете „да“ */}
+              {/* да — зелен шрифт; при избор (преди Check) — сив фон, за да се чете „да" */}
               <button
                 type="button"
                 onClick={() => handleSelect(sentence.id, 'true')}
@@ -168,7 +191,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
         }`}>
           {allCorrect
             ? t('exercise.allCorrect')
-            : `${t('exercise.result')} ${correctCount} / ${sentences.length}`
+            : `${t('exercise.result')} ${correctCount} / ${gradedSentences.length}`
           }
         </div>
       )}
