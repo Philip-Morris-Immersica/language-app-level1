@@ -43,7 +43,10 @@ export function WordSearchGrid({
     return generateWordSearchGrid(hiddenWords, 10, directions);
   }, [hiddenWords, propGrid, directions]);
 
-  const [foundWords, setFoundWords] = useState<FoundEntry[]>(() => s?.foundWords ?? []);
+  const [foundWords, setFoundWords] = useState<FoundEntry[]>(() => {
+    const saved = s?.foundWords ?? [];
+    return (saved as any[]).filter((f: any) => f?.word && Array.isArray(f?.cells));
+  });
   const [firstCell, setFirstCell] = useState<{ row: number; col: number } | null>(null);
   const [flashCells, setFlashCells] = useState<{ cells: string[]; valid: boolean } | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
@@ -56,7 +59,7 @@ export function WordSearchGrid({
 
   const foundCells = useMemo(() => {
     const set = new Set<string>();
-    foundWords.forEach(f => f.cells.forEach(c => set.add(c)));
+    foundWords.forEach(f => f.cells?.forEach(c => set.add(c)));
     return set;
   }, [foundWords]);
 
