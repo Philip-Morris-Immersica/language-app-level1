@@ -1,108 +1,82 @@
-// Central export point for all content
-export * from './types';
+/**
+ * Public content barrel.
+ *
+ * - Re-exports types from `./shared/types` so `import { … } from '@/content/types'`
+ *   keeps working everywhere.
+ * - Re-exports navigation / metadata / loaders from `./registry`, which itself
+ *   aggregates A1 / A2 / B1 / B2.
+ * - Provides legacy-named helpers (navItems, getTestFolder, …) used by routes
+ *   and the sidebar so we don't have to touch every consumer.
+ */
 
-// Lesson metadata for navigation
-export const lessonsMetadata = [
-  { id: 'lesson-00', number: 0, title: 'Азбука', hasTest: false },
-  { id: 'lesson-01', number: 1, title: 'Здравейте', hasTest: false },
-  { id: 'lesson-02', number: 2, title: 'Закуска', hasTest: false },
-  { id: 'lesson-03', number: 3, title: 'В ресторанта', hasTest: true, testId: 'test-a1-1' },
-  { id: 'lesson-04', number: 4, title: 'В супермаркета. На пазара', hasTest: true, testId: 'test-a1-2' },
-  { id: 'lesson-05', number: 5, title: 'Градът и селото', hasTest: false },
-  { id: 'lesson-06', number: 6, title: 'Моето семейство', hasTest: true, testId: 'test-a1-3' },
-  { id: 'lesson-07', number: 7, title: 'Времето', hasTest: false },
-  { id: 'lesson-08', number: 8, title: 'Цветове и дрехи', hasTest: true, testId: 'test-a1-4' },
-  { id: 'lesson-09', number: 9, title: 'Вкъщи', hasTest: false },
-  { id: 'lesson-10', number: 10, title: 'На път', hasTest: true, testId: 'test-a1-5' },
-  { id: 'lesson-11', number: 11, title: 'Всеки ден', hasTest: true, testId: 'test-a1-6' },
-];
+export * from './shared/types';
 
-// Navigation items for sidebar — includes Азбука, lessons, and tests in correct order
-export type NavItem =
-  | { type: 'special'; id: string; titleKey: string; href: string }
-  | { type: 'lesson';  id: string; number: number; title: string }
-  | { type: 'test';    id: string; label: string };
+import {
+  ALL_LESSONS_METADATA,
+  ALL_NAV_ITEMS_BY_LEVEL,
+  ALL_TEST_FOLDER_MAP,
+  ALL_TEST_NEXT_LESSON_MAP,
+  ALL_LESSON_EXERCISE_COUNTS,
+  type LessonMetadataEntry,
+  type NavItem,
+} from './registry';
 
-export const navItems: NavItem[] = [
-  { type: 'special', id: 'azbouka',    titleKey: 'nav.alphabet', href: '/lessons/azbouka' },
-  { type: 'lesson',  id: 'lesson-01',  number: 1,  title: 'Здравейте'               },
-  { type: 'lesson',  id: 'lesson-02',  number: 2,  title: 'Закуска'                 },
-  { type: 'lesson',  id: 'lesson-03',  number: 3,  title: 'В ресторанта'            },
-  { type: 'test',    id: 'test-a1-1',  label: 'уроци 1, 2 и 3'                      },
-  { type: 'lesson',  id: 'lesson-04',  number: 4,  title: 'В супермаркета. На пазара' },
-  { type: 'test',    id: 'test-a1-2',  label: 'урок 4'                              },
-  { type: 'lesson',  id: 'lesson-05',  number: 5,  title: 'Градът и селото'         },
-  { type: 'lesson',  id: 'lesson-06',  number: 6,  title: 'Моето семейство'         },
-  { type: 'test',    id: 'test-a1-3',  label: 'уроци 5 и 6'                         },
-  { type: 'lesson',  id: 'lesson-07',  number: 7,  title: 'Времето'                  },
-  { type: 'lesson',  id: 'lesson-08',  number: 8,  title: 'Цветове и дрехи'         },
-  { type: 'test',    id: 'test-a1-4',  label: 'уроци 7 и 8'                         },
-  { type: 'lesson',  id: 'lesson-09',  number: 9,  title: 'Вкъщи'                  },
-  { type: 'lesson',  id: 'lesson-10',  number: 10, title: 'На път'                  },
-  { type: 'test',    id: 'test-a1-5',  label: 'уроци 9 и 10'                        },
-  { type: 'lesson',  id: 'lesson-11',  number: 11, title: 'Всеки ден'               },
-  { type: 'test',    id: 'test-a1-6',  label: 'урок 11'                             },
-];
+export {
+  loadLesson,
+  loadTest,
+  LESSON_LOADERS,
+  TEST_LOADERS,
+  LESSON_LEVEL_MAP,
+  TEST_LEVEL_MAP,
+  ALL_LESSON_IDS,
+  LEVELS,
+  type Level,
+  type LessonMetadataEntry,
+  type NavItem,
+} from './registry';
 
-// Get lesson metadata by ID
-export function getLessonMetadata(lessonId: string) {
-  return lessonsMetadata.find(l => l.id === lessonId);
-}
+// ── Legacy aliases (kept so existing imports keep compiling) ──────────────────
 
-// Get previous lesson
-export function getPrevLesson(currentNumber: number) {
-  const prevNumber = currentNumber - 1;
-  return lessonsMetadata.find(l => l.number === prevNumber);
-}
-
-// Get next lesson
-export function getNextLesson(currentNumber: number) {
-  const nextNumber = currentNumber + 1;
-  return lessonsMetadata.find(l => l.number === nextNumber);
-}
-
-// Check if test available after lesson
-export function hasTestAfterLesson(lessonNumber: number) {
-  return lessonsMetadata.find(l => l.number === lessonNumber)?.hasTest ?? false;
-}
-
-// Map test IDs to content folder names
-const testFolderMap: Record<string, string> = {
-  'test-a1-1': 'test-lessons-1-2-3',
-  'test-a1-2': 'test-lessons-4',
-  'test-a1-3': 'test-lessons-5-6',
-};
-
-export function getTestFolder(testId: string): string | undefined {
-  return testFolderMap[testId];
-}
-
-const testNextLessonMap: Record<string, string> = {
-  'test-a1-1': 'lesson-04',
-  'test-a1-2': 'lesson-05',
-  'test-a1-3': 'lesson-07',
-  'test-a1-4': 'lesson-09',
-  'test-a1-5': 'lesson-11',
-};
-
-export function getNextLessonAfterTest(testId: string) {
-  const nextId = testNextLessonMap[testId];
-  if (!nextId) return undefined;
-  return lessonsMetadata.find(l => l.id === nextId);
-}
+/** Lessons metadata across all configured levels. */
+export const lessonsMetadata: LessonMetadataEntry[] = ALL_LESSONS_METADATA;
 
 /**
- * Total interactive exercises per lesson (exercises + workbook with points > 0).
- * Used by the sidebar to compute completion %. Update when adding lesson content.
+ * Sidebar items. Today the sidebar is A1-only; we expose A1's nav items here
+ * for backward-compatibility, plus a `getNavItemsForLevel(level)` helper for
+ * future level-specific sidebars.
  */
-export const lessonExerciseCounts: Record<string, number> = {
-  'lesson-00': 3,
-  'lesson-01': 21,
-  'lesson-02': 22,
-  'lesson-03': 25,
-  'lesson-04': 31,
-  'lesson-05': 30,
-  'lesson-06': 32,
-  'lesson-07': 43,
-  'lesson-08': 21,
-};
+export const navItems: NavItem[] = ALL_NAV_ITEMS_BY_LEVEL.a1;
+
+export function getNavItemsForLevel(level: 'a1' | 'a2' | 'b1' | 'b2'): NavItem[] {
+  return ALL_NAV_ITEMS_BY_LEVEL[level];
+}
+
+export function getLessonMetadata(lessonId: string): LessonMetadataEntry | undefined {
+  return ALL_LESSONS_METADATA.find((l) => l.id === lessonId);
+}
+
+export function getPrevLesson(currentNumber: number): LessonMetadataEntry | undefined {
+  return ALL_LESSONS_METADATA.find((l) => l.number === currentNumber - 1);
+}
+
+export function getNextLesson(currentNumber: number): LessonMetadataEntry | undefined {
+  return ALL_LESSONS_METADATA.find((l) => l.number === currentNumber + 1);
+}
+
+export function hasTestAfterLesson(lessonNumber: number): boolean {
+  return ALL_LESSONS_METADATA.find((l) => l.number === lessonNumber)?.hasTest ?? false;
+}
+
+/** Folder name on disk for a given test ID. */
+export function getTestFolder(testId: string): string | undefined {
+  return ALL_TEST_FOLDER_MAP[testId];
+}
+
+export function getNextLessonAfterTest(testId: string): LessonMetadataEntry | undefined {
+  const nextId = ALL_TEST_NEXT_LESSON_MAP[testId];
+  if (!nextId) return undefined;
+  return ALL_LESSONS_METADATA.find((l) => l.id === nextId);
+}
+
+/** Total interactive exercises per lesson (used by sidebar % computation). */
+export const lessonExerciseCounts: Record<string, number> = ALL_LESSON_EXERCISE_COUNTS;

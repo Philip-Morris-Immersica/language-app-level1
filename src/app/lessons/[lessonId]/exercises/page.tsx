@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { Button } from '@/components/ui/button';
 import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
-import { getLessonMetadata } from '@/content';
+import { getLessonMetadata, loadLesson } from '@/content';
 import { ChevronLeft } from 'lucide-react';
 import { T } from '@/components/T';
 import { TranslatedText } from '@/components/TranslatedText';
@@ -14,15 +14,6 @@ interface ExercisesPageProps {
   }>;
 }
 
-async function getLessonData(lessonId: string) {
-  try {
-    const lesson = await import(`@/content/lessons/${lessonId}`);
-    return lesson.default || lesson.lessonData;
-  } catch {
-    return null;
-  }
-}
-
 export default async function ExercisesPage({ params }: ExercisesPageProps) {
   const { lessonId } = await params;
   const metadata = getLessonMetadata(lessonId);
@@ -31,7 +22,7 @@ export default async function ExercisesPage({ params }: ExercisesPageProps) {
     notFound();
   }
 
-  const lessonData = await getLessonData(lessonId);
+  const lessonData = await loadLesson(lessonId);
 
   if (!lessonData || !lessonData.workbookExercises || lessonData.workbookExercises.length === 0) {
     return (

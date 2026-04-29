@@ -3,17 +3,14 @@ import { verifyToken } from '@/lib/auth/jwt';
 import { db } from '@/db';
 import { exerciseStatesTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { ALL_LESSON_IDS, loadLesson } from '@/content';
 
 async function getExerciseCount(lessonId: string): Promise<number> {
-  try {
-    const lesson = await import(`@/content/lessons/${lessonId}`);
-    const data = lesson.default || lesson.lessonData;
-    const exercises = data?.exercises?.length ?? 0;
-    const workbook = data?.workbookExercises?.length ?? 0;
-    return exercises + workbook;
-  } catch {
-    return 0;
-  }
+  const data = await loadLesson(lessonId);
+  if (!data) return 0;
+  const exercises = data.exercises?.length ?? 0;
+  const workbook = data.workbookExercises?.length ?? 0;
+  return exercises + workbook;
 }
 
 export async function GET(req: NextRequest) {
@@ -39,10 +36,8 @@ export async function GET(req: NextRequest) {
     completedByLesson[row.lessonId].add(row.exerciseId);
   }
 
-  const lessonIds = [
-    'lesson-01', 'lesson-02', 'lesson-03', 'lesson-04', 'lesson-05',
-    'lesson-06', 'lesson-07', 'lesson-08', 'lesson-09', 'lesson-10', 'lesson-11',
-  ];
+  // Skip the alphabet (lesson-00) — historically excluded from the summary.
+  const lessonIds = ALL_LESSON_IDS.filter((id) => id !== 'lesson-00');
 
   const lessons: Record<string, { completed: number; total: number }> = {};
 

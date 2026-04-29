@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { LessonNav } from '@/components/layout/LessonNav';
 import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
-import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson } from '@/content';
+import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson, loadLesson } from '@/content';
 import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
@@ -18,15 +18,6 @@ interface LessonPageProps {
   }>;
 }
 
-async function getLessonData(lessonId: string) {
-  try {
-    const lesson = await import(`@/content/lessons/${lessonId}`);
-    return lesson.default || lesson.lessonData;
-  } catch {
-    return null;
-  }
-}
-
 export default async function LessonPage({ params }: LessonPageProps) {
   const { lessonId } = await params;
   const metadata = getLessonMetadata(lessonId);
@@ -35,7 +26,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound();
   }
 
-  const lessonData = await getLessonData(lessonId);
+  const lessonData = await loadLesson(lessonId);
 
   if (!lessonData) {
     return (

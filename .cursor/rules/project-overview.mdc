@@ -3,7 +3,7 @@ alwaysApply: true
 ---
 # Project Overview
 
-**UNHCR Bulgarian Language Platform** — free interactive app for refugees learning Bulgarian, A1 level. 11 lessons + 6 tests.
+**UNHCR Bulgarian Language Platform** — free interactive app for refugees learning Bulgarian. Currently scoped to A1 (11 lessons + 6 tests, ~9 lessons digitalised); the codebase is structured to host A2, B1, B2 in the same repo.
 
 **Stack:** Next.js 15 App Router, TypeScript, Tailwind CSS, shadcn/ui, Drizzle ORM + Neon PostgreSQL, JWT auth (HTTP-only cookies), dnd-kit.
 
@@ -11,6 +11,17 @@ alwaysApply: true
 
 **i18n:** `useT()` → static UI strings pre-translated in [src/i18n/ui.ts](mdc:src/i18n/ui.ts). `useTranslate()` → dynamic content via Google Translate API + localStorage cache. Exercise words/answers always stay in Bulgarian — never translate them.
 
-**Status:** lesson-01 fully complete. Lessons 2–11 have metadata only in [src/content/index.ts](mdc:src/content/index.ts). Progress tracked in localStorage ([src/lib/progress.ts](mdc:src/lib/progress.ts)); Neon DB schema exists for future migration.
+## Content Layout (Multi-Level)
+
+- `src/content/shared/` — types, EXERCISE_TEMPLATES, TEST_TEMPLATES (shared by ALL levels — change once, applies everywhere)
+- `src/content/a1/`, `src/content/a2/`, `src/content/b1/`, `src/content/b2/` — per-level lessons & tests, each with its own `index.ts` registry
+- `src/content/registry.ts` — aggregates all levels into a single loader + lookup map (`loadLesson(id)`, `loadTest(id)`, `LESSON_LEVEL_MAP`, etc.)
+- `src/content/index.ts` — public barrel; legacy helpers (`navItems`, `getLessonMetadata`, `getTestFolder`, …) still work for backward-compat
+
+A1 lesson IDs stay un-prefixed (`lesson-XX`) so existing user progress keeps working. A2+ lesson IDs are level-prefixed (`a2-lesson-XX`, …). Test IDs already include the level (`test-a1-1`, `test-a2-1`, …).
+
+**Onboarding a new collaborator:** see [ONBOARDING.md](mdc:ONBOARDING.md).
+
+**Status:** A1 lessons 0–8 + tests 1–3 fully digitalised. Lessons 9–11 + tests 4–6 are placeholders. A2/B1/B2 are skeleton folders ready for content.
 
 For content/lesson work → see `content-lessons` rule. For UI/component work → see `design-system` rule.

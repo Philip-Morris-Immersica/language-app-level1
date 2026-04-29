@@ -3,9 +3,32 @@ globs: src/content/**
 ---
 # Content & Lessons Guide
 
+> This guide applies to **every CEFR level** (A1, A2, B1, B2). The same
+> templates, types, exercise components, i18n, TTS pipeline and quality
+> checklist are shared across all levels. Each level has its own content
+> folder; the rest of the platform is level-agnostic.
+
+## Folder Layout (Multi-Level)
+
+```
+src/content/
+├── shared/                ← types, EXERCISE_TEMPLATES, TEST_TEMPLATES (USED BY ALL LEVELS)
+├── a1/
+│   ├── lessons/lesson-XX/ ← A1 lesson folders (folder name == lesson id)
+│   ├── tests/test-…/
+│   └── index.ts           ← A1 registry: loaders, navItems, metadata
+├── a2/                    ← same shape
+├── b1/, b2/               ← same shape (skeletons)
+├── registry.ts            ← global cross-level registry (loaders, lookups)
+└── index.ts               ← public barrel: types + helpers + registry
+```
+
+When adding a new exercise type, template, or rule, put it in `shared/` so it
+is available for every level — never duplicate per level.
+
 ## Lesson Folder Structure
 
-Each lesson lives in `src/content/lessons/lesson-XX/` with 5 files:
+Each lesson lives in `src/content/<level>/lessons/<lesson-id>/` with 5 files:
 
 - `metadata.ts` — id, number, title, description, grammarTopics[], vocabulary[]
 - `content.ts` — introduction text, dialogues, sections
@@ -13,22 +36,40 @@ Each lesson lives in `src/content/lessons/lesson-XX/` with 5 files:
 - `workbook.ts` — workbook-only exercises
 - `index.ts` — re-exports everything as `lessonData`
 
-After creating the files, register the lesson in [src/content/index.ts](mdc:src/content/index.ts) `lessonsMetadata` array.
+After creating the files, register the lesson **in the level's index file**
+(e.g. `src/content/a2/index.ts`) by adding entries to:
+
+- `<LEVEL>_LESSON_LOADERS` — `'a2-lesson-01': () => import('./lessons/a2-lesson-01')`
+- `<LEVEL>_LESSONS_METADATA` — id, number, title, hasTest, testId
+- `<LEVEL>_NAV_ITEMS` — sidebar entry
+- `<LEVEL>_LESSON_EXERCISE_COUNTS` — total interactive exercises (for sidebar %)
+
+The cross-level `src/content/registry.ts` automatically picks the new entries
+up; routes (`/lessons/[lessonId]`, `/tests/[testId]`) work without changes.
 
 ## ID Naming Conventions
 
-| Element | Format | Example |
+A1 lesson IDs are kept un-prefixed (`lesson-XX`) for backward compatibility
+with existing user progress in the database. **A2 / B1 / B2 lesson IDs are
+level-prefixed** (`a2-lesson-XX`, `b1-lesson-XX`, …) so they never collide
+with A1.
+
+| Element | A1 format | A2+ format |
 |---|---|---|
-| Lesson | `lesson-XX` | `lesson-02` |
-| Exercise | `lXX-ex-NN` | `l02-ex-01` |
-| Workbook | `lXX-wb-NN` | `l02-wb-01` |
-| Нови думи | `lXX-novi-dumi-NN` | `l02-novi-dumi-01` |
-| Граматика | `lXX-gramatika-NN` | `l02-gramatika-01` |
-| Диалози | `lXX-dialozi-NN` | `l02-dialozi-01` |
+| Lesson | `lesson-XX` (e.g. `lesson-02`) | `a2-lesson-XX`, `b1-lesson-XX`, … |
+| Exercise | `lXX-ex-NN` (e.g. `l02-ex-01`) | `a2-lXX-ex-NN`, `b1-lXX-ex-NN`, … |
+| Workbook | `lXX-wb-NN` | `a2-lXX-wb-NN`, … |
+| Нови думи | `lXX-novi-dumi-NN` | `a2-lXX-novi-dumi-NN`, … |
+| Граматика | `lXX-gramatika-NN` | `a2-lXX-gramatika-NN`, … |
+| Диалози | `lXX-dialozi-NN` | `a2-lXX-dialozi-NN`, … |
+| Test | `test-a1-N` (e.g. `test-a1-3`) | `test-a2-N`, `test-b1-N`, … |
 
 ## Asset Paths
 
-Assets go in `/public/assets/lesson-XX/` with descriptive subfolders:
+Assets go in `/public/assets/<lesson-id>/` with descriptive subfolders. The
+folder name **matches the lesson ID** (so A1 uses `/public/assets/lesson-02/`
+and A2 uses `/public/assets/a2-lesson-01/`):
+
 - `audio/tts/` — generated TTS MP3 files (see `tts-audio` rule)
 - `audio/` — other audio files
 - `exercise-NN-name/` — images for a specific exercise
@@ -36,7 +77,8 @@ Assets go in `/public/assets/lesson-XX/` with descriptive subfolders:
 - `gramatika-N/` — grammar section images
 
 Source files (PDFs, audio, images) are on the developer's machine at:
-`C:\Users\Work Account\Desktop\CURSOR\GITHUB A1\a1-files\lessons\lesson-X\`
+`C:\Users\Work Account\Desktop\CURSOR\GITHUB A1\a1-files\lessons\lesson-X\` (A1)
+or the equivalent A2/B1/B2 source folders.
 
 ## exercises.ts — Key Rules
 
@@ -170,15 +212,19 @@ When an exercise has **multiple valid answers** for the same question:
 
 ## Creating Exercises — ALWAYS Use Templates
 
-When creating exercises, **always read `@EXERCISE_TEMPLATES.ts` first**.
+When creating exercises, **always read [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) first**.
 Copy the relevant template and replace only the content — never write exercise structure from scratch.
 
 Reference: [LESSON_STRUCTURE.md](mdc:LESSON_STRUCTURE.md) shows how lesson-01 PDF maps to exercise types and IDs.
 
 ## Adding a New Exercise Type — Checklist
 
-1. Add interface + type to [src/content/types.ts](mdc:src/content/types.ts)
+New exercise types live in `shared/` so they are immediately available for
+every CEFR level.
+
+1. Add interface + type to [src/content/shared/types.ts](mdc:src/content/shared/types.ts)
+   (the legacy alias `@/content/types` still works — it re-exports from `shared/`)
 2. Create component in `src/components/exercises/`
 3. Add `case` in [src/components/exercises/ExerciseRenderer.tsx](mdc:src/components/exercises/ExerciseRenderer.tsx)
-4. Add template to [src/content/EXERCISE_TEMPLATES.ts](mdc:src/content/EXERCISE_TEMPLATES.ts)
+4. Add template to [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts)
 5. Add type to the category list in this rule

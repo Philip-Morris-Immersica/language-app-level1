@@ -1,27 +1,15 @@
 import { ClipboardCheck } from 'lucide-react';
 import { LessonLayout } from '@/components/layout/LessonLayout';
-import { getTestFolder } from '@/content';
-import type { TestData } from '@/content/types';
+import { loadTest } from '@/content';
 import { TestPageClient } from './TestPageClient';
 
 interface TestPageProps {
   params: Promise<{ testId: string }>;
 }
 
-async function getTestData(testId: string): Promise<TestData | null> {
-  const folder = getTestFolder(testId);
-  if (!folder) return null;
-  try {
-    const mod = await import(`@/content/tests/${folder}`);
-    return mod.default || mod.testData;
-  } catch {
-    return null;
-  }
-}
-
 export default async function TestPage({ params }: TestPageProps) {
   const { testId } = await params;
-  const testData = await getTestData(testId);
+  const testData = await loadTest(testId);
 
   if (!testData) {
     const parts = testId.replace('test-a1-', '');

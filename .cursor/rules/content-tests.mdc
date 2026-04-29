@@ -1,22 +1,28 @@
 ---
-globs: src/content/tests/**
+globs: src/content/**/tests/**
 ---
 # Content & Tests Guide
+
+> Applies to every CEFR level. The shared test templates, scoring component
+> and quality rules apply 1:1 to A1, A2, B1, B2.
 
 ## Test vs Lesson — Key Differences
 
 Tests have **3 files only** (no `content.ts`, no `workbook.ts`):
 
 ```
-src/content/tests/test-lessons-X-Y/
+src/content/<level>/tests/<test-folder>/
   ├── metadata.ts     — id, number, afterLesson, title, totalPoints, introText
   ├── exercises.ts    — ALL exercises grouped by section (listening, reading, grammar, writing)
   └── index.ts        — assembles TestData with sections array
 ```
 
-After creating the files, register the test in [src/content/index.ts](mdc:src/content/index.ts):
-- Add entry to `testFolderMap`
-- Verify the `navItems` array has the correct `label` for the sidebar
+After creating the files, register the test **in the level's index file**
+(e.g. `src/content/a2/index.ts`):
+- Add a loader to `<LEVEL>_TEST_LOADERS`
+- Add an entry to `<LEVEL>_TEST_FOLDER_MAP` (testId → folder name on disk)
+- Add an entry to `<LEVEL>_TEST_NEXT_LESSON_MAP` (testId → next lesson id)
+- Verify the `<LEVEL>_NAV_ITEMS` has the correct `label` for the sidebar
 
 ## ID Naming Conventions
 
@@ -30,14 +36,16 @@ After creating the files, register the test in [src/content/index.ts](mdc:src/co
 
 ## Asset Paths
 
-Assets go in `/public/assets/test-a1-N/` with subfolders:
+Assets go in `/public/assets/<test-id>/` (folder name = test ID — e.g.
+`/public/assets/test-a1-3/` or `/public/assets/test-a2-1/`) with subfolders:
 - `slushane/` — listening section images (speaker photos)
 - `chetene/` — reading section images (dialog photos, context images)
 - `gramatika/` — grammar section context images (decorative, shown above exercise)
 - `pisane/` — writing section images (individual food items OR shared basket/scene)
 
 Source files on developer machine:
-`C:\Users\Work Account\Desktop\CURSOR\a1-files\lessons\test-lessons-X-Y\`
+`C:\Users\Work Account\Desktop\CURSOR\a1-files\lessons\test-lessons-X-Y\` (A1)
+or the equivalent A2/B1/B2 source folders.
 
 ## Test Structure — 4 Sections
 
@@ -154,7 +162,7 @@ Two valid patterns depending on available images:
 ## index.ts Structure
 
 ```typescript
-import type { TestData } from '@/content/types';
+import type { TestData } from '@/content/types'; // re-export from shared/types
 import { metadata } from './metadata';
 import { listeningExercises, readingExercises, grammarExercises, writingExercises } from './exercises';
 
@@ -236,15 +244,18 @@ These are built into the exercise components and apply to tests automatically:
 
 ## Creating Tests — ALWAYS Use Templates
 
-When creating a new test, **always read `@TEST_TEMPLATES.ts` first**.
+When creating a new test, **always read [src/content/shared/TEST_TEMPLATES.ts](mdc:src/content/shared/TEST_TEMPLATES.ts) first**.
 Copy the relevant section template and replace only the content.
 
 ## Registration Checklist
 
 When adding a new test:
-1. Create folder `src/content/tests/test-lessons-X-Y/`
+1. Create folder `src/content/<level>/tests/<test-folder>/`
 2. Create `metadata.ts`, `exercises.ts`, `index.ts`
-3. Copy images to `public/assets/test-a1-N/`
-4. Add to `testFolderMap` in [src/content/index.ts](mdc:src/content/index.ts)
-5. Verify `navItems` has the correct label
-6. Verify `totalPoints` = sum of section `maxPoints`
+3. Copy images to `public/assets/<test-id>/`
+4. Register the test in `src/content/<level>/index.ts`:
+   - Append to `<LEVEL>_TEST_LOADERS`
+   - Append to `<LEVEL>_TEST_FOLDER_MAP` and `<LEVEL>_TEST_NEXT_LESSON_MAP`
+   - Append a `{ type: 'test', id, label }` entry to `<LEVEL>_NAV_ITEMS`
+   - Update the parent lesson's `hasTest` + `testId` in `<LEVEL>_LESSONS_METADATA`
+5. Verify `totalPoints` = sum of section `maxPoints`

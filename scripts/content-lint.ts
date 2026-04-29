@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Content Quality Linter — deterministic checks over src/content/lessons/*.
+ * Content Quality Linter — deterministic checks over src/content/{a1,a2,b1,b2}/lessons/*.
  *
  * Runs a set of conservative rules catching the most frequent mistakes from
  * the lesson 0–7 feedback cycles. All rules emit warnings by default so the
@@ -31,8 +31,35 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const LESSONS_DIR = path.join(PROJECT_ROOT, 'src', 'content', 'lessons');
+const CONTENT_DIR = path.join(PROJECT_ROOT, 'src', 'content');
+const LEVELS = ['a1', 'a2', 'b1', 'b2'] as const;
 const PUBLIC_DIR = path.join(PROJECT_ROOT, 'public');
+
+/** Find the lesson folder by ID across all levels. */
+function findLessonDir(lessonId: string): string | null {
+  for (const lvl of LEVELS) {
+    const dir = path.join(CONTENT_DIR, lvl, 'lessons', lessonId);
+    if (fs.existsSync(path.join(dir, 'exercises.ts'))) return dir;
+  }
+  return null;
+}
+
+/** List every lesson folder ({ id, dir }) across all levels with an `exercises.ts`. */
+function listAllLessons(): Array<{ id: string; dir: string }> {
+  const out: Array<{ id: string; dir: string }> = [];
+  for (const lvl of LEVELS) {
+    const lessonsDir = path.join(CONTENT_DIR, lvl, 'lessons');
+    if (!fs.existsSync(lessonsDir)) continue;
+    const entries = fs.readdirSync(lessonsDir);
+    for (const name of entries) {
+      const dir = path.join(lessonsDir, name);
+      if (fs.existsSync(path.join(dir, 'exercises.ts'))) {
+        out.push({ id: name, dir });
+      }
+    }
+  }
+  return out.sort((a, b) => a.id.localeCompare(b.id));
+}
 
 // ─── Colors ──────────────────────────────────────────────────────────────────
 const RED = '\x1b[31m';
@@ -689,7 +716,8 @@ function parseDisabled(fileText: string) {
 }
 
 async function lintLesson(lessonId: string): Promise<Finding[]> {
-  const dir = path.join(LESSONS_DIR, lessonId);
+  const dir = findLessonDir(lessonId);
+  if (!dir) return [];
   const exercisesFile = path.join(dir, 'exercises.ts');
   if (!fs.existsSync(exercisesFile)) return [];
 
@@ -778,14 +806,17 @@ function printSummary(all: Finding[]) {
 }
 
 async function main() {
-  const lessons = fs
-    .readdirSync(LESSONS_DIR)
-    .filter((name) => /^lesson-\d{2}$/.test(name))
-    .filter((name) => fs.existsSync(path.join(LESSONS_DIR, name, 'exercises.ts')))
-    .sort();
+  const lessons = listAllLessons()
+    .map((entry) => entry.id)
+    .filter((id) => /lesson-\d{2}$/.test(id));
 
   const target = lessonArg
-    ? lessons.filter((l) => l === `lesson-${lessonArg.padStart(2, '0')}` || l.endsWith(`-${lessonArg}`))
+    ? lessons.filter(
+        (l) =>
+          l === `lesson-${lessonArg.padStart(2, '0')}` ||
+          l.endsWith(`-lesson-${lessonArg.padStart(2, '0')}`) ||
+          l.endsWith(`-${lessonArg}`),
+      )
     : lessons;
 
   if (target.length === 0) {

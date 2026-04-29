@@ -9,7 +9,7 @@ import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
 import { VocabularyDrawer } from '@/components/VocabularyDrawer';
 import { CultureSection } from '@/components/CultureSection';
 import { GrammarReferenceSection } from '@/components/GrammarReferenceSection';
-import { lessonData } from '@/content/lessons/lesson-00';
+import { lessonData } from '@/content/a1/lessons/lesson-00';
 
 export default function AzboukaPage() {
   const vocabulary = lessonData.content?.vocabulary || [];

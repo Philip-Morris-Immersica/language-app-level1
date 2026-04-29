@@ -672,14 +672,30 @@ async function main() {
   let content: LessonContent | null = null;
   let exercises: Exercise[];
 
+  // Resolve which level (a1/a2/b1/b2) hosts the requested folder. The script
+  // accepts the bare folder name (e.g. `lesson-04` / `test-lessons-4`); we
+  // search every level for a matching folder under `lessons/` or `tests/`.
+  function findLevelForFolder(kind: 'lessons' | 'tests', folder: string): string {
+    const levels = ['a1', 'a2', 'b1', 'b2'];
+    for (const lvl of levels) {
+      const dir = path.join(PROJECT_ROOT, 'src', 'content', lvl, kind, folder);
+      if (fs.existsSync(dir)) return lvl;
+    }
+    throw new Error(
+      `Could not find ${kind}/${folder} under any of src/content/{${levels.join(',')}}/`,
+    );
+  }
+
   if (IS_TEST) {
-    const metaModule = await import(`../src/content/tests/${CONTENT_ID}/metadata`);
-    const testModule = await import(`../src/content/tests/${CONTENT_ID}/exercises`);
+    const lvl = findLevelForFolder('tests', CONTENT_ID);
+    const metaModule = await import(`../src/content/${lvl}/tests/${CONTENT_ID}/metadata`);
+    const testModule = await import(`../src/content/${lvl}/tests/${CONTENT_ID}/exercises`);
     exercises = testModule.exercises as Exercise[];
     OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', metaModule.metadata.id, 'audio', 'tts');
   } else {
-    const contentModule = await import(`../src/content/lessons/${CONTENT_ID}/content`);
-    const exercisesModule = await import(`../src/content/lessons/${CONTENT_ID}/exercises`);
+    const lvl = findLevelForFolder('lessons', CONTENT_ID);
+    const contentModule = await import(`../src/content/${lvl}/lessons/${CONTENT_ID}/content`);
+    const exercisesModule = await import(`../src/content/${lvl}/lessons/${CONTENT_ID}/exercises`);
     content = contentModule.content as LessonContent;
     exercises = exercisesModule.exercises as Exercise[];
     OUTPUT_BASE = path.join(PROJECT_ROOT, 'public', 'assets', CONTENT_ID, 'audio', 'tts');
