@@ -22,7 +22,7 @@ export function LessonWorkbookSection({ lessonId, count }: LessonWorkbookSection
       </h3>
       <p className="text-lg text-gray-600 mb-6">{desc}</p>
       <Link href={`/lessons/${lessonId}/exercises`}>
-        <Button className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 min-h-[52px] active:scale-95 transition-transform">
+        <Button className="bg-[#32C189] hover:bg-[#257958] text-base font-semibold px-8 py-6 min-h-[52px] active:scale-95 transition-transform">
           <BookOpen className="w-5 h-5 mr-2" />
           {t('lesson.openWorkbook')}
         </Button>

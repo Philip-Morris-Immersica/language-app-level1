@@ -142,7 +142,7 @@ export function AlphabetMaze({
           <span className="text-sm text-gray-500">
             {t('exercise.find')}:
           </span>
-          <span className="ms-2 text-2xl font-bold text-amber-600">
+          <span className="ms-2 text-2xl font-bold text-[#684D0B]">
             {expectedLetter}
           </span>
         </div>
@@ -192,7 +192,7 @@ export function AlphabetMaze({
                   .map((p) => `${p.x},${p.y}`)
                   .join(' ')}
                 fill="none"
-                stroke="#8FC412"
+                stroke="#32C189"
                 strokeWidth={3}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -223,9 +223,9 @@ export function AlphabetMaze({
                     transition-all duration-150
                     ${
                       done
-                        ? 'bg-[#8FC412] text-white border-2 border-[#6A940C] shadow-sm'
+                        ? 'bg-[#32C189] text-white border-2 border-[#1F5741] shadow-sm'
                         : isTarget
-                          ? 'bg-amber-50 text-gray-800 border-2 border-amber-400 shadow-md animate-pulse'
+                          ? 'bg-[#FEF1D1] text-gray-800 border-2 border-[#FFC740] shadow-md animate-pulse'
                           : onPath
                             ? 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                             : 'bg-gray-100/80 text-gray-400 border border-dashed border-gray-200'
@@ -275,7 +275,7 @@ export function AlphabetMaze({
             {step} / {correctPath.length}
           </p>
         ) : (
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#8FC412] text-white rounded-lg font-bold text-base shadow-md">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#32C189] text-white rounded-lg font-bold text-base shadow-md">
             ✓ {t('exercise.excellent')}
           </div>
         )}

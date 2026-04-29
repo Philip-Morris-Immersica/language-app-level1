@@ -156,7 +156,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
               <div className={`
                 min-h-[100px] p-5 rounded-xl border-2 flex flex-wrap gap-3 items-center shadow-sm
                 ${state.validation === true ? 'border-green-500 bg-green-50' : ''}
-                ${state.validation === false ? 'border-red-500 bg-red-50' : ''}
+                ${state.validation === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                 ${state.validation === null ? 'border-gray-300 bg-gray-50' : ''}
               `}>
                 {state.built.length === 0 ? (
@@ -168,7 +168,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                         key={wIndex}
                         onClick={() => handleWordClick(qIndex, word, true)}
                         className="
-                          px-4 py-3 rounded-xl border-2 border-[#8FC412] bg-[#EEF7C8] shadow-sm
+                          px-4 py-3 rounded-xl border-2 border-[#32C189] bg-[#DAF6EB] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
                           hover:bg-white hover:shadow-md cursor-pointer
                         "
@@ -181,7 +181,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                         {state.validation ? (
                           <Check className="w-7 h-7 text-green-600" />
                         ) : (
-                          <X className="w-7 h-7 text-red-600" />
+                          <X className="w-7 h-7 text-[#D25A45]" />
                         )}
                       </span>
                     )}
@@ -191,7 +191,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
 
               {/* Available words */}
               {state.available.length > 0 && (
-                <div className="p-5 rounded-xl bg-[#EEF7C8]">
+                <div className="p-5 rounded-xl bg-[#DAF6EB]">
                   <div className="flex flex-wrap gap-3">
                     {state.available.map((word, wIndex) => (
                       <button
@@ -200,7 +200,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                         className="
                           px-4 py-3 rounded-xl border-2 border-gray-300 bg-white shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95
-                          hover:border-[#8FC412] hover:bg-[#EEF7C8] hover:shadow-md
+                          hover:border-[#32C189] hover:bg-[#DAF6EB] hover:shadow-md
                           cursor-pointer transition-all
                         "
                       >
@@ -226,13 +226,13 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
 
       <Button
         onClick={handleSubmit}
-        className="mt-8 bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+        className="mt-8 bg-[#32C189] hover:bg-[#257958] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
       >
         {t('exercise.check')}
       </Button>
 
       {isSubmitted && (
-        <div className="mt-8 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
+        <div className="mt-8 p-5 rounded-xl bg-[#DAF6EB] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
             {t('exercise.result')} {Object.values(questionStates).filter(s => s.validation === true).length} / {exercise.questions.length} {t('exercise.correct_n')}
           </p>

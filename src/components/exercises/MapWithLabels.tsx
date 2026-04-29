@@ -47,9 +47,9 @@ export function MapWithLabels({ imageUrl, labels, legendItems, legendTitle }: Ma
             }}
           >
             <span
-              className="bg-white/90 text-[#0279C3] font-semibold text-[10px] sm:text-xs md:text-sm
+              className="bg-white/90 text-[#0072BC] font-semibold text-[10px] sm:text-xs md:text-sm
                          px-1 py-0.5 rounded leading-tight text-center whitespace-nowrap
-                         border border-[#0279C3]/30 shadow-sm"
+                         border border-[#0072BC]/30 shadow-sm"
             >
               {label.name}
             </span>

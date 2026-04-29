@@ -139,14 +139,14 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
           return (
             <div
               key={section.id}
-              className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#8FC412]/50"
+              className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#32C189]/50"
             >
               <div className="flex items-center justify-between gap-2 mb-4">
                 <div
                   onClick={() => toggleSection(section.id)}
                   className="flex items-center gap-2 cursor-pointer flex-1"
                 >
-                  <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#8FC412] text-white">
+                  <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
                     {section.id}
                   </span>
                 </div>
@@ -154,8 +154,8 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
                   onClick={(e) => handlePlaySection(e, section)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
                     playingSection === section.id
-                      ? 'bg-red-500 hover:bg-red-600 text-white'
-                      : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+                      ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                      : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
                   }`}
                 >
                   {playingSection === section.id ? (
@@ -176,17 +176,17 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
                       onClick={(e) => handleLineClick(e, section, index)}
                       className={`flex items-start gap-3 rounded-lg px-3 py-2 -mx-3 cursor-pointer transition-colors active:scale-[0.99] ${
                         isLinePlaying
-                          ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                          ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
                           : 'hover:bg-gray-50 border border-transparent'
                       }`}
                     >
                       <Volume2 className={`w-4 h-4 mt-1.5 shrink-0 transition-colors ${
-                        isLinePlaying ? 'text-[#8FC412]' : 'text-gray-300'
+                        isLinePlaying ? 'text-[#32C189]' : 'text-gray-300'
                       }`} />
                       <div className="flex-1">
                         <p className="text-base md:text-lg text-gray-800 leading-relaxed">
                           {line.speaker && (
-                            <span className="font-bold text-[#0279C3] mr-1">{line.speaker}:</span>
+                            <span className="font-bold text-[#0072BC] mr-1">{line.speaker}:</span>
                           )}
                           {line.text}
                         </p>
@@ -201,7 +201,7 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
         })}
       </div>
 
-      <div className="mt-8 p-4 rounded-lg bg-[#f4faee] border-2 border-[#8FC412]/40">
+      <div className="mt-8 p-4 rounded-lg bg-[#DAF6EB]/30 border-2 border-[#32C189]/40">
         <p className="text-sm text-gray-600 text-center">
           {t('exercise.clickLineToListen')}
         </p>

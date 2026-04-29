@@ -115,7 +115,7 @@ export function GrammarTable({
                     <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 min-w-[5rem] md:min-w-[7rem]">
                       <div className="flex items-center justify-between gap-1">
                         <span>{row.pronoun}</span>
-                        <Volume2 className="w-3.5 h-3.5 text-[#8FC412] opacity-60 flex-shrink-0" />
+                        <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
                       </div>
                     </td>
                     {row.cells.map((cell, cIdx) => (
@@ -176,7 +176,7 @@ export function GrammarTable({
             >
               <div className="flex items-center justify-center gap-2">
                 <p className="text-sm md:text-base font-semibold text-gray-800">{note}</p>
-                <Volume2 className="w-3.5 h-3.5 text-[#8FC412] opacity-60 flex-shrink-0" />
+                <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
               </div>
               <InlineTranslation text={note} visible={revealedNotes.has(i)} />
             </div>

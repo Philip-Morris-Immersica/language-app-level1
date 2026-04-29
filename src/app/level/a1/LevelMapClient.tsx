@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, Play, BookOpen, ClipboardCheck, Languages } from 'lucide-react';
 import { useT } from '@/i18n/useT';
+import { PlatformLegend } from '@/components/PlatformLegend';
 
 interface LessonProgress {
   completed: number;
@@ -85,7 +86,7 @@ function ProgressRing({ percent, size = 48 }: { percent: number; size?: number }
         fill="none" stroke="currentColor" strokeWidth={stroke}
         strokeLinecap="round"
         strokeDasharray={circumference} strokeDashoffset={offset}
-        className="text-[#8FC412] transition-all duration-700"
+        className="text-[#32C189] transition-all duration-700"
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
       <text x="50%" y="50%" textAnchor="middle" dy=".35em"
@@ -117,19 +118,17 @@ function LessonCard({
   const isDone = total > 0 && completed >= total;
 
   const borderClass = isDone
-    ? 'border-[#8FC412]'
+    ? 'border-[#32C189]'
     : isStarted
-      ? 'border-[#0279C3]/40'
+      ? 'border-[#0072BC]/40'
       : 'border-gray-200';
-  const bgClass = isDone
-    ? 'bg-gradient-to-br from-[#f0fad4] to-white'
-    : 'bg-white';
+  const bgClass = 'bg-white';
 
   return (
     <div className={`rounded-2xl border-2 ${borderClass} ${bgClass} overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col relative`}>
       {isDone && (
         <div className="absolute top-3 right-3 z-10">
-          <div className="w-6 h-6 bg-[#8FC412] rounded-full flex items-center justify-center shadow-sm">
+          <div className="w-6 h-6 bg-[#32C189] rounded-full flex items-center justify-center shadow-sm">
             <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
           </div>
         </div>
@@ -139,7 +138,7 @@ function LessonCard({
         <div className="flex items-center gap-3 mb-3">
           <div className={`
             w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0 shadow-sm
-            ${isDone ? 'bg-[#8FC412]' : isStarted ? 'bg-[#0279C3]' : 'bg-gray-300'}
+            ${isDone ? 'bg-[#32C189]' : isStarted ? 'bg-[#0072BC]' : 'bg-gray-300'}
           `}>
             {number}
           </div>
@@ -162,7 +161,7 @@ function LessonCard({
             <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-700 ${
-                  isDone ? 'bg-[#8FC412]' : isStarted ? 'bg-[#0279C3]' : 'bg-gray-200'
+                  isDone ? 'bg-[#32C189]' : isStarted ? 'bg-[#0072BC]' : 'bg-gray-200'
                 }`}
                 style={{ width: `${percent}%` }}
               />
@@ -179,9 +178,9 @@ function LessonCard({
           className={`
             w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold transition-all
             ${isDone
-              ? 'bg-[#8FC412]/10 text-[#6A940C] hover:bg-[#8FC412]/20'
+              ? 'bg-[#DAF6EB]/50 text-[#1F5741] hover:bg-[#DAF6EB]'
               : isStarted
-                ? 'bg-[#0279C3] text-white hover:bg-[#026aa8] shadow-sm'
+                ? 'bg-[#0072BC] text-white hover:bg-[#005A8E] shadow-sm'
                 : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border border-gray-200'
             }
           `}
@@ -201,14 +200,14 @@ function LessonCard({
 
 function AlphabetCard({ t }: { t: (key: string) => string }) {
   return (
-    <div className="rounded-2xl border-2 border-[#0279C3]/20 bg-gradient-to-br from-blue-50 to-white overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col">
+    <div className="rounded-2xl border-2 border-[#0072BC]/20 bg-gradient-to-br from-blue-50 to-white overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col">
       <div className="p-4 pb-2 flex-1">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#0279C3] text-white shrink-0 shadow-sm">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#0072BC] text-white shrink-0 shadow-sm">
             <Languages className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] text-[#0279C3]/60 font-medium uppercase tracking-wider">
+            <p className="text-[10px] text-[#0072BC]/60 font-medium uppercase tracking-wider">
               &nbsp;
             </p>
             <h3 className="font-bold text-gray-800 text-[13px] leading-snug">
@@ -231,56 +230,29 @@ function AlphabetCard({ t }: { t: (key: string) => string }) {
   );
 }
 
-function PlatformLegend({ t }: { t: (key: string) => string }) {
-  const items = [
-    { titleKey: 'legend.audio.title', textKey: 'legend.audio.text' },
-    { titleKey: 'legend.dictionary.title', textKey: 'legend.dictionary.text' },
-    { titleKey: 'legend.chatbot.title', textKey: 'legend.chatbot.text' },
-    { titleKey: 'legend.reset.title', textKey: 'legend.reset.text' },
-  ];
-
-  return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 pb-10">
-      <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-gray-100 shadow-sm p-5 lg:p-6">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-          {t('legend.title')}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items.map(({ titleKey, textKey }) => (
-            <div key={titleKey} className="flex flex-col gap-1">
-              <p className="font-semibold text-gray-700 text-sm">{t(titleKey)}</p>
-              <p className="text-xs text-gray-500 leading-relaxed">{t(textKey)}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function TestCard({ testId, label, t }: { testId: string; label: string; t: (key: string) => string }) {
   return (
-    <div className="rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50/30 overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col">
+    <div className="rounded-2xl border-2 border-[#FFC740]/40 bg-white overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col">
       <div className="p-4 pb-2 flex-1">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-400 text-white shrink-0 shadow-sm">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FFC740] text-[#684D0B] shrink-0 shadow-sm">
             <ClipboardCheck className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] text-amber-500 font-medium uppercase tracking-wider">
+            <p className="text-[10px] text-[#684D0B] font-medium uppercase tracking-wider">
               {t('level.test')}
             </p>
-            <h3 className="font-bold text-amber-800 text-[13px] leading-snug">
+            <h3 className="font-bold text-[#684D0B] text-[13px] leading-snug">
               {label}
             </h3>
           </div>
         </div>
-        <div className="w-full h-1.5 bg-amber-100 rounded-full" />
+        <div className="w-full h-1.5 bg-[#FEF1D1] rounded-full" />
       </div>
       <div className="px-4 pb-4 pt-2">
         <Link
           href={`/tests/${testId}`}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-200 transition-all"
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold bg-[#FEF1D1] text-[#684D0B] hover:bg-[#FFC740]/30 border border-[#FFC740]/40 transition-all"
         >
           <Play className="w-3.5 h-3.5" />
           {t('level.start')}
@@ -329,7 +301,7 @@ export function LevelMapClient() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 border-4 border-[#8FC412] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#32C189] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -349,7 +321,7 @@ export function LevelMapClient() {
 
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#0279C3]">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#0072BC]">
                 {t('level.title')}
               </h1>
               <p className="text-gray-500 text-sm mt-1">
@@ -366,7 +338,7 @@ export function LevelMapClient() {
             </div>
             <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#8FC412] to-[#a8d94e] rounded-full transition-all duration-700"
+                className="h-full bg-gradient-to-r from-[#32C189] to-[#7DE0B9] rounded-full transition-all duration-700"
                 style={{ width: `${overallPercent}%` }}
               />
             </div>
@@ -426,8 +398,8 @@ export function LevelMapClient() {
         </div>
       </div>
 
-      {/* Platform legend */}
-      <PlatformLegend t={t} />
+      {/* Platform legend (shared component — also shown on the home page) */}
+      <PlatformLegend />
     </div>
   );
 }

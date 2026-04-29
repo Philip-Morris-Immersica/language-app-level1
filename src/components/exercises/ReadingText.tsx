@@ -78,8 +78,8 @@ function TtsButton({
       onClick={handlePlay}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
         isPlaying
-          ? 'bg-red-500 hover:bg-red-600 text-white'
-          : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+          ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+          : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
       }`}
     >
       {isPlaying ? (
@@ -210,7 +210,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
         <div className="flex justify-end gap-2 mb-6">
           {showDictionary && (
             <Button
-              className="px-5 py-3 md:px-6 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white"
+              className="px-5 py-3 md:px-6 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 bg-[#0072BC] hover:bg-[#05568B] text-white"
               onClick={() => window.dispatchEvent(new CustomEvent('open-vocabulary-drawer'))}
             >
               <span className="text-lg">📖</span>
@@ -220,7 +220,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
           {audioUrl && (
             <Button
               onClick={handlePlayAudio}
-              className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+              className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
             >
               {isPlaying ? (
                 <>
@@ -240,8 +240,8 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
               onClick={handleSequentialListen}
               className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
                 sequentialPlaying
-                  ? 'bg-red-500 hover:bg-red-600 text-white'
-                  : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
               }`}
             >
               {sequentialPlaying ? (
@@ -328,7 +328,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                     </div>
                   </div>
                   <div
-                    className="absolute w-full h-full backface-hidden bg-[#8FC412] rounded-xl p-4 shadow-md flex items-center justify-center"
+                    className="absolute w-full h-full backface-hidden bg-[#32C189] rounded-xl p-4 shadow-md flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
@@ -400,7 +400,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                   ? 'rounded-lg p-2 -mx-2'
                   : `cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
                       playingParaIndex === index
-                        ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                        ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
                         : 'hover:bg-gray-50 border border-transparent'
                     }`
                 }
@@ -439,7 +439,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                   key={item.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                     isCorrect ? 'border-green-400 bg-green-50' :
-                    isWrong ? 'border-red-400 bg-red-50' :
+                    isWrong ? 'border-[#D25A45]/70 bg-[#FCE2DE]/40' :
                     answer !== null && answer !== undefined ? 'border-[#8B9D5F] bg-[#f4faee]' :
                     'border-gray-200 bg-gray-50'
                   }`}
@@ -456,8 +456,8 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                       disabled={checkSubmitted}
                       className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                         answer === true
-                          ? isCorrect ? 'bg-green-500 text-white' : isWrong ? 'bg-red-500 text-white' : 'bg-[#8FC412] text-white'
-                          : 'bg-white border-2 border-gray-300 text-gray-500 hover:border-green-400 hover:text-green-600'
+                          ? isCorrect ? 'bg-[#32C189] text-white' : isWrong ? 'bg-[#D25A45] text-white' : 'bg-[#32C189] text-white'
+                          : 'bg-white border-2 border-gray-300 text-gray-500 hover:border-[#32C189] hover:text-[#32C189]'
                       }`}
                     >
                       ✓
@@ -470,8 +470,8 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                       disabled={checkSubmitted}
                       className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                         answer === false
-                          ? isCorrect ? 'bg-green-500 text-white' : isWrong ? 'bg-red-500 text-white' : 'bg-[#8FC412] text-white'
-                          : 'bg-white border-2 border-gray-300 text-gray-500 hover:border-red-400 hover:text-red-600'
+                          ? isCorrect ? 'bg-[#32C189] text-white' : isWrong ? 'bg-[#D25A45] text-white' : 'bg-[#32C189] text-white'
+                          : 'bg-white border-2 border-gray-300 text-gray-500 hover:border-[#D25A45]/70 hover:text-[#D25A45]'
                       }`}
                     >
                       ✗
@@ -495,13 +495,13 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                 }
               }}
               disabled={!checklist.items.every(item => checkAnswers[item.id] !== null && checkAnswers[item.id] !== undefined)}
-              className="mt-4 bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="mt-4 bg-[#32C189] hover:bg-[#257958] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               {t('exercise.check')}
             </Button>
           ) : (
             <div className={`mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-lg font-bold text-white text-base shadow-md ${
-              checklist.items.every(item => checkAnswers[item.id] === item.isTrue) ? 'bg-[#8FC412]' : 'bg-red-500'
+              checklist.items.every(item => checkAnswers[item.id] === item.isTrue) ? 'bg-[#32C189]' : 'bg-[#D25A45]'
             }`}>
               {checklist.items.every(item => checkAnswers[item.id] === item.isTrue)
                 ? `✓ ${t('exercise.excellent')}`

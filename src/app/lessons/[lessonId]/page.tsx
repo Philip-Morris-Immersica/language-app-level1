@@ -61,6 +61,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   const vocabulary = lessonData.content?.vocabulary || [];
+  const hasGrammarReference = !!(lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0);
 
   return (
     <LessonLayout>
@@ -72,6 +73,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           title={metadata.title}
           description={lessonData.description}
           grammarTopics={lessonData.grammarTopics}
+          hasGrammarReference={hasGrammarReference}
         />
 
         {/* Lesson intro — translatable */}
@@ -114,6 +116,18 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </>
           )}
         </LessonExercisesProvider>
+
+        {/* Back-to-grammar-reference link — anchors to GrammarReferenceSection's #grammar-reference */}
+        {hasGrammarReference && (
+          <div className="flex justify-end pt-2">
+            <a
+              href="#grammar-reference"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-colors border border-indigo-200"
+            >
+              <T k="lesson.grammarReferenceLink" />
+            </a>
+          </div>
+        )}
 
         {/* Navigation */}
         <LessonNav

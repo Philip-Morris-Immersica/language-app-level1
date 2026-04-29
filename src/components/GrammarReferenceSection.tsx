@@ -78,7 +78,7 @@ export function GrammarReferenceSection({ notes }: GrammarReferenceSectionProps)
   const sectionHint = SECTION_HINT[lang] || SECTION_HINT['en'];
 
   return (
-    <div className="rounded-2xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-purple-50 overflow-hidden shadow-sm">
+    <div id="grammar-reference" className="rounded-2xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-purple-50 overflow-hidden shadow-sm scroll-mt-20">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-indigo-100/50 transition-colors cursor-pointer"

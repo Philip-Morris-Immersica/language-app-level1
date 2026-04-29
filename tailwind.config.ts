@@ -50,27 +50,38 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        // UNHCR theme colors
+        // UNHCR official color ramps (6 steps each, from lightest to darkest)
+        unhcr: {
+          blue:   { 1: "#CDE3F1", 2: "#8FC1E1", 3: "#4F9ED0", 4: "#0072BC", 5: "#05568B", 6: "#0B3754" },
+          green:  { 1: "#DAF6EB", 2: "#7DE0B9", 3: "#32C189", 4: "#2B9C70", 5: "#257958", 6: "#1F5741" },
+          yellow: { 1: "#FEF1D1", 2: "#FFC740", 3: "#E4A202", 4: "#B98405", 5: "#8F6808", 6: "#684D0B" },
+          red:    { 1: "#FCE2DE", 2: "#F9B3A7", 3: "#F67F6A", 4: "#D25A45", 5: "#9C4637", 6: "#683229" },
+          cyan:   { 1: "#D4F3FE", 2: "#6CD8FD", 3: "#01B6F2", 4: "#0493C2", 5: "#087295", 6: "#0B5269" },
+          purple: { 1: "#E7E5F7", 2: "#C3BEED", 3: "#A097E3", 4: "#7E74C2", 5: "#5E578E", 6: "#403C5D" },
+          brown:  { 1: "#EAD9D8", 2: "#D3AFAB", 3: "#BC8580", 4: "#A65B54", 5: "#7C3C36", 6: "#482724" },
+          grey:   { 1: "#E5E5E5", 2: "#BFBFBF", 3: "#999999", 4: "#737373", 5: "#4D4D4D", 6: "#262626" },
+        },
+        // Legacy alias — kept for backward compatibility, mapped to new ramp values
         bolt: {
           primary: {
-            DEFAULT: "#8FC412",  // Учебниково зелено
-            hover: "#7DAD0E",
-            dark: "#6A940C",
+            DEFAULT: "#32C189",
+            hover: "#257958",
+            dark: "#1F5741",
           },
           secondary: {
-            light: "#F5F1E8",    // Бежов/кремав фон
-            DEFAULT: "#B8D45A",  // Светло зелена рамка
-            cream: "#F8F5EE",    // Много светъл крем
+            light: "#F5F1E8",
+            DEFAULT: "#7DE0B9",
+            cream: "#F8F5EE",
           },
           blue: {
-            DEFAULT: "#0279C3",  // UNHCR синьо за заглавия и лого
-            hover: "#0267A3",
-            dark: "#015585",
+            DEFAULT: "#0072BC",
+            hover: "#05568B",
+            dark: "#0B3754",
           },
           green: {
-            button: "#8FC412",   // Зелен за бутони
-            border: "#7DAD0E",   // Рамки
-            light: "#EEF7C8",    // Много светъл зелен фон
+            button: "#32C189",
+            border: "#257958",
+            light: "#DAF6EB",
           },
         },
       },

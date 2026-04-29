@@ -63,7 +63,7 @@ export default function LoginPage() {
               onClick={() => { setTab('login'); setError(''); }}
               className={`flex-1 py-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                 tab === 'login'
-                  ? 'bg-[#8FC412] text-white'
+                  ? 'bg-[#32C189] text-white'
                   : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
               }`}
             >
@@ -74,7 +74,7 @@ export default function LoginPage() {
               onClick={() => { setTab('register'); setError(''); }}
               className={`flex-1 py-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                 tab === 'register'
-                  ? 'bg-[#8FC412] text-white'
+                  ? 'bg-[#32C189] text-white'
                   : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
               }`}
             >
@@ -86,7 +86,7 @@ export default function LoginPage() {
           <div className="px-8 py-8">
             {/* Title */}
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-[#0279C3]">
+              <h1 className="text-2xl font-bold text-[#0072BC]">
                 {tab === 'login' ? t('auth.welcome') : t('auth.createAccount')}
               </h1>
               <p className="text-gray-500 text-sm mt-1">
@@ -106,7 +106,7 @@ export default function LoginPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t('auth.yourName')}
                     required
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8FC412] focus:border-transparent transition"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#32C189] focus:border-transparent transition"
                   />
                 </div>
               )}
@@ -121,7 +121,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="email@example.com"
                   required
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8FC412] focus:border-transparent transition"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#32C189] focus:border-transparent transition"
                 />
               </div>
 
@@ -137,7 +137,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     required
                     minLength={6}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8FC412] focus:border-transparent transition pr-10"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#32C189] focus:border-transparent transition pr-10"
                   />
                   <button
                     type="button"
@@ -152,14 +152,14 @@ export default function LoginPage() {
 
               {/* Error */}
               {error && (
-                <p className="text-sm text-red-600 bg-red-50 px-4 py-2.5 rounded-lg">{error}</p>
+                <p className="text-sm text-[#D25A45] bg-[#FCE2DE]/40 px-4 py-2.5 rounded-lg">{error}</p>
               )}
 
               {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#8FC412] hover:bg-[#7DAD0E] disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2 mt-2"
+                className="w-full bg-[#32C189] hover:bg-[#257958] disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2 mt-2"
               >
                 {loading ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

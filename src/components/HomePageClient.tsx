@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Lock, ArrowRight, BookOpen } from 'lucide-react';
+import { Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
-import { useLanguage } from '@/i18n/LanguageContext';
+import { PlatformLegend } from '@/components/PlatformLegend';
 
+// Level labels are ALWAYS Latin (A1, A2, B1, B2) per UNHCR convention,
+// regardless of the user's UI language.
 const LEVELS = [
-  { code: 'A1', labelBg: 'А1', labelEn: 'A1', href: '/level/a1', available: true },
-  { code: 'A2', labelBg: 'А2', labelEn: 'A2', href: '#', available: false },
-  { code: 'B1', labelBg: 'Б1', labelEn: 'B1', href: '#', available: false },
-  { code: 'B2', labelBg: 'Б2', labelEn: 'B2', href: '#', available: false },
+  { code: 'A1', label: 'A1', href: '/level/a1', available: true  },
+  { code: 'A2', label: 'A2', href: '#',         available: false },
+  { code: 'B1', label: 'B1', href: '#',         available: false },
+  { code: 'B2', label: 'B2', href: '#',         available: false },
 ];
 
 function ProgressBar({ value }: { value: number }) {
@@ -28,67 +30,14 @@ function ProgressBar({ value }: { value: number }) {
 export function HomePageClient() {
   const { user, loading } = useAuth();
   const t = useT();
-  const { lang } = useLanguage();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 border-4 border-[#8FC412] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  // ── GUEST ────────────────────────────────────────────────────────────────
-  if (!user) {
-    return (
-      <div className="min-h-[calc(100vh-56px)] flex flex-col">
-        <div className="flex-1 flex flex-col items-center justify-center px-8 md:px-16 lg:px-24 py-16 text-center bg-white">
-          <div className="flex items-center gap-2 mb-8 px-4 py-2 bg-[#EEF7C8] rounded-full">
-            <span className="text-[#6A940C] font-semibold text-sm">UNHCR</span>
-            <span className="text-gray-500 text-sm">· The UN Refugee Agency</span>
-          </div>
-
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#0279C3] leading-tight mb-4">
-            {t('home.welcome')}
-          </h1>
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-6">
-            {t('home.subtitle')}
-          </h2>
-          <p className="text-gray-500 max-w-xl mb-10 leading-relaxed text-lg">
-            {t('home.description')}
-          </p>
-
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 bg-[#8FC412] hover:bg-[#7DAD0E] text-white font-semibold px-10 py-4 rounded-xl transition-colors shadow-md text-lg"
-          >
-            {t('home.continue')}
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-          <p className="mt-4 text-sm text-gray-400">
-            {t('auth.alreadyHave')}{' '}
-            <Link href="/login" className="text-[#0279C3] hover:underline">
-              {t('auth.loginHere')}
-            </Link>
-          </p>
-        </div>
-
-        <div className="bg-[#8FC412] py-4 px-6 flex items-center justify-center gap-3">
-          <BookOpen className="w-5 h-5 text-white" />
-          <span className="text-white text-sm font-medium">{t('home.statsBar')}</span>
-        </div>
-      </div>
-    );
-  }
-
-  // ── LOGGED IN ────────────────────────────────────────────────────────────
+  // Hooks must run unconditionally — keep this above any early return.
   const [a1Progress, setA1Progress] = useState(0);
-
-  // 11 lessons + 1 alphabet + 6 tests = 18 items, each with equal weight
-  const A1_TOTAL_ITEMS = 18;
 
   useEffect(() => {
     if (!user) return;
+    // 11 lessons + 1 alphabet + 6 tests = 18 items, each weighted equally
+    const A1_TOTAL_ITEMS = 18;
     fetch('/api/progress/summary')
       .then(r => r.json())
       .then(data => {
@@ -102,51 +51,107 @@ export function HomePageClient() {
       .catch(() => {});
   }, [user]);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-4 border-[#32C189] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // ── GUEST ────────────────────────────────────────────────────────────────
+  if (!user) {
+    return (
+      <div className="min-h-[calc(100vh-56px)] flex flex-col bg-white">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 py-12 text-center">
+          {/* Big UNHCR logo above the welcome heading (per Обратна връзка 2). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/unhcr-logo.png"
+            alt="UNHCR"
+            className="mb-8 w-[200px] md:w-[240px] lg:w-[280px] h-auto"
+          />
+
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0072BC] leading-tight mb-6">
+            {t('home.welcome')}
+          </h1>
+
+          <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-3 leading-relaxed">
+            {t('home.subtitle')}
+          </p>
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mb-3 leading-relaxed">
+            {t('home.description')}
+          </p>
+          <p className="text-base md:text-lg text-[#0072BC] font-semibold mb-10">
+            {t('home.wishYouSuccess')}
+          </p>
+
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 bg-[#0072BC] hover:bg-[#005A8E] text-white font-semibold px-10 py-4 rounded-xl transition-colors shadow-md text-lg"
+          >
+            {t('home.continue')}
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <p className="mt-4 text-sm text-gray-400">
+            {t('auth.alreadyHave')}{' '}
+            <Link href="/login" className="text-[#0072BC] hover:underline font-medium">
+              {t('auth.loginHere')}
+            </Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── LOGGED IN ────────────────────────────────────────────────────────────
+  // Layout per Обратна връзка 2:
+  //   1. „Добре дошли, [Name]!"
+  //   2. „Изберете ниво:"
+  //   3. Level cards (UNHCR blue, Latin labels)
+  //   4. Legend below the cards
   return (
     <div className="min-h-[calc(100vh-56px)] bg-white flex flex-col">
       <div className="px-8 md:px-16 lg:px-24 pt-12 pb-6">
-        <h1 className="text-3xl md:text-5xl font-bold text-[#0279C3] mb-2">
+        <h1 className="text-3xl md:text-5xl font-bold text-[#0072BC] mb-2">
           {t('home.welcomeUser')} {user.name}!
         </h1>
-        <p className="text-gray-500 text-base md:text-lg">
-          {t('home.subtitle')}
-        </p>
       </div>
 
-      <div className="flex-1 px-8 md:px-16 lg:px-24 pb-12">
-        <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-5">
-          {t('home.selectLevel')}
+      <div className="px-8 md:px-16 lg:px-24 pb-12">
+        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-5">
+          {t('home.selectLevel')}:
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {LEVELS.map((level) => {
-            const displayLabel = lang === 'bg' ? level.labelBg : level.labelEn;
             const progress = level.code === 'A1' ? a1Progress : 0;
             return level.available ? (
               <Link
                 key={level.code}
                 href={level.href}
-                className="rounded-2xl bg-[#8FC412] text-white p-8 flex flex-col items-center justify-center shadow-md hover:bg-[#7DAD0E] transition-colors"
+                className="rounded-2xl bg-[#0072BC] text-white p-8 flex flex-col items-center justify-center shadow-md hover:bg-[#005A8E] transition-colors"
               >
-                <span className="text-4xl font-bold mb-2">{displayLabel}</span>
+                <span className="text-4xl font-bold mb-2 tracking-wide">{level.label}</span>
                 <span className="text-white/80 text-sm font-medium mb-3">{t('home.progress')}</span>
                 <ProgressBar value={progress} />
-                <span className="mt-2 text-white/60 text-xs">{progress}{t('home.completed')}</span>
+                <span className="mt-2 text-white/70 text-xs">{progress}{t('home.completed')}</span>
               </Link>
             ) : (
               <div
                 key={level.code}
                 className="rounded-2xl bg-gray-100 text-gray-400 p-8 flex flex-col items-center justify-center cursor-not-allowed"
               >
-                <span className="text-4xl font-bold mb-4">{displayLabel}</span>
+                <span className="text-4xl font-bold mb-4 tracking-wide">{level.label}</span>
                 <Lock className="w-7 h-7 opacity-40" />
               </div>
             );
           })}
         </div>
-
-        <p className="text-center text-xs text-gray-400 mt-6">{t('home.selectHint')}</p>
       </div>
+
+      {/* Legend appears DIRECTLY below the level cards (Обратна връзка 2). */}
+      <PlatformLegend />
     </div>
   );
 }

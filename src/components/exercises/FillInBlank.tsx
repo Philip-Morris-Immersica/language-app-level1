@@ -162,7 +162,7 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
                   border-2 rounded-lg transition-all uppercase
                   focus:ring-2 focus:ring-[#6B8543] focus:ring-offset-1 focus:outline-none
                   ${validationResult === true ? 'border-green-500 bg-green-50 text-green-700' : ''}
-                  ${validationResult === false ? 'border-red-500 bg-red-50 text-red-700' : ''}
+                  ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40 text-[#683229]' : ''}
                   ${validationResult === null ? 'border-gray-400 bg-white' : ''}
                   ${!isSubmitted ? 'hover:border-[#6B8543]' : ''}
                 `}
@@ -208,13 +208,13 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
             focus:outline-none focus:ring-2 focus:ring-[#6B8543] focus:ring-offset-1
             transition-all
             ${validationResult === true ? 'border-green-500 bg-green-50 text-green-700' : ''}
-            ${validationResult === false ? 'border-red-500 bg-red-50 text-red-700' : ''}
+            ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40 text-[#683229]' : ''}
             ${validationResult === null || validationResult === undefined ? 'border-gray-300 bg-white' : ''}
           `}
           autoComplete="off"
         />
         {isSubmitted && validationResult === false && (
-          <p className="text-sm text-red-600 italic">
+          <p className="text-sm text-[#D25A45] italic">
             Правилен отговор: {sentence.correctAnswers.join(' / ')}
           </p>
         )}
@@ -238,7 +238,7 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
@@ -254,7 +254,7 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
             {Object.values(validation).every(v => v === true) ? (
               <Check className="w-6 h-6 text-green-600" />
             ) : (
-              <X className="w-6 h-6 text-red-600" />
+              <X className="w-6 h-6 text-[#D25A45]" />
             )}
             <p className="text-base font-semibold text-gray-800">
               {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {Object.keys(validation).length} {t('exercise.correct_n')}

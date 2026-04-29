@@ -158,7 +158,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                 bg-white rounded-xl border-2 transition-all
                 ${isImageMode ? 'p-3' : 'p-4 md:p-4'}
                 ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-                ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                ${validation[question.id] === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                 ${validation[question.id] === null || validation[question.id] === undefined ? 'border-gray-200' : ''}
               `}
             >
@@ -181,7 +181,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                         <SelectTrigger className={`
                           w-full h-10 text-sm sm:text-base font-semibold
                           ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-                          ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                          ${validation[question.id] === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                         `}>
                           <SelectValue placeholder={t('exercise.selectOption')} />
                         </SelectTrigger>
@@ -200,7 +200,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                       </p>
                     )}
                     {isSubmitted && validation[question.id] === false && (
-                      <p className="mt-1 text-xs text-red-700 font-semibold flex items-center gap-1">
+                      <p className="mt-1 text-xs text-[#683229] font-semibold flex items-center gap-1">
                         <X className="w-3 h-3" /> {t('exercise.correctLabel')} {question.correctAnswer}
                       </p>
                     )}
@@ -234,7 +234,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                               <SelectTrigger className={`
                                 w-28 md:w-36 h-8 md:h-10 text-sm md:text-base font-semibold
                                 ${validation[question.id] === true ? 'border-green-500 bg-green-50' : ''}
-                                ${validation[question.id] === false ? 'border-red-500 bg-red-50' : ''}
+                                ${validation[question.id] === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                               `}>
                                 <SelectValue placeholder={t('exercise.selectOption')} />
                               </SelectTrigger>
@@ -256,7 +256,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                             <Check className="w-6 h-6 text-green-600 flex-shrink-0" />
                           )}
                           {validation[question.id] === false && (
-                            <X className="w-6 h-6 text-red-600 flex-shrink-0" />
+                            <X className="w-6 h-6 text-[#D25A45] flex-shrink-0" />
                           )}
                         </>
                       );
@@ -279,7 +279,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
@@ -295,7 +295,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
             {Object.values(validation).every(v => v === true) ? (
               <Check className="w-6 h-6 text-green-600" />
             ) : (
-              <X className="w-6 h-6 text-red-600" />
+              <X className="w-6 h-6 text-[#D25A45]" />
             )}
             <p className="text-base font-semibold text-gray-800">
               {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {questions.filter(q => !q.isExample && q.options.length > 0).length} {t('exercise.correct_n')}

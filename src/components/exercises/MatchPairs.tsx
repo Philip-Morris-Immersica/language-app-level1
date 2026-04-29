@@ -150,7 +150,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                 transition-all active:scale-95
                 ${isUsed ? 'opacity-30 cursor-not-allowed border-gray-300 bg-gray-100' : ''}
                 ${!selectedLeft && !isUsed ? 'border-gray-300 bg-white text-gray-500' : ''}
-                ${selectedLeft && !isUsed ? 'border-[#6B7B3F] bg-white hover:border-[#8FC412] hover:bg-[#EEF7C8] cursor-pointer' : ''}
+                ${selectedLeft && !isUsed ? 'border-[#6B7B3F] bg-white hover:border-[#32C189] hover:bg-[#DAF6EB] cursor-pointer' : ''}
               `}
             >
               <MatchRightDisplay value={rightText} />
@@ -191,7 +191,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                     flex items-center justify-center min-h-[52px]
                     transition-all cursor-pointer
                     ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
-                    ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
+                    ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                     ${validationResult === null || validationResult === undefined ? 'border-[#6B7B3F] bg-white hover:bg-gray-50' : ''}
                   `}
                 >
@@ -204,7 +204,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
                     w-full px-4 py-3 rounded-lg border-2 text-center font-medium text-base shadow-sm
                     transition-all cursor-pointer
                     ${isSelected
-                      ? 'border-[#8FC412] bg-[#8FC412] text-white'
+                      ? 'border-[#32C189] bg-[#32C189] text-white'
                       : 'border-gray-300 bg-white text-gray-400 hover:border-[#6B7B3F] hover:bg-gray-50'
                     }
                   `}
@@ -217,7 +217,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
             {isSubmitted && (
               <div className="flex-shrink-0 w-6">
                 {validationResult === true && <Check className="w-6 h-6 text-green-600" />}
-                {validationResult === false && <X className="w-6 h-6 text-red-600" />}
+                {validationResult === false && <X className="w-6 h-6 text-[#D25A45]" />}
               </div>
             )}
           </div>
@@ -245,7 +245,7 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>

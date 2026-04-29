@@ -44,7 +44,7 @@ function HighlightPrepositions({ text }: { text: string }) {
     <>
       {parts.map((part, i) => {
         const lower = part.toLowerCase();
-        if (lower === 'без' || lower === 'няма') return <span key={i} className="text-red-600 font-extrabold">{part}</span>;
+        if (lower === 'без' || lower === 'няма') return <span key={i} className="text-[#D25A45] font-extrabold">{part}</span>;
         if (lower === 'с' || lower === 'със' || lower === 'има') return <span key={i} className="text-green-700 font-extrabold">{part}</span>;
         return <span key={i}>{part}</span>;
       })}
@@ -174,11 +174,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     const colorClass = isPositive
                       ? 'text-green-700'
                       : isNegative
-                      ? 'text-red-600'
+                      ? 'text-[#D25A45]'
                       : isWarning
-                      ? 'text-amber-700 font-extrabold'
+                      ? 'text-[#684D0B] font-extrabold'
                       : isSentence
-                      ? 'text-[#0279C3] font-semibold'
+                      ? 'text-[#0072BC] font-semibold'
                       : 'text-gray-800';
                     return (
                       <div key={lineIndex}>

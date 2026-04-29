@@ -85,7 +85,7 @@ function ProfileMenu() {
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#D25A45] hover:bg-[#FCE2DE]/40 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             {t('auth.logout')}
@@ -99,7 +99,7 @@ function ProfileMenu() {
 export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
   const t = useT();
   return (
-    <header className="sticky top-0 z-50 bg-[#8FC412] text-white py-2 px-4 shadow-md">
+    <header className="sticky top-0 z-50 bg-[#0072BC] text-white py-2 px-4 shadow-md">
       <div className="flex items-center justify-between gap-2">
 
         {/* Left: hamburger */}
@@ -124,7 +124,7 @@ export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
             className="flex-shrink-0 p-1.5 rounded-lg hover:bg-white/20 transition-colors group"
           >
             <Home
-              className="text-[#0072BC] group-hover:text-[#005a8e] transition-colors"
+              className="text-white group-hover:text-white/80 transition-colors"
               style={{ width: 28, height: 28 }}
             />
           </Link>
@@ -133,7 +133,7 @@ export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
           <Link href="/" className="flex items-center gap-4 min-w-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/unhcr-logo.png"
+              src="/unhcr-logo-white.png"
               alt="UNHCR"
               style={{ height: '31px', width: 'auto', flexShrink: 0 }}
             />

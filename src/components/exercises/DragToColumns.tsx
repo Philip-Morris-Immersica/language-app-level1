@@ -59,7 +59,7 @@ function ColumnDropZone({
           <div key={index} className="relative">
             <div
               className={`bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-center font-medium text-gray-700 ${
-                !submitted && onRemove ? 'cursor-pointer hover:bg-red-50 hover:border-red-300 active:scale-95 transition-all' : ''
+                !submitted && onRemove ? 'cursor-pointer hover:bg-[#FCE2DE]/40 hover:border-[#D25A45]/50 active:scale-95 transition-all' : ''
               }`}
               onClick={() => !submitted && onRemove && onRemove(item)}
               title={!submitted && onRemove ? 'Натиснете, за да върнете' : undefined}
@@ -484,7 +484,7 @@ export function DragToColumns({
             <Button
               onClick={handleSubmit}
               disabled={!allItemsPlaced}
-              className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="bg-[#32C189] hover:bg-[#257958] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               {t('exercise.check')}
             </Button>
@@ -501,7 +501,7 @@ export function DragToColumns({
           <>
             <div
               className={`px-5 py-3 rounded-lg font-bold text-white text-base shadow-md ${
-                isCorrect ? 'bg-[#8FC412]' : 'bg-red-500'
+                isCorrect ? 'bg-[#32C189]' : 'bg-[#D25A45]'
               }`}
             >
               {isCorrect ? `✓ ${t('exercise.excellent')}` : `✗ ${t('exercise.incorrect')}`}

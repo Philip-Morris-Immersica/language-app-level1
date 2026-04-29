@@ -101,7 +101,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
               model.isTrue ? 'bg-gray-200 border-gray-400 text-green-700' : 'bg-white border-gray-300 text-green-600'
             }`}>да</span>
             <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center ${
-              !model.isTrue ? 'bg-gray-200 border-gray-400 text-red-700' : 'bg-white border-gray-300 text-red-600'
+              !model.isTrue ? 'bg-gray-200 border-gray-400 text-[#683229]' : 'bg-white border-gray-300 text-[#D25A45]'
             }`}>не</span>
           </div>
         </div>
@@ -120,7 +120,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
                   sentence.isTrue ? 'bg-green-100 border-green-400 text-green-800' : 'bg-white border-gray-300 text-green-600'
                 }`}>да</span>
                 <span className={`w-10 h-10 rounded-lg font-bold text-base border-2 flex items-center justify-center not-italic ${
-                  !sentence.isTrue ? 'bg-red-100 border-red-400 text-red-800' : 'bg-white border-gray-300 text-red-600'
+                  !sentence.isTrue ? 'bg-[#FCE2DE] border-[#D25A45]/70 text-[#683229]' : 'bg-white border-gray-300 text-[#D25A45]'
                 }`}>не</span>
               </div>
             </div>
@@ -136,7 +136,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
             key={sentence.id}
             className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-colors ${
               isAnsweredCorrectly ? 'border-green-400 bg-green-50' :
-              isAnsweredWrongly   ? 'border-red-400 bg-red-50' :
+              isAnsweredWrongly   ? 'border-[#D25A45]/70 bg-[#FCE2DE]/40' :
                                     'border-gray-200 bg-white'
             }`}
           >
@@ -154,7 +154,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
                     ? checked
                       ? sentence.isTrue
                         ? 'bg-green-100 border-green-500 text-green-800'
-                        : 'bg-red-100 border-red-500 text-red-800'
+                        : 'bg-[#FCE2DE] border-[#D25A45] text-[#683229]'
                       : 'bg-gray-200 border-gray-400 text-green-700 scale-105'
                     : 'bg-white border-gray-300 text-green-600 hover:border-green-400 hover:bg-gray-50'
                   }`}
@@ -169,10 +169,10 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
                   ${answer === 'false'
                     ? checked
                       ? !sentence.isTrue
-                        ? 'bg-green-100 border-green-500 text-red-700'
-                        : 'bg-red-100 border-red-500 text-red-800'
-                      : 'bg-gray-200 border-gray-400 text-red-700 scale-105'
-                    : 'bg-white border-gray-300 text-red-600 hover:border-red-400 hover:bg-gray-50'
+                        ? 'bg-green-100 border-green-500 text-[#683229]'
+                        : 'bg-[#FCE2DE] border-[#D25A45] text-[#683229]'
+                      : 'bg-gray-200 border-gray-400 text-[#683229] scale-105'
+                    : 'bg-white border-gray-300 text-[#D25A45] hover:border-[#D25A45]/70 hover:bg-gray-50'
                   }`}
               >
                 не
@@ -201,7 +201,7 @@ export function TrueFalse({ sentences, imageUrl, model, onComplete, exerciseId }
         <Button
           onClick={handleCheck}
           disabled={!allAnswered}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+          className="bg-[#32C189] hover:bg-[#257958] text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           {t('exercise.check')}
         </Button>

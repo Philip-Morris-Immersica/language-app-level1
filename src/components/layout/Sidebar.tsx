@@ -66,7 +66,7 @@ function ProgressRing({
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            className="text-[#8FC412] transition-all duration-500"
+            className="text-[#32C189] transition-all duration-500"
           />
         )}
       </svg>
@@ -144,7 +144,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       className={`
                         flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all text-sm font-medium
                         ${active
-                          ? 'bg-[#EEF7C8] text-[#2D2D2D] border-l-4 border-[#8FC412]'
+                          ? 'bg-[#CDE3F1] text-[#2D2D2D] border-l-4 border-[#0072BC]'
                           : 'text-[#2D2D2D] hover:bg-gray-200'
                         }
                       `}
@@ -152,7 +152,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       <span
                         className={`
                           flex-shrink-0 w-[30px] h-[30px] rounded-full flex items-center justify-center text-xs font-bold
-                          ${active ? 'bg-[#8FC412] text-white' : 'bg-[#8FC412]/20 text-[#5a8a00]'}
+                          ${active ? 'bg-[#0072BC] text-white' : 'bg-[#CDE3F1] text-[#0072BC]'}
                         `}
                       >
                         А
@@ -176,9 +176,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       className={`
                         flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all text-sm font-medium
                         ${active
-                          ? 'bg-[#EEF7C8] text-[#2D2D2D] border-l-4 border-[#8FC412]'
+                          ? 'bg-[#CDE3F1] text-[#2D2D2D] border-l-4 border-[#0072BC]'
                           : isStarted
-                            ? 'bg-green-50/70 text-[#2D2D2D] hover:bg-green-100'
+                            ? 'bg-[#DAF6EB]/50 text-[#2D2D2D] hover:bg-[#DAF6EB]'
                             : 'text-[#2D2D2D] hover:bg-gray-200'
                         }
                       `}
@@ -186,16 +186,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       {isStarted && !active ? (
                         <ProgressRing percent={isDone ? 100 : percent}>
                           {isDone ? (
-                            <Check className="w-3.5 h-3.5 text-[#5a8a00]" />
+                            <Check className="w-3.5 h-3.5 text-[#1F5741]" />
                           ) : (
-                            <span className="text-[10px] font-bold text-[#5a8a00]">{item.number}</span>
+                            <span className="text-[10px] font-bold text-[#1F5741]">{item.number}</span>
                           )}
                         </ProgressRing>
                       ) : (
                         <span
                           className={`
                             flex-shrink-0 w-[30px] h-[30px] rounded-full flex items-center justify-center text-xs font-bold
-                            ${active ? 'bg-[#8FC412] text-white' : 'bg-gray-300 text-gray-600'}
+                            ${active ? 'bg-[#0072BC] text-white' : 'bg-gray-300 text-gray-600'}
                           `}
                         >
                           {item.number}
@@ -204,7 +204,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       <div className="flex-1 min-w-0">
                         <span className="leading-snug block"><LessonTitle title={item.title} /></span>
                         {isStarted && !active && (
-                          <span className={`text-[10px] ${isDone ? 'text-[#5a8a00]' : 'text-gray-400'}`}>
+                          <span className={`text-[10px] ${isDone ? 'text-[#1F5741]' : 'text-gray-400'}`}>
                             {percent}%
                           </span>
                         )}
@@ -226,15 +226,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       className={`
                         flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all text-sm font-medium
                         ${active
-                          ? 'bg-blue-100 text-blue-900 border-l-4 border-blue-400'
-                          : 'text-blue-700 hover:bg-blue-50'
+                          ? 'bg-[#FEF1D1] text-[#684D0B] border-l-4 border-[#FFC740]'
+                          : 'text-[#684D0B] hover:bg-[#FEF1D1]/70'
                         }
                       `}
                     >
                       <span
                         className={`
                           flex-shrink-0 w-[30px] h-[30px] rounded-md flex items-center justify-center
-                          ${active ? 'bg-blue-400 text-white' : 'bg-blue-100 text-blue-500'}
+                          ${active ? 'bg-[#FFC740] text-[#684D0B]' : 'bg-[#FEF1D1] text-[#684D0B]'}
                         `}
                       >
                         <ClipboardCheck className="w-4 h-4" />

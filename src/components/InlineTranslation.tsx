@@ -19,7 +19,7 @@ export function InlineTranslation({ text, visible, className, translations }: In
   if (!visible || lang === 'bg') return null;
 
   return (
-    <span className={`text-sm text-[#0279C3] font-medium mt-1 block transition-all duration-300 animate-in fade-in slide-in-from-top-1 ${className ?? ''}`}>
+    <span className={`text-sm text-[#0072BC] font-medium mt-1 block transition-all duration-300 animate-in fade-in slide-in-from-top-1 ${className ?? ''}`}>
       {display}
     </span>
   );

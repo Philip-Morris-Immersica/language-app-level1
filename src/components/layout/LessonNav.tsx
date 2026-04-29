@@ -36,7 +36,7 @@ export function LessonNav({ prevLesson, nextLesson, testAvailable, testId }: Les
         {testAvailable && testId && (
           <div className="w-full sm:w-auto">
             <Link href={`/tests/${testId}`}>
-              <Button className="w-full sm:w-auto bg-[#8FC412] hover:bg-[#7DAD0E]">
+              <Button className="w-full sm:w-auto bg-[#32C189] hover:bg-[#257958]">
                 {t('lesson.takeTest')}
               </Button>
             </Link>

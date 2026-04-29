@@ -12,47 +12,97 @@ Standards for the home page, welcome screen, level map, and shared UI elements. 
 
 ## UNHCR Branding
 
-- **Primary color:** `#0072BC` (UNHCR blue). Use as primary action button color, link color, accent.
-- **Logo:** UNHCR logo should be visible and reasonably large (not tiny).
-- **Home button:** The UNHCR logo should act as a home button (link to `/`).
-- **Reference:** https://dataviz.unhcr.org/download/UNHCR_Data_Visualization_Guidelines.pdf (page 4 for color palette).
+- **Primary color:** `#0072BC` (UNHCR blue) — primary action buttons, level cards, headings, accents. Hover variant: `#005A8E`.
+- **Header color:** `#2B9C70` (UNHCR Green 04) — sticky header background.
+- **Green accent:** `#32C189` (UNHCR Green 03) — for audio button borders/text, lesson progress rings, done badges, completed states. Only on small surfaces — NOT for large fills.
+- **Audio buttons style:** `bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]` — white with green outline.
+- **Logo:** UNHCR logo (`/public/unhcr-logo.png`) must be **visible and reasonably large** on the welcome screen — not just in the header. Recommended sizes:
+  - Header: ~31px height
+  - Guest welcome screen: 200–280px width above the heading
+- **Home button:** A separate home icon (or the UNHCR logo) in the header links to `/` and acts as a home button.
+- **Reference:** https://dataviz.unhcr.org/download/UNHCR_Data_Visualization_Guidelines.pdf (page 4 for color palette). Brand assets at https://www.unhcr.org/brand (password: `brand@2026`).
 
 ## Welcome / Home Screen (after login)
 
-After the user logs in and arrives at the level selection screen:
+After the user logs in and arrives at the level selection screen, the page shows EXACTLY:
 
-- Show: „Добре дошли, [Name]!" + „Изберете ниво:" + level cards (A1, A2, B1, B2).
-- Do NOT show: „Изберете ниво, за да продължите обучението си." (redundant subtitle).
-- Below the level cards: **Legend** (виж §Legend section).
+1. „Добре дошли, [Name]!" — heading in UNHCR blue
+2. „Изберете ниво:" — small uppercase label
+3. Four level cards (A1, A2, B1, B2) in **UNHCR blue** with **Latin labels**
+4. **Legend** (виж §Legend section)
+
+Do NOT show on this page:
+- „в платформата за български език" (was `home.subtitle` before login)
+- „Изберете ниво, за да продължите обучението си" (was `home.selectHint`)
+
+The level cards must use `bg-[#0072BC] hover:bg-[#005A8E]` (NOT green). Latin labels (A1, A2, B1, B2) are the same in every UI language — never localize to Cyrillic А1/Б1.
 
 ## Welcome Screen (before login)
 
-Text for the unauthenticated home page:
+Layout (top to bottom, centered):
+
+1. **Big UNHCR logo** (~200–280px wide) above the heading
+2. „Добре дошли!" — heading in UNHCR blue
+3. „Това е платформа за изучаване на български език." — subtitle
+4. „Тук ще намерите безплатни интерактивни уроци, упражнения и тестове за нивата A1, A2, B1 и B2." — description
+5. „Желаем Ви успех!" — closing line in UNHCR blue
+6. Primary „Продължи" button (UNHCR blue) → `/login`
+
+i18n keys: `home.welcome`, `home.subtitle`, `home.description`, `home.wishYouSuccess`, `home.continue` — all on 7 languages in `src/i18n/ui.ts`.
+
+The exact Bulgarian copy:
 
 ```
 Добре дошли!
 Това е платформа за изучаване на български език.
-Тук ще намерите безплатни интерактивни уроци, упражнения и тестове за нивата А1, А2, B1 и B2.
-Желаем ви успех!
+Тук ще намерите безплатни интерактивни уроци, упражнения и тестове за нивата A1, A2, B1 и B2.
+Желаем Ви успех!
 ```
 
 ## Legend (Platform Guide)
 
-Location: bottom of the level-selection screen (after login), in [src/app/level/a1/LevelMapClient.tsx](mdc:src/app/level/a1/LevelMapClient.tsx) or a shared component.
+Implemented as a **shared component** [PlatformLegend](mdc:src/components/PlatformLegend.tsx). Used in TWO places:
 
-The legend explains the platform's interactive elements. It must be translated on all 7 languages via `ui.ts`. Contents:
+1. **Logged-in home page** (`HomePageClient.tsx`) — directly below the level cards
+2. **Level overview page** (`LevelMapClient.tsx`) — at the bottom
 
-| Element | What to explain |
+Both render the same content from the same component. To change the legend, edit `PlatformLegend.tsx` and the matching `legend.*` keys in `src/i18n/ui.ts`.
+
+The legend explains the platform's interactive elements. Translated on all 7 languages via `ui.ts`. Required items:
+
+| Element | i18n key prefix | What to explain |
+|---|---|---|
+| 🔊 Аудио | `legend.audio` | Натиснете 🔊 до думи/реплики, за да чуете произношението. Натиснете отново за пауза. |
+| 🟢 Слушай | `legend.listen` | Зеленият бутон „Слушай" над дълги текстове/диалози свири цялото аудио. |
+| 📖 Речник | `legend.dictionary` | Бутонът „Речник" в края на някои уроци отваря списък с новите думи. |
+| 💬 AI асистент | `legend.chatbot` | Чатбот иконата отваря AI асистента за практика на български. |
+| 📚 Граматика | `legend.grammar` | Граматическият справочник е достъпен от всеки урок. |
+| 🌍 Култура и начин на живот | `legend.culture` | Раздел „Култура и начин на живот" в края на всеки урок. |
+| ↺ Нов опит | `legend.reset` | Бутонът „Нов опит" изчиства всички отговори. |
+
+Когато добавяш нов интерактивен елемент в платформата, който потребителят трябва да открие сам, добави го към легендата. Не оставяй обяснения на елементи разпръснати в инструкции на упражнения — мястото за тях е в легендата (виж feedback Обратна връзка 2).
+
+### Visual previews — show the REAL button, not just an emoji
+
+Всеки елемент в легендата ТРЯБВА да рендерира **миниатюрно копие на реалния бутон/икона** (същите цветове, форма, lucide-react иконка, ring), а НЕ просто emoji в заглавието. Потребителят разпознава бутона визуално, не по описание. Стандартни preview-та (виж `PlatformLegend.tsx`):
+
+| Item | Real preview |
 |---|---|
-| 🔊 icon | Clicking it reads the word/phrase aloud |
-| Green „Слушай" button | Plays the full audio for a text or dialogue |
-| Dictionary icon | Opens the built-in dictionary for the current word |
-| Chatbot button | Opens the AI language assistant (external link) |
-| Grammar menu | Access to the grammar reference |
-| Culture menu | Access to culture & lifestyle notes |
-| Reset button | Resets all answers in the current exercise |
+| Audio | `Volume2` icon в сив `bg-gray-50` квадрат (както върху картите) |
+| Listen | Зелен pill бутон: `bg-white border-2 border-[#32C189] text-[#1F5741]` + `Play` icon + локализиран label „Слушай" (от `exercise.listen`) |
+| Dictionary | Кръгъл син FAB: `bg-[#0072BC]` + `BookOpen` + `ring-4 ring-[#D25A45]` |
+| Chatbot | Кръгъл `<img src="/robi.jpg">` с `ring-4 ring-[#D25A45]` |
+| Grammar | Indigo pill: `bg-indigo-50 text-indigo-700 border-indigo-200` + `BookText` icon + label от `lesson.grammarReferenceLink` |
+| Culture | Златен акордеон: `bg-[#FEF1D1] border-2 border-[#FFC740]/60` + 🇧🇬 + label |
+| Reset | Outline бутон: `border-2 border-gray-300 bg-white` + `RotateCcw` icon + label от `exercise.reset` |
 
-Screenshot images in the legend stay universal (no translation needed); only the text labels are translated.
+Когато променяш визуален стил на реален бутон в платформата, обнови и съответния preview в `PlatformLegend.tsx`, за да остане синхрон.
+
+### Type sizes (legend)
+- Section header (`legend.title`): `text-base sm:text-lg`, `font-semibold`, UNHCR blue (`#0072BC`), uppercase, tracking-wider.
+- Item title: `text-base sm:text-lg`, `font-semibold`, `text-gray-800` — emoji се **премахва** автоматично от началото (рендерираме реален preview).
+- Item description: `text-sm sm:text-[0.95rem]`, `text-gray-600`, `leading-relaxed`.
+- Layout: 1 колона на mobile, 2 колони от `md:` нагоре (всяка legend позиция има достатъчно място за preview + текст).
 
 ## Audio UX Standard
 
@@ -66,6 +116,6 @@ Every interactive exercise must have a **Reset** button that clears all user ans
 
 ## Info Box (Grammar Highlight)
 
-For grammar notes that need visual prominence (not just a subtitle), use the `GrammarHighlight` component. It renders as a **green rounded box with ℹ icon**. Translated via `textKey` in `ui.ts`.
+For grammar notes that need visual prominence (not just a subtitle), use the `GrammarHighlight` component. It renders as a **white card with a green left border (4px) and ℹ icon** — light and clean, not heavy. Translated via `textKey` in `ui.ts`.
 
 Example usage: the с/със rule (урок 2 упр. 12), the million/milliard rule (урок 5 упр. 31).

@@ -220,8 +220,8 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                 onClick={handleSequentialListen}
                 className={`px-5 py-2.5 rounded-lg font-semibold text-sm md:text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
                   sequentialPlaying
-                    ? 'bg-red-500 hover:bg-red-600 text-white'
-                    : 'bg-[#8FC412] hover:bg-[#7DAD0E] text-white'
+                    ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                    : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
                 }`}
               >
                 {sequentialPlaying ? (
@@ -261,12 +261,12 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
               }}
               className={`cursor-pointer rounded-lg p-3 -mx-1 transition-colors active:scale-[0.99] ${
                 playingParaIndex === i
-                  ? 'bg-[#f4faee] border border-[#8FC412]/40'
+                  ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
                   : 'hover:bg-gray-50 border border-transparent'
               }`}
             >
               {para.speaker && (
-                <p className="text-xs font-bold text-[#0279C3] mb-1">{para.speaker}</p>
+                <p className="text-xs font-bold text-[#0072BC] mb-1">{para.speaker}</p>
               )}
               <p className="text-base md:text-lg text-gray-800 leading-relaxed">{para.text}</p>
               <InlineTranslation text={para.text} visible={revealedParas.has(i)} />
@@ -278,7 +278,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
       {tables.map((table, ti) => (
         <div key={ti}>
           {table.name && (
-            <h4 className="text-sm md:text-base font-bold text-[#0279C3] mb-3">
+            <h4 className="text-sm md:text-base font-bold text-[#0072BC] mb-3">
               {table.name}
             </h4>
           )}
@@ -291,7 +291,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                   {table.columns.map((col, ci) => (
                     <th
                       key={ci}
-                      className="border border-gray-200 px-3 py-2 text-center font-bold text-[#0279C3]"
+                      className="border border-gray-200 px-3 py-2 text-center font-bold text-[#0072BC]"
                     >
                       {COLUMN_KEY_MAP[col] ? t(COLUMN_KEY_MAP[col]) : col}
                     </th>
@@ -321,7 +321,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                           key={ci}
                           className={`border border-gray-200 px-2 py-1.5 text-center ${
                             validation[key] === true ? 'bg-green-50' : ''
-                          }${validation[key] === false ? 'bg-red-50' : ''}`}
+                          }${validation[key] === false ? 'bg-[#FCE2DE]/40' : ''}`}
                         >
                           <div className="flex items-center justify-center gap-1">
                             <Select
@@ -331,7 +331,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                               <SelectTrigger className={`
                                 w-full min-w-[80px] h-8 text-xs md:text-sm font-medium
                                 ${validation[key] === true ? 'border-green-500 bg-green-50' : ''}
-                                ${validation[key] === false ? 'border-red-500 bg-red-50' : ''}
+                                ${validation[key] === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                               `}>
                                 <SelectValue placeholder="—" />
                               </SelectTrigger>
@@ -344,7 +344,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                               </SelectContent>
                             </Select>
                             {validation[key] === true && <Check className="w-4 h-4 text-green-600 flex-shrink-0" />}
-                            {validation[key] === false && <X className="w-4 h-4 text-red-600 flex-shrink-0" />}
+                            {validation[key] === false && <X className="w-4 h-4 text-[#D25A45] flex-shrink-0" />}
                           </div>
                           {isSubmitted && validation[key] === false && (
                             <p className="text-[10px] md:text-xs text-yellow-700 mt-1">
@@ -365,7 +365,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
@@ -381,7 +381,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
             {correctCount === totalGraded ? (
               <Check className="w-6 h-6 text-green-600" />
             ) : (
-              <X className="w-6 h-6 text-red-600" />
+              <X className="w-6 h-6 text-[#D25A45]" />
             )}
             <p className="text-base font-semibold text-gray-800">
               {t('exercise.result')} {correctCount} / {totalGraded} {t('exercise.correct_n')}

@@ -189,8 +189,8 @@ export function WorkbookFillBlank({
                     placeholder="..."
                     className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-base font-medium focus:outline-none min-w-[6rem]
                       ${isSubmitted && blankOk !== null
-                        ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
-                        : 'border-[#0279C3] focus:border-[#025a93]'
+                        ? blankOk ? 'border-green-500 text-green-700' : 'border-[#D25A45]/70 text-[#683229]'
+                        : 'border-[#0072BC] focus:border-[#025a93]'
                       }`}
                   />
                 );
@@ -207,7 +207,7 @@ export function WorkbookFillBlank({
                     ${isSubmitted && blankOk !== null
                       ? blankOk
                         ? 'border-green-500 bg-green-50 text-green-700'
-                        : 'border-red-400 bg-red-50 text-red-700'
+                        : 'border-[#D25A45]/70 bg-[#FCE2DE]/40 text-[#683229]'
                       : 'border-bolt-primary hover:border-bolt-primary-hover'
                     }
                   `}
@@ -235,7 +235,7 @@ export function WorkbookFillBlank({
             </span>
           )}
           {isSubmitted && valid === false && (
-            <span className="ml-2 text-sm text-red-600 italic">
+            <span className="ml-2 text-sm text-[#D25A45] italic">
               ({sentence.correctAnswers.join(' / ')})
             </span>
           )}
@@ -280,8 +280,8 @@ export function WorkbookFillBlank({
                 placeholder="..."
                 className={`inline-block border-b-2 bg-transparent px-1 py-0.5 text-sm font-medium focus:outline-none min-w-[10rem] w-full max-w-[22rem]
                   ${isSubmitted && blankOk !== null
-                    ? blankOk ? 'border-green-500 text-green-700' : 'border-red-400 text-red-700'
-                    : 'border-[#8FC412] focus:border-[#0279C3]'
+                    ? blankOk ? 'border-green-500 text-green-700' : 'border-[#D25A45]/70 text-[#683229]'
+                    : 'border-[#32C189] focus:border-[#0072BC]'
                   }`}
               />
             );
@@ -295,7 +295,7 @@ export function WorkbookFillBlank({
                 inline-block border-b-2 rounded px-1 py-0.5 text-sm font-medium bg-white
                 focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
                 ${isSubmitted && blankOk !== null
-                  ? blankOk ? 'border-green-500 bg-green-50' : 'border-red-400 bg-red-50'
+                  ? blankOk ? 'border-green-500 bg-green-50' : 'border-[#D25A45]/70 bg-[#FCE2DE]/40'
                   : 'border-bolt-primary'
                 }
               `}
@@ -364,7 +364,7 @@ export function WorkbookFillBlank({
                   inline-block border-b-2 rounded px-1 py-0.5 text-sm md:text-base font-medium bg-white
                   focus:outline-none focus:ring-1 focus:ring-bolt-primary cursor-pointer
                   ${isSubmitted && blankOk !== null
-                    ? blankOk ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700'
+                    ? blankOk ? 'border-green-500 bg-green-50 text-green-700' : 'border-[#D25A45]/70 bg-[#FCE2DE]/40 text-[#683229]'
                     : 'border-[#8B9D5F]'
                   }
                 `}
@@ -388,7 +388,7 @@ export function WorkbookFillBlank({
                 ${isSubmitted && blankOk !== null
                   ? blankOk
                     ? 'border-green-500 text-green-700'
-                    : 'border-red-400 text-red-700'
+                    : 'border-[#D25A45]/70 text-[#683229]'
                   : 'border-[#8B9D5F] focus:border-[#5a7030]'
                 }
               `}
@@ -417,12 +417,12 @@ export function WorkbookFillBlank({
         className={`
           rounded-lg border-2 p-3 md:p-4 transition-all
           ${valid === true ? 'border-green-500 bg-green-50' : ''}
-          ${valid === false ? 'border-red-400 bg-red-50' : ''}
+          ${valid === false ? 'border-[#D25A45]/70 bg-[#FCE2DE]/40' : ''}
           ${valid === null || valid === undefined ? 'border-gray-200 bg-white' : ''}
         `}
       >
         <div className="flex items-start gap-2">
-          <span className="font-bold text-[#0279C3] shrink-0 pt-0.5">{displayNum}.</span>
+          <span className="font-bold text-[#0072BC] shrink-0 pt-0.5">{displayNum}.</span>
           <div className="flex-1 space-y-1">
             <p className="text-base font-semibold text-gray-800">{questionPart}</p>
             <div className="flex flex-wrap items-baseline gap-x-1">
@@ -436,7 +436,7 @@ export function WorkbookFillBlank({
                 </span>
               )}
               {isSubmitted && valid === false && (
-                <span className="ml-1 text-sm text-red-600 italic">
+                <span className="ml-1 text-sm text-[#D25A45] italic">
                   ({sentence.correctAnswers.join(' / ')})
                 </span>
               )}
@@ -485,7 +485,7 @@ export function WorkbookFillBlank({
         <div className="mb-6">
           <div
             onClick={() => speakText(listeningText)}
-            className="rounded-lg border-2 border-[#8FC412] bg-[#f4faee] px-5 py-4 cursor-pointer hover:bg-[#edf5e4] transition-colors active:scale-[0.99]"
+            className="rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-4 cursor-pointer hover:bg-[#DAF6EB] transition-colors active:scale-[0.99]"
           >
             <p className="text-sm md:text-base text-gray-800 leading-relaxed flex items-start gap-2">
               <span className="text-[#4a6b1f] mt-0.5 shrink-0">🔊</span>
@@ -528,7 +528,7 @@ export function WorkbookFillBlank({
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
@@ -547,7 +547,7 @@ export function WorkbookFillBlank({
         const totalCount = filledBlanks.length;
         const allCorrect = totalCount > 0 && correctCount === totalCount;
         return (
-          <div className="mt-6 p-4 rounded-lg bg-[#EEF7C8] animate-in fade-in duration-300">
+          <div className="mt-6 p-4 rounded-lg bg-[#DAF6EB] animate-in fade-in duration-300">
             <div className="flex items-center gap-2">
               {allCorrect ? (
                 <Check className="w-5 h-5 text-green-600" />

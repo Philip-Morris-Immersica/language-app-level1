@@ -63,7 +63,7 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle }: Exerci
   const displayInstruction = instructionKey ? t(instructionKey) : translatedInstruction;
   return (
     <div className="mb-5 pb-4 border-b border-gray-100">
-      <h3 className="text-[#0279C3] font-bold text-xl md:text-2xl leading-tight">
+      <h3 className="text-[#0072BC] font-bold text-xl md:text-2xl leading-tight">
         {translatedTitle}
       </h3>
       {instruction && (

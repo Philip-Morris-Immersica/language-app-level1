@@ -17,8 +17,8 @@ export function GrammarHighlight({ highlight }: Props) {
   if (!displayText && !highlight.examples?.length) return null;
 
   return (
-    <div className="mb-5 flex gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">
-      <Info className="mt-0.5 h-4 w-4 shrink-0 text-green-600" aria-hidden />
+    <div className="mb-5 flex gap-3 rounded-r-xl border-0 border-l-[4px] border-l-[#32C189] bg-white shadow-sm px-4 py-3 text-sm text-[#1F5741] ring-1 ring-gray-100">
+      <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#32C189]" aria-hidden />
       <div className="space-y-1.5">
         {displayText && <p>{displayText}</p>}
         {highlight.examples && highlight.examples.length > 0 && (

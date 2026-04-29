@@ -49,7 +49,7 @@ export function LanguageSelector() {
                 setIsOpen(false);
               }}
               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors text-left ${
-                selected.code === l.code ? 'font-semibold text-[#0279C3]' : 'text-gray-700'
+                selected.code === l.code ? 'font-semibold text-[#0072BC]' : 'text-gray-700'
               }`}
             >
               <img

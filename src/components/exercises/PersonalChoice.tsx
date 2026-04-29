@@ -63,7 +63,7 @@ function SentenceWithBlank({
           className={`inline-block px-3 py-0.5 mx-1 rounded-lg font-bold text-base md:text-lg border-2 ${
             isCorrect
               ? 'bg-green-100 text-green-800 border-green-400'
-              : 'bg-red-100 text-red-700 border-red-400'
+              : 'bg-[#FCE2DE] text-[#683229] border-[#D25A45]/70'
           }`}
         >
           {selectedValue}
@@ -77,8 +77,8 @@ function SentenceWithBlank({
               onClick={() => onSelect(opt)}
               className={`px-4 py-1 rounded-lg font-bold text-base border-2 transition-all
                 ${selectedValue === opt
-                  ? 'bg-[#0279C3] text-white border-[#0279C3] scale-105'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#0279C3] hover:text-[#0279C3]'
+                  ? 'bg-[#0072BC] text-white border-[#0072BC] scale-105'
+                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#0072BC] hover:text-[#0072BC]'
                 }
               `}
             >
@@ -176,7 +176,7 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
 
       {model && (
         <div
-          className="bg-[#f0f7ff] border border-[#0279C3]/20 rounded-xl p-4 md:p-5 cursor-pointer"
+          className="bg-[#f0f7ff] border border-[#0072BC]/20 rounded-xl p-4 md:p-5 cursor-pointer"
           onClick={() => {
             const modelText = `${model.question} ${model.positiveAnswer} ${model.negativeAnswer}`;
             const audioPath = exerciseId ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-model`) : '';
@@ -184,7 +184,7 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
             setModelTranslationVisible(v => !v);
           }}
         >
-          <p className="text-xs font-semibold text-[#0279C3] uppercase tracking-wide mb-2">
+          <p className="text-xs font-semibold text-[#0072BC] uppercase tracking-wide mb-2">
             {t('exercise.model')}
           </p>
           <p className="text-base md:text-lg font-bold text-gray-800">
@@ -193,7 +193,7 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
           <p className="text-base md:text-lg text-green-700 font-medium mt-1">
             – {model.positiveAnswer}
           </p>
-          <p className="text-base md:text-lg text-red-600 font-medium">
+          <p className="text-base md:text-lg text-[#D25A45] font-medium">
             – {model.negativeAnswer}
           </p>
           {lang !== 'bg' && (
@@ -227,11 +227,11 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
               className={`rounded-xl border-2 p-4 md:p-5 transition-all duration-300 ${
                 state.phase === 'done'
                   ? state.correct
-                    ? 'bg-[#f4faee] border-[#8BC34A]/40'
-                    : 'bg-red-50/50 border-red-300/40'
+                    ? 'bg-[#DAF6EB]/40 border-[#32C189]/40'
+                    : 'bg-[#FCE2DE]/50 border-[#D25A45]/40'
                   : state.phase === 'fill'
-                  ? 'bg-[#fefce8] border-amber-300/60'
-                  : 'bg-white border-gray-200 hover:border-[#0279C3]/40 hover:shadow-sm'
+                  ? 'bg-[#FEF1D1] border-[#FFC740]/60'
+                  : 'bg-white border-gray-200 hover:border-[#0072BC]/40 hover:shadow-sm'
               }`}
             >
               {/* Question */}
@@ -264,7 +264,7 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex-1 border-red-300 text-red-600 hover:bg-red-50 hover:border-red-500 font-bold text-base md:text-lg py-3"
+                    className="flex-1 border-[#D25A45]/50 text-[#D25A45] hover:bg-[#FCE2DE]/40 hover:border-[#D25A45] font-bold text-base md:text-lg py-3"
                     onClick={() => handlePreference(item.id, 'negative')}
                   >
                     Не
@@ -285,7 +285,7 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
                   />
                   {selections[item.id] && (
                     <Button
-                      className="bg-[#0279C3] hover:bg-[#025f9c] text-white font-semibold px-6 animate-in fade-in duration-200"
+                      className="bg-[#0072BC] hover:bg-[#025f9c] text-white font-semibold px-6 animate-in fade-in duration-200"
                       onClick={() => handleConfirm(item.id)}
                     >
                       {t('exercise.check')}
@@ -329,8 +329,8 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
         <div className="text-center py-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
           <div className={`inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full border ${
             correctCount === items.length
-              ? 'bg-[#f4faee] text-[#2d5a1b] border-[#8BC34A]/40'
-              : 'bg-amber-50 text-amber-800 border-amber-300/40'
+              ? 'bg-[#DAF6EB] text-[#1F5741] border-[#32C189]/40'
+              : 'bg-[#FEF1D1] text-[#684D0B] border-[#FFC740]/40'
           }`}>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

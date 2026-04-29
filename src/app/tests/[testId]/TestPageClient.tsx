@@ -31,7 +31,7 @@ export function TestPageClient({ testData, testId }: TestPageClientProps) {
           <ClipboardCheck className="w-4 h-4" />
           <TranslatedText text={`Максимум: ${testData.totalPoints} точки`} />
         </div>
-        <h1 className="text-3xl font-bold text-[#0279C3]">
+        <h1 className="text-3xl font-bold text-[#0072BC]">
           <TranslatedText text={testData.title} />
         </h1>
         {testData.introText && (
@@ -90,7 +90,7 @@ export function TestPageClient({ testData, testId }: TestPageClientProps) {
             return (
               <Link
                 href={`/lessons/${next.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#0279C3] text-white hover:bg-[#026aa8] shadow-sm transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#0072BC] text-white hover:bg-[#005A8E] shadow-sm transition-all"
               >
                 <TranslatedText text={`Урок ${next.number}: ${next.title}`} />
                 <ArrowRight className="w-4 h-4" />

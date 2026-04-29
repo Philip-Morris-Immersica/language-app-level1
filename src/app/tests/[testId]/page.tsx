@@ -47,7 +47,7 @@ export default async function TestPage({ params }: TestPageProps) {
             <div className="border-t border-gray-100" />
             <a
               href="/lessons/lesson-01"
-              className="inline-flex items-center gap-2 text-sm text-[#8FC412] font-medium hover:underline"
+              className="inline-flex items-center gap-2 text-sm text-[#32C189] font-medium hover:underline"
             >
               ← Обратно към уроците
             </a>

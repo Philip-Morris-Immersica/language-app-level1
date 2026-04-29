@@ -5,16 +5,48 @@ globs: src/components/**
 
 ## Colors
 
-| Role | Hex |
-|---|---|
-| Primary green | `#8FC412` |
-| Primary hover | `#7DAD0E` |
-| Primary dark | `#6A940C` |
-| Secondary light bg | `#EEF7C8` |
-| UNHCR blue | `#0279C3` |
-| UNHCR blue hover | `#0267A3` |
-| Sidebar bg | `#F5F5F5` |
-| Active sidebar item | `#EEF7C8` |
+UNHCR official palette — use the `unhcr.*` Tailwind tokens or the raw hex values below. **Never use Tailwind color names** like `green-500`, `amber-200`, `red-600` etc.
+
+### "Trio" principle — every color family uses exactly 3 steps:
+`01 (light bg)` → `Primary accent` → `AAA text`
+
+| Family | Light bg (01) | Primary accent | AAA text |
+|---|---|---|---|
+| **Blue** (navigation, CTA) | `#CDE3F1` | `#0072BC` | `#05568B` |
+| **Green** (header, audio, done) | `#DAF6EB` | `#32C189` | `#1F5741` |
+| **Yellow** (tests) | `#FEF1D1` | `#FFC740` | `#684D0B` |
+| **Red** (chatbot ring, errors) | `#FCE2DE` | `#D25A45` | `#683229` |
+| **Grey** (structure) | `#E5E5E5` | `#737373` | `#262626` |
+
+### Role → hex mapping
+
+| Role | Hex | Token |
+|---|---|---|
+| Header bg | `#2B9C70` | `unhcr-green-4` |
+| Header hover | `#257958` | `unhcr-green-5` |
+| Primary CTA (buttons) | `#32C189` | `unhcr-green-3` |
+| Primary CTA hover | `#257958` | `unhcr-green-5` |
+| Done badge / progress | `#32C189` | `unhcr-green-3` |
+| Audio button border+text | `#32C189` / `#1F5741` | `unhcr-green-3` / `unhcr-green-6` |
+| Audio button hover bg | `#DAF6EB` | `unhcr-green-1` |
+| UNHCR blue (level cards, links) | `#0072BC` | `unhcr-blue-4` |
+| UNHCR blue hover | `#05568B` | `unhcr-blue-5` |
+| Sidebar active bg | `#CDE3F1` | `unhcr-blue-1` |
+| Sidebar active border | `#0072BC` | `unhcr-blue-4` |
+| Test card accent | `#FFC740` | `unhcr-yellow-2` |
+| Test card text | `#684D0B` | `unhcr-yellow-6` |
+| Test card bg | `#FEF1D1` | `unhcr-yellow-1` |
+| Chatbot/dictionary ring | `#D25A45` | `unhcr-red-4` |
+| Error border | `#D25A45` | `unhcr-red-4` |
+| Error bg | `#FCE2DE` | `unhcr-red-1` |
+| Error text | `#683229` | `unhcr-red-6` |
+| Sidebar bg | `#F5F5F5` | — |
+| Body text | `#262626` | `unhcr-grey-6` |
+
+### Rule: namedColors vs large surfaces
+- **Primary accent** (e.g. `#32C189`, `#FFC740`, `#D25A45`) — for **small surfaces only**: icons, badges, rings, borders, button text. Max width ≈ button.
+- **Light bg (01)** — for hover states, info boxes, card tints.
+- **Exceptions** — 2 permitted large surfaces: `#2B9C70` header + `#0072BC` level cards.
 
 Use these exact values — never approximate with Tailwind color names like `green-500`.
 

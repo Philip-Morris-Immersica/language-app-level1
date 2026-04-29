@@ -281,7 +281,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
                       ? 'bg-[#3d5f06] text-white border-2 border-[#2a4204] shadow-sm'
                       : isNext
                         ? 'bg-yellow-100 text-yellow-900 border-2 border-yellow-400 shadow-lg animate-pulse'
-                        : 'bg-white/90 text-gray-600 border-2 border-[#b8de6f] hover:border-[#8FC412] hover:bg-white'
+                        : 'bg-white/90 text-gray-600 border-2 border-[#7DE0B9] hover:border-[#32C189] hover:bg-white'
                   }
                   ${isShaking ? 'animate-shake' : ''}
                 `}
@@ -315,7 +315,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
             {connected.length} / {total}
           </p>
         ) : (
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#8FC412] text-white rounded-lg font-bold text-base shadow-md">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#32C189] text-white rounded-lg font-bold text-base shadow-md">
             ✓ {t('exercise.excellent')}
           </div>
         )}

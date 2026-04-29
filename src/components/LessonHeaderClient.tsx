@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { BookText } from 'lucide-react';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
 import { markLessonVisited } from '@/lib/progress';
@@ -11,18 +12,20 @@ interface LessonHeaderClientProps {
   title: string;
   description?: string;
   grammarTopics?: string[];
+  /** When true, render a "Граматика на урока" jump link anchoring to #grammar-reference. */
+  hasGrammarReference?: boolean;
 }
 
 function TranslatedTag({ topic }: { topic: string }) {
   const translated = useTranslate(topic);
   return (
-    <span className="px-4 py-1.5 bg-[#EEF7C8] rounded-full text-sm font-medium text-[#6A940C]">
+    <span className="px-4 py-1.5 bg-[#DAF6EB] rounded-full text-sm font-medium text-[#1F5741]">
       {translated}
     </span>
   );
 }
 
-export function LessonHeaderClient({ lessonId, number, title, description, grammarTopics }: LessonHeaderClientProps) {
+export function LessonHeaderClient({ lessonId, number, title, description, grammarTopics, hasGrammarReference }: LessonHeaderClientProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedDescription = useTranslate(description ?? '');
@@ -44,6 +47,17 @@ export function LessonHeaderClient({ lessonId, number, title, description, gramm
           {grammarTopics.map((topic, index) => (
             <TranslatedTag key={index} topic={topic} />
           ))}
+        </div>
+      )}
+      {hasGrammarReference && (
+        <div className="mt-4">
+          <a
+            href="#grammar-reference"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-colors border border-indigo-200"
+          >
+            <BookText className="w-4 h-4" />
+            {t('lesson.grammarReferenceLink')}
+          </a>
         </div>
       )}
     </div>

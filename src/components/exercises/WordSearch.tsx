@@ -96,7 +96,7 @@ export function WordSearch({
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {/* Letter string display */}
-      <div className="bg-white rounded-xl border-2 border-[#8FC412] p-6 mb-6 text-center">
+      <div className="bg-white rounded-xl border-2 border-[#32C189] p-6 mb-6 text-center">
         <p className="text-lg md:text-2xl font-bold text-[#6B8543] tracking-wide break-all">
           {letterString}
         </p>
@@ -124,8 +124,8 @@ export function WordSearch({
                     ${isFound 
                       ? 'bg-green-100 border-green-400 text-green-700 cursor-not-allowed opacity-50' 
                       : isWrong
-                      ? 'bg-red-100 border-red-400 text-red-700 animate-pulse'
-                      : 'bg-white border-[#8FC412] text-gray-800 hover:bg-[#EEF7C8] hover:scale-105 active:scale-95'
+                      ? 'bg-[#FCE2DE] border-[#D25A45]/70 text-[#683229] animate-pulse'
+                      : 'bg-white border-[#32C189] text-gray-800 hover:bg-[#DAF6EB] hover:scale-105 active:scale-95'
                     }
                   `}
                 >
@@ -168,7 +168,7 @@ export function WordSearch({
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>

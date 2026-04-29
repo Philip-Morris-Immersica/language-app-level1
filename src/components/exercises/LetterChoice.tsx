@@ -133,7 +133,7 @@ function DroppableSlot({
   const bgClass = isSubmitted
     ? validation === true
       ? 'bg-green-100 border-green-500 text-green-700'
-      : 'bg-red-100 border-red-500 text-red-700'
+      : 'bg-[#FCE2DE] border-[#D25A45] text-[#683229]'
     : letter
     ? isOver
       ? 'bg-yellow-100 border-yellow-400'
@@ -327,7 +327,7 @@ function PuzzleCard({
               </div>
             ) : (
               <div className="text-center space-y-1">
-                <div className="flex items-center gap-2 text-red-600 justify-center">
+                <div className="flex items-center gap-2 text-[#D25A45] justify-center">
                   <X className="w-5 h-5" />
                   <span className="font-semibold">{wrongText}</span>
                 </div>
@@ -459,7 +459,7 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>
@@ -475,7 +475,7 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
             {Object.values(validation).every(v => v === true) ? (
               <Check className="w-6 h-6 text-green-600" />
             ) : (
-              <X className="w-6 h-6 text-red-600" />
+              <X className="w-6 h-6 text-[#D25A45]" />
             )}
             <p className="text-base font-semibold text-gray-800">
               {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {puzzles.length} {t('exercise.correct_n')}

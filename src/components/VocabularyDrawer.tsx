@@ -19,13 +19,13 @@ function VocabRow({ item, lessonId }: { item: VocabularyItem; lessonId?: string 
         const audioPath = lessonId ? `/assets/${lessonId}/audio/tts/words/${item.id}.mp3` : '';
         playTtsAudio(audioPath, item.bulgarian);
       }}
-      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#EEF7C8] transition-colors text-left group cursor-pointer"
+      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#DAF6EB] transition-colors text-left group cursor-pointer"
     >
-      <Volume2 className="w-4 h-4 text-gray-400 group-hover:text-[#8FC412] shrink-0 transition-colors" />
+      <Volume2 className="w-4 h-4 text-gray-400 group-hover:text-[#32C189] shrink-0 transition-colors" />
       <div className="flex-1 min-w-0">
         <span className="font-semibold text-gray-800">{item.bulgarian}</span>
         {showTranslation && (
-          <span className="text-sm text-[#0279C3] ml-2">— {translated}</span>
+          <span className="text-sm text-[#0072BC] ml-2">— {translated}</span>
         )}
       </div>
     </button>
@@ -75,7 +75,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
       {/* Floating button — bottom-left, mirroring the chatbot on the right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 left-5 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#0279C3] hover:bg-[#025f9a] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ring-[4px] ring-[#8FC412]"
+        className="fixed bottom-5 left-5 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#0072BC] hover:bg-[#025f9a] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ring-[4px] ring-[#D25A45]"
         aria-label={t('exercise.dictionary')}
       >
         <BookOpen className="w-6 h-6 md:w-7 md:h-7" />
@@ -99,7 +99,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#0279C3] to-[#025f9a]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#0072BC] to-[#025f9a]">
           <div className="flex items-center gap-3">
             <BookOpen className="w-6 h-6 text-white" />
             <div>
@@ -118,7 +118,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
         </div>
 
         {/* Hint */}
-        <div className="px-6 py-2 bg-[#EEF7C8] text-xs text-[#4a6b1f] text-center">
+        <div className="px-6 py-2 bg-[#DAF6EB] text-xs text-[#1F5741] text-center">
           🔊 {t('exercise.tapToTranslate')}
         </div>
 

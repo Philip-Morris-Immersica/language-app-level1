@@ -60,7 +60,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
             onClick={() => handleCardClick(card)}
             className={`relative rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
               visitedCards.has(card.id)
-                ? 'bg-green-50 border-[#8FC412]/40'
+                ? 'bg-green-50 border-[#32C189]/40'
                 : 'bg-white border-gray-200'
             }`}
           >

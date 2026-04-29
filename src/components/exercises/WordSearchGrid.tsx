@@ -118,15 +118,15 @@ export function WordSearchGrid({
     const flashValid = flashCells?.valid;
 
     if (inFlash && flashValid === false) {
-      return 'bg-red-200 text-red-800 border-red-300';
+      return 'bg-red-200 text-[#683229] border-[#D25A45]/50';
     }
     if (inFlash && flashValid === true) {
       return 'bg-green-200 text-green-800 border-green-400 scale-105';
     }
     if (isFound) {
-      return 'bg-[#8FC412]/20 text-[#4a6e00] border-[#8FC412] font-bold';
+      return 'bg-[#32C189]/20 text-[#1F5741] border-[#32C189] font-bold';
     }
-    return 'bg-white hover:bg-[#EEF7C8] border-gray-300 text-gray-800 cursor-pointer active:scale-95';
+    return 'bg-white hover:bg-[#DAF6EB] border-gray-300 text-gray-800 cursor-pointer active:scale-95';
   }
 
   const progress = `${foundWords.length}/${hiddenWords.length}`;
@@ -213,7 +213,7 @@ export function WordSearchGrid({
         <Button
           onClick={handleSubmit}
           disabled={isSubmitted}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
+          className="bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 min-h-[48px] active:scale-95 transition-transform rounded-lg"
         >
           {t('exercise.checkAnswers')}
         </Button>

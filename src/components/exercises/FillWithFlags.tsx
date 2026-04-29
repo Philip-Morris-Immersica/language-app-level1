@@ -109,7 +109,7 @@ export function FillWithFlags({
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {/* Model */}
       {modelText && (
-        <div className="mb-6 p-4 bg-white rounded-xl border-2 border-[#8FC412] flex items-center gap-4">
+        <div className="mb-6 p-4 bg-white rounded-xl border-2 border-[#32C189] flex items-center gap-4">
           <div className="flex-1">
             <p className="text-sm font-semibold text-gray-600 mb-1">{t('exercise.model')}</p>
             <p className="text-base md:text-lg text-gray-800">{modelText}</p>
@@ -142,7 +142,7 @@ export function FillWithFlags({
             >
               {/* Header row: number + flag */}
               <div className="flex items-center gap-2">
-                <span className="text-base font-bold text-[#0279C3]">{index + 1}.</span>
+                <span className="text-base font-bold text-[#0072BC]">{index + 1}.</span>
                 <div className="relative w-10 h-7 flex-shrink-0 border border-gray-300 rounded overflow-hidden">
                   <Image
                     src={sentence.flagUrl}
@@ -165,7 +165,7 @@ export function FillWithFlags({
                   <SelectTrigger 
                     className={`w-16 md:w-20 h-8 text-sm ${
                       isSubmitted && verb1Correct === false
-                        ? 'border-red-500 bg-red-50'
+                        ? 'border-[#D25A45] bg-[#FCE2DE]/40'
                         : isSubmitted && verb1Correct === true
                         ? 'border-green-500 bg-green-50'
                         : ''
@@ -194,7 +194,7 @@ export function FillWithFlags({
                   <SelectTrigger 
                     className={`w-16 md:w-20 h-8 text-sm ${
                       isSubmitted && verb2Correct === false
-                        ? 'border-red-500 bg-red-50'
+                        ? 'border-[#D25A45] bg-[#FCE2DE]/40'
                         : isSubmitted && verb2Correct === true
                         ? 'border-green-500 bg-green-50'
                         : ''
@@ -218,7 +218,7 @@ export function FillWithFlags({
                   <SelectTrigger 
                     className={`w-28 md:w-32 h-8 text-sm ${
                       isSubmitted && countryCorrect === false
-                        ? 'border-red-500 bg-red-50'
+                        ? 'border-[#D25A45] bg-[#FCE2DE]/40'
                         : isSubmitted && countryCorrect === true
                         ? 'border-green-500 bg-green-50'
                         : ''
@@ -243,7 +243,7 @@ export function FillWithFlags({
       {/* Submit button */}
       <Button
         onClick={handleSubmit}
-        className="mt-6 bg-[#8FC412] hover:bg-[#7DAD0E] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
+        className="mt-6 bg-[#32C189] hover:bg-[#257958] text-white text-base font-semibold px-8 py-3 w-full sm:w-auto min-h-[48px] active:scale-95 transition-transform rounded-lg"
       >
         {t('exercise.checkAnswers')}
       </Button>

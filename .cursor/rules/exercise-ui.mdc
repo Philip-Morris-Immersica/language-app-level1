@@ -22,14 +22,14 @@ Do NOT add `useTranslate()` inside individual exercise components for titles/ins
 
 Single-answer exercises (one field to check):
 ```tsx
-<Button onClick={handleCheck} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+<Button onClick={handleCheck} className="bg-[#32C189] hover:bg-[#257958] text-white ...">
   {t('exercise.check')}
 </Button>
 ```
 
 Multi-answer exercises (many fields at once):
 ```tsx
-<Button onClick={handleCheck} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+<Button onClick={handleCheck} className="bg-[#32C189] hover:bg-[#257958] text-white ...">
   {t('exercise.checkAnswers')}
 </Button>
 ```
@@ -51,7 +51,7 @@ The reset button must be **always visible** (not hidden behind a condition like 
 
 ```tsx
 <div className="flex justify-end mb-4">
-  <Button onClick={handlePlayAudio} className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white ...">
+  <Button onClick={handlePlayAudio} className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] ...">
     {isPlaying ? (
       <><Pause className="w-5 h-5" />{t('exercise.stop')}</>
     ) : (

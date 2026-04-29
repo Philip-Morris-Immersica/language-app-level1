@@ -28,7 +28,7 @@ function DynamicTranslatedParagraph({ text }: { text: string }) {
     <div className="mb-3 last:mb-0">
       <p className="text-gray-700 leading-relaxed">{text}</p>
       {lang !== 'bg' && translated !== text && (
-        <p className="text-sm text-[#0279C3] mt-1 leading-relaxed italic">{translated}</p>
+        <p className="text-sm text-[#0072BC] mt-1 leading-relaxed italic">{translated}</p>
       )}
     </div>
   );
@@ -43,7 +43,7 @@ function PreTranslatedParagraph({ content }: { content: Record<string, string> }
     <div className="mb-3 last:mb-0">
       <p className="text-gray-700 leading-relaxed">{bgText}</p>
       {localText && (
-        <p className="text-sm text-[#0279C3] mt-1 leading-relaxed italic">{localText}</p>
+        <p className="text-sm text-[#0072BC] mt-1 leading-relaxed italic">{localText}</p>
       )}
     </div>
   );
@@ -59,12 +59,12 @@ function NoteTitle({ title }: { title: string | Record<string, string> }) {
 
   return (
     <div className="mb-2">
-      <h4 className="font-semibold text-amber-800">{bgTitle}</h4>
+      <h4 className="font-semibold text-[#684D0B]">{bgTitle}</h4>
       {typeof title === 'string' && lang !== 'bg' && dynamicTranslation !== title && (
-        <p className="text-xs text-amber-600/80 italic">{dynamicTranslation}</p>
+        <p className="text-xs text-[#B98405]/80 italic">{dynamicTranslation}</p>
       )}
       {typeof title !== 'string' && localTitle && (
-        <p className="text-xs text-amber-600/80 italic">{localTitle}</p>
+        <p className="text-xs text-[#B98405]/80 italic">{localTitle}</p>
       )}
     </div>
   );
@@ -81,21 +81,21 @@ export function CultureSection({ notes }: CultureSectionProps) {
   if (!notes || notes.length === 0) return null;
 
   return (
-    <div className="rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 overflow-hidden shadow-sm">
+    <div className="rounded-2xl border-2 border-[#FFC740]/40 bg-[#FEF1D1]/50 overflow-hidden shadow-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-amber-100/50 transition-colors cursor-pointer"
+        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-[#FEF1D1] transition-colors cursor-pointer"
       >
         <span className="text-2xl">🇧🇬</span>
         <div className="flex-1">
-          <h3 className="font-bold text-amber-900 text-lg">
+          <h3 className="font-bold text-[#684D0B] text-lg">
             Култура и начин на живот
           </h3>
           {lang !== 'bg' && sectionTitle !== 'Култура и начин на живот' && (
-            <p className="text-sm text-amber-700/70">{sectionTitle}</p>
+            <p className="text-sm text-[#684D0B]/70">{sectionTitle}</p>
           )}
         </div>
-        <ChevronDown className={`w-5 h-5 text-amber-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-5 h-5 text-[#B98405] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <div
@@ -105,7 +105,7 @@ export function CultureSection({ notes }: CultureSectionProps) {
         `}
       >
         <div className="overflow-hidden">
-          <div className="px-5 pb-5 pt-1 space-y-5 border-t border-amber-200">
+          <div className="px-5 pb-5 pt-1 space-y-5 border-t border-[#FFC740]/40">
             {notes.map((note) => (
               <div key={note.id}>
                 <NoteTitle title={note.title} />

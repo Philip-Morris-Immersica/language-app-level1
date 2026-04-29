@@ -20,7 +20,7 @@ export function ChatbotWidget() {
       {isOpen && (
         <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[536px] h-[803px] max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2rem)] sm:w-[621px] sm:h-[540px]">
           {/* Panel header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#8FC412] text-white flex-shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#0072BC] text-white flex-shrink-0">
             <div className="flex items-center gap-2">
               <img
                 src="/robi.jpg"
@@ -58,7 +58,7 @@ export function ChatbotWidget() {
             setIsOpen(true);
             setIsPulsing(false);
           }}
-          className="fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden ring-[4px] ring-[#8FC412] focus:outline-none focus:ring-[4px] focus:ring-[#8FC412]"
+          className="fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden ring-[4px] ring-[#D25A45] focus:outline-none focus:ring-[4px] focus:ring-[#D25A45]"
           aria-label="Open AI chat assistant"
         >
           <img
@@ -69,7 +69,7 @@ export function ChatbotWidget() {
 
           {/* Pulse ring */}
           {isPulsing && (
-            <span className="absolute inset-0 rounded-full border-2 border-[#8FC412] animate-ping opacity-60 pointer-events-none" />
+            <span className="absolute inset-0 rounded-full border-2 border-[#D25A45] animate-ping opacity-60 pointer-events-none" />
           )}
         </button>
       )}

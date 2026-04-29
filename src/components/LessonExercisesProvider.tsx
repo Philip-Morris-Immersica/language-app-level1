@@ -56,7 +56,7 @@ export function LessonExercisesProvider({ lessonId, children }: LessonExercisesP
   if (!loaded) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border-4 border-[#8FC412] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#32C189] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

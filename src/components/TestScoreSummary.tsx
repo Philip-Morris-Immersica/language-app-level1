@@ -107,9 +107,9 @@ function buildTierMessages(testTitle: string): Record<'low' | 'mid' | 'high', st
 }
 
 const tierColors: Record<'low' | 'mid' | 'high', { bg: string; border: string; text: string; bar: string }> = {
-  low:  { bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-700',    bar: 'bg-red-400' },
-  mid:  { bg: 'bg-amber-50',  border: 'border-amber-200',  text: 'text-amber-700',  bar: 'bg-amber-400' },
-  high: { bg: 'bg-green-50',  border: 'border-green-200',  text: 'text-green-700',  bar: 'bg-green-500' },
+  low:  { bg: 'bg-[#FCE2DE]',  border: 'border-[#D25A45]/40', text: 'text-[#683229]',  bar: 'bg-[#D25A45]' },
+  mid:  { bg: 'bg-[#FEF1D1]',  border: 'border-[#FFC740]/40', text: 'text-[#684D0B]',  bar: 'bg-[#FFC740]' },
+  high: { bg: 'bg-[#DAF6EB]',  border: 'border-[#32C189]/40', text: 'text-[#1F5741]',  bar: 'bg-[#32C189]' },
 };
 
 interface TestScoreSummaryProps {
@@ -190,7 +190,7 @@ export function TestScoreSummary({ testData }: TestScoreSummaryProps) {
                 const needsWork = sPct < 50;
                 return (
                   <div key={section.id} className="flex items-center gap-3">
-                    <span className={`text-sm font-medium w-48 truncate ${needsWork ? 'text-red-600' : 'text-gray-700'}`}>
+                    <span className={`text-sm font-medium w-48 truncate ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
                       <TranslatedText text={section.name} />
                     </span>
                     <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -199,7 +199,7 @@ export function TestScoreSummary({ testData }: TestScoreSummaryProps) {
                         style={{ width: `${sPct}%` }}
                       />
                     </div>
-                    <span className={`text-sm font-bold w-14 text-right ${needsWork ? 'text-red-600' : 'text-gray-700'}`}>
+                    <span className={`text-sm font-bold w-14 text-right ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
                       {earned}/{total}
                     </span>
                     {!completed && (

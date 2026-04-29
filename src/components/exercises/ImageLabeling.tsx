@@ -134,7 +134,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
 
                   {/* Back - Country name */}
                   <div
-                    className="absolute w-full h-full backface-hidden bg-[#8FC412] rounded-xl p-4 shadow-md flex items-center justify-center"
+                    className="absolute w-full h-full backface-hidden bg-[#32C189] rounded-xl p-4 shadow-md flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
@@ -173,7 +173,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
               className={`
                 relative rounded-xl border-2 p-6 transition-all shadow-sm
                 ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
-                ${validationResult === false ? 'border-red-500 bg-red-50' : ''}
+                ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
                 ${validationResult === null ? 'border-gray-200 bg-white' : ''}
               `}
             >
@@ -226,7 +226,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
                       <Check className="w-5 h-5 text-white" />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-md">
+                    <div className="w-8 h-8 bg-[#D25A45] rounded-full flex items-center justify-center shadow-md">
                       <X className="w-5 h-5 text-white" />
                     </div>
                   )}
@@ -235,7 +235,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
 
               {/* Show correct answer if wrong */}
               {isSubmitted && validationResult === false && (
-                  <p className="mt-3 text-sm text-red-700 font-medium">
+                  <p className="mt-3 text-sm text-[#683229] font-medium">
                   {t('exercise.correctLabel')} {image.correctLabel}
                 </p>
               )}
@@ -247,7 +247,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
       <div className="flex gap-3 mt-6">
         <Button
           onClick={handleSubmit}
-          className="bg-[#8FC412] hover:bg-[#7DAD0E] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
+          className="bg-[#32C189] hover:bg-[#257958] text-base font-semibold px-8 py-6 w-full sm:w-auto min-h-[52px] active:scale-95 transition-transform"
         >
           {t('exercise.check')}
         </Button>
@@ -258,7 +258,7 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
       </div>
 
       {isSubmitted && (
-        <div className="mt-6 p-5 rounded-xl bg-[#EEF7C8] animate-in fade-in duration-300">
+        <div className="mt-6 p-5 rounded-xl bg-[#DAF6EB] animate-in fade-in duration-300">
           <p className="text-base font-semibold text-gray-800">
             {t('exercise.result')} {Object.values(validation).filter(v => v === true).length} / {exercise.images.length} {t('exercise.correct_n')}
           </p>

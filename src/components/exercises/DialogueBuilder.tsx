@@ -60,13 +60,13 @@ function SortableItem({
 
   let borderColor = 'border-gray-200 bg-white';
   if (isLocked) {
-    borderColor = 'border-[#8FC412] bg-[#f4faee]';
+    borderColor = 'border-[#32C189] bg-[#DAF6EB]/30';
   } else if (checked && isCorrect === true) {
     borderColor = 'border-green-400 bg-green-50';
   } else if (checked && isCorrect === false) {
-    borderColor = 'border-red-400 bg-red-50';
+    borderColor = 'border-[#D25A45]/70 bg-[#FCE2DE]/40';
   } else if (isDragging) {
-    borderColor = 'border-[#8FC412] bg-[#f4faee] shadow-lg';
+    borderColor = 'border-[#32C189] bg-[#DAF6EB]/30 shadow-lg';
   }
 
   return (
@@ -86,7 +86,7 @@ function SortableItem({
       </span>
 
       {/* Lock icon for given line */}
-      {isLocked && <Lock className="w-4 h-4 text-[#8FC412] flex-shrink-0" />}
+      {isLocked && <Lock className="w-4 h-4 text-[#32C189] flex-shrink-0" />}
 
       <span className="text-base md:text-lg text-gray-800 leading-snug flex-1">
         <span className="text-gray-400 mr-2">–</span>
@@ -217,7 +217,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
           >
             {/* Section label */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-[#8FC412] text-white rounded-full flex items-center justify-center font-bold text-sm">
+              <span className="w-8 h-8 bg-[#32C189] text-white rounded-full flex items-center justify-center font-bold text-sm">
                 {section.id}
               </span>
               {state.checked && (
@@ -268,7 +268,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
               ) : (
                 <Button
                   onClick={() => handleCheck(section.id)}
-                  className="bg-[#8FC412] hover:bg-[#7DAD0E] text-white flex items-center gap-2"
+                  className="bg-[#32C189] hover:bg-[#257958] text-white flex items-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   {t('exercise.check')}
