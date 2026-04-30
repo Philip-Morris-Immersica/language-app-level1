@@ -32,6 +32,7 @@ export const A1_LESSON_LOADERS: Record<
   'lesson-06': () => import('./lessons/lesson-06'),
   'lesson-07': () => import('./lessons/lesson-07'),
   'lesson-08': () => import('./lessons/lesson-08'),
+  'lesson-09': () => import('./lessons/lesson-09'),
 };
 
 export const A1_TEST_LOADERS: Record<
@@ -116,4 +117,5 @@ export const A1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'lesson-06': 32,
   'lesson-07': 43,
   'lesson-08': 21,
+  'lesson-09': 14,
 };

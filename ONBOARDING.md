@@ -10,16 +10,16 @@ without stepping on each other's toes.
 ## 1. The 60-second mental model
 
 - **One repo, one Next.js app, four CEFR levels.** A1 is in production;
-  A2 is the current focus for the new collaborator; B1 / B2 are skeleton
-  placeholders.
+A2 is the current focus for the new collaborator; B1 / B2 are skeleton
+placeholders.
 - **Templates, types, UI components, i18n, TTS pipeline, and Cursor rules
-  are SHARED.** Add a new exercise type or rule once → it applies to every
-  level automatically.
+are SHARED.** Add a new exercise type or rule once → it applies to every
+level automatically.
 - **Lesson and test CONTENT is per-level.** Each level has its own folder
-  under `src/content/<level>/`. You can write A2 freely without ever
-  touching A1.
+under `src/content/<level>/`. You can write A2 freely without ever
+touching A1.
 - **GitHub is the synchronisation layer.** No copying folders on USB sticks.
-  Everyone clones the same repo, works on a feature branch, opens a PR.
+Everyone clones the same repo, works on a feature branch, opens a PR.
 
 ```
 src/content/
@@ -39,9 +39,9 @@ src/content/
 
 - **Node.js 22.x** (use `nvm` so you pick up the version pinned in `.nvmrc`).
 - **Git** + a GitHub account that has access to
-  `Philip-Morris-Immersica/language-app-level1`.
+`Philip-Morris-Immersica/language-app-level1`.
 - **Cursor** desktop app (any recent version) — Cursor will read `.cursor/rules/`
-  automatically once you open the project folder.
+automatically once you open the project folder.
 
 ### Steps
 
@@ -56,11 +56,13 @@ Then ask the project owner for these three files via a secure channel
 (1Password / Bitwarden / Signal — **never email or chat**) and drop them at
 the project root:
 
-| File | Purpose |
-|---|---|
-| `.env` | Database URL (Neon) |
-| `.env.local` | Google TTS API key + dev secrets |
+
+| File                   | Purpose                                           |
+| ---------------------- | ------------------------------------------------- |
+| `.env`                 | Database URL (Neon)                               |
+| `.env.local`           | Google TTS API key + dev secrets                  |
 | `service-account.json` | Google Cloud service account for the TTS pipeline |
+
 
 Run the dev server:
 
@@ -68,7 +70,7 @@ Run the dev server:
 npm run dev
 ```
 
-Open <http://localhost:3010>. You should see the level selection screen.
+Open [http://localhost:3010](http://localhost:3010). You should see the level selection screen.
 Click **A1** → you should see lessons 0–11 and tests 1–6.
 
 ### Optional but recommended
@@ -91,12 +93,14 @@ We use plain GitHub flow:
 
 **Branch naming convention:**
 
-| Pattern | Example | When |
-|---|---|---|
-| `a2/lesson-NN` | `a2/lesson-01` | New A2 lesson |
-| `a2/test-N` | `a2/test-1` | New A2 test |
-| `fix/<area>` | `fix/tts-numbers` | Fix shared infrastructure |
-| `feat/<area>` | `feat/dialogue-builder-v2` | Cross-level feature |
+
+| Pattern        | Example                    | When                      |
+| -------------- | -------------------------- | ------------------------- |
+| `a2/lesson-NN` | `a2/lesson-01`             | New A2 lesson             |
+| `a2/test-N`    | `a2/test-1`                | New A2 test               |
+| `fix/<area>`   | `fix/tts-numbers`          | Fix shared infrastructure |
+| `feat/<area>`  | `feat/dialogue-builder-v2` | Cross-level feature       |
+
 
 **Daily loop:**
 
@@ -145,20 +149,20 @@ trivially.
 > rules apply 1:1 to A2.
 
 1. **Create the folder** `src/content/a2/lessons/a2-lesson-01/` with five
-   files (use lesson-01 from A1 as a reference for structure):
-   - `metadata.ts` — `id: 'a2-lesson-01'`, number, title, description, grammarTopics, vocabulary
-   - `content.ts` — introduction, dialogues, sections, vocabulary, cultural notes
-   - `exercises.ts` — all in-lesson exercises in PDF order
-   - `workbook.ts` — Преговор exercises
-   - `index.ts` — re-export `lessonData`
+  files (use lesson-01 from A1 as a reference for structure):
+  - `metadata.ts` — `id: 'a2-lesson-01'`, number, title, description, grammarTopics, vocabulary
+  - `content.ts` — introduction, dialogues, sections, vocabulary, cultural notes
+  - `exercises.ts` — all in-lesson exercises in PDF order
+  - `workbook.ts` — Преговор exercises
+  - `index.ts` — re-export `lessonData`
 2. **Register the lesson** in `src/content/a2/index.ts`:
-   - Append a loader to `A2_LESSON_LOADERS`
-   - Append metadata to `A2_LESSONS_METADATA`
-   - Append a sidebar entry to `A2_NAV_ITEMS`
-   - Set the exercise count in `A2_LESSON_EXERCISE_COUNTS`
+  - Append a loader to `A2_LESSON_LOADERS`
+  - Append metadata to `A2_LESSONS_METADATA`
+  - Append a sidebar entry to `A2_NAV_ITEMS`
+  - Set the exercise count in `A2_LESSON_EXERCISE_COUNTS`
 3. **Drop assets** (images, PDFs) under `public/assets/a2-lesson-01/…`.
 4. **Generate TTS:** `npm run tts:generate -- --lesson 01 --model gemini`
-   (the script auto-detects which level the folder belongs to).
+  (the script auto-detects which level the folder belongs to).
 5. **Run the linter:** `npm run content:lint -- --lesson 01`
 6. **Run the dev server,** click through the lesson in the browser, fix issues.
 7. **Commit, push, open PR.**
@@ -171,12 +175,14 @@ sidebar — no other code changes needed.
 A1 keeps un-prefixed IDs (`lesson-XX`) for backward compatibility with the
 production database. **A2 IDs are level-prefixed:**
 
-| Element | Format |
-|---|---|
-| Lesson | `a2-lesson-XX` |
+
+| Element  | Format         |
+| -------- | -------------- |
+| Lesson   | `a2-lesson-XX` |
 | Exercise | `a2-lXX-ex-NN` |
 | Workbook | `a2-lXX-wb-NN` |
-| Test | `test-a2-N` |
+| Test     | `test-a2-N`    |
+
 
 The full table is in `.cursor/rules/content-lessons.mdc`.
 
@@ -197,29 +203,31 @@ If you ever see one of these in `git status`, stop and ask before committing.
 ## 6. Cursor specifics
 
 - The `.cursor/rules/` folder is committed to git, so we share the same AI
-  guardrails. When the project owner adds or refines a rule, you get it
-  with `git pull`.
+guardrails. When the project owner adds or refines a rule, you get it
+with `git pull`.
 - Cursor's chat history (transcripts) is **per-machine**, not shared. If
-  you want to hand off context after a long thinking session, write a
-  short summary into a markdown file in the repo (the project already
-  contains `IMPLEMENTATION_SUMMARY.md`, `FEEDBACK-RESPONSE-FULL.md` —
-  add similar files when needed).
+you want to hand off context after a long thinking session, write a
+short summary into a markdown file in the repo (the project already
+contains `IMPLEMENTATION_SUMMARY.md`, `FEEDBACK-RESPONSE-FULL.md` —
+add similar files when needed).
 - MCP servers are configured per-machine; the project doesn't currently
-  require any.
+require any.
 
 ---
 
 ## 7. Where to look when something breaks
 
-| Symptom | First place to look |
-|---|---|
-| Lesson page 404 | Is the loader registered in `src/content/<level>/index.ts`? |
-| Test page "Съдържанието се подготвя" | Is the test loader registered? Does the folder exist? |
-| Sidebar missing an item | `<LEVEL>_NAV_ITEMS` in the level's index file |
-| Audio not playing | `npm run check:audio`; then check `tts-audio` rule |
-| TypeScript errors after a refactor | `npx tsc --noEmit` — never commit on red |
-| Linter warnings | `npm run content:lint` |
-| Production progress lost | **Stop.** Don't change A1 IDs. Talk to the project owner. |
+
+| Symptom                              | First place to look                                         |
+| ------------------------------------ | ----------------------------------------------------------- |
+| Lesson page 404                      | Is the loader registered in `src/content/<level>/index.ts`? |
+| Test page "Съдържанието се подготвя" | Is the test loader registered? Does the folder exist?       |
+| Sidebar missing an item              | `<LEVEL>_NAV_ITEMS` in the level's index file               |
+| Audio not playing                    | `npm run check:audio`; then check `tts-audio` rule          |
+| TypeScript errors after a refactor   | `npx tsc --noEmit` — never commit on red                    |
+| Linter warnings                      | `npm run content:lint`                                      |
+| Production progress lost             | **Stop.** Don't change A1 IDs. Talk to the project owner.   |
+
 
 ---
 
@@ -236,3 +244,4 @@ npm run tts:generate -- --lesson 04 --model gemini  # generate TTS
 npm run check:audio                 # verify MP3 integrity
 npm run db:studio                   # open Drizzle Studio
 ```
+
