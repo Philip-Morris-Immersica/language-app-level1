@@ -29,10 +29,10 @@ export const exercises: Exercise[] = [
     points: 4,
     displayType: 'default',
     images: [
-      { id: 'televizor', imageUrl: '', correctLabel: 'телевизор' }, // TODO: добави иконка от учебника
-      { id: 'blok',      imageUrl: '', correctLabel: 'блок' },      // TODO: добави иконка от учебника
-      { id: 'kompyutar', imageUrl: '', correctLabel: 'компютър' }, // TODO: добави иконка от учебника
-      { id: 'kashta',    imageUrl: '', correctLabel: 'къща' },      // TODO: добави иконка от учебника
+      { id: 'televizor', imageUrl: '/assets/lesson-09/01-upr-01-kashta-blok/01-televizor.jpg', correctLabel: 'телевизор' },
+      { id: 'blok',      imageUrl: '/assets/lesson-09/01-upr-01-kashta-blok/02-blok.jpg',      correctLabel: 'блок' },
+      { id: 'kompyutar', imageUrl: '/assets/lesson-09/01-upr-01-kashta-blok/03-kompyutar.jpg', correctLabel: 'компютър' },
+      { id: 'kashta',    imageUrl: '/assets/lesson-09/01-upr-01-kashta-blok/04-kashta.jpg',    correctLabel: 'къща' },
     ],
     options: ['блок', 'компютър', 'къща', 'телевизор'],
   } as ImageLabelingExercise,
@@ -47,29 +47,47 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 2,
     cards: [
-      { id: 'stol-nd',      imageUrl: '', label: 'стол' },      // TODO: иконка
-      { id: 'masa-nd',      imageUrl: '', label: 'маса' },      // TODO: иконка
-      { id: 'shkaf-nd',     imageUrl: '', label: 'шкаф' },      // TODO: иконка
-      { id: 'pechka-nd',    imageUrl: '', label: 'печка' },     // TODO: иконка
-      { id: 'hladilnik-nd', imageUrl: '', label: 'хладилник' }, // TODO: иконка
-      { id: 'peralnya-nd',  imageUrl: '', label: 'пералня' },   // TODO: иконка
-      { id: 'leglo-nd',     imageUrl: '', label: 'легло' },     // TODO: иконка
-      { id: 'divan-nd',     imageUrl: '', label: 'диван' },     // TODO: иконка
-      { id: 'spalnya-nd',   imageUrl: '', label: 'спалня' },    // TODO: иконка (тук е мека мебел, не стая)
-      { id: 'garderob-nd',  imageUrl: '', label: 'гардероб' },  // TODO: иконка
-      { id: 'lampa-nd',     imageUrl: '', label: 'лампа' },     // TODO: иконка
-      { id: 'kilim-nd',     imageUrl: '', label: 'килим' },     // TODO: иконка
-      { id: 'cvete-nd',     imageUrl: '', label: 'цвете' },     // TODO: иконка
-      { id: 'vana-nd',      imageUrl: '', label: 'вана' },      // TODO: иконка
-      { id: 'mivka-nd',     imageUrl: '', label: 'мивка' },     // TODO: иконка
-      { id: 'dush-nd',      imageUrl: '', label: 'душ' },       // TODO: иконка
-      { id: 'studena-voda-nd', imageUrl: '', label: 'студена вода' }, // TODO: иконка
-      { id: 'topla-voda-nd',   imageUrl: '', label: 'топла вода' },   // TODO: иконка
-      { id: 'sapun-nd',     imageUrl: '', label: 'сапун' },     // TODO: иконка
-      { id: 'vrata-nd',     imageUrl: '', label: 'врата' },     // TODO: иконка
-      { id: 'prozorec-nd',  imageUrl: '', label: 'прозорец' },  // TODO: иконка
+      { id: 'stol-nd',         imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/01-stol.jpg',          label: 'стол' },
+      { id: 'masa-nd',         imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/02-masa.jpg',          label: 'маса' },
+      { id: 'shkaf-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/03-shkaf.jpg',         label: 'шкаф' },
+      { id: 'pechka-nd',       imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/04-pechka.jpg',        label: 'печка' },
+      { id: 'hladilnik-nd',    imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/05-hladilnik.jpg',     label: 'хладилник' },
+      { id: 'peralnya-nd',     imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/06-peralnya.jpg',      label: 'пералня' },
+      { id: 'leglo-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/07-leglo.jpg',         label: 'легло' },
+      { id: 'divan-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/08-divan.jpg',         label: 'диван' },
+      { id: 'spalnya-nd',      imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/09-spalnya-leglo.jpg', label: 'спалня' },
+      { id: 'garderob-nd',     imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/10-garderob.jpg',      label: 'гардероб' },
+      { id: 'lampa-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/11-lampa.jpg',         label: 'лампа' },
+      { id: 'kilim-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/12-kilim.jpg',         label: 'килим' },
+      { id: 'cvete-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/13-tsvete.jpg',        label: 'цвете' },
+      { id: 'vana-nd',         imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/14-vana.jpg',          label: 'вана' },
+      { id: 'mivka-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/15-mivka.jpg',         label: 'мивка' },
+      { id: 'dush-nd',         imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/16-dush.jpg',          label: 'душ' },
+      { id: 'studena-voda-nd', imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/17-studena-voda.jpg',  label: 'студена вода' },
+      { id: 'topla-voda-nd',   imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/18-topla-voda.jpg',    label: 'топла вода' },
+      { id: 'sapun-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/19-sapun.jpg',         label: 'сапун' },
+      { id: 'vrata-nd',        imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/20-vrata.jpg',         label: 'врата' },
+      { id: 'prozorec-nd',     imageUrl: '/assets/lesson-09/03-novi-dumi-1-mebeli/21-prozorets.jpg',     label: 'прозорец' },
     ],
   } as IllustratedCardsExercise,
+
+  // ══════════════════════════════════════════════════════
+  // НОВИ ДУМИ 2 — Стаи в дома — голяма илюстрация (разрез на къща)
+  // ══════════════════════════════════════════════════════
+  {
+    id: 'l09-novi-dumi-02-image',
+    type: 'grammar_examples',
+    disableTts: true,
+    title: 'Стаите в къщата',
+    instruction: '',
+    order: 3,
+    examples: [
+      {
+        imageUrl: '/assets/lesson-09/05-novi-dumi-2-stai/01-kashta-razorez.jpg',
+        text: '',
+      },
+    ],
+  } as GrammarExamplesExercise,
 
   // ══════════════════════════════════════════════════════
   // НОВИ ДУМИ 2 — Стаи в дома (стр. 83 — илюстрация на къща)
@@ -79,15 +97,15 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: '',
-    order: 3,
+    order: 4,
     cards: [
-      { id: 'balkon-nd',   imageUrl: '', label: 'балкон' },   // TODO: иконка
-      { id: 'spalnya2-nd', imageUrl: '', label: 'спалня' },   // TODO: иконка
-      { id: 'toaletna-nd', imageUrl: '', label: 'тоалетна' }, // TODO: иконка
-      { id: 'banya-nd',    imageUrl: '', label: 'баня' },     // TODO: иконка
-      { id: 'kuhnya-nd',   imageUrl: '', label: 'кухня' },    // TODO: иконка
-      { id: 'koridor-nd',  imageUrl: '', label: 'коридор' },  // TODO: иконка
-      { id: 'hol-nd',      imageUrl: '', label: 'хол' },      // TODO: иконка
+      { id: 'balkon-nd',   imageUrl: '', label: 'балкон' },
+      { id: 'spalnya2-nd', imageUrl: '', label: 'спалня' },
+      { id: 'toaletna-nd', imageUrl: '', label: 'тоалетна' },
+      { id: 'banya-nd',    imageUrl: '', label: 'баня' },
+      { id: 'kuhnya-nd',   imageUrl: '', label: 'кухня' },
+      { id: 'koridor-nd',  imageUrl: '', label: 'коридор' },
+      { id: 'hol-nd',      imageUrl: '', label: 'хол' },
     ],
   } as IllustratedCardsExercise,
 
@@ -100,28 +118,28 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 2',
     instruction: 'Изберете правилния номер за всеки предмет в картинката.',
-    order: 4,
+    order: 5,
     points: 18,
     imageUrl: '/assets/lesson-09/02-upr-02-kashta-kragcheta/01-kashta-kragcheta.jpg',
     questions: [
-      { id: 'q1',  left: '① маса',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '1' },
-      { id: 'q2',  left: '② столове',   options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '2' },
-      { id: 'q3',  left: '③ печка',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '3' },
-      { id: 'q4',  left: '④ шкаф',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '4' },
-      { id: 'q5',  left: '⑤ пералня',   options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '5' },
-      { id: 'q6',  left: '⑥ хладилник', options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '6' },
-      { id: 'q7',  left: '⑦ лампа',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '7' },
-      { id: 'q8',  left: '⑧ спалня',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '8' },
-      { id: 'q9',  left: '⑨ гардероб',  options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '9' },
-      { id: 'q10', left: '⑩ килим',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '10' },
-      { id: 'q11', left: '⑪ лаптоп',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '11' },
-      { id: 'q12', left: '⑫ диван',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '12' },
-      { id: 'q13', left: '⑬ цвете',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '13' },
-      { id: 'q14', left: '⑭ телевизор', options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '14' },
-      { id: 'q15', left: '⑮ вана',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '15' },
-      { id: 'q16', left: '⑯ душ',       options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '16' },
-      { id: 'q17', left: '⑰ мивка',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '17' },
-      { id: 'q18', left: '⑱ врата',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '18' },
+      { id: 'q1',  left: '1. маса',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '1' },
+      { id: 'q2',  left: '2. столове',   options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '2' },
+      { id: 'q3',  left: '3. печка',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '3' },
+      { id: 'q4',  left: '4. шкаф',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '4' },
+      { id: 'q5',  left: '5. пералня',   options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '5' },
+      { id: 'q6',  left: '6. хладилник', options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '6' },
+      { id: 'q7',  left: '7. лампа',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '7' },
+      { id: 'q8',  left: '8. спалня',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '8' },
+      { id: 'q9',  left: '9. гардероб',  options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '9' },
+      { id: 'q10', left: '10. килим',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '10' },
+      { id: 'q11', left: '11. лаптоп',   options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '11' },
+      { id: 'q12', left: '12. диван',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '12' },
+      { id: 'q13', left: '13. цвете',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '13' },
+      { id: 'q14', left: '14. телевизор', options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '14' },
+      { id: 'q15', left: '15. вана',     options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '15' },
+      { id: 'q16', left: '16. душ',      options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '16' },
+      { id: 'q17', left: '17. мивка',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '17' },
+      { id: 'q18', left: '18. врата',    options: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18'], correctAnswer: '18' },
     ],
   } as DropdownMatchExercise,
 
@@ -134,26 +152,52 @@ export const exercises: Exercise[] = [
     type: 'personal_choice',
     title: 'УПРАЖНЕНИЕ 3',
     instruction: 'Опишете къде са мебелите в стаите. Използвайте предлозите: до, над, под, пред, зад, в, между, срещу, близо до, далече от, на.',
-    order: 5,
+    order: 6,
     points: 0,
     imageUrls: ['/assets/lesson-09/02-upr-02-kashta-kragcheta/01-kashta-kragcheta.jpg'],
     model: {
-      question: 'Где е хладилникът?',
+      question: 'Къде е хладилникът?',
       positiveAnswer: 'Хладилникът е до печката.',
       negativeAnswer: '',
     },
-    blankOptions: ['до', 'над', 'под', 'пред', 'зад', 'в', 'между', 'срещу', 'близо до', 'далече от', 'на'],
+    blankOptions: ['до', 'над', 'под', 'пред', 'зад', 'в', 'между', 'срещу', 'около', 'близо до', 'на'],
     items: [
-      { id: 'p1', question: 'Где е печката?',     positiveTemplate: 'Печката е ___ хладилника.',    negativeTemplate: '', positiveBlank: 'до',    negativeBlank: '' },
-      { id: 'p2', question: 'Где е мивката?',     positiveTemplate: 'Мивката е ___ печката.',       negativeTemplate: '', positiveBlank: 'до',    negativeBlank: '' },
-      { id: 'p3', question: 'Где са столовете?',  positiveTemplate: 'Столовете са ___ масата.',     negativeTemplate: '', positiveBlank: 'зад',   negativeBlank: '' },
-      { id: 'p4', question: 'Где е масата?',      positiveTemplate: 'Масата е ___ центъра.',        negativeTemplate: '', positiveBlank: 'в',     negativeBlank: '' },
-      { id: 'p5', question: 'Где е лампата?',     positiveTemplate: 'Лампата е ___ масата.',        negativeTemplate: '', positiveBlank: 'над',   negativeBlank: '' },
-      { id: 'p6', question: 'Где е килимът?',     positiveTemplate: 'Килимът е ___ масата.',        negativeTemplate: '', positiveBlank: 'под',   negativeBlank: '' },
-      { id: 'p7', question: 'Где е диванът?',     positiveTemplate: 'Диванът е ___ хола.',          negativeTemplate: '', positiveBlank: 'в',     negativeBlank: '' },
-      { id: 'p8', question: 'Где е телевизорът?', positiveTemplate: 'Телевизорът е ___ дивана.',   negativeTemplate: '', positiveBlank: 'срещу', negativeBlank: '' },
+      { id: 'kuhnya-1', question: 'В кухнята: Къде е печката?',      positiveTemplate: 'Печката е ___ хладилника.',     negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
+      { id: 'kuhnya-2', question: 'В кухнята: Къде са шкафовете?',   positiveTemplate: 'Шкафовете са ___ печката.',     negativeTemplate: '', positiveBlank: 'над',    negativeBlank: '' },
+      { id: 'kuhnya-3', question: 'В кухнята: Къде е мивката?',      positiveTemplate: 'Мивката е ___ шкафовете.',      negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
+      { id: 'kuhnya-4', question: 'В кухнята: Къде са столовете?',   positiveTemplate: 'Столовете са ___ масата.',      negativeTemplate: '', positiveBlank: 'около',  negativeBlank: '' },
+      { id: 'kuhnya-5', question: 'В кухнята: Къде е масата?',       positiveTemplate: 'Масата е ___ кухнята.',         negativeTemplate: '', positiveBlank: 'в',      negativeBlank: '' },
+      { id: 'spalnya-1', question: 'В спалнята: Къде е вратата?',    positiveTemplate: 'Вратата е ___ стаята.',         negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
+      { id: 'spalnya-2', question: 'В спалнята: Къде е леглото?',    positiveTemplate: 'Леглото е ___ стената.',        negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
+      { id: 'spalnya-3', question: 'В спалнята: Къде е гардеробът?', positiveTemplate: 'Гардеробът е ___ леглото.',     negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
+      { id: 'banya-1',  question: 'В банята: Къде е лампата?',       positiveTemplate: 'Лампата е ___ мивката.',        negativeTemplate: '', positiveBlank: 'над',    negativeBlank: '' },
+      { id: 'banya-2',  question: 'В банята: Къде е килимът?',       positiveTemplate: 'Килимът е ___ душа.',           negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
+      { id: 'hol-1',    question: 'В хола: Къде е диванът?',         positiveTemplate: 'Диванът е ___ телевизора.',     negativeTemplate: '', positiveBlank: 'срещу',  negativeBlank: '' },
+      { id: 'hol-2',    question: 'В хола: Къде е масата?',          positiveTemplate: 'Масата е ___ дивана.',          negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
+      { id: 'hol-3',    question: 'В хола: Къде са столовете?',      positiveTemplate: 'Столовете са ___ масата.',      negativeTemplate: '', positiveBlank: 'около',  negativeBlank: '' },
+      { id: 'hol-4',    question: 'В хола: Къде е телевизорът?',     positiveTemplate: 'Телевизорът е ___ стената.',    negativeTemplate: '', positiveBlank: 'на',     negativeBlank: '' },
+      { id: 'hol-5',    question: 'В хола: Къде е лаптопът?',        positiveTemplate: 'Лаптопът е ___ масата.',        negativeTemplate: '', positiveBlank: 'на',     negativeBlank: '' },
+      { id: 'hol-6',    question: 'В хола: Къде е цветето?',         positiveTemplate: 'Цветето е ___ прозореца.',      negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
     ],
   } as PersonalChoiceExercise,
+
+  // ══════════════════════════════════════════════════════
+  // НОВИ ДУМИ 3 — Прибори за хранене — голяма илюстрация
+  // ══════════════════════════════════════════════════════
+  {
+    id: 'l09-novi-dumi-03-image',
+    type: 'grammar_examples',
+    disableTts: true,
+    title: 'Прибори за хранене',
+    instruction: '',
+    order: 7,
+    examples: [
+      {
+        imageUrl: '/assets/lesson-09/07-novi-dumi-3-pribori/01-masa-pribori.jpg',
+        text: '',
+      },
+    ],
+  } as GrammarExamplesExercise,
 
   // ══════════════════════════════════════════════════════
   // НОВИ ДУМИ 3 — Прибори за хранене (стр. 84)
@@ -163,13 +207,13 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
     instruction: '',
-    order: 6,
+    order: 8,
     cards: [
-      { id: 'vilica-nd',  imageUrl: '', label: 'вилица' }, // TODO: иконка
-      { id: 'lyzhica-nd', imageUrl: '', label: 'лъжица' }, // TODO: иконка
-      { id: 'nozh-nd',    imageUrl: '', label: 'нож' },    // TODO: иконка
-      { id: 'chasha-nd',  imageUrl: '', label: 'чаша' },   // TODO: иконка
-      { id: 'chiniya-nd', imageUrl: '', label: 'чиния' },  // TODO: иконка
+      { id: 'vilica-nd',  imageUrl: '', label: 'вилица' },
+      { id: 'lyzhica-nd', imageUrl: '', label: 'лъжица' },
+      { id: 'nozh-nd',    imageUrl: '', label: 'нож' },
+      { id: 'chasha-nd',  imageUrl: '', label: 'чаша' },
+      { id: 'chiniya-nd', imageUrl: '', label: 'чиния' },
     ],
   } as IllustratedCardsExercise,
 
@@ -181,7 +225,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Изберете правилната дума, за да довършите изреченията.',
-    order: 7,
+    order: 9,
     points: 5,
     layout: 'single',
     sentences: [
@@ -230,7 +274,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Поредни числителни',
     instruction: 'Поредни числителни — **първи**, **първа**, **първо**, **първите**.',
     instructionKey: 'grammar.l09.g1.instruction',
-    order: 8,
+    order: 10,
     tableTitle: 'Поредни числителни',
     columns: ['Мъжки род', 'Женски род', 'Среден род', 'Мн. число'],
     rows: [
@@ -253,7 +297,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Попълнете с правилния пореден номер на деня.',
-    order: 9,
+    order: 11,
     points: 6,
     layout: 'single',
     sentences: [
@@ -303,7 +347,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
     instruction: 'Попълнете с правилния месец или пореден номер.',
-    order: 10,
+    order: 12,
     points: 11,
     layout: 'single',
     sentences: [
@@ -312,14 +356,14 @@ export const exercises: Exercise[] = [
         blanks: [], correctAnswers: [], isExample: true,
       },
       {
-        text: 'Вторият _______ е февруари.',
-        blanks: [0], correctAnswers: ['месец'],
-        options: ['месец', 'ден', 'сезон', 'клас'],
+        text: 'Вторият месец е _______.',
+        blanks: [0], correctAnswers: ['февруари'],
+        options: ['февруари', 'март', 'януари', 'април'],
       },
       {
-        text: '_______ е март.',
-        blanks: [0], correctAnswers: ['Третият месец'],
-        options: ['Третият месец', 'Вторият месец', 'Четвъртият месец', 'Петият месец'],
+        text: '_______ месец е март.',
+        blanks: [0], correctAnswers: ['Третият'],
+        options: ['Третият', 'Вторият', 'Четвъртият', 'Петият'],
       },
       {
         text: 'Четвъртият месец е _______.',
@@ -327,29 +371,29 @@ export const exercises: Exercise[] = [
         options: ['април', 'март', 'май', 'юни'],
       },
       {
-        text: '_______ е май.',
-        blanks: [0], correctAnswers: ['Петият месец'],
-        options: ['Петият месец', 'Четвъртият месец', 'Шестият месец', 'Третият месец'],
+        text: '_______ месец е май.',
+        blanks: [0], correctAnswers: ['Петият'],
+        options: ['Петият', 'Четвъртият', 'Шестият', 'Третият'],
       },
       {
-        text: 'Шестият месец _______ е юни.',
-        blanks: [0], correctAnswers: ['от годината'],
-        options: ['от годината', 'от седмицата', 'от деня', 'от годините'],
+        text: 'Шестият месец е _______.',
+        blanks: [0], correctAnswers: ['юни'],
+        options: ['юни', 'май', 'юли', 'август'],
       },
       {
-        text: '_______ е юли.',
-        blanks: [0], correctAnswers: ['Седмият месец'],
-        options: ['Седмият месец', 'Шестият месец', 'Осмият месец', 'Деветият месец'],
+        text: '_______ месец е юли.',
+        blanks: [0], correctAnswers: ['Седмият'],
+        options: ['Седмият', 'Шестият', 'Осмият', 'Деветият'],
       },
       {
-        text: 'Осмият _______ е август.',
-        blanks: [0], correctAnswers: ['месец'],
-        options: ['месец', 'ден', 'сезон', 'клас'],
+        text: 'Осмият месец е _______.',
+        blanks: [0], correctAnswers: ['август'],
+        options: ['август', 'юли', 'септември', 'октомври'],
       },
       {
-        text: '_______ септември.',
-        blanks: [0], correctAnswers: ['Деветият месец е'],
-        options: ['Деветият месец е', 'Осмият месец е', 'Десетият месец е', 'Единадесетият месец е'],
+        text: '_______ месец е септември.',
+        blanks: [0], correctAnswers: ['Деветият'],
+        options: ['Деветият', 'Осмият', 'Десетият', 'Единадесетият'],
       },
       {
         text: 'Десетият месец е _______.',
@@ -357,9 +401,9 @@ export const exercises: Exercise[] = [
         options: ['октомври', 'септември', 'ноември', 'декември'],
       },
       {
-        text: '_______ ноември.',
-        blanks: [0], correctAnswers: ['Единадесетият месец е'],
-        options: ['Единадесетият месец е', 'Десетият месец е', 'Дванадесетият месец е', 'Деветият месец е'],
+        text: '_______ месец е ноември.',
+        blanks: [0], correctAnswers: ['Единадесетият'],
+        options: ['Единадесетият', 'Десетият', 'Дванадесетият', 'Деветият'],
       },
       {
         text: 'Дванадесетият месец е _______.',
@@ -380,7 +424,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Изберете на кой етаж живее всеки човек.',
-    order: 11,
+    order: 13,
     points: 6,
     imageUrl: '/assets/lesson-09/12-upr-09-blok-etazhi/01-blok-etazhi.jpg',
     questions: [
@@ -405,7 +449,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Степенуване на прилагателните',
     instruction: 'Степенуване — **по-** (сравнителна) и **най-** (превъзходна степен).',
     instructionKey: 'grammar.l09.g2.instruction',
-    order: 12,
+    order: 14,
     tableTitle: 'Степенуване на прилагателните',
     columns: ['Положителна', 'Сравнителна', 'Превъзходна'],
     rows: [
@@ -425,7 +469,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Попълнете сравнителната и превъзходната степен по модела.',
-    order: 13,
+    order: 15,
     points: 22,
     layout: 'single',
     sentences: [
@@ -501,7 +545,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Сравнение с „от"',
     instruction: 'При сравнение използваме **по-** + прилагателно + **от**.',
     instructionKey: 'grammar.l09.g3.instruction',
-    order: 14,
+    order: 16,
     examples: [
       {
         imageUrl: '',
@@ -530,7 +574,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 12',
     instruction: 'Сравнете двете къщи по модела.',
-    order: 15,
+    order: 17,
     points: 5,
     layout: 'single',
     sentences: [
@@ -575,7 +619,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Сравнете времето в двата града. Изберете правилната форма.',
-    order: 16,
+    order: 18,
     points: 3,
     layout: 'single',
     imageUrl: '/assets/lesson-09/16-upr-13-vreme-sofiya-plovdiv/01-vreme-sofiya-plovdiv.jpg',
@@ -613,7 +657,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Под наем',
     instruction: 'Прочетете примерите и запомнете изразите.',
     instructionKey: 'grammar.l09.naem.instruction',
-    order: 17,
+    order: 19,
     examples: [
       {
         imageUrl: '',
@@ -636,9 +680,9 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 14',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 18,
+    order: 20,
     textTitle: 'Обяви — търсят апартамент',
-    audioUrl: '', // TODO: TTS Фаза 2
+    audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-14-full.mp3',
     paragraphs: [
       'Стоян: Търся едностаен апартамент в центъра, необзаведен, до 650 евро. Стоян, тел. 0883-657-421',
       'Екатерина: Семейство търси двустаен апартамент близо до метрото, обзаведен, до 850 евро. Екатерина, тел. 0886-531-205',
@@ -655,7 +699,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Изберете правилния отговор за всеки човек.',
-    order: 19,
+    order: 21,
     points: 3,
     layout: 'qa-split',
     sentences: [
@@ -685,13 +729,13 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 20,
+    order: 22,
     textTitle: 'Обяви — даване под наем',
-    audioUrl: '', // TODO: TTS Фаза 2
+    audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-16-full.mp3',
     paragraphs: [
       'Петрова: Давам под наем апартамент в „Надежда", 3 стаи, 630 евро. Петрова, тел. 0283-763-611',
       'Георгиев: Давам под наем апартамент в центъра, едностаен, необзаведен, 600 евро. тел. 0884-999-125',
-      'Димитрови: Даваме под наем обзаведен двустаен апартамент до метростанция „Младост 1", 1000 евро. тел. 0888-213-489',
+      'Димитрови: Даваме под наем обзаведен двустаен апартамент до метростанция „Младост" 1, 1000 евро. тел. 0888-213-489',
     ],
     showDictionary: true,
   } as ReadingTextExercise,
@@ -705,7 +749,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изберете подходящ апартамент от обявите за всеки човек.',
-    order: 21,
+    order: 23,
     points: 3,
     questions: [
       {
@@ -739,7 +783,7 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     subtitle: 'Упражнение 18',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
-    order: 22,
+    order: 24,
     imageUrl: '/assets/lesson-09/22-upr-18-dialog-mariya-valya/01-apartament-hol.jpg',
     sections: [
       {
@@ -767,35 +811,53 @@ export const exercises: Exercise[] = [
     id: 'l09-ex-19',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 19',
-    instruction: 'Попълнете с правилната дума от диалога.',
-    order: 23,
-    points: 5,
+    instruction: 'Попълнете с правилните думи от диалога.',
+    order: 25,
+    points: 11,
     layout: 'single',
     sentences: [
       {
-        text: 'Апартаментът има _______ стаи — кухня, хол, стая за децата и две спални.',
-        blanks: [0], correctAnswers: ['пет', '5'],
-        options: ['пет', 'три', 'четири', 'шест'],
+        text: 'Апартаментът има _______ стаи — _______, _______, стая за децата и две _______.',
+        blanks: [0, 1, 2, 3],
+        correctAnswers: ['пет', 'кухня', 'хол', 'спални'],
+        options: [
+          ['пет', 'три', 'четири', 'шест'],
+          ['кухня', 'спалня', 'баня', 'хол'],
+          ['хол', 'балкон', 'коридор', 'баня'],
+          ['спални', 'стаи', 'бани', 'балкона'],
+        ],
       },
       {
-        text: 'Мария _______ в апартамент в квартал Борово.',
-        blanks: [0], correctAnswers: ['живее'],
-        options: ['живее', 'търси', 'купува', 'наема'],
+        text: 'Мария _______ в апартамент в квартал _______.',
+        blanks: [0, 1],
+        correctAnswers: ['живее', 'Борово'],
+        options: [
+          ['живее', 'търси', 'купува', 'наема'],
+          ['Борово', 'Надежда', 'Младост', 'Лозенец'],
+        ],
       },
       {
-        text: 'На първия етаж има _______ и малко кафе.',
-        blanks: [0], correctAnswers: ['аптека'],
-        options: ['аптека', 'магазин', 'банка', 'училище'],
+        text: 'На първия етаж има _______.',
+        blanks: [0], correctAnswers: ['аптека и малко кафе'],
+        options: ['аптека и малко кафе', 'магазин и банка', 'ресторант и кафе', 'аптека и магазин'],
       },
       {
-        text: 'Съседите на Мария са _______ семейство с едно дете.',
-        blanks: [0], correctAnswers: ['младо'],
-        options: ['младо', 'старо', 'голямо', 'малко'],
+        text: 'Съседите на Мария са _______ семейство с _______ дете.',
+        blanks: [0, 1],
+        correctAnswers: ['младо', 'едно'],
+        options: [
+          ['младо', 'старо', 'голямо', 'малко'],
+          ['едно', 'две', 'три', 'четири'],
+        ],
       },
       {
-        text: 'Валя също иска нов апартамент, но няма _______.',
-        blanks: [0], correctAnswers: ['пари'],
-        options: ['пари', 'време', 'желание', 'работа'],
+        text: 'Валя също иска _______ апартамент, но няма _______.',
+        blanks: [0, 1],
+        correctAnswers: ['нов', 'пари'],
+        options: [
+          ['нов', 'малък', 'евтин', 'голям'],
+          ['пари', 'време', 'желание', 'работа'],
+        ],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -808,9 +870,9 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 24,
+    order: 26,
     textTitle: 'Къщата на Ани',
-    audioUrl: '', // TODO: TTS Фаза 2
+    audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-20-full.mp3',
     images: [{ imageUrl: '/assets/lesson-09/24-upr-20-kashtata-na-ani/01-kashta-na-ani.jpg', label: '' }],
     paragraphs: [
       'Аз съм Ани. Живея в хубава нова къща с майка ми и баща ми в град Бургас.',
@@ -833,19 +895,18 @@ export const exercises: Exercise[] = [
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 21',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 25,
+    order: 27,
     points: 8,
     sentences: [
-      { id: 'tf-0', text: 'Ани няма къща.', isTrue: false, isExample: true },
-      { id: 'tf-1', text: 'Ани живее с родителите си.', isTrue: true },
-      { id: 'tf-2', text: 'Къщата е на два етажа.', isTrue: false },
-      { id: 'tf-3', text: 'Има четири стаи.', isTrue: true },
-      { id: 'tf-4', text: 'Има две бани.', isTrue: false },
-      { id: 'tf-5', text: 'Има пет стаи.', isTrue: false },
-      { id: 'tf-6', text: 'Градината с цветя е пред къщата.', isTrue: true },
-      { id: 'tf-7', text: 'Близо до къщата има магазин.', isTrue: true },
-      { id: 'tf-8', text: 'Ани не обича Бургас.', isTrue: false },
-      { id: 'tf-9', text: 'Къщата на Ани е чудесна.', isTrue: true },
+      { id: 'tf-0', text: 'Ани няма къща.',                   isTrue: false, isExample: true },
+      { id: 'tf-1', text: 'Ани живее с родителите си.',       isTrue: true },
+      { id: 'tf-2', text: 'Къщата е на два етажа.',           isTrue: false },
+      { id: 'tf-3', text: 'Има четири стаи.',                 isTrue: true },
+      { id: 'tf-4', text: 'Има две бани.',                    isTrue: false },
+      { id: 'tf-5', text: 'Градината с цветя е пред къщата.', isTrue: true },
+      { id: 'tf-6', text: 'Ани не обича Бургас.',             isTrue: false },
+      { id: 'tf-7', text: 'Близо до къщата има магазин.',     isTrue: true },
+      { id: 'tf-8', text: 'Къщата на Ани е чудесна.',         isTrue: true },
     ],
   } as TrueFalseExercise,
 
@@ -857,17 +918,17 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 22',
     instruction: 'Изберете правилния отговор на въпросите за Ани.',
-    order: 26,
+    order: 28,
     points: 10,
     layout: 'qa-split',
     sentences: [
       {
-        text: 'Където живее Ани? | _______',
+        text: 'Къде живее Ани? | _______',
         blanks: [0], correctAnswers: ['В Бургас.'],
         options: ['В Бургас.', 'В София.', 'В Пловдив.', 'В Борово.'],
       },
       {
-        text: 'Где е къщата? | _______',
+        text: 'Къде е къщата? | _______',
         blanks: [0], correctAnswers: ['Близо до центъра.'],
         options: ['Близо до центъра.', 'Далече от центъра.', 'До паркa.', 'До метрото.'],
       },
@@ -887,7 +948,7 @@ export const exercises: Exercise[] = [
         options: ['Диван, маса, столове, библиотека, телевизор и цвете.', 'Легло, гардероб.', 'Печка, хладилник.', 'Душ, тоалетна, мивка.'],
       },
       {
-        text: 'Где е банята? | _______',
+        text: 'Къде е банята? | _______',
         blanks: [0], correctAnswers: ['До спалнята на Ани.'],
         options: ['До спалнята на Ани.', 'До кухнята.', 'До хола.', 'До входа.'],
       },
@@ -897,12 +958,12 @@ export const exercises: Exercise[] = [
         options: ['Душ, огледало, тоалетна и мивка.', 'Вана, душ, мивка.', 'Само душ и мивка.', 'Вана и тоалетна.'],
       },
       {
-        text: 'Где има градина с цветя? | _______',
+        text: 'Къде има градина с цветя? | _______',
         blanks: [0], correctAnswers: ['Пред къщата.'],
         options: ['Пред къщата.', 'Зад къщата.', 'До входа.', 'Вляво от къщата.'],
       },
       {
-        text: 'Где има дървета? | _______',
+        text: 'Къде има дървета? | _______',
         blanks: [0], correctAnswers: ['Зад къщата.'],
         options: ['Зад къщата.', 'Пред къщата.', 'До паркa.', 'Близо до метрото.'],
       },

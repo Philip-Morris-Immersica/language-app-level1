@@ -117,5 +117,5 @@ export const A1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'lesson-06': 32,
   'lesson-07': 43,
   'lesson-08': 21,
-  'lesson-09': 14,
+  'lesson-09': 17,
 };

@@ -67,6 +67,7 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
   'l08-gramatika-02-row-3', // хубави → хубавите, малки → малките, зелени → зелените
+  'l09-gramatika-01-row-3', // четвърти — "четвърт" root, known Flash mispronunciation
 ]);
 
 // Grammar table note files that need Pro model instead of Flash (full sentences, not isolated words)
@@ -75,6 +76,8 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l04-gramatika-02-note-0',  // "двеста шестдесет и пет"
   'l04-gramatika-02-note-1',  // "хиляда триста осемдесет и девет"
   'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
+  'l09-gramatika-01-note-0',  // "Понеделник е първият ден от седмицата." — full sentence
+  'l09-gramatika-02-note-0',  // "Пловдив е голям град. София е по-голям…" — full sentences
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
