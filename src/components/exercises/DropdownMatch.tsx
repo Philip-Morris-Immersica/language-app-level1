@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface DropdownQuestion {
   id: string;
@@ -101,12 +102,20 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {imageUrl ? (
-        <div className="mb-6 flex justify-center">
-          <img
-            src={imageUrl}
-            alt=""
-            className="max-w-full max-h-[min(420px,70vh)] w-auto rounded-lg shadow-md object-contain border border-gray-100"
-          />
+        <div className="mb-6 max-w-3xl mx-auto">
+          <ImageLightbox src={imageUrl} alt="">
+            <div className="relative flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imageUrl}
+                alt=""
+                className="max-w-full max-h-[min(560px,72vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
+              />
+            </div>
+          </ImageLightbox>
+          <p className="mt-2 text-center text-xs text-gray-400 select-none">
+            Кликнете върху картинката, за да я увеличите.
+          </p>
         </div>
       ) : null}
 

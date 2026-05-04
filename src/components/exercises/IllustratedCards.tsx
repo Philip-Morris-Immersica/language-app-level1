@@ -8,6 +8,7 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -45,6 +46,25 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {/* Optional hero image above the cards (e.g. house cross-section, table setting) */}
+      {exercise.headerImageUrl && (
+        <div className="mb-6 max-w-3xl mx-auto">
+          <ImageLightbox src={exercise.headerImageUrl} alt={exercise.title}>
+            <div className="relative flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={exercise.headerImageUrl}
+                alt={exercise.title}
+                className="max-w-full max-h-[min(480px,65vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
+              />
+            </div>
+          </ImageLightbox>
+          <p className="mt-2 text-center text-xs text-gray-400 select-none">
+            Кликнете върху картинката, за да я увеличите.
+          </p>
+        </div>
+      )}
+
       {/* Tap hint for non-Bulgarian users */}
       {lang !== 'bg' && (
         <p className="text-xs text-gray-400 text-center mb-3 italic">
@@ -109,10 +129,6 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         ))}
       </div>
 
-      {/* Optional note at bottom */}
-      <div className="mt-6 text-sm text-gray-600 text-center italic">
-        Речник – Урок 1
-      </div>
     </div>
   );
 }

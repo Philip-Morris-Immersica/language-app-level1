@@ -3,7 +3,6 @@ import type {
   ImageLabelingExercise,
   IllustratedCardsExercise,
   DropdownMatchExercise,
-  PersonalChoiceExercise,
   WorkbookFillBlankExercise,
   GrammarTableExercise,
   GrammarExamplesExercise,
@@ -84,6 +83,7 @@ export const exercises: Exercise[] = [
     examples: [
       {
         imageUrl: '/assets/lesson-09/05-novi-dumi-2-stai/01-kashta-razorez.jpg',
+        zoomable: true,
         text: '',
       },
     ],
@@ -144,70 +144,53 @@ export const exercises: Exercise[] = [
   } as DropdownMatchExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 3 — Опишете къде са мебелите (стр. 83) — personal_choice
-  // Отворено упражнение с предлози; ученикът описва позицията
+  // Упр. 3 — Опишете къде са мебелите (стр. 83) — dropdown_match
+  // Изберете предлог за всеки предмет в картинката
   // ══════════════════════════════════════════════════════
   {
     id: 'l09-ex-03',
-    type: 'personal_choice',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Опишете къде са мебелите в стаите. Използвайте предлозите: до, над, под, пред, зад, в, между, срещу, близо до, далече от, на.',
+    instruction: 'Изберете правилния предлог за всеки предмет в картинката.',
     order: 6,
-    points: 0,
-    imageUrls: ['/assets/lesson-09/02-upr-02-kashta-kragcheta/01-kashta-kragcheta.jpg'],
-    model: {
-      question: 'Къде е хладилникът?',
-      positiveAnswer: 'Хладилникът е до печката.',
-      negativeAnswer: '',
-    },
-    blankOptions: ['до', 'над', 'под', 'пред', 'зад', 'в', 'между', 'срещу', 'около', 'близо до', 'на'],
-    items: [
-      { id: 'kuhnya-1', question: 'В кухнята: Къде е печката?',      positiveTemplate: 'Печката е ___ хладилника.',     negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
-      { id: 'kuhnya-2', question: 'В кухнята: Къде са шкафовете?',   positiveTemplate: 'Шкафовете са ___ печката.',     negativeTemplate: '', positiveBlank: 'над',    negativeBlank: '' },
-      { id: 'kuhnya-3', question: 'В кухнята: Къде е мивката?',      positiveTemplate: 'Мивката е ___ шкафовете.',      negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
-      { id: 'kuhnya-4', question: 'В кухнята: Къде са столовете?',   positiveTemplate: 'Столовете са ___ масата.',      negativeTemplate: '', positiveBlank: 'около',  negativeBlank: '' },
-      { id: 'kuhnya-5', question: 'В кухнята: Къде е масата?',       positiveTemplate: 'Масата е ___ кухнята.',         negativeTemplate: '', positiveBlank: 'в',      negativeBlank: '' },
-      { id: 'spalnya-1', question: 'В спалнята: Къде е вратата?',    positiveTemplate: 'Вратата е ___ стаята.',         negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
-      { id: 'spalnya-2', question: 'В спалнята: Къде е леглото?',    positiveTemplate: 'Леглото е ___ стената.',        negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
-      { id: 'spalnya-3', question: 'В спалнята: Къде е гардеробът?', positiveTemplate: 'Гардеробът е ___ леглото.',     negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
-      { id: 'banya-1',  question: 'В банята: Къде е лампата?',       positiveTemplate: 'Лампата е ___ мивката.',        negativeTemplate: '', positiveBlank: 'над',    negativeBlank: '' },
-      { id: 'banya-2',  question: 'В банята: Къде е килимът?',       positiveTemplate: 'Килимът е ___ душа.',           negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
-      { id: 'hol-1',    question: 'В хола: Къде е диванът?',         positiveTemplate: 'Диванът е ___ телевизора.',     negativeTemplate: '', positiveBlank: 'срещу',  negativeBlank: '' },
-      { id: 'hol-2',    question: 'В хола: Къде е масата?',          positiveTemplate: 'Масата е ___ дивана.',          negativeTemplate: '', positiveBlank: 'пред',   negativeBlank: '' },
-      { id: 'hol-3',    question: 'В хола: Къде са столовете?',      positiveTemplate: 'Столовете са ___ масата.',      negativeTemplate: '', positiveBlank: 'около',  negativeBlank: '' },
-      { id: 'hol-4',    question: 'В хола: Къде е телевизорът?',     positiveTemplate: 'Телевизорът е ___ стената.',    negativeTemplate: '', positiveBlank: 'на',     negativeBlank: '' },
-      { id: 'hol-5',    question: 'В хола: Къде е лаптопът?',        positiveTemplate: 'Лаптопът е ___ масата.',        negativeTemplate: '', positiveBlank: 'на',     negativeBlank: '' },
-      { id: 'hol-6',    question: 'В хола: Къде е цветето?',         positiveTemplate: 'Цветето е ___ прозореца.',      negativeTemplate: '', positiveBlank: 'до',     negativeBlank: '' },
+    points: 16,
+    imageUrl: '/assets/lesson-09/02-upr-02-kashta-kragcheta/01-kashta-kragcheta.jpg',
+    questions: [
+      // Кухня
+      { id: 'kuhnya-1', left: 'В кухнята: Печката е … хладилника.',     options: ['до', 'над', 'под', 'пред', 'зад'],     correctAnswer: 'до' },
+      { id: 'kuhnya-2', left: 'В кухнята: Шкафовете са … печката.',     options: ['над', 'под', 'до', 'пред', 'зад'],     correctAnswer: 'над' },
+      { id: 'kuhnya-3', left: 'В кухнята: Мивката е … шкафовете.',      options: ['до', 'под', 'над', 'зад', 'срещу'],    correctAnswer: 'до' },
+      { id: 'kuhnya-4', left: 'В кухнята: Столовете са … масата.',      options: ['около', 'до', 'под', 'над', 'срещу'],  correctAnswer: 'около' },
+      { id: 'kuhnya-5', left: 'В кухнята: Масата е … кухнята.',         options: ['в', 'до', 'пред', 'над', 'зад'],       correctAnswer: 'в' },
+      // Спалня
+      { id: 'spalnya-1', left: 'В спалнята: Вратата е … стаята.',       options: ['пред', 'зад', 'в', 'до', 'над'],       correctAnswer: 'пред' },
+      { id: 'spalnya-2', left: 'В спалнята: Леглото е … стената.',      options: ['до', 'пред', 'над', 'под', 'зад'],     correctAnswer: 'до' },
+      { id: 'spalnya-3', left: 'В спалнята: Гардеробът е … леглото.',   options: ['до', 'пред', 'зад', 'срещу', 'над'],   correctAnswer: 'до' },
+      // Баня
+      { id: 'banya-1',  left: 'В банята: Лампата е … мивката.',         options: ['над', 'под', 'до', 'пред', 'срещу'],   correctAnswer: 'над' },
+      { id: 'banya-2',  left: 'В банята: Килимът е … душа.',            options: ['пред', 'до', 'над', 'под', 'зад'],     correctAnswer: 'пред' },
+      // Хол
+      { id: 'hol-1',    left: 'В хола: Диванът е … телевизора.',        options: ['срещу', 'до', 'пред', 'зад', 'над'],   correctAnswer: 'срещу' },
+      { id: 'hol-2',    left: 'В хола: Масата е … дивана.',             options: ['пред', 'до', 'зад', 'срещу', 'около'], correctAnswer: 'пред' },
+      { id: 'hol-3',    left: 'В хола: Столовете са … масата.',         options: ['около', 'до', 'под', 'над', 'срещу'],  correctAnswer: 'около' },
+      { id: 'hol-4',    left: 'В хола: Телевизорът е … стената.',       options: ['на', 'до', 'пред', 'над', 'зад'],      correctAnswer: 'на' },
+      { id: 'hol-5',    left: 'В хола: Лаптопът е … масата.',           options: ['на', 'до', 'под', 'над', 'пред'],      correctAnswer: 'на' },
+      { id: 'hol-6',    left: 'В хола: Цветето е … прозореца.',         options: ['до', 'пред', 'зад', 'на', 'под'],      correctAnswer: 'до' },
     ],
-  } as PersonalChoiceExercise,
-
-  // ══════════════════════════════════════════════════════
-  // НОВИ ДУМИ 3 — Прибори за хранене — голяма илюстрация
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l09-novi-dumi-03-image',
-    type: 'grammar_examples',
-    disableTts: true,
-    title: 'Прибори за хранене',
-    instruction: '',
-    order: 7,
-    examples: [
-      {
-        imageUrl: '/assets/lesson-09/07-novi-dumi-3-pribori/01-masa-pribori.jpg',
-        text: '',
-      },
-    ],
-  } as GrammarExamplesExercise,
+  } as DropdownMatchExercise,
 
   // ══════════════════════════════════════════════════════
   // НОВИ ДУМИ 3 — Прибори за хранене (стр. 84)
+  // Картинката и картите са обединени в една секция
   // ══════════════════════════════════════════════════════
   {
     id: 'l09-novi-dumi-03',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
+    subtitle: 'Прибори за хранене',
     instruction: '',
-    order: 8,
+    order: 7,
+    headerImageUrl: '/assets/lesson-09/07-novi-dumi-3-pribori/01-masa-pribori.jpg',
     cards: [
       { id: 'vilica-nd',  imageUrl: '', label: 'вилица' },
       { id: 'lyzhica-nd', imageUrl: '', label: 'лъжица' },
@@ -225,7 +208,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Изберете правилната дума, за да довършите изреченията.',
-    order: 9,
+    order: 8,
     points: 5,
     layout: 'single',
     sentences: [
@@ -274,7 +257,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Поредни числителни',
     instruction: 'Поредни числителни — **първи**, **първа**, **първо**, **първите**.',
     instructionKey: 'grammar.l09.g1.instruction',
-    order: 10,
+    order: 9,
     tableTitle: 'Поредни числителни',
     columns: ['Мъжки род', 'Женски род', 'Среден род', 'Мн. число'],
     rows: [
@@ -297,7 +280,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Попълнете с правилния пореден номер на деня.',
-    order: 11,
+    order: 10,
     points: 6,
     layout: 'single',
     sentences: [
@@ -347,7 +330,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
     instruction: 'Попълнете с правилния месец или пореден номер.',
-    order: 12,
+    order: 11,
     points: 11,
     layout: 'single',
     sentences: [
@@ -424,7 +407,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Изберете на кой етаж живее всеки човек.',
-    order: 13,
+    order: 12,
     points: 6,
     imageUrl: '/assets/lesson-09/12-upr-09-blok-etazhi/01-blok-etazhi.jpg',
     questions: [
@@ -449,7 +432,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Степенуване на прилагателните',
     instruction: 'Степенуване — **по-** (сравнителна) и **най-** (превъзходна степен).',
     instructionKey: 'grammar.l09.g2.instruction',
-    order: 14,
+    order: 13,
     tableTitle: 'Степенуване на прилагателните',
     columns: ['Положителна', 'Сравнителна', 'Превъзходна'],
     rows: [
@@ -469,7 +452,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Попълнете сравнителната и превъзходната степен по модела.',
-    order: 15,
+    order: 14,
     points: 22,
     layout: 'single',
     sentences: [
@@ -545,7 +528,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Сравнение с „от"',
     instruction: 'При сравнение използваме **по-** + прилагателно + **от**.',
     instructionKey: 'grammar.l09.g3.instruction',
-    order: 16,
+    order: 15,
     examples: [
       {
         imageUrl: '',
@@ -574,7 +557,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 12',
     instruction: 'Сравнете двете къщи по модела.',
-    order: 17,
+    order: 16,
     points: 5,
     layout: 'single',
     sentences: [
@@ -619,7 +602,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Сравнете времето в двата града. Изберете правилната форма.',
-    order: 18,
+    order: 17,
     points: 3,
     layout: 'single',
     imageUrl: '/assets/lesson-09/16-upr-13-vreme-sofiya-plovdiv/01-vreme-sofiya-plovdiv.jpg',
@@ -657,7 +640,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Под наем',
     instruction: 'Прочетете примерите и запомнете изразите.',
     instructionKey: 'grammar.l09.naem.instruction',
-    order: 19,
+    order: 18,
     examples: [
       {
         imageUrl: '',
@@ -680,7 +663,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 14',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 20,
+    order: 19,
     textTitle: 'Обяви — търсят апартамент',
     audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-14-full.mp3',
     paragraphs: [
@@ -699,7 +682,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Изберете правилния отговор за всеки човек.',
-    order: 21,
+    order: 20,
     points: 3,
     layout: 'qa-split',
     sentences: [
@@ -729,7 +712,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 22,
+    order: 21,
     textTitle: 'Обяви — даване под наем',
     audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-16-full.mp3',
     paragraphs: [
@@ -749,7 +732,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изберете подходящ апартамент от обявите за всеки човек.',
-    order: 23,
+    order: 22,
     points: 3,
     questions: [
       {
@@ -783,7 +766,7 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     subtitle: 'Упражнение 18',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
-    order: 24,
+    order: 23,
     imageUrl: '/assets/lesson-09/22-upr-18-dialog-mariya-valya/01-apartament-hol.jpg',
     sections: [
       {
@@ -812,7 +795,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 19',
     instruction: 'Попълнете с правилните думи от диалога.',
-    order: 25,
+    order: 24,
     points: 11,
     layout: 'single',
     sentences: [
@@ -870,7 +853,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 26,
+    order: 25,
     textTitle: 'Къщата на Ани',
     audioUrl: '/assets/lesson-09/audio/tts/texts/l09-ex-20-full.mp3',
     images: [{ imageUrl: '/assets/lesson-09/24-upr-20-kashtata-na-ani/01-kashta-na-ani.jpg', label: '' }],
@@ -895,7 +878,7 @@ export const exercises: Exercise[] = [
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 21',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 27,
+    order: 26,
     points: 8,
     sentences: [
       { id: 'tf-0', text: 'Ани няма къща.',                   isTrue: false, isExample: true },
@@ -918,7 +901,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 22',
     instruction: 'Изберете правилния отговор на въпросите за Ани.',
-    order: 28,
+    order: 27,
     points: 10,
     layout: 'qa-split',
     sentences: [

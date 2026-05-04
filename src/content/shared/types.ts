@@ -140,6 +140,9 @@ export interface NumberWritingExercise extends BaseExercise {
 export interface IllustratedCardsExercise extends BaseExercise {
   type: 'illustrated_cards';
   title: string;           // "НОВИ ДУМИ 1"
+  subtitle?: string;       // Optional subtitle shown below title (auto-translated)
+  /** Large zoomable illustration shown above the cards grid (e.g. house cross-section, table setting). */
+  headerImageUrl?: string;
   audioUrl?: string;       // For "Listen" button
   cards: {
     id: string;
@@ -246,6 +249,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
     voiceGender?: 'male' | 'female';
     /** TTS only: alternative text for audio (e.g. only the full word, not the abbreviation). Display text stays unchanged. */
     ttsText?: string;
+    /** When true, the image opens in a fullscreen lightbox on click (used in non-hero multi-example grid). Hero mode (single image) is always zoomable. */
+    zoomable?: boolean;
   }[];
 }
 
