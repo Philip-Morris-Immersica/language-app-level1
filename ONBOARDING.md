@@ -1,247 +1,176 @@
-# Onboarding Guide
+# Туториал за екипа — UNHCR Bulgarian Language App
 
-This document is for a second developer joining the **UNHCR Bulgarian Language
-Platform**. It explains how the project is structured for multi-level work
-(A1 / A2 / B1 / B2), how to set up your machine, and how to collaborate
-without stepping on each other's toes.
+> За Филип, Алекс и Нина. Прочети веднъж, следвай стъпките.
 
 ---
 
-## 1. The 60-second mental model
+## Как работи системата (накратко)
 
-- **One repo, one Next.js app, four CEFR levels.** A1 is in production;
-A2 is the current focus for the new collaborator; B1 / B2 are skeleton
-placeholders.
-- **Templates, types, UI components, i18n, TTS pipeline, and Cursor rules
-are SHARED.** Add a new exercise type or rule once → it applies to every
-level automatically.
-- **Lesson and test CONTENT is per-level.** Each level has its own folder
-under `src/content/<level>/`. You can write A2 freely without ever
-touching A1.
-- **GitHub is the synchronisation layer.** No copying folders on USB sticks.
-Everyone clones the same repo, works on a feature branch, opens a PR.
+GitHub е като споделен Google Drive за код. Всеки има **свой личен branch (клон)**:
 
-```
-src/content/
-├── shared/                ← types, EXERCISE_TEMPLATES, TEST_TEMPLATES (USED BY ALL)
-├── a1/lessons/, a1/tests/ ← A1 content (production)
-├── a2/lessons/, a2/tests/ ← A2 content (start here)
-├── b1/, b2/               ← skeletons for the future
-├── registry.ts            ← cross-level loaders + lookups
-└── index.ts               ← public barrel (back-compat helpers)
-```
+| Човек | Branch | Работи по |
+|-------|--------|-----------|
+| Филип | `philip` | A1 уроци, инфраструктура |
+| Алекс | `alex` | A2 уроци |
+| Нина | `nina` | B1 уроци |
+| Официален проект | `master` | само Филип merge-ва тук |
+
+Работиш в своя branch независимо. Когато нещо е готово → Филип го слива в `master` → автоматично се качва на сайта.
 
 ---
 
-## 2. Machine setup (do this once)
+## СТЪПКА 1 — Първоначална настройка (само веднъж)
 
-### Prerequisites
+### 1.1 Приеми поканата за GitHub
 
-- **Node.js 22.x** (use `nvm` so you pick up the version pinned in `.nvmrc`).
-- **Git** + a GitHub account that has access to
-`Philip-Morris-Immersica/language-app-level1`.
-- **Cursor** desktop app (any recent version) — Cursor will read `.cursor/rules/`
-automatically once you open the project folder.
+Филип ти е пратил покана на имейла. Приеми я преди да продължиш.
 
-### Steps
+### 1.2 Инсталирай Node.js и Git
 
-```bash
+- Node.js: https://nodejs.org → изтегли LTS версията
+- Git: https://git-scm.com → изтегли и инсталирай
+
+### 1.3 Клонирай проекта
+
+Отвори терминала (в Cursor: `Ctrl + \``) и напиши:
+
+```
 git clone https://github.com/Philip-Morris-Immersica/language-app-level1.git
 cd language-app-level1
-nvm use            # picks up the version from .nvmrc
 npm install
 ```
 
-Then ask the project owner for these three files via a secure channel
-(1Password / Bitwarden / Signal — **never email or chat**) and drop them at
-the project root:
+### 1.4 Влез в своя branch
 
+**Алекс:**
+```
+git checkout alex
+```
 
-| File                   | Purpose                                           |
-| ---------------------- | ------------------------------------------------- |
-| `.env`                 | Database URL (Neon)                               |
-| `.env.local`           | Google TTS API key + dev secrets                  |
-| `service-account.json` | Google Cloud service account for the TTS pipeline |
+**Нина:**
+```
+git checkout nina
+```
 
+**Филип:**
+```
+git checkout philip
+```
 
-Run the dev server:
+### 1.5 Копирай секретните файлове
 
-```bash
+Филип ти ги праща директно (не са в GitHub по сигурност).
+
+Постави ги в главната папка на проекта (`language-app-level1/`):
+- `.env`
+- `.env.local`
+- `service-account.json`
+
+### 1.6 Стартирай проекта локално
+
+```
 npm run dev
 ```
 
-Open [http://localhost:3010](http://localhost:3010). You should see the level selection screen.
-Click **A1** → you should see lessons 0–11 and tests 1–6.
+Отвори браузъра на: http://localhost:3010
 
-### Optional but recommended
+Готово. Настройката е завършена. **Не повтаряш тези стъпки.**
 
-```bash
-npm run content:lint       # static linter for content quality
-npm run check:audio        # verifies MP3 files are real binaries (not LFS pointers)
+---
+
+## СТЪПКА 2 — Всеки ден: как запазваш работата си
+
+Когато приключиш с работа и искаш да я запазиш в GitHub:
+
+### Вариант А — С команда в терминала (препоръчително)
+
+```
+.\sync.ps1 "описание на промяната"
 ```
 
-These should both pass before you commit anything content-related.
-
----
-
-## 3. Branch & PR workflow
-
-We use plain GitHub flow:
-
-- `main` — always deployable; reviewed code only.
-- Feature branches per piece of work — short-lived (≤ 1 week).
-
-**Branch naming convention:**
-
-
-| Pattern        | Example                    | When                      |
-| -------------- | -------------------------- | ------------------------- |
-| `a2/lesson-NN` | `a2/lesson-01`             | New A2 lesson             |
-| `a2/test-N`    | `a2/test-1`                | New A2 test               |
-| `fix/<area>`   | `fix/tts-numbers`          | Fix shared infrastructure |
-| `feat/<area>`  | `feat/dialogue-builder-v2` | Cross-level feature       |
-
-
-**Daily loop:**
-
-```bash
-git checkout main
-git pull
-git checkout -b a2/lesson-01
-
-# ... work, commit often ...
-
-git push -u origin a2/lesson-01
-# Open a Pull Request from this branch into main on GitHub
+**Примери:**
+```
+.\sync.ps1 "добавих урок A2-01 нови думи"
+.\sync.ps1 "поправих упражнение 3 в урок 2"
+.\sync.ps1 "готова чернова на урок A2-02"
 ```
 
-If your PR conflicts with `main` (because the other person merged something
-first), rebase locally:
+Скриптът автоматично:
+1. Взима всички твои промени
+2. Записва ги с описанието
+3. Качва ги в GitHub в **твоя** branch
+4. Блокира ако случайно си на `master`
 
-```bash
-git fetch origin
-git rebase origin/main
-git push --force-with-lease
+### Вариант Б — Без терминал (само кликане в Cursor)
+
+1. `Ctrl+Shift+G` → отваря Source Control панела
+2. Напиши съобщение в полето горе
+3. Кликни **✓ Commit**
+4. Кликни **↑ Sync Changes**
+
+---
+
+## СТЪПКА 3 — Правила (задължителни)
+
+- ✅ Работи само в **своя** branch (`alex`, `nina`, `philip`)
+- ✅ Алекс работи само в `src/content/a2/`
+- ✅ Нина работи само в `src/content/b1/`
+- ❌ Никога не пиши `git checkout master` и не commit-вай там
+- ❌ Не пипай чуждите branch-ове
+- ❌ Не трий файлове извън своята папка
+- ℹ️ Ако нещо се обърка — не трий нищо, пиши на Филип
+
+---
+
+## СТЪПКА 4 — Когато искате да слеете в master (merge)
+
+Само Филип прави това. Алекс и Нина:
+
+**1. Кажи на Филип** в чата: "Урок X е готов, може да се слее."
+
+**2. Филип проверява** и отваря Pull Request в GitHub.
+
+**3. Филип merge-ва** в `master` → сайтът се обновява автоматично за ~2 минути.
+
+### Ако Филип иска да merge-не (команди за Филип)
+
+```
+git checkout master
+git pull origin master
+git merge alex
+git push origin master
+git checkout philip
 ```
 
-**Code review:** the project owner reviews every A2 PR before merging. Don't
-merge your own PRs without a review — that's how regressions sneak into A1.
-
-**Anyone can push commits to anyone else's branch.** If the owner wants to
-fix something on the collaborator's `a2/lesson-01` branch directly, they just:
-
-```bash
-git fetch
-git checkout a2/lesson-01
-# fix something
-git commit -am "..."
-git push
-```
-
-This is the answer to *"мога ли да и правя подобрнеия ако не се справя?"* — yes,
-trivially.
+Или директно от GitHub: `Pull Requests` → `New Pull Request` → `base: master ← compare: alex`
 
 ---
 
-## 4. Adding an A2 lesson — step by step
+## Полезни команди
 
-> Read the full content guide first: `.cursor/rules/content-lessons.mdc`. The
-> rules apply 1:1 to A2.
-
-1. **Create the folder** `src/content/a2/lessons/a2-lesson-01/` with five
-  files (use lesson-01 from A1 as a reference for structure):
-  - `metadata.ts` — `id: 'a2-lesson-01'`, number, title, description, grammarTopics, vocabulary
-  - `content.ts` — introduction, dialogues, sections, vocabulary, cultural notes
-  - `exercises.ts` — all in-lesson exercises in PDF order
-  - `workbook.ts` — Преговор exercises
-  - `index.ts` — re-export `lessonData`
-2. **Register the lesson** in `src/content/a2/index.ts`:
-  - Append a loader to `A2_LESSON_LOADERS`
-  - Append metadata to `A2_LESSONS_METADATA`
-  - Append a sidebar entry to `A2_NAV_ITEMS`
-  - Set the exercise count in `A2_LESSON_EXERCISE_COUNTS`
-3. **Drop assets** (images, PDFs) under `public/assets/a2-lesson-01/…`.
-4. **Generate TTS:** `npm run tts:generate -- --lesson 01 --model gemini`
-  (the script auto-detects which level the folder belongs to).
-5. **Run the linter:** `npm run content:lint -- --lesson 01`
-6. **Run the dev server,** click through the lesson in the browser, fix issues.
-7. **Commit, push, open PR.**
-
-The lesson is automatically picked up by `/lessons/a2-lesson-01` and the
-sidebar — no other code changes needed.
-
-### A2 ID conventions
-
-A1 keeps un-prefixed IDs (`lesson-XX`) for backward compatibility with the
-production database. **A2 IDs are level-prefixed:**
-
-
-| Element  | Format         |
-| -------- | -------------- |
-| Lesson   | `a2-lesson-XX` |
-| Exercise | `a2-lXX-ex-NN` |
-| Workbook | `a2-lXX-wb-NN` |
-| Test     | `test-a2-N`    |
-
-
-The full table is in `.cursor/rules/content-lessons.mdc`.
+| Команда | Какво прави |
+|---------|-------------|
+| `.\sync.ps1 "текст"` | Запазва и качва работата ти |
+| `git status` | Показва какво си променил |
+| `git branch` | Показва на кой branch си |
+| `git checkout alex` | Превключва към branch `alex` |
+| `npm run dev` | Стартира проекта локално |
 
 ---
 
-## 5. Files you should NOT commit
+## Ако нещо не работи
 
-- `.env`, `.env.local` — secrets (`.gitignore` already covers them)
-- `service-account.json` — Google credentials (`.gitignore` already covers it)
-- `node_modules/` — regenerated by `npm install`
-- `.next/` — build output
-- `*.tsbuildinfo` — TypeScript incremental cache
-
-If you ever see one of these in `git status`, stop and ask before committing.
-
----
-
-## 6. Cursor specifics
-
-- The `.cursor/rules/` folder is committed to git, so we share the same AI
-guardrails. When the project owner adds or refines a rule, you get it
-with `git pull`.
-- Cursor's chat history (transcripts) is **per-machine**, not shared. If
-you want to hand off context after a long thinking session, write a
-short summary into a markdown file in the repo (the project already
-contains `IMPLEMENTATION_SUMMARY.md`, `FEEDBACK-RESPONSE-FULL.md` —
-add similar files when needed).
-- MCP servers are configured per-machine; the project doesn't currently
-require any.
+| Проблем | Решение |
+|---------|---------|
+| `.\sync.ps1` не се стартира | Пиши `Set-ExecutionPolicy RemoteSigned` в терминала |
+| Грешка "not on your branch" | Пиши `git branch` за да видиш къде си |
+| Проектът не се стартира | Провери дали `.env` файловете са на място |
+| Нещо се е счупило в Git | Пиши на Филип преди да правиш нещо |
 
 ---
 
-## 7. Where to look when something breaks
+## Линкове
 
-
-| Symptom                              | First place to look                                         |
-| ------------------------------------ | ----------------------------------------------------------- |
-| Lesson page 404                      | Is the loader registered in `src/content/<level>/index.ts`? |
-| Test page "Съдържанието се подготвя" | Is the test loader registered? Does the folder exist?       |
-| Sidebar missing an item              | `<LEVEL>_NAV_ITEMS` in the level's index file               |
-| Audio not playing                    | `npm run check:audio`; then check `tts-audio` rule          |
-| TypeScript errors after a refactor   | `npx tsc --noEmit` — never commit on red                    |
-| Linter warnings                      | `npm run content:lint`                                      |
-| Production progress lost             | **Stop.** Don't change A1 IDs. Talk to the project owner.   |
-
-
----
-
-## 8. Useful commands
-
-```bash
-npm run dev                         # local dev server (port 3010)
-npm run build                       # production build (also runs check:audio)
-npx tsc --noEmit                    # full TypeScript check
-npm run lint                        # next lint
-npm run content:lint                # content quality linter
-npm run content:lint -- --lesson 04 # single lesson
-npm run tts:generate -- --lesson 04 --model gemini  # generate TTS
-npm run check:audio                 # verify MP3 integrity
-npm run db:studio                   # open Drizzle Studio
-```
-
+- GitHub репо: https://github.com/Philip-Morris-Immersica/language-app-level1
+- Живият сайт: https://new-language-app-level1.vercel.app
+- Preview на твоя branch: появява се в Vercel при първи push
