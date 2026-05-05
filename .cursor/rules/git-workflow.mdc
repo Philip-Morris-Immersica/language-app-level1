@@ -1,0 +1,32 @@
+---
+description: Git workflow reminders for the team (Philip, Alex, Nina)
+globs:
+alwaysApply: true
+---
+
+# Git Workflow — Team Rules
+
+## Personal branches
+- Philip works on branch: `philip`
+- Alex works on branch: `alex`
+- Nina works on branch: `nina`
+- `master` = official project — never commit directly here
+
+## How to save work
+Run in terminal:
+```
+.\sync.ps1 "short description of what you did"
+```
+This does git add + commit + push automatically to your personal branch.
+
+## Cursor Source Control (no terminal needed)
+1. Press `Ctrl+Shift+G` to open Source Control panel
+2. Type a message in the box at the top
+3. Click the **✓ Commit** button
+4. Click the **↑ Sync Changes** button (or "Publish Branch")
+
+## Rules
+- NEVER switch to `master` and commit there
+- NEVER push to another person's branch
+- Only merge to `master` via Philip (Pull Request)
+- When in doubt — ask Philip before doing anything in Git
