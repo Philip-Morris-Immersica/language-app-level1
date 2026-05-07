@@ -13,17 +13,22 @@ alwaysApply: true
 - `master` = official project — never commit directly here
 
 ## How to save work
-Run in terminal:
-```
-.\sync.ps1 "short description of what you did"
-```
-This does git add + commit + push automatically to your personal branch.
+Tell the AI agent in chat: "commit" or "push".
+The agent reads the diff, writes the commit message, and pushes to your personal branch automatically.
 
 ## Cursor Source Control (no terminal needed)
 1. Press `Ctrl+Shift+G` to open Source Control panel
 2. Type a message in the box at the top
 3. Click the **✓ Commit** button
 4. Click the **↑ Sync Changes** button (or "Publish Branch")
+
+## File access rules (AGENT MUST ENFORCE)
+- Alex (`alex` branch) → may ONLY edit files inside `src/content/a2/`
+- Nina (`nina` branch) → may ONLY edit files inside `src/content/b1/`
+- Philip (`philip` branch) → full access to all files
+- NEVER edit files outside your designated folder
+- NEVER commit or push to another person's branch
+- NEVER commit or push to `master`
 
 ## Rules
 - NEVER switch to `master` and commit there
