@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import {
   DndContext,
@@ -170,7 +170,6 @@ function DroppableSlot({
 function PuzzleCard({
   puzzle,
   slotContents,
-  poolLetters,
   onPlace,
   onMoveSlot,
   onClear,
@@ -179,7 +178,6 @@ function PuzzleCard({
 }: {
   puzzle: LetterPuzzle;
   slotContents: (string | null)[];
-  poolLetters: string[];
   onPlace: (slotIndex: number, letter: string) => void;
   onMoveSlot: (fromSlot: number, toSlot: number) => void;
   onClear: (slotIndex: number) => void;
@@ -225,9 +223,7 @@ function PuzzleCard({
 
   const shuffledOrder = useRef<string[] | null>(null);
   if (!shuffledOrder.current) {
-    const correctSet = new Set(puzzle.correctLetters);
-    const distractors = poolLetters.filter(l => !correctSet.has(l));
-    const letters = [...puzzle.correctLetters, ...distractors];
+    const letters = [...puzzle.correctLetters];
     for (let i = letters.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [letters[i], letters[j]] = [letters[j], letters[i]];
@@ -241,8 +237,6 @@ function PuzzleCard({
     const result: string[] = [];
     const available: Record<string, number> = {};
     puzzle.correctLetters.forEach(l => { available[l] = (available[l] || 0) + 1; });
-    const correctSet = new Set(puzzle.correctLetters);
-    poolLetters.forEach(l => { if (!correctSet.has(l)) available[l] = 1; });
     for (const letter of shuffledOrder.current!) {
       const remaining = (available[letter] || 0) - (placed[letter] || 0);
       if (remaining > 0) {
@@ -362,11 +356,6 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
 
-  const poolLetters = useMemo(() => {
-    const set = new Set<string>();
-    puzzles.forEach(p => p.correctLetters.forEach(l => set.add(l)));
-    return [...set];
-  }, [puzzles]);
   const s = savedState as any;
   const [slotContents, setSlotContents] = useState<{ [puzzleId: string]: (string | null)[] }>(
     () => s?.slotContents ?? Object.fromEntries(puzzles.map(p => [p.id, p.correctLetters.map(() => null)]))
@@ -446,7 +435,6 @@ export function LetterChoice({ puzzles, onComplete, exerciseId }: LetterChoicePr
             key={puzzle.id}
             puzzle={puzzle}
             slotContents={slotContents[puzzle.id] || []}
-            poolLetters={poolLetters}
             onPlace={(slotIdx, letter) => handlePlace(puzzle.id, slotIdx, letter)}
             onMoveSlot={(from, to) => handleMoveSlot(puzzle.id, from, to)}
             onClear={slotIdx => handleClear(puzzle.id, slotIdx)}

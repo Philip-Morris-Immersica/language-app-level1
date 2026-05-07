@@ -78,6 +78,7 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
   'l09-gramatika-01-note-0',  // "Понеделник е първият ден от седмицата." — full sentence
   'l09-gramatika-02-note-0',  // "Пловдив е голям град. София е по-голям…" — full sentences
+  'l10-gramatika-01b-note-0', // разписание Заминаващи — пълно изречение с числа
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
@@ -113,7 +114,7 @@ const GRAMMAR_LABELS = new Set([
 ]);
 
 /** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
-const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset']);
+const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
 
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
