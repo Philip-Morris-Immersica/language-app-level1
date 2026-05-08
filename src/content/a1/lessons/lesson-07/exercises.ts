@@ -28,6 +28,7 @@ export const exercises: Exercise[] = [
   // ──────────────────────────────────────────────────────────
 
   // ORDER 1: Упр. 1 — Напишете поздравите под картинките
+  // Подредба по учебника: 1) ден, 2) вечер, 3) утро, 4) нощ.
   {
     id: 'l07-ex-01',
     type: 'image_labeling',
@@ -37,39 +38,41 @@ export const exercises: Exercise[] = [
     points: 4,
     displayType: 'default',
     images: [
-      { id: 'utro',   imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/01-dobro-utro.jpg',   correctLabel: 'Добро утро!'  },
       { id: 'den',    imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/02-dobru-den.jpg',    correctLabel: 'Добър ден!'   },
       { id: 'vecher', imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/03-dobru-vecher.jpg', correctLabel: 'Добър вечер!' },
+      { id: 'utro',   imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/01-dobro-utro.jpg',   correctLabel: 'Добро утро!'  },
       { id: 'nosht',  imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/04-leka-nosht.jpg',   correctLabel: 'Лека нощ!'    },
     ],
     options: ['Добро утро!', 'Добър ден!', 'Добър вечер!', 'Лека нощ!'],
   } as ImageLabelingExercise,
 
   // ORDER 2: НОВИ ДУМИ 1 — Календар: ден, седмица, месец, година
+  // Календарът е като headerImageUrl (голяма снимка отгоре), думите имат отделни илюстрации.
   {
     id: 'l07-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: '',
     order: 2,
+    headerImageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/01-kalendar-yanuari.jpg',
     cards: [
       { id: 'kalendar', imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/01-kalendar-yanuari.jpg', label: 'календар' },
-      { id: 'den-nd1',  imageUrl: '', label: 'ден' },
-      { id: 'sedmitsa', imageUrl: '', label: 'седмица' },
-      { id: 'mesets',   imageUrl: '', label: 'месец' },
-      { id: 'godina',   imageUrl: '', label: 'година' },
+      { id: 'den-nd1',  imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/02-den.png',      label: 'ден' },
+      { id: 'sedmitsa', imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/03-sedmitsa.png', label: 'седмица' },
+      { id: 'mesets',   imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/04-mesets.png',   label: 'месец' },
+      { id: 'godina',   imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/05-godina.png',   label: 'година' },
     ],
   } as IllustratedCardsExercise,
 
-  // ORDER 3: Упр. 2 — Отговорете на въпросите
+  // ORDER 3: Упр. 2 — Отговорете на въпросите (dropdown за всеки празен слот)
   {
     id: 'l07-ex-02',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 2',
-    instruction: 'Напишете отговорите на въпросите.',
+    instruction: 'Изберете правилния отговор от падащото меню.',
     order: 3,
     points: 4,
-    layout: 'single',
+    layout: 'qa-stacked',
     sentences: [
       {
         text: 'Колко дни има една седмица? | Една седмица има _______ дни.',
@@ -81,21 +84,27 @@ export const exercises: Exercise[] = [
         text: 'Колко седмици има един месец? | Един месец има _______ седмици.',
         blanks: [1],
         correctAnswers: ['четири'],
+        options: ['две', 'три', 'четири', 'пет'],
       },
       {
         text: 'Колко месеца има една година? | Една година има _______ месеца.',
         blanks: [1],
-        correctAnswers: ['дванайсет', 'дванадесет'],
+        correctAnswers: ['дванайсет'],
+        acceptableAnswers: [['дванадесет']],
+        options: ['десет', 'дванайсет', 'двайсет', 'седем'],
       },
       {
         text: 'Колко дни има един месец? | Един месец има _______ дни.',
         blanks: [1],
-        correctAnswers: ['тридесет', 'трийсет'],
+        correctAnswers: ['трийсет'],
+        acceptableAnswers: [['тридесет']],
+        options: ['двайсет', 'трийсет', 'четирийсет', 'петдесет'],
       },
       {
         text: 'Колко дни има една година? | Една година има _______ дни.',
         blanks: [1],
-        correctAnswers: ['триста шейсет и пет', '365'],
+        correctAnswers: ['триста шейсет и пет'],
+        options: ['сто шейсет и пет', 'двеста шейсет и пет', 'триста шейсет и пет', 'четиристотин шейсет и пет'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -143,7 +152,7 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-04',
     type: 'syllable_blocks',
     title: 'УПРАЖНЕНИЕ 4',
-    instruction: 'Подредете буквите/сричките, за да съставите дума или израз.',
+    instruction: 'Подредете буквите/сричките, за да съставите дните от седмицата.',
     order: 6,
     points: 7,
     puzzles: [
@@ -169,18 +178,18 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 7,
     cards: [
-      { id: 'yanuari',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/01-lenta-mesetsi.jpg', label: 'януари'   },
-      { id: 'fevruari', imageUrl: '', label: 'февруари'  },
-      { id: 'mart',     imageUrl: '', label: 'март'      },
-      { id: 'april',    imageUrl: '', label: 'април'     },
-      { id: 'may',      imageUrl: '', label: 'май'       },
-      { id: 'yuni',     imageUrl: '', label: 'юни'       },
-      { id: 'yuli',     imageUrl: '', label: 'юли'       },
-      { id: 'avgust',   imageUrl: '', label: 'август'    },
-      { id: 'septemvri',imageUrl: '', label: 'септември' },
-      { id: 'oktomvri', imageUrl: '', label: 'октомври'  },
-      { id: 'noemvri',  imageUrl: '', label: 'ноември'   },
-      { id: 'dekemvri', imageUrl: '', label: 'декември'  },
+      { id: 'yanuari',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/02-yanuari.png',   label: 'януари'   },
+      { id: 'fevruari', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/03-fevruari.png',  label: 'февруари' },
+      { id: 'mart',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/04-mart.png',      label: 'март'     },
+      { id: 'april',    imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/05-april.png',     label: 'април'    },
+      { id: 'may',      imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/06-may.png',       label: 'май'      },
+      { id: 'yuni',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/07-yuni.png',      label: 'юни'      },
+      { id: 'yuli',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/08-yuli.png',      label: 'юли'      },
+      { id: 'avgust',   imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/09-avgust.png',    label: 'август'   },
+      { id: 'septemvri',imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/10-septemvri.png', label: 'септември'},
+      { id: 'oktomvri', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/11-oktomvri.png',  label: 'октомври' },
+      { id: 'noemvri',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/12-noemvri.png',   label: 'ноември'  },
+      { id: 'dekemvri', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/13-dekemvri.png',  label: 'декември' },
     ],
   } as IllustratedCardsExercise,
 
@@ -258,12 +267,12 @@ export const exercises: Exercise[] = [
     ],
   } as MatchPairsExercise,
 
-  // ORDER 11: Упр. 7 — Напишете думите в правилната редна форма
+  // ORDER 11: Упр. 7 — Изберете редното числително в правилната форма (м/ж/ср)
   {
     id: 'l07-ex-07',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
-    instruction: 'Напишете редното числително в правилната форма.',
+    instruction: 'Изберете редното числително в правилната форма.',
     order: 11,
     points: 9,
     layout: 'two-column',
@@ -278,46 +287,55 @@ export const exercises: Exercise[] = [
         text: '_______ чай (4)',
         blanks: [0],
         correctAnswers: ['четвърти'],
+        options: ['четвърти', 'четвърта', 'четвърто'],
       },
       {
         text: '_______ сладолед (3)',
         blanks: [0],
         correctAnswers: ['трети'],
+        options: ['трети', 'трета', 'трето'],
       },
       {
         text: '_______ салата (2)',
         blanks: [0],
         correctAnswers: ['втора'],
+        options: ['втори', 'втора', 'второ'],
       },
       {
         text: '_______ ден (10)',
         blanks: [0],
         correctAnswers: ['десети'],
+        options: ['десети', 'десета', 'десето'],
       },
       {
         text: '_______ седмица (8)',
         blanks: [0],
         correctAnswers: ['осма'],
+        options: ['осми', 'осма', 'осмо'],
       },
       {
         text: '_______ дете (6)',
         blanks: [0],
         correctAnswers: ['шесто'],
+        options: ['шести', 'шеста', 'шесто'],
       },
       {
         text: '_______ сандвич (5)',
         blanks: [0],
         correctAnswers: ['пети'],
+        options: ['пети', 'пета', 'пето'],
       },
       {
         text: '_______ месец (7)',
         blanks: [0],
         correctAnswers: ['седми'],
+        options: ['седми', 'седма', 'седмо'],
       },
       {
         text: '_______ година (9)',
         blanks: [0],
         correctAnswers: ['девета'],
+        options: ['девети', 'девета', 'девето'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -367,16 +385,16 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 13,
     cards: [
-      { id: 'studeno',   imageUrl: '', label: 'Студено е.',  sublabels: ['0°C'] },
-      { id: 'hladno',    imageUrl: '', label: 'Хладно е.',   sublabels: ['10°C'] },
-      { id: 'toplo',     imageUrl: '', label: 'Топло е.',    sublabels: ['20°C'] },
-      { id: 'goreshto',  imageUrl: '', label: 'Горещо е.',   sublabels: ['30°C'] },
-      { id: 'slanchevo', imageUrl: '', label: 'Слънчево е.', sublabels: ['Има слънце.'] },
-      { id: 'oblachno',  imageUrl: '', label: 'Облачно е.',  sublabels: ['Има облаци.'] },
-      { id: 'dazhd',     imageUrl: '', label: 'Дъждовно е.', sublabels: ['Вали дъжд.'] },
-      { id: 'snyag',     imageUrl: '', label: 'Вали сняг.',  sublabels: [] },
-      { id: 'vetrovito', imageUrl: '', label: 'Ветровито е.',sublabels: ['Има вятър.'] },
-      { id: 'magliovo',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/01-ikona-magla.jpg', label: 'Мъгливо е.', sublabels: ['Има мъгла.'] },
+      { id: 'studeno',   imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/02-studeno-e.jpg',  label: 'Студено е.',  sublabels: ['0°C'] },
+      { id: 'hladno',    imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/03-hladno-e.jpg',   label: 'Хладно е.',   sublabels: ['10°C'] },
+      { id: 'toplo',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/04-toplo-e.jpg',    label: 'Топло е.',    sublabels: ['20°C'] },
+      { id: 'goreshto',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/05-goreshto-e.jpg', label: 'Горещо е.',   sublabels: ['30°C'] },
+      { id: 'slanchevo', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/06-ima-slunce.jpg', label: 'Слънчево е.', sublabels: ['Има слънце.'] },
+      { id: 'oblachno',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/07-ima-oblaci.jpg', label: 'Облачно е.',  sublabels: ['Има облаци.'] },
+      { id: 'dazhd',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/08-vali-dujd.jpg',  label: 'Дъждовно е.', sublabels: ['Вали дъжд.'] },
+      { id: 'snyag',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/09-vali-sniag.jpg', label: 'Вали сняг.',  sublabels: [] },
+      { id: 'vetrovito', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/10-ima-viatar.jpg', label: 'Ветровито е.',sublabels: ['Има вятър.'] },
+      { id: 'magliovo',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/11-ima-mugla.jpg',  label: 'Мъгливо е.',  sublabels: ['Има мъгла.'] },
     ],
   } as IllustratedCardsExercise,
 
@@ -451,12 +469,12 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 68
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 17: Упр. 12 — Попълнете месеците в таблицата по сезони
+  // ORDER 17: Упр. 12 — Подредете месеците по сезони (без номерация на редовете)
   {
     id: 'l07-ex-12',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 12',
-    instruction: 'Попълнете празните места в таблицата.',
+    instruction: 'Подредете месеците по сезони — изберете правилния месец за всяка колона.',
     order: 17,
     points: 8,
     paragraphs: [],
@@ -466,7 +484,7 @@ export const exercises: Exercise[] = [
         columns: ['зима', 'пролет', 'лято', 'есен'],
         rows: [
           {
-            label: '1',
+            label: '',
             cells: [
               { correctAnswers: ['декември'],  options: ['декември', 'януари', 'февруари', 'март', 'юни', 'септември'] },
               { correctAnswers: ['март'],      options: ['март', 'април', 'май', 'юни', 'декември'] },
@@ -475,7 +493,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '2',
+            label: '',
             cells: [
               { correctAnswers: ['януари'],   options: ['януари', 'февруари', 'декември', 'март', 'юни'] },
               { correctAnswers: ['април'],    options: ['март', 'април', 'май', 'юни', 'януари'] },
@@ -484,7 +502,7 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: '3',
+            label: '',
             cells: [
               { correctAnswers: ['февруари'], options: ['януари', 'февруари', 'декември', 'март', 'юни'] },
               { correctAnswers: ['май'],      options: ['март', 'април', 'май', 'юни', 'декември'] },
@@ -497,22 +515,8 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-  // ORDER 18: Упр. 13 — Колко сезона има в страната Ви?
-  {
-    id: 'l07-ex-13',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 13',
-    instruction: 'Отговорете на въпроса за Вашата страна.',
-    order: 18,
-    points: 0,
-    model: {
-      question: 'Колко сезона има в страната Ви?',
-      positiveAnswer: 'В _____ има _____ сезона. Те са: _____.',
-      negativeAnswer: 'В _____ има _____ сезона. Те са: _____.',
-    },
-    blankOptions: [],
-    items: [],
-  } as PersonalChoiceExercise,
+  // ORDER 18: Упр. 13 е премахнато по обратна връзка от клиента
+  // (personal_choice „Колко сезона има в страната Ви?“ — без верифицируем отговор)
 
   // ORDER 19: ГРАМАТИКА 2 — Предлози за време
   {
@@ -542,84 +546,142 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 20: Упр. 14 — Отговорете на въпросите (лично)
+  // ORDER 20: Упр. 14 — Кога са сезоните в България? (dropdown_match)
   {
     id: 'l07-ex-14',
-    type: 'personal_choice',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 14',
-    instruction: 'Отговорете на въпросите.',
+    instruction: 'Изберете кога е всеки сезон в България.',
     order: 20,
-    points: 0,
-    model: {
-      question: 'Кога учите български език?',
-      positiveAnswer: 'Уча български в понеделник и сряда.',
-      negativeAnswer: 'Уча български в понеделник и сряда.',
-    },
-    blankOptions: [],
-    items: [],
-  } as PersonalChoiceExercise,
+    points: 4,
+    questions: [
+      {
+        id: 'q1',
+        left: 'Кога е пролет в България? — През …',
+        options: ['март, април и май', 'юни, юли и август', 'септември, октомври и ноември', 'декември, януари и февруари'],
+        correctAnswer: 'март, април и май',
+      },
+      {
+        id: 'q2',
+        left: 'Кога е лято в България? — През …',
+        options: ['март, април и май', 'юни, юли и август', 'септември, октомври и ноември', 'декември, януари и февруари'],
+        correctAnswer: 'юни, юли и август',
+      },
+      {
+        id: 'q3',
+        left: 'Кога е есен в България? — През …',
+        options: ['март, април и май', 'юни, юли и август', 'септември, октомври и ноември', 'декември, януари и февруари'],
+        correctAnswer: 'септември, октомври и ноември',
+      },
+      {
+        id: 'q4',
+        left: 'Кога е зима в България? — През …',
+        options: ['март, април и май', 'юни, юли и август', 'септември, октомври и ноември', 'декември, януари и февруари'],
+        correctAnswer: 'декември, януари и февруари',
+      },
+    ],
+  } as DropdownMatchExercise,
 
-  // ORDER 21: Упр. 15 — Отговорете за времето в градовете
+  // ORDER 21: Упр. 15 — Изберете описание на времето в градовете (dropdown_match)
   {
     id: 'l07-ex-15',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Отговорете на въпросите по модела, като използвате таблицата.',
+    instruction: 'Изберете правилния отговор по таблицата.',
     imageUrl: '/assets/lesson-07/23-upr-15-gradove-vreme/01-tablitsa-gradove.jpg',
     order: 21,
     points: 7,
-    layout: 'qa-stacked',
-    sentences: [
+    questions: [
       {
-        text: 'Какво е времето в София през зимата? | През зимата е студено и вали сняг.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'q0',
+        left: 'Какво е времето в София през зимата? — …',
+        options: [
+          'През зимата е студено и вали сняг.',
+          'През зимата е горещо и слънчево.',
+          'През зимата е топло и духа вятър.',
+        ],
+        correctAnswer: 'През зимата е студено и вали сняг.',
         isExample: true,
       },
       {
-        text: 'Какво е времето в Киев през пролетта? | _______',
-        blanks: [1],
-        correctAnswers: ['През пролетта е хладно и вали дъжд.'],
-        acceptableAnswers: [['Хладно е и вали дъжд.', 'В Киев през пролетта е хладно.']],
+        id: 'q1',
+        left: 'Какво е времето в Киев през пролетта? — …',
+        options: [
+          'През пролетта е хладно и вали дъжд.',
+          'През пролетта е горещо и слънчево.',
+          'През пролетта е студено и вали сняг.',
+          'През пролетта е топло и духа вятър.',
+        ],
+        correctAnswer: 'През пролетта е хладно и вали дъжд.',
       },
       {
-        text: 'Какво е времето в Кайро през лятото? | _______',
-        blanks: [1],
-        correctAnswers: ['През лятото е горещо и слънчево.'],
-        acceptableAnswers: [['Горещо е и слънчево.', 'В Кайро през лятото е горещо.']],
+        id: 'q2',
+        left: 'Какво е времето в Кайро през лятото? — …',
+        options: [
+          'През лятото е горещо и слънчево.',
+          'През лятото е студено и вали сняг.',
+          'През лятото е хладно и облачно.',
+          'През лятото е топло и духа вятър.',
+        ],
+        correctAnswer: 'През лятото е горещо и слънчево.',
       },
       {
-        text: 'Какво е времето в Бейрут през есента? | _______',
-        blanks: [1],
-        correctAnswers: ['През есента е топло и облачно.'],
-        acceptableAnswers: [['Топло е и облачно.']],
+        id: 'q3',
+        left: 'Какво е времето в Бейрут през есента? — …',
+        options: [
+          'През есента е топло и облачно.',
+          'През есента е горещо и духа вятър.',
+          'През есента е студено и вали сняг.',
+          'През есента е хладно и слънчево.',
+        ],
+        correctAnswer: 'През есента е топло и облачно.',
       },
       {
-        text: 'Какво е времето в Дамаск през зимата? | _______',
-        blanks: [1],
-        correctAnswers: ['През зимата е хладно и облачно.'],
-        acceptableAnswers: [['Хладно е и облачно.']],
+        id: 'q4',
+        left: 'Какво е времето в Дамаск през зимата? — …',
+        options: [
+          'През зимата е хладно и облачно.',
+          'През зимата е горещо и слънчево.',
+          'През зимата е топло и вали дъжд.',
+          'През зимата е студено и духа вятър.',
+        ],
+        correctAnswer: 'През зимата е хладно и облачно.',
       },
       {
-        text: 'Какво е времето в Кабул през пролетта? | _______',
-        blanks: [1],
-        correctAnswers: ['През пролетта е хладно и вали дъжд.'],
-        acceptableAnswers: [['Хладно е и вали дъжд.']],
+        id: 'q5',
+        left: 'Какво е времето в Кабул през пролетта? — …',
+        options: [
+          'През пролетта е хладно и вали дъжд.',
+          'През пролетта е горещо и слънчево.',
+          'През пролетта е топло и духа вятър.',
+          'През пролетта е студено и вали сняг.',
+        ],
+        correctAnswer: 'През пролетта е хладно и вали дъжд.',
       },
       {
-        text: 'Какво е времето в Техеран през лятото? | _______',
-        blanks: [1],
-        correctAnswers: ['През лятото е горещо и слънчево.'],
-        acceptableAnswers: [['Горещо е и слънчево.']],
+        id: 'q6',
+        left: 'Какво е времето в Техеран през лятото? — …',
+        options: [
+          'През лятото е горещо и слънчево.',
+          'През лятото е хладно и вали дъжд.',
+          'През лятото е топло и облачно.',
+          'През лятото е студено и духа вятър.',
+        ],
+        correctAnswer: 'През лятото е горещо и слънчево.',
       },
       {
-        text: 'Какво е времето в Багдад през есента? | _______',
-        blanks: [1],
-        correctAnswers: ['През есента е топло и слънчево.'],
-        acceptableAnswers: [['Топло е и слънчево.']],
+        id: 'q7',
+        left: 'Какво е времето в Багдад през есента? — …',
+        options: [
+          'През есента е топло и слънчево.',
+          'През есента е студено и вали сняг.',
+          'През есента е хладно и духа вятър.',
+          'През есента е горещо и облачно.',
+        ],
+        correctAnswer: 'През есента е топло и слънчево.',
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // SKIP Упр. 16 — Работете по двойки (клиент)
 
@@ -628,6 +690,8 @@ export const exercises: Exercise[] = [
   // ──────────────────────────────────────────────────────────
 
   // ORDER 22: ГРАМАТИКА 3 — Колко е часът?
+  // TTS бележки: дисплеят показва „=“ и „/“ за визуална яснота, но `ttsText`
+  // дава чисто аудио (запетая вместо „=“ и „/“; цифри изписани с думи).
   {
     id: 'l07-gramatika-03',
     type: 'grammar_examples',
@@ -641,116 +705,134 @@ export const exercises: Exercise[] = [
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/01-dvanadeset-chasa.jpg',
         text: 'Дванайсет часа.',
         subtext: '12:00',
+        ttsText: 'Дванайсет часа.',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/02-bez-i.jpg',
         text: 'БЕЗ / И',
         subtext: 'минути преди / след часа',
+        ttsText: 'Без, и. Минути преди, след часа.',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/03-polovina.jpg',
         text: '30 минути = половина',
         subtext: 'Един и половина.',
+        ttsText: 'Тридесет минути, половина. Един и половина.',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/04-chetvurt.jpg',
         text: '15 минути = четвърт',
         subtext: 'Един и четвърт.',
+        ttsText: 'Петнайсет минути, четвърт. Един и четвърт.',
       },
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 23: Упр. 17 — Напишете колко е часът
+  // ORDER 23: Упр. 17 — Изберете колко е часът (часовник + dropdown отдясно)
   {
     id: 'l07-ex-17',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Напишете колко е часът.',
+    instruction: 'Изберете колко е часът на всеки часовник.',
     order: 23,
     points: 7,
-    layout: 'single',
-    sentences: [
+    questions: [
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/12-chas-01-00.jpg'],
-        text: 'Един.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex1',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/12-chas-01-00.jpg',
+        left: 'Един.',
+        options: [],
+        correctAnswer: 'Един.',
         isExample: true,
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/11-chas-01-05.jpg'],
-        text: 'Един и пет.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex2',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/11-chas-01-05.jpg',
+        left: 'Един и пет.',
+        options: [],
+        correctAnswer: 'Един и пет.',
         isExample: true,
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/10-chas-01-10.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Един и десет.'],
+        id: 'q1',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/10-chas-01-10.jpg',
+        left: '',
+        options: ['Един и десет.', 'Един и пет.', 'Един и петнайсет.', 'Два без десет.'],
+        correctAnswer: 'Един и десет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/09-chas-01-15.jpg'],
-        text: 'Един и петнайсет. = Един и четвърт.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex3',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/09-chas-01-15.jpg',
+        left: 'Един и петнайсет. (Един и четвърт.)',
+        options: [],
+        correctAnswer: 'Един и петнайсет. (Един и четвърт.)',
         isExample: true,
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/08-chas-01-20.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Един и двайсет.'],
+        id: 'q2',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/08-chas-01-20.jpg',
+        left: '',
+        options: ['Един и двайсет.', 'Един и десет.', 'Два без двайсет.', 'Един и двайсет и пет.'],
+        correctAnswer: 'Един и двайсет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/07-chas-01-25.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Един и двайсет и пет.'],
+        id: 'q3',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/07-chas-01-25.jpg',
+        left: '',
+        options: ['Един и двайсет и пет.', 'Един и двайсет.', 'Два без двайсет и пет.', 'Един и четвърт.'],
+        correctAnswer: 'Един и двайсет и пет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/06-chas-01-30.jpg'],
-        text: 'Един и трийсет. = Един и половина.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex4',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/06-chas-01-30.jpg',
+        left: 'Един и трийсет. (Един и половина.)',
+        options: [],
+        correctAnswer: 'Един и трийсет. (Един и половина.)',
         isExample: true,
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/05-chas-01-35.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Два без двайсет и пет.'],
+        id: 'q4',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/05-chas-01-35.jpg',
+        left: '',
+        options: ['Два без двайсет и пет.', 'Един и двайсет и пет.', 'Два без петнайсет.', 'Един и трийсет и пет.'],
+        correctAnswer: 'Два без двайсет и пет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/04-chas-01-40.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Два без двайсет.'],
+        id: 'q5',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/04-chas-01-40.jpg',
+        left: '',
+        options: ['Два без двайсет.', 'Два без четвърт.', 'Един и трийсет.', 'Два без десет.'],
+        correctAnswer: 'Два без двайсет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/03-chas-01-45.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Два без петнайсет.', 'Два без четвърт.'],
+        id: 'q6',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/03-chas-01-45.jpg',
+        left: '',
+        options: ['Два без четвърт.', 'Един и петнайсет.', 'Два без двайсет.', 'Един и три четвърти.'],
+        correctAnswer: 'Два без четвърт.',
+        alternateCorrectAnswers: ['Два без петнайсет.'],
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/02-chas-01-50.jpg'],
-        text: '_______',
-        blanks: [0],
-        correctAnswers: ['Два без десет.'],
+        id: 'q7',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/02-chas-01-50.jpg',
+        left: '',
+        options: ['Два без десет.', 'Един и десет.', 'Два без петнайсет.', 'Един и петдесет.'],
+        correctAnswer: 'Два без десет.',
       },
       {
-        images: ['/assets/lesson-07/26-upr-17-napishite-chasa/01-chas-01-55.jpg'],
-        text: 'Два без пет.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex5',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/01-chas-01-55.jpg',
+        left: 'Два без пет.',
+        options: [],
+        correctAnswer: 'Два без пет.',
         isExample: true,
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 24: ГРАМАТИКА 4 — Части на денонощието
+  // Картите показват само името на частта от денонощието (като в учебника).
+  // Часовете-примери са в зелено инфо-боксче отгоре, отделени от новите думи.
   {
     id: 'l07-gramatika-04',
     type: 'grammar_examples',
@@ -759,31 +841,36 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с частите на денонощието. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g4.instruction',
     order: 24,
+    grammarHighlight: {
+      text: 'Кога? Кажете часа с части на денонощието:',
+      examples: [
+        '8:00 ч. — осем часа сутринта',
+        '11:00 ч. — единайсет часа преди обед',
+        '15:00 ч. — три часа следобед',
+        '20:00 ч. — осем часа вечерта',
+        '23:00 ч. — единайсет часа през нощта',
+      ],
+    },
     examples: [
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/03-sutrinta-zakuska.jpg',
         text: 'сутринта',
-        subtext: '8:00 ч. = осем часа сутринта',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/04-na-obed-salata.jpg',
         text: 'на обед',
-        subtext: '11:00 ч. = единайсет часа преди обед',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/01-prez-denya-rabotnik.jpg',
         text: 'следобед',
-        subtext: '15:00 ч. = три часа следобед',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/05-vecher-tv.jpg',
         text: 'вечерта',
-        subtext: '20:00 ч. = осем часа вечерта',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/02-prez-noshta-syam.jpg',
         text: 'през нощта',
-        subtext: '23:00 ч. = единайсет часа през нощта',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/06-den-peyzazh.jpg',
@@ -821,60 +908,90 @@ export const exercises: Exercise[] = [
     ],
   } as MatchPairsExercise,
 
-  // ORDER 26: Упр. 19 — Напишете часа с думи
+  // ORDER 26: Упр. 19 — Изберете часа с думи (dropdown_match)
   {
     id: 'l07-ex-19',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 19',
-    instruction: 'Напишете часа с думи по модела.',
+    instruction: 'Изберете правилния израз за всеки час.',
     order: 26,
     points: 6,
-    layout: 'two-column',
-    sentences: [
+    questions: [
       {
-        text: '21:30 | Девет и половина вечерта.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex0',
+        left: '21:30 — …',
+        options: [],
+        correctAnswer: 'Девет и половина вечерта.',
         isExample: true,
       },
       {
-        text: '08:15 | _______',
-        blanks: [1],
-        correctAnswers: ['Осем и четвърт сутринта.'],
-        acceptableAnswers: [['Осем и петнайсет сутринта.']],
+        id: 'q1',
+        left: '08:15 — …',
+        options: [
+          'Осем и четвърт сутринта.',
+          'Девет без четвърт сутринта.',
+          'Осем и половина сутринта.',
+          'Осем и петнайсет вечерта.',
+        ],
+        correctAnswer: 'Осем и четвърт сутринта.',
       },
       {
-        text: '12:30 | _______',
-        blanks: [1],
-        correctAnswers: ['Дванайсет и половина.'],
-        acceptableAnswers: [['Дванайсет и тридесет.', 'Дванайсет и трийсет.']],
+        id: 'q2',
+        left: '12:30 — …',
+        options: [
+          'Дванайсет и половина.',
+          'Дванайсет и четвърт.',
+          'Дванайсет без половина.',
+          'Един и половина.',
+        ],
+        correctAnswer: 'Дванайсет и половина.',
       },
       {
-        text: '23:25 | _______',
-        blanks: [1],
-        correctAnswers: ['Единайсет и двайсет и пет през нощта.'],
-        acceptableAnswers: [['Дванайсет без тридесет и пет.', 'Дванайсет без трийсет и пет.']],
+        id: 'q3',
+        left: '23:25 — …',
+        options: [
+          'Единайсет и двайсет и пет през нощта.',
+          'Дванайсет и двайсет и пет през нощта.',
+          'Единайсет и половина през нощта.',
+          'Дванайсет без двайсет и пет вечерта.',
+        ],
+        correctAnswer: 'Единайсет и двайсет и пет през нощта.',
       },
       {
-        text: '16:45 | _______',
-        blanks: [1],
-        correctAnswers: ['Пет без четвърт следобед.'],
-        acceptableAnswers: [['Пет без петнайсет следобед.']],
+        id: 'q4',
+        left: '16:45 — …',
+        options: [
+          'Пет без четвърт следобед.',
+          'Пет и петнайсет следобед.',
+          'Четири и половина следобед.',
+          'Пет и половина следобед.',
+        ],
+        correctAnswer: 'Пет без четвърт следобед.',
       },
       {
-        text: '11:05 | _______',
-        blanks: [1],
-        correctAnswers: ['Единайсет и пет преди обед.'],
-        acceptableAnswers: [['Единайсет и пет.']],
+        id: 'q5',
+        left: '11:05 — …',
+        options: [
+          'Единайсет и пет преди обед.',
+          'Единайсет без пет преди обед.',
+          'Десет и пет преди обед.',
+          'Единайсет и петнайсет преди обед.',
+        ],
+        correctAnswer: 'Единайсет и пет преди обед.',
       },
       {
-        text: '20:35 | _______',
-        blanks: [1],
-        correctAnswers: ['Девет без двайсет и пет вечерта.'],
-        acceptableAnswers: [['Осем и трийсет и пет вечерта.', 'Осем и тридесет и пет вечерта.']],
+        id: 'q6',
+        left: '20:35 — …',
+        options: [
+          'Девет без двайсет и пет вечерта.',
+          'Осем и двайсет и пет вечерта.',
+          'Девет и трийсет и пет вечерта.',
+          'Осем без двайсет и пет вечерта.',
+        ],
+        correctAnswer: 'Девет без двайсет и пет вечерта.',
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 27: ДИАЛОЗИ 2 — Колко е часът?
   {
@@ -907,45 +1024,50 @@ export const exercises: Exercise[] = [
   // SKIP Упр. 20 — Прочетете диалозите по двойки (клиент)
   // SKIP Упр. 21 — Работете по двойки (клиент)
 
-  // ORDER 28: Упр. 22 — Слушайте и напишете отговорите
+  // ORDER 28: Упр. 22 — Слушайте и изберете отговора (dropdown_match)
+  // Опциите ползват цифри за по-голяма яснота при чете на мобилно устройство.
   {
     id: 'l07-ex-22',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 22',
-    instruction: 'Слушайте и напишете отговорите на въпросите.',
+    instruction: 'Изслушайте текста и изберете правилния отговор.',
     order: 28,
     points: 3,
-    layout: 'qa-stacked',
-    listeningText: 'Мартин обядва в един часа след обяд. Галя вечеря в седем и половина вечерта. Светла и Ани пият кафе в десет часа преди обед.',
-    sentences: [
+    questions: [
       {
-        text: 'В колко часа закусва Петър? | Петър закусва в седем и тридесет сутринта.',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex0',
+        left: 'В колко часа закусва Петър? — …',
+        options: [],
+        correctAnswer: 'В 7:30 сутринта.',
         isExample: true,
       },
       {
-        text: 'В колко часа обядва Мартин? | _______',
-        blanks: [1],
-        correctAnswers: ['Мартин обядва в един часа след обяд.'],
-        acceptableAnswers: [['В един часа след обяд.', 'Обядва в един часа.']],
+        id: 'q1',
+        left: 'В колко часа обядва Мартин? — …',
+        options: ['В 13:00 след обяд.', 'В 11:00 преди обед.', 'В 14:30 следобед.', 'В 19:30 вечерта.'],
+        correctAnswer: 'В 13:00 след обяд.',
       },
       {
-        text: 'В колко часа вечеря Галя? | _______',
-        blanks: [1],
-        correctAnswers: ['Галя вечеря в седем и половина вечерта.'],
-        acceptableAnswers: [['В седем и половина вечерта.', 'Вечеря в седем и половина.']],
+        id: 'q2',
+        left: 'В колко часа вечеря Галя? — …',
+        options: ['В 19:30 вечерта.', 'В 18:00 вечерта.', 'В 20:00 вечерта.', 'В 21:30 вечерта.'],
+        correctAnswer: 'В 19:30 вечерта.',
       },
       {
-        text: 'В колко часа пият кафе Светла и Ани? | _______',
-        blanks: [1],
-        correctAnswers: ['Светла и Ани пият кафе в десет часа преди обед.'],
-        acceptableAnswers: [['В десет часа преди обед.', 'Пият кафе в десет часа.']],
+        id: 'q3',
+        left: 'В колко часа пият кафе Светла и Ани? — …',
+        options: ['В 10:00 преди обед.', 'В 8:00 сутринта.', 'В 11:00 преди обед.', 'В 13:00 след обяд.'],
+        correctAnswer: 'В 10:00 преди обед.',
       },
     ],
-  } as WorkbookFillBlankExercise,
+    // Listening text — TTS-friendly (numbers as words)
+    listeningText: 'Мартин обядва в един часа след обяд. Галя вечеря в седем и половина вечерта. Светла и Ани пият кафе в десет часа преди обед.',
+  } as DropdownMatchExercise,
 
   // ORDER 29: ГРАМАТИКА 5 — от, до, преди, след
+  // Картите показват само примерите (без правилата). Правилата се отделят
+  // в зеленото инфо-боксче (grammarHighlight) — както в учебника.
+  // TTS чете часовете с думи, а не с цифри.
   {
     id: 'l07-gramatika-05',
     type: 'grammar_examples',
@@ -954,26 +1076,31 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с предлозите за начало и край на действие. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g5.instruction',
     order: 29,
+    grammarHighlight: {
+      text: 'Предлози за време:',
+      examples: [
+        'от … до … — от кога до кога',
+        'преди — по-рано от',
+        'след — по-късно от',
+        'от понеделник до петък — през седмицата',
+        'в събота и неделя — през уикенда',
+      ],
+    },
     examples: [
       {
         imageUrl: '/assets/lesson-07/34-gramatika-5-ot-do-predi-sled/01-ot-do-chasove.jpg',
         text: 'Учим български от 10:00 до 12:00 часа.',
-        subtext: 'от … до … = от кога до кога',
+        ttsText: 'Учим български от десет до дванайсет часа.',
       },
       {
         imageUrl: '/assets/lesson-07/34-gramatika-5-ot-do-predi-sled/02-predi-chas.jpg',
         text: 'Закусвам преди 10:00 часа.',
-        subtext: 'преди = по-рано от',
+        ttsText: 'Закусвам преди десет часа.',
       },
       {
         imageUrl: '/assets/lesson-07/34-gramatika-5-ot-do-predi-sled/03-sled-chas.jpg',
         text: 'Обядвам след 12:00 часа.',
-        subtext: 'след = по-късно от',
-      },
-      {
-        imageUrl: '',
-        text: 'от понеделник до петък = през седмицата',
-        subtext: 'в събота и неделя = през уикенда',
+        ttsText: 'Обядвам след дванайсет часа.',
       },
     ],
   } as GrammarExamplesExercise,
@@ -983,60 +1110,61 @@ export const exercises: Exercise[] = [
   // ──────────────────────────────────────────────────────────
 
   // ORDER 30: Упр. 23 — Изберете подходящите предлози
+  // `…` (елипсис) се замества от dropdown в DropdownMatch компонента.
   {
     id: 'l07-ex-23',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 23',
-    instruction: 'Изберете подходящия предлог от списъка.',
+    instruction: 'Изберете подходящия предлог от падащото меню.',
     order: 30,
     points: 8,
     questions: [
       {
         id: 'q1',
-        left: 'Закусвам _______ 8:30.',
+        left: 'Закусвам … 8:30.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'в',
       },
       {
         id: 'q2',
-        left: 'Имам време _______ 19:30.',
+        left: 'Имам време … 19:30.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'до',
       },
       {
         id: 'q3',
-        left: '_______ уикенда има много хора тук.',
+        left: '… уикенда има много хора тук.',
         options: ['В', 'До', 'От', 'Преди', 'През', 'След'],
         correctAnswer: 'През',
       },
       {
         id: 'q4a',
-        left: 'Тя работи _______ 9:00',
+        left: 'Тя работи … 9:00',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'от',
       },
       {
         id: 'q4b',
-        left: '_______ 17:30.',
+        left: '… 17:30.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'до',
       },
       {
         id: 'q5',
-        left: 'Ние учим _______ 12:30.',
+        left: 'Ние учим … 12:30.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'до',
         alternateCorrectAnswers: ['след'],
       },
       {
         id: 'q6',
-        left: 'Той няма време _______ седмицата.',
+        left: 'Той няма време … седмицата.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'през',
       },
       {
         id: 'q7',
-        left: 'Обядвам _______ 12:00.',
+        left: 'Обядвам … 12:00.',
         options: ['в', 'до', 'от', 'преди', 'през', 'след'],
         correctAnswer: 'след',
         alternateCorrectAnswers: ['в'],
@@ -1091,6 +1219,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Посоки на света',
     instruction: '',
     order: 32,
+    headerImageUrl: '/assets/lesson-07/38-novi-dumi-6-posoki-svyat/01-kompas.png',
     cards: [
       { id: 'sever',       imageUrl: '', label: 'север'      },
       { id: 'severoiztok', imageUrl: '', label: 'североизток'},
@@ -1132,34 +1261,34 @@ export const exercises: Exercise[] = [
     questions: [
       {
         id: 'q1',
-        left: 'Гърция е на _______ от България.',
+        left: 'Гърция е на … от България.',
         options: ['север', 'юг', 'изток', 'запад', 'югоизток', 'югозапад'],
         correctAnswer: 'юг',
         alternateCorrectAnswers: ['югоизток', 'югозапад'],
       },
       {
         id: 'q2',
-        left: 'Сърбия е на _______ от България.',
+        left: 'Сърбия е на … от България.',
         options: ['север', 'юг', 'изток', 'запад', 'югоизток', 'югозапад'],
         correctAnswer: 'запад',
       },
       {
         id: 'q3',
-        left: 'Турция е на _______ от България.',
+        left: 'Турция е на … от България.',
         options: ['север', 'юг', 'изток', 'запад', 'югоизток', 'югозапад'],
         correctAnswer: 'югоизток',
         alternateCorrectAnswers: ['юг', 'изток'],
       },
       {
         id: 'q4',
-        left: 'Северна Македония е на _______ от България.',
+        left: 'Северна Македония е на … от България.',
         options: ['север', 'юг', 'изток', 'запад', 'югоизток', 'югозапад'],
         correctAnswer: 'запад',
         alternateCorrectAnswers: ['югозапад'],
       },
       {
         id: 'q5',
-        left: 'Черно море е на _______ от България.',
+        left: 'Черно море е на … от България.',
         options: ['север', 'юг', 'изток', 'запад', 'югоизток', 'югозапад'],
         correctAnswer: 'изток',
       },
@@ -1193,49 +1322,54 @@ export const exercises: Exercise[] = [
   // СТРАНИЦА 72
   // ──────────────────────────────────────────────────────────
 
-  // ORDER 36: Упр. 28 — Поставете глагола ОТИВАМ в правилната форма
+  // ORDER 36: Упр. 28 — Изберете правилната форма на глагола ОТИВАМ
   {
     id: 'l07-ex-28',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 28',
-    instruction: 'Напишете глагола **отивам** в правилната форма.',
+    instruction: 'Изберете правилната форма на глагола **отивам**.',
     order: 36,
     points: 5,
-    layout: 'single',
-    sentences: [
+    questions: [
       {
-        text: 'Отивам на работа. (аз)',
-        blanks: [],
-        correctAnswers: [],
+        id: 'ex',
+        left: 'Отивам на работа. (аз)',
+        options: [],
+        correctAnswer: 'Отивам',
         isExample: true,
       },
       {
-        text: '_______ на пазара. (ние)',
-        blanks: [0],
-        correctAnswers: ['Отиваме'],
+        id: 'q1',
+        left: '… на пазара. (ние)',
+        options: ['Отивам', 'Отиваш', 'Отива', 'Отиваме', 'Отивате', 'Отиват'],
+        correctAnswer: 'Отиваме',
       },
       {
-        text: 'Къде _______? (ти)',
-        blanks: [1],
-        correctAnswers: ['отиваш'],
+        id: 'q2',
+        left: 'Къде … ? (ти)',
+        options: ['отивам', 'отиваш', 'отива', 'отиваме', 'отивате', 'отиват'],
+        correctAnswer: 'отиваш',
       },
       {
-        text: '_______ в магазина. (те)',
-        blanks: [0],
-        correctAnswers: ['Отиват'],
+        id: 'q3',
+        left: '… в магазина. (те)',
+        options: ['Отивам', 'Отиваш', 'Отива', 'Отиваме', 'Отивате', 'Отиват'],
+        correctAnswer: 'Отиват',
       },
       {
-        text: '_______ в Пловдив. (вие)',
-        blanks: [0],
-        correctAnswers: ['Отивате'],
+        id: 'q4',
+        left: '… в Пловдив. (вие)',
+        options: ['Отивам', 'Отиваш', 'Отива', 'Отиваме', 'Отивате', 'Отиват'],
+        correctAnswer: 'Отивате',
       },
       {
-        text: '_______ на работа преди осем и половина. (той)',
-        blanks: [0],
-        correctAnswers: ['Отива'],
+        id: 'q5',
+        left: '… на работа преди осем и половина. (той)',
+        options: ['Отивам', 'Отиваш', 'Отива', 'Отиваме', 'Отивате', 'Отиват'],
+        correctAnswer: 'Отива',
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 37: ДИАЛОЗИ 4 — Довиждане и уикенд
   {
@@ -1279,51 +1413,7 @@ export const exercises: Exercise[] = [
   // SKIP Упр. 29 — Прочетете диалозите по двойки (клиент)
   // SKIP Упр. 30 — Работете по двойки (клиент)
 
-  // ORDER 38: ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ — Упр. 31: Напишете числата с думи
-  {
-    id: 'l07-ex-31',
-    type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 31',
-    subtitle: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
-    instruction: 'Напишете редното числително с думи.',
-    order: 38,
-    points: 6,
-    layout: 'single',
-    sentences: [
-      {
-        text: '_______ (1) януари – Нова година',
-        blanks: [0],
-        correctAnswers: ['Първи'],
-      },
-      {
-        text: '_______ (1) март – Баба Марта',
-        blanks: [0],
-        correctAnswers: ['Първи'],
-      },
-      {
-        text: '_______ (3) март – Национален празник на България',
-        blanks: [0],
-        correctAnswers: ['Трети'],
-      },
-      {
-        text: '_______ (8) март – Ден на жената',
-        blanks: [0],
-        correctAnswers: ['Осми'],
-      },
-      {
-        text: '_______ (24) май – Ден на азбуката',
-        blanks: [0],
-        correctAnswers: ['Двайсет и четвърти'],
-        acceptableAnswers: [['Двадесет и четвърти']],
-      },
-      {
-        text: '_______ (25) декември – Коледа',
-        blanks: [0],
-        correctAnswers: ['Двайсет и пети'],
-        acceptableAnswers: [['Двадесет и пети']],
-      },
-    ],
-  } as WorkbookFillBlankExercise,
+  // ORDER 38: Упр. 31 е премахнато по обратна връзка от клиента.
 
   // ORDER 39: Упр. 32 — Напишете поздрав за всеки празник
   {
@@ -1337,38 +1427,38 @@ export const exercises: Exercise[] = [
       {
         id: 'q0',
         left: 'Днес е 1 януари.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
         correctAnswer: 'Честита Нова година!',
         isExample: true,
       },
       {
         id: 'q1',
         left: 'Днес е 1 март.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
         correctAnswer: 'Честита Баба Марта!',
       },
       {
         id: 'q2',
         left: 'Днес е 8 март.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
-        correctAnswer: 'Честит празник!',
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        correctAnswer: 'Честит ден на жената!',
       },
       {
         id: 'q3',
         left: 'Днес е 24 май.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
         correctAnswer: 'Честит празник!',
       },
       {
         id: 'q4',
         left: 'Днес е 25 декември.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
         correctAnswer: 'Честита Коледа!',
       },
       {
         id: 'q5',
         left: 'Днес имам рожден ден.',
-        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
+        options: ['Честита Нова година!', 'Честита Баба Марта!', 'Честит ден на жената!', 'Честит празник!', 'Честита Коледа!', 'Честит рожден ден!'],
         correctAnswer: 'Честит рожден ден!',
       },
     ],
@@ -1462,63 +1552,102 @@ export const exercises: Exercise[] = [
   // ORDER 43: Упр. 36 — Отговорете на въпросите (Ибрахим)
   {
     id: 'l07-ex-36',
-    type: 'workbook_fill_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 36',
-    instruction: 'Отговорете на въпросите за текста.',
+    instruction: 'Отговорете на въпросите за текста — изберете правилния отговор.',
     order: 43,
     points: 8,
-    layout: 'qa-stacked',
-    sentences: [
+    questions: [
       {
-        text: 'Къде живее Ибрахим? | _______',
-        blanks: [1],
-        correctAnswers: ['Ибрахим живее в София в малък апартамент.'],
-        acceptableAnswers: [['В София.', 'В малък апартамент в София.']],
+        id: 'q1',
+        left: 'Къде живее Ибрахим?',
+        options: [
+          'В София, в малък апартамент.',
+          'В Пловдив, в голяма къща.',
+          'В арабско училище.',
+          'На планина Витоша.',
+        ],
+        correctAnswer: 'В София, в малък апартамент.',
       },
       {
-        text: 'Къде работи? | _______',
-        blanks: [1],
-        correctAnswers: ['Работи в арабско училище.'],
-        acceptableAnswers: [['В арабско училище.']],
+        id: 'q2',
+        left: 'Къде работи?',
+        options: [
+          'В арабско училище.',
+          'В български университет.',
+          'В болница.',
+          'В супермаркет.',
+        ],
+        correctAnswer: 'В арабско училище.',
       },
       {
-        text: 'В колко часа отива в училище сутрин? | _______',
-        blanks: [1],
-        correctAnswers: ['Отива в осем и тридесет сутринта.'],
-        acceptableAnswers: [['В осем и тридесет.', 'В 8:30.']],
+        id: 'q3',
+        left: 'В колко часа отива в училище сутрин?',
+        options: [
+          'В седем и петнайсет.',
+          'В осем и тридесет.',
+          'В девет часа.',
+          'В десет и половина.',
+        ],
+        correctAnswer: 'В осем и тридесет.',
       },
       {
-        text: 'Има ли обедна почивка? | _______',
-        blanks: [1],
-        correctAnswers: ['Да, има почивка от дванайсет и тридесет до тринайсет и тридесет.'],
-        acceptableAnswers: [['Да, от 12:30 до 13:30.', 'Да, от дванайсет и тридесет.']],
+        id: 'q4',
+        left: 'Има ли обедна почивка?',
+        options: [
+          'Да, от дванайсет и тридесет до тринайсет и тридесет.',
+          'Да, от единайсет до дванайсет.',
+          'Не, няма обедна почивка.',
+          'Да, от четиринайсет до петнайсет.',
+        ],
+        correctAnswer: 'Да, от дванайсет и тридесет до тринайсет и тридесет.',
       },
       {
-        text: 'Какво обядва? | _______',
-        blanks: [1],
-        correctAnswers: ['Обядва сандвич и кафе.'],
-        acceptableAnswers: [['Сандвич и кафе.']],
+        id: 'q5',
+        left: 'Какво обядва?',
+        options: [
+          'Сандвич и кафе.',
+          'Супа и салата.',
+          'Пица и сок.',
+          'Месо и ориз.',
+        ],
+        correctAnswer: 'Сандвич и кафе.',
       },
       {
-        text: 'До колко часа работи? | _______',
-        blanks: [1],
-        correctAnswers: ['Работи до шестнайсет и тридесет.'],
-        acceptableAnswers: [['До 16:30.', 'До шестнайсет тридесет.']],
+        id: 'q6',
+        left: 'До колко часа работи?',
+        options: [
+          'До петнайсет часа.',
+          'До шестнайсет и тридесет.',
+          'До осемнайсет часа.',
+          'До деветнайсет и тридесет.',
+        ],
+        correctAnswer: 'До шестнайсет и тридесет.',
       },
       {
-        text: 'Кога учи английски? | _______',
-        blanks: [1],
-        correctAnswers: ['В сряда и петък учи английски от осемнайсет до деветнайсет и тридесет.'],
-        acceptableAnswers: [['В сряда и петък.', 'От 18:00 до 19:30.']],
+        id: 'q7',
+        left: 'Кога учи английски?',
+        options: [
+          'В сряда и петък, от осемнайсет до деветнайсет и тридесет.',
+          'В понеделник и вторник сутринта.',
+          'Всеки ден следобед.',
+          'Само в събота и неделя.',
+        ],
+        correctAnswer: 'В сряда и петък, от осемнайсет до деветнайсет и тридесет.',
       },
       {
-        text: 'Как се казва планината близо до София? | _______',
-        blanks: [1],
-        correctAnswers: ['Планината се казва Витоша.'],
-        acceptableAnswers: [['Витоша.']],
+        id: 'q8',
+        left: 'Как се казва планината близо до София?',
+        options: [
+          'Рила.',
+          'Пирин.',
+          'Витоша.',
+          'Стара планина.',
+        ],
+        correctAnswer: 'Витоша.',
       },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
 ];
 

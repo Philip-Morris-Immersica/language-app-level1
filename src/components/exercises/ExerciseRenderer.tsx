@@ -143,6 +143,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
+          listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />

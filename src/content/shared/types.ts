@@ -330,6 +330,8 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Опционален текст за слушане — рендира зелен бутон „Слушай" над въпросите. */
+  listeningText?: string;
   /** Масив от снимки с подписи, показвани над въпросите. */
   images?: {
     imageUrl: string;

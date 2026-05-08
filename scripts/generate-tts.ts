@@ -155,6 +155,8 @@ function cleanForGeminiTTS(raw: string): string {
     .replace(/\*\*/g, '')          // strip markdown bold markers (e.g. **това**)
     .replace(/^[–—]\s*/gm, '')
     .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/\s*=\s*/g, ', ')     // „=“ → comma (TTS reads „=“ as „равно“)
+    .replace(/\s+\/\s+/g, ', ')    // „ / “ → comma between alternatives (e.g. „БЕЗ / И“)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -325,23 +327,44 @@ function getDialogueVoice(speaker: string | undefined, lineIndex: number): strin
   return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
 }
 
-/** Per-section counters so consecutive same-gender lines get voice alternation. */
+/**
+ * Resolve TTS voice for a dialogue line.
+ *
+ * Voice-alternation rule (matches `tts-audio.mdc`):
+ *   The script swaps to the ALT voice (Despina / Achird) ONLY for
+ *   **consecutive same-gender lines within the same section** — a clear
+ *   indicator of two characters of the same gender in conversation.
+ *   When genders alternate by line (А=female, Б=male, …), the same
+ *   primary voice is reused for every line of that character so it
+ *   does not sound like two different people.
+ *
+ * `prevGender` tracks the gender of the immediately previous line in this
+ * section. `consecutiveSameGenderTurn` is the running parity index for the
+ * current run of same-gender lines (0 → primary, 1 → ALT, 2 → primary, …).
+ */
 function dialogueLineVoice(
   line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
   lineIndex: number,
-  maleTurn: { n: number },
-  femaleTurn: { n: number },
+  state: {
+    prevGender: 'male' | 'female' | null;
+    consecutiveSameGenderTurn: number;
+  },
 ): string {
-  if (line.voiceGender === 'female') {
-    const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
-    femaleTurn.n++;
-    return v;
+  if (line.voiceGender === 'female' || line.voiceGender === 'male') {
+    if (state.prevGender === line.voiceGender) {
+      state.consecutiveSameGenderTurn += 1;
+    } else {
+      state.consecutiveSameGenderTurn = 0;
+    }
+    state.prevGender = line.voiceGender;
+
+    if (line.voiceGender === 'female') {
+      return state.consecutiveSameGenderTurn % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
+    }
+    return state.consecutiveSameGenderTurn % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
   }
-  if (line.voiceGender === 'male') {
-    const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
-    maleTurn.n++;
-    return v;
-  }
+  state.prevGender = null;
+  state.consecutiveSameGenderTurn = 0;
   return getDialogueVoice(line.speaker, lineIndex);
 }
 
@@ -495,8 +518,10 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
     for (const section of ex.sections!) {
-      const maleTurn = { n: 0 };
-      const femaleTurn = { n: 0 };
+      const voiceState = {
+        prevGender: null as 'male' | 'female' | null,
+        consecutiveSameGenderTurn: 0,
+      };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         // Use ttsText override when set (e.g. to expand abbreviations); display text stays unchanged
@@ -505,7 +530,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn),
+          voice: dialogueLineVoice(line, i, voiceState),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });

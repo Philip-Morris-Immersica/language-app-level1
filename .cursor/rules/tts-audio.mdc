@@ -124,10 +124,13 @@ Two cleaning functions exist:
 ## Content Rules for TTS Quality
 
 These rules in **content files** directly affect audio quality:
-- **Numbers as words** in `listeningText` and `reading_text.paragraphs` — write „седемдесет и шест" not „76". TTS reads digits unnaturally.
+- **Numbers as words** in `listeningText`, `reading_text.paragraphs`, **AND every `grammar_examples.examples[].text/subtext` that will be TTS-read** — write „седемдесет и шест" not „76", „десет часа" not „10:00". TTS reads digits unnaturally. If display must show digits (e.g. „Закусвам преди 10:00 часа."), set `ttsText: 'Закусвам преди десет часа.'` so display stays unchanged but audio is clean.
 - **Period, not dash** between sums — `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`. Dashes confuse pacing.
+- **No `=` sign in TTS text** — TTS reads `=` as „равно" / „равняе се на". The script auto-replaces `=` → `,` in `cleanForGeminiTTS()`, but prefer to write commas directly in content. For `grammar_examples` cards where a visual `=` is desired (e.g. „30 минути = половина"), set `ttsText: '30 минути, половина.'` to keep display + clean audio.
+- **No `/` between alternatives in TTS** — write „без, и" instead of „БЕЗ / И"; „минути преди, след часа" instead of „минути преди / след часа". Slashes break pacing. Use `ttsText` to override.
 - **No markdown** in text fields — TTS reads asterisks, brackets etc. Keep text clean. (Изключение: `grammar_table.cells` може да ползва `**bold**` за удебеляване на окончания — markdown се премахва преди TTS.)
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
+- **Voice alternation rule (Achernar↔Despina, Charon↔Achird)** — the script alternates between primary and ALT voices ONLY for **consecutive same-gender lines within the same dialogue section** (clear case of two characters of the same gender in conversation). For sections where genders alternate (А=жена / Б=мъж by line), the same primary voice is used for all of А's lines and all of Б's lines. This avoids the bug where the same character sounds like two different people across lines.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
 - **`reading_text` с илюстрации задължително с TTS** — ако урок смесва текст + нови думи (напр. урок 3 упр. 33, урок 4 упр. 34/37/39/41), всяка картинка в `images[]` трябва да има `ttsWordId` + `label`. Това произвежда `words/{ttsWordId}.mp3` и flip-card свири звук при клик. БЕЗ това картинките остават без звук.
 
