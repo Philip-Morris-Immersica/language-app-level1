@@ -29,6 +29,8 @@ export const exercises: Exercise[] = [
 
   // ORDER 1: Упр. 1 — Напишете поздравите под картинките
   // Подредба по учебника: 1) ден, 2) вечер, 3) утро, 4) нощ.
+  // Имената на JPG файловете не съвпадат с картинките — подложените изображения са подредени така:
+  // 01 → ден; 02 → вечер; 03 → утро; 04 → нощ.
   {
     id: 'l07-ex-01',
     type: 'image_labeling',
@@ -38,23 +40,22 @@ export const exercises: Exercise[] = [
     points: 4,
     displayType: 'default',
     images: [
-      { id: 'den',    imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/02-dobru-den.jpg',    correctLabel: 'Добър ден!'   },
-      { id: 'vecher', imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/03-dobru-vecher.jpg', correctLabel: 'Добър вечер!' },
-      { id: 'utro',   imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/01-dobro-utro.jpg',   correctLabel: 'Добро утро!'  },
+      { id: 'den',    imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/01-dobro-utro.jpg',   correctLabel: 'Добър ден!'   },
+      { id: 'vecher', imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/02-dobru-den.jpg',    correctLabel: 'Добър вечер!' },
+      { id: 'utro',   imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/03-dobru-vecher.jpg', correctLabel: 'Добро утро!'  },
       { id: 'nosht',  imageUrl: '/assets/lesson-07/01-upr-01-pozdravi-pod-kartinki/04-leka-nosht.jpg',   correctLabel: 'Лека нощ!'    },
     ],
     options: ['Добро утро!', 'Добър ден!', 'Добър вечер!', 'Лека нощ!'],
   } as ImageLabelingExercise,
 
   // ORDER 2: НОВИ ДУМИ 1 — Календар: ден, седмица, месец, година
-  // Календарът е като headerImageUrl (голяма снимка отгоре), думите имат отделни илюстрации.
   {
     id: 'l07-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: '',
     order: 2,
-    headerImageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/01-kalendar-yanuari.jpg',
+    cardsGridMaxCols: 3,
     cards: [
       { id: 'kalendar', imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/01-kalendar-yanuari.jpg', label: 'календар' },
       { id: 'den-nd1',  imageUrl: '/assets/lesson-07/02-novi-dumi-1-kalendar-dni/02-den.png',      label: 'ден' },
@@ -81,6 +82,13 @@ export const exercises: Exercise[] = [
         isExample: true,
       },
       {
+        text: 'Колко дни има един месец? | Един месец има _______ дни.',
+        blanks: [1],
+        correctAnswers: ['трийсет'],
+        acceptableAnswers: [['тридесет']],
+        options: ['двайсет', 'трийсет', 'четирийсет', 'петдесет'],
+      },
+      {
         text: 'Колко седмици има един месец? | Един месец има _______ седмици.',
         blanks: [1],
         correctAnswers: ['четири'],
@@ -92,13 +100,6 @@ export const exercises: Exercise[] = [
         correctAnswers: ['дванайсет'],
         acceptableAnswers: [['дванадесет']],
         options: ['десет', 'дванайсет', 'двайсет', 'седем'],
-      },
-      {
-        text: 'Колко дни има един месец? | Един месец има _______ дни.',
-        blanks: [1],
-        correctAnswers: ['трийсет'],
-        acceptableAnswers: [['тридесет']],
-        options: ['двайсет', 'трийсет', 'четирийсет', 'петдесет'],
       },
       {
         text: 'Колко дни има една година? | Една година има _______ дни.',
@@ -117,6 +118,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Кой ден е днес?',
     instruction: '',
     order: 4,
+    cardsGridMaxCols: 3,
     cards: [
       { id: 'ponedelnik', imageUrl: '', label: 'понеделник' },
       { id: 'vtornik',    imageUrl: '', label: 'вторник'    },
@@ -177,6 +179,7 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 3',
     instruction: '',
     order: 7,
+    cardsGridMaxCols: 3,
     cards: [
       { id: 'yanuari',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/02-yanuari.png',   label: 'януари'   },
       { id: 'fevruari', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/03-fevruari.png',  label: 'февруари' },
@@ -200,11 +203,12 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Свържете числото с правилния месец.',
     order: 8,
-    points: 11,
+    points: 12,
+    showLeftOrdinal: false,
     pairs: [
       { id: 'p01', left: '1',  correctRight: 'януари'   },
       { id: 'p02', left: '2',  correctRight: 'февруари' },
-      // 3 март е модел в учебника
+      { id: 'p03', left: '3',  correctRight: 'март'     },
       { id: 'p04', left: '4',  correctRight: 'април'    },
       { id: 'p05', left: '5',  correctRight: 'май'      },
       { id: 'p06', left: '6',  correctRight: 'юни'      },
@@ -384,17 +388,43 @@ export const exercises: Exercise[] = [
     subtitle: 'Какво е времето днес?',
     instruction: '',
     order: 13,
+    cardsGridMaxCols: 3,
     cards: [
-      { id: 'studeno',   imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/02-studeno-e.jpg',  label: 'Студено е.',  sublabels: ['0°C'] },
-      { id: 'hladno',    imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/03-hladno-e.jpg',   label: 'Хладно е.',   sublabels: ['10°C'] },
-      { id: 'toplo',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/04-toplo-e.jpg',    label: 'Топло е.',    sublabels: ['20°C'] },
-      { id: 'goreshto',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/05-goreshto-e.jpg', label: 'Горещо е.',   sublabels: ['30°C'] },
-      { id: 'slanchevo', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/06-ima-slunce.jpg', label: 'Слънчево е.', sublabels: ['Има слънце.'] },
-      { id: 'oblachno',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/07-ima-oblaci.jpg', label: 'Облачно е.',  sublabels: ['Има облаци.'] },
-      { id: 'dazhd',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/08-vali-dujd.jpg',  label: 'Дъждовно е.', sublabels: ['Вали дъжд.'] },
+      // Температури: на картата са °C; в TTS изписани думи (Gemini чете ° неясно).
+      {
+        id: 'studeno',
+        imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/02-studeno-e.jpg',
+        label: 'Студено е.',
+        sublabels: ['0°C'],
+        ttsLabel: 'Студено е. Нула градуса.',
+      },
+      {
+        id: 'hladno',
+        imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/03-hladno-e.jpg',
+        label: 'Хладно е.',
+        sublabels: ['10°C'],
+        ttsLabel: 'Хладно е. Десет градуса.',
+      },
+      {
+        id: 'toplo',
+        imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/04-toplo-e.jpg',
+        label: 'Топло е.',
+        sublabels: ['20°C'],
+        ttsLabel: 'Топло е. Двадесет градуса.',
+      },
+      {
+        id: 'goreshto',
+        imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/05-goreshto-e.jpg',
+        label: 'Горещо е.',
+        sublabels: ['30°C'],
+        ttsLabel: 'Горещо е. Тридесет градуса.',
+      },
+      { id: 'slanchevo', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/06-ima-slunce.jpg', label: 'Слънчево е.', sublabels: ['Има слънце.'], ttsIncludeSublabels: true },
+      { id: 'oblachno',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/07-ima-oblaci.jpg', label: 'Облачно е.',  sublabels: ['Има облаци.'], ttsIncludeSublabels: true },
+      { id: 'dazhd',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/08-vali-dujd.jpg',  label: 'Дъждовно е.', sublabels: ['Вали дъжд.'], ttsIncludeSublabels: true },
       { id: 'snyag',     imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/09-vali-sniag.jpg', label: 'Вали сняг.',  sublabels: [] },
-      { id: 'vetrovito', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/10-ima-viatar.jpg', label: 'Ветровито е.',sublabels: ['Има вятър.'] },
-      { id: 'magliovo',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/11-ima-mugla.jpg',  label: 'Мъгливо е.',  sublabels: ['Има мъгла.'] },
+      { id: 'vetrovito', imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/10-ima-viatar.jpg', label: 'Ветровито е.', sublabels: ['Има вятър.'], ttsIncludeSublabels: true },
+      { id: 'magliovo',  imageUrl: '/assets/lesson-07/15-novi-dumi-4-vreme-gradus/11-ima-mugla.jpg',  label: 'Мъгливо е.',  sublabels: ['Има мъгла.'], ttsIncludeSublabels: true },
     ],
   } as IllustratedCardsExercise,
 
@@ -690,8 +720,7 @@ export const exercises: Exercise[] = [
   // ──────────────────────────────────────────────────────────
 
   // ORDER 22: ГРАМАТИКА 3 — Колко е часът?
-  // TTS бележки: дисплеят показва „=“ и „/“ за визуална яснота, но `ttsText`
-  // дава чисто аудио (запетая вместо „=“ и „/“; цифри изписани с думи).
+  // На екрана: като учебник (= и /). За TTS: `ttsText` с точки за паузи където е зададено.
   {
     id: 'l07-gramatika-03',
     type: 'grammar_examples',
@@ -703,109 +732,75 @@ export const exercises: Exercise[] = [
     examples: [
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/01-dvanadeset-chasa.jpg',
-        text: 'Дванайсет часа.',
-        subtext: '12:00',
-        ttsText: 'Дванайсет часа.',
+        text: 'Дванайсет часà.',
+        ttsText: 'Дванайсет часà.',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/02-bez-i.jpg',
-        text: 'БЕЗ / И',
-        subtext: 'минути преди / след часа',
-        ttsText: 'Без, и. Минути преди, след часа.',
+        text: 'без / и',
+        ttsText: 'Без. И.',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/03-polovina.jpg',
         text: '30 минути = половина',
-        subtext: 'Един и половина.',
-        ttsText: 'Тридесет минути, половина. Един и половина.',
+        ttsText: '30 минути. половина',
       },
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/04-chetvurt.jpg',
         text: '15 минути = четвърт',
-        subtext: 'Един и четвърт.',
-        ttsText: 'Петнайсет минути, четвърт. Един и четвърт.',
+        ttsText: '15 минути. четвърт',
       },
     ],
   } as GrammarExamplesExercise,
 
   // ORDER 23: Упр. 17 — Изберете колко е часът (часовник + dropdown отдясно)
+  // Един модел: „Един и десет.“; останалите редове са за попълване.
   {
     id: 'l07-ex-17',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изберете колко е часът на всеки часовник.',
     order: 23,
-    points: 7,
+    points: 6,
     questions: [
       {
-        id: 'ex1',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/12-chas-01-00.jpg',
-        left: 'Един.',
+        id: 'ex-deset',
+        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/10-chas-01-10.jpg',
+        left: '',
         options: [],
-        correctAnswer: 'Един.',
-        isExample: true,
-      },
-      {
-        id: 'ex2',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/11-chas-01-05.jpg',
-        left: 'Един и пет.',
-        options: [],
-        correctAnswer: 'Един и пет.',
+        correctAnswer: 'Един и десет.',
         isExample: true,
       },
       {
         id: 'q1',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/10-chas-01-10.jpg',
-        left: '',
-        options: ['Един и десет.', 'Един и пет.', 'Един и петнайсет.', 'Два без десет.'],
-        correctAnswer: 'Един и десет.',
-      },
-      {
-        id: 'ex3',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/09-chas-01-15.jpg',
-        left: 'Един и петнайсет. (Един и четвърт.)',
-        options: [],
-        correctAnswer: 'Един и петнайсет. (Един и четвърт.)',
-        isExample: true,
-      },
-      {
-        id: 'q2',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/08-chas-01-20.jpg',
         left: '',
         options: ['Един и двайсет.', 'Един и десет.', 'Два без двайсет.', 'Един и двайсет и пет.'],
         correctAnswer: 'Един и двайсет.',
       },
       {
-        id: 'q3',
+        id: 'q2',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/07-chas-01-25.jpg',
         left: '',
         options: ['Един и двайсет и пет.', 'Един и двайсет.', 'Два без двайсет и пет.', 'Един и четвърт.'],
         correctAnswer: 'Един и двайсет и пет.',
       },
       {
-        id: 'ex4',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/06-chas-01-30.jpg',
-        left: 'Един и трийсет. (Един и половина.)',
-        options: [],
-        correctAnswer: 'Един и трийсет. (Един и половина.)',
-        isExample: true,
-      },
-      {
-        id: 'q4',
+        id: 'q3',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/05-chas-01-35.jpg',
         left: '',
         options: ['Два без двайсет и пет.', 'Един и двайсет и пет.', 'Два без петнайсет.', 'Един и трийсет и пет.'],
         correctAnswer: 'Два без двайсет и пет.',
       },
       {
-        id: 'q5',
+        id: 'q4',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/04-chas-01-40.jpg',
         left: '',
         options: ['Два без двайсет.', 'Два без четвърт.', 'Един и трийсет.', 'Два без десет.'],
         correctAnswer: 'Два без двайсет.',
       },
       {
-        id: 'q6',
+        id: 'q5',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/03-chas-01-45.jpg',
         left: '',
         options: ['Два без четвърт.', 'Един и петнайсет.', 'Два без двайсет.', 'Един и три четвърти.'],
@@ -813,26 +808,18 @@ export const exercises: Exercise[] = [
         alternateCorrectAnswers: ['Два без петнайсет.'],
       },
       {
-        id: 'q7',
+        id: 'q6',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/02-chas-01-50.jpg',
         left: '',
         options: ['Два без десет.', 'Един и десет.', 'Два без петнайсет.', 'Един и петдесет.'],
         correctAnswer: 'Два без десет.',
-      },
-      {
-        id: 'ex5',
-        leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/01-chas-01-55.jpg',
-        left: 'Два без пет.',
-        options: [],
-        correctAnswer: 'Два без пет.',
-        isExample: true,
       },
     ],
   } as DropdownMatchExercise,
 
   // ORDER 24: ГРАМАТИКА 4 — Части на денонощието
   // Картите показват само името на частта от денонощието (като в учебника).
-  // Часовете-примери са в зелено инфо-боксче отгоре, отделени от новите думи.
+  // Часовете-примери: зелено инфо-боксче под картите; всеки ред с отделно аудио по клик.
   {
     id: 'l07-gramatika-04',
     type: 'grammar_examples',
@@ -841,14 +828,23 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с частите на денонощието. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g4.instruction',
     order: 24,
+    grammarHighlightAfterBody: true,
     grammarHighlight: {
       text: 'Кога? Кажете часа с части на денонощието:',
+      interactiveExamples: true,
       examples: [
         '8:00 ч. — осем часа сутринта',
-        '11:00 ч. — единайсет часа преди обед',
+        '11:00 ч. — единайсет часа преди обяд',
         '15:00 ч. — три часа следобед',
         '20:00 ч. — осем часа вечерта',
         '23:00 ч. — единайсет часа през нощта',
+      ],
+      exampleTtsTexts: [
+        'Осем часа сутринта.',
+        'Единайсет часа преди обяд.',
+        'Три часа следобед.',
+        'Осем часа вечерта.',
+        'Единайсет часа през нощта.',
       ],
     },
     examples: [
@@ -858,7 +854,8 @@ export const exercises: Exercise[] = [
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/04-na-obed-salata.jpg',
-        text: 'на обед',
+        text: 'на обяд',
+        ttsText: 'На обяд.',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/01-prez-denya-rabotnik.jpg',
@@ -875,12 +872,10 @@ export const exercises: Exercise[] = [
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/06-den-peyzazh.jpg',
         text: 'през деня',
-        subtext: 'денят е от сутринта до вечерта',
       },
       {
         imageUrl: '/assets/lesson-07/27-gramatika-4-den-sutrin-obed/07-nosht-peyzazh.jpg',
         text: 'нощта',
-        subtext: 'нощта е след вечерта',
       },
     ],
   } as GrammarExamplesExercise,
@@ -1076,14 +1071,23 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с предлозите за начало и край на действие. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g5.instruction',
     order: 29,
+    grammarHighlightAfterBody: true,
     grammarHighlight: {
       text: 'Предлози за време:',
+      interactiveExamples: true,
       examples: [
         'от … до … — от кога до кога',
         'преди — по-рано от',
         'след — по-късно от',
         'от понеделник до петък — през седмицата',
         'в събота и неделя — през уикенда',
+      ],
+      exampleTtsTexts: [
+        'От нещо до нещо. От кога до кога.',
+        'Преди означава по-рано от.',
+        'След означава по-късно от.',
+        'От понеделник до петък. През седмицата.',
+        'В събота и неделя. През уикенда.',
       ],
     },
     examples: [
@@ -1219,6 +1223,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Посоки на света',
     instruction: '',
     order: 32,
+    cardsGridMaxCols: 3,
     headerImageUrl: '/assets/lesson-07/38-novi-dumi-6-posoki-svyat/01-kompas.png',
     cards: [
       { id: 'sever',       imageUrl: '', label: 'север'      },

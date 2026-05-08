@@ -16,6 +16,14 @@ interface IllustratedCardsProps {
   exerciseId?: string;
 }
 
+/** Matches `collectIllustratedCardJobs` in scripts/generate-tts.ts — audio must match visible phrasing policy. */
+function getIllustratedCardSpokenText(card: IllustratedCardsExercise['cards'][number]): string {
+  const tts = card.ttsLabel?.trim();
+  if (tts) return tts;
+  const parts = card.ttsIncludeSublabels ? [card.label, ...(card.sublabels ?? [])] : [card.label];
+  return parts.join('. ').replace(/\s*=\s*/g, ', ');
+}
+
 export function IllustratedCards({ exercise, onComplete, exerciseId }: IllustratedCardsProps) {
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
@@ -34,12 +42,12 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
     });
   };
 
-  const handleCardClick = (card: { id: string; label: string; sublabels?: string[] }) => {
-    const parts = [card.label, ...(card.sublabels || [])];
+  const handleCardClick = (card: IllustratedCardsExercise['cards'][number]) => {
+    const spoken = getIllustratedCardSpokenText(card);
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'words', card.id)
       : '';
-    playTtsAudio(audioPath, parts.join('. '));
+    playTtsAudio(audioPath, spoken);
     toggleTranslation(card.id);
     setVisitedCards(prev => new Set(prev).add(card.id));
   };
@@ -72,8 +80,14 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         </p>
       )}
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      {/* Cards Grid — default scales to 4 cols on lg; optional max 3 cols for symmetric rows */}
+      <div
+        className={
+          exercise.cardsGridMaxCols === 3
+            ? 'grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6'
+            : 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'
+        }
+      >
         {exercise.cards.map((card) => (
           <div
             key={card.id}

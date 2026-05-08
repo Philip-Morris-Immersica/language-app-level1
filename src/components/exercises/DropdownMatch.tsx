@@ -170,17 +170,42 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
             const hasSplit = parts.length === 2;
             const before = hasSplit ? parts[0] : question.left;
             const after = hasSplit ? parts[1] : '';
-            return (
-              <div
-                key={question.id}
-                className="bg-gray-50 rounded-xl border-2 border-gray-200 p-4 opacity-70 italic"
-              >
-                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mr-2">Модел:</span>
-                <span className="text-sm md:text-base text-gray-600">
+            const modelAnswer = (
+              <>
+                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mr-2 shrink-0">
+                  {t('exercise.model')}
+                </span>
+                <span className="text-sm md:text-base text-gray-600 italic">
                   {before.trim()}{before.trim() && ' '}
                   <span className="font-bold text-[#4a6b1f] not-italic">{question.correctAnswer}</span>
                   {after && ` ${after.trim()}`}
                 </span>
+              </>
+            );
+            if (question.leftImageUrl) {
+              return (
+                <div
+                  key={question.id}
+                  className="bg-[#f6faf3] rounded-xl border-2 border-[#bcd4a8]/80 p-4 md:col-span-2"
+                >
+                  <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={question.leftImageUrl}
+                      alt=""
+                      className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
+                    />
+                    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">{modelAnswer}</div>
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div
+                key={question.id}
+                className="bg-gray-50 rounded-xl border-2 border-gray-200 p-4 opacity-70"
+              >
+                {modelAnswer}
               </div>
             );
           }

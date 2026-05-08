@@ -123,10 +123,10 @@ export function WorkbookFillBlank({
       const userAnswers = answers[sIdx] || [];
       const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
         const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
-        if (sentence.acceptableAnswers?.[bIdx]) {
-          return sentence.acceptableAnswers[bIdx].some(a => a.toLowerCase() === userVal);
-        }
-        return userVal === correct.toLowerCase();
+        const matchesPrimary = userVal === correct.toLowerCase();
+        const alternates = sentence.acceptableAnswers?.[bIdx];
+        const matchesAlternate = alternates?.some(a => a.toLowerCase() === userVal) ?? false;
+        return matchesPrimary || matchesAlternate;
       });
 
       newBlankValidation[sIdx] = blankResults;
