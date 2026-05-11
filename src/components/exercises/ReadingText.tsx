@@ -344,7 +344,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
           })}
         </div>
       ) : !hideText && images && images.length > 0 ? (
-        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md md:max-w-lg mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <img

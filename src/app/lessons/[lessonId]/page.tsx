@@ -64,7 +64,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
           title={metadata.title}
           description={lessonData.description}
           grammarTopics={lessonData.grammarTopics}
-          hasGrammarReference={hasGrammarReference}
         />
 
         {/* Lesson intro — translatable */}
@@ -75,6 +74,12 @@ export default async function LessonPage({ params }: LessonPageProps) {
         {/* Culture section — collapsible accordion */}
         {lessonData.content?.culturalNotes && lessonData.content.culturalNotes.length > 0 && (
           <CultureSection notes={lessonData.content.culturalNotes} />
+        )}
+
+        {/* Grammar reference (TOP) — same accordion as the bottom one, shown BEFORE exercises
+            so learners can read the rules before practising. */}
+        {hasGrammarReference && (
+          <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
         )}
 
         <LessonExercisesProvider lessonId={lessonId}>
@@ -90,9 +95,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </div>
           )}
 
-          {/* Grammar reference — collapsible, before Преговор */}
-          {lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0 && (
-            <GrammarReferenceSection notes={lessonData.content.grammarReference} />
+          {/* Grammar reference (BOTTOM) — same accordion as the top one, shown AFTER exercises
+              for end-of-lesson review. Visually identical to the top instance. */}
+          {hasGrammarReference && (
+            <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
           )}
 
           {/* Workbook exercises — inline with Преговор divider */}
@@ -107,18 +113,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </>
           )}
         </LessonExercisesProvider>
-
-        {/* Back-to-grammar-reference link — anchors to GrammarReferenceSection's #grammar-reference */}
-        {hasGrammarReference && (
-          <div className="flex justify-end pt-2">
-            <a
-              href="#grammar-reference"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold transition-colors border border-indigo-200"
-            >
-              <T k="lesson.grammarReferenceLink" />
-            </a>
-          </div>
-        )}
 
         {/* Navigation */}
         <LessonNav

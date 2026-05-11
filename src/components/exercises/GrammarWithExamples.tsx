@@ -248,9 +248,12 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                   </div>
                   <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
                   {example.label && (
-                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
-                      {example.label}
-                    </p>
+                    <div className="mt-2 inline-block">
+                      <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
+                        {example.label}
+                      </p>
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                    </div>
                   )}
                 </>
               ) : (
@@ -268,9 +271,12 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     </>
                   )}
                   {example.label && (
-                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
-                      {example.label}
-                    </p>
+                    <div className="mt-2 inline-block">
+                      <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
+                        {example.label}
+                      </p>
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                    </div>
                   )}
                 </>
               )}

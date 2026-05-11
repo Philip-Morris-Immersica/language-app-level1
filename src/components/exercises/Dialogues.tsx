@@ -36,6 +36,7 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
   const [playingLine, setPlayingLine] = useState<string | null>(null);
   const [playingSection, setPlayingSection] = useState<string | null>(null);
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const [revealedLines, setRevealedLines] = useState<Set<string>>(new Set());
   const sectionPlaybackRef = useRef<{ cancelled: boolean } | null>(null);
 
   useEffect(() => {
@@ -81,6 +82,14 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
       : '';
     const rawText = line.text.replace(/^—\s*/, '');
     playTtsAudio(audioPath, rawText, undefined, () => setPlayingLine(null));
+
+    // Reveal translation for this specific line
+    setRevealedLines(prev => {
+      const next = new Set(prev);
+      if (next.has(lineKey)) next.delete(lineKey);
+      else next.add(lineKey);
+      return next;
+    });
   };
 
   const handlePlaySection = (e: React.MouseEvent, section: DialogueSection) => {
@@ -190,7 +199,7 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
                           )}
                           {line.text}
                         </p>
-                        <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
+                        <InlineTranslation text={line.text} visible={revealedLines.has(lineKey) || isRevealed} translations={line.translations} />
                       </div>
                     </div>
                   );
