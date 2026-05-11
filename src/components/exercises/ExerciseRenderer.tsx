@@ -98,10 +98,17 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   const subtitle = 'subtitle' in exercise ? (exercise as any).subtitle as string | undefined : undefined;
 
   function wrap(component: React.ReactNode) {
+    const gh = exercise.grammarHighlight;
+    const ghAfter = gh && exercise.grammarHighlightAfterBody;
+    const ghBefore = gh && !exercise.grammarHighlightAfterBody;
     return (
       <div>
         <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
-        {exercise.grammarHighlight && <GrammarHighlight highlight={exercise.grammarHighlight} />}
+        {ghBefore && (
+          <div className="mb-5">
+            <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
+          </div>
+        )}
         {exercise.mapLabels && exercise.mapLabels.length > 0 && (
           <MapWithLabels
             imageUrl={(exercise as any).imageUrl ?? ''}
@@ -111,6 +118,11 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           />
         )}
         {component}
+        {ghAfter && (
+          <div className="mt-8">
+            <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
+          </div>
+        )}
       </div>
     );
   }
@@ -143,6 +155,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
+          listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />

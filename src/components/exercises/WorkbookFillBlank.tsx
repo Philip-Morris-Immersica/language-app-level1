@@ -123,10 +123,10 @@ export function WorkbookFillBlank({
       const userAnswers = answers[sIdx] || [];
       const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
         const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
-        if (sentence.acceptableAnswers?.[bIdx]) {
-          return sentence.acceptableAnswers[bIdx].some(a => a.toLowerCase() === userVal);
-        }
-        return userVal === correct.toLowerCase();
+        const matchesPrimary = userVal === correct.toLowerCase();
+        const alternates = sentence.acceptableAnswers?.[bIdx];
+        const matchesAlternate = alternates?.some(a => a.toLowerCase() === userVal) ?? false;
+        return matchesPrimary || matchesAlternate;
       });
 
       newBlankValidation[sIdx] = blankResults;
@@ -147,11 +147,13 @@ export function WorkbookFillBlank({
     const blankValArr = blankValidation[sIdx];
 
     const imageEl = sentence.images && sentence.images.length > 0 ? (
-      <img
-        src={sentence.images[0]}
-        alt=""
-        className="w-24 h-24 md:w-36 md:h-36 rounded-lg object-contain shrink-0 bg-gray-50"
-      />
+      <ImageLightbox src={sentence.images[0]} alt="">
+        <img
+          src={sentence.images[0]}
+          alt=""
+          className="w-32 h-32 md:w-48 md:h-48 object-contain shrink-0 cursor-zoom-in"
+        />
+      </ImageLightbox>
     ) : null;
 
     return (

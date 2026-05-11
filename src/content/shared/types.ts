@@ -30,11 +30,15 @@ export type ExerciseType =
   | 'alphabet_maze'        // Interactive letter grid — tap letters in alphabetical order
   | 'table_fill';          // Dialogue paragraphs + fillable table cells (dropdowns)
 
-// Grammar highlight info box — shown above exercise body as a green info panel
+// Grammar highlight info box — shown above exercise body as a green info panel (or below when grammarHighlightAfterBody)
 export interface GrammarHighlight {
   textKey?: string;    // Key in UI_TRANSLATIONS (pre-translated on 7 languages)
   text?: string;       // Inline Bulgarian text (auto-translated via useTranslate)
   examples?: string[]; // Optional example sentences displayed below the text
+  /** Spoken text per `examples[i]` (digits → words, cleaner pacing). Falls back to `examples[i]`. */
+  exampleTtsTexts?: string[];
+  /** When true, each example line is tappable for audio (`exerciseId` passed from ExerciseRenderer). */
+  interactiveExamples?: boolean;
 }
 
 // Map label — overlaid text label on a map image
@@ -60,7 +64,9 @@ export interface BaseExercise {
   points?: number;          // For scoring
   order: number;
   voiceGender?: 'male' | 'female';
-  grammarHighlight?: GrammarHighlight; // Optional green info box shown above exercise body
+  grammarHighlight?: GrammarHighlight; // Optional green info box (above body by default; see grammarHighlightAfterBody)
+  /** If true, `grammarHighlight` renders after the exercise component instead of before it. */
+  grammarHighlightAfterBody?: boolean;
   mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
   mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
 }
@@ -95,6 +101,8 @@ export interface MatchPairsExercise extends BaseExercise {
     correctRight: string;
   }[];
   shuffledRights?: string[]; // Optional pre-shuffled rights
+  /** When false, hide the row index column (e.g. left column already shows "1", "2" …). Default true. */
+  showLeftOrdinal?: boolean;
 }
 
 export interface WordOrderExercise extends BaseExercise {
@@ -143,6 +151,11 @@ export interface IllustratedCardsExercise extends BaseExercise {
   subtitle?: string;       // Optional subtitle shown below title (auto-translated)
   /** Large zoomable illustration shown above the cards grid (e.g. house cross-section, table setting). */
   headerImageUrl?: string;
+  /**
+   * By default cards use up to 4 columns on large screens.
+   * Use `3` for a symmetric grid (e.g. rows of three — typical for НОВИ ДУМИ).
+   */
+  cardsGridMaxCols?: 3;
   audioUrl?: string;       // For "Listen" button
   cards: {
     id: string;
@@ -330,6 +343,8 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Опционален текст за слушане — рендира зелен бутон „Слушай" над въпросите. */
+  listeningText?: string;
   /** Масив от снимки с подписи, показвани над въпросите. */
   images?: {
     imageUrl: string;

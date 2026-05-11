@@ -62,6 +62,8 @@ interface GrammarExample {
   zoomable?: boolean;
   /** TTS generation only — which voice reads the card (see generate-tts.ts). */
   voiceGender?: 'male' | 'female';
+  /** Overrides spoken text (and MP3 source text); display uses `text` / `subtext`. Matches generate-tts.ts. */
+  ttsText?: string;
 }
 
 interface GrammarWithExamplesProps {
@@ -96,9 +98,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
     if (!disableTts) {
       const stripGrammarLinePrefix = (l: string) =>
         l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[✓✗]\s*/, '');
-      const textToSpeak = example.lines
-        ? example.lines.filter(l => l.trim() !== '').map(stripGrammarLinePrefix).join(' ')
-        : [example.text, example.subtext].filter(Boolean).join(' ');
+      const textToSpeak =
+        example.ttsText?.trim() ||
+        (example.lines
+          ? example.lines.filter(l => l.trim() !== '').map(stripGrammarLinePrefix).join(' ')
+          : [example.text, example.subtext].filter(Boolean).join(' '));
       const audioPath = exerciseId
         ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-card-${index}`)
         : '';

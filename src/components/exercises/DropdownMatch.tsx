@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Check, X, RotateCcw } from 'lucide-react';
+import { Check, X, RotateCcw, Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { getTtsAudioPath, playTtsAudio, stopSpeaking } from '@/lib/tts';
 
 interface DropdownQuestion {
   id: string;
@@ -30,6 +31,7 @@ interface DropdownMatchProps {
   exerciseId?: string;
   imageUrl?: string;
   images?: { imageUrl: string; label: string }[];
+  listeningText?: string;
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -41,9 +43,22 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
-export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, images }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, images, listeningText }: DropdownMatchProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  const handlePlayListening = () => {
+    if (!listeningText) return;
+    if (isPlayingAudio) {
+      stopSpeaking();
+      setIsPlayingAudio(false);
+      return;
+    }
+    const audioPath = exerciseId ? getTtsAudioPath(exerciseId, 'listening', exerciseId) : '';
+    setIsPlayingAudio(true);
+    playTtsAudio(audioPath, listeningText, undefined, () => setIsPlayingAudio(false));
+  };
   const s = savedState as any;
 
   const shuffledOptionsMap = useMemo(() => {
@@ -101,15 +116,25 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {listeningText && (
+        <div className="flex justify-end mb-4">
+          <Button
+            onClick={handlePlayListening}
+            className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] gap-2 min-h-[48px] active:scale-95 rounded-lg"
+          >
+            {isPlayingAudio ? <><Pause className="w-5 h-5" />{t('exercise.stop')}</> : <><Play className="w-5 h-5" />{t('exercise.listen')}</>}
+          </Button>
+        </div>
+      )}
       {imageUrl ? (
-        <div className="mb-6 max-w-3xl mx-auto">
+        <div className="mb-6 max-w-md md:max-w-lg mx-auto">
           <ImageLightbox src={imageUrl} alt="">
             <div className="relative flex justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageUrl}
                 alt=""
-                className="max-w-full max-h-[min(560px,72vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
+                className="max-w-full max-h-[min(440px,60vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
               />
             </div>
           </ImageLightbox>
@@ -145,17 +170,42 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
             const hasSplit = parts.length === 2;
             const before = hasSplit ? parts[0] : question.left;
             const after = hasSplit ? parts[1] : '';
-            return (
-              <div
-                key={question.id}
-                className="bg-gray-50 rounded-xl border-2 border-gray-200 p-4 opacity-70 italic"
-              >
-                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mr-2">Модел:</span>
-                <span className="text-sm md:text-base text-gray-600">
+            const modelAnswer = (
+              <>
+                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mr-2 shrink-0">
+                  {t('exercise.model')}
+                </span>
+                <span className="text-sm md:text-base text-gray-600 italic">
                   {before.trim()}{before.trim() && ' '}
                   <span className="font-bold text-[#4a6b1f] not-italic">{question.correctAnswer}</span>
                   {after && ` ${after.trim()}`}
                 </span>
+              </>
+            );
+            if (question.leftImageUrl) {
+              return (
+                <div
+                  key={question.id}
+                  className="bg-[#f6faf3] rounded-xl border-2 border-[#bcd4a8]/80 p-4 md:col-span-2"
+                >
+                  <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={question.leftImageUrl}
+                      alt=""
+                      className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-lg flex-shrink-0 border border-gray-100 shadow-sm bg-white"
+                    />
+                    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">{modelAnswer}</div>
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div
+                key={question.id}
+                className="bg-gray-50 rounded-xl border-2 border-gray-200 p-4 opacity-70"
+              >
+                {modelAnswer}
               </div>
             );
           }

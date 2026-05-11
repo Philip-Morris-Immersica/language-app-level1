@@ -32,11 +32,14 @@ const modelFlag = parseArg('model') || 'gemini';
 const USE_GEMINI = modelFlag === 'gemini';
 
 const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
-/** Second female voice for dialogues with two women (Gemini only; Chirp reuses Achernar). */
-const FEMALE_VOICE_ALT = USE_GEMINI ? 'Despina' : 'bg-BG-Chirp3-HD-Achernar';
+/**
+ * Historical „second speaker“ presets (Despina / Achird) are aliased to the primaries:
+ * team preference — Achernar/Charon only unless content explicitly gains a name-based dual-voice rule.
+ * Chirp already had no distinct alt presets (both mapped to the same HD voice).
+ */
+const FEMALE_VOICE_ALT = FEMALE_VOICE;
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
-/** Second male voice for dialogues with two men (Gemini only; Chirp reuses Charon). */
-const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Charon';
+const MALE_VOICE_ALT = MALE_VOICE;
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
@@ -78,6 +81,7 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
   'l09-gramatika-01-note-0',  // "Понеделник е първият ден от седмицата." — full sentence
   'l09-gramatika-02-note-0',  // "Пловдив е голям град. София е по-голям…" — full sentences
+  'l10-gramatika-01b-note-0', // разписание Заминаващи — пълно изречение с числа
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
@@ -113,7 +117,7 @@ const GRAMMAR_LABELS = new Set([
 ]);
 
 /** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
-const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset']);
+const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
 
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
@@ -129,6 +133,9 @@ const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
   baklava:
     'Bulgarian word баклава (layered pastry dessert). Stress must fall on the first syllable: БА — кла — ва.',
 };
+
+/** `grammar_examples` + highlight rows: force Gemini Pro + Achernar (no Flash / no male line preset). */
+const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set(['l07-gramatika-04', 'l07-gramatika-05']);
 
 /** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
 const ILLUSTRATED_CARD_FLASH_IDS = new Set([
@@ -154,6 +161,8 @@ function cleanForGeminiTTS(raw: string): string {
     .replace(/\*\*/g, '')          // strip markdown bold markers (e.g. **това**)
     .replace(/^[–—]\s*/gm, '')
     .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/\s*=\s*/g, ', ')     // „=“ → comma (TTS reads „=“ as „равно“)
+    .replace(/\s+\/\s+/g, ', ')    // „ / “ → comma between alternatives (e.g. „БЕЗ / И“)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -190,6 +199,11 @@ interface Exercise {
   cards?: { id: string; label: string; sublabels?: string[]; ttsIncludeSublabels?: boolean; ttsLabel?: string }[];
   images?: { id: string; correctLabel: string }[];
   pronouns?: { pronoun: string; description?: string }[];
+  grammarHighlight?: {
+    examples?: string[];
+    exampleTtsTexts?: string[];
+    interactiveExamples?: boolean;
+  };
 }
 
 interface TtsJob {
@@ -324,23 +338,37 @@ function getDialogueVoice(speaker: string | undefined, lineIndex: number): strin
   return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
 }
 
-/** Per-section counters so consecutive same-gender lines get voice alternation. */
+/**
+ * Resolve TTS voice for a dialogue line.
+ *
+ * Primary vs „alt“ presets are the same voice (Achernar / Charon) — no automatic
+ * second speaker timbre. Male/female still follows `voiceGender` or `SPEAKER_VOICE_MAP`.
+ *
+ * (Legacy behaviour alternated Despina/Achird for consecutive same-gender lines; disabled per team preference.)
+ */
 function dialogueLineVoice(
   line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
   lineIndex: number,
-  maleTurn: { n: number },
-  femaleTurn: { n: number },
+  state: {
+    prevGender: 'male' | 'female' | null;
+    consecutiveSameGenderTurn: number;
+  },
 ): string {
-  if (line.voiceGender === 'female') {
-    const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
-    femaleTurn.n++;
-    return v;
+  if (line.voiceGender === 'female' || line.voiceGender === 'male') {
+    if (state.prevGender === line.voiceGender) {
+      state.consecutiveSameGenderTurn += 1;
+    } else {
+      state.consecutiveSameGenderTurn = 0;
+    }
+    state.prevGender = line.voiceGender;
+
+    if (line.voiceGender === 'female') {
+      return state.consecutiveSameGenderTurn % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
+    }
+    return state.consecutiveSameGenderTurn % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
   }
-  if (line.voiceGender === 'male') {
-    const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
-    maleTurn.n++;
-    return v;
-  }
+  state.prevGender = null;
+  state.consecutiveSameGenderTurn = 0;
   return getDialogueVoice(line.speaker, lineIndex);
 }
 
@@ -494,8 +522,10 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
     for (const section of ex.sections!) {
-      const maleTurn = { n: 0 };
-      const femaleTurn = { n: 0 };
+      const voiceState = {
+        prevGender: null as 'male' | 'female' | null,
+        consecutiveSameGenderTurn: 0,
+      };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         // Use ttsText override when set (e.g. to expand abbreviations); display text stays unchanged
@@ -504,7 +534,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn),
+          voice: dialogueLineVoice(line, i, voiceState),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
@@ -553,10 +583,33 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/** Grammar highlight box — one MP3 per example line when `interactiveExamples` is true. */
+function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises) {
+    const gh = ex.grammarHighlight;
+    if (!gh?.interactiveExamples || !gh.examples?.length) continue;
+    const proAchernar = GRAMMAR_PRO_ACHERNAR_ONLY_IDS.has(ex.id);
+    for (let i = 0; i < gh.examples.length; i++) {
+      const raw = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-highlight-${i}.mp3`,
+        text: clean(raw),
+        voice: FEMALE_VOICE,
+        model: proAchernar ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: GEMINI_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'grammar_examples' && !e.disableTts && e.examples)) {
     const useFlash = !!ex.ttsFlash;
+    const proAchernar = GRAMMAR_PRO_ACHERNAR_ONLY_IDS.has(ex.id);
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
       let parts: string;
@@ -573,14 +626,16 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
         parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
       }
-      const voice = card.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
+      const voice = proAchernar ? FEMALE_VOICE : (card.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE);
+      const model = proAchernar ? GEMINI_MODEL : (useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL);
+      const prompt = proAchernar ? GEMINI_PROMPT : (useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT);
       jobs.push({
         category: 'grammar',
         filename: `${ex.id}-card-${i}.mp3`,
         text: clean(parts),
         voice,
-        model: useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL,
-        prompt: useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT,
+        model,
+        prompt,
       });
     }
   }
@@ -712,6 +767,7 @@ async function main() {
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
+    ...collectGrammarHighlightJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectTableFillParagraphJobs(exercises),

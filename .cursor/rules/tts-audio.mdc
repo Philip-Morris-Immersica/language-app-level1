@@ -33,10 +33,13 @@ Some grammar table rows need Pro instead of Flash (e.g. multi-syllable numbers l
 - **Output:** MP3
 - **Rate limit:** ~10 req/min → script uses 6.5s delay between requests
 - **Voices:**
-  - `Achernar` — female (default)
-  - `Despina` — second female (when two women alternate in dialogues)
-  - `Charon` — male
-  - `Achird` — second male (when two men alternate in dialogues)
+  - `Achernar` — female (default for most clips)
+  - `Charon` — male (dialogue lines marked male, speaker map, etc.)
+  - **No second timbre:** `FEMALE_VOICE_ALT` / `MALE_VOICE_ALT` are aliased to the same presets — Despina/Achird are not used (team preference; avoids weaker alt takes). Same‑gender dialogue rows still differ by **text**, not by a second Gemini voice.
+
+### Override: `GRAMMAR_PRO_ACHERNAR_ONLY_IDS`
+
+Exercise IDs listed here use **Gemini Pro + Achernar only** for every grammar clip (`*-card-*`, interactive highlight lines): currently lesson 7 `l07-gramatika-04`, `l07-gramatika-05`.
 
 ### Why Gemini over Chirp3-HD
 
@@ -78,7 +81,8 @@ public/assets/lesson-XX/audio/tts/
 | Grammar tables | `exercises[type=grammar_table].rows[]` | Female | Flash (or Pro via override) |
 | Grammar table notes | `exercises[type=grammar_table].notes[]` | Female | Flash |
 | Grammar visual (pronouns) | `exercises[type=grammar_visual].pronouns[]` | Female | Flash (`{exerciseId}-pronoun-{i}.mp3`) |
-| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female by default; set `voiceGender: 'male'` on a card for Charon (e.g. lines spoken by a male character) | Pro |
+| Grammar examples | `exercises[type=grammar_examples].examples[]` | Female by default; set `voiceGender: 'male'` on a card for Charon | Pro (Flash only if `ttsFlash`); **exception:** IDs in `GRAMMAR_PRO_ACHERNAR_ONLY_IDS` → **Pro + Achernar for every card** |
+| Grammar highlight (`interactiveExamples`) | `grammarHighlight.exampleTtsTexts[]` / `examples[]` | Female | Flash by default; **Pro + Achernar** for IDs in `GRAMMAR_PRO_ACHERNAR_ONLY_IDS` |
 | Reading texts | `exercises[type=reading_text].paragraphs[]` | Female by default; `voiceGender` on exercise for all paragraphs; or `paragraphVoiceGenders[]` (same length as `paragraphs`) for per-paragraph voice — then **no** `-full.mp3`; UI uses sequential „Слушай“ | Pro |
 | Reading text images (flip cards) | `exercises[type=reading_text].images[]` when `ttsWordId` + `label` са зададени → `words/{ttsWordId}.mp3` | Female | Flash (Pro ако `ttsWordId` е в `READING_TEXT_IMAGE_STRESS_IDS`) |
 | Listening | `exercises[].listeningText` | Female | Pro |
@@ -100,11 +104,9 @@ public/assets/lesson-XX/audio/tts/
 
 ### Explicit `voiceGender` on dialogue lines (recommended)
 
-In `exercises.ts`, each dialogue line may set `voiceGender: 'male' | 'female'` (TTS only; not shown in the UI). When set, it overrides the fallback alternation so a **male** line always uses a male voice.
+In `exercises.ts`, each dialogue line may set `voiceGender: 'male' | 'female'` (TTS only; not shown in the UI). When set, it overrides the fallback alternation so a **male** line uses Charon and a **female** line uses Achernar.
 
-**Two men in a row:** the script alternates **`Charon`** and **`Achird`** (Gemini TTS). Chirp mode has only one Bulgarian male preset, so both map to Chirp Charon.
-
-**Two women in a row:** the script alternates **`Achernar`** and **`Despina`** (Gemini TTS).
+**Two women / two men in a row:** the generator uses the **same** preset throughout (Achernar or Charon) — no second „named speaker“ timbre (legacy Despina/Achird disabled).
 
 When adding new lessons with different speakers, update `SPEAKER_VOICE_MAP` in [generate-tts.ts](mdc:scripts/generate-tts.ts) and/or add `voiceGender` on lines where roles are clear.
 
@@ -124,10 +126,13 @@ Two cleaning functions exist:
 ## Content Rules for TTS Quality
 
 These rules in **content files** directly affect audio quality:
-- **Numbers as words** in `listeningText` and `reading_text.paragraphs` — write „седемдесет и шест" not „76". TTS reads digits unnaturally.
+- **Numbers as words** in `listeningText`, `reading_text.paragraphs`, **AND every `grammar_examples.examples[].text/subtext` that will be TTS-read** — write „седемдесет и шест" not „76", „десет часа" not „10:00". TTS reads digits unnaturally. If display must show digits (e.g. „Закусвам преди 10:00 часа."), set `ttsText: 'Закусвам преди десет часа.'` so display stays unchanged but audio is clean.
 - **Period, not dash** between sums — `'Рестото. Четири евро.'` not `'Рестото — четири евро.'`. Dashes confuse pacing.
+- **No `=` sign in TTS text** — TTS reads `=` as „равно" / „равняе се на". The script auto-replaces `=` → `,` in `cleanForGeminiTTS()`, but prefer to write commas directly in content. For `grammar_examples` cards where a visual `=` is desired (e.g. „30 минути = половина"), set `ttsText: '30 минути, половина.'` to keep display + clean audio.
+- **No `/` between alternatives in TTS** — write „без, и" instead of „БЕЗ / И"; „минути преди, след часа" instead of „минути преди / след часа". Slashes break pacing. Use `ttsText` to override.
 - **No markdown** in text fields — TTS reads asterisks, brackets etc. Keep text clean. (Изключение: `grammar_table.cells` може да ползва `**bold**` за удебеляване на окончания — markdown се премахва преди TTS.)
 - **voiceGender on every dialogue line** where the speaker's gender is clear (male/female). Fallback alternation works but explicit is better.
+- **Voice alternation rule (Achernar↔Despina, Charon↔Achird)** — the script alternates between primary and ALT voices ONLY for **consecutive same-gender lines within the same dialogue section** (clear case of two characters of the same gender in conversation). For sections where genders alternate (А=жена / Б=мъж by line), the same primary voice is used for all of А's lines and all of Б's lines. This avoids the bug where the same character sounds like two different people across lines.
 - **Problematic words** — add to `GRAMMAR_TABLE_PRO_ROWS` if a Flash-generated word sounds wrong. Examples: „хиляда", „милиард", „вие работите".
 - **`reading_text` с илюстрации задължително с TTS** — ако урок смесва текст + нови думи (напр. урок 3 упр. 33, урок 4 упр. 34/37/39/41), всяка картинка в `images[]` трябва да има `ttsWordId` + `label`. Това произвежда `words/{ttsWordId}.mp3` и flip-card свири звук при клик. БЕЗ това картинките остават без звук.
 
