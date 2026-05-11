@@ -1,6 +1,6 @@
 'use client';
 
-import { Volume2, Play, BookOpen, BookText, RotateCcw } from 'lucide-react';
+import { Volume2, Play, BookOpen, ChevronDown, RotateCcw } from 'lucide-react';
 import { useT } from '@/i18n/useT';
 
 /**
@@ -67,12 +67,16 @@ function RobiAvatarPreview() {
   );
 }
 
-/** Indigo "Граматика на урока" jump-link pill as shown at top/bottom of lessons. */
-function GrammarLinkPreview({ label }: { label: string }) {
+/** Indigo „Граматика — справочник" accordion header (collapsed state) as shown
+    at the start AND end of every lesson. */
+function GrammarAccordionPreview({ label }: { label: string }) {
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-semibold border border-indigo-200 shrink-0">
-      <BookText className="w-4 h-4" />
-      <span className="truncate max-w-[10rem]">{label}</span>
+    <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 shadow-sm shrink-0">
+      <span className="text-lg leading-none">📚</span>
+      <span className="text-indigo-900 font-bold text-sm truncate max-w-[10rem]">
+        {label}
+      </span>
+      <ChevronDown className="w-4 h-4 text-indigo-500 shrink-0" />
     </div>
   );
 }
@@ -134,7 +138,7 @@ export function PlatformLegend() {
     {
       titleKey: 'legend.grammar.title',
       textKey: 'legend.grammar.text',
-      visual: <GrammarLinkPreview label={t('lesson.grammarReferenceLink')} />,
+      visual: <GrammarAccordionPreview label={stripLeadingEmoji(t('legend.grammar.title'))} />,
     },
     {
       titleKey: 'legend.culture.title',

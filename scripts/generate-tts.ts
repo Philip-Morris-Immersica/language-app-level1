@@ -37,9 +37,9 @@ const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
  * team preference — Achernar/Charon only unless content explicitly gains a name-based dual-voice rule.
  * Chirp already had no distinct alt presets (both mapped to the same HD voice).
  */
-const FEMALE_VOICE_ALT = FEMALE_VOICE;
+const FEMALE_VOICE_ALT = USE_GEMINI ? 'Autonoe' : 'bg-BG-Chirp3-HD-Achird';
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
-const MALE_VOICE_ALT = MALE_VOICE;
+const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Achird';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
@@ -66,6 +66,10 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-4', // един милиард (l05)
   'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
+  'l08-gramatika-01-row-0', // този. този панталон.
+  'l08-gramatika-01-row-1', // тази. тази блуза.
+  'l08-gramatika-01-row-2', // това. това яке.
+  'l08-gramatika-01-row-3', // тези. тези дрехи.
   'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
@@ -90,6 +94,24 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // l08-gramatika-01 — показателни местоимения: пропуска м.р./ж.р./ср.р./мн.ч., пауза между местоимението и примера
+  'l08-gramatika-01-row-0': 'този. този панталон.',
+  'l08-gramatika-01-row-1': 'тази. тази блуза.',
+  'l08-gramatika-01-row-2': 'това. това яке.',
+  'l08-gramatika-01-row-3': 'тези. тези дрехи.',
+
+  // l08-gramatika-02 — членуване на прилагателните: пропуска рода и наставката (-ИЯ(Т) и др.), само примери
+  'l08-gramatika-02-row-0': 'хубавият. малкият. зеленият.',
+  'l08-gramatika-02-row-1': 'хубавата. малката. зелената.',
+  'l08-gramatika-02-row-2': 'хубавото. малкото. зеленото.',
+  'l08-gramatika-02-row-3': 'хубавите. малките. зелените.',
+
+  // l09-gramatika-02 — степенуване на прилагателните: пропуска м.р./ж.р./ср.р./мн.ч., само формите
+  'l09-gramatika-02-row-0': 'голям. по-голям. най-голям.',
+  'l09-gramatika-02-row-1': 'голяма. по-голяма. най-голяма.',
+  'l09-gramatika-02-row-2': 'голямо. по-голямо. най-голямо.',
+  'l09-gramatika-02-row-3': 'големи. по-големи. най-големи.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -123,6 +145,11 @@ const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene', // lesson 3 — Пушенето забранено!
   'bob',     // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  // lesson 9 — Pro + word prompt for cleaner stress (Flash mispronounces these)
+  'hladilnik-nd', // хладилник
+  'spalnya-nd',   // спалня
+  'mivka-nd',     // мивка
+  'dush-nd',      // душ
 ]);
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
@@ -151,6 +178,21 @@ const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'hello',
   'hello_formal',
   'goodbye',
+  // lesson 8 — НОВИ ДУМИ 2 (clothes): isolated clothing words — Flash gives cleaner stress
+  'kostyum', 'pantalon', 'sako', 'riza', 'danki', 'roklya', 'pola', 'bluza',
+  'palto', 'yake', 'obuvki', 'sandali', 'maratonki', 'dzhapanki', 'boti',
+  'pulover', 'teniska', 'kasi-pantaloni', 'shapka', 'chorapi', 'botushi',
+  'shal', 'rakavitsi', 'noshtnitsa', 'pizhama', 'ochila', 'slanchevi-ochila', 'kolan',
+  // lesson 9 — НОВИ ДУМИ 1 (furniture/household items): isolated words — Flash + word prompt
+  // Note: hladilnik-nd, spalnya-nd, mivka-nd, dush-nd → ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS (better stress)
+  'stol-nd', 'masa-nd', 'shkaf-nd', 'pechka-nd', 'peralnya-nd',
+  'leglo-nd', 'divan-nd', 'garderob-nd', 'lampa-nd', 'kilim-nd',
+  'cvete-nd', 'vana-nd', 'studena-voda-nd', 'topla-voda-nd',
+  'sapun-nd', 'vrata-nd', 'prozorec-nd',
+  // lesson 9 — НОВИ ДУМИ 2 (rooms)
+  'balkon-nd', 'spalnya2-nd', 'toaletna-nd', 'banya-nd', 'kuhnya-nd', 'koridor-nd', 'hol-nd',
+  // lesson 9 — НОВИ ДУМИ 3 (tableware)
+  'vilica-nd', 'lyzhica-nd', 'nozh-nd', 'chasha-nd', 'chiniya-nd',
 ]);
 
 // ---------------------------------------------------------------------------

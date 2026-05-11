@@ -170,6 +170,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
   displayMode?: 'grid' | 'presentation';  // For different display modes
+  /** When true, cards render as compact text-only boxes (no images) — just the label. Header image still shown. */
+  textOnly?: boolean;
 }
 
 export interface DialogueReadingExercise extends BaseExercise {
@@ -381,6 +383,8 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
+  /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
+  images?: { imageUrl: string; label?: string }[];
   listeningText?: string;
   sentences: {
     text: string;

@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Exercise,
   IllustratedCardsExercise,
   PersonalChoiceExercise,
@@ -9,7 +9,6 @@ import type {
   ImageLabelingExercise,
   DialoguesExercise,
   GrammarTableExercise,
-  GrammarExamplesExercise,
   ReadingTextExercise,
 } from '@/content/types';
 
@@ -44,13 +43,13 @@ export const exercises: Exercise[] = [
   } as IllustratedCardsExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 1 — Кои цветове обичате? (стр. 74) — personal_choice
+  // Упр. 1 — Какви цветове обичате? (стр. 74) — personal_choice
   // ══════════════════════════════════════════════════════
   {
-    id: 'l08-ex-01',
+    id: 'l08-ex-03',
     type: 'personal_choice',
     title: 'УПРАЖНЕНИЕ 1',
-    instruction: 'Кои цветове обичате и кои не обичате?',
+    instruction: 'Попълнете таблицата. Какви цветове обичате? Какви цветове не обичате?',
     order: 2,
     points: 0,
     model: {
@@ -60,16 +59,16 @@ export const exercises: Exercise[] = [
     },
     blankOptions: ['розово', 'червено', 'жълто', 'оранжево', 'лилаво', 'синьо', 'зелено', 'кафяво', 'черно', 'сиво', 'бяло'],
     items: [
-      { id: 'c1',  question: 'Обичате ли розово?',    positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'розово',    negativeBlank: 'розово' },
-      { id: 'c2',  question: 'Обичате ли червено?',   positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'червено',   negativeBlank: 'червено' },
-      { id: 'c3',  question: 'Обичате ли жълто?',     positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'жълто',     negativeBlank: 'жълто' },
-      { id: 'c4',  question: 'Обичате ли оранжево?',  positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'оранжево',  negativeBlank: 'оранжево' },
-      { id: 'c5',  question: 'Обичате ли лилаво?',    positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'лилаво',    negativeBlank: 'лилаво' },
-      { id: 'c6',  question: 'Обичате ли зелено?',    positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'зелено',    negativeBlank: 'зелено' },
-      { id: 'c7',  question: 'Обичате ли кафяво?',    positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'кафяво',    negativeBlank: 'кафяво' },
-      { id: 'c8',  question: 'Обичате ли черно?',     positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'черно',     negativeBlank: 'черно' },
-      { id: 'c9',  question: 'Обичате ли сиво?',      positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'сиво',      negativeBlank: 'сиво' },
-      { id: 'c10', question: 'Обичате ли бяло?',      positiveTemplate: 'Да, обичам ___.', negativeTemplate: 'Не, не обичам ___.', positiveBlank: 'бяло',      negativeBlank: 'бяло' },
+      { id: 't1',  question: 'Обичате ли розово?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'розово',    negativeBlank: 'розово' },
+      { id: 't2',  question: 'Обичате ли червено?',   positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'червено',   negativeBlank: 'червено' },
+      { id: 't3',  question: 'Обичате ли жълто?',     positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'жълто',     negativeBlank: 'жълто' },
+      { id: 't4',  question: 'Обичате ли оранжево?',  positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'оранжево',  negativeBlank: 'оранжево' },
+      { id: 't5',  question: 'Обичате ли лилаво?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'лилаво',    negativeBlank: 'лилаво' },
+      { id: 't6',  question: 'Обичате ли зелено?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'зелено',    negativeBlank: 'зелено' },
+      { id: 't7',  question: 'Обичате ли кафяво?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'кафяво',    negativeBlank: 'кафяво' },
+      { id: 't8',  question: 'Обичате ли черно?',     positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'черно',     negativeBlank: 'черно' },
+      { id: 't9',  question: 'Обичате ли сиво?',      positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'сиво',      negativeBlank: 'сиво' },
+      { id: 't10', question: 'Обичате ли бяло?',      positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'бяло',      negativeBlank: 'бяло' },
     ],
   } as PersonalChoiceExercise,
 
@@ -101,98 +100,77 @@ export const exercises: Exercise[] = [
   } as MatchPairsExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 3 — Какви цветове обичате? (стр. 74) — personal_choice
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l08-ex-03',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Попълнете таблицата. Какви цветове обичате? Какви цветове не обичате?',
-    order: 4,
-    points: 0,
-    model: {
-      question: 'Обичате ли синьо?',
-      positiveAnswer: 'Да, обичам синьо.',
-      negativeAnswer: 'Не, не обичам синьо.',
-    },
-    blankOptions: ['розово', 'червено', 'жълто', 'оранжево', 'лилаво', 'синьо', 'зелено', 'кафяво', 'черно', 'сиво', 'бяло'],
-    items: [
-      { id: 't1',  question: 'Обичате ли розово?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'розово',    negativeBlank: 'розово' },
-      { id: 't2',  question: 'Обичате ли червено?',   positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'червено',   negativeBlank: 'червено' },
-      { id: 't3',  question: 'Обичате ли жълто?',     positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'жълто',     negativeBlank: 'жълто' },
-      { id: 't4',  question: 'Обичате ли оранжево?',  positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'оранжево',  negativeBlank: 'оранжево' },
-      { id: 't5',  question: 'Обичате ли лилаво?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'лилаво',    negativeBlank: 'лилаво' },
-      { id: 't6',  question: 'Обичате ли зелено?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'зелено',    negativeBlank: 'зелено' },
-      { id: 't7',  question: 'Обичате ли кафяво?',    positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'кафяво',    negativeBlank: 'кафяво' },
-      { id: 't8',  question: 'Обичате ли черно?',     positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'черно',     negativeBlank: 'черно' },
-      { id: 't9',  question: 'Обичате ли сиво?',      positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'сиво',      negativeBlank: 'сиво' },
-      { id: 't10', question: 'Обичате ли бяло?',      positiveTemplate: 'Обичам ___.', negativeTemplate: 'Не обичам ___.', positiveBlank: 'бяло',      negativeBlank: 'бяло' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ══════════════════════════════════════════════════════
-  // Упр. 4 — Знамена и цветове (стр. 75) — workbook_fill_blank
+  // Упр. 3 — Знамена и цветове (стр. 75) — workbook_fill_blank
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-04',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 4',
+    title: 'УПРАЖНЕНИЕ 3',
     instruction: 'Довършете изреченията по модела. Изберете правилните цветове за всяко знаме.',
-    order: 5,
+    order: 4,
     points: 8,
     layout: 'single',
     sentences: [
       {
         text: 'Модел: Знамето на България е бяло, зелено и червено.',
         blanks: [], correctAnswers: [], isExample: true,
+        images: ['/assets/lesson-08/flags/flag-bg.png'],
       },
       {
         text: 'Знамето на Сирия е _______.',
         blanks: [0],
         correctAnswers: ['червено, бяло, черно и зелено'],
         options: ['червено, бяло, черно и зелено', 'синьо и жълто', 'черно, червено и жълто', 'червено, бяло и синьо'],
+        images: ['/assets/lesson-08/flags/flag-de.png'],
       },
       {
         text: 'Знамето на Иран е _______.',
         blanks: [0],
         correctAnswers: ['зелено, бяло и червено'],
         options: ['зелено, бяло и червено', 'синьо и жълто', 'червено, бяло и черно', 'черно, червено и жълто'],
+        images: ['/assets/lesson-08/flags/flag-fr.png'],
       },
       {
         text: 'Знамето на Германия е _______.',
         blanks: [0],
         correctAnswers: ['черно, червено и жълто'],
         options: ['черно, червено и жълто', 'синьо и жълто', 'червено, бяло и синьо', 'зелено, бяло и червено'],
+        images: ['/assets/lesson-08/flags/flag-it.png'],
       },
       {
         text: 'Знамето на Ирак е _______.',
         blanks: [0],
         correctAnswers: ['червено, бяло, черно и зелено'],
         options: ['червено, бяло, черно и зелено', 'червено, бяло и синьо', 'синьо и жълто', 'черно, червено и жълто'],
+        images: ['/assets/lesson-08/flags/flag-es.png'],
       },
       {
         text: 'Знамето на Украйна е _______.',
         blanks: [0],
         correctAnswers: ['синьо и жълто'],
         options: ['синьо и жълто', 'червено, бяло и синьо', 'черно, червено и жълто', 'зелено, бяло и червено'],
+        images: ['/assets/lesson-08/flags/flag-ru.png'],
       },
       {
         text: 'Знамето на Великобритания е _______.',
         blanks: [0],
         correctAnswers: ['червено, бяло и синьо'],
         options: ['червено, бяло и синьо', 'синьо и жълто', 'черно, червено и жълто', 'зелено, бяло и червено'],
+        images: ['/assets/lesson-08/flags/flag-ua.png'],
       },
       {
         text: 'Знамето на Франция е _______.',
         blanks: [0],
         correctAnswers: ['синьо, бяло и червено'],
         options: ['синьо, бяло и червено', 'червено, бяло и синьо', 'синьо и жълто', 'черно, червено и жълто'],
+        images: ['/assets/lesson-08/flags/flag-uk.png'],
       },
       {
         text: 'Знамето на Европейския съюз е _______.',
         blanks: [0],
         correctAnswers: ['синьо и жълто'],
         options: ['синьо и жълто', 'червено, бяло и синьо', 'черно, червено и жълто', 'зелено, бяло и червено'],
+        images: ['/assets/lesson-08/flags/flag-us.png'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -205,7 +183,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: '',
-    order: 6,
+    order: 5,
     cards: [
       { id: 'kostyum',          imageUrl: '/assets/lesson-08/06-novi-dumi-2-drehi-ilustratsii/15-kostyum.jpg',          label: 'костюм' },
       { id: 'pantalon',         imageUrl: '/assets/lesson-08/06-novi-dumi-2-drehi-ilustratsii/14-pantalon.jpg',         label: 'панталон' },
@@ -239,47 +217,47 @@ export const exercises: Exercise[] = [
   } as IllustratedCardsExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 5 — Напишете правилните номера (стр. 76) — dropdown_match
+  // Упр. 4 — Напишете правилните номера (стр. 76) — dropdown_match
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-05',
     type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 5',
+    title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Вижте картинката и изберете правилния номер за всяка дреха.',
-    order: 7,
+    order: 6,
     points: 18,
-    imageUrl: '/assets/lesson-08/07-upr-05-nomera-kragcheta-drehi/01-vitrina-drehi-kragcheta.jpg',
+    imageUrl: '/assets/lesson-08/07-upr-05-nomera-kragcheta-drehi/01-vitrina-drehi-kragcheta-s-cifri-v-krygovete.png',
     questions: [
-      { id: 'q1',  left: '① панталон',       options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '1' },
-      { id: 'q2',  left: '② сако',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '2' },
-      { id: 'q3',  left: '③ маратонки',       options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '3' },
-      { id: 'q4',  left: '④ риза',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '4' },
-      { id: 'q5',  left: '⑤ обувки',          options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '5' },
-      { id: 'q6',  left: '⑥ колан',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '6' },
-      { id: 'q7',  left: '⑦ пола',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '7' },
-      { id: 'q8',  left: '⑧ блуза',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '8' },
-      { id: 'q9',  left: '⑨ сандали',         options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '9' },
-      { id: 'q10', left: '⑩ дънки',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '10' },
-      { id: 'q11', left: '⑪ пуловер',         options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '11' },
-      { id: 'q12', left: '⑫ яке',             options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '12' },
-      { id: 'q13', left: '⑬ очила',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '13' },
-      { id: 'q14', left: '⑭ палто',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '14' },
-      { id: 'q15', left: '⑮ шал',             options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '15' },
-      { id: 'q16', left: '⑯ ботуши',          options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '16' },
-      { id: 'q17', left: '⑰ ръкавици',        options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '17' },
-      { id: 'q18', left: '⑱ слънчеви очила',  options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '18' },
+      { id: 'q1',  left: 'панталон',       options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '1' },
+      { id: 'q2',  left: 'сако',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '2' },
+      { id: 'q3',  left: 'маратонки',       options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '3' },
+      { id: 'q4',  left: 'риза',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '4' },
+      { id: 'q5',  left: 'обувки',          options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '5' },
+      { id: 'q6',  left: 'колан',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '6' },
+      { id: 'q7',  left: 'пола',            options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '7' },
+      { id: 'q8',  left: 'блуза',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '8' },
+      { id: 'q9',  left: 'сандали',         options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '9' },
+      { id: 'q10', left: 'дънки',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '10' },
+      { id: 'q11', left: 'пуловер',         options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '11' },
+      { id: 'q12', left: 'яке',             options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '12' },
+      { id: 'q13', left: 'очила',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '13' },
+      { id: 'q14', left: 'палто',           options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '14' },
+      { id: 'q15', left: 'шал',             options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '15' },
+      { id: 'q16', left: 'ботуши',          options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '16' },
+      { id: 'q17', left: 'ръкавици',        options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '17' },
+      { id: 'q18', left: 'слънчеви очила',  options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'], correctAnswer: '18' },
     ],
   } as DropdownMatchExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 6 — Подредете дрехите: мъже и жени (стр. 77) — drag_to_columns
+  // Упр. 5 — Подредете дрехите: мъже и жени (стр. 77) — drag_to_columns
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-06',
     type: 'drag_to_columns',
-    title: 'УПРАЖНЕНИЕ 6',
+    title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Плъзнете дрехите в правилната колона: за мъже или за жени.',
-    order: 8,
+    order: 7,
     points: 9,
     items: [
       'рокля', 'костюм', 'панталон', 'пола', 'яке',
@@ -292,24 +270,24 @@ export const exercises: Exercise[] = [
   } as DragToColumnsExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 7 — Напишете правилните номера (стр. 77) — dropdown_match
+  // Упр. 6 — Напишете правилните номера (стр. 77) — dropdown_match
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-07',
     type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 7',
+    title: 'УПРАЖНЕНИЕ 6',
     instruction: 'Вижте картинката и изберете правилния номер за всяка дреха.',
-    order: 9,
+    order: 8,
     points: 7,
-    imageUrl: '/assets/lesson-08/09-upr-07-napishi-nomera-kragcheta/01-dvama-deca-kragcheta.jpg',
+    imageUrl: '/assets/lesson-08/09-upr-07-napishi-nomera-kragcheta/01-dvama-deca-kragcheta-s-cifri.png',
     questions: [
-      { id: 'q1', left: '① рокля',           options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '1' },
-      { id: 'q2', left: '② тениска',          options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '2' },
-      { id: 'q3', left: '③ джапанки',         options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '3' },
-      { id: 'q4', left: '④ чорапи',           options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '4' },
-      { id: 'q5', left: '⑤ шапка',            options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '5' },
-      { id: 'q6', left: '⑥ маратонки',        options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '6' },
-      { id: 'q7', left: '⑦ къси панталони',   options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '7' },
+      { id: 'q1', left: 'рокля',           options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '1' },
+      { id: 'q2', left: 'тениска',          options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '2' },
+      { id: 'q3', left: 'джапанки',         options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '3' },
+      { id: 'q4', left: 'чорапи',           options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '4' },
+      { id: 'q5', left: 'шапка',            options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '5' },
+      { id: 'q6', left: 'маратонки',        options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '6' },
+      { id: 'q7', left: 'къси панталони',   options: ['1', '2', '3', '4', '5', '6', '7'], correctAnswer: '7' },
     ],
   } as DropdownMatchExercise,
 
@@ -317,7 +295,7 @@ export const exercises: Exercise[] = [
   // Упр. 9 — SKIP по клиент (Продължете по модела)
 
   // ══════════════════════════════════════════════════════
-  // Упр. 10 — Довършете изреченията (стр. 77) — image_labeling
+  // Упр. 7 — Довършете изреченията (стр. 77) — image_labeling
   // По заявка на клиента: картинки от НОВИ ДУМИ 2,
   // потребителят изписва думите по сезони.
   // Разделено на 4 секции (пролет, лято, есен, зима).
@@ -325,9 +303,9 @@ export const exercises: Exercise[] = [
   {
     id: 'l08-ex-10a',
     type: 'image_labeling',
-    title: 'УПРАЖНЕНИЕ 10 — Пролет',
-    instruction: 'През пролетта нося... Напишете имената на дрехите под картинките.',
-    order: 10,
+    title: 'УПРАЖНЕНИЕ 7 — Пролет',
+    instruction: 'Изберете подходящите дрехи за пролетта.',
+    order: 9,
     points: 4,
     displayType: 'default',
     images: [
@@ -342,9 +320,9 @@ export const exercises: Exercise[] = [
   {
     id: 'l08-ex-10b',
     type: 'image_labeling',
-    title: 'УПРАЖНЕНИЕ 10 — Лято',
-    instruction: 'През лятото нося... Напишете имената на дрехите под картинките.',
-    order: 11,
+    title: 'УПРАЖНЕНИЕ 7 — Лято',
+    instruction: 'Изберете подходящите дрехи за лятото.',
+    order: 10,
     points: 7,
     displayType: 'default',
     images: [
@@ -362,9 +340,9 @@ export const exercises: Exercise[] = [
   {
     id: 'l08-ex-10c',
     type: 'image_labeling',
-    title: 'УПРАЖНЕНИЕ 10 — Есен',
-    instruction: 'През есента нося... Напишете имената на дрехите под картинките.',
-    order: 12,
+    title: 'УПРАЖНЕНИЕ 7 — Есен',
+    instruction: 'Изберете подходящите дрехи за есента.',
+    order: 11,
     points: 7,
     displayType: 'default',
     images: [
@@ -382,9 +360,9 @@ export const exercises: Exercise[] = [
   {
     id: 'l08-ex-10d',
     type: 'image_labeling',
-    title: 'УПРАЖНЕНИЕ 10 — Зима',
-    instruction: 'През зимата нося... Напишете имената на дрехите под картинките.',
-    order: 13,
+    title: 'УПРАЖНЕНИЕ 7 — Зима',
+    instruction: 'Изберете подходящите дрехи за зимата.',
+    order: 12,
     points: 8,
     displayType: 'default',
     images: [
@@ -401,14 +379,14 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 11 — Подчертайте правилната форма на глагола (стр. 77)
+  // Упр. 8 — Подчертайте правилната форма на глагола (стр. 77)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-11',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 11',
+    title: 'УПРАЖНЕНИЕ 8',
     instruction: 'Изберете правилната форма на глагола **нося**.',
-    order: 14,
+    order: 13,
     points: 6,
     layout: 'two-column',
     sentences: [
@@ -432,8 +410,8 @@ export const exercises: Exercise[] = [
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
-    order: 15,
-    imageUrl: '/assets/lesson-08/16-dialozi-1-razmeri-drehi-obuvki/01-teniski-razmeri-s-m-l-xl.jpg',
+    order: 14,
+    imageUrl: '/assets/lesson-08/16-dialozi-1-razmeri-drehi-obuvki/02-teniski-razmeri-s-m-l-xl.png',
     sections: [
       {
         id: 'а.',
@@ -467,7 +445,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Показателни местоимения',
     instruction: 'Показателни местоимения — **този**, **тази**, **това**, **тези**.',
     instructionKey: 'grammar.l08.g1.instruction',
-    order: 16,
+    order: 15,
     tableTitle: 'Показателни местоимения',
     columns: ['Форма', 'Пример'],
     rows: [
@@ -480,14 +458,14 @@ export const exercises: Exercise[] = [
   } as GrammarTableExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 15 — Поставете правилната дума (стр. 78)
+  // Упр. 9 — Поставете правилната дума (стр. 78)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-15',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 15',
+    title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Изберете правилната дума: **този**, **тази**, **това** или **тези**.',
-    order: 17,
+    order: 16,
     points: 14,
     layout: 'two-column',
     sentences: [
@@ -521,7 +499,7 @@ export const exercises: Exercise[] = [
     subtitle: 'Членуване на прилагателните',
     instruction: 'Членуване на прилагателните имена.',
     instructionKey: 'grammar.l08.g2.instruction',
-    order: 18,
+    order: 17,
     tableTitle: 'Членуване на прилагателните',
     columns: ['Окончание', 'Примери'],
     rows: [
@@ -534,54 +512,14 @@ export const exercises: Exercise[] = [
   } as GrammarTableExercise,
 
   // ══════════════════════════════════════════════════════
-  // ДИАЛОЗИ 2 — В магазина (стр. 79)
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l08-dialozi-02',
-    type: 'dialogues',
-    title: 'ДИАЛОЗИ 2',
-    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
-    order: 19,
-    imageUrl: '/assets/lesson-08/24-upr-18-prilagatelni-kartinki/01-magazin-teniski-dialoz.jpg',
-    sections: [
-      {
-        id: 'а.',
-        lines: [
-          { text: '— Извинете, може ли тази тениска?', voiceGender: 'female' as const },
-          { text: '— Бялата?', voiceGender: 'male' as const },
-          { text: '— Не, червената.', voiceGender: 'female' as const },
-          { text: '— Заповядайте!', voiceGender: 'male' as const },
-          { text: '— Благодаря!', voiceGender: 'female' as const },
-        ],
-      },
-      {
-        id: 'б.',
-        lines: [
-          { text: '— Може ли зеленото яке?', voiceGender: 'female' as const },
-          { text: '— Да, разбира се. Кой номер искате?', voiceGender: 'male' as const },
-          { text: '— Номер 46.', voiceGender: 'female' as const, ttsText: '— Номер четиридесет и шест.' },
-        ],
-      },
-      {
-        id: 'в.',
-        lines: [
-          { text: '— Как е якето?', voiceGender: 'male' as const },
-          { text: '— Малко е. Може ли номер 48?', voiceGender: 'female' as const, ttsText: '— Малко е. Може ли номер четиридесет и осем?' },
-          { text: '— Да, разбира се.', voiceGender: 'male' as const },
-        ],
-      },
-    ],
-  } as DialoguesExercise,
-
-  // ══════════════════════════════════════════════════════
-  // Упр. 17 — Напишете правилната форма (стр. 79)
+  // Упр. 10 — Напишете правилната форма (стр. 79)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-17',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 17',
+    title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Изберете правилната форма на прилагателното.',
-    order: 20,
+    order: 18,
     points: 4,
     layout: 'single',
     sentences: [
@@ -613,14 +551,54 @@ export const exercises: Exercise[] = [
   } as WorkbookFillBlankExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 18 — Поставете правилната дума (стр. 79)
+  // ДИАЛОЗИ 2 — В магазина (стр. 79)
+  // ══════════════════════════════════════════════════════
+  {
+    id: 'l08-dialozi-02',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 2',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
+    order: 19,
+    imageUrl: '/assets/lesson-08/24-upr-18-prilagatelni-kartinki/02-magazin-dama-kupuva-cherevna-bluza.png',
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: '— Извинете, може ли тази тениска?', voiceGender: 'female' as const },
+          { text: '— Бялата?', voiceGender: 'male' as const },
+          { text: '— Не, червената.', voiceGender: 'female' as const },
+          { text: '— Заповядайте!', voiceGender: 'male' as const },
+          { text: '— Благодаря!', voiceGender: 'female' as const },
+        ],
+      },
+      {
+        id: 'б.',
+        lines: [
+          { text: '— Може ли зеленото яке?', voiceGender: 'female' as const },
+          { text: '— Да, разбира се. Кой номер искате?', voiceGender: 'male' as const },
+          { text: '— Номер 46.', voiceGender: 'female' as const, ttsText: '— Номер четиридесет и шест.' },
+        ],
+      },
+      {
+        id: 'в.',
+        lines: [
+          { text: '— Как е якето?', voiceGender: 'male' as const },
+          { text: '— Малко е. Може ли номер 48?', voiceGender: 'female' as const, ttsText: '— Малко е. Може ли номер четиридесет и осем?' },
+          { text: '— Да, разбира се.', voiceGender: 'male' as const },
+        ],
+      },
+    ],
+  } as DialoguesExercise,
+
+  // ══════════════════════════════════════════════════════
+  // Упр. 11 — Поставете правилната дума (стр. 79)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-18',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 18',
+    title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Изберете правилния член на прилагателното.',
-    order: 21,
+    order: 20,
     points: 8,
     layout: 'single',
     sentences: [
@@ -664,14 +642,14 @@ export const exercises: Exercise[] = [
   // Упр. 19 — SKIP по клиент (Прочетете диалозите по двойки)
 
   // ══════════════════════════════════════════════════════
-  // Упр. 20 — Слушайте и попълнете липсващите думи (стр. 79)
+  // Упр. 12 — Слушайте и попълнете липсващите думи (стр. 79)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-20',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 20',
-    instruction: 'Натиснете текста, за да чуете произношението. Попълнете липсващите думи.',
-    order: 22,
+    title: 'УПРАЖНЕНИЕ 12',
+    instruction: 'Изслушайте диалозите и попълнете липсващите думи.',
+    order: 21,
     points: 8,
     layout: 'single',
     listeningText: 'а. Извинете, може ли тази тениска? Бялата? Не, червената. Заповядайте! Благодаря! б. Може ли зеленото яке? Да, разбира се. Кой номер искате? Номер четиридесет и шест. в. Как е якето? Малко е. Може ли номер четиридесет и осем? Да, разбира се.',
@@ -716,21 +694,23 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3',
     instruction: '',
-    order: 23,
+    order: 22,
+    textOnly: true,
+    headerImageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/s-nomera.jpg',
     cards: [
-      { id: 'chanta',          imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/01-chanta-sastav-obekti.jpg', label: 'чанта' },
-      { id: 'pasport',         imageUrl: '',                                                                              label: 'паспорт' },
-      { id: 'pari',            imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/10-pari-leva.jpg',            label: 'пари' },
-      { id: 'zapalka',         imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/03-zapalka.jpg',              label: 'запалка' },
-      { id: 'ogledalo',        imageUrl: '',                                                                              label: 'огледало' },
-      { id: 'portmone',        imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/05-portmone.jpg',             label: 'портмоне' },
-      { id: 'klyuchove',       imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/02-klyuchove.jpg',            label: 'ключове' },
-      { id: 'himikalka',       imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/04-himikalka.jpg',            label: 'химикалка' },
-      { id: 'chadar',          imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/07-chadar.jpg',               label: 'чадър' },
-      { id: 'telefon-gsm',     imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/08-telefon.jpg',              label: 'телефон (GSM)' },
-      { id: 'lichna-karta',    imageUrl: '',                                                                              label: 'лична карта' },
-      { id: 'shofyorska-kn',   imageUrl: '',                                                                              label: 'шофьорска книжка' },
-      { id: 'kreditna-karta',  imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/06-kreditna-karta.jpg',       label: 'кредитна / дебитна карта' },
+      { id: 'chanta',          imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/01-chanta-sastav-obekti.jpg', label: '① чанта',                       ttsLabel: 'чанта' },
+      { id: 'pasport',         imageUrl: '',                                                                              label: '② паспорт',                      ttsLabel: 'паспорт' },
+      { id: 'pari',            imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/10-pari-leva.jpg',            label: '③ пари',                         ttsLabel: 'пари' },
+      { id: 'zapalka',         imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/03-zapalka.jpg',              label: '④ запалка',                      ttsLabel: 'запалка' },
+      { id: 'ogledalo',        imageUrl: '',                                                                              label: '⑤ огледало',                     ttsLabel: 'огледало' },
+      { id: 'portmone',        imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/05-portmone.jpg',             label: '⑥ портмоне',                    ttsLabel: 'портмоне' },
+      { id: 'klyuchove',       imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/02-klyuchove.jpg',            label: '⑦ ключове',                     ttsLabel: 'ключове' },
+      { id: 'himikalka',       imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/04-himikalka.jpg',            label: '⑧ химикалка',                   ttsLabel: 'химикалка' },
+      { id: 'chadar',          imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/07-chadar.jpg',               label: '⑨ чадър',                       ttsLabel: 'чадър' },
+      { id: 'telefon-gsm',     imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/08-telefon.jpg',              label: '⑩ телефон (GSM)',               ttsLabel: 'телефон' },
+      { id: 'lichna-karta',    imageUrl: '',                                                                              label: '⑪ лична карта',                 ttsLabel: 'лична карта' },
+      { id: 'shofyorska-kn',   imageUrl: '',                                                                              label: '⑫ шофьорска книжка',            ttsLabel: 'шофьорска книжка' },
+      { id: 'kreditna-karta',  imageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/06-kreditna-karta.jpg',       label: '⑬ кредитна / дебитна карта',   ttsLabel: 'кредитна карта' },
     ],
   } as IllustratedCardsExercise,
 
@@ -742,15 +722,15 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
 
   // ══════════════════════════════════════════════════════
-  // Упр. 23 — Отговорете на въпросите (стр. 80)
+  // Упр. 13 — Отговорете на въпросите (стр. 80)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-23',
     type: 'workbook_fill_blank',
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
-    subtitle: 'Упражнение 23',
+    subtitle: 'Упражнение 13',
     instruction: 'Отговорете на въпросите по модела. Изберете правилния цвят.',
-    order: 24,
+    order: 23,
     points: 9,
     layout: 'qa-split',
     sentences: [
@@ -807,14 +787,14 @@ export const exercises: Exercise[] = [
   } as WorkbookFillBlankExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 24 — Напишете липсващите думи (стр. 80)
+  // Упр. 14 — Напишете липсващите думи (стр. 80)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-24',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 24',
+    title: 'УПРАЖНЕНИЕ 14',
     instruction: 'Попълнете липсващите думи.',
-    order: 25,
+    order: 24,
     points: 9,
     layout: 'single',
     sentences: [
@@ -822,11 +802,13 @@ export const exercises: Exercise[] = [
         text: 'Вали дъжд и нося _______.',
         blanks: [0], correctAnswers: ['чадър'],
         options: ['чадър', 'шапка', 'очила', 'колан'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/07-chadar.jpg'],
       },
       {
         text: 'Иван има голяма чанта, но няма много _______.',
         blanks: [0], correctAnswers: ['пари'],
         options: ['пари', 'дрехи', 'обувки', 'ключове'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/10-pari-leva.jpg'],
       },
       {
         text: 'Мария има кола, но няма _______.',
@@ -837,26 +819,31 @@ export const exercises: Exercise[] = [
         text: 'Тя има скъп _______.',
         blanks: [0], correctAnswers: ['телефон'],
         options: ['телефон', 'чадър', 'колан', 'шал'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/08-telefon.jpg'],
       },
       {
         text: '_______ са на вратата.',
         blanks: [0], correctAnswers: ['Ключовете'],
         options: ['Ключовете', 'Парите', 'Очилата', 'Чорапите'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/02-klyuchove.jpg'],
       },
       {
         text: 'Тя има _______ и купува много дрехи.',
         blanks: [0], correctAnswers: ['кредитна карта'],
         options: ['кредитна карта', 'лична карта', 'шофьорска книжка', 'паспорт'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/06-kreditna-karta.jpg'],
       },
       {
         text: 'Извинете, имате ли _______?',
         blanks: [0], correctAnswers: ['химикалка'],
         options: ['химикалка', 'запалка', 'огледало', 'портмоне'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/04-himikalka.jpg'],
       },
       {
         text: 'Имам 20 евро в _______.',
         blanks: [0], correctAnswers: ['портмонето'],
         options: ['портмонето', 'чантата', 'джоба', 'кутията'],
+        images: ['/assets/lesson-08/30-dopalnitelni-upr-24-lipsvashti-dumi/05-portmone.jpg'],
       },
       {
         text: '_______ е в чантата.',
@@ -871,16 +858,15 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
 
   // ══════════════════════════════════════════════════════
-  // Упр. 25 — Прочетете текста: Милена (стр. 81)
+  // Упр. 15 — Прочетете текста: Милена (стр. 81)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-25',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
-    subtitle: 'Упражнение 25',
+    subtitle: 'Упражнение 15',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 26,
-    textTitle: 'Милена',
+    order: 25,
     audioUrl: '', // TODO: TTS Фаза 2
     images: [{ imageUrl: '/assets/lesson-08/32-tekst-upr-25-milena-ofis/01-milena-ofis.jpg', label: '' }],
     paragraphs: [
@@ -895,14 +881,14 @@ export const exercises: Exercise[] = [
   // Упр. 26 — SKIP по клиент (Подчертайте непознатите думи)
 
   // ══════════════════════════════════════════════════════
-  // Упр. 27 — Отговорете на въпросите (стр. 81)
+  // Упр. 16 — Отговорете на въпросите (стр. 81)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-27',
     type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 27',
+    title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Отговорете на въпросите за Милена.',
-    order: 27,
+    order: 26,
     points: 5,
     layout: 'qa-split',
     sentences: [
@@ -935,14 +921,14 @@ export const exercises: Exercise[] = [
   } as WorkbookFillBlankExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 28 — Песен „Оранжево" (стр. 81)
+  // Упр. 17 — Песен „Оранжево" (стр. 81)
   // ══════════════════════════════════════════════════════
   {
     id: 'l08-ex-28',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 28',
+    title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 28,
+    order: 27,
     textTitle: 'Оранжево',
     audioUrl: '', // TODO: TTS Фаза 2
     images: [{ imageUrl: '/assets/lesson-08/35-upr-28-pesen-oranjevo/01-ilustratsiya-pesen-oranjevo.jpg', label: '' }],
@@ -967,114 +953,6 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
 
   // ══════════════════════════════════════════════════════
-  // Преговор 1 — Дрехи по сезони (drag_to_columns)
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l08-wb-01',
-    type: 'drag_to_columns',
-    title: 'ПРЕГОВОР',
-    subtitle: 'Упражнение 1',
-    instruction: 'Разпределете дрехите: топли (за зима/есен) или леки (за лято/пролет)?',
-    order: 29,
-    points: 10,
-    items: [
-      'палто', 'тениска', 'пуловер', 'сандали', 'ботуши',
-      'шал', 'шапка', 'блуза', 'ръкавици', 'джапанки',
-    ],
-    columns: [
-      {
-        id: 'topli',
-        title: 'Топли дрехи',
-        correctItems: ['палто', 'пуловер', 'ботуши', 'шал', 'шапка', 'ръкавици'],
-      },
-      {
-        id: 'leki',
-        title: 'Леки дрехи',
-        correctItems: ['тениска', 'сандали', 'блуза', 'джапанки'],
-      },
-    ],
-  } as DragToColumnsExercise,
-
-  // ══════════════════════════════════════════════════════
-  // Преговор 2 — Цвят + съществително (match_pairs)
-  // Членуване на прилагателното — свържете прилагателното
-  // с правилната членувана форма.
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l08-wb-02',
-    type: 'match_pairs',
-    title: 'ПРЕГОВОР',
-    subtitle: 'Упражнение 2',
-    instruction: 'Свържете прилагателното с правилната членувана форма.',
-    order: 30,
-    points: 8,
-    pairs: [
-      { id: 'p1', left: 'черен панталон →',   correctRight: 'черният панталон' },
-      { id: 'p2', left: 'синя рокля →',        correctRight: 'синята рокля' },
-      { id: 'p3', left: 'зелено яке →',        correctRight: 'зеленото яке' },
-      { id: 'p4', left: 'бели обувки →',       correctRight: 'белите обувки' },
-      { id: 'p5', left: 'червена блуза →',     correctRight: 'червената блуза' },
-      { id: 'p6', left: 'кафяво палто →',      correctRight: 'кафявото палто' },
-      { id: 'p7', left: 'лилав шал →',         correctRight: 'лилавият шал' },
-      { id: 'p8', left: 'жълти ботуши →',      correctRight: 'жълтите ботуши' },
-    ],
-    shuffledRights: [
-      'синята рокля', 'черният панталон', 'белите обувки', 'зеленото яке',
-      'кафявото палто', 'червената блуза', 'жълтите ботуши', 'лилавият шал',
-    ],
-  } as MatchPairsExercise,
-
-  // ══════════════════════════════════════════════════════
-  // Преговор 3 — Този/Тази/Това + прилагателно (fill_blank)
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l08-wb-03',
-    type: 'workbook_fill_blank',
-    title: 'ПРЕГОВОР',
-    subtitle: 'Упражнение 3',
-    instruction: 'Попълнете с правилната форма на показателното местоимение и прилагателното.',
-    order: 31,
-    points: 6,
-    layout: 'single',
-    sentences: [
-      {
-        text: 'Модел: Искам това зелено яке.',
-        blanks: [], correctAnswers: [], isExample: true,
-      },
-      {
-        text: '_______ черна рокля е много хубава.',
-        blanks: [0], correctAnswers: ['Тази'],
-        options: ['Тази', 'Този', 'Това', 'Тези'],
-      },
-      {
-        text: '_______ сини панталони са евтини.',
-        blanks: [0], correctAnswers: ['Тези'],
-        options: ['Тези', 'Тази', 'Този', 'Това'],
-      },
-      {
-        text: '_______ червено палто е топло.',
-        blanks: [0], correctAnswers: ['Това'],
-        options: ['Това', 'Тази', 'Този', 'Тези'],
-      },
-      {
-        text: 'Може ли _______ бял пуловер?',
-        blanks: [0], correctAnswers: ['този'],
-        options: ['този', 'тази', 'това', 'тези'],
-      },
-      {
-        text: 'Не обичам _______ кафяви обувки.',
-        blanks: [0], correctAnswers: ['тези'],
-        options: ['тези', 'тази', 'този', 'това'],
-      },
-      {
-        text: 'Искам _______ лилава блуза.',
-        blanks: [0], correctAnswers: ['тази'],
-        options: ['тази', 'този', 'това', 'тези'],
-      },
-    ],
-  } as WorkbookFillBlankExercise,
-
-  // ══════════════════════════════════════════════════════
   // Преговор 4 — Глагол нося + цвят (fill_blank)
   // ══════════════════════════════════════════════════════
   {
@@ -1083,7 +961,7 @@ export const exercises: Exercise[] = [
     title: 'ПРЕГОВОР',
     subtitle: 'Упражнение 4',
     instruction: 'Попълнете с правилната форма на глагола и правилния цвят.',
-    order: 32,
+    order: 28,
     points: 8,
     layout: 'single',
     sentences: [
@@ -1138,7 +1016,7 @@ export const exercises: Exercise[] = [
     title: 'ПРЕГОВОР',
     subtitle: 'Упражнение 5',
     instruction: 'Какви дрехи харесвате? Отговорете по модела.',
-    order: 33,
+    order: 29,
     points: 0,
     model: {
       question: 'Харесвате ли черни дрехи?',

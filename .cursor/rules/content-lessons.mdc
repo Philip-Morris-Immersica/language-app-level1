@@ -103,6 +103,37 @@ or the equivalent A2/B1/B2 source folders.
 - **`grammar_table` bolding — choose the right tool:** `boldColumns: [n]` bolds the ENTIRE column (header + cells). Inline `**word**` inside a cell bolds ONLY that word/ending (e.g. „пазар**ът**", „две ябълк**и**"). Use inline `**` when you want to highlight noun endings / articles per word — using `boldColumns` would make the table heavy and unreadable. Markdown is stripped before TTS.
 - **Instruction text must match the actual exercise type.** If the exercise uses dropdowns, the instruction should say "Изберете" (Select), not "Напишете" (Write). Match the verb to the interaction: Select → dropdown, Write → text input, Arrange → drag-and-drop.
 
+## Grammar Reference (`grammarReference` on `LessonContent`)
+
+Each lesson can have a structured grammar reference attached to its `content.ts`:
+
+```ts
+// src/content/<level>/lessons/<lesson-id>/content.ts
+export const content: LessonContent = {
+  // ...
+  grammarReference: [
+    {
+      id: 'l07-gr-redni-chislitelni',
+      title: { bg: '...', en: '...', fr: '...', ar: '...', fa: '...', ru: '...', uk: '...' },
+      content: { bg: '...', en: '...', fr: '...', ar: '...', fa: '...', ru: '...', uk: '...' },
+    },
+    // ...more grammar topics for THIS lesson only
+  ],
+};
+```
+
+**Where it appears (automatic — no UI work needed):**
+The `<GrammarReferenceSection>` component is rendered TWICE on every lesson page — once at the **TOP** (right after the cultural notes, before the exercises) and once at the **BOTTOM** (right after the exercises, before the workbook „Преговор"). Both render identically. See `platform-ui` rule → "Grammar Reference Placement" for the implementation.
+
+**Authoring rules:**
+- Title MUST be filled on **all 7 languages** (`bg`, `en`, `fr`, `ar`, `fa`, `ru`, `uk`).
+- Content MUST be filled on **all 7 languages** — written manually with high quality. **Do NOT rely on web/auto translation** for grammar — linguistic terminology gets mangled.
+- Use prose style (not Markdown tables) — paragraphs with inline examples in Bulgarian + native-language explanations in parentheses.
+- Bulgarian examples in the body **stay in Bulgarian** even in the other-language versions — the learner needs to see the original form.
+- Cover only the grammar that is **introduced in THIS lesson** — not foundational grammar from earlier lessons.
+- Use `id` format: `l<NN>-gr-<topic-slug>` (e.g. `l07-gr-redni-chislitelni`). For A2+: `a2-l<NN>-gr-...`.
+- Reference lesson 6's `grammarReference` as the canonical pedagogical template (4 grammar sections, prose style, examples in Bulgarian with translations in parentheses).
+
 ## Grammar Info Box (`grammar_highlight`)
 
 For visually prominent grammar notes that need to stand out from the exercise body (e.g. the с/със rule in l2 ex 12, or the million/milliard rule in l5 ex 31), add a `grammarHighlight` object to the exercise:

@@ -28,6 +28,7 @@ export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
   imageUrl?: string;
+  images?: { imageUrl: string; label?: string }[];
   listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
@@ -46,6 +47,7 @@ export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
   imageUrl,
+  images,
   listeningText,
   onComplete,
   exerciseId,
@@ -469,6 +471,25 @@ export function WorkbookFillBlank({
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+      {images && images.length > 0 && (
+        <div className="mb-6 flex flex-wrap justify-center gap-6">
+          {images.map((img, i) => (
+            <div key={i} className="flex flex-col items-center gap-2">
+              <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
+                <img
+                  src={img.imageUrl}
+                  alt={img.label || ''}
+                  className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                />
+              </ImageLightbox>
+              {img.label && (
+                <p className="text-sm font-bold text-gray-700">{img.label}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {imageUrl ? (
         <div className="mb-6 flex justify-center">
           <div className="w-full max-w-3xl md:max-w-4xl">
