@@ -44,6 +44,26 @@ const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
+/**
+ * Illustrated cards on Gemini Flash: optional stronger prompt than GEMINI_WORD_PROMPT
+ * (same model + Achernar; helps tricky single words in lesson 9).
+ */
+const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
+  'hladilnik-nd':
+    'Read exactly one Bulgarian word: хладилник. Native Bulgarian only, clear vowels, stress on the second syllable (хла-DI-lnik). Do not anglicize.',
+  'spalnya-nd':
+    'Read exactly one Bulgarian word: спалня. Native Bulgarian only, clear stress on the first syllable (SPA-lnya).',
+  'spalnya2-nd':
+    'Read exactly one Bulgarian word: спалня. Native Bulgarian only, clear stress on the first syllable (SPA-lnya).',
+  'mivka-nd':
+    'Read exactly one Bulgarian word: мивка. Native Bulgarian only, clear stress on the first syllable (MIV-ka).',
+  'dush-nd':
+    'Read exactly one Bulgarian word: душ. Native Bulgarian only, short and clear; one syllable.',
+  'toaletna-nd':
+    'Read exactly one Bulgarian word: тоалетна. Native Bulgarian only, clear stress on the second syllable (то-А-лет-на).',
+  'spalnya2-nd':
+    'Read exactly one Bulgarian word: спалня. Native Bulgarian only, clear stress on the first syllable (СПА-лня).',
+};
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
 const GEMINI_BG_WORD_STRESS_PROMPT =
   'Bulgarian food name. Speak with native word stress (ударение) on the correct syllable in each word.';
@@ -107,11 +127,11 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l08-gramatika-02-row-2': 'хубавото. малкото. зеленото.',
   'l08-gramatika-02-row-3': 'хубавите. малките. зелените.',
 
-  // l09-gramatika-02 — степенуване на прилагателните: пропуска м.р./ж.р./ср.р./мн.ч., само формите
-  'l09-gramatika-02-row-0': 'голям. по-голям. най-голям.',
-  'l09-gramatika-02-row-1': 'голяма. по-голяма. най-голяма.',
-  'l09-gramatika-02-row-2': 'голямо. по-голямо. най-голямо.',
-  'l09-gramatika-02-row-3': 'големи. по-големи. най-големи.',
+  // l09-gramatika-02 — степенуване: без м.р./ж.р./ср.р./мн.ч.; точки + многоточие за по-дълги паузи
+  'l09-gramatika-02-row-0': 'голям. ... по-голям. ... най-голям.',
+  'l09-gramatika-02-row-1': 'голяма. ... по-голяма. ... най-голяма.',
+  'l09-gramatika-02-row-2': 'голямо. ... по-голямо. ... най-голямо.',
+  'l09-gramatika-02-row-3': 'големи. ... по-големи. ... най-големи.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -145,11 +165,6 @@ const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene', // lesson 3 — Пушенето забранено!
   'bob',     // lesson 4 — боб (single short word, word prompt gives clearer stress)
-  // lesson 9 — Pro + word prompt for cleaner stress (Flash mispronounces these)
-  'hladilnik-nd', // хладилник
-  'spalnya-nd',   // спалня
-  'mivka-nd',     // мивка
-  'dush-nd',      // душ
 ]);
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
@@ -183,13 +198,12 @@ const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'palto', 'yake', 'obuvki', 'sandali', 'maratonki', 'dzhapanki', 'boti',
   'pulover', 'teniska', 'kasi-pantaloni', 'shapka', 'chorapi', 'botushi',
   'shal', 'rakavitsi', 'noshtnitsa', 'pizhama', 'ochila', 'slanchevi-ochila', 'kolan',
-  // lesson 9 — НОВИ ДУМИ 1 (furniture/household items): isolated words — Flash + word prompt
-  // Note: hladilnik-nd, spalnya-nd, mivka-nd, dush-nd → ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS (better stress)
-  'stol-nd', 'masa-nd', 'shkaf-nd', 'pechka-nd', 'peralnya-nd',
-  'leglo-nd', 'divan-nd', 'garderob-nd', 'lampa-nd', 'kilim-nd',
-  'cvete-nd', 'vana-nd', 'studena-voda-nd', 'topla-voda-nd',
+  // lesson 9 — НОВИ ДУМИ 1 (furniture/household items): isolated words — Flash + word prompt + Achernar
+  'stol-nd', 'masa-nd', 'shkaf-nd', 'pechka-nd', 'hladilnik-nd', 'peralnya-nd',
+  'leglo-nd', 'divan-nd', 'spalnya-nd', 'garderob-nd', 'lampa-nd', 'kilim-nd',
+  'cvete-nd', 'vana-nd', 'mivka-nd', 'dush-nd', 'studena-voda-nd', 'topla-voda-nd',
   'sapun-nd', 'vrata-nd', 'prozorec-nd',
-  // lesson 9 — НОВИ ДУМИ 2 (rooms)
+  // lesson 9 — НОВИ ДУМИ 2 (rooms): Flash + Achernar + strong prompt per id
   'balkon-nd', 'spalnya2-nd', 'toaletna-nd', 'banya-nd', 'kuhnya-nd', 'koridor-nd', 'hol-nd',
   // lesson 9 — НОВИ ДУМИ 3 (tableware)
   'vilica-nd', 'lyzhica-nd', 'nozh-nd', 'chasha-nd', 'chiniya-nd',
@@ -455,7 +469,11 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
       const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
       const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
-      const prompt = useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT;
+      const prompt = useFlash
+        ? ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT
+        : useProWordPrompt
+          ? GEMINI_WORD_PROMPT
+          : GEMINI_PROMPT;
             jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,

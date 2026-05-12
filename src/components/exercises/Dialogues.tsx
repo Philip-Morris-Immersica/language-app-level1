@@ -26,11 +26,12 @@ interface DialoguesProps {
   title?: string;
   subtitle?: string;
   audioUrl?: string;
+  imageUrl?: string;
   sections: DialogueSection[];
   exerciseId?: string;
 }
 
-export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
+export function Dialogues({ subtitle, imageUrl, sections, exerciseId }: DialoguesProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [playingLine, setPlayingLine] = useState<string | null>(null);
@@ -136,6 +137,16 @@ export function Dialogues({ subtitle, sections, exerciseId }: DialoguesProps) {
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {imageUrl && (
+        <div className="mb-6 flex justify-center">
+          <img
+            src={imageUrl}
+            alt=""
+            className="w-full max-w-md md:max-w-lg rounded-xl object-cover shadow-sm"
+          />
+        </div>
+      )}
+
       {lang !== 'bg' && (
         <p className="text-xs text-gray-400 text-center mb-4 italic">
           {t('exercise.tapToTranslate')}
