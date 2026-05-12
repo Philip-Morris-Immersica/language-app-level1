@@ -1,6 +1,6 @@
 'use client';
 
-import { Volume2, Play, BookOpen, ChevronDown, RotateCcw } from 'lucide-react';
+import { Volume2, Play, BookOpen, ChevronDown } from 'lucide-react';
 import { useT } from '@/i18n/useT';
 
 /**
@@ -93,16 +93,6 @@ function CultureAccordionPreview({ label }: { label: string }) {
   );
 }
 
-/** Outline „Нов опит" button with RotateCcw icon. */
-function ResetButtonPreview({ label }: { label: string }) {
-  return (
-    <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 text-sm font-semibold shadow-sm shrink-0">
-      <RotateCcw className="w-4 h-4" />
-      <span>{label}</span>
-    </div>
-  );
-}
-
 /* ──────────────────────────────────────────────────────────────────
  * Main component
  * ────────────────────────────────────────────────────────────────── */
@@ -126,16 +116,6 @@ export function PlatformLegend() {
       visual: <ListenButtonPreview label={t('exercise.listen')} />,
     },
     {
-      titleKey: 'legend.dictionary.title',
-      textKey: 'legend.dictionary.text',
-      visual: <DictionaryPreview />,
-    },
-    {
-      titleKey: 'legend.chatbot.title',
-      textKey: 'legend.chatbot.text',
-      visual: <RobiAvatarPreview />,
-    },
-    {
       titleKey: 'legend.grammar.title',
       textKey: 'legend.grammar.text',
       visual: <GrammarAccordionPreview label={stripLeadingEmoji(t('legend.grammar.title'))} />,
@@ -146,9 +126,14 @@ export function PlatformLegend() {
       visual: <CultureAccordionPreview label={stripLeadingEmoji(t('legend.culture.title'))} />,
     },
     {
-      titleKey: 'legend.reset.title',
-      textKey: 'legend.reset.text',
-      visual: <ResetButtonPreview label={t('exercise.reset')} />,
+      titleKey: 'legend.dictionary.title',
+      textKey: 'legend.dictionary.text',
+      visual: <DictionaryPreview />,
+    },
+    {
+      titleKey: 'legend.chatbot.title',
+      textKey: 'legend.chatbot.text',
+      visual: <RobiAvatarPreview />,
     },
   ];
 

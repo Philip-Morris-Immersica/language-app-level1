@@ -492,7 +492,7 @@ export function WorkbookFillBlank({
 
       {imageUrl ? (
         <div className="mb-6 flex justify-center">
-          <div className="w-full max-w-3xl md:max-w-4xl">
+          <div className="w-full max-w-md md:max-w-lg">
             <ImageLightbox src={imageUrl} alt="">
               <img
                 src={imageUrl}
