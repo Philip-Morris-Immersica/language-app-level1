@@ -3,7 +3,6 @@ import type {
   ImageLabelingExercise,
   IllustratedCardsExercise,
   LetterChoiceExercise,
-  FillInBlankExercise,
   DialoguesExercise,
   WorkbookFillBlankExercise,
   MultipleChoiceExercise,
@@ -85,25 +84,49 @@ export const exercises: Exercise[] = [
   } as LetterChoiceExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 3 — Напишете имена на сгради, които знаете (стр. 89)
-  // Свободно упражнение, без оценяване
+  // Упр. 3 — Познавате ли сградите? (стр. 89)
+  // Dropdown: свържете описанието с правилната сграда
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-03',
-    type: 'fill_in_blank',
+    type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Напишете имена на сгради, които знаете.',
+    instruction: 'Изберете правилното название на сградата.',
     order: 4,
-    points: 0, // content-lint-disable example-points-mismatch
-    freeText: true,
-    sentences: [
-      { text: '1. _______', blanks: [0], correctAnswers: [] },
-      { text: '2. _______', blanks: [0], correctAnswers: [] },
-      { text: '3. _______', blanks: [0], correctAnswers: [] },
-      { text: '4. _______', blanks: [0], correctAnswers: [] },
-      { text: '5. _______', blanks: [0], correctAnswers: [] },
+    points: 5,
+    questions: [
+      {
+        id: 'q03-1',
+        left: 'Хората се лекуват в _______.',
+        options: ['болница', 'музей', 'община', 'театър', 'училище'],
+        correctAnswer: 'болница',
+      },
+      {
+        id: 'q03-2',
+        left: 'Учениците учат в _______.',
+        options: ['болница', 'музей', 'община', 'театър', 'училище'],
+        correctAnswer: 'училище',
+      },
+      {
+        id: 'q03-3',
+        left: 'Зрителите гледат спектакли в _______.',
+        options: ['болница', 'музей', 'община', 'театър', 'училище'],
+        correctAnswer: 'театър',
+      },
+      {
+        id: 'q03-4',
+        left: 'Историческите и художествените предмети са в _______.',
+        options: ['болница', 'музей', 'община', 'театър', 'училище'],
+        correctAnswer: 'музей',
+      },
+      {
+        id: 'q03-5',
+        left: 'Местната администрация работи в _______.',
+        options: ['болница', 'музей', 'община', 'театър', 'училище'],
+        correctAnswer: 'община',
+      },
     ],
-  } as FillInBlankExercise,
+  } as DropdownMatchExercise,
 
   // ══════════════════════════════════════════════════════
   // ДИАЛОЗИ 1 (стр. 90)
@@ -167,17 +190,17 @@ export const exercises: Exercise[] = [
     id: 'l10-ex-07',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 7',
-    instruction: 'Изберете думата, която не принадлежи към групата.',
+    instruction: 'Изберете излишната дума.',
     order: 7,
     points: 2,
     questions: [
       {
-        question: 'Коя дума е различна? билет, каса, карта, сектор, автобус, трамвай, метро, тролей',
+        question: '1.',
         options: ['билет', 'каса', 'карта', 'сектор'],
         correctIndex: 3,
       },
       {
-        question: 'Коя дума е различна? спирка, автогара, такси, метростанция, автобус, трамвай, такси, кола',
+        question: '2.',
         options: ['спирка', 'автогара', 'такси', 'метростанция'],
         correctIndex: 2,
       },
@@ -195,15 +218,20 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 2',
     instruction: 'Изслушайте диалозите и след това ги прочетете сами.',
     order: 8,
-    imageUrl: '/assets/lesson-10/04-dialozi-2-patuvane-s-avtobus/01-bagaj-avtobus.jpg',
+    images: [
+      '/assets/lesson-10/04-dialozi-2-patuvane-s-avtobus/01-bagaj-avtobus.jpg',
+      '/assets/lesson-10/04-dialozi-2-patuvane-s-avtobus/02-bileti-kasa.jpg',
+      '/assets/lesson-10/04-dialozi-2-patuvane-s-avtobus/03-avtobus-peron.jpg',
+    ],
     sections: [
       {
         id: 'а.',
         lines: [
-          { voiceGender: 'male',   text: '– Един билет за Варна за 12:00 часà. Колко струва?' },
+          { voiceGender: 'male',   text: '– Един билет за Варна за 12:00 часà. Колко струва?',
+            ttsText: '– Един билет за Варна за дванадесет часà. Колко струва?' },
           { voiceGender: 'female', text: '– 23 евро.' },
           { voiceGender: 'male',   text: '– Откъде тръгва автобусът?' },
-          { voiceGender: 'female', text: '– От сектор 3.' },
+          { voiceGender: 'female', text: '– От сектор 3.', ttsText: '– От сектор три.' },
           { voiceGender: 'male',   text: '– Благодаря.' },
         ],
       },
@@ -211,7 +239,7 @@ export const exercises: Exercise[] = [
         id: 'б.',
         lines: [
           { voiceGender: 'female', text: '– Кога има автобус за Русе?' },
-          { voiceGender: 'male',   text: '– В 7:00 часà сутринта.' },
+          { voiceGender: 'male',   text: '– В 7:00 часà сутринта.', ttsText: '– В седем часà сутринта.' },
           { voiceGender: 'female', text: '– Колко часà е пътят?' },
           { voiceGender: 'male',   text: '– Пет часà.' },
         ],
@@ -220,18 +248,18 @@ export const exercises: Exercise[] = [
         id: 'в.',
         lines: [
           { voiceGender: 'female', text: '– В колко часà е първият автобус за Пловдив?' },
-          { voiceGender: 'male',   text: '– В 6:00 часà.' },
+          { voiceGender: 'male',   text: '– В 6:00 часà.', ttsText: '– В шест часà.' },
           { voiceGender: 'female', text: '– А кога е последният?' },
-          { voiceGender: 'male',   text: '– В 9:00 часà вечерта.' },
+          { voiceGender: 'male',   text: '– В 9:00 часà вечерта.', ttsText: '– В девет часà вечерта.' },
         ],
       },
       {
         id: 'г.',
         lines: [
           { voiceGender: 'male',   text: '– Кога тръгва автобусът за Стара Загора?' },
-          { voiceGender: 'female', text: '– В 10:00 часà.' },
+          { voiceGender: 'female', text: '– В 10:00 часà.', ttsText: '– В десет часà.' },
           { voiceGender: 'male',   text: '– А кога пристига?' },
-          { voiceGender: 'female', text: '– В 12:30.' },
+          { voiceGender: 'female', text: '– В 12:30.', ttsText: '– В дванадесет часà и тридесет минути.' },
         ],
       },
       {
@@ -263,71 +291,7 @@ export const exercises: Exercise[] = [
 
   // SKIP упр. 8 — „Прочетете диалозите по двойки" (хартиена дейност)
   // SKIP упр. 9 — „Работете по двойки. Упражнявайте диалозите" (хартиена дейност)
-
-  // ══════════════════════════════════════════════════════
-  // Упр. 10 — Попълнете празните места с подходяща дума (стр. 92)
-  // Два мини-диалога: а. билет за Сливен  б. Автобус за Пловдив
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l10-ex-10',
-    type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 10',
-    instruction: 'Изберете правилната дума за всяко празно място.',
-    order: 9,
-    points: 10,
-    layout: 'single',
-    sentences: [
-      {
-        text: 'а. – Един _______ до Сливен за 9:00 _______ сутринта. Колко _______?',
-        blanks: [0, 1, 2],
-        correctAnswers: ['билет', 'часà', 'струва'],
-        options: [
-          ['билет', 'карта', 'куфар', 'сектор'],
-          ['часà', 'лева', 'сутринта', 'минути'],
-          ['струва', 'тръгва', 'пристига', 'закъснява'],
-        ],
-      },
-      {
-        text: '– 10 _______.',
-        blanks: [0],
-        correctAnswers: ['евро'],
-        options: ['евро', 'часà', 'минути', 'лева'],
-      },
-      {
-        text: '– _______.',
-        blanks: [0],
-        correctAnswers: ['Благодаря'],
-        options: ['Благодаря', 'Заповядайте', 'Извинете', 'Моля'],
-      },
-      {
-        text: 'б. – Кога е _______ автобус _______ Пловдив?',
-        blanks: [0, 1],
-        correctAnswers: ['първият', 'за'],
-        options: [
-          ['първият', 'последният', 'следващият', 'директният'],
-          ['за', 'от', 'до', 'в'],
-        ],
-      },
-      {
-        text: '– В 6:00 _______ сутринта.',
-        blanks: [0],
-        correctAnswers: ['часà'],
-        options: ['часà', 'лева', 'минути', 'сектора'],
-      },
-      {
-        text: '– Кога е _______?',
-        blanks: [0],
-        correctAnswers: ['последният'],
-        options: ['последният', 'първият', 'следващият', 'директният'],
-      },
-      {
-        text: '– В 9:00 _______ вечерта.',
-        blanks: [0],
-        correctAnswers: ['часà'],
-        options: ['часà', 'лева', 'минути', 'сектора'],
-      },
-    ],
-  } as WorkbookFillBlankExercise,
+  // SKIP упр. 10 — клиентката не го иска
 
   // ══════════════════════════════════════════════════════
   // ГРАМАТИКА 1 — Глаголи за движение с предлози (стр. 93)
@@ -405,58 +369,7 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ══════════════════════════════════════════════════════
-  // Упр. 12 — Попълнете предлозите (стр. 93)
-  // Текст за Алекс с 9 предлога
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l10-ex-12',
-    type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 12',
-    instruction: 'Изберете правилния предлог.',
-    order: 12,
-    points: 9,
-    layout: 'single',
-    sentences: [
-      {
-        text: 'Алекс тръгва от Нова Загора _______ София _______ 7:00 часà _______ автобус.',
-        blanks: [0, 1, 2],
-        correctAnswers: ['за', 'в', 'с'],
-        options: [
-          ['за', 'от', 'в', 'до', 'на'],
-          ['в', 'от', 'за', 'до', 'на'],
-          ['с', 'в', 'за', 'от', 'до'],
-        ],
-      },
-      {
-        text: 'Пристига _______ 11:00 часà _______ Централна автогара.',
-        blanks: [0, 1],
-        correctAnswers: ['в', 'на'],
-        options: [
-          ['в', 'от', 'за', 'до', 'на'],
-          ['на', 'в', 'от', 'за', 'до'],
-        ],
-      },
-      {
-        text: 'Алекс пътува _______ центъра _______ трамвай.',
-        blanks: [0, 1],
-        correctAnswers: ['в', 'с'],
-        options: [
-          ['в', 'от', 'за', 'до', 'на'],
-          ['с', 'в', 'за', 'от', 'до'],
-        ],
-      },
-      {
-        text: 'Той се връща _______ Нова Загора _______ 10:00 часà вечерта.',
-        blanks: [0, 1],
-        correctAnswers: ['в', 'в'],
-        options: [
-          ['в', 'от', 'за', 'до', 'на'],
-          ['в', 'от', 'за', 'до', 'на'],
-        ],
-      },
-    ],
-  } as WorkbookFillBlankExercise,
+  // SKIP упр. 12 — клиентката не го иска
 
   // ══════════════════════════════════════════════════════
   // НОВИ ДУМИ 3 — Железопътен транспорт (стр. 93)
@@ -504,6 +417,7 @@ export const exercises: Exercise[] = [
 
   // ══════════════════════════════════════════════════════
   // Упр. 13 — Колко думи можете да откриете? (стр. 93)
+  // Grid mode: words hidden horizontally with 1 letter padding on each side
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-13',
@@ -514,6 +428,7 @@ export const exercises: Exercise[] = [
     points: 7,
     letterString: 'гаравлакколовоззакъснениевагонзаминаващипристигащи',
     correctWords: ['гара', 'влак', 'коловоз', 'закъснение', 'вагон', 'заминаващи', 'пристигащи'],
+    hiddenWords: ['ГАРА', 'ВЛАК', 'КОЛОВОЗ', 'ЗАКЪСНЕНИЕ', 'ВАГОН', 'ЗАМИНАВАЩИ', 'ПРИСТИГАЩИ'],
   } as WordSearchExercise,
 
   // ══════════════════════════════════════════════════════
@@ -723,9 +638,10 @@ export const exercises: Exercise[] = [
 
   // ══════════════════════════════════════════════════════
   // ГРАМАТИКА 2 — Видове въпроси (стр. 95)
+  // Разделена на 4 блока за по-нагледно представяне
   // ══════════════════════════════════════════════════════
   {
-    id: 'l10-gramatika-02',
+    id: 'l10-gramatika-02a',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     subtitle: 'Видове въпроси',
@@ -737,12 +653,44 @@ export const exercises: Exercise[] = [
       { imageUrl: '', text: 'Кога заминава автобусът?', subtext: 'Кога пристига автобусът?' },
       { imageUrl: '', text: 'Кога е първият автобус за Пловдив?', subtext: 'Кога е последният? Кога е следващият?' },
       { imageUrl: '', text: 'Кога има влак за София?' },
+    ],
+  } as GrammarExamplesExercise,
+
+  {
+    id: 'l10-gramatika-02b',
+    type: 'grammar_examples',
+    title: '',
+    instruction: '',
+    order: 20,
+    examples: [
       { imageUrl: '', text: 'Къде спира автобусът?', label: 'КЪДЕ (where)' },
       { imageUrl: '', text: 'Откъде тръгва автобусът?', label: 'ОТКЪДЕ (from where)' },
       { imageUrl: '', text: 'Откъде заминава автобусът?' },
+    ],
+  } as GrammarExamplesExercise,
+
+  {
+    id: 'l10-gramatika-02c',
+    type: 'grammar_examples',
+    title: '',
+    instruction: '',
+    order: 20,
+    examples: [
       { imageUrl: '', text: 'Колко билета искате?', label: 'КОЛКО (how many/much)' },
-      { imageUrl: '', text: 'Колко минути закъснява влакът?', subtext: 'Колко струва билетът? / Колко лева струва билетът?' },
+      { imageUrl: '', text: 'Колко минути закъснява влакът?',
+        subtext: 'Колко струва билетът?',
+        ttsText: 'Колко минути закъснява влакът? Колко струва билетът?' },
       { imageUrl: '', text: 'Как пътуваш до Централна гара?', label: 'КАК (how)' },
+    ],
+  } as GrammarExamplesExercise,
+
+  {
+    id: 'l10-gramatika-02d',
+    type: 'grammar_examples',
+    title: '',
+    instruction: '',
+    order: 20,
+    examples: [
       { imageUrl: '', text: 'На кой коловоз пристига влакът?', label: 'НА КОЙ / ОТ КОЙ' },
       { imageUrl: '', text: 'От кой коловоз тръгва влакът?', subtext: 'На кой сектор пристига автобусът?' },
       { imageUrl: '', text: 'Влакът има ли закъснение?', label: 'ЛИ (yes/no)' },

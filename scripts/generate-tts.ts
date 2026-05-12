@@ -132,6 +132,11 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l09-gramatika-02-row-1': 'голяма. ... по-голяма. ... най-голяма.',
   'l09-gramatika-02-row-2': 'голямо. ... по-голямо. ... най-голямо.',
   'l09-gramatika-02-row-3': 'големи. ... по-големи. ... най-големи.',
+
+  // l10-gramatika-01b — разписание (пристигащи): пълна форма с думи вместо цифри
+  'l10-gramatika-01b-row-0': 'Пловдив. Пристига в осем часа и петнадесет минути. На първи коловоз. Има закъснение от пет минути.',
+  'l10-gramatika-01b-row-1': 'Плевен. Пристига в дванадесет часа. На трети коловоз. Без закъснение.',
+  'l10-gramatika-01b-row-2': 'Русе. Пристига в петнадесет часа и тридесет минути. На четвърти коловоз. Има закъснение от петнадесет минути.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -161,11 +166,6 @@ const GRAMMAR_LABELS = new Set([
 /** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
 const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
 
-/** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
-const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
-  'pushene', // lesson 3 — Пушенето забранено!
-  'bob',     // lesson 4 — боб (single short word, word prompt gives clearer stress)
-]);
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
 const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>(['shopska-salata', 'sarmi', 'baklava']);
@@ -178,36 +178,6 @@ const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
 
 /** `grammar_examples` + highlight rows: force Gemini Pro + Achernar (no Flash / no male line preset). */
 const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set(['l07-gramatika-04', 'l07-gramatika-05']);
-
-/** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
-const ILLUSTRATED_CARD_FLASH_IDS = new Set([
-  'tsigari', // lesson 3 — цигари (ударение на -га-)
-  'shishche', // lesson 3 НОВИ ДУМИ 3 — шишче
-  '200-euro', // lesson 3 НОВИ ДУМИ 2 — двеста евро
-  '20-cent', // lesson 3 НОВИ ДУМИ 2 — двадесет евроцента
-  // lesson 1 — НОВИ ДУМИ 1 (greetings); Pro + „warm" sounds overexcited for short phrases
-  'morning',
-  'day',
-  'evening',
-  'night',
-  'hello',
-  'hello_formal',
-  'goodbye',
-  // lesson 8 — НОВИ ДУМИ 2 (clothes): isolated clothing words — Flash gives cleaner stress
-  'kostyum', 'pantalon', 'sako', 'riza', 'danki', 'roklya', 'pola', 'bluza',
-  'palto', 'yake', 'obuvki', 'sandali', 'maratonki', 'dzhapanki', 'boti',
-  'pulover', 'teniska', 'kasi-pantaloni', 'shapka', 'chorapi', 'botushi',
-  'shal', 'rakavitsi', 'noshtnitsa', 'pizhama', 'ochila', 'slanchevi-ochila', 'kolan',
-  // lesson 9 — НОВИ ДУМИ 1 (furniture/household items): isolated words — Flash + word prompt + Achernar
-  'stol-nd', 'masa-nd', 'shkaf-nd', 'pechka-nd', 'hladilnik-nd', 'peralnya-nd',
-  'leglo-nd', 'divan-nd', 'spalnya-nd', 'garderob-nd', 'lampa-nd', 'kilim-nd',
-  'cvete-nd', 'vana-nd', 'mivka-nd', 'dush-nd', 'studena-voda-nd', 'topla-voda-nd',
-  'sapun-nd', 'vrata-nd', 'prozorec-nd',
-  // lesson 9 — НОВИ ДУМИ 2 (rooms): Flash + Achernar + strong prompt per id
-  'balkon-nd', 'spalnya2-nd', 'toaletna-nd', 'banya-nd', 'kuhnya-nd', 'koridor-nd', 'hol-nd',
-  // lesson 9 — НОВИ ДУМИ 3 (tableware)
-  'vilica-nd', 'lyzhica-nd', 'nozh-nd', 'chasha-nd', 'chiniya-nd',
-]);
 
 // ---------------------------------------------------------------------------
 // Text cleaning
@@ -450,8 +420,9 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
 }
 
 /**
- * Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01).
- * Pro + warm prompt: short phrases sound more natural than Flash (stress/intonation on e.g. „Добър ден!“).
+ * Illustrated cards use words/{card.id}.mp3.
+ * Flash + word-clarity prompt is the default for ALL НОВИ ДУМИ cards (isolated vocabulary words).
+ * Use ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID to override the prompt per card when Flash mis-stresses a word.
  */
 function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
@@ -466,21 +437,13 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
           : [card.label];
         joined = parts.join('. ').replace(/\s*=\s*/g, ', ');
       }
-      const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
-      const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
-      const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
-      const prompt = useFlash
-        ? ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT
-        : useProWordPrompt
-          ? GEMINI_WORD_PROMPT
-          : GEMINI_PROMPT;
-            jobs.push({
+      jobs.push({
         category: 'words',
-        filename: `${card.id}.mp3`,
+        filename: \.mp3,
         text: clean(joined),
         voice: FEMALE_VOICE,
-        model,
-        prompt,
+        model: GEMINI_FLASH_MODEL,
+        prompt: ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT,
       });
     }
   }

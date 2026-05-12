@@ -20,7 +20,7 @@ Two Gemini TTS models are used depending on content type:
 - **Why:** Better pronunciation accuracy for isolated words
 
 ### gemini-2.5-pro-tts (connected text)
-- **Use for:** Dialogues, reading texts, listening, grammar examples (full sentences), personal choice models, **illustrated_cards** (greeting phrases like „Добър ден!“ — natural stress/intonation)
+- **Use for:** Dialogues, reading texts, listening, grammar examples (full sentences), personal choice models
 - **Prompt:** `"Read aloud in a warm, welcoming tone."`
 - **Why:** More natural intonation and flow for sentences and paragraphs
 

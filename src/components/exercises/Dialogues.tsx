@@ -27,11 +27,13 @@ interface DialoguesProps {
   subtitle?: string;
   audioUrl?: string;
   imageUrl?: string;
+  /** Multiple images shown side-by-side at top (desktop: row, mobile: stack). */
+  images?: string[];
   sections: DialogueSection[];
   exerciseId?: string;
 }
 
-export function Dialogues({ subtitle, imageUrl, sections, exerciseId }: DialoguesProps) {
+export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: DialoguesProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [playingLine, setPlayingLine] = useState<string | null>(null);
@@ -137,7 +139,17 @@ export function Dialogues({ subtitle, imageUrl, sections, exerciseId }: Dialogue
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {imageUrl && (
+      {/* Multiple images (side-by-side on desktop) */}
+      {images && images.length > 0 && (
+        <div className={`mb-6 grid gap-3 ${images.length === 1 ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
+          {images.map((src, i) => (
+            <img key={i} src={src} alt="" className="w-full rounded-xl object-cover shadow-sm" />
+          ))}
+        </div>
+      )}
+
+      {/* Legacy single image */}
+      {!images && imageUrl && (
         <div className="mb-6 flex justify-center">
           <img
             src={imageUrl}

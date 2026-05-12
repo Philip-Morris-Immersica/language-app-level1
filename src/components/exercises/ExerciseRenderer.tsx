@@ -267,6 +267,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           audioUrl={exercise.audioUrl}
           imageUrl={exercise.imageUrl}
+          images={exercise.images}
           sections={exercise.sections}
           exerciseId={exercise.id}
         />
