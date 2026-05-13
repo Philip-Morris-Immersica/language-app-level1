@@ -393,13 +393,13 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
           })}
         </div>
       ) : !hideText && images && images.length > 0 ? (
-        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md md:max-w-lg mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-xl md:max-w-2xl mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <img
                 src={img.imageUrl}
                 alt={img.label}
-                className="w-full rounded-lg shadow-sm object-contain max-h-72"
+                className={`w-full rounded-lg shadow-sm object-contain ${images.length === 1 ? 'max-h-96 md:max-h-[480px]' : 'max-h-72'}`}
                 loading="lazy"
               />
               {img.label && (

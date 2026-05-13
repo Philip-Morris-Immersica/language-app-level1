@@ -101,9 +101,11 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const gh = exercise.grammarHighlight;
     const ghAfter = gh && exercise.grammarHighlightAfterBody;
     const ghBefore = gh && !exercise.grammarHighlightAfterBody;
+    // title === '' means "continuation section" — hide header + number entirely
+    const showHeader = exercise.title !== '';
     return (
       <div>
-        <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
+        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />}
         {ghBefore && (
           <div className="mb-5">
             <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
