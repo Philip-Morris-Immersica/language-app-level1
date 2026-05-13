@@ -20,6 +20,8 @@ interface ReadingTextImage {
   imageUrl: string;
   label: string;
   ttsWordId?: string;
+  /** Optional curated translations for `label` (lang code → text); click-to-reveal uses same pattern as paragraph translation. */
+  labelTranslations?: Record<string, string>;
 }
 
 interface ReadingTextProps {
@@ -106,6 +108,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
   const [playingParaIndex, setPlayingParaIndex] = useState<number | null>(null);
   const seqRef = useRef<{ cancelled: boolean } | null>(null);
   const [flippedVocabImages, setFlippedVocabImages] = useState<Record<number, boolean>>({});
+  const [revealedImageLabels, setRevealedImageLabels] = useState<Set<number>>(new Set());
 
   const stopSequentialPlayback = useCallback(() => {
     if (seqRef.current) seqRef.current.cancelled = true;
@@ -267,25 +270,71 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
       )}
 
       {hideText && images && images.length > 0 ? (
-        <div className={`grid gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2'}`}>
-          {images.map((img, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <img
-                src={img.imageUrl}
-                alt={img.label}
-                className="w-full rounded-lg shadow-sm object-contain max-h-72"
-                loading="lazy"
-              />
-              {img.label && (
-                <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
-              )}
-              {paragraphs[i] && (
-                <div className="mt-3">
-                  <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} />
+        <div className="mb-6">
+          {!noTranslation && lang !== 'bg' && (
+            <p className="text-xs md:text-sm text-[#737373] mb-3 text-center max-w-xl mx-auto">
+              {t('exercise.tapLabelForTranslation')}
+            </p>
+          )}
+          <div
+            className={`grid gap-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:max-w-3xl md:mx-auto'}`}
+          >
+            {images.map((img, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-stretch h-full min-w-0"
+              >
+                <div className="flex-1 flex items-center justify-center min-h-[11rem] md:min-h-[14rem]">
+                  <img
+                    src={img.imageUrl}
+                    alt={img.label}
+                    className="w-full max-h-72 rounded-lg shadow-sm object-contain"
+                    loading="lazy"
+                  />
                 </div>
-              )}
-            </div>
-          ))}
+                <div className="mt-3 flex flex-col items-center grow justify-end">
+                  {img.label &&
+                    (noTranslation || lang === 'bg' ? (
+                      <span className="text-xs md:text-sm text-gray-500 font-medium text-center">
+                        {img.label}
+                      </span>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className={`text-xs md:text-sm font-medium text-center rounded-md px-2 py-1 transition-colors border border-transparent ${
+                            revealedImageLabels.has(i)
+                              ? 'text-[#0072BC] bg-[#CDE3F1]/30 border-[#0072BC]/25'
+                              : 'text-gray-700 hover:bg-gray-50 border-dashed border-gray-300'
+                          }`}
+                          aria-expanded={revealedImageLabels.has(i)}
+                          onClick={() => {
+                            setRevealedImageLabels((prev) => {
+                              const next = new Set(prev);
+                              if (next.has(i)) next.delete(i);
+                              else next.add(i);
+                              return next;
+                            });
+                          }}
+                        >
+                          {img.label}
+                        </button>
+                        <InlineTranslation
+                          text={img.label}
+                          visible={revealedImageLabels.has(i)}
+                          translations={img.labelTranslations}
+                        />
+                      </>
+                    ))}
+                  {paragraphs[i] && (
+                    <div className="mt-3 w-full flex justify-center">
+                      <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : !hideText && images && images.length > 0 && imageFlashcards ? (
         <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
@@ -344,13 +393,13 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
           })}
         </div>
       ) : !hideText && images && images.length > 0 ? (
-        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md md:max-w-lg mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-xl md:max-w-2xl mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <img
                 src={img.imageUrl}
                 alt={img.label}
-                className="w-full rounded-lg shadow-sm object-contain max-h-72"
+                className={`w-full rounded-lg shadow-sm object-contain ${images.length === 1 ? 'max-h-96 md:max-h-[480px]' : 'max-h-72'}`}
                 loading="lazy"
               />
               {img.label && (

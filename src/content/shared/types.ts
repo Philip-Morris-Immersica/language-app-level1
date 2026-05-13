@@ -313,6 +313,8 @@ export interface DialoguesExercise extends BaseExercise {
   title: string;             // 'ДИАЛОЗИ 1'
   subtitle?: string;
   imageUrl?: string;
+  /** Multiple illustration images shown side-by-side at the top (desktop: row, mobile: stack). */
+  images?: string[];
   audioUrl?: string;
   sections: {
     id: string;              // 'а.', 'б.'
@@ -418,6 +420,8 @@ export interface ReadingTextExercise extends BaseExercise {
     label: string;
     /** Stem for `words/{ttsWordId}.mp3` in the lesson TTS folder (flip-card audio). */
     ttsWordId?: string;
+    /** Optional per-language translation for `label` (keys: ar, en, …). When `hideText` + images, click toggles; falls back to auto-translate. */
+    labelTranslations?: Record<string, string>;
   }[];
   /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
   imageFlashcards?: boolean;
