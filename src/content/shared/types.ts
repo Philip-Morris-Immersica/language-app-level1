@@ -383,6 +383,9 @@ export interface DragToColumnsExercise extends BaseExercise {
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  /** Override the automatic mid-point split for two-column layout. Useful when items fall into two
+   *  semantically distinct groups (e.g. months 0-11 on the left, days 12-18 on the right). */
+  columnSplitAt?: number;
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */

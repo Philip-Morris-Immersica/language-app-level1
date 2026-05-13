@@ -46,6 +46,7 @@ export const A1_TEST_LOADERS: Record<
   'test-a1-3': () => import('./tests/test-lessons-5-6'),
   'test-a1-4': () => import('./tests/test-lessons-7-8'),
   'test-a1-5': () => import('./tests/test-lessons-9-10'),
+  'test-a1-6': () => import('./tests/test-lessons-11'),
 };
 
 // ── Lesson metadata (static, used by sidebar / lesson page header) ────────────
@@ -98,6 +99,7 @@ export const A1_TEST_FOLDER_MAP: Record<string, string> = {
   'test-a1-3': 'test-lessons-5-6',
   'test-a1-4': 'test-lessons-7-8',
   'test-a1-5': 'test-lessons-9-10',
+  'test-a1-6': 'test-lessons-11',
 };
 
 // ── testId → next lesson after the test (used for "next" navigation) ──────────
@@ -107,6 +109,7 @@ export const A1_TEST_NEXT_LESSON_MAP: Record<string, string> = {
   'test-a1-3': 'lesson-07',
   'test-a1-4': 'lesson-09',
   'test-a1-5': 'lesson-11',
+  // test-a1-6 is the final A1 test — no next lesson
 };
 
 /**

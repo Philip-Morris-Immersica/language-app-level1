@@ -138,6 +138,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <WorkbookFillBlank
           sentences={exercise.sentences}
           layout={exercise.layout}
+          columnSplitAt={exercise.columnSplitAt}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
           listeningText={exercise.listeningText}
