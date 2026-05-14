@@ -619,6 +619,31 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     uk: 'Вирази для оренди житла — «під оренду», «здавати під оренду», «шукати під оренду».',
     ru: 'Выражения для аренды жилья — «в аренду», «сдаю в аренду», «ищу в аренду».',
   },
+
+  // ── Chatbot ───────────────────────────────────────────────────────────────────
+  'chat.placeholder':       { bg: 'Питай Robi...', ar: 'اسأل Robi...', fr: 'Demandez à Robi...', en: 'Ask Robi...', fa: 'از Robi بپرسید...', uk: 'Запитай Robi...', ru: 'Спросите Robi...' },
+  'chat.send':              { bg: 'Изпрати', ar: 'إرسال', fr: 'Envoyer', en: 'Send', fa: 'ارسال', uk: 'Надіслати', ru: 'Отправить' },
+  'chat.thinking':          { bg: 'Robi мисли...', ar: 'Robi يفكر...', fr: 'Robi réfléchit...', en: 'Robi is thinking...', fa: 'Robi در حال فکر کردن است...', uk: 'Robi думає...', ru: 'Robi думает...' },
+  'chat.privacyNotice':     { bg: 'Аз съм AI асистент. Разговорите се записват. Не споделяй лична информация.', ar: 'أنا مساعد ذكاء اصطناعي. تُسجَّل المحادثات. لا تشارك معلومات شخصية.', fr: "Je suis un assistant IA. Les conversations sont enregistrées. Ne partagez pas d'informations personnelles.", en: "I'm an AI assistant. Conversations are recorded. Don't share personal information.", fa: 'من یک دستیار هوش مصنوعی هستم. مکالمات ضبط می‌شوند. اطلاعات شخصی خود را به اشتراک نگذارید.', uk: 'Я AI-асистент. Розмови записуються. Не діліться особистою інформацією.', ru: 'Я AI-ассистент. Разговоры записываются. Не делитесь личной информацией.' },
+  'chat.suggestionExplain': { bg: 'Обясни тази граматика', ar: 'اشرح هذه القاعدة', fr: 'Explique cette règle', en: 'Explain this grammar', fa: 'این دستور زبان را توضیح دهید', uk: 'Поясни цю граматику', ru: 'Объясни эту грамматику' },
+  'chat.suggestionExamples':{ bg: 'Дай ми примери', ar: 'أعطني أمثلة', fr: 'Donne-moi des exemples', en: 'Give me examples', fa: 'مثال بده', uk: 'Дай мені приклади', ru: 'Дай мне примеры' },
+  'chat.suggestionWord':    { bg: 'Какво означава тази дума?', ar: 'ماذا تعني هذه الكلمة؟', fr: 'Que veut dire ce mot ?', en: 'What does this word mean?', fa: 'این کلمه چه معنایی دارد؟', uk: 'Що означає це слово?', ru: 'Что значит это слово?' },
+  'chat.errorNoKey':        { bg: 'Няма конфигуриран API ключ. Моля, свържете се с администратора.', ar: 'لا يوجد مفتاح API. يُرجى التواصل مع المشرف.', fr: "Pas de clé API configurée. Veuillez contacter l'administrateur.", en: 'No API key configured. Please contact the administrator.', fa: 'کلید API تنظیم نشده است. لطفاً با مدیر تماس بگیرید.', uk: 'API ключ не налаштовано. Будь ласка, зверніться до адміністратора.', ru: 'API ключ не настроен. Пожалуйста, обратитесь к администратору.' },
+  'chat.rateLimit':         { bg: 'Достигнахте лимита на съобщенията. Опитайте след час.', ar: 'لقد وصلت إلى الحد الأقصى من الرسائل. حاول بعد ساعة.', fr: 'Vous avez atteint la limite de messages. Réessayez dans une heure.', en: 'You have reached the message limit. Try again in an hour.', fa: 'به محدودیت پیام رسیده‌اید. یک ساعت دیگر دوباره امتحان کنید.', uk: 'Досягнуто ліміт повідомлень. Спробуйте через годину.', ru: 'Достигнут лимит сообщений. Попробуйте через час.' },
+  'chat.micStart':          { bg: 'Говори', ar: 'تحدث', fr: 'Parler', en: 'Speak', fa: 'صحبت کن', uk: 'Говори', ru: 'Говорить' },
+  'chat.micStop':           { bg: 'Стоп', ar: 'إيقاف', fr: 'Arrêt', en: 'Stop', fa: 'توقف', uk: 'Стоп', ru: 'Стоп' },
+  'chat.micNotSupported':   { bg: 'Микрофонът не се поддържа в този браузър.', ar: 'الميكروفون غير مدعوم في هذا المتصفح.', fr: "Le microphone n'est pas pris en charge dans ce navigateur.", en: 'Microphone not supported in this browser.', fa: 'میکروفون در این مرورگر پشتیبانی نمی‌شود.', uk: 'Мікрофон не підтримується в цьому браузері.', ru: 'Микрофон не поддерживается в этом браузере.' },
+
+  // ── Admin panel ───────────────────────────────────────────────────────────────
+  'admin.nav.dashboard':    { bg: 'Табло', ar: 'لوحة التحكم', fr: 'Tableau de bord', en: 'Dashboard', fa: 'داشبورد', uk: 'Дашборд', ru: 'Дашборд' },
+  'admin.nav.chats':        { bg: 'Разговори', ar: 'المحادثات', fr: 'Conversations', en: 'Conversations', fa: 'مکالمات', uk: 'Розмови', ru: 'Разговоры' },
+  'admin.nav.users':        { bg: 'Потребители', ar: 'المستخدمون', fr: 'Utilisateurs', en: 'Users', fa: 'کاربران', uk: 'Користувачі', ru: 'Пользователи' },
+  'admin.nav.reports':      { bg: 'Отчети', ar: 'التقارير', fr: 'Rapports', en: 'Reports', fa: 'گزارش‌ها', uk: 'Звіти', ru: 'Отчёты' },
+  'admin.nav.prompts':      { bg: 'Промтове (IT)', ar: 'المطالبات (IT)', fr: 'Prompts (IT)', en: 'Prompts (IT)', fa: 'پرامپت‌ها (IT)', uk: 'Промпти (IT)', ru: 'Промты (IT)' },
+  'admin.nav.welcome':      { bg: 'Welcome съобщение (IT)', ar: 'رسالة ترحيب (IT)', fr: 'Message d\'accueil (IT)', en: 'Welcome message (IT)', fa: 'پیام خوش‌آمد (IT)', uk: 'Привітальне повідомлення (IT)', ru: 'Приветственное сообщение (IT)' },
+  'admin.nav.apiKeys':      { bg: 'API ключове (IT)', ar: 'مفاتيح API (IT)', fr: 'Clés API (IT)', en: 'API Keys (IT)', fa: 'کلیدهای API (IT)', uk: 'API ключі (IT)', ru: 'API ключи (IT)' },
+  'admin.nav.admins':       { bg: 'Администратори (IT)', ar: 'المسؤولون (IT)', fr: 'Administrateurs (IT)', en: 'Admins (IT)', fa: 'مدیران (IT)', uk: 'Адміністратори (IT)', ru: 'Администраторы (IT)' },
+  'admin.nav.audit':        { bg: 'Одит лог (IT)', ar: 'سجل التدقيق (IT)', fr: 'Journal d\'audit (IT)', en: 'Audit log (IT)', fa: 'گزارش حسابرسی (IT)', uk: 'Журнал аудиту (IT)', ru: 'Журнал аудита (IT)' },
 };
 
 export type UIKey = keyof typeof UI_TRANSLATIONS;

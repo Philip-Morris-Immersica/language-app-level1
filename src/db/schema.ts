@@ -1,6 +1,8 @@
 import { integer, pgTable, varchar, text, boolean, timestamp, pgEnum, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+export const adminRoleEnum = pgEnum("admin_role", ["it", "admin", "viewer"]);
+
 // Enums for exercise types and difficulty levels
 export const difficultyEnum = pgEnum("difficulty", ["beginner", "intermediate", "advanced"]);
 export const exerciseTypeEnum = pgEnum("exercise_type", [
@@ -81,10 +83,92 @@ export const exerciseStatesTable = pgTable("exercise_states", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (t) => [unique().on(t.userId, t.exerciseId)]);
 
-// Relations
+// ── Chat tables ────────────────────────────────────────────────────────────────
+
+export const chatConversationsTable = pgTable("chat_conversations", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  language: varchar({ length: 5 }).notNull(),
+  level: varchar({ length: 5 }),
+  startedAt: timestamp("started_at").notNull().defaultNow(),
+  lastMessageAt: timestamp("last_message_at").notNull().defaultNow(),
+  totalTokensIn: integer("total_tokens_in").notNull().default(0),
+  totalTokensOut: integer("total_tokens_out").notNull().default(0),
+  totalCostUsdMicro: integer("total_cost_usd_micro").notNull().default(0),
+});
+
+export const chatMessagesTable = pgTable("chat_messages", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  conversationId: integer("conversation_id").notNull().references(() => chatConversationsTable.id, { onDelete: "cascade" }),
+  role: varchar({ length: 16 }).notNull(),
+  content: text().notNull(),
+  contentRedacted: boolean("content_redacted").notNull().default(false),
+  lessonContext: varchar("lesson_context", { length: 64 }),
+  model: varchar({ length: 64 }),
+  tokensIn: integer("tokens_in").default(0),
+  tokensOut: integer("tokens_out").default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// ── Admin tables ───────────────────────────────────────────────────────────────
+
+export const adminUsersTable = pgTable("admin_users", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().unique().references(() => usersTable.id, { onDelete: "cascade" }),
+  role: adminRoleEnum().notNull(),
+  createdBy: integer("created_by").references(() => usersTable.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const adminAuditLogTable = pgTable("admin_audit_log", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  adminUserId: integer("admin_user_id").notNull().references(() => usersTable.id),
+  action: varchar({ length: 64 }).notNull(),
+  target: varchar({ length: 128 }),
+  beforeJson: text("before_json"),
+  afterJson: text("after_json"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const adminPromptsTable = pgTable("admin_prompts", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  scope: varchar({ length: 16 }).notNull(),
+  promptText: text("prompt_text").notNull(),
+  temperature: integer().notNull().default(70),
+  model: varchar({ length: 64 }).notNull().default("gpt-4o-mini"),
+  maxTokens: integer("max_tokens").notNull().default(1000),
+  isActive: boolean("is_active").notNull().default(true),
+  version: integer().notNull().default(1),
+  updatedBy: integer("updated_by").references(() => usersTable.id),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (t) => [unique().on(t.scope, t.version)]);
+
+export const adminWelcomeMessageTable = pgTable("admin_welcome_message", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  lang: varchar({ length: 5 }).notNull().unique(),
+  text: text().notNull(),
+  suggestionChips: text("suggestion_chips"),  // JSON array of 3 strings
+  isActive: boolean("is_active").notNull().default(true),
+  updatedBy: integer("updated_by").references(() => usersTable.id),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const adminApiKeysTable = pgTable("admin_api_keys", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  provider: varchar({ length: 32 }).notNull(),
+  encryptedKey: text("encrypted_key").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  createdBy: integer("created_by").notNull().references(() => usersTable.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastUsedAt: timestamp("last_used_at"),
+});
+
+// ── Relations ──────────────────────────────────────────────────────────────────
+
 export const usersRelations = relations(usersTable, ({ many }) => ({
   progress: many(userProgressTable),
   lessonProgress: many(lessonProgressTable),
+  chatConversations: many(chatConversationsTable),
 }));
 
 export const lessonsRelations = relations(lessonsTable, ({ many }) => ({
@@ -119,5 +203,20 @@ export const lessonProgressRelations = relations(lessonProgressTable, ({ one }) 
   lesson: one(lessonsTable, {
     fields: [lessonProgressTable.lessonId],
     references: [lessonsTable.id],
+  }),
+}));
+
+export const chatConversationsRelations = relations(chatConversationsTable, ({ one, many }) => ({
+  user: one(usersTable, {
+    fields: [chatConversationsTable.userId],
+    references: [usersTable.id],
+  }),
+  messages: many(chatMessagesTable),
+}));
+
+export const chatMessagesRelations = relations(chatMessagesTable, ({ one }) => ({
+  conversation: one(chatConversationsTable, {
+    fields: [chatMessagesTable.conversationId],
+    references: [chatConversationsTable.id],
   }),
 }));
