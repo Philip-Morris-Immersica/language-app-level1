@@ -27,6 +27,12 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  /** See WorkbookFillBlankExercise.columnSplitAt */
+  columnSplitAt?: number;
+  /** When true, skip the automatic "N." numbering prefix in front of each sentence. */
+  hideSentenceNumbers?: boolean;
+  /** Optional captions rendered above the two columns when layout='two-column'. */
+  columnLabels?: { left?: string; right?: string };
   imageUrl?: string;
   images?: { imageUrl: string; label?: string }[];
   listeningText?: string;
@@ -46,6 +52,9 @@ function parseText(text: string): { type: 'text' | 'blank'; value: string }[] {
 export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
+  columnSplitAt,
+  hideSentenceNumbers = false,
+  columnLabels,
   imageUrl,
   images,
   listeningText,
@@ -141,7 +150,7 @@ export function WorkbookFillBlank({
     onComplete?.(correctCount === totalSentences, correctCount);
   };
 
-  const renderSentence = (sentence: WorkbookSentence, sIdx: number) => {
+  const renderSentence = (sentence: WorkbookSentence, sIdx: number, displayNum?: number) => {
     const isExample = sentence.isExample || sentence.blanks.length === 0;
     const segments = parseText(sentence.text);
     let blankCounter = 0;
@@ -163,7 +172,9 @@ export function WorkbookFillBlank({
         key={sIdx}
         className={`flex items-center gap-3 py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}
       >
-        <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{sIdx + 1}.</span>
+        {!hideSentenceNumbers && (
+          <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
+        )}
         <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
@@ -452,7 +463,7 @@ export function WorkbookFillBlank({
   };
 
   // Split sentences for two-column layout: first half left, second half right
-  const half = Math.ceil(shuffledSentences.length / 2);
+  const half = columnSplitAt ?? Math.ceil(shuffledSentences.length / 2);
   const leftSentences = shuffledSentences.slice(0, half);
   const rightSentences = shuffledSentences.slice(half);
 
@@ -536,10 +547,20 @@ export function WorkbookFillBlank({
       ) : layout === 'two-column' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
           <div className="space-y-1">
+            {columnLabels?.left && (
+              <h4 className="text-sm font-bold text-[#1F5741] uppercase tracking-wide mb-2 pb-1 border-b-2 border-[#DAF6EB]">
+                {columnLabels.left}
+              </h4>
+            )}
             {leftSentences.map((s, i) => renderSentence(s, i))}
           </div>
           <div className="space-y-1">
-            {rightSentences.map((s, i) => renderSentence(s, i + half))}
+            {columnLabels?.right && (
+              <h4 className="text-sm font-bold text-[#1F5741] uppercase tracking-wide mb-2 pb-1 border-b-2 border-[#DAF6EB]">
+                {columnLabels.right}
+              </h4>
+            )}
+            {rightSentences.map((s, i) => renderSentence(s, i + half, i))}
           </div>
         </div>
       ) : (

@@ -156,6 +156,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
    * Use `3` for a symmetric grid (e.g. rows of three — typical for НОВИ ДУМИ).
    */
   cardsGridMaxCols?: 3;
+  /** TTS voice for ALL cards in this exercise (e.g. 'male' when the entire block is narrated by a male character like Георги). Individual cards still default to Achernar unless this is set. */
+  voiceGender?: 'male' | 'female';
   audioUrl?: string;       // For "Listen" button
   cards: {
     id: string;
@@ -383,6 +385,14 @@ export interface DragToColumnsExercise extends BaseExercise {
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  /** Override the automatic mid-point split for two-column layout. Useful when items fall into two
+   *  semantically distinct groups (e.g. months 0-11 on the left, days 12-18 on the right). */
+  columnSplitAt?: number;
+  /** When true, skip the automatic "N." numbering prefix in front of each sentence.
+   *  Useful when the sentence text itself already represents the numbering (e.g. names of months/days). */
+  hideSentenceNumbers?: boolean;
+  /** Optional captions rendered above the two columns when layout='two-column'. */
+  columnLabels?: { left?: string; right?: string };
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
