@@ -104,6 +104,13 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
       exercise.sentences.forEach((sentence, sIdx) => {
         const key = `${sIdx}-0`;
         const answer = answers[key] || '';
+        // Open-ended writing (no defined correct answers) — accept everything, never mark as wrong.
+        if (sentence.correctAnswers.length === 0) {
+          newValidation[key] = true;
+          correctCount++;
+          totalCount++;
+          return;
+        }
         const isCorrect = validateAnswer(answer, sentence.correctAnswers);
         newValidation[key] = isCorrect;
         if (isCorrect) correctCount++;
@@ -192,8 +199,14 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
   const renderFreeTextInput = (sentence: typeof exercise.sentences[0], sentenceIndex: number) => {
     const key = `${sentenceIndex}-0`;
     const validationResult = validation[key];
+    const noValidation = sentence.correctAnswers.length === 0;
     return (
       <div className="flex flex-col items-center gap-3">
+        {sentence.text && (
+          <p className="text-base md:text-lg text-gray-800 text-center font-medium leading-snug">
+            {sentence.text}
+          </p>
+        )}
         <input
           type="text"
           value={answers[key] || ''}
@@ -204,16 +217,16 @@ export function FillInBlank({ exercise, onComplete }: FillInBlankProps) {
           onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
           placeholder="Напишете отговора си тук..."
           className={`
-            w-full max-w-xs text-center text-lg font-medium px-4 py-3 rounded-xl border-2
+            w-full max-w-md text-center text-lg font-medium px-4 py-3 rounded-xl border-2
             focus:outline-none focus:ring-2 focus:ring-[#6B8543] focus:ring-offset-1
             transition-all
             ${validationResult === true ? 'border-green-500 bg-green-50 text-green-700' : ''}
-            ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40 text-[#683229]' : ''}
+            ${validationResult === false && !noValidation ? 'border-[#D25A45] bg-[#FCE2DE]/40 text-[#683229]' : ''}
             ${validationResult === null || validationResult === undefined ? 'border-gray-300 bg-white' : ''}
           `}
           autoComplete="off"
         />
-        {isSubmitted && validationResult === false && (
+        {isSubmitted && !noValidation && validationResult === false && (
           <p className="text-sm text-[#D25A45] italic">
             Правилен отговор: {sentence.correctAnswers.join(' / ')}
           </p>

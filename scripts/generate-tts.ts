@@ -424,6 +424,11 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
 function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
+    // Exercise-level voice override (e.g. all cards narrated by a male character).
+    const exerciseVoice =
+      (ex as { voiceGender?: 'male' | 'female' }).voiceGender === 'male'
+        ? MALE_VOICE
+        : FEMALE_VOICE;
     for (const card of ex.cards!) {
       let joined: string;
       if (card.ttsLabel) {
@@ -438,7 +443,7 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(joined),
-        voice: FEMALE_VOICE,
+        voice: exerciseVoice,
         model: GEMINI_FLASH_MODEL,
         prompt: ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT,
       });
