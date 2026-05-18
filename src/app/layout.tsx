@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="bg" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${sofiaSans.variable} antialiased font-[family-name:var(--font-sofia-sans)]`}
+        className={`${geistSans.variable} ${geistMono.variable} ${sofiaSans.variable} ${sofiaSans.className} antialiased`}
         suppressHydrationWarning
       >
         <LanguageProvider>

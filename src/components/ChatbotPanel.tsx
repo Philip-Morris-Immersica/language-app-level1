@@ -19,9 +19,15 @@ interface Props {
   onNewConversation?: () => void;
 }
 
-function extractLessonId(pathname: string): string | null {
-  const m = pathname.match(/\/lessons\/([^/]+)/);
-  return m ? m[1] : null;
+/** Detect lesson, test or alphabet from the current URL. Returns the kind so
+ *  the chat backend can branch on lesson vs test (different exercise loaders,
+ *  different prompt rules). */
+function extractContext(pathname: string): { kind: 'lesson' | 'test' | null; id: string | null } {
+  const lesson = pathname.match(/\/lessons\/([^/]+)/);
+  if (lesson) return { kind: 'lesson', id: lesson[1] };
+  const test = pathname.match(/\/tests\/([^/]+)/);
+  if (test) return { kind: 'test', id: test[1] };
+  return { kind: null, id: null };
 }
 
 function describeCurrentPage(pathname: string): string {
@@ -37,24 +43,49 @@ function describeCurrentPage(pathname: string): string {
   return pathname;
 }
 
-// Thin wrapper to translate a single BG string with useTranslate
-function TranslatedChip({ text, onClick }: { text: string; onClick: () => void }) {
-  const translated = useTranslate(text);
+/** Chip that auto-translates its visible text from a Bulgarian source string.
+ *  On click sends the **translated** text (not the BG source) so the bot sees
+ *  the user's message in their own language. */
+function TranslatedChip({ source, onClick }: { source: string; onClick: (text: string) => void }) {
+  const translated = useTranslate(source);
+  const display = translated || source;
   return (
     <button
-      onClick={onClick}
+      onClick={() => onClick(display)}
       className="text-xs bg-[#CDE3F1] text-[#05568B] rounded-full px-3 py-1.5 hover:bg-[#0072BC] hover:text-white transition-colors"
     >
-      {translated}
+      {display}
     </button>
   );
+}
+
+/** Inert chip — its text is already in the user's language (e.g. per-lang
+ *  hardcoded fallback or admin's per-lang override). Sent as-is on click. */
+function PlainChip({ text, onClick }: { text: string; onClick: (text: string) => void }) {
+  return (
+    <button
+      onClick={() => onClick(text)}
+      className="text-xs bg-[#CDE3F1] text-[#05568B] rounded-full px-3 py-1.5 hover:bg-[#0072BC] hover:text-white transition-colors"
+    >
+      {text}
+    </button>
+  );
+}
+
+/** Welcome message that auto-translates a Bulgarian source string when one
+ *  is provided. When `source` is null we render the already-localised
+ *  `display` text directly. */
+function useDisplayedWelcome(display: string, source: string | null): string {
+  const translated = useTranslate(source ?? '');
+  if (source) return translated || display;
+  return display;
 }
 
 export function ChatbotPanel({ onNewConversation }: Props) {
   const { lang } = useLanguage();
   const t = useT();
   const pathname = usePathname();
-  const lessonId = extractLessonId(pathname ?? '');
+  const { kind: ctxKind, id: ctxId } = extractContext(pathname ?? '');
   const currentPage = describeCurrentPage(pathname ?? '');
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -62,18 +93,20 @@ export function ChatbotPanel({ onNewConversation }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [showPrivacy, setShowPrivacy] = useState(false);
-  // Store Bulgarian source text for translation
-  const [welcomeBg, setWelcomeBg] = useState('');
-  const [chipsBg, setChipsBg] = useState<string[]>([]);
+
+  // Welcome / chips: the server returns both the localised display value AND
+  // (when the admin has customised BG) the BG source for client-side translation.
+  const [welcomeText, setWelcomeText] = useState('');
+  const [welcomeSource, setWelcomeSource] = useState<string | null>(null);
+  const [chips, setChips] = useState<string[]>([]);
+  const [chipsSource, setChipsSource] = useState<string[] | null>(null);
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
-  // Auto-translate welcome message from BG
-  const welcomeTranslated = useTranslate(welcomeBg);
+  const displayedWelcome = useDisplayedWelcome(welcomeText, welcomeSource);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Initial load: fetch BG welcome + chips, then check history
   useEffect(() => {
     let cancelled = false;
 
@@ -82,17 +115,18 @@ export function ChatbotPanel({ onNewConversation }: Props) {
       if (!seen) setShowPrivacy(true);
 
       try {
-        // Always fetch BG source for translation
         const [welcomeRes, histRes] = await Promise.all([
-          fetch('/api/chat/welcome?lang=bg'),
+          fetch(`/api/chat/welcome?lang=${encodeURIComponent(lang)}`),
           fetch('/api/chat/conversations'),
         ]);
 
         if (cancelled) return;
 
         const welcomeData = await welcomeRes.json();
-        setWelcomeBg(welcomeData.message ?? '');
-        setChipsBg(welcomeData.chips ?? []);
+        setWelcomeText(welcomeData.message ?? '');
+        setWelcomeSource(welcomeData.messageSource ?? null);
+        setChips(welcomeData.chips ?? []);
+        setChipsSource(welcomeData.chipsSource ?? null);
 
         const { conversation, messages: histMsgs } = await histRes.json();
 
@@ -106,12 +140,13 @@ export function ChatbotPanel({ onNewConversation }: Props) {
               id: `hist-${i}`,
             }));
           setMessages(loaded);
-        } else {
-          // Will show welcome via welcomeTranslated once translated
-          setMessages([]);
         }
+        // For empty history, the welcome is rendered via the displayedWelcome
+        // effect below (waits for translation when needed).
       } catch {
-        if (!cancelled) setWelcomeBg('Здравей! Аз съм Robi, твоят AI помощник за български език. Питай ме за думи, граматика или упражнения!');
+        if (!cancelled) {
+          setWelcomeText('Hi! I\'m Robi, your AI assistant for Bulgarian. Ask me about words, grammar, or exercises!');
+        }
       } finally {
         if (!cancelled) setHistoryLoaded(true);
       }
@@ -121,14 +156,15 @@ export function ChatbotPanel({ onNewConversation }: Props) {
     return () => { cancelled = true; };
   }, [lang]);
 
-  // Once welcome is translated, show it if no history
+  // Once welcome is resolved (and possibly translated), show it as the first
+  // assistant message — only if there is no loaded conversation history.
   useEffect(() => {
-    if (!historyLoaded || !welcomeTranslated) return;
+    if (!historyLoaded || !displayedWelcome) return;
     setMessages((prev) => {
       if (prev.length > 0) return prev;
-      return [{ role: 'assistant', content: welcomeTranslated, id: 'welcome' }];
+      return [{ role: 'assistant', content: displayedWelcome, id: 'welcome' }];
     });
-  }, [historyLoaded, welcomeTranslated]);
+  }, [historyLoaded, displayedWelcome]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -143,11 +179,10 @@ export function ChatbotPanel({ onNewConversation }: Props) {
     setConversationId(null);
     setIsLoading(false);
     setInput('');
-    const welcome = welcomeTranslated || welcomeBg;
-    setMessages([{ role: 'assistant', content: welcome, id: `welcome-${Date.now()}` }]);
+    setMessages([{ role: 'assistant', content: displayedWelcome, id: `welcome-${Date.now()}` }]);
     onNewConversation?.();
     inputRef.current?.focus();
-  }, [welcomeTranslated, welcomeBg, onNewConversation]);
+  }, [displayedWelcome, onNewConversation]);
 
   const sendMessage = useCallback(async (text: string) => {
     const trimmed = text.trim();
@@ -168,7 +203,10 @@ export function ChatbotPanel({ onNewConversation }: Props) {
         body: JSON.stringify({
           message: trimmed,
           language: lang,
-          lessonContext: lessonId,
+          // Backward-compat: lessonContext is sent for lesson pages; for test
+          // pages we send testContext. The server reads either.
+          lessonContext: ctxKind === 'lesson' ? ctxId : null,
+          testContext: ctxKind === 'test' ? ctxId : null,
           currentPage,
           conversationId,
         }),
@@ -213,7 +251,7 @@ export function ChatbotPanel({ onNewConversation }: Props) {
       setIsLoading(false);
       inputRef.current?.focus();
     }
-  }, [isLoading, lang, lessonId, currentPage, conversationId]);
+  }, [isLoading, lang, ctxKind, ctxId, currentPage, conversationId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -227,7 +265,10 @@ export function ChatbotPanel({ onNewConversation }: Props) {
     }
   };
 
-  const showChips = messages.length <= 1 && !isLoading && chipsBg.length > 0;
+  const showChips = messages.length <= 1 && !isLoading && chips.length > 0 && historyLoaded;
+  // Show the "New conversation" button only once there's an actual back-and-forth
+  // (welcome message + user reply + assistant reply ≥ 3 messages).
+  const showNewConversation = messages.length >= 3 && !isLoading;
 
   return (
     <div className="flex flex-col h-full relative">
@@ -246,13 +287,15 @@ export function ChatbotPanel({ onNewConversation }: Props) {
         </div>
       )}
 
-      {messages.length > 1 && !isLoading && (
-        <div className="flex-shrink-0 flex justify-end px-3 pt-2">
-          <button onClick={startNewConversation}
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#0072BC] transition-colors"
-            title="New conversation">
+      {showNewConversation && (
+        <div className="flex-shrink-0 flex justify-end px-3 pt-2 pb-1 border-b border-gray-100">
+          <button
+            onClick={startNewConversation}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-[#0072BC] text-[#0072BC] bg-white hover:bg-[#CDE3F1] transition-colors shadow-sm"
+            title={t('chat.newConversation') || 'New conversation'}
+          >
             <RotateCcw className="w-3.5 h-3.5" />
-            New conversation
+            {t('chat.newConversation') || 'New conversation'}
           </button>
         </div>
       )}
@@ -289,8 +332,10 @@ export function ChatbotPanel({ onNewConversation }: Props) {
 
       {showChips && (
         <div className="px-3 pb-2 flex flex-wrap gap-1.5">
-          {chipsBg.map((chip) => (
-            <TranslatedChip key={chip} text={chip} onClick={() => sendMessage(chip)} />
+          {chips.map((chip, i) => (
+            chipsSource && chipsSource[i]
+              ? <TranslatedChip key={`c-${i}`} source={chipsSource[i]} onClick={sendMessage} />
+              : <PlainChip key={`c-${i}`} text={chip} onClick={sendMessage} />
           ))}
         </div>
       )}

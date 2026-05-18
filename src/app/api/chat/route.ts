@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth/jwt';
 import { db } from '@/db';
 import { chatConversationsTable, chatMessagesTable } from '@/db/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, sql } from 'drizzle-orm';
 import { exerciseStatesTable } from '@/db/schema';
 import { getActiveConfig } from '@/lib/chat/getActiveConfig';
 import { getLLMClient } from '@/lib/chat/llmClient';
 import { buildSystemPrompt, buildMessages } from '@/lib/chat/promptBuilder';
-import { getLessonChatContext } from '@/lib/chat/contentLoader';
+import { getLessonChatContext, getTestChatContext, type ChatPageContext } from '@/lib/chat/contentLoader';
+import { summarizeLessonProgress } from '@/lib/chat/progressAnalyzer';
 import { redactPII } from '@/lib/chat/piiRedactor';
 import { getLessonLevel } from '@/content/registry';
+import { computeCostMicroUsd } from '@/lib/chat/availableModels';
 
 const RATE_LIMIT_PER_HOUR = parseInt(process.env.CHAT_RATE_LIMIT_PER_HOUR ?? '30');
 const rateLimitMap = new Map<number, { count: number; resetAt: number }>();
@@ -38,10 +40,18 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { message, language, lessonContext: lessonId, currentPage, conversationId } = body as {
+  const {
+    message,
+    language,
+    lessonContext: lessonId,
+    testContext: testId,
+    currentPage,
+    conversationId,
+  } = body as {
     message: string;
     language: string;
-    lessonContext?: string;
+    lessonContext?: string | null;
+    testContext?: string | null;
     currentPage?: string;
     conversationId?: number;
   };
@@ -51,22 +61,67 @@ export async function POST(req: NextRequest) {
   }
 
   const { text: cleanMessage, wasRedacted } = redactPII(message.trim());
-  const level = lessonId ? (getLessonLevel(lessonId) ?? undefined) : undefined;
+
+  // Determine which page-context loader to use. Tests trump lessons if both
+  // are sent for some reason (the client only ever sends one).
+  // The `contextId` is the value we use both for the chat context and for the
+  // `exerciseStatesTable.lessonId` lookup (test states are stored under the
+  // testId in that column).
+  const contextId: string | null = testId ?? lessonId ?? null;
+  const isTest = !!testId;
+
+  let level: string | undefined;
+  if (isTest && testId) {
+    const m = testId.match(/^test-(a1|a2|b1|b2)-/i);
+    level = m?.[1]?.toLowerCase();
+  } else if (lessonId) {
+    level = getLessonLevel(lessonId) ?? undefined;
+  }
+
   const config = await getActiveConfig(level);
 
   if (!config.apiKey) {
     return NextResponse.json({ error: 'No API key configured. Please add an OpenAI API key in the admin panel.' }, { status: 503 });
   }
 
-  // Get distinct lesson IDs where user has saved exercise state (= started/completed)
-  const [lessonCtx, progressRows] = await Promise.all([
-    lessonId ? getLessonChatContext(lessonId) : Promise.resolve(null),
+  // Three parallel DB reads:
+  // 1) page context (lesson OR test) with all exercises + correct answers
+  // 2) distinct lesson/test IDs the user has touched (overall profile)
+  // 3) per-exercise saved states for the CURRENT page (to surface mistakes)
+  const pageContextPromise: Promise<ChatPageContext | null> = (() => {
+    if (isTest && testId) return getTestChatContext(testId);
+    if (lessonId) return getLessonChatContext(lessonId);
+    return Promise.resolve(null);
+  })();
+
+  const [pageContext, progressRows, currentPageStates] = await Promise.all([
+    pageContextPromise,
     db.selectDistinct({ lessonId: exerciseStatesTable.lessonId })
       .from(exerciseStatesTable)
       .where(eq(exerciseStatesTable.userId, payload.userId)),
+    contextId
+      ? db.select({
+          exerciseId: exerciseStatesTable.exerciseId,
+          state: exerciseStatesTable.state,
+        })
+        .from(exerciseStatesTable)
+        .where(and(
+          eq(exerciseStatesTable.userId, payload.userId),
+          eq(exerciseStatesTable.lessonId, contextId),
+        ))
+      : Promise.resolve([] as Array<{ exerciseId: string; state: string }>),
   ]);
 
   const completedLessons = progressRows.map((r) => r.lessonId);
+
+  const pageProgress = contextId && pageContext
+    ? summarizeLessonProgress(
+        contextId,
+        currentPageStates,
+        pageContext.exercises.length,
+        new Set(pageContext.exercises.map((e) => e.id)),
+      )
+    : null;
 
   let convId = conversationId;
   if (!convId) {
@@ -94,18 +149,19 @@ export async function POST(req: NextRequest) {
     role: 'user',
     content: cleanMessage,
     contentRedacted: wasRedacted,
-    lessonContext: lessonId ?? null,
+    lessonContext: contextId ?? null,
     model: config.model,
   });
 
   const systemPrompt = buildSystemPrompt({
     basePrompt: config.basePrompt ?? undefined,
     levelPrompt: config.levelPrompt ?? undefined,
-    lessonContext: lessonCtx,
+    pageContext,
     userLanguage: language,
     level,
     completedLessons,
     currentPage: currentPage ?? null,
+    pageProgress,
   });
 
   const messages = buildMessages(systemPrompt, history, cleanMessage);
@@ -113,8 +169,13 @@ export async function POST(req: NextRequest) {
 
   const encoder = new TextEncoder();
   let fullResponse = '';
-  let totalTokensIn = 0;
-  let totalTokensOut = 0;
+  // OpenAI sends the real token counts in a final stream chunk
+  // (`stream_options: { include_usage: true }`). If for some reason that chunk
+  // is missing we fall back to a chars/4 estimate — clearly worse but better
+  // than silently storing 0.
+  let promptTokens = 0;
+  let completionTokens = 0;
+  let gotUsage = false;
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -126,30 +187,50 @@ export async function POST(req: NextRequest) {
         });
 
         for await (const chunk of tokenStream) {
-          fullResponse += chunk;
-          totalTokensOut++;
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`));
+          if (chunk.type === 'text') {
+            fullResponse += chunk.value;
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk.value })}\n\n`));
+          } else if (chunk.type === 'usage') {
+            promptTokens = chunk.value.promptTokens;
+            completionTokens = chunk.value.completionTokens;
+            gotUsage = true;
+          }
         }
 
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true, conversationId: convId })}\n\n`));
         controller.close();
 
-        totalTokensIn = Math.ceil(systemPrompt.length / 4) + Math.ceil(cleanMessage.length / 4);
+        if (!gotUsage) {
+          // Fallback estimate — should rarely trigger because OpenAI sends usage
+          // on the final chunk. Clearly inferior; logged so we notice if it
+          // becomes common.
+          promptTokens = Math.ceil(systemPrompt.length / 4) + Math.ceil(cleanMessage.length / 4);
+          completionTokens = Math.ceil(fullResponse.length / 4);
+          console.warn('[chat] no usage chunk received, falling back to chars/4 estimate');
+        }
+
+        const costMicroUsd = computeCostMicroUsd(config.model, promptTokens, completionTokens);
 
         await db.insert(chatMessagesTable).values({
           conversationId: convId!,
           role: 'assistant',
           content: fullResponse,
-          lessonContext: lessonId ?? null,
+          lessonContext: contextId ?? null,
           model: config.model,
-          tokensIn: totalTokensIn,
-          tokensOut: totalTokensOut,
+          tokensIn: promptTokens,
+          tokensOut: completionTokens,
+          costMicroUsd,
         });
 
+        // Accumulate conversation totals with SQL `+=` so multi-message
+        // conversations report the real sum (the old code OVERWROTE these
+        // values on every message, so a 5-message chat only stored the LAST
+        // message's tokens — that was the main reason cost reports were wrong).
         await db.update(chatConversationsTable)
           .set({
-            totalTokensIn: totalTokensIn,
-            totalTokensOut: totalTokensOut,
+            totalTokensIn: sql`${chatConversationsTable.totalTokensIn} + ${promptTokens}`,
+            totalTokensOut: sql`${chatConversationsTable.totalTokensOut} + ${completionTokens}`,
+            totalCostUsdMicro: sql`${chatConversationsTable.totalCostUsdMicro} + ${costMicroUsd}`,
             lastMessageAt: new Date(),
           })
           .where(eq(chatConversationsTable.id, convId!));

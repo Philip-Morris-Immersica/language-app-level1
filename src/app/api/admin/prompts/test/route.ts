@@ -14,23 +14,39 @@ export async function POST(req: NextRequest) {
 
   const config = await getActiveConfig();
   if (!config.apiKey) {
-    return NextResponse.json({ error: 'No API key configured' }, { status: 503 });
+    return NextResponse.json({
+      error: 'No OpenAI API key configured. Open /admin → API Keys to add one (or set OPENAI_API_KEY in .env.local for local dev).',
+    }, { status: 503 });
   }
 
   const llm = getLLMClient(config.apiKey);
   let response = '';
-  for await (const chunk of llm.stream(
-    [
-      { role: 'system', content: promptText },
-      { role: 'user', content: testMessage },
-    ],
-    {
-      model: model ?? config.model,
-      temperature: (temperature ?? 70) / 100,
-      maxTokens: maxTokens ?? 500,
-    },
-  )) {
-    response += chunk;
+  try {
+    for await (const chunk of llm.stream(
+      [
+        { role: 'system', content: promptText },
+        { role: 'user', content: testMessage },
+      ],
+      {
+        model: model ?? config.model,
+        temperature: (temperature ?? 70) / 100,
+        maxTokens: maxTokens ?? 500,
+      },
+    )) {
+      if (chunk.type === 'text') response += chunk.value;
+    }
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error('[admin/prompts/test] LLM error:', err);
+    return NextResponse.json({
+      error: `LLM call failed: ${detail}`,
+    }, { status: 502 });
+  }
+
+  if (!response.trim()) {
+    return NextResponse.json({
+      error: 'LLM returned an empty response. Check the model name and try again.',
+    }, { status: 502 });
   }
 
   return NextResponse.json({ response });

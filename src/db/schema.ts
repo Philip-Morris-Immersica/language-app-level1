@@ -83,6 +83,19 @@ export const exerciseStatesTable = pgTable("exercise_states", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (t) => [unique().on(t.userId, t.exerciseId)]);
 
+// Password reset tokens — short-lived, single-use tokens for forgot-password flow.
+// We store ONLY a SHA-256 hash of the raw token (never plaintext) so a DB leak
+// can't be used to reset anyone's password. The raw token is sent to the user
+// in the reset link and never persisted.
+export const passwordResetTokensTable = pgTable("password_reset_tokens", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  tokenHash: varchar("token_hash", { length: 64 }).notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  usedAt: timestamp("used_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ── Chat tables ────────────────────────────────────────────────────────────────
 
 export const chatConversationsTable = pgTable("chat_conversations", {
@@ -107,6 +120,11 @@ export const chatMessagesTable = pgTable("chat_messages", {
   model: varchar({ length: 64 }),
   tokensIn: integer("tokens_in").default(0),
   tokensOut: integer("tokens_out").default(0),
+  // Per-message cost in micro-USD (1 USD = 1,000,000 micro). Integer so we can
+  // SUM losslessly. Filled in after the assistant reply when OpenAI returns
+  // its real usage. User messages and rows from before this column was added
+  // get the default of 0.
+  costMicroUsd: integer("cost_micro_usd").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

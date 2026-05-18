@@ -61,7 +61,7 @@ Respond in English in 3-5 bullet points.`;
     [{ role: 'user', content: prompt }],
     { model: config.model, temperature: 0.3, maxTokens: 400 },
   )) {
-    summary += chunk;
+    if (chunk.type === 'text') summary += chunk.value;
   }
 
   return NextResponse.json({ summary });
