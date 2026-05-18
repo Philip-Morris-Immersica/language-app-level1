@@ -2,24 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-
-const CHATBOT_URL = 'https://immersica.skillie.ai/chatbot-embed/223/prompt/700';
+import { ChatbotPanel } from './ChatbotPanel';
 
 export function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPulsing, setIsPulsing] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsPulsing(false), 4000);
+    fetch('/api/auth/me').then((r) => r.json()).then(({ user }) => {
+      setIsLoggedIn(!!user);
+    }).catch(() => {});
     return () => clearTimeout(timer);
   }, []);
 
+  if (!isLoggedIn) return null;
+
   return (
     <>
-      {/* Chat panel — anchored at bottom-5 right-5 (same as FAB), grows upward */}
       {isOpen && (
-        <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[536px] h-[803px] max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2rem)] sm:w-[621px] sm:h-[540px]">
-          {/* Panel header */}
+        <div className="fixed bottom-5 right-5 z-[60] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300 w-[380px] h-[560px] max-w-[calc(100vw-2.5rem)] max-h-[calc(100dvh-2rem)] sm:w-[420px] sm:h-[600px]">
           <div className="flex items-center justify-between px-4 py-3 bg-[#0072BC] text-white flex-shrink-0">
             <div className="flex items-center gap-2">
               <img
@@ -41,17 +44,12 @@ export function ChatbotWidget() {
             </button>
           </div>
 
-          {/* iframe */}
-          <iframe
-            src={CHATBOT_URL}
-            className="flex-1 w-full border-0"
-            title="Robi AI Chatbot"
-            allow="microphone"
-          />
+          <div className="flex-1 relative overflow-hidden">
+            <ChatbotPanel />
+          </div>
         </div>
       )}
 
-      {/* FAB button — hidden when panel is open */}
       {!isOpen && (
         <button
           onClick={() => {
@@ -66,8 +64,6 @@ export function ChatbotWidget() {
             alt="Chat with Robi"
             className="w-full h-full object-cover"
           />
-
-          {/* Pulse ring */}
           {isPulsing && (
             <span className="absolute inset-0 rounded-full border-2 border-[#D25A45] animate-ping opacity-60 pointer-events-none" />
           )}

@@ -1,12 +1,25 @@
 'use client';
 
-import { Menu, X, LogIn, LogOut, User, ChevronDown, Home } from 'lucide-react';
+import { Menu, X, LogIn, LogOut, User, ChevronDown, Home, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
+
+function useAdminRole() {
+  const [role, setRole] = useState<string | null>(null);
+  useEffect(() => {
+    fetch('/api/admin/me', { credentials: 'include' })
+      .then((r) => r.json())
+      .then(({ admin }) => {
+        setRole(admin?.role ?? null);
+      })
+      .catch(() => setRole(null));
+  }, []);
+  return role;
+}
 
 interface HeaderProps {
   isMobileMenuOpen: boolean;
@@ -17,6 +30,7 @@ function ProfileMenu() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const t = useT();
+  const adminRole = useAdminRole();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -83,6 +97,16 @@ function ProfileMenu() {
             <User className="w-4 h-4 text-gray-400" />
             {t('auth.profile')}
           </Link>
+          {adminRole && (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#0072BC] hover:bg-[#CDE3F1]/40 transition-colors"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Admin Panel
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#D25A45] hover:bg-[#FCE2DE]/40 transition-colors"
