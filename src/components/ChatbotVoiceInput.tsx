@@ -16,19 +16,30 @@ import { useT } from '@/i18n/useT';
  *
  * UI states:
  *   idle         → grey mic icon
- *   recording    → red pulsing square + elapsed seconds badge
+ *   recording    → red pulsing square + live audio-level bars
  *   transcribing → spinning loader (Whisper request in flight)
+ *
+ * The audio-level bars reuse the same AnalyserNode that powers silence
+ * detection — no extra audio plumbing. The parent (ChatbotPanel) is notified
+ * of status changes via `onStatusChange` so it can swap the textarea
+ * placeholder to "Слушане..." while the mic is hot.
  *
  * Errors surface as a small auto-dismissing toast above the button. All
  * notable events are also logged to the console for diagnostics.
  */
 
+export type VoiceStatus = 'idle' | 'recording' | 'transcribing';
+
 interface Props {
   onTranscript: (text: string) => void;
+  onStatusChange?: (status: VoiceStatus) => void;
   disabled?: boolean;
 }
 
-type Status = 'idle' | 'recording' | 'transcribing';
+// Bars are rendered in this order, with these multipliers applied to the
+// smoothed RMS level. The pyramid shape (centre bar reacts strongest) reads as
+// a more "natural" waveform than uniform-height bars.
+const BAR_MULTIPLIERS = [0.7, 1.2, 1.6, 1.2, 0.7];
 
 // Hard cap on a single utterance. 60 s is plenty for a chat message and keeps
 // the upload <2 MB at typical opus bitrates — well under the API's 25 MB max.
@@ -56,19 +67,29 @@ function pickMimeType(): string {
   return '';
 }
 
-export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
+export function ChatbotVoiceInput({ onTranscript, onStatusChange, disabled }: Props) {
   const { lang } = useLanguage();
   const t = useT();
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<VoiceStatus>('idle');
   const [isSupported, setIsSupported] = useState(true);
-  const [elapsedSec, setElapsedSec] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  // Smoothed audio level in [0, 1]. Drives the live bar visualisation; updated
+  // from the silence-detector RAF loop and throttled below to ~30 fps to keep
+  // React re-renders cheap.
+  const [audioLevel, setAudioLevel] = useState(0);
+  const lastLevelEmitRef = useRef(0);
+  const smoothedLevelRef = useRef(0);
+
+  // Notify the parent (ChatbotPanel) whenever the status flips so it can
+  // swap the textarea placeholder to "Listening..." in the user's language.
+  useEffect(() => {
+    onStatusChange?.(status);
+  }, [status, onStatusChange]);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const startedAtRef = useRef<number>(0);
-  const tickTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const maxTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Silence detector wiring (Web Audio API). All three are kept on refs so
@@ -90,10 +111,6 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
   // Web Audio graph. Safe to call multiple times; each ref is nulled out as
   // soon as it's been handled.
   const cleanup = useCallback(() => {
-    if (tickTimerRef.current) {
-      clearInterval(tickTimerRef.current);
-      tickTimerRef.current = null;
-    }
     if (maxTimerRef.current) {
       clearTimeout(maxTimerRef.current);
       maxTimerRef.current = null;
@@ -122,6 +139,8 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
       streamRef.current = null;
     }
     recorderRef.current = null;
+    smoothedLevelRef.current = 0;
+    setAudioLevel(0);
   }, []);
 
   useEffect(() => {
@@ -230,10 +249,21 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
         for (let i = 0; i < buffer.length; i++) sumSq += buffer[i] * buffer[i];
         const rms = Math.sqrt(sumSq / buffer.length);
 
+        // Smooth & normalise the level for the bar visualisation. The raw RMS
+        // for normal speech sits around 0.03-0.15, so we multiply by ~6 to
+        // push it toward [0, 1] and clamp. Exponential smoothing avoids
+        // jittery "fully on / fully off" flicker between frames.
+        const normalised = Math.min(1, rms * 6);
+        smoothedLevelRef.current = smoothedLevelRef.current * 0.7 + normalised * 0.3;
+        const now = performance.now();
+        if (now - lastLevelEmitRef.current > 33) {
+          lastLevelEmitRef.current = now;
+          setAudioLevel(smoothedLevelRef.current);
+        }
+
         if (rms > SILENCE_RMS_THRESHOLD) {
           silenceStartedAtRef.current = null;
         } else {
-          const now = performance.now();
           if (silenceStartedAtRef.current === null) {
             silenceStartedAtRef.current = now;
           } else if (now - silenceStartedAtRef.current >= SILENCE_MS) {
@@ -327,10 +357,6 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
     }
 
     setStatus('recording');
-    setElapsedSec(0);
-    tickTimerRef.current = setInterval(() => {
-      setElapsedSec(Math.floor((Date.now() - startedAtRef.current) / 1000));
-    }, 250);
     maxTimerRef.current = setTimeout(() => {
       console.log('[voice] max duration reached, stopping');
       stopRecording();
@@ -407,12 +433,23 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
       </button>
 
       {isRecording && (
-        <span
-          className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-[#D25A45] text-white text-[10px] font-bold flex items-center justify-center pointer-events-none"
+        <div
           aria-hidden
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-10 flex items-end gap-[3px] h-6 px-2 py-1 rounded-full bg-[#FCE2DE] shadow-sm pointer-events-none"
         >
-          {elapsedSec}
-        </span>
+          {BAR_MULTIPLIERS.map((mult, i) => {
+            // Each bar gets a tiny baseline so it never fully collapses (a
+            // 0-height bar looks "dead"), then scales with the smoothed level.
+            const h = Math.max(3, Math.min(16, 3 + audioLevel * mult * 14));
+            return (
+              <span
+                key={i}
+                className="w-[3px] rounded-full bg-[#D25A45]"
+                style={{ height: `${h}px`, transition: 'height 80ms linear' }}
+              />
+            );
+          })}
+        </div>
       )}
 
       {errorMsg && (

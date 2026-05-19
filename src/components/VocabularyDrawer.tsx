@@ -75,7 +75,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
       {/* Floating button — bottom-left, mirroring the chatbot on the right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 left-5 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#0072BC] hover:bg-[#025f9a] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ring-[4px] ring-[#D25A45]"
+        className="fixed bottom-5 left-5 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#0072BC] hover:bg-[#025f9a] text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 ring-[4px] ring-[#F67F6A]"
         aria-label={t('exercise.dictionary')}
       >
         <BookOpen className="w-6 h-6 md:w-7 md:h-7" />
@@ -89,31 +89,33 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
         />
       )}
 
-      {/* Drawer panel — slides from left */}
+      {/* Panel — mirrors chatbot, anchored bottom-left */}
       <div
         className={`
-          fixed top-0 left-0 h-full z-50 w-full sm:w-[400px] md:w-[440px]
-          bg-white shadow-2xl transform transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          flex flex-col
+          fixed z-[60] bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden
+          transition-transform duration-300 ease-in-out
+          left-0 right-0 bottom-0 top-14 rounded-t-2xl
+          sm:right-auto sm:top-auto sm:left-5 sm:bottom-5 sm:w-[420px] sm:h-[calc(100dvh-5rem)] sm:max-h-[860px] sm:rounded-2xl
+          ${isOpen ? 'translate-y-0' : 'translate-y-[calc(100%+2rem)]'}
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#0072BC] to-[#025f9a]">
-          <div className="flex items-center gap-3">
-            <BookOpen className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-between px-4 py-3 bg-[#0072BC] text-white flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-8 h-8 rounded-full p-1.5 bg-white/20 flex-shrink-0" />
             <div>
-              <h2 className="text-lg font-bold text-white">{t('exercise.dictionary')}</h2>
+              <p className="font-semibold text-sm leading-tight">{t('exercise.dictionary')}</p>
               {lessonTitle && (
-                <p className="text-xs text-white/70">{lessonTitle}</p>
+                <p className="text-xs text-white/80">{lessonTitle}</p>
               )}
             </div>
           </div>
           <button
             onClick={close}
-            className="p-2 rounded-lg hover:bg-white/20 text-white transition-colors"
+            className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+            aria-label="Close dictionary"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
