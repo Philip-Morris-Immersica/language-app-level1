@@ -90,7 +90,7 @@ function ProfileMenu() {
             <p className="text-xs text-gray-400 truncate">{user.email}</p>
           </div>
           <Link
-            href="/"
+            href="/profile"
             onClick={() => setOpen(false)}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >

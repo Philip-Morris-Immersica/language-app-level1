@@ -171,6 +171,19 @@ export const adminWelcomeMessageTable = pgTable("admin_welcome_message", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+// ── User AI analyses cache ─────────────────────────────────────────────────────
+// One row per user — stores the last generated AI performance analysis so we
+// don't call the LLM on every page open. Re-generated when the user has made
+// new exercise attempts since the last analysis (attemptedSnapshot changed) or
+// after 24 hours.
+export const userAnalysesTable = pgTable("user_analyses", {
+  userId: integer("user_id").primaryKey().references(() => usersTable.id, { onDelete: 'cascade' }),
+  generatedAt: timestamp("generated_at").notNull().defaultNow(),
+  attemptedSnapshot: integer("attempted_snapshot").notNull(),
+  language: varchar({ length: 5 }).notNull(),
+  summaryJson: text("summary_json").notNull(),
+});
+
 export const adminApiKeysTable = pgTable("admin_api_keys", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   provider: varchar({ length: 32 }).notNull(),

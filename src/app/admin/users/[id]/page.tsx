@@ -38,6 +38,9 @@ interface TestSection {
   correctCount: number;
   wrongCount: number;
   scorePct: number;
+  pointsEarned: number;
+  maxPoints: number;
+  pointsScorePct: number;
 }
 
 interface UserTestResult {
@@ -53,6 +56,9 @@ interface UserTestResult {
   wrongCount: number;
   scorePct: number;
   completed: boolean;
+  pointsEarned: number;
+  totalPoints: number;
+  pointsScorePct: number;
   bySection: TestSection[];
 }
 
@@ -356,16 +362,16 @@ function UserTestRow({ test }: { test: UserTestResult }) {
           <div className="flex items-center gap-2 mt-0.5">
             <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#32C189]"
-                style={{ width: `${test.submittedCount > 0 ? test.scorePct : 0}%` }}
+                className={`h-full ${test.pointsScorePct >= 50 ? 'bg-[#32C189]' : 'bg-[#D25A45]'}`}
+                style={{ width: `${test.pointsScorePct}%` }}
               />
             </div>
             <span className="text-[11px] tabular-nums w-9 text-right text-gray-700">
-              {test.submittedCount > 0 ? `${test.scorePct}%` : '—'}
+              {test.pointsEarned > 0 || test.submittedCount > 0 ? `${test.pointsScorePct}%` : '—'}
             </span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-0.5">
-            {test.correctCount}✓ / {test.wrongCount}✗
+          <p className="text-[10px] text-gray-400 mt-0.5 tabular-nums">
+            {test.pointsEarned}/{test.totalPoints} pts
           </p>
         </div>
         <div className="col-span-1 text-right text-xs text-gray-400">
@@ -378,33 +384,31 @@ function UserTestRow({ test }: { test: UserTestResult }) {
           <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
             По компоненти
           </p>
-          <div className="space-y-1">
-            {test.bySection.map((s) => (
-              <div key={s.sectionId} className="grid grid-cols-12 gap-2 items-center text-xs">
-                <div className="col-span-4 text-gray-700 font-medium truncate" title={s.name}>
-                  {s.name}
-                </div>
-                <div className="col-span-1 text-right text-gray-400 tabular-nums text-[10px]">
-                  {s.totalExercises} ex.
-                </div>
-                <div className="col-span-3 flex items-center gap-1.5">
-                  <span className="text-[10px] text-gray-400 w-12">attempted</span>
-                  <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#0072BC]" style={{ width: `${s.attemptedPct}%` }} />
+          <div className="space-y-1.5">
+            {test.bySection.map((s) => {
+              const needsWork = s.maxPoints > 0 && s.pointsScorePct < 50;
+              return (
+                <div key={s.sectionId} className="grid grid-cols-12 gap-2 items-center text-xs">
+                  <div className={`col-span-4 font-medium truncate ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`} title={s.name}>
+                    {s.name}
                   </div>
-                  <span className="tabular-nums w-8 text-right text-gray-600">{s.attemptedPct}%</span>
-                </div>
-                <div className="col-span-4 flex items-center gap-1.5">
-                  <span className="text-[10px] text-gray-400 w-9">score</span>
-                  <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#32C189]" style={{ width: `${s.submittedCount > 0 ? s.scorePct : 0}%` }} />
+                  <div className="col-span-6 flex items-center gap-2">
+                    <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${needsWork ? 'bg-[#D25A45]' : 'bg-[#32C189]'}`}
+                        style={{ width: `${s.pointsScorePct}%` }}
+                      />
+                    </div>
+                    <span className={`tabular-nums w-10 text-right text-[11px] ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
+                      {s.pointsScorePct}%
+                    </span>
                   </div>
-                  <span className="tabular-nums w-9 text-right text-gray-600">
-                    {s.submittedCount > 0 ? `${s.scorePct}%` : '—'}
-                  </span>
+                  <div className={`col-span-2 text-right text-[11px] font-bold tabular-nums ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
+                    {s.pointsEarned}/{s.maxPoints}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
