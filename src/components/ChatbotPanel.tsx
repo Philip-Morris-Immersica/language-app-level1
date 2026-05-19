@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
-import { ChatbotVoiceInput } from './ChatbotVoiceInput';
+import { ChatbotVoiceInput, type VoiceStatus } from './ChatbotVoiceInput';
 
 interface Message {
   role: 'user' | 'assistant' | 'info';
@@ -93,6 +93,7 @@ export function ChatbotPanel({ onNewConversation }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle');
 
   // Welcome / chips: the server returns both the localised display value AND
   // (when the admin has customised BG) the BG source for client-side translation.
@@ -341,13 +342,23 @@ export function ChatbotPanel({ onNewConversation }: Props) {
       )}
 
       <form onSubmit={handleSubmit} className="flex-shrink-0 border-t border-gray-200 px-3 py-2 flex items-end gap-2">
-        <ChatbotVoiceInput onTranscript={(text) => setInput(text)} disabled={isLoading} />
+        <ChatbotVoiceInput
+          onTranscript={(text) => setInput(text)}
+          onStatusChange={setVoiceStatus}
+          disabled={isLoading}
+        />
         <textarea
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t('chat.placeholder')}
+          placeholder={
+            voiceStatus === 'recording'
+              ? t('chat.micListening')
+              : voiceStatus === 'transcribing'
+                ? t('chat.micTranscribing')
+                : t('chat.placeholder')
+          }
           disabled={isLoading}
           rows={1}
           className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0072BC]/40 min-h-[40px] max-h-[120px] overflow-y-auto disabled:opacity-50"
