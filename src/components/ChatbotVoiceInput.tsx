@@ -1,112 +1,142 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Mic, MicOff, Square } from 'lucide-react';
+import { Mic, MicOff, Square, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
-import { getSpeechLang } from '@/lib/chat/speechLangMap';
+
+/**
+ * Voice input button for the chatbot.
+ *
+ * Records audio on the client with MediaRecorder and uploads it to
+ * /api/chat/transcribe (OpenAI Whisper). This replaces the previous
+ * browser-native SpeechRecognition implementation, which was unreliable for
+ * Bulgarian/Russian/Persian/etc. on Edge (Microsoft's online speech service
+ * has limited language coverage and is regionally gated).
+ *
+ * UI states:
+ *   idle         → grey mic icon
+ *   recording    → red pulsing square + elapsed seconds badge
+ *   transcribing → spinning loader (Whisper request in flight)
+ *
+ * Errors surface as a small auto-dismissing toast above the button. All
+ * notable events are also logged to the console for diagnostics.
+ */
 
 interface Props {
   onTranscript: (text: string) => void;
   disabled?: boolean;
 }
 
-type SpeechRecognitionInstance = {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  onresult: ((e: SpeechRecognitionEvent) => void) | null;
-  onend: (() => void) | null;
-  onerror: ((e: { error: string }) => void) | null;
-  start: () => void;
-  stop: () => void;
-};
+type Status = 'idle' | 'recording' | 'transcribing';
 
-type SpeechRecognitionEvent = {
-  results: SpeechRecognitionResultList;
-};
+// Hard cap on a single utterance. 60 s is plenty for a chat message and keeps
+// the upload <2 MB at typical opus bitrates — well under the API's 25 MB max.
+const MAX_RECORDING_MS = 60_000;
+// Stop automatically after 5 s of measured silence so users don't have to
+// remember to press Stop. We piggy-back on Web Audio's analyser node for this
+// (no heuristics on the encoded blob).
+const SILENCE_MS = 5_000;
+const SILENCE_RMS_THRESHOLD = 0.012;
 
-type SpeechRecognitionResultList = {
-  length: number;
-  [index: number]: SpeechRecognitionResult;
-};
-
-type SpeechRecognitionResult = {
-  [index: number]: { transcript: string };
-  isFinal: boolean;
-};
-
-declare global {
-  interface Window {
-    SpeechRecognition?: new () => SpeechRecognitionInstance;
-    webkitSpeechRecognition?: new () => SpeechRecognitionInstance;
+function pickMimeType(): string {
+  if (typeof MediaRecorder === 'undefined') return '';
+  // Preference order: opus in webm (Chrome/Edge/Firefox), opus in ogg
+  // (some Firefoxes), mp4/aac (Safari). Empty string => browser default.
+  const candidates = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+    'audio/mpeg',
+  ];
+  for (const c of candidates) {
+    if (MediaRecorder.isTypeSupported(c)) return c;
   }
+  return '';
 }
 
 export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
   const { lang } = useLanguage();
   const t = useT();
-  const [isListening, setIsListening] = useState(false);
+  const [status, setStatus] = useState<Status>('idle');
   const [isSupported, setIsSupported] = useState(true);
+  const [elapsedSec, setElapsedSec] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
-  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const startedAtRef = useRef<number>(0);
+  const tickTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const maxTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const interimRef = useRef('');
+  // Silence detector wiring (Web Audio API). All three are kept on refs so
+  // teardown can null them out from any code path.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const silenceFrameRef = useRef<number | null>(null);
+  const silenceStartedAtRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const SR = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    if (!SR) {
-      setIsSupported(false);
+    if (typeof window === 'undefined') return;
+    const ok = typeof MediaRecorder !== 'undefined'
+      && !!navigator.mediaDevices?.getUserMedia;
+    if (!ok) setIsSupported(false);
+  }, []);
+
+  // Centralised teardown — releases the mic, stops timers and disconnects the
+  // Web Audio graph. Safe to call multiple times; each ref is nulled out as
+  // soon as it's been handled.
+  const cleanup = useCallback(() => {
+    if (tickTimerRef.current) {
+      clearInterval(tickTimerRef.current);
+      tickTimerRef.current = null;
     }
+    if (maxTimerRef.current) {
+      clearTimeout(maxTimerRef.current);
+      maxTimerRef.current = null;
+    }
+    if (silenceFrameRef.current !== null) {
+      cancelAnimationFrame(silenceFrameRef.current);
+      silenceFrameRef.current = null;
+    }
+    silenceStartedAtRef.current = null;
+
+    if (sourceRef.current) {
+      try { sourceRef.current.disconnect(); } catch { /* already disconnected */ }
+      sourceRef.current = null;
+    }
+    if (analyserRef.current) {
+      try { analyserRef.current.disconnect(); } catch { /* already disconnected */ }
+      analyserRef.current = null;
+    }
+    if (audioCtxRef.current) {
+      audioCtxRef.current.close().catch(() => { /* ignore */ });
+      audioCtxRef.current = null;
+    }
+
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((tr) => tr.stop());
+      streamRef.current = null;
+    }
+    recorderRef.current = null;
   }, []);
 
   useEffect(() => {
     return () => {
       if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
-      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      cleanup();
     };
-  }, []);
+  }, [cleanup]);
 
-  // Temporary diagnostic toast. Auto-hides after 6s so it doesn't linger.
   const showError = useCallback((msg: string) => {
     setErrorMsg(msg);
     if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
     errorTimerRef.current = setTimeout(() => setErrorMsg(null), 6000);
   }, []);
 
-  const stopListening = useCallback(() => {
-    if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-    recognitionRef.current?.stop();
-    setIsListening(false);
-    if (interimRef.current.trim()) {
-      onTranscript(interimRef.current.trim());
-      interimRef.current = '';
-    }
-  }, [onTranscript]);
-
-  // Map a SpeechRecognition error code (defined by the Web Speech API) to a
-  // localised user-facing message.
-  const messageForSpeechError = useCallback((code: string): string => {
-    switch (code) {
-      case 'not-allowed':
-      case 'service-not-allowed':
-        return t('chat.micErrorBlocked');
-      case 'no-speech':
-        return t('chat.micErrorNoSpeech');
-      case 'network':
-        return t('chat.micErrorNetwork');
-      case 'audio-capture':
-        return t('chat.micErrorBusy');
-      case 'language-not-supported':
-      case 'bad-grammar':
-        return t('chat.micErrorLangNotSupported');
-      default:
-        return `${t('chat.micErrorGeneric')} (${code})`;
-    }
-  }, [t]);
-
-  // Map a getUserMedia DOMException name to a localised user-facing message.
   const messageForMediaError = useCallback((name: string): string => {
     switch (name) {
       case 'NotAllowedError':
@@ -123,108 +153,202 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
     }
   }, [t]);
 
-  const startListening = useCallback(async () => {
-    const SR = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    if (!SR) return;
-
-    setErrorMsg(null);
-    const speechLang = getSpeechLang(lang);
-
-    // Preflight: explicitly request mic permission via getUserMedia. This
-    // forces the browser to show its permission prompt (which SpeechRecognition
-    // does not always trigger on its own) and gives us specific DOMException
-    // names so we can show useful errors instead of a silent failure.
-    if (!navigator.mediaDevices?.getUserMedia) {
-      console.error('[voice] mediaDevices.getUserMedia unavailable (likely insecure context)');
-      showError(t('chat.micErrorBlocked'));
-      return;
-    }
-
+  const transcribe = useCallback(async (blob: Blob, mime: string) => {
+    setStatus('transcribing');
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // We only needed the prompt + a sanity check — SpeechRecognition opens
-      // its own internal mic handle, so close ours immediately.
-      stream.getTracks().forEach((track) => track.stop());
-      console.log('[voice] preflight ok');
+      const form = new FormData();
+      form.append('audio', blob, mime.includes('mp4') ? 'audio.mp4' : 'audio.webm');
+      form.append('language', lang);
+
+      const res = await fetch('/api/chat/transcribe', {
+        method: 'POST',
+        body: form,
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: 'Transcription failed' }));
+        console.error('[voice] transcribe http error', res.status, error);
+        showError(error ?? t('chat.micErrorTranscribe'));
+        return;
+      }
+
+      const { text } = (await res.json()) as { text: string };
+      console.log('[voice] transcript', { len: text.length, preview: text.slice(0, 60) });
+      if (text.trim()) {
+        onTranscript(text.trim());
+      } else {
+        // Whisper occasionally returns an empty string for silent / very short
+        // audio — treat that as "didn't catch it" rather than a hard error so
+        // the user understands why nothing happened.
+        showError(t('chat.micErrorNoSpeech'));
+      }
+    } catch (err) {
+      console.error('[voice] transcribe fetch failed', err);
+      showError(t('chat.micErrorTranscribe'));
+    } finally {
+      setStatus('idle');
+    }
+  }, [lang, onTranscript, showError, t]);
+
+  const stopRecording = useCallback(() => {
+    const rec = recorderRef.current;
+    if (rec && rec.state !== 'inactive') {
+      // The actual upload happens in `onstop` below — calling stop() here
+      // simply flushes the final chunk so MediaRecorder fires that event.
+      try { rec.stop(); } catch { /* already stopped */ }
+    } else {
+      // Nothing was actually recording (e.g. preflight failure). Just reset.
+      cleanup();
+      setStatus('idle');
+    }
+  }, [cleanup]);
+
+  // Lightweight silence detector. We sample the time-domain waveform every
+  // animation frame, compute an RMS amplitude and stop the recording once the
+  // signal stays below `SILENCE_RMS_THRESHOLD` for `SILENCE_MS` consecutively.
+  // This is intentionally crude — we don't need VAD-quality accuracy, only a
+  // "the user stopped talking" hint so the UI doesn't depend on a Stop click.
+  const startSilenceDetector = useCallback((stream: MediaStream) => {
+    try {
+      const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!Ctor) return;
+      const ctx = new Ctor();
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      source.connect(analyser);
+
+      audioCtxRef.current = ctx;
+      sourceRef.current = source;
+      analyserRef.current = analyser;
+
+      const buffer = new Float32Array(analyser.fftSize);
+      const tick = () => {
+        if (!analyserRef.current) return;
+        analyserRef.current.getFloatTimeDomainData(buffer);
+        let sumSq = 0;
+        for (let i = 0; i < buffer.length; i++) sumSq += buffer[i] * buffer[i];
+        const rms = Math.sqrt(sumSq / buffer.length);
+
+        if (rms > SILENCE_RMS_THRESHOLD) {
+          silenceStartedAtRef.current = null;
+        } else {
+          const now = performance.now();
+          if (silenceStartedAtRef.current === null) {
+            silenceStartedAtRef.current = now;
+          } else if (now - silenceStartedAtRef.current >= SILENCE_MS) {
+            // Long enough silence — stop the recording. The onstop handler
+            // will pick up the chunks and trigger transcription.
+            stopRecording();
+            return;
+          }
+        }
+        silenceFrameRef.current = requestAnimationFrame(tick);
+      };
+      silenceFrameRef.current = requestAnimationFrame(tick);
+    } catch (err) {
+      // The silence detector is best-effort — if the browser refuses to give
+      // us an AudioContext, recording still works via the manual Stop button
+      // and the MAX_RECORDING_MS timeout.
+      console.warn('[voice] silence detector unavailable', err);
+    }
+  }, [stopRecording]);
+
+  const startRecording = useCallback(async () => {
+    if (!isSupported) return;
+    setErrorMsg(null);
+
+    let stream: MediaStream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err) {
       const name = err instanceof Error ? err.name : String(err);
-      console.error('[voice] preflight failed', name, err);
-      // Dump the list of devices the browser actually sees so we can tell
-      // apart "no hardware" vs "blocked at OS level" vs "permission denied".
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const audioInputs = devices.filter((d) => d.kind === 'audioinput');
-        console.log('[voice] enumerateDevices audioinputs:', audioInputs.map((d) => ({
-          deviceId: d.deviceId,
-          label: d.label || '(empty — permission not granted)',
-          groupId: d.groupId,
-        })));
-        console.log('[voice] all devices:', devices.map((d) => ({ kind: d.kind, label: d.label })));
-      } catch (enumErr) {
-        console.error('[voice] enumerateDevices failed', enumErr);
-      }
+      console.error('[voice] getUserMedia failed', name, err);
       showError(messageForMediaError(name));
       return;
     }
+    streamRef.current = stream;
 
-    const recognition = new SR();
-    recognition.lang = speechLang;
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    interimRef.current = '';
-
-    console.log('[voice] start', { speechLang, menuLang: lang, origin: window.location.origin });
-
-    recognition.onresult = (e: SpeechRecognitionEvent) => {
-      let interim = '';
-      let final = '';
-      for (let i = 0; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) {
-          final += r[0].transcript;
-        } else {
-          interim += r[0].transcript;
-        }
-      }
-
-      const combined = final + interim;
-      interimRef.current = combined;
-      if (combined) {
-        console.log('[voice] transcript', { final, interim });
-        onTranscript(combined);
-      }
-
-      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-      silenceTimerRef.current = setTimeout(() => {
-        stopListening();
-      }, 2500);
-    };
-
-    recognition.onend = () => {
-      console.log('[voice] end');
-      setIsListening(false);
-    };
-
-    recognition.onerror = (e: { error: string }) => {
-      console.error('[voice] error', e.error, { speechLang, menuLang: lang });
-      // 'aborted' fires when we call stop() ourselves — that's expected, not
-      // a real error worth surfacing to the user.
-      if (e.error !== 'aborted') {
-        showError(messageForSpeechError(e.error));
-      }
-      setIsListening(false);
-    };
-
+    const mimeType = pickMimeType();
+    let recorder: MediaRecorder;
     try {
-      recognitionRef.current = recognition;
-      recognition.start();
-      setIsListening(true);
+      recorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error('[voice] start() threw', err);
-      showError(`${t('chat.micErrorGeneric')} (${msg})`);
+      console.error('[voice] MediaRecorder construction failed', err);
+      cleanup();
+      showError(t('chat.micErrorGeneric'));
+      return;
     }
-  }, [lang, onTranscript, stopListening, showError, t, messageForMediaError, messageForSpeechError]);
+    recorderRef.current = recorder;
+    chunksRef.current = [];
+
+    recorder.ondataavailable = (e: BlobEvent) => {
+      if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
+    };
+
+    recorder.onstop = () => {
+      const effectiveMime = recorder.mimeType || mimeType || 'audio/webm';
+      const blob = new Blob(chunksRef.current, { type: effectiveMime });
+      chunksRef.current = [];
+      cleanup();
+
+      console.log('[voice] recording stopped', {
+        bytes: blob.size,
+        mime: effectiveMime,
+        durationMs: Date.now() - startedAtRef.current,
+      });
+
+      if (blob.size === 0) {
+        setStatus('idle');
+        showError(t('chat.micErrorNoSpeech'));
+        return;
+      }
+      void transcribe(blob, effectiveMime);
+    };
+
+    recorder.onerror = (e) => {
+      const evt = e as unknown as { error?: { name?: string; message?: string } };
+      console.error('[voice] MediaRecorder error', evt.error);
+      cleanup();
+      setStatus('idle');
+      showError(`${t('chat.micErrorGeneric')} (${evt.error?.name ?? 'recorder'})`);
+    };
+
+    startedAtRef.current = Date.now();
+    try {
+      recorder.start();
+    } catch (err) {
+      console.error('[voice] recorder.start() threw', err);
+      cleanup();
+      showError(t('chat.micErrorGeneric'));
+      return;
+    }
+
+    setStatus('recording');
+    setElapsedSec(0);
+    tickTimerRef.current = setInterval(() => {
+      setElapsedSec(Math.floor((Date.now() - startedAtRef.current) / 1000));
+    }, 250);
+    maxTimerRef.current = setTimeout(() => {
+      console.log('[voice] max duration reached, stopping');
+      stopRecording();
+    }, MAX_RECORDING_MS);
+
+    startSilenceDetector(stream);
+    console.log('[voice] recording started', { mimeType, menuLang: lang });
+  }, [
+    isSupported,
+    showError,
+    messageForMediaError,
+    cleanup,
+    t,
+    transcribe,
+    stopRecording,
+    startSilenceDetector,
+    lang,
+  ]);
 
   if (!isSupported) {
     return (
@@ -239,25 +363,62 @@ export function ChatbotVoiceInput({ onTranscript, disabled }: Props) {
     );
   }
 
+  const isRecording = status === 'recording';
+  const isTranscribing = status === 'transcribing';
+  const isBusy = disabled || isTranscribing;
+
+  const handleClick = () => {
+    if (isRecording) {
+      stopRecording();
+    } else if (status === 'idle') {
+      void startRecording();
+    }
+  };
+
+  const title = isTranscribing
+    ? t('chat.micTranscribing')
+    : isRecording
+      ? t('chat.micRecording')
+      : t('chat.micStart');
+
   return (
     <div className="relative">
       <button
         type="button"
-        disabled={disabled}
-        onClick={isListening ? stopListening : startListening}
-        title={isListening ? t('chat.micStop') : `${t('chat.micStart')} (${getSpeechLang(lang)})`}
+        disabled={isBusy}
+        onClick={handleClick}
+        title={title}
+        aria-label={title}
         className={`p-2 rounded-full transition-colors ${
-          isListening
-            ? 'bg-red-100 text-red-600 hover:bg-red-200 animate-pulse'
-            : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-        } ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
+          isRecording
+            ? 'bg-[#FCE2DE] text-[#D25A45] hover:bg-[#f7cfc7] animate-pulse'
+            : isTranscribing
+              ? 'text-[#0072BC]'
+              : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+        } ${isBusy && !isTranscribing ? 'opacity-40 cursor-not-allowed' : ''}`}
       >
-        {isListening ? <Square className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+        {isTranscribing ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : isRecording ? (
+          <Square className="w-5 h-5 fill-current" />
+        ) : (
+          <Mic className="w-5 h-5" />
+        )}
       </button>
+
+      {isRecording && (
+        <span
+          className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-[#D25A45] text-white text-[10px] font-bold flex items-center justify-center pointer-events-none"
+          aria-hidden
+        >
+          {elapsedSec}
+        </span>
+      )}
+
       {errorMsg && (
         <div
           role="alert"
-          className="absolute bottom-full left-0 mb-2 z-20 whitespace-nowrap bg-[#683229] text-white text-xs rounded-lg px-3 py-1.5 shadow-lg"
+          className="absolute bottom-full left-0 mb-2 z-20 max-w-[260px] bg-[#683229] text-white text-xs rounded-lg px-3 py-1.5 shadow-lg"
         >
           {errorMsg}
         </div>
