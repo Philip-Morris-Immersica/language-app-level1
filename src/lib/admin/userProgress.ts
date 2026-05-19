@@ -32,6 +32,7 @@ import {
   getLevelDef,
 } from '@/content/registry';
 import { summarizeLessonProgress } from '@/lib/chat/progressAnalyzer';
+import { getSectionScore } from '@/lib/testScoring';
 
 export interface UserLessonProgress {
   lessonId: string;
@@ -636,6 +637,12 @@ export interface UserTestProgress {
   /** True if attemptedPct >= TEST_COMPLETED_THRESHOLD_PCT — i.e. the score
    *  is representative of an engaged attempt. */
   completed: boolean;
+  /** Points earned across all sections (matches the in-test score block). */
+  pointsEarned: number;
+  /** Sum of section.maxPoints (i.e. test.totalPoints). */
+  totalPoints: number;
+  /** pointsEarned / totalPoints * 100, rounded. 0 if totalPoints is 0. */
+  pointsScorePct: number;
   bySection: Array<{
     sectionId: string;
     name: string;
@@ -646,6 +653,12 @@ export interface UserTestProgress {
     correctCount: number;
     wrongCount: number;
     scorePct: number;
+    /** Points earned in this section. */
+    pointsEarned: number;
+    /** section.maxPoints (e.g. 8 for СЛУШАНЕ). */
+    maxPoints: number;
+    /** pointsEarned / maxPoints * 100, rounded. */
+    pointsScorePct: number;
   }>;
 }
 
@@ -731,6 +744,23 @@ export async function getUserTestSummary(userId: number): Promise<UserTestProgre
     const submittedCount = right + wrong;
     const scorePct = submittedCount > 0 ? Math.round((right / submittedCount) * 100) : 0;
 
+    // Build the savedStates map shape that getSectionScore expects.
+    // Each row's `state` is JSON; parse once and pass through.
+    const savedStates: Record<string, unknown> = {};
+    for (const r of list) {
+      try {
+        savedStates[r.exerciseId] = JSON.parse(r.state);
+      } catch {
+        // Ignore malformed rows; absence from the map = "no state for this id"
+      }
+    }
+
+    // Score each section by points (mirrors the in-test score block)
+    const sectionPointResults = testData.sections.map((s) => getSectionScore(s, savedStates));
+    const totalPointsEarned = sectionPointResults.reduce((sum, sec) => sum + sec.earned, 0);
+    const totalPoints = testData.totalPoints;
+    const pointsScorePct = totalPoints > 0 ? Math.round((totalPointsEarned / totalPoints) * 100) : 0;
+
     results.push({
       testId,
       level: TEST_LEVEL_MAP[testId] ?? 'unknown',
@@ -744,12 +774,16 @@ export async function getUserTestSummary(userId: number): Promise<UserTestProgre
       wrongCount: wrong,
       scorePct,
       completed,
-      bySection: testData.sections.map((s) => {
+      pointsEarned: totalPointsEarned,
+      totalPoints,
+      pointsScorePct,
+      bySection: testData.sections.map((s, idx) => {
         const secTotal = s.exercises.length;
         const attempted = secAttempted.get(s.id) ?? 0;
         const rCount = secRight.get(s.id) ?? 0;
         const wCount = secWrong.get(s.id) ?? 0;
         const submitted = rCount + wCount;
+        const pts = sectionPointResults[idx];
         return {
           sectionId: s.id,
           name: s.name,
@@ -760,6 +794,9 @@ export async function getUserTestSummary(userId: number): Promise<UserTestProgre
           correctCount: rCount,
           wrongCount: wCount,
           scorePct: submitted > 0 ? Math.round((rCount / submitted) * 100) : 0,
+          pointsEarned: pts.earned,
+          maxPoints: pts.total,
+          pointsScorePct: pts.total > 0 ? Math.round((pts.earned / pts.total) * 100) : 0,
         };
       }),
     });
