@@ -12,7 +12,7 @@ export const testData: TestData = {
   sections: [
     { id: 'listening', name: 'СЛУШАНЕ',   maxPoints: 7,  exercises: listeningExercises },
     { id: 'reading',   name: 'ЧЕТЕНЕ',    maxPoints: 10, exercises: readingExercises   },
-    { id: 'grammar',   name: 'ГРАМАТИКА', maxPoints: 41, exercises: grammarExercises   },
+    { id: 'grammar',   name: 'ГРАМАТИКА', maxPoints: 42, exercises: grammarExercises   },
     { id: 'writing',   name: 'ПИСАНЕ',    maxPoints: 10, exercises: writingExercises   },
   ],
 };

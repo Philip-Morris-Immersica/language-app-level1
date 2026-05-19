@@ -57,13 +57,13 @@ export function ChatbotWidget() {
         </div>
       </div>
 
-      {/* Floating button */}
+      {/* Floating button — hidden when panel is open */}
       <button
         onClick={() => {
-          setIsOpen(!isOpen);
+          setIsOpen(true);
           setIsPulsing(false);
         }}
-        className="fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden ring-[4px] ring-[#F67F6A] focus:outline-none focus:ring-[4px] focus:ring-[#F67F6A]"
+        className={`fixed bottom-5 right-5 z-[60] w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 overflow-hidden ring-[4px] ring-[#F67F6A] focus:outline-none focus:ring-[4px] focus:ring-[#F67F6A] ${isOpen ? 'pointer-events-none opacity-0 scale-75' : 'opacity-100 scale-100'}`}
         aria-label="Open AI chat assistant"
       >
         <img

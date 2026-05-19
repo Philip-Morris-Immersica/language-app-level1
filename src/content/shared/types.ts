@@ -69,6 +69,8 @@ export interface BaseExercise {
   grammarHighlightAfterBody?: boolean;
   mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
   mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
+  /** When true, renders the exercise subtitle with larger, bolder styling for visual prominence. */
+  prominentSubtitle?: boolean;
 }
 
 // Specific exercise interfaces

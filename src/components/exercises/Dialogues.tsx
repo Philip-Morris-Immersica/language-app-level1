@@ -178,9 +178,11 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
                   onClick={() => toggleSection(section.id)}
                   className="flex items-center gap-2 cursor-pointer flex-1"
                 >
-                  <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
-                    {section.id}
-                  </span>
+                  {sections.length > 1 && (
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
+                      {section.id}
+                    </span>
+                  )}
                 </div>
                 <Button
                   onClick={(e) => handlePlaySection(e, section)}

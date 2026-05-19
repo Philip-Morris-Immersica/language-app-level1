@@ -60,6 +60,10 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
     'Read exactly one Bulgarian word: ???. Native Bulgarian only, short and clear; one syllable.',
   'toaletna-nd':
     'Read exactly one Bulgarian word: ????????. Native Bulgarian only, clear stress on the second syllable (??-?-???-??).',
+  'banya-nd':
+    'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (BA-nya).',
+  'cvete-nd':
+    'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
 };
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
 const GEMINI_BG_WORD_STRESS_PROMPT =
@@ -91,7 +95,19 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l08-gramatika-02-row-1', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
   'l08-gramatika-02-row-2', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
   'l08-gramatika-02-row-3', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
-  'l09-gramatika-01-row-3', // ???????? � "???????" root, known Flash mispronunciation
+  'l09-gramatika-01-row-3', // четвъртия/т — "четвърти" root, known Flash mispronunciation
+  'l09-gramatika-01-row-4', // петия/т — Flash mis-stresses
+  'l09-gramatika-01-row-7', // осмия/т — new row
+  'l09-gramatika-01-row-8', // деветия/т — new row
+  'l09-gramatika-01-row-9', // десетия/т — new row
+  'l07-gramatika-01-row-8', // девето/девета/девето/девети — Flash mispronounces
+  // l07-gramatika-07 — ОТИВАМ conjugation (all rows need Pro for clear pronunciation)
+  'l07-gramatika-07-row-0', // аз отивам
+  'l07-gramatika-07-row-1', // ти отиваш
+  'l07-gramatika-07-row-2', // той/тя/то отива
+  'l07-gramatika-07-row-3', // ние отиваме
+  'l07-gramatika-07-row-4', // Вие отивате
+  'l07-gramatika-07-row-5', // те отиват
 ]);
 
 // Grammar table note files that need Pro model instead of Flash (full sentences, not isolated words)
@@ -130,7 +146,16 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l09-gramatika-02-row-2': '??????. ... ??-??????. ... ???-??????.',
   'l09-gramatika-02-row-3': '??????. ... ??-??????. ... ???-??????.',
 
-  // l10-gramatika-01b � ?????????? (??????????): ????? ????? ? ???? ?????? ?????
+  // l09-gramatika-01 — поредни числителни: редове с трудно произношение
+  'l09-gramatika-01-row-4': 'пети. петия. пета. пето. пети.',
+  'l09-gramatika-01-row-7': 'осми. осмия. осма. осмо. осми.',
+  'l09-gramatika-01-row-8': 'девети. деветия. девета. девето. девети.',
+  'l09-gramatika-01-row-9': 'десети. десетия. десета. десето. десети.',
+
+  // l07-gramatika-01 — редни числителни: row-8 е "девето" — Flash го чете неправилно
+  'l07-gramatika-01-row-8': 'Девети. Девета. Девето. Девети.',
+
+  // l10-gramatika-01b — ???????? (??????????): ????? ????? ? ???? ?????? ?????
   'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнадесет минути. Първи коловоз. Пет минути закъснение.',
   'l10-gramatika-01b-row-1': 'Плевен. Дванадесет часа. Трети коловоз. Без закъснение.',
   'l10-gramatika-01b-row-2': 'Русе. Петнадесет часа и тридесет минути. Четвърти коловоз. Петнадесет минути закъснение.',
@@ -174,7 +199,7 @@ const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
 };
 
 /** `grammar_examples` + highlight rows: force Gemini Pro + Achernar (no Flash / no male line preset). */
-const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set(['l07-gramatika-04', 'l07-gramatika-05']);
+const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set(['l07-gramatika-04', 'l07-gramatika-05', 'l09-gramatika-03']);
 
 // ---------------------------------------------------------------------------
 // Text cleaning

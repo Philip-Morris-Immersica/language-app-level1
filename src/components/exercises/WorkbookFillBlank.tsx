@@ -24,6 +24,16 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   return options as string[];
 }
 
+function renderBoldText(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
@@ -418,7 +428,7 @@ export function WorkbookFillBlank({
       return (
         <div key={sIdx} className="mb-5 p-4 border-2 border-[#8B9D5F] rounded-lg bg-[#f8faf4]">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Модел:</p>
-          <p className="text-base text-gray-700">{questionPart}</p>
+          <p className="text-base text-gray-700">{renderBoldText(questionPart)}</p>
           <p className="text-base text-gray-700">
             {answerPart ? renderAnswerPart(answerPart) : null}
           </p>
@@ -517,15 +527,14 @@ export function WorkbookFillBlank({
 
       {listeningText && (
         <div className="mb-6">
-          <div
+          <button
+            type="button"
             onClick={() => speakText(listeningText)}
-            className="rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-4 cursor-pointer hover:bg-[#DAF6EB] transition-colors active:scale-[0.99]"
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-3 text-sm md:text-base text-gray-800 hover:bg-[#DAF6EB] transition-colors active:scale-[0.99] cursor-pointer"
           >
-            <p className="text-sm md:text-base text-gray-800 leading-relaxed flex items-start gap-2">
-              <span className="text-[#4a6b1f] mt-0.5 shrink-0">🔊</span>
-              {listeningText}
-            </p>
-          </div>
+            <span className="text-[#4a6b1f]">🔊</span>
+            <span>Слушай</span>
+          </button>
         </div>
       )}
 

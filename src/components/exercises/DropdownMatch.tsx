@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { ImageLightbox } from '@/components/ImageLightbox';
-import { getTtsAudioPath, playTtsAudio, stopSpeaking } from '@/lib/tts';
+import { getTtsAudioPath, playTtsAudio, stopTtsAudio } from '@/lib/tts';
 
 interface DropdownQuestion {
   id: string;
@@ -51,7 +51,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
   const handlePlayListening = () => {
     if (!listeningText) return;
     if (isPlayingAudio) {
-      stopSpeaking();
+      stopTtsAudio();
       setIsPlayingAudio(false);
       return;
     }
@@ -120,7 +120,11 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
         <div className="flex justify-end mb-4">
           <Button
             onClick={handlePlayListening}
-            className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] gap-2 min-h-[48px] active:scale-95 rounded-lg"
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow-md min-h-[48px] active:scale-95 transition-all ${
+              isPlayingAudio
+                ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+            }`}
           >
             {isPlayingAudio ? <><Pause className="w-5 h-5" />{t('exercise.stop')}</> : <><Play className="w-5 h-5" />{t('exercise.listen')}</>}
           </Button>

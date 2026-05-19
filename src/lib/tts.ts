@@ -133,20 +133,13 @@ export function playTtsAudio(
   rate?: number,
   onPlaybackEnd?: () => void,
 ): void {
-  // Toggle: if the same audio is already playing, stop it (second click = pause).
-  // Components benefit from this without any per-component changes.
-  if (
-    currentAudio &&
-    currentAudioUrl === audioUrl &&
-    !currentAudio.paused &&
-    !currentAudio.ended
-  ) {
-    const cb = onPlaybackEnd;
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio = null;
-    currentAudioUrl = null;
-    cb?.();
+  // Same URL already loaded: toggle pause/resume without resetting position.
+  if (currentAudio && currentAudioUrl === audioUrl) {
+    if (currentAudio.paused) {
+      currentAudio.play().catch(() => {});
+    } else {
+      currentAudio.pause();
+    }
     return;
   }
 
@@ -163,6 +156,7 @@ export function playTtsAudio(
   }
 
   const audio = new Audio(audioUrl);
+  if (rate && rate !== 1) audio.playbackRate = rate;
   currentAudio = audio;
   currentAudioUrl = audioUrl;
   const finish = () => {

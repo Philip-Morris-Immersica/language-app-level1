@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Square, Check, X } from 'lucide-react';
+import { Play, Square, Check, X, BookOpen, Volume2, Turtle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -47,12 +47,14 @@ function TtsButton({
   exerciseId,
   paragraphIndex = 0,
   useFullAudio,
+  rate = 1,
 }: {
   text: string;
   exerciseId?: string;
   paragraphIndex?: number;
   /** When multiple paragraphs are read as one block, use the `-full` MP3 if generated */
   useFullAudio?: boolean;
+  rate?: number;
 }) {
   const t = useT();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -67,13 +69,13 @@ function TtsButton({
     if (exerciseId) {
       const stem = useFullAudio ? `${exerciseId}-full` : `${exerciseId}-p-${paragraphIndex}`;
       const audioPath = getTtsAudioPath(exerciseId, 'texts', stem);
-      playTtsAudio(audioPath, text, undefined, () => setIsPlaying(false));
+      playTtsAudio(audioPath, text, rate, () => setIsPlaying(false));
       setIsPlaying(true);
       return;
     }
-    speakBulgarian(text);
+    speakBulgarian(text, rate);
     setIsPlaying(true);
-  }, [text, isPlaying, exerciseId, paragraphIndex, useFullAudio]);
+  }, [text, isPlaying, exerciseId, paragraphIndex, useFullAudio, rate]);
 
   return (
     <Button
@@ -109,6 +111,24 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
   const seqRef = useRef<{ cancelled: boolean } | null>(null);
   const [flippedVocabImages, setFlippedVocabImages] = useState<Record<number, boolean>>({});
   const [revealedImageLabels, setRevealedImageLabels] = useState<Set<number>>(new Set());
+  const [showHiddenText, setShowHiddenText] = useState(false);
+
+  /** Slow-mode toggle (only for hideText/listening exercises). Persisted in localStorage. */
+  const [slowMode, setSlowMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem('tts-slow-mode') === '1';
+  });
+  const ttsRate = hideText && slowMode ? 0.85 : 1;
+
+  const toggleSlowMode = useCallback(() => {
+    setSlowMode(prev => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('tts-slow-mode', next ? '1' : '0');
+      }
+      return next;
+    });
+  }, []);
 
   const stopSequentialPlayback = useCallback(() => {
     if (seqRef.current) seqRef.current.cancelled = true;
@@ -160,7 +180,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
       const p = paragraphs[i];
       setPlayingParaIndex(i);
       const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
-      playTtsAudio(audioPath, p, undefined, () => {
+      playTtsAudio(audioPath, p, ttsRate, () => {
         if (token.cancelled) return;
         window.setTimeout(() => {
           if (!token.cancelled) playNext(i + 1);
@@ -209,8 +229,8 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {(audioUrl || showDictionary || showSequentialListen) && (
-        <div className="flex justify-end gap-2 mb-6">
+      {(audioUrl || showDictionary || showSequentialListen || hideText) && (
+        <div className="flex justify-end gap-2 mb-6 flex-wrap">
           {showDictionary && (
             <Button
               className="px-5 py-3 md:px-6 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 bg-[#0072BC] hover:bg-[#05568B] text-white"
@@ -220,14 +240,32 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
               {t('exercise.dictionary')}
             </Button>
           )}
+          {hideText && (
+            <Button
+              onClick={toggleSlowMode}
+              title={slowMode ? 'Нормална скорост' : 'По-бавно четене (0.85x)'}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                slowMode
+                  ? 'bg-[#0072BC] text-white hover:bg-[#05568B]'
+                  : 'bg-white border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40'
+              }`}
+            >
+              <Turtle className="w-4 h-4" />
+              {slowMode ? '0.85x' : '1x'}
+            </Button>
+          )}
           {audioUrl && (
             <Button
               onClick={handlePlayAudio}
-              className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+              className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                isPlaying
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+              }`}
             >
               {isPlaying ? (
                 <>
-                  <Pause className="w-5 h-5" />
+                  <Square className="w-5 h-5" />
                   {t('exercise.stop')}
                 </>
               ) : (
@@ -260,6 +298,16 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
               )}
             </Button>
           )}
+          {hideText && paragraphs.length > 0 && (
+            <Button
+              variant="outline"
+              onClick={() => setShowHiddenText(prev => !prev)}
+              className="flex items-center gap-2 border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40 px-4 py-2 md:px-5 md:py-2.5 rounded-lg font-semibold text-sm"
+            >
+              <BookOpen className="w-4 h-4" />
+              {showHiddenText ? t('exercise.hideText') : t('exercise.showText')}
+            </Button>
+          )}
         </div>
       )}
 
@@ -277,7 +325,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
             </p>
           )}
           <div
-            className={`grid gap-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:max-w-3xl md:mx-auto'}`}
+            className={`grid gap-x-6 gap-y-10 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:max-w-3xl md:mx-auto'}`}
           >
             {images.map((img, i) => (
               <div
@@ -328,13 +376,23 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                     ))}
                   {paragraphs[i] && (
                     <div className="mt-3 w-full flex justify-center">
-                      <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} />
+                      <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} rate={ttsRate} />
                     </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
+
+          {showHiddenText && paragraphs.length > 0 && (
+            <div className="mt-5 space-y-3 border-t border-gray-100 pt-5">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       ) : !hideText && images && images.length > 0 && imageFlashcards ? (
         <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
@@ -411,12 +469,36 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
       ) : null}
 
       {hideText && (!images || images.length === 0) ? (
-        <div className="flex items-center gap-3 mb-2">
-          <TtsButton
-            text={paragraphs.join('\n\n')}
-            exerciseId={exerciseId}
-            useFullAudio={paragraphs.length > 1}
-          />
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <TtsButton
+              text={paragraphs.join('\n\n')}
+              exerciseId={exerciseId}
+              useFullAudio={paragraphs.length > 1}
+              rate={ttsRate}
+            />
+          </div>
+          {paragraphs.length > 0 && (
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => setShowHiddenText(prev => !prev)}
+                className="flex items-center gap-2 border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40 px-5 py-2.5 rounded-lg font-semibold text-sm"
+              >
+                <BookOpen className="w-4 h-4" />
+                {showHiddenText ? t('exercise.hideText') : t('exercise.showText')}
+              </Button>
+            </div>
+          )}
+          {showHiddenText && paragraphs.length > 0 && (
+            <div className="mt-5 space-y-3 border-t border-gray-100 pt-5">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       ) : hideText ? null : (
         <>
@@ -426,7 +508,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
             {paragraphs.map((paragraph, index) => (
               <div
                 key={index}
-                onClick={noTranslation ? undefined : () => {
+                onClick={() => {
                   if (sequentialPlaying) stopSequentialPlayback();
                   if (audioRef.current) {
                     audioRef.current.pause();
@@ -438,34 +520,42 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                   setPlayingParaIndex(index);
                   playTtsAudio(audioPath, paragraph, undefined, () => setPlayingParaIndex(null));
 
-                  setRevealedParas(prev => {
-                    const next = new Set(prev);
-                    if (next.has(index)) next.delete(index);
-                    else next.add(index);
-                    return next;
-                  });
+                  if (!noTranslation) {
+                    setRevealedParas(prev => {
+                      const next = new Set(prev);
+                      if (next.has(index)) next.delete(index);
+                      else next.add(index);
+                      return next;
+                    });
+                  }
                 }}
-                className={noTranslation
-                  ? 'rounded-lg p-2 -mx-2'
-                  : `cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
-                      playingParaIndex === index
-                        ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
-                        : 'hover:bg-gray-50 border border-transparent'
-                    }`
-                }
+                className={`cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
+                  playingParaIndex === index
+                    ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
+                    : 'hover:bg-gray-50 border border-transparent'
+                }`}
               >
-                {paragraph.includes('\n') ? (
-                  paragraph.split('\n').map((line, li) => (
-                    <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
-                      {line}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                    {paragraph}
-                  </p>
-                )}
-                {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
+                <div className="flex items-start gap-2">
+                  <Volume2
+                    className={`w-4 h-4 mt-1.5 flex-shrink-0 transition-colors ${
+                      playingParaIndex === index ? 'text-[#32C189]' : 'text-gray-300'
+                    }`}
+                  />
+                  <div className="flex-1">
+                    {paragraph.includes('\n') ? (
+                      paragraph.split('\n').map((line, li) => (
+                        <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                          {line}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                        {paragraph}
+                      </p>
+                    )}
+                    {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
