@@ -64,6 +64,19 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
     'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (BA-nya).',
   'cvete-nd':
     'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
+  // Lesson 08 — Flash misread o as u, or wrong stress
+  lilav:
+    'Bulgarian color word лилав. Native Bulgarian only; clear "o" vowel (not Russian "u"); stress on second syllable (li-LAV).',
+  sako:
+    'Bulgarian word сако (jacket). Native Bulgarian only; clear "o" vowel in both syllables, not "u".',
+  pola:
+    'Bulgarian word пола (skirt). Native Bulgarian only; clear "o" vowel, not "u".',
+  pulover:
+    'Bulgarian word пуловер. Native Bulgarian only; clear "o" vowels, not "u".',
+  ochila:
+    'Bulgarian word очила (glasses). Native Bulgarian only; clear "o" vowel, not "u".',
+  dechitsa:
+    'Bulgarian word дечица (little children). Native Bulgarian only; stress on second syllable (de-CHI-tsa).',
 };
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
 const GEMINI_BG_WORD_STRESS_PROMPT =
@@ -186,7 +199,14 @@ const GRAMMAR_LABELS = new Set([
 ]);
 
 /** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
-const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset', 'taksi']);
+const VOCAB_USE_PRO_IDS = new Set([
+  'kiselo-mlyako',
+  'otset',
+  'taksi',
+  // Lesson 08 — Flash Russian accent / wrong stress
+  'pasport',
+  'predpochitam',
+]);
 
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` � regenerate with Pro + stress prompt when accent is wrong. */
