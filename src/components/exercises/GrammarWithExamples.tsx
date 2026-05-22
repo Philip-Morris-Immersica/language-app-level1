@@ -8,7 +8,7 @@ import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -168,8 +168,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
           <div
             key={index}
             onClick={() => handleClick(index, example)}
-            className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
+            className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
+            {!disableTts && (
+              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+            )}
             {/* Image */}
             {example.imageUrl && (
               example.zoomable ? (

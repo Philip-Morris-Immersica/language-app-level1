@@ -42,6 +42,7 @@ interface ExerciseHeaderProps {
   instruction: string;
   instructionKey?: string;
   subtitle?: string;
+  prominentSubtitle?: boolean;
 }
 
 /** Converts **bold** markers in instruction strings to <strong> elements. */
@@ -55,7 +56,7 @@ function renderInstructionText(text: string): React.ReactNode {
   });
 }
 
-function ExerciseHeader({ title, instruction, instructionKey, subtitle }: ExerciseHeaderProps) {
+function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedInstruction = useTranslate(instruction);
@@ -66,14 +67,17 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle }: Exerci
       <h3 className="text-[#0072BC] font-bold text-xl md:text-2xl leading-tight">
         {translatedTitle}
       </h3>
+      {subtitle && (
+        <p className={prominentSubtitle
+          ? 'text-gray-700 text-base md:text-lg font-semibold mt-2'
+          : 'text-gray-400 text-xs mt-1'
+        }>
+          {translatedSubtitle}
+        </p>
+      )}
       {instruction && (
         <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
           {renderInstructionText(displayInstruction)}
-        </p>
-      )}
-      {subtitle && (
-        <p className="text-gray-400 text-xs mt-1">
-          {translatedSubtitle}
         </p>
       )}
     </div>
@@ -96,6 +100,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   }
 
   const subtitle = 'subtitle' in exercise ? (exercise as any).subtitle as string | undefined : undefined;
+  const prominentSubtitle = exercise.prominentSubtitle;
 
   function wrap(component: React.ReactNode) {
     const gh = exercise.grammarHighlight;
@@ -105,7 +110,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const showHeader = exercise.title !== '';
     return (
       <div>
-        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />}
+        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
         {ghBefore && (
           <div className="mb-5">
             <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
@@ -303,6 +308,8 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ReadingText
           audioUrl={exercise.audioUrl}
+          songUrl={exercise.songUrl}
+          disableParagraphAudio={exercise.disableParagraphAudio}
           textTitle={exercise.textTitle}
           images={exercise.images}
           imageFlashcards={exercise.imageFlashcards}

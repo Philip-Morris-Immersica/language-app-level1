@@ -1,13 +1,14 @@
-'use client';
+﻿'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Square, Check, X } from 'lucide-react';
+import { Play, Pause, Check, X, BookOpen, Volume2, Turtle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { speakBulgarian, stopSpeaking, stopTtsAudio, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { Music } from 'lucide-react';
+import { speakBulgarian, stopSpeaking, stopTtsAudio, pauseTtsAudio, resumeTtsAudio, setTtsAudioRate, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { TtsHint } from '@/components/TtsHint';
 
 interface ChecklistItem {
@@ -26,6 +27,10 @@ interface ReadingTextImage {
 
 interface ReadingTextProps {
   audioUrl?: string;
+  /** URL of an original song/audio file — shows a separate "🎵 Слушай песента" button. */
+  songUrl?: string;
+  /** When true, paragraphs are rendered as plain text without per-paragraph click-to-play audio. */
+  disableParagraphAudio?: boolean;
   textTitle?: string;
   images?: ReadingTextImage[];
   imageFlashcards?: boolean;
@@ -47,33 +52,36 @@ function TtsButton({
   exerciseId,
   paragraphIndex = 0,
   useFullAudio,
+  rate = 1,
 }: {
   text: string;
   exerciseId?: string;
   paragraphIndex?: number;
   /** When multiple paragraphs are read as one block, use the `-full` MP3 if generated */
   useFullAudio?: boolean;
+  rate?: number;
 }) {
   const t = useT();
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = useCallback(() => {
     if (isPlaying) {
-      stopSpeaking();
-      stopTtsAudio();
+      // Pause pre-generated MP3 (keeps position); stop browser TTS (no pause support).
+      pauseTtsAudio();
       setIsPlaying(false);
       return;
     }
     if (exerciseId) {
       const stem = useFullAudio ? `${exerciseId}-full` : `${exerciseId}-p-${paragraphIndex}`;
       const audioPath = getTtsAudioPath(exerciseId, 'texts', stem);
-      playTtsAudio(audioPath, text, undefined, () => setIsPlaying(false));
+      // If the same audio was paused, playTtsAudio resumes from the paused position.
+      playTtsAudio(audioPath, text, rate, () => setIsPlaying(false));
       setIsPlaying(true);
       return;
     }
-    speakBulgarian(text);
+    speakBulgarian(text, rate);
     setIsPlaying(true);
-  }, [text, isPlaying, exerciseId, paragraphIndex, useFullAudio]);
+  }, [text, isPlaying, exerciseId, paragraphIndex, useFullAudio, rate]);
 
   return (
     <Button
@@ -85,7 +93,7 @@ function TtsButton({
       }`}
     >
       {isPlaying ? (
-        <><Square className="w-4 h-4" /> {t('exercise.stop')}</>
+        <><Pause className="w-4 h-4" /> {t('exercise.pause')}</>
       ) : (
         <><Play className="w-4 h-4" /> {t('exercise.listen')}</>
       )}
@@ -93,28 +101,58 @@ function TtsButton({
   );
 }
 
-export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
+export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitle, images, imageFlashcards, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [revealedParas, setRevealedParas] = useState<Set<number>>(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const songAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [songPlaying, setSongPlaying] = useState(false);
   const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>({});
   const [checkSubmitted, setCheckSubmitted] = useState(false);
   const completedRef = useRef(false);
 
   /** Sequential „Слушай“ (paragraph p-0, then p-1, …) when no single `audioUrl` full file */
   const [sequentialPlaying, setSequentialPlaying] = useState(false);
+  const [sequentialPaused, setSequentialPaused] = useState(false);
   const [playingParaIndex, setPlayingParaIndex] = useState<number | null>(null);
   const seqRef = useRef<{ cancelled: boolean } | null>(null);
   const [flippedVocabImages, setFlippedVocabImages] = useState<Record<number, boolean>>({});
   const [revealedImageLabels, setRevealedImageLabels] = useState<Set<number>>(new Set());
+  const [showHiddenText, setShowHiddenText] = useState(false);
+
+  /** Slow-mode toggle (only for hideText/listening exercises). Persisted in localStorage.
+   *  Default: ON (0.85x) — user must explicitly switch to 1x.
+   */
+  const [slowMode, setSlowMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    const stored = window.localStorage.getItem('tts-slow-mode');
+    return stored !== '0'; // '1' or null → slow; '0' → normal
+  });
+  const ttsRate = hideText && slowMode ? 0.85 : 1;
+
+  const toggleSlowMode = useCallback(() => {
+    setSlowMode(prev => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('tts-slow-mode', next ? '1' : '0');
+      }
+      // Apply the new rate to any currently playing audio without interrupting it.
+      const newRate = hideText && next ? 0.85 : 1;
+      setTtsAudioRate(newRate);
+      if (audioRef.current) audioRef.current.playbackRate = newRate;
+      return next;
+    });
+  }, [hideText]);
 
   const stopSequentialPlayback = useCallback(() => {
     if (seqRef.current) seqRef.current.cancelled = true;
     seqRef.current = null;
     stopTtsAudio();
     setSequentialPlaying(false);
+    setSequentialPaused(false);
     setPlayingParaIndex(null);
   }, []);
 
@@ -129,45 +167,95 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
     };
   }, []);
 
+  // Show the listen button whenever there is playable content — including hideText exercises.
+  const showFullListenButton =
+    (!!exerciseId && paragraphs.length > 0) || !!audioUrl;
+
+  const handleSongPlay = () => {
+    if (songPlaying) {
+      songAudioRef.current?.pause();
+      setSongPlaying(false);
+      return;
+    }
+    stopTtsAudio();
+    if (sequentialPlaying) stopSequentialPlayback();
+    const audio = songAudioRef.current ?? new Audio(songUrl!);
+    songAudioRef.current = audio;
+    audio.onended = () => setSongPlaying(false);
+    audio.onerror = () => setSongPlaying(false);
+    audio.play().catch(() => setSongPlaying(false));
+    setSongPlaying(true);
+  };
+
+  /** @deprecated Prefer `showFullListenButton`. Kept for safety but is now always false. */
   const showSequentialListen =
+    !showFullListenButton &&
     !!exerciseId &&
     paragraphs.length > 0 &&
     !audioUrl &&
     !hideText;
 
   const handleSequentialListen = () => {
+    // Build the sequential chain for a given token.
+    const makeChain = (tok: { cancelled: boolean }) => {
+      const step = (i: number) => {
+        if (tok.cancelled) return;
+        if (i >= paragraphs.length) {
+          if (seqRef.current === tok) seqRef.current = null;
+          setSequentialPlaying(false);
+          setSequentialPaused(false);
+          setPlayingParaIndex(null);
+          return;
+        }
+        setPlayingParaIndex(i);
+        const audioPath = getTtsAudioPath(exerciseId!, 'texts', `${exerciseId}-p-${i}`);
+        playTtsAudio(audioPath, paragraphs[i], ttsRate, () => {
+          if (tok.cancelled) return;
+          window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, 400);
+        });
+      };
+      return step;
+    };
+
+    // 1. PAUSE — currently playing.
     if (sequentialPlaying) {
-      stopSequentialPlayback();
+      pauseTtsAudio(); // keeps currentAudio for resume
+      setSequentialPlaying(false);
+      setSequentialPaused(true);
+      // Token stays alive; playingParaIndex marks the paused position.
       return;
     }
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
+
+    // 2. RESUME — paused with a live token.
+    if (sequentialPaused && seqRef.current && !seqRef.current.cancelled && playingParaIndex !== null) {
+      const token = seqRef.current;
+      const pausedIdx = playingParaIndex;
+      const step = makeChain(token);
+      // resumeTtsAudio updates onended so the chain fires correctly when audio ends.
+      const resumed = resumeTtsAudio(() => {
+        if (token.cancelled) return;
+        window.setTimeout(() => { if (!token.cancelled) step(pausedIdx + 1); }, 400);
+      });
+      if (resumed) {
+        setSequentialPlaying(true);
+        setSequentialPaused(false);
+        return;
+      }
+      // Resume failed — fall through to fresh start.
+      token.cancelled = true;
+      seqRef.current = null;
     }
+
+    // 3. FRESH START.
+    stopSequentialPlayback();
+    if (audioRef.current) { audioRef.current.pause(); setIsPlaying(false); }
     if (!exerciseId) return;
+
     const token = { cancelled: false };
     seqRef.current = token;
     setSequentialPlaying(true);
-
-    const playNext = (i: number) => {
-      if (token.cancelled) return;
-      if (i >= paragraphs.length) {
-        if (seqRef.current === token) seqRef.current = null;
-        setSequentialPlaying(false);
-        setPlayingParaIndex(null);
-        return;
-      }
-      const p = paragraphs[i];
-      setPlayingParaIndex(i);
-      const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
-      playTtsAudio(audioPath, p, undefined, () => {
-        if (token.cancelled) return;
-        window.setTimeout(() => {
-          if (!token.cancelled) playNext(i + 1);
-        }, 400);
-      });
-    };
-    playNext(0);
+    setSequentialPaused(false);
+    makeChain(token)(0);
   };
 
   const handleVocabImageClick = (index: number, label: string, ttsWordId?: string) => {
@@ -188,29 +276,59 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
   };
 
   const handlePlayAudio = () => {
-    if (!audioUrl) return;
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } else {
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      audio.onended = () => setIsPlaying(false);
-      audio.onerror = () => setIsPlaying(false);
-      audio.play();
-      setIsPlaying(true);
+    if (sequentialPlaying) stopSequentialPlayback();
+
+    // PAUSE — currently playing.
+    if (isPlaying) {
+      pauseTtsAudio();
+      if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
+      setIsPlaying(false);
+      setIsPaused(true);
+      return;
     }
+
+    // RESUME — was paused (convention-based full MP3 path via tts.ts currentAudio).
+    if (isPaused && exerciseId && paragraphs.length > 0) {
+      const resumed = resumeTtsAudio(() => { setIsPlaying(false); setIsPaused(false); });
+      if (resumed) { setIsPlaying(true); setIsPaused(false); return; }
+      // Resume failed — fall through to fresh start.
+      setIsPaused(false);
+    }
+
+    // RESUME — was paused via audioRef (direct audioUrl branch).
+    if (isPaused && audioRef.current) {
+      audioRef.current.playbackRate = ttsRate;
+      audioRef.current.play().catch(() => { setIsPlaying(false); setIsPaused(false); });
+      setIsPlaying(true);
+      setIsPaused(false);
+      return;
+    }
+
+    // FRESH START — convention-based full MP3 (+ browser TTS fallback via playTtsAudio).
+    if (exerciseId && paragraphs.length > 0) {
+      const fullText = paragraphs.join(' ');
+      const path = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-full`);
+      playTtsAudio(path, fullText, ttsRate, () => { setIsPlaying(false); setIsPaused(false); });
+      setIsPlaying(true);
+      setIsPaused(false);
+      return;
+    }
+
+    if (!audioUrl) return;
+    const audio = audioRef.current ?? new Audio(audioUrl);
+    audioRef.current = audio;
+    audio.playbackRate = ttsRate;
+    audio.onended = () => { setIsPlaying(false); setIsPaused(false); };
+    audio.onerror = () => { setIsPlaying(false); setIsPaused(false); };
+    audio.play().catch(() => { setIsPlaying(false); setIsPaused(false); });
+    setIsPlaying(true);
+    setIsPaused(false);
   };
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {(audioUrl || showDictionary || showSequentialListen) && (
-        <div className="flex justify-end gap-2 mb-6">
+      {(audioUrl || songUrl || showDictionary || showSequentialListen || hideText || showFullListenButton) && (
+        <div className="flex justify-end gap-2 mb-6 flex-wrap">
           {showDictionary && (
             <Button
               className="px-5 py-3 md:px-6 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 bg-[#0072BC] hover:bg-[#05568B] text-white"
@@ -220,21 +338,60 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
               {t('exercise.dictionary')}
             </Button>
           )}
-          {audioUrl && (
+          {hideText && (
+            <Button
+              onClick={toggleSlowMode}
+              title={slowMode ? 'Нормална скорост' : 'По-бавно четене (0.85x)'}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                slowMode
+                  ? 'bg-[#0072BC] text-white hover:bg-[#05568B]'
+                  : 'bg-white border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40'
+              }`}
+            >
+              <Turtle className="w-4 h-4" />
+              {slowMode ? '0.85x' : '1x'}
+            </Button>
+          )}
+          {showFullListenButton && (
             <Button
               onClick={handlePlayAudio}
-              className="bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB] px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2"
+              className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                isPlaying
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+              }`}
             >
               {isPlaying ? (
                 <>
                   <Pause className="w-5 h-5" />
-                  {t('exercise.stop')}
+                  {t('exercise.pause')}
+                </>
+              ) : isPaused ? (
+                <>
+                  <Play className="w-5 h-5" />
+                  {t('exercise.continue')}
                 </>
               ) : (
                 <>
                   <Play className="w-5 h-5" />
                   {t('exercise.listen')}
                 </>
+              )}
+            </Button>
+          )}
+          {songUrl && (
+            <Button
+              onClick={handleSongPlay}
+              className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
+                songPlaying
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#0072BC] text-[#05568B] hover:bg-[#CDE3F1]'
+              }`}
+            >
+              {songPlaying ? (
+                <><Pause className="w-5 h-5" />{t('exercise.pause')}</>
+              ) : (
+                <><Music className="w-5 h-5" />{t('exercise.listenSong')}</>
               )}
             </Button>
           )}
@@ -249,8 +406,13 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
             >
               {sequentialPlaying ? (
                 <>
-                  <Square className="w-5 h-5" />
-                  {t('exercise.stop')}
+                  <Pause className="w-5 h-5" />
+                  {t('exercise.pause')}
+                </>
+              ) : sequentialPaused ? (
+                <>
+                  <Play className="w-5 h-5" />
+                  {t('exercise.continue')}
                 </>
               ) : (
                 <>
@@ -258,6 +420,16 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                   {t('exercise.listen')}
                 </>
               )}
+            </Button>
+          )}
+          {hideText && paragraphs.length > 0 && (
+            <Button
+              variant="outline"
+              onClick={() => setShowHiddenText(prev => !prev)}
+              className="flex items-center gap-2 border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40 px-4 py-2 md:px-5 md:py-2.5 rounded-lg font-semibold text-sm"
+            >
+              <BookOpen className="w-4 h-4" />
+              {showHiddenText ? t('exercise.hideText') : t('exercise.showText')}
             </Button>
           )}
         </div>
@@ -277,7 +449,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
             </p>
           )}
           <div
-            className={`grid gap-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:max-w-3xl md:mx-auto'}`}
+            className={`grid gap-x-6 gap-y-10 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:max-w-3xl md:mx-auto'}`}
           >
             {images.map((img, i) => (
               <div
@@ -328,13 +500,23 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                     ))}
                   {paragraphs[i] && (
                     <div className="mt-3 w-full flex justify-center">
-                      <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} />
+                      <TtsButton text={paragraphs[i]} exerciseId={exerciseId} paragraphIndex={i} rate={ttsRate} />
                     </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
+
+          {showHiddenText && paragraphs.length > 0 && (
+            <div className="mt-5 space-y-3 border-t border-gray-100 pt-5">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       ) : !hideText && images && images.length > 0 && imageFlashcards ? (
         <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
@@ -411,14 +593,46 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
       ) : null}
 
       {hideText && (!images || images.length === 0) ? (
-        <div className="flex items-center gap-3 mb-2">
-          <TtsButton
-            text={paragraphs.join('\n\n')}
-            exerciseId={exerciseId}
-            useFullAudio={paragraphs.length > 1}
-          />
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <TtsButton
+              text={paragraphs.join('\n\n')}
+              exerciseId={exerciseId}
+              useFullAudio={paragraphs.length > 1}
+              rate={ttsRate}
+            />
+          </div>
+          {paragraphs.length > 0 && (
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => setShowHiddenText(prev => !prev)}
+                className="flex items-center gap-2 border-2 border-[#0072BC]/40 text-[#0072BC] hover:bg-[#CDE3F1]/40 px-5 py-2.5 rounded-lg font-semibold text-sm"
+              >
+                <BookOpen className="w-4 h-4" />
+                {showHiddenText ? t('exercise.hideText') : t('exercise.showText')}
+              </Button>
+            </div>
+          )}
+          {showHiddenText && paragraphs.length > 0 && (
+            <div className="mt-5 space-y-3 border-t border-gray-100 pt-5">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
-      ) : hideText ? null : (
+      ) : hideText ? null : disableParagraphAudio ? (
+        <div className="space-y-1">
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className="text-base md:text-lg text-gray-800 leading-relaxed py-0.5">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      ) : (
         <>
           <TtsHint messageKey="exercise.tapTextToHear" />
 
@@ -426,7 +640,7 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
             {paragraphs.map((paragraph, index) => (
               <div
                 key={index}
-                onClick={noTranslation ? undefined : () => {
+                onClick={() => {
                   if (sequentialPlaying) stopSequentialPlayback();
                   if (audioRef.current) {
                     audioRef.current.pause();
@@ -438,34 +652,42 @@ export function ReadingText({ audioUrl, textTitle, images, imageFlashcards, para
                   setPlayingParaIndex(index);
                   playTtsAudio(audioPath, paragraph, undefined, () => setPlayingParaIndex(null));
 
-                  setRevealedParas(prev => {
-                    const next = new Set(prev);
-                    if (next.has(index)) next.delete(index);
-                    else next.add(index);
-                    return next;
-                  });
+                  if (!noTranslation) {
+                    setRevealedParas(prev => {
+                      const next = new Set(prev);
+                      if (next.has(index)) next.delete(index);
+                      else next.add(index);
+                      return next;
+                    });
+                  }
                 }}
-                className={noTranslation
-                  ? 'rounded-lg p-2 -mx-2'
-                  : `cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
-                      playingParaIndex === index
-                        ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
-                        : 'hover:bg-gray-50 border border-transparent'
-                    }`
-                }
+                className={`cursor-pointer rounded-lg p-2 -mx-2 transition-colors active:scale-[0.99] ${
+                  playingParaIndex === index
+                    ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
+                    : 'hover:bg-gray-50 border border-transparent'
+                }`}
               >
-                {paragraph.includes('\n') ? (
-                  paragraph.split('\n').map((line, li) => (
-                    <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
-                      {line}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                    {paragraph}
-                  </p>
-                )}
-                {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
+                <div className="flex items-start gap-2">
+                  <Volume2
+                    className={`w-4 h-4 mt-1.5 flex-shrink-0 transition-colors ${
+                      playingParaIndex === index ? 'text-[#32C189]' : 'text-gray-300'
+                    }`}
+                  />
+                  <div className="flex-1">
+                    {paragraph.includes('\n') ? (
+                      paragraph.split('\n').map((line, li) => (
+                        <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
+                          {line}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+                        {paragraph}
+                      </p>
+                    )}
+                    {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
+                  </div>
+                </div>
               </div>
             ))}
           </div>

@@ -25,7 +25,7 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-01',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 1',
-    instruction: 'Изберете правилното название на месеца или деня.',
+    instruction: 'Изберете правилното название на месеца или деня според поредността му в годината/седмицата.',
     order: 1,
     points: 17,
     layout: 'two-column',
@@ -62,14 +62,26 @@ export const exercises: Exercise[] = [
   // 19 дейности с изречения от учебника
   // ══════════════════════════════════════════════════════
   {
+    id: 'l11-georgi-intro',
+    type: 'reading_text',
+    title: 'НОВИ ДУМИ 1',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 2,
+    textTitle: 'Аз съм Георги',
+    voiceGender: 'male',
+    paragraphs: [
+      'Аз съм Георги. На 25 години съм. Не съм женен. Живея в Нова Загора и работя в магазин за дрехи.',
+    ],
+  } as ReadingTextExercise,
+
+  {
     id: 'l11-novi-dumi-01',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    subtitle: 'Аз съм Георги. На 25 години съм. Не съм женен. Живея в Нова Загора и работя в магазин за дрехи.',
     headerImageUrl: '/assets/lesson-11/novi-dumi-1/01-georgi-stane.jpg',
     voiceGender: 'male',
     instruction: '',
-    order: 2,
+    order: 3,
     cards: [
       { id: 'stavam-nd',       imageUrl: '/assets/lesson-11/novi-dumi-1/02-stavam-sedem-chasa.jpg',         label: 'Ставам в 7:00 часа.',            ttsLabel: 'Ставам в седем часа.'                          },
       { id: 'vlizam-nd',       imageUrl: '/assets/lesson-11/novi-dumi-1/03-vlezam-v-banya-vrata.jpg',       label: 'Влизам в банята.'                },
@@ -82,7 +94,7 @@ export const exercises: Exercise[] = [
       { id: 'svarshvam-nd',    imageUrl: '/assets/lesson-11/novi-dumi-1/10-svarshvam-rabota-magazin.jpg',   label: 'Свършвам работа в 18:00 ч.',     ttsLabel: 'Свършвам работа в осемнадесет часа.'           },
       { id: 'zatvaryam-nd',    imageUrl: '/assets/lesson-11/novi-dumi-1/11-zatvaryam-magazin.jpg',          label: 'Затварям магазина в 18:30 ч.',   ttsLabel: 'Затварям магазина в осемнадесет часа и тридесет минути.' },
       { id: 'sreshtam-se-nd',  imageUrl: '/assets/lesson-11/novi-dumi-1/12-sreshtam-priyateli.jpg',         label: 'Срещам се с приятели.'           },
-      { id: 'pazaruvam-nd',    imageUrl: '/assets/lesson-11/novi-dumi-1/13-pazaruvam-v-supera.jpg',         label: 'Пазарувам в супера.'             },
+      { id: 'pazaruvam-nd',    imageUrl: '/assets/lesson-11/novi-dumi-1/13-pazaruvam-v-supera.jpg',         label: 'Пазарувам в супермаркета.'             },
       { id: 'vrashtam-se-nd',  imageUrl: '/assets/lesson-11/novi-dumi-1/14-vrashtam-se-vkushti.jpg',        label: 'Връщам се вкъщи около 20:00 ч.',ttsLabel: 'Връщам се вкъщи около двадесет часа.'          },
       { id: 'vecherqm-nd',     imageUrl: '/assets/lesson-11/novi-dumi-1/15-vecheryam-sandvich-chay.jpg',    label: 'Вечерям сандвичи и чай.'         },
       { id: 'gledam-nd',       imageUrl: '/assets/lesson-11/novi-dumi-1/16-gledam-televiziya.jpg',          label: 'Гледам телевизия.'               },
@@ -94,96 +106,6 @@ export const exercises: Exercise[] = [
   } as IllustratedCardsExercise,
 
   // ══════════════════════════════════════════════════════
-  // Упр. 3 — Спрежение на глаголи (стр. 101–102)
-  // По клиент: ставам (А), пиша (Е), спя (И)
-  // Три grammar_table — по един за всяка група
-  // ══════════════════════════════════════════════════════
-  {
-    id: 'l11-gramatika-01',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА — Спрежение',
-    subtitle: 'Спрежение на глаголи в сегашно време',
-    tableTitle: 'А/Я група — ставам',
-    instructionKey: 'grammar.l11.g1.instruction',
-    instruction: 'Запознайте се с окончанията на глаголите в А/Я група.',
-    order: 3,
-    columns: ['ставам'],
-    rows: [
-      { pronoun: 'Аз',        cells: ['ставам']  },
-      { pronoun: 'Ти',        cells: ['ставаш']  },
-      { pronoun: 'Той/Тя/То', cells: ['става']   },
-      { pronoun: 'Ние',       cells: ['ставаме'] },
-      { pronoun: 'Вие',       cells: ['ставате'] },
-      { pronoun: 'Те',        cells: ['стават']  },
-    ],
-    notes: [
-      'Окончания А/Я група: -ам / -аш / -а / -аме / -ате / -ат',
-      'Това е най-голямата и най-лесната група в българския език — повечето глаголи от ежедневието са тук.',
-      'Кога я разпознаваме: ако формата за Аз завършва на -ам или -ям → глаголът е от А/Я група.',
-      'Примери от урока: ставам, закусвам, излизам, обядвам, връщам се, вечерям, гледам.',
-    ],
-    grammarHighlight: {
-      text: 'А/Я група — формата за Аз винаги завършва на -ам или -ям. Окончанията се добавят към основата без промяна на корена.',
-    },
-  } as GrammarTableExercise,
-
-  {
-    id: 'l11-gramatika-01b',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА — Спрежение',
-    tableTitle: 'Е група — пиша',
-    instructionKey: 'grammar.l11.g1.instruction',
-    instruction: 'Запознайте се с окончанията на глаголите в Е група.',
-    order: 4,
-    columns: ['пиша'],
-    rows: [
-      { pronoun: 'Аз',        cells: ['пиша']   },
-      { pronoun: 'Ти',        cells: ['пишеш']  },
-      { pronoun: 'Той/Тя/То', cells: ['пише']   },
-      { pronoun: 'Ние',       cells: ['пишем']  },
-      { pronoun: 'Вие',       cells: ['пишете'] },
-      { pronoun: 'Те',        cells: ['пишат']  },
-    ],
-    notes: [
-      'Окончания Е група: -а или -я (за Аз) / -еш / -е / -ем / -ете / -ат',
-      'Това е средно голяма група. Окончанията за Ти, Той/Тя, Ние и Вие винаги съдържат гласната -е-.',
-      'Кога я разпознаваме: ако формата за Ти завършва на -еш → глаголът е от Е група.',
-      'Примери от урока: пиша → пишеш, чета → четеш. Други чести Е-глаголи: живея, мога, искам.',
-    ],
-    grammarHighlight: {
-      text: 'Е група — за Ти завършва на -еш (пишеш, четеш). Гласната -е- се чува във всички форми освен Аз и Те.',
-    },
-  } as GrammarTableExercise,
-
-  {
-    id: 'l11-gramatika-01c',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА — Спрежение',
-    tableTitle: 'И група — спя',
-    instructionKey: 'grammar.l11.g1.instruction',
-    instruction: 'Запознайте се с окончанията на глаголите в И група.',
-    order: 5,
-    columns: ['спя'],
-    rows: [
-      { pronoun: 'Аз',        cells: ['спя']   },
-      { pronoun: 'Ти',        cells: ['спиш']  },
-      { pronoun: 'Той/Тя/То', cells: ['спи']   },
-      { pronoun: 'Ние',       cells: ['спим']  },
-      { pronoun: 'Вие',       cells: ['спите'] },
-      { pronoun: 'Те',        cells: ['спят']  },
-    ],
-    notes: [
-      'Окончания И група: -я / -иш / -и / -им / -ите / -ят',
-      'Това е по-малка група. Окончанията за Ти, Той/Тя, Ние и Вие винаги съдържат гласната -и-.',
-      'Кога я разпознаваме: ако формата за Ти завършва на -иш → глаголът е от И група.',
-      'Примери от урока: спя → спиш, правя → правиш. Други чести И-глаголи: ходя, говоря, каня, готвя.',
-    ],
-    grammarHighlight: {
-      text: 'И група — за Ти завършва на -иш (спиш, правиш, ходиш). Гласната -и- се чува във всички форми освен Аз и Те.',
-    },
-  } as GrammarTableExercise,
-
-  // ══════════════════════════════════════════════════════
   // Упр. 2 — Класифицирайте глаголите по групи (стр. 101)
   // Всички 19 глагола от НОВИ ДУМИ 1, разбъркани
   // (след Grammar — за да са видели групите преди да класифицират)
@@ -193,7 +115,7 @@ export const exercises: Exercise[] = [
     type: 'drag_to_columns',
     title: 'УПРАЖНЕНИЕ 2',
     instruction: 'Поставете глаголите в правилната колона според групата.',
-    order: 6,
+    order: 4,
     points: 19,
     items: [
       // Scrambled: А/Я (15), Е (2), И (2)
@@ -234,7 +156,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 6',
     subtitle: 'Модел: Кога ставате? — Аз ставам в 7:00 часа.',
     instruction: 'Отговорете на въпросите за себе си. Изберете правилната форма на глагола за Аз.',
-    order: 7,
+    order: 5,
     points: 8,
     layout: 'single',
     sentences: [
@@ -253,6 +175,35 @@ export const exercises: Exercise[] = [
   // SKIP упр. 7 — „Работете по двойки" (хартиена дейност)
 
   // ══════════════════════════════════════════════════════
+  // ГРАМАТИКА — Спрежение на глаголи (стр. 101–102)
+  // Обединена 4-колонна таблица: Местоимение + А група + И група + Е група
+  // ══════════════════════════════════════════════════════
+  {
+    id: 'l11-gramatika-01',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА — Спрежение',
+    subtitle: 'Глаголите в българския език се делят на три групи според спрежението си: такива, които получават окончания с А, такива с И и такива с Е.',
+    tableTitle: 'Лично местоимение / Група А (ставам) / Група И (спя) / Група Е (пиша)',
+    instructionKey: 'grammar.l11.g1.instruction',
+    instruction: 'Вижте таблицата по-долу.',
+    order: 6,
+    columns: ['Лично местоимение', 'Група А — ставам', 'Група И — спя', 'Група Е — пиша'],
+    rows: [
+      { pronoun: '', cells: ['аз',        'ставам',  'спя',   'пиша']   },
+      { pronoun: '', cells: ['ти',        'ставаш',  'спиш',  'пишеш']  },
+      { pronoun: '', cells: ['той/тя/то', 'става',   'спи',   'пише']   },
+      { pronoun: '', cells: ['ние',       'ставаме', 'спим',  'пишем']  },
+      { pronoun: '', cells: ['вие/Вие',   'ставате', 'спите', 'пишете'] },
+      { pronoun: '', cells: ['те',        'стават',  'спят',  'пишат']  },
+    ],
+    notes: [
+      'ПРИМЕРИ — Група А: ставам, затварям, пазарувам, излизам, връщам се, вземам, лягам си, обядвам, свършвам, вечерям, срещам се, гледам, влизам, закусвам, започвам',
+      'ПРИМЕРИ — Група И: спя, правя',
+      'ПРИМЕРИ — Група Е: пиша, чета',
+    ],
+  } as GrammarTableExercise,
+
+  // ══════════════════════════════════════════════════════
   // Упр. 8 — Превърнете в въпрос с „ли" (стр. 102)
   // Модел: Сутрин вземам душ. → А Вие вземате ли душ сутрин?
   // ══════════════════════════════════════════════════════
@@ -260,12 +211,13 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-08',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
-    subtitle: 'Модел: Сутрин вземам душ. → А Вие вземате ли душ сутрин?',
     instruction: 'Изберете правилната форма на глагола за въпроса с „ли".',
-    order: 8,
+    order: 7,
     points: 6,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
+      { text: 'Сутрин вземам душ. → А Вие вземате ли душ сутрин?', blanks: [], correctAnswers: [], isExample: true },
       { text: '1. Закусвам баница. → А Вие ___ ли баница?',             blanks: [0], correctAnswers: ['закусвате'],    options: ['закусвате','закусвам','закусва','закусват'] },
       { text: '2. Обядвам супа и печено пиле. → А Вие ___ ли супа?',    blanks: [0], correctAnswers: ['обядвате'],     options: ['обядвате','обядвам','обядва','обядват'] },
       { text: '3. Вечерям пица. → А Вие ___ ли пица?',                  blanks: [0], correctAnswers: ['вечеряте'],     options: ['вечеряте','вечерям','вечерят','вечеря'] },
@@ -284,7 +236,7 @@ export const exercises: Exercise[] = [
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
     instruction: 'Изслушайте диалозите и след това ги прочетете сами.',
-    order: 9,
+    order: 8,
     sections: [
       {
         id: 'а.',
@@ -341,11 +293,10 @@ export const exercises: Exercise[] = [
     tableTitle: 'всеки / всяка / всяко / всички',
     instructionKey: 'grammar.l11.g2.instruction',
     instruction: 'Запознайте се с обобщителните местоимения по рода и числото.',
-    order: 10,
+    order: 9,
     columns: ['Мъжки род', 'Женски род', 'Среден род', 'Множествено число'],
     rows: [
-      { pronoun: 'Форма',  cells: ['всеки',   'всяка',  'всяко',  'всички']  },
-      { pronoun: 'Примери', cells: ['ден / месец / уикенд', 'седмица / година / сутрин', 'лято / село / дете', 'българи / хора / деца'] },
+      { pronoun: '', cells: ['всеки / ден, месец, уикенд', 'всяка / седмица, година, сутрин', 'всяко / лято, село, дете', 'всички / българи, хора, деца'] },
     ],
     notes: [
       'Всеки ден слушам хубава музика.',
@@ -364,7 +315,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Изберете правилната форма: всеки, всяка, всяко или всички.',
-    order: 11,
+    order: 10,
     points: 12,
     layout: 'two-column',
     sentences: [
@@ -396,14 +347,14 @@ export const exercises: Exercise[] = [
     subtitle: 'Наречия за честота',
     instructionKey: 'grammar.l11.g3.instruction',
     instruction: 'Запознайте се с наречията за честота.',
-    order: 12,
+    order: 11,
     grammarHighlight: {
       text: 'С „никога" глаголът е в отрицателна форма: Никога НЕ закусвам.',
     },
     examples: [
       { imageUrl: '', text: 'винаги',      subtext: '100% — Аз винаги ставам в 7:00 часа.',          ttsText: 'Винаги. Аз винаги ставам в седем часа.'          },
       { imageUrl: '', text: 'обикновено',  subtext: '75% — Обикновено закусвам вкъщи.',               ttsText: 'Обикновено. Обикновено закусвам вкъщи.'           },
-      { imageUrl: '', text: 'често',       subtext: '50% — Често ходим на ресторант.',                ttsText: 'Често. Често ходим на ресторант.'                 },
+      { imageUrl: '', text: 'често',       subtext: '60% — Често ходим на ресторант.',                ttsText: 'Често. Често ходим на ресторант.'                 },
       { imageUrl: '', text: 'понякога',    subtext: '25% — Понякога каня гости у дома.',              ttsText: 'Понякога. Понякога каня гости у дома.'            },
       { imageUrl: '', text: 'рядко',       subtext: '10% — Рядко слушам сирийска музика.',            ttsText: 'Рядко. Рядко слушам сирийска музика.'             },
       { imageUrl: '', text: 'никога',      subtext: '0% — Никога не закусвам в кафенето.',            ttsText: 'Никога. Никога не закусвам в кафенето.'           },
@@ -419,20 +370,20 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-13',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 13',
-    subtitle: 'Изберете наречие за честота: винаги · обикновено · често · понякога · рядко · никога',
-    instruction: 'Изберете наречие за честота, което описва вашия живот. Всеки личен отговор е верен.',
-    order: 13,
+    instruction: 'Изберете правилното наречие за честота.',
+    order: 12,
     points: 8,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: '1. ___ ставам в 5:00 часа.',     blanks: [0], correctAnswers: ['никога'],     acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '2. ___ чета книга.',              blanks: [0], correctAnswers: ['понякога'],   acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '3. ___ вземам душ.',              blanks: [0], correctAnswers: ['винаги'],     acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '4. ___ пиша имейли.',             blanks: [0], correctAnswers: ['често'],      acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '5. ___ си лягам преди 21:00.',    blanks: [0], correctAnswers: ['рядко'],      acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '6. ___ слушам музика.',           blanks: [0], correctAnswers: ['обикновено'], acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '7. ___ спя много.',               blanks: [0], correctAnswers: ['понякога'],   acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
-      { text: '8. ___ ям свинско месо.',         blanks: [0], correctAnswers: ['никога'],     acceptableAnswers: [['винаги','обикновено','често','понякога','рядко','никога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Всеки ден ставам в 7:00 ч. Аз ___ ставам в 7:00 ч.',                                blanks: [0], correctAnswers: ['винаги'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Тя закусва в кафенето само в събота. Тя ___ закусва в кафенето.',                    blanks: [0], correctAnswers: ['рядко'],     acceptableAnswers: [['рядко','понякога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Ние ходим на кино всяка събота. Ние ___ ходим на кино в събота.',                    blanks: [0], correctAnswers: ['винаги'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Той пие кафе само когато много му се спи. Той ___ пие кафе.',                        blanks: [0], correctAnswers: ['рядко'],                                        options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Не позволявам на децата да гледат телевизия вечер. Децата ___ не гледат телевизия.', blanks: [0], correctAnswers: ['никога'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Аз винаги съм точен. Аз ___ не закъснявам за работа.',                              blanks: [0], correctAnswers: ['никога'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Когато имаме време, готвим заедно в неделя. ___ готвим заедно в неделя.',            blanks: [0], correctAnswers: ['често'],     acceptableAnswers: [['често','обикновено']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Те ходят на ресторант само за рождени дни. Те ___ ходят на ресторант.',              blanks: [0], correctAnswers: ['рядко'],                                        options: ['винаги','обикновено','често','понякога','рядко','никога'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -448,7 +399,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 14',
     subtitle: 'Изберете правилната форма за Аз. Думата в скоби е подсказка за смисъла на отговора.',
     instruction: 'Преминете от Вие към Аз: изберете правилната форма на глагола в първо лице, единствено число.',
-    order: 14,
+    order: 13,
     points: 7,
     layout: 'single',
     sentences: [
@@ -471,32 +422,26 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-gramatika-04',
-    type: 'grammar_examples',
+    type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     subtitle: 'Глаголи за движение: ОТИВАМ и ХОДЯ',
     instructionKey: 'grammar.l11.g4.instruction',
-    instruction: 'След глаголите ОТИВАМ и ХОДЯ използваме предлог. Има два варианта: НА + дума без определителен член ИЛИ В + дума с определителен член. По-долу са показани два отделни списъка с примерни места.',
-    order: 15,
-    examples: [
-      {
-        imageUrl: '',
-        text: 'отивам / ходя + НА',
-        subtext: '(дума БЕЗ определителен член)',
-        lines: ['на ресторант', 'на кино', 'на гости', 'на работа', 'на планина', 'на море'],
-        ttsText: 'на ресторант. на кино. на гости. на работа. на планина. на море.',
-      },
-      {
-        imageUrl: '',
-        text: 'отивам / ходя + В',
-        subtext: '(дума С определителен член)',
-        lines: ['в ресторанта', 'в супера', 'в магазина', 'в центъра', 'в офиса', 'в киното'],
-        ttsText: 'в ресторанта. в супера. в магазина. в центъра. в офиса. в киното.',
-      },
+    instruction: 'След глаголите ОТИВАМ и ХОДЯ използваме предлог НА или В. Вижте таблиците по-долу.',
+    order: 14,
+    columns: ['НА + (без член)', 'В + (с член)'],
+    rows: [
+      { pronoun: '', cells: ['на ресторант',  'в ресторанта']  },
+      { pronoun: '', cells: ['на кино',        'в киното']      },
+      { pronoun: '', cells: ['на гости',       'в магазина']    },
+      { pronoun: '', cells: ['на работа',      'в супермаркета'] },
+      { pronoun: '', cells: ['на планина',     'в центъра']     },
+      { pronoun: '', cells: ['на море',        'в офиса']       },
     ],
-    grammarHighlight: {
-      text: 'ОТИВАМ — за движение В МОМЕНТА (сега, точно сега). Пример: „Сега отивам на работа."   ХОДЯ — за движение ПО НАВИК (всеки ден, обикновено, често). Пример: „Всеки ден ходя в офиса."',
-    },
-  } as GrammarExamplesExercise,
+    notes: [
+      'ОТИВАМ — за движение В МОМЕНТА (сега). Пример: „Сега отивам на работа."',
+      'ХОДЯ — за движение ПО НАВИК (всеки ден, обикновено). Пример: „Всеки ден ходя в офиса."',
+    ],
+  } as GrammarTableExercise,
 
   // ══════════════════════════════════════════════════════
   // Упр. 16 — Попълни в / на (стр. 104)
@@ -506,9 +451,10 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Изберете правилния предлог: в или на.',
-    order: 16,
+    order: 15,
     points: 6,
     layout: 'two-column',
+    hideSentenceNumbers: true,
     sentences: [
       { text: '1. Отивам ___ офиса.',                    blanks: [0], correctAnswers: ['в'],  options: ['в','на'] },
       { text: '2. Те отиват ___ магазина.',              blanks: [0], correctAnswers: ['в'],  options: ['в','на'] },
@@ -526,37 +472,40 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Изберете кой глагол можете да използвате: ходя, отивам или и двата.',
-    order: 17,
-    points: 5,
+    instruction: 'Изберете ХОДЯ или ОТИВАМ.',
+    order: 16,
+    points: 6,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: '1. Сега децата ___ на училище.',                        blanks: [0], correctAnswers: ['отиват'],  options: ['ходят','отиват','и двата'] },
-      { text: '2. Ние ___ на кино всяка седмица.',                     blanks: [0], correctAnswers: ['и двата'], options: ['ходим','отиваме','и двата'] },
-      { text: '3. Иван често ___ на кафе с приятели.',                 blanks: [0], correctAnswers: ['и двата'], options: ['ходи','отива','и двата'] },
-      { text: '4. В момента аз ___ в супермаркета.',                   blanks: [0], correctAnswers: ['отивам'],  options: ['ходя','отивам','и двата'] },
-      { text: '5. Обикновено мъжът ми ___ на работа с трамвай.',       blanks: [0], correctAnswers: ['ходи'],    options: ['ходи','отива','и двата'] },
+      { text: '1. Сега децата ___ на училище.',                        blanks: [0], correctAnswers: ['отиват'],  options: ['ходят','отиват'] },
+      { text: '2. Ние ___ на кино всяка седмица.',                     blanks: [0], correctAnswers: ['ходим'],   options: ['ходим','отиваме'], alternateCorrectAnswers: ['отиваме'] },
+      { text: '3. Иван често ___ на кафе с приятели.',                 blanks: [0], correctAnswers: ['ходи'],    options: ['ходи','отива'], alternateCorrectAnswers: ['отива'] },
+      { text: '4. В момента аз ___ в супермаркета.',                   blanks: [0], correctAnswers: ['отивам'],  options: ['ходя','отивам'] },
+      { text: '5. Обикновено мъжът ми ___ на работа с трамвай.',       blanks: [0], correctAnswers: ['ходи'],    options: ['ходи','отива'] },
+      { text: '6. Всяка събота ние ___ на кино.',                      blanks: [0], correctAnswers: ['ходим'],   options: ['ходим','отиваме'], alternateCorrectAnswers: ['отиваме'] },
+      { text: '7. На театър ли ___?',                                   blanks: [0], correctAnswers: ['отиваш'], options: ['ходиш','отиваш'], alternateCorrectAnswers: ['ходиш'] },
     ],
   } as WorkbookFillBlankExercise,
 
   // ══════════════════════════════════════════════════════
-  // ДИАЛОГ 2 — В супера (стр. 104)
+  // ДИАЛОГ 2 — В супермаркета (стр. 104)
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОГ 2',
     instruction: 'Изслушайте диалога и след това го прочетете сами.',
-    order: 18,
+    order: 17,
     sections: [
       {
-        id: 'а.',
+        id: 'д.',
         lines: [
           { voiceGender: 'male',   text: '– Здравей! Къде отиваш?' },
-          { voiceGender: 'female', text: '– Отивам в супера.' },
-          { voiceGender: 'male',   text: '– Ходиш ли често в супера?' },
+          { voiceGender: 'female', text: '– Отивам в супермаркета.' },
+          { voiceGender: 'male',   text: '– Ходиш ли често в супермаркета?' },
           { voiceGender: 'female', text: '– Да, обикновено ходя четири пъти в седмицата. А ти?' },
-          { voiceGender: 'male',   text: '– Аз ходя рядко – във вторник и петък.' },
+          { voiceGender: 'male',   text: '– Аз ходя рядко. Във вторник и петък.' },
         ],
       },
     ],
@@ -573,11 +522,11 @@ export const exercises: Exercise[] = [
     type: 'grammar_table',
     title: 'ГРАМАТИКА 4',
     subtitle: 'Степенуване на наречия',
-    tableTitle: 'Положителна / Сравнителна / Превъзходна степен',
+    tableTitle: 'Основна / Сравнителна / Превъзходна степен',
     instructionKey: 'grammar.l11.g5.instruction',
-    instruction: 'Запознайте се с трите степени на наречията.',
-    order: 19,
-    columns: ['Положителна', 'Сравнителна', 'Превъзходна'],
+    instruction: 'Запознайте се със степенуването на наречията.',
+    order: 18,
+    columns: ['Основна', 'Сравнителна', 'Превъзходна'],
     rows: [
       { pronoun: '',  cells: ['добре',   'по-добре',   'най-добре']   },
       { pronoun: '',  cells: ['зле',     'по-зле',     'най-зле']     },
@@ -588,11 +537,11 @@ export const exercises: Exercise[] = [
       { pronoun: '',  cells: ['евтино',  'по-евтино',  'най-евтино']  },
       { pronoun: '',  cells: ['скъпо',   'по-скъпо',   'най-скъпо']   },
       { pronoun: '',  cells: ['малко',   'по-малко',   'най-малко']   },
-      { pronoun: '',  cells: ['много',   'повече',     'най-много']   },
+      { pronoun: '',  cells: ['много',   '**повече**', 'най-много']   },
     ],
     notes: [
       'Ахмед говори български добре. Мохамед говори по-добре от Ахмед. Мустафа говори най-добре.',
-      'Забележка: „много" → „повече" (не „по-много").',
+      'Забележка: „много" → „**повече**" (не „по-много").',
     ],
   } as GrammarTableExercise,
 
@@ -605,7 +554,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 20',
     subtitle: 'Поставете наречията в сравнителна и превъзходна степен.',
     instruction: 'Попълнете правилната форма на наречието.',
-    order: 20,
+    order: 19,
     points: 8,
     layout: 'single',
     sentences: [
@@ -629,7 +578,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 21',
     subtitle: 'Модел: Жана яде малко. Калина яде по-малко от Жана. Мариана яде най-малко.',
     instruction: 'Довършете изреченията, като следвате модела.',
-    order: 21,
+    order: 20,
     points: 8,
     layout: 'single',
     sentences: [
@@ -651,17 +600,16 @@ export const exercises: Exercise[] = [
     subtitle: 'Възвратни глаголи',
     instructionKey: 'grammar.l11.g6.instruction',
     instruction: 'Запознайте се с възвратните глаголи.',
-    order: 22,
+    order: 21,
     grammarHighlight: {
       text: 'Отрицание: „Не се мия." / Въпрос: „Миеш ли се?" — „се" минава след глагола при въпрос.',
     },
     examples: [
-      { imageUrl: '', text: 'Майката мие детето.',   subtext: 'Майката се мие.' },
-      { imageUrl: '', text: 'мия → мия се',          subtext: 'Аз се мия. Миеш ли се?' },
-      { imageUrl: '', text: 'обличам → обличам се',  subtext: 'Аз се обличам бързо.' },
-      { imageUrl: '', text: 'събличам → събличам се', subtext: 'Децата се събличат.' },
-      { imageUrl: '', text: 'обувам → обувам се',    subtext: 'Аз се обувам.' },
-      { imageUrl: '', text: 'събувам → събувам се',  subtext: 'Той се събува.' },
+      { imageUrl: '', text: 'мия → мия се',          subtext: 'Майката мие детето. Аз се мия.' },
+      { imageUrl: '', text: 'обличам → обличам се',  subtext: 'Майката облича детето. Аз се обличам.' },
+      { imageUrl: '', text: 'събличам → събличам се', subtext: 'Майката съблича детето. Аз се събличам.' },
+      { imageUrl: '', text: 'обувам → обувам се',    subtext: 'Майката обува обувки на детето. Аз се обувам.' },
+      { imageUrl: '', text: 'събувам → събувам се',  subtext: 'Майката събува обувките на детето. Аз се събувам.' },
     ],
   } as GrammarExamplesExercise,
 
@@ -672,56 +620,18 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-22',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
-    tableTitle: 'мия се — Е група, възвратен',
+    tableTitle: 'Спрежение на възвратни глаголи',
     instructionKey: 'grammar.l11.g6.instruction',
-    instruction: 'Запознайте се със спрежението на мия се.',
-    order: 23,
-    columns: ['мия се'],
+    instruction: 'Запознайте се със спрежението на възвратните глаголи.',
+    order: 22,
+    columns: ['мия се', 'обличам се', 'събличам се'],
     rows: [
-      { pronoun: 'Аз',        cells: ['мия се']    },
-      { pronoun: 'Ти',        cells: ['миеш се']   },
-      { pronoun: 'Той/Тя/То', cells: ['мие се']    },
-      { pronoun: 'Ние',       cells: ['миeм се']   },
-      { pronoun: 'Вие',       cells: ['миeте се']  },
-      { pronoun: 'Те',        cells: ['мият се']   },
-    ],
-  } as GrammarTableExercise,
-
-  {
-    id: 'l11-ex-22b',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА 5',
-    tableTitle: 'обличам се — А група, възвратен',
-    instructionKey: 'grammar.l11.g6.instruction',
-    instruction: 'Запознайте се със спрежението на обличам се.',
-    order: 24,
-    columns: ['обличам се'],
-    rows: [
-      { pronoun: 'Аз',        cells: ['обличам се']  },
-      { pronoun: 'Ти',        cells: ['обличаш се']  },
-      { pronoun: 'Той/Тя/То', cells: ['облича се']   },
-      { pronoun: 'Ние',       cells: ['обличаме се'] },
-      { pronoun: 'Вие',       cells: ['обличате се'] },
-      { pronoun: 'Те',        cells: ['обличат се']  },
-    ],
-  } as GrammarTableExercise,
-
-  {
-    id: 'l11-ex-22c',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА 5',
-    tableTitle: 'събличам се — А група, възвратен',
-    instructionKey: 'grammar.l11.g6.instruction',
-    instruction: 'Запознайте се със спрежението на събличам се.',
-    order: 25,
-    columns: ['събличам се'],
-    rows: [
-      { pronoun: 'Аз',        cells: ['събличам се']  },
-      { pronoun: 'Ти',        cells: ['събличаш се']  },
-      { pronoun: 'Той/Тя/То', cells: ['събличa се']   },
-      { pronoun: 'Ние',       cells: ['събличаме се'] },
-      { pronoun: 'Вие',       cells: ['събличате се'] },
-      { pronoun: 'Те',        cells: ['събличат се']  },
+      { pronoun: 'Аз',        cells: ['мия се',     'обличам се',  'събличам се']  },
+      { pronoun: 'Ти',        cells: ['миеш се',    'обличаш се',  'събличаш се']  },
+      { pronoun: 'Той/Тя/То', cells: ['мие се',     'облича се',   'събличa се']   },
+      { pronoun: 'Ние',       cells: ['миeм се',    'обличаме се', 'събличаме се'] },
+      { pronoun: 'Вие',       cells: ['миeте се',   'обличате се', 'събличате се'] },
+      { pronoun: 'Те',        cells: ['мият се',    'обличат се',  'събличат се']  },
     ],
   } as GrammarTableExercise,
 
@@ -733,17 +643,17 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-23',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 23',
-    subtitle: 'Модел: Аз се мия в банята. (мия се)',
     instruction: 'Изберете правилната форма на глагола.',
-    order: 26,
+    order: 23,
     points: 6,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: 'Модел: Аз се мия в банята. (мия се)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Аз се мия в банята. (мия се)', blanks: [], correctAnswers: [], isExample: true },
       { text: '1. Детето ___ (обувам се).',                     blanks: [0], correctAnswers: ['се обува'],    options: ['се обува','се обуваш','се обуват'] },
       { text: '2. Боряна ___ бързо. (обличам се)',              blanks: [0], correctAnswers: ['се облича'],   options: ['се облича','се обличам','се обличат'] },
       { text: '3. Децата ___ и ___ . (събувам се / събличам се)', blanks: [0, 1], correctAnswers: ['се събуват','се събличат'], options: [['се събуват','се събува','се събувам'],['се събличат','се събличам','се събличаш']] },
-      { text: '4. Марина ___ до вратата. (събувам се)',         blanks: [0], correctAnswers: ['се събува'],   options: ['се събува','се събуват','се събуваш'] },
+      { text: '4. Мариам ___ до вратата. (събувам се)',         blanks: [0], correctAnswers: ['се събува'],   options: ['се събува','се събуват','се събуваш'] },
       { text: '5. Ти ___ в спалнята. (обличам се)',             blanks: [0], correctAnswers: ['се обличаш'], options: ['се обличаш','се обличате','се облича'] },
     ],
   } as WorkbookFillBlankExercise,
@@ -753,19 +663,20 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-gramatika-07',
-    type: 'grammar_examples',
+    type: 'grammar_table',
     title: 'ГРАМАТИКА 6',
-    subtitle: 'казвам / казвам се · връщам / връщам се',
+    subtitle: 'Сравнете значението',
     instructionKey: 'grammar.l11.g7.instruction',
-    instruction: 'Сравнете двойките глаголи.',
-    order: 27,
-    examples: [
-      { imageUrl: '', text: 'Казвам „Добро утро".',            subtext: 'казвам = to say / сказать',             ttsText: 'Казвам Добро утро.'                    },
-      { imageUrl: '', text: 'Казвам се Ели.',                  subtext: 'казвам се = to be called / называться', ttsText: 'Казвам се Ели.'                        },
-      { imageUrl: '', text: 'Връщам книгата на Теодор.',       subtext: 'връщам = to give back / возвращать',    ttsText: 'Връщам книгата на Теодор.'             },
-      { imageUrl: '', text: 'Връщам се от работа в 6:00 ч.',  subtext: 'връщам се = to come back / возвращаться', ttsText: 'Връщам се от работа в шест часа.'    },
+    instruction: 'Сравнете значението на двойките глаголи.',
+    order: 24,
+    columns: ['Глагол', 'Значение', 'Пример'],
+    rows: [
+      { pronoun: '', cells: ['казвам',    'говоря, съобщавам',      'Сутрин казвам на приятелите си „Добро утро!"'] },
+      { pronoun: '', cells: ['казвам се', 'името ми е',             'Казвам се Елена.'] },
+      { pronoun: '', cells: ['връщам',    'давам обратно',          'Връщам книгата на Теодор.'] },
+      { pronoun: '', cells: ['връщам се', 'идвам обратно от някъде', 'Връщам се от работа вкъщи в 18:00 ч.'] },
     ],
-  } as GrammarExamplesExercise,
+  } as GrammarTableExercise,
 
   // SKIP упр. 24 — „Напишете по едно изречение с казвам и връщам" (свободно писане)
   // SKIP упр. 25 — „Напишете по едно изречение с казвам се и връщам се" (свободно писане)
@@ -778,13 +689,13 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
-    subtitle: 'Модел: Ние връщаме книгите в библиотеката.',
     instruction: 'Изберете правилния глагол.',
-    order: 28,
+    order: 25,
     points: 4,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: 'Модел: Ние връщаме книгите в библиотеката.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Ние връщаме книгите в библиотеката.', blanks: [], correctAnswers: [], isExample: true },
       { text: '1. Майката ___ „Лека нощ" на децата.',           blanks: [0], correctAnswers: ['казва'],        options: ['казва','казва се','връща'] },
       { text: '2. Аз ___ десет лева на един приятел.',          blanks: [0], correctAnswers: ['връщам'],       options: ['връщам','връщам се','казвам'] },
       { text: '3. Учителят ___ Стоян Стоянов.',                 blanks: [0], correctAnswers: ['се казва'],     options: ['се казва','казва','казва се'] },
@@ -801,7 +712,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 27',
     subtitle: 'Допълнително упражнение — Слушане',
     instruction: 'Слушайте текста за Мариам и изберете правилната дума за всяко празно място.',
-    order: 29,
+    order: 26,
     points: 12,
     layout: 'single',
     sentences: [
@@ -856,7 +767,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 28',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 30,
+    order: 27,
     textTitle: 'Всеки ден на Иван Иванов',
     showDictionary: true,
     images: [{ imageUrl: '/assets/lesson-11/ivan-family-dinner.jpg', label: '' }],
@@ -884,19 +795,18 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-29',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 29',
-    subtitle: 'Модел: е, живее в, работи в, ___',
-    instruction: 'Изберете глагола или глагол + предлог от текста.',
-    order: 31,
+    instruction: 'Изберете правилния отговор.',
+    order: 28,
     points: 6,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: 'Модел: е / живее в / работи в / ___', blanks: [], correctAnswers: [], isExample: true },
-      { text: '1. ___ в 6:00 часа.',   blanks: [0], correctAnswers: ['Става'],      options: ['Става','Отива в','Тича','Взема'] },
-      { text: '2. Отива ___.',          blanks: [0], correctAnswers: ['в парка'],    options: ['в парка','в офиса','вкъщи','в банята'] },
-      { text: '3. ___ половин час.',   blanks: [0], correctAnswers: ['Тича'],       options: ['Тича','Взема','Работи','Помага'] },
-      { text: '4. Среща се ___.',       blanks: [0], correctAnswers: ['с клиенти'], options: ['с клиенти','с Таня','с деца','с приятели'] },
-      { text: '5. ___ на Таня.',       blanks: [0], correctAnswers: ['Помага'],     options: ['Помага','Казва','Дава','Взема'] },
-      { text: '6. Играят ___.',         blanks: [0], correctAnswers: ['на компютъра'], options: ['на компютъра','навън','в парка','на кино'] },
+      { text: 'Иван ___ в 6:00 часа.',                blanks: [0], correctAnswers: ['става'],        options: ['става','отива','тича','взема'] },
+      { text: 'После той отива ___.',                  blanks: [0], correctAnswers: ['в парка'],      options: ['в парка','в офиса','вкъщи','в банята'] },
+      { text: 'Там Иван ___ половин час.',             blanks: [0], correctAnswers: ['тича'],         options: ['тича','взема','работи','помага'] },
+      { text: 'На работа често ___ с клиенти.',       blanks: [0], correctAnswers: ['се среща'],     options: ['се среща','се връща','се облича','се събува'] },
+      { text: 'Понякога ___ на Таня в кухнята.',      blanks: [0], correctAnswers: ['помага'],       options: ['помага','казва','дава','взема'] },
+      { text: 'Децата ___ на компютъра.',             blanks: [0], correctAnswers: ['играят'],       options: ['играят','отиват','ходят','учат'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -908,7 +818,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 30',
     instruction: 'Изберете правилния отговор за всеки въпрос за текста „Всеки ден на Иван Иванов".',
-    order: 32,
+    order: 29,
     points: 9,
     imageUrl: '/assets/lesson-11/ivan-family-dinner.jpg',
     questions: [
@@ -934,8 +844,8 @@ export const exercises: Exercise[] = [
       {
         id: 'q30-04',
         left: '4. Какво прави Иван в парка?',
-        options: ['В парка — тича.','В парка — ходи.','В парка — чете.'],
-        correctAnswer: 'В парка — тича.',
+        options: ['Тича.','Ходи.','Чете.'],
+        correctAnswer: 'Тича.',
       },
       {
         id: 'q30-05',
@@ -983,8 +893,8 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-31',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 31',
-    instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 33,
+    instruction: 'Изслушайте българската народна приказка „Който не работи, не трябва да яде" и след това я прочетете сами.',
+    order: 30,
     textTitle: 'Който не работи, не трябва да яде',
     showDictionary: true,
     images: [{ imageUrl: '/assets/lesson-11/bogdanka-sweeping.jpg', label: '' }],
@@ -1018,7 +928,7 @@ export const exercises: Exercise[] = [
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 32',
     instruction: 'Изберете правилния отговор за всеки въпрос за приказката „Който не работи, не трябва да яде".',
-    order: 34,
+    order: 31,
     points: 6,
     imageUrl: '/assets/lesson-11/bogdanka-sweeping.jpg',
     questions: [

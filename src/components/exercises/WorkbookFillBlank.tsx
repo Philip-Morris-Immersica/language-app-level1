@@ -24,6 +24,16 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   return options as string[];
 }
 
+function renderBoldText(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
@@ -158,13 +168,15 @@ export function WorkbookFillBlank({
     const blankValArr = blankValidation[sIdx];
 
     const imageEl = sentence.images && sentence.images.length > 0 ? (
-      <ImageLightbox src={sentence.images[0]} alt="">
-        <img
-          src={sentence.images[0]}
-          alt=""
-          className="w-32 h-32 md:w-48 md:h-48 object-contain shrink-0 cursor-zoom-in"
-        />
-      </ImageLightbox>
+      <div className="flex-none w-28 md:w-36 flex items-center justify-center pl-3">
+        <ImageLightbox src={sentence.images[0]} alt="">
+          <img
+            src={sentence.images[0]}
+            alt=""
+            className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-zoom-in"
+          />
+        </ImageLightbox>
+      </div>
     ) : null;
 
     return (
@@ -175,7 +187,7 @@ export function WorkbookFillBlank({
         {!hideSentenceNumbers && (
           <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
         )}
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 flex-1">
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
@@ -418,7 +430,7 @@ export function WorkbookFillBlank({
       return (
         <div key={sIdx} className="mb-5 p-4 border-2 border-[#8B9D5F] rounded-lg bg-[#f8faf4]">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Модел:</p>
-          <p className="text-base text-gray-700">{questionPart}</p>
+          <p className="text-base text-gray-700">{renderBoldText(questionPart)}</p>
           <p className="text-base text-gray-700">
             {answerPart ? renderAnswerPart(answerPart) : null}
           </p>
@@ -517,15 +529,14 @@ export function WorkbookFillBlank({
 
       {listeningText && (
         <div className="mb-6">
-          <div
+          <button
+            type="button"
             onClick={() => speakText(listeningText)}
-            className="rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-4 cursor-pointer hover:bg-[#DAF6EB] transition-colors active:scale-[0.99]"
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-3 text-sm md:text-base text-gray-800 hover:bg-[#DAF6EB] transition-colors active:scale-[0.99] cursor-pointer"
           >
-            <p className="text-sm md:text-base text-gray-800 leading-relaxed flex items-start gap-2">
-              <span className="text-[#4a6b1f] mt-0.5 shrink-0">🔊</span>
-              {listeningText}
-            </p>
-          </div>
+            <span className="text-[#4a6b1f]">🔊</span>
+            <span>Слушай</span>
+          </button>
         </div>
       )}
 
@@ -564,7 +575,7 @@ export function WorkbookFillBlank({
           </div>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className={`space-y-2 ${shuffledSentences.some(s => s.images?.length) ? 'max-w-2xl' : ''}`}>
           {shuffledSentences.map((s, i) => renderSentence(s, i))}
         </div>
       )}
