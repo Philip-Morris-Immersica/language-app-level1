@@ -168,13 +168,15 @@ export function WorkbookFillBlank({
     const blankValArr = blankValidation[sIdx];
 
     const imageEl = sentence.images && sentence.images.length > 0 ? (
-      <ImageLightbox src={sentence.images[0]} alt="">
-        <img
-          src={sentence.images[0]}
-          alt=""
-          className="w-32 h-32 md:w-48 md:h-48 object-contain shrink-0 cursor-zoom-in"
-        />
-      </ImageLightbox>
+      <div className="flex-none w-28 md:w-36 flex items-center justify-center pl-3">
+        <ImageLightbox src={sentence.images[0]} alt="">
+          <img
+            src={sentence.images[0]}
+            alt=""
+            className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-zoom-in"
+          />
+        </ImageLightbox>
+      </div>
     ) : null;
 
     return (
@@ -185,7 +187,7 @@ export function WorkbookFillBlank({
         {!hideSentenceNumbers && (
           <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
         )}
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 flex-1">
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
@@ -573,7 +575,7 @@ export function WorkbookFillBlank({
           </div>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className={`space-y-2 ${shuffledSentences.some(s => s.images?.length) ? 'max-w-2xl' : ''}`}>
           {shuffledSentences.map((s, i) => renderSentence(s, i))}
         </div>
       )}

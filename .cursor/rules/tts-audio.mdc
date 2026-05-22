@@ -29,16 +29,18 @@ delete the MP3 first — see "When to Delete Old MP3s" below.
 
 ---
 
-## Models — Flash for Words, Pro for Sentences
+## Models — Flash за граматика, Pro само за свързан текст
 
 | Модел | За какво |
 |-------|---------|
-| `gemini-2.5-flash-tts` | Единични думи и кратки фрази (vocabulary, illustrated_cards, grammar_table rows/notes, grammar_visual pronouns) |
-| `gemini-2.5-pro-tts` | Свързан текст (dialogues, reading_text, listening, grammar_examples, personal_choice) |
+| `gemini-2.5-flash-tts` + `"make sure the word is clearly in Bulgarian with the right pronunciation"` | **Всичко освен диалози и текстове:** vocabulary, illustrated_cards, grammar_table rows/notes, grammar_examples cards, grammar_highlights, grammar_visual pronouns, image labeling, reading_text flip-card words |
+| `gemini-2.5-pro-tts` + `"Read aloud in a warm, welcoming tone."` | **Само свързан текст:** dialogues, reading_text paragraphs, listening, personal_choice models, table_fill paragraphs |
 
-**Промтове:**
-- Flash: `"make sure the word is clearly in Bulgarian with the right pronunciation"`
-- Pro: `"Read aloud in a warm, welcoming tone."`
+**ПРАВИЛО — веднъж завинаги:**
+- Flash = Achernar + clarity prompt → граматика (таблици, примери, highlight), думи, картички
+- Pro = Achernar + warm prompt → диалози, текстове за четене/слушане
+- **Никога не добавяй граматика в `GRAMMAR_TABLE_PRO_ROWS`, `GRAMMAR_TABLE_PRO_NOTES`, `GRAMMAR_PRO_ACHERNAR_ONLY_IDS`** — тези сетове са умишлено празни.
+- Ако Flash произнася погрешно дадена дума — добави custom Flash prompt в `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID` или пренапиши текста в `GRAMMAR_TABLE_ROW_TTS_TEXT` / `ttsNotes[]`.
 
 **Защо НЕ Chirp3-HD:** има акцентни/ударителни проблеми на български. Gemini
 TTS дава по-естествено произношение.
@@ -52,20 +54,20 @@ TTS дава по-естествено произношение.
 
 | Категория | Източник | Глас | Модел |
 |-----------|---------|------|-------|
-| Vocabulary | `content.vocabulary[].bulgarian` | Achernar | **Flash** (Pro само за `VOCAB_USE_PRO_IDS`) |
-| Illustrated cards | `exercises[type=illustrated_cards].cards[]` — `label` (или `ttsLabel`); `ttsIncludeSublabels: true` за обединяване със sublabels | Achernar | **Flash** (Pro override per id през `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID`) |
-| Image labeling | `words/{image.id}.mp3`; `displayType: 'flags'` → `words/{exerciseId}-flag-{image.id}.mp3` | Achernar | Flash |
-| Reading text images (flip cards) | `images[]` с `ttsWordId` + `label` → `words/{ttsWordId}.mp3` | Achernar | Flash (Pro за `READING_TEXT_IMAGE_STRESS_IDS`) |
+| Vocabulary | `content.vocabulary[].bulgarian` | Achernar | **Flash** |
+| Illustrated cards | `exercises[type=illustrated_cards].cards[]` — `label` (или `ttsLabel`); `ttsIncludeSublabels: true` за обединяване със sublabels | Achernar | **Flash** (custom prompt per card в `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID`) |
+| Image labeling | `words/{image.id}.mp3`; `displayType: 'flags'` → `words/{exerciseId}-flag-{image.id}.mp3` | Achernar | **Flash** |
+| Reading text images (flip cards) | `images[]` с `ttsWordId` + `label` → `words/{ttsWordId}.mp3` | Achernar | **Flash** |
+| Grammar tables | `grammar_table.rows[]` | Achernar | **Flash**; `GRAMMAR_TABLE_ROW_TTS_TEXT` презаписва текста при нужда |
+| Grammar table notes | `grammar_table.notes[]` (използва `ttsNotes[i]` ако е зададен) | Achernar | **Flash** |
+| Grammar visual pronouns | `grammar_visual.pronouns[]` | Achernar | **Flash** |
+| Grammar examples | `grammar_examples.examples[]` (използва `ttsText` ако е зададен) | Achernar (или Charon ако card има `voiceGender: 'male'`) | **Flash** |
+| Grammar highlight | `grammarHighlight.exampleTtsTexts[]` / `examples[]` (само когато `interactiveExamples: true`) | Achernar | **Flash** (custom prompt per key в `GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID`) |
 | Dialogues | `dialogues.sections[].lines[]` (използва `ttsText` ако е зададен) | По `voiceGender` или `SPEAKER_VOICE_MAP` | **Pro** |
-| Grammar tables | `grammar_table.rows[]` | Achernar | Flash (Pro за `GRAMMAR_TABLE_PRO_ROWS`); `GRAMMAR_TABLE_ROW_TTS_TEXT` презаписва текста |
-| Grammar table notes | `grammar_table.notes[]` (използва `ttsNotes[i]` ако е зададен) | Achernar | Flash (Pro за `GRAMMAR_TABLE_PRO_NOTES`) |
-| Grammar visual pronouns | `grammar_visual.pronouns[]` | Achernar | Flash (Pro ако има `description`) |
-| Grammar examples | `grammar_examples.examples[]` (използва `ttsText` ако е зададен) | Achernar (или Charon ако card има `voiceGender: 'male'`) | **Pro** (Flash само ако `ttsFlash: true`); `GRAMMAR_PRO_ACHERNAR_ONLY_IDS` форсира Pro+Achernar |
-| Grammar highlight | `grammarHighlight.exampleTtsTexts[]` / `examples[]` (само когато `interactiveExamples: true`) | Achernar | Flash (Pro+Achernar за `GRAMMAR_PRO_ACHERNAR_ONLY_IDS`) |
-| Reading texts | `reading_text.paragraphs[]` (използва `ttsParagraphs[]` ако е зададен) | Achernar (Charon за `voiceGender: 'male'`); `paragraphVoiceGenders[]` за per-параграф; ако е зададен → НЕ се генерира `-full.mp3` | Pro |
-| Table fill paragraphs | `table_fill.paragraphs[].text` | Achernar (по `paragraphVoiceGenders`) | Pro |
-| Listening | `exercises[].listeningText` | Achernar | Pro |
-| Personal choice models | `personal_choice.model` (question + positive + negative) | Achernar | Pro |
+| Reading texts | `reading_text.paragraphs[]` (използва `ttsParagraphs[]` ако е зададен) | Achernar (Charon за `voiceGender: 'male'`); `paragraphVoiceGenders[]` за per-параграф | **Pro** |
+| Table fill paragraphs | `table_fill.paragraphs[].text` | Achernar (по `paragraphVoiceGenders`) | **Pro** |
+| Listening | `exercises[].listeningText` | Achernar | **Pro** |
+| Personal choice models | `personal_choice.model` (question + positive + negative) | Achernar | **Pro** |
 
 **НЕ се генерира за:** интерактивни упражнения (`fill_in_blank`, `dropdown_match`, `word_order`, …), карти с `disableTts: true`, упражнения в `READING_TEXT_EXCLUDE` / `SKIP_FULL_TEXT`.
 

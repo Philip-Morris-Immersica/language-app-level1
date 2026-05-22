@@ -39,6 +39,10 @@ export interface GrammarHighlight {
   exampleTtsTexts?: string[];
   /** When true, each example line is tappable for audio (`exerciseId` passed from ExerciseRenderer). */
   interactiveExamples?: boolean;
+  /** When true, highlight lines use Gemini Flash + word-clarity prompt (Achernar). Default for most grammar. */
+  ttsFlash?: boolean;
+  /** When true, highlight lines use Gemini Pro (better for connected phrases / time expressions). */
+  ttsPro?: boolean;
 }
 
 // Map label — overlaid text label on a map image
@@ -446,6 +450,10 @@ export interface ReadingTextExercise extends BaseExercise {
   showDictionary?: boolean;
   hideText?: boolean;
   noTranslation?: boolean;
+  /** URL of an original song/audio file — shows a separate "🎵 Слушай песента" button. */
+  songUrl?: string;
+  /** When true, paragraphs are rendered as plain text without per-paragraph click-to-play audio. */
+  disableParagraphAudio?: boolean;
   checklist?: {
     instruction: string;
     items: { id: string; text: string; isTrue: boolean }[];

@@ -470,8 +470,8 @@ export const writingExercises: Exercise[] = [
         isExample: true,
       },
       {
-        text: 'Иван носи тъмно _______ и _______.',
-        blanks: [3, 5],
+        text: 'Иван носи тъмно _______ и лилава _______.',
+        blanks: [3, 6],
         correctAnswers: ['сако', 'вратовръзка'],
         options: [
           ['сако', 'риза', 'пуловер'],
@@ -488,8 +488,8 @@ export const writingExercises: Exercise[] = [
         ],
       },
       {
-        text: 'Камен носи черна _______ и _______.',
-        blanks: [3, 5],
+        text: 'Камен носи черна _______ и черен _______.',
+        blanks: [3, 6],
         correctAnswers: ['риза', 'панталон'],
         options: [
           ['риза', 'тениска', 'пуловер'],
@@ -497,8 +497,8 @@ export const writingExercises: Exercise[] = [
         ],
       },
       {
-        text: 'Силвия носи лилава _______ и _______.',
-        blanks: [3, 5],
+        text: 'Силвия носи лилава _______ и сини _______.',
+        blanks: [3, 6],
         correctAnswers: ['блуза', 'дънки'],
         options: [
           ['блуза', 'риза', 'рокля'],
@@ -506,8 +506,8 @@ export const writingExercises: Exercise[] = [
         ],
       },
       {
-        text: 'Милен носи черен _______ и _______.',
-        blanks: [3, 5],
+        text: 'Милен носи черен _______ и бежов _______.',
+        blanks: [3, 6],
         correctAnswers: ['панталон', 'пуловер'],
         options: [
           ['панталон', 'дънки', 'шорти'],

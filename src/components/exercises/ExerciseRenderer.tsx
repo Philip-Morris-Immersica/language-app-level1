@@ -308,6 +308,8 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ReadingText
           audioUrl={exercise.audioUrl}
+          songUrl={exercise.songUrl}
+          disableParagraphAudio={exercise.disableParagraphAudio}
           textTitle={exercise.textTitle}
           images={exercise.images}
           imageFlashcards={exercise.imageFlashcards}

@@ -184,11 +184,11 @@ export const exercises: Exercise[] = [
     cards: [
       { id: 'yanuari',  imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/02-yanuari.png',   label: 'януари'   },
       { id: 'fevruari', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/03-fevruari.png',  label: 'февруари' },
-      { id: 'mart',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/04-mart.png',      label: 'март'     },
+      { id: 'mart',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/04-mart.png',      label: 'март'    },
       { id: 'april',    imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/05-april.png',     label: 'април'    },
       { id: 'may',      imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/06-may.png',       label: 'май'      },
-      { id: 'yuni',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/07-yuni.png',      label: 'юни',      ttsLabel: 'Месец юни.' },
-      { id: 'yuli',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/08-yuli.png',      label: 'юли',      ttsLabel: 'Месец юли.' },
+      { id: 'yuni',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/07-yuni.png',      label: 'юни'     },
+      { id: 'yuli',     imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/08-yuli.png',      label: 'юли'     },
       { id: 'avgust',   imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/09-avgust.png',    label: 'август'   },
       { id: 'septemvri',imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/10-septemvri.png', label: 'септември'},
       { id: 'oktomvri', imageUrl: '/assets/lesson-07/07-novi-dumi-3-mesetsi/11-oktomvri.png',  label: 'октомври' },
@@ -540,7 +540,7 @@ export const exercises: Exercise[] = [
           {
             label: '',
             cells: [
-              { correctAnswers: ['февруари'], options: ['февруари', 'май', 'юни', 'ноември'] },
+              { correctAnswers: ['февруари'], options: ['февруари', 'май', 'март', 'ноември'] },
               { correctAnswers: ['май'],      options: ['май', 'август', 'ноември', 'февруари'] },
               { correctAnswers: ['август'],   options: ['август', 'ноември', 'февруари', 'май'] },
               { correctAnswers: ['ноември'],  options: ['ноември', 'февруари', 'май', 'август'] },
@@ -563,16 +563,19 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с предлозите за време. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g2.instruction',
     order: 19,
+    ttsFlash: true,
     examples: [
       {
         imageUrl: '',
         text: 'в понеделник, във вторник, в сряда',
         subtext: 'на 5 септември 2024 г.',
+        ttsText: 'В понеделник, във вторник, в сряда на пети септември две хиляди двадесет и четвърта година.',
       },
       {
         imageUrl: '',
         text: 'през януари, февруари, март',
-        subtext: 'през 2024 година',
+        subtext: 'през 2026 г.',
+        ttsText: 'През януари, февруари, март през две хиляди двадесет и шеста година.',
       },
       {
         imageUrl: '',
@@ -736,6 +739,7 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с часовника. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g3.instruction',
     order: 22,
+    ttsFlash: true,
     examples: [
       {
         imageUrl: '/assets/lesson-07/25-gramatika-3-chasovnik/01-dvanadeset-chasa.jpg',
@@ -818,7 +822,7 @@ export const exercises: Exercise[] = [
         id: 'q6',
         leftImageUrl: '/assets/lesson-07/26-upr-17-napishite-chasa/02-chas-01-50.jpg',
         left: '',
-        options: ['Два без десет.', 'Един и десет.', 'Два без петнайсет.', 'Два без двайсет.'],
+        options: ['Два без десет.', 'Един и половина.', 'Два без петнайсет.', 'Един и четвърт.'],
         correctAnswer: 'Два без десет.',
       },
     ],
@@ -837,6 +841,7 @@ export const exercises: Exercise[] = [
     grammarHighlight: {
       text: 'Кога?',
       interactiveExamples: true,
+      ttsPro: true,
       examples: [
         '8:00 ч. — осем часà сутринта',
         '11:00 ч. — единайсет часà преди обяд',
@@ -845,11 +850,11 @@ export const exercises: Exercise[] = [
         '23:00 ч. — единайсет часà през нощта',
       ],
       exampleTtsTexts: [
-        'Осем часà сутринта.',
-        'Единайсет часà преди обяд.',
-        'Три часà следобед.',
-        'Осем часà вечерта.',
-        'Единайсет часà през нощта.',
+        'Осем часа сутринта.',
+        'Единайсет часа преди обяд.',
+        'Три часа следобед.',
+        'Осем часа вечерта.',
+        'Единайсет часа през нощта.',
       ],
     },
     examples: [
@@ -1079,7 +1084,6 @@ export const exercises: Exercise[] = [
     id: 'l07-gramatika-05',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 5',
-    subtitle: 'Предлози: от, до, преди, след',
     instruction: 'Запознайте се с предлозите за начало и край на действие. Натиснете за произношение.',
     instructionKey: 'grammar.l07.g5.instruction',
     order: 29,
@@ -1095,11 +1099,11 @@ export const exercises: Exercise[] = [
         'в събота и неделя — през уикенда',
       ],
       exampleTtsTexts: [
-        'От нещо до нещо. От кога до кога.',
-        'Преди означава по-рано от.',
-        'След означава по-късно от.',
-        'От понеделник до петък. През седмицата.',
-        'В събота и неделя. През уикенда.',
+        'От нещо, до нещо, от кога до кога.',
+        'Преди, по-рано от.',
+        'След, по-късно от.',
+        'От понеделник до петък, през седмицата.',
+        'В събота и неделя, през уикенда.',
       ],
     },
     examples: [
@@ -1451,7 +1455,7 @@ export const exercises: Exercise[] = [
     id: 'l07-ex-31',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 31',
-    instruction: 'Изберете правилната форма на редното числително.',
+    instruction: 'Изберете правилното изписване на числата с думи за тези български празници.',
     order: 39,
     points: 5,
     layout: 'single',

@@ -66,13 +66,13 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
     'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
   // Lesson 08 — Flash misread o as u, or wrong stress
   lilav:
-    'Bulgarian color word лилав. Native Bulgarian only; clear "o" vowel (not Russian "u"); stress on second syllable (li-LAV).',
+    'Bulgarian color word and its forms: лилав, лилава, лилаво, лилави. Read them in order, separated by commas. Native Bulgarian only; clear vowels; stress on second syllable (li-LAV, li-LA-va, li-LA-vo, li-LA-vi).',
   sako:
     'Bulgarian word сако (jacket). Native Bulgarian only; clear "o" vowel in both syllables, not "u".',
   pola:
     'Bulgarian word пола (skirt). Native Bulgarian only; clear "o" vowel, not "u".',
   pulover:
-    'Bulgarian word пуловер. Native Bulgarian only; clear "o" vowels, not "u".',
+    'Say only the single Bulgarian word: пуловер. One word, nothing else.',
   ochila:
     'Bulgarian word очила (glasses). Native Bulgarian only; clear "o" vowel, not "u".',
   dechitsa:
@@ -82,56 +82,17 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
 const GEMINI_BG_WORD_STRESS_PROMPT =
   'Bulgarian food name. Speak with native word stress (????????) on the correct syllable in each word.';
 
-// Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers, tricky pronunciation)
-const GRAMMAR_TABLE_PRO_ROWS = new Set([
-  // Lesson 00 � Alphabet letters with tricky pronunciation
-  'l00-gramatika-01-row-0',  // ? � ???
-  'l00-gramatika-01-row-4',  // ? � ?????
-  'l00-gramatika-01-row-11', // ? � ????? (soft ?)
-  'l00-gramatika-01-row-12', // ? � ???????
-  'l00-gramatika-01-row-19', // ? � ?????
-  'l00-gramatika-01-row-22', // ? � ?????????
-  'l03-gramatika-04-row-0', // ???????, ??? � Flash mispronounces loanwords
-  'l04-gramatika-02-row-9', // ??????
-  'l05-gramatika-07-row-0', // ?????? (l05)
-  'l05-gramatika-07-row-1', // ??? ?????? (l05)
-  'l05-gramatika-07-row-2', // ???? ?????? (l05)
-  'l05-gramatika-07-row-3', // ??? ??????? (l05)
-  'l05-gramatika-07-row-4', // ???? ??????? (l05)
-  'l06-gramatika-04-row-3', // ?? / ? (KPM table � "?" needs Pro for correct pronunciation)
-  'l06-gramatika-08-row-6', // ??? ???????? / ?? ????????
-  'l08-gramatika-01-row-0', // ????. ???? ????????.
-  'l08-gramatika-01-row-1', // ????. ???? ?????.
-  'l08-gramatika-01-row-2', // ????. ???? ???.
-  'l08-gramatika-01-row-3', // ????. ???? ?????.
-  'l08-gramatika-02-row-0', // ????? ? ????????, ????? ? ???????, ????? ? ????????
-  'l08-gramatika-02-row-1', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
-  'l08-gramatika-02-row-2', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
-  'l08-gramatika-02-row-3', // ?????? ? ????????, ????? ? ???????, ?????? ? ????????
-  'l09-gramatika-01-row-3', // четвъртия/т — "четвърти" root, known Flash mispronunciation
-  'l09-gramatika-01-row-4', // петия/т — Flash mis-stresses
-  'l09-gramatika-01-row-7', // осмия/т — new row
-  'l09-gramatika-01-row-8', // деветия/т — new row
-  'l09-gramatika-01-row-9', // десетия/т — new row
-  'l07-gramatika-01-row-8', // девето/девета/девето/девети — Flash mispronounces
-  // l07-gramatika-07 — ОТИВАМ conjugation (all rows need Pro for clear pronunciation)
-  'l07-gramatika-07-row-0', // аз отивам
-  'l07-gramatika-07-row-1', // ти отиваш
-  'l07-gramatika-07-row-2', // той/тя/то отива
-  'l07-gramatika-07-row-3', // ние отиваме
-  'l07-gramatika-07-row-4', // Вие отивате
-  'l07-gramatika-07-row-5', // те отиват
+// RULE: Flash (Achernar + clarity prompt) for ALL grammar table rows.
+// Pro is ONLY for: dialogues, reading_text, listening, personal_choice, table_fill paragraphs.
+// If a specific row sounds wrong, add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID
+// or use GRAMMAR_TABLE_ROW_TTS_TEXT to rewrite the text for better Flash pronunciation.
+const GRAMMAR_TABLE_PRO_ROWS = new Set<string>([
+  // INTENTIONALLY EMPTY — all grammar table rows use Flash by default.
 ]);
 
-// Grammar table note files that need Pro model instead of Flash (full sentences, not isolated words)
-const GRAMMAR_TABLE_PRO_NOTES = new Set([
-  'l07-gramatika-01-note-0',  // "????: 10 ?????? 2023 ?. = ?????? ?????? ??? ?????? ??????? ? ????? ??????" � full sentence
-  'l04-gramatika-02-note-0',  // "?????? ????????? ? ???"
-  'l04-gramatika-02-note-1',  // "?????? ?????? ????????? ? ?????"
-  'l05-gramatika-07-note-0',  // "???? 2�4 ??????????? �???????/????????"..."
-  'l09-gramatika-01-note-0',  // "?????????? ? ??????? ??? ?? ?????????." � full sentence
-  'l09-gramatika-02-note-0',  // "??????? ? ????? ????. ????? ? ??-?????�" � full sentences
-  'l10-gramatika-01b-note-0', // ?????????? ?????????? � ????? ????????? ? ?????
+// RULE: Flash for ALL grammar table notes. Use ttsNotes[] to rewrite text for better Flash pronunciation.
+const GRAMMAR_TABLE_PRO_NOTES = new Set<string>([
+  // INTENTIONALLY EMPTY — all grammar table notes use Flash by default.
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the ???????? ????? but ?????????? is preferred (???? ??????? -??????). */
@@ -148,7 +109,7 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l08-gramatika-01-row-3': '????. ???? ?????.',
 
   // l08-gramatika-02 � ????????? ?? ??????????????: ???????? ???? ? ?????????? (-??(?) ? ??.), ???? ???????
-  'l08-gramatika-02-row-0': '????????. ???????. ????????.',
+  'l08-gramatika-02-row-0': 'хубавият, малкият, зеленият.',
   'l08-gramatika-02-row-1': '????????. ???????. ????????.',
   'l08-gramatika-02-row-2': '????????. ???????. ????????.',
   'l08-gramatika-02-row-3': '????????. ???????. ????????.',
@@ -192,25 +153,23 @@ const READING_TEXT_EXCLUDE = new Set(
 const SKIP_FULL_TEXT = new Set(
   lessonNum === '05' ? ['l05-ex-25'] : [],
 );
+/** reading_text with `ttsParagraphs`: still generate `-full.mp3` for the main Listen button. */
+const READING_TEXT_FORCE_FULL = new Set(['l07-ex-34', 'l08-ex-25']);
 
 const GRAMMAR_LABELS = new Set([
   '????? ???', '?????? ???', '?????? ???', '??????????? ?????',
   '?.?.', '?.?.', '??.?.', '??.?.',
 ]);
 
-/** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
-const VOCAB_USE_PRO_IDS = new Set([
-  'kiselo-mlyako',
-  'otset',
-  'taksi',
-  // Lesson 08 — Flash Russian accent / wrong stress
-  'pasport',
-  'predpochitam',
+// RULE: all vocabulary uses Flash + clarity prompt.
+// For words Flash mispronounces, add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID instead.
+const VOCAB_USE_PRO_IDS = new Set<string>([
+  // INTENTIONALLY EMPTY — all vocabulary uses Flash by default.
 ]);
 
 
-/** reading_text flip-card `words/{ttsWordId}.mp3` � regenerate with Pro + stress prompt when accent is wrong. */
-const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>(['shopska-salata', 'sarmi', 'baklava']);
+// RULE: all flip-card words use Flash. For stress problems add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID.
+const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>([]);
 
 /** Optional per-id prompt override (Pro) when generic stress prompt is not enough. */
 const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
@@ -218,8 +177,23 @@ const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
     'Bulgarian word ??????? (layered pastry dessert). Stress must fall on the first syllable: ?? � ??? � ??.',
 };
 
-/** `grammar_examples` + highlight rows: force Gemini Pro + Achernar (no Flash / no male line preset). */
-const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set(['l07-gramatika-04', 'l07-gramatika-05', 'l09-gramatika-03']);
+// RULE: grammar_examples use Flash by default. Pro is only for dialogues/reading_text/listening.
+// This set is intentionally empty — do not add grammar exercises here.
+const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set<string>([]);
+
+/** Grammar highlight lines (`Кога?` etc.): Flash + clarity prompt; optional stress hint per file. */
+const GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID: Record<string, string> = {
+  'l07-gramatika-04-highlight-0':
+    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
+  'l07-gramatika-04-highlight-1':
+    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
+  'l07-gramatika-04-highlight-2':
+    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
+  'l07-gramatika-04-highlight-3':
+    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
+  'l07-gramatika-04-highlight-4':
+    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
+};
 
 // ---------------------------------------------------------------------------
 // Text cleaning
@@ -653,41 +627,40 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
-/** Grammar highlight box � one MP3 per example line when `interactiveExamples` is true. */
+// RULE: grammar highlight boxes always use Flash + Achernar + clarity prompt.
 function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises) {
     const gh = ex.grammarHighlight;
     if (!gh?.interactiveExamples || !gh.examples?.length) continue;
-    const proAchernar = GRAMMAR_PRO_ACHERNAR_ONLY_IDS.has(ex.id);
+    const usePro = !!gh.ttsPro;
     for (let i = 0; i < gh.examples.length; i++) {
       const raw = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
+      const highlightKey = `${ex.id}-highlight-${i}`;
       jobs.push({
         category: 'grammar',
-        filename: `${ex.id}-highlight-${i}.mp3`,
+        filename: `${highlightKey}.mp3`,
         text: clean(raw),
         voice: FEMALE_VOICE,
-        model: proAchernar ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: GEMINI_PROMPT,
+        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: usePro ? GEMINI_PROMPT : (GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID[highlightKey] ?? GEMINI_WORD_PROMPT),
       });
     }
   }
   return jobs;
 }
 
+// RULE: grammar_examples always use Flash + Achernar + clarity prompt.
+// Pro is ONLY for dialogues, reading_text, listening, personal_choice, table_fill paragraphs.
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'grammar_examples' && !e.disableTts && e.examples)) {
-    const useFlash = !!ex.ttsFlash;
-    const proAchernar = GRAMMAR_PRO_ACHERNAR_ONLY_IDS.has(ex.id);
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
       let parts: string;
       if (card.ttsText) {
-        // Use explicit TTS-only text (e.g. full word without abbreviation)
         parts = card.ttsText;
       } else if (card.lines) {
-        // Strip speaker labels, ?/? markers, skip blank spacer lines
         parts = card.lines
           .filter(l => l.trim() !== '')
           .map(l => l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[??]\s*/, ''))
@@ -696,16 +669,14 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
         parts = [card.text, cleanedSubtext].filter(Boolean).join(' ');
       }
-      const voice = proAchernar ? FEMALE_VOICE : (card.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE);
-      const model = proAchernar ? GEMINI_MODEL : (useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL);
-      const prompt = proAchernar ? GEMINI_PROMPT : (useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT);
+      const voice = card.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
       jobs.push({
         category: 'grammar',
         filename: `${ex.id}-card-${i}.mp3`,
         text: clean(parts),
         voice,
-        model,
-        prompt,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
       });
     }
   }
@@ -753,12 +724,17 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
         : defaultVoice;
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
-    // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used; UI uses sequential listen instead
-    const skipFull = SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs;
+    // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used — unless forced (main Listen button).
+    const forceFull = READING_TEXT_FORCE_FULL.has(ex.id);
+    const skipFull = !forceFull && (SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs);
     if (!skipFull) {
       const voice = defaultVoice;
       const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
-      const fullText = clean(titlePrefix + paragraphs.join('\n'));
+      const body =
+        forceFull && ex.ttsParagraphs && ex.ttsParagraphs.length === paragraphs.length
+          ? ttsParagraphs
+          : paragraphs;
+      const fullText = clean(titlePrefix + body.join('\n'));
       if (paragraphs.length > 0 && fullText.length < 2000) {
         jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
       }
