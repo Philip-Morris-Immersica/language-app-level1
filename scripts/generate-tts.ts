@@ -64,6 +64,9 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
     'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (BA-nya).',
   'cvete-nd':
     'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
+  // Lesson 10 — такси: Flash mis-stresses; explicit Bulgarian prompt
+  'taksi-nd':
+    'Bulgarian word такси (taxi). Stress on the first syllable: ТАК-си. Native Bulgarian pronunciation only.',
   // Lesson 08 — Flash misread o as u, or wrong stress
   lilav:
     'Bulgarian color word and its forms: лилав, лилава, лилаво, лилави. Read them in order, separated by commas. Native Bulgarian only; clear vowels; stress on second syllable (li-LAV, li-LA-va, li-LA-vo, li-LA-vi).',
@@ -87,7 +90,10 @@ const GEMINI_BG_WORD_STRESS_PROMPT =
 // If a specific row sounds wrong, add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID
 // or use GRAMMAR_TABLE_ROW_TTS_TEXT to rewrite the text for better Flash pronunciation.
 const GRAMMAR_TABLE_PRO_ROWS = new Set<string>([
-  // INTENTIONALLY EMPTY — all grammar table rows use Flash by default.
+  // l10-gramatika-01c — Заминаващи: по-топъл и естествен прочит (клиентска заявка)
+  'l10-gramatika-01c-row-0',
+  'l10-gramatika-01c-row-1',
+  'l10-gramatika-01c-row-2',
 ]);
 
 // RULE: Flash for ALL grammar table notes. Use ttsNotes[] to rewrite text for better Flash pronunciation.
@@ -120,19 +126,24 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l09-gramatika-02-row-2': '??????. ... ??-??????. ... ???-??????.',
   'l09-gramatika-02-row-3': '??????. ... ??-??????. ... ???-??????.',
 
-  // l09-gramatika-01 — поредни числителни: редове с трудно произношение
-  'l09-gramatika-01-row-4': 'пети. петия. пета. пето. пети.',
-  'l09-gramatika-01-row-7': 'осми. осмия. осма. осмо. осми.',
-  'l09-gramatika-01-row-8': 'девети. деветия. девета. девето. девети.',
-  'l09-gramatika-01-row-9': 'десети. десетия. десета. десето. десети.',
+  // l09-gramatika-01 — поредни числителни: членувани форми за по-ясно произношение
+  'l09-gramatika-01-row-4': 'пети, петият, петата, петото, петите.',
+  'l09-gramatika-01-row-7': 'осми, осмият, осмата, осмото, осмите.',
+  'l09-gramatika-01-row-8': 'девети, деветият, деветата, деветото, деветите.',
+  'l09-gramatika-01-row-9': 'десети, десетият, десетата, десетото, десетите.',
 
   // l07-gramatika-01 — редни числителни: row-8 е "девето" — Flash го чете неправилно
   'l07-gramatika-01-row-8': 'Девети. Девета. Девето. Девети.',
 
-  // l10-gramatika-01b — ???????? (??????????): ????? ????? ? ???? ?????? ?????
+  // l10-gramatika-01b — Пристигащи (гара разписание): числа с думи + пауза между колоните
   'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнадесет минути. Първи коловоз. Пет минути закъснение.',
   'l10-gramatika-01b-row-1': 'Плевен. Дванадесет часа. Трети коловоз. Без закъснение.',
   'l10-gramatika-01b-row-2': 'Русе. Петнадесет часа и тридесет минути. Четвърти коловоз. Петнадесет минути закъснение.',
+
+  // l10-gramatika-01c — Заминаващи (гара разписание): числа с думи + пауза между колоните
+  'l10-gramatika-01c-row-0': 'Бургас, седем часа, втори коловоз, без закъснение.',
+  'l10-gramatika-01c-row-1': 'Варна, единадесет и двадесет, пети коловоз, двадесет и пет минути закъснение.',
+  'l10-gramatika-01c-row-2': 'Видин, четиринадесет и десет, шести коловоз, без закъснение.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 

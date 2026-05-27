@@ -83,7 +83,7 @@ export const workbookExercises: Exercise[] = [
       {
         text: 'Таксито _______ пред блока.',
         blanks: [0], correctAnswers: ['спира'],
-        options: ['спира', 'пристига', 'пътува'],
+        options: ['спира', 'пътува', 'заминава'],
       },
       {
         text: 'Автобусът _______ на автогарата.',
