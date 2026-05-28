@@ -70,6 +70,27 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
           <p className="mt-2 text-center text-xs text-gray-400 select-none">
             Кликнете върху картинката, за да я увеличите.
           </p>
+          {/* Optional narrator paragraph shown below the header image with a listen button */}
+          {exercise.headerCaption && (
+            <div className="mt-4 flex items-start gap-3 bg-[#DAF6EB] rounded-xl px-5 py-4">
+              <button
+                type="button"
+                aria-label="Слушай"
+                onClick={() => {
+                  const audioPath = exerciseId
+                    ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
+                    : '';
+                  playTtsAudio(audioPath, exercise.headerCaption);
+                }}
+                className="flex-shrink-0 mt-0.5 w-9 h-9 rounded-full bg-white border-2 border-[#32C189] flex items-center justify-center hover:bg-[#DAF6EB] transition-colors"
+              >
+                <Volume2 className="w-4 h-4 text-[#1F5741]" />
+              </button>
+              <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed">
+                {exercise.headerCaption}
+              </p>
+            </div>
+          )}
         </div>
       )}
 

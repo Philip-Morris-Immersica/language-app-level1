@@ -143,6 +143,20 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l10-gramatika-01c-row-0': 'Бургас, седем часа, втори коловоз, без закъснение.',
   'l10-gramatika-01c-row-1': 'Варна, единадесет и двадесет, пети коловоз, двадесет и пет минути закъснение.',
   'l10-gramatika-01c-row-2': 'Видин, четиринадесет и десет, шести коловоз, без закъснение.',
+
+  // l11-gramatika-01 — Спрежение: примери за всяка група в последния ред
+  'l11-gramatika-01-row-6': 'Примери. Група А: ставам, затварям, пазарувам, излизам, връщам се, вземам, лягам си, обядвам, свършвам, вечерям, срещам се, гледам, влизам, закусвам, започвам. Група И: спя, правя. Група Е: пиша, чета.',
+
+  // l11-gramatika-02 — всеки/всяка/всяко/всички: чете с повторение на местоимението пред всяка дума
+  'l11-gramatika-02-row-0': 'всеки ден, всеки месец, всеки уикенд. всяка седмица, всяка година, всяка сутрин. всяко лято, всяко село, всяко дете. всички българи, всички хора, всички деца.',
+
+  // l11-gramatika-04 — ОТИВАМ/ХОДЯ: чете и двата глагола с предлога и думата
+  'l11-gramatika-04-row-0': 'ходя на ресторант, отивам в ресторанта.',
+  'l11-gramatika-04-row-1': 'ходя на кино, отивам в киното.',
+  'l11-gramatika-04-row-2': 'ходя на гости, отивам в магазина.',
+  'l11-gramatika-04-row-3': 'ходя на работа, отивам в супермаркета.',
+  'l11-gramatika-04-row-4': 'ходя на планина, отивам в центъра.',
+  'l11-gramatika-04-row-5': 'ходя на море, отивам в офиса.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -180,6 +194,7 @@ const VOCAB_USE_PRO_IDS = new Set<string>([
 /** Illustrated cards where Flash mis-stresses or reads the prompt twice — use Pro + Achernar. */
 const ILLUSTRATED_CARD_PRO_IDS = new Set<string>([
   'taksi-nd',
+  'vecherqm-nd', // "Вечерям сандвичи и чай." — сандвичи е проблемна дума за Flash
 ]);
 
 
@@ -472,6 +487,18 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       (ex as { voiceGender?: 'male' | 'female' }).voiceGender === 'male'
         ? MALE_VOICE
         : FEMALE_VOICE;
+    // Optional narrator paragraph shown below the header image — Pro + exercise voice.
+    const caption = (ex as { headerCaption?: string }).headerCaption?.trim();
+    if (caption) {
+      jobs.push({
+        category: 'texts',
+        filename: `${ex.id}-caption.mp3`,
+        text: clean(caption),
+        voice: exerciseVoice,
+        model: GEMINI_MODEL,
+        prompt: GEMINI_PROMPT,
+      });
+    }
     for (const card of ex.cards!) {
       let joined: string;
       if (card.ttsLabel) {

@@ -157,6 +157,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
   subtitle?: string;       // Optional subtitle shown below title (auto-translated)
   /** Large zoomable illustration shown above the cards grid (e.g. house cross-section, table setting). */
   headerImageUrl?: string;
+  /** Short paragraph shown below the header image with a TTS listen button (Pro male/female voice depending on voiceGender). */
+  headerCaption?: string;
   /**
    * By default cards use up to 4 columns on large screens.
    * Use `3` for a symmetric grid (e.g. rows of three — typical for НОВИ ДУМИ).
@@ -291,6 +293,8 @@ export interface GrammarTableExercise extends BaseExercise {
   notes?: string[];          // Text notes shown below the table
   ttsNotes?: string[];       // TTS-only text for notes (overrides notes[] for audio; display unchanged)
   boldColumns?: number[];
+  /** When true, makes the pronoun column equal width to the data columns. */
+  widePronouns?: boolean;
   illustrations?: {
     imageUrl: string;
     singularLabel: string;

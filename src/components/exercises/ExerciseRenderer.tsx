@@ -268,6 +268,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           exerciseId={exercise.id}
           boldColumns={exercise.boldColumns}
+          widePronouns={exercise.widePronouns}
         />
       );
 
