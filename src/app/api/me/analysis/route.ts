@@ -184,9 +184,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Sort by most mistakes first, cap at 15
+  // Sort by most mistakes first, cap at 25
   mistakes.sort((a, b) => b.wrongCount - a.wrongCount);
-  const topMistakes = mistakes.slice(0, 15);
+  const topMistakes = mistakes.slice(0, 25);
 
   // Build level summary for context
   const levelSummary = Object.entries(progress.byLevel)
@@ -216,9 +216,9 @@ export async function POST(req: NextRequest) {
     )
     .join('\n\n');
 
-  const systemPrompt = `You are a warm and encouraging Bulgarian language teacher writing a PERSONAL analysis directly to the learner.
+  const systemPrompt = `You are a warm, encouraging, and thorough Bulgarian language teacher writing a DETAILED PERSONAL analysis directly to the learner.
 Address the learner directly using "you" / "your" throughout — never say "the learner" or "the student".
-Write as if speaking face-to-face with the person.
+Write as if speaking face-to-face with the person. Be specific, detailed, and insightful — this is a full learning report, not a short summary.
 
 The learner's progress: ${levelSummary || 'just started'}.
 Current level: ${progress.highestLevel?.toUpperCase() ?? 'A1'} (${progress.highestLevelPct}% average completion).
@@ -229,44 +229,56 @@ Use the appropriate form of address for ${langName} (e.g. "ти" / "твоят" 
 
 Analyze the mistakes below and return a JSON object with this exact structure:
 {
-  "summary": "2-3 sentences addressing the learner directly: their overall level, what they are doing well, and the main area to work on",
-  "strengths": ["strength 1 — phrased as 'You are good at...' or 'You consistently...'", "strength 2", "strength 3"],
+  "summary": "4-6 sentences addressing the learner directly: describe their overall level in detail, what they have accomplished so far, what specific skills they are demonstrating well, and what the main patterns to improve are. Be specific about their progress percentage and which lessons they have worked through.",
+  "strengths": [
+    "strength 1 — phrased as 'You are good at...' or 'You consistently...' — be specific with grammar terms or vocabulary areas",
+    "strength 2 — give a concrete example from their work if possible",
+    "strength 3",
+    "strength 4 (optional)"
+  ],
   "improvementAreas": [
     {
-      "topic": "Topic name (e.g. verb conjugation, noun gender)",
-      "explanation": "2-3 sentences addressed to the learner: explain the pattern they struggle with and why it matters for them",
+      "topic": "Topic name — use precise Bulgarian grammar term (e.g. 'Падежни форми на съществителни', 'Глаголно спрежение')",
+      "explanation": "4-6 sentences addressed to the learner: explain the exact grammatical/vocabulary pattern they struggle with, why it is tricky, how it works in Bulgarian, and why mastering it will help them in real-life situations. Be educational and warm.",
       "examples": [
         {
-          "lessonId": "lesson-id",
+          "lessonId": "lesson-id-exactly-as-in-content",
           "yourAnswer": "what the learner wrote (keep in Bulgarian)",
           "correctAnswer": "the correct Bulgarian form",
-          "note": "1 sentence addressed to the learner explaining why this is wrong"
+          "note": "2 sentences: first explain why this specific answer is wrong, then give the rule or tip to remember the correct form"
         }
       ],
       "recommendations": [
         {
           "type": "review_lesson",
-          "lessonId": "lesson-id",
-          "description": "Personal advice addressed to the learner: what exactly to focus on when revisiting"
+          "lessonId": "lesson-id-exactly-as-in-content",
+          "description": "2-3 sentences of personal advice: what specific section or exercise to focus on when revisiting, what mental model or trick to use"
         }
       ]
     }
   ],
-  "nextSteps": ["step 1 addressed directly to the learner", "step 2", "step 3"],
-  "encouragement": "One warm, personal encouraging sentence addressed directly to the learner"
+  "nextSteps": [
+    "step 1 — concrete, actionable, addressed directly to the learner with specific Bulgarian grammar focus",
+    "step 2 — specific exercise or practice technique",
+    "step 3 — longer-term study goal",
+    "step 4 (optional)"
+  ],
+  "encouragement": "2-3 warm, personal encouraging sentences addressed directly to the learner — reference their specific progress numbers to make it feel personal"
 }
 
 Rules:
 - 3-5 improvementAreas, grouped by grammatical/vocabulary theme (not by lesson)
-- Each area: 2-3 examples from the actual mistakes
+- Each improvementArea MUST have 2-4 concrete examples from the actual mistakes
 - recommendations type can be: "review_lesson", "redo_exercise", "alternative_practice"
-- Be specific and reference actual Bulgarian grammar terms
+- lessonId values MUST use the exact IDs from the content: lesson-00, lesson-01, ..., lesson-11 (zero-padded two digits)
+- Be specific, educational, and reference actual Bulgarian grammar terms throughout
 - Do NOT translate Bulgarian words/exercises — they stay in Bulgarian
-- Keep everything else in ${langName}
+- Keep all explanatory text in ${langName}
 - Always use direct address — never refer to the learner in third person
+- Make the analysis feel like a real teacher's feedback, not a generic report
 
 MISTAKES TO ANALYZE:
-${mistakesText || 'No submitted mistakes found — the learner has attempted exercises but not checked answers yet.'}`;
+${mistakesText || 'No submitted mistakes found — the learner has attempted exercises but not checked answers yet. Base the analysis on their overall progress level and completed lessons.'}`;
 
   const config = await getActiveConfig();
   if (!config.apiKey) {
@@ -277,7 +289,7 @@ ${mistakesText || 'No submitted mistakes found — the learner has attempted exe
   let raw = '';
   for await (const chunk of llm.stream(
     [{ role: 'user', content: systemPrompt }],
-    { model: config.model, temperature: 0.4, maxTokens: 1500 },
+    { model: config.model, temperature: 0.4, maxTokens: 3000 },
   )) {
     if (chunk.type === 'text') raw += chunk.value;
   }

@@ -594,14 +594,16 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
 
       {hideText && (!images || images.length === 0) ? (
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <TtsButton
-              text={paragraphs.join('\n\n')}
-              exerciseId={exerciseId}
-              useFullAudio={paragraphs.length > 1}
-              rate={ttsRate}
-            />
-          </div>
+          {!showFullListenButton && (
+            <div className="flex items-center gap-3">
+              <TtsButton
+                text={paragraphs.join('\n\n')}
+                exerciseId={exerciseId}
+                useFullAudio={paragraphs.length > 1}
+                rate={ttsRate}
+              />
+            </div>
+          )}
           {paragraphs.length > 0 && (
             <div className="flex justify-center">
               <Button

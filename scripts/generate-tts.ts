@@ -64,9 +64,6 @@ const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
     'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (BA-nya).',
   'cvete-nd':
     'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
-  // Lesson 10 — такси: Flash mis-stresses; explicit Bulgarian prompt
-  'taksi-nd':
-    'Bulgarian word такси (taxi). Stress on the first syllable: ТАК-си. Native Bulgarian pronunciation only.',
   // Lesson 08 — Flash misread o as u, or wrong stress
   lilav:
     'Bulgarian color word and its forms: лилав, лилава, лилаво, лилави. Read them in order, separated by commas. Native Bulgarian only; clear vowels; stress on second syllable (li-LAV, li-LA-va, li-LA-vo, li-LA-vi).',
@@ -94,6 +91,8 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set<string>([
   'l10-gramatika-01c-row-0',
   'l10-gramatika-01c-row-1',
   'l10-gramatika-01c-row-2',
+  // l09-gramatika-01 — петата (ordinal) vs петата (heel): Flash mis-stresses; Pro + Achernar
+  'l09-gramatika-01-row-4',
 ]);
 
 // RULE: Flash for ALL grammar table notes. Use ttsNotes[] to rewrite text for better Flash pronunciation.
@@ -126,8 +125,8 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'l09-gramatika-02-row-2': '??????. ... ??-??????. ... ???-??????.',
   'l09-gramatika-02-row-3': '??????. ... ??-??????. ... ???-??????.',
 
-  // l09-gramatika-01 — поредни числителни: членувани форми за по-ясно произношение
-  'l09-gramatika-01-row-4': 'пети, петият, петата, петото, петите.',
+  // l09-gramatika-01 — поредни числителни: членувани форми; row-4 петата ≠ стъпало (PE-ta-ta)
+  'l09-gramatika-01-row-4': 'Пети. Петият. Петата. Петото. Петите.',
   'l09-gramatika-01-row-7': 'осми, осмият, осмата, осмото, осмите.',
   'l09-gramatika-01-row-8': 'девети, деветият, деветата, деветото, деветите.',
   'l09-gramatika-01-row-9': 'десети, десетият, десетата, десетото, десетите.',
@@ -178,6 +177,11 @@ const VOCAB_USE_PRO_IDS = new Set<string>([
   // INTENTIONALLY EMPTY — all vocabulary uses Flash by default.
 ]);
 
+/** Illustrated cards where Flash mis-stresses or reads the prompt twice — use Pro + Achernar. */
+const ILLUSTRATED_CARD_PRO_IDS = new Set<string>([
+  'taksi-nd',
+]);
+
 
 // RULE: all flip-card words use Flash. For stress problems add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID.
 const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>([]);
@@ -191,6 +195,15 @@ const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
 // RULE: grammar_examples use Flash by default. Pro is only for dialogues/reading_text/listening.
 // This set is intentionally empty — do not add grammar exercises here.
 const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set<string>([]);
+
+/** Grammar table rows where Flash needs a stronger prompt than GEMINI_WORD_PROMPT. */
+const GRAMMAR_TABLE_FLASH_PROMPT_BY_ID: Record<string, string> = {};
+
+/** Grammar table rows on Pro (Achernar): optional custom prompt when GEMINI_PROMPT is not enough. */
+const GRAMMAR_TABLE_PRO_PROMPT_BY_ID: Record<string, string> = {
+  'l09-gramatika-01-row-4':
+    'Read aloud in Bulgarian with a warm, clear tone. These are five ordinal-number forms with definite articles: пети, петият, петата, петото, петите. NOT the body word for heel. Stress петата on the first syllable (PE-ta-ta), ordinal feminine. Brief pause between each form.',
+};
 
 /** Grammar highlight lines (`Кога?` etc.): Flash + clarity prompt; optional stress hint per file. */
 const GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID: Record<string, string> = {
@@ -469,13 +482,16 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
           : [card.label];
         joined = parts.join('. ').replace(/\s*=\s*/g, ', ');
       }
+      const usePro = ILLUSTRATED_CARD_PRO_IDS.has(card.id);
       jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(joined),
         voice: exerciseVoice,
-        model: GEMINI_FLASH_MODEL,
-        prompt: ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT,
+        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: usePro
+          ? GEMINI_PROMPT
+          : (ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT),
       });
     }
   }
@@ -616,7 +632,9 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
         text: clean(rowSource),
         voice: FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+        prompt: useProForRow
+          ? (GRAMMAR_TABLE_PRO_PROMPT_BY_ID[rowKey] ?? GEMINI_PROMPT)
+          : (GRAMMAR_TABLE_FLASH_PROMPT_BY_ID[rowKey] ?? GEMINI_WORD_PROMPT),
       });
     }
     if (ex.notes) {

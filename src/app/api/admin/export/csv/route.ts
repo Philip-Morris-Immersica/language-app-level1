@@ -43,7 +43,11 @@ export async function GET(req: NextRequest) {
     ].join(',')),
   ];
 
-  return new Response(lines.join('\n'), {
+  // Prepend UTF-8 BOM (\uFEFF) so Excel on Windows opens Cyrillic correctly.
+  // Without it, Excel guesses Windows-1251 on a BG locale and shows garbage.
+  const body = '\uFEFF' + lines.join('\r\n');
+
+  return new Response(body, {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
       'Content-Disposition': `attachment; filename="robi-conversations-${from.toISOString().slice(0, 10)}.csv"`,

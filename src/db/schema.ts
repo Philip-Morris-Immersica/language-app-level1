@@ -81,7 +81,7 @@ export const exerciseStatesTable = pgTable("exercise_states", {
   exerciseId: varchar("exercise_id", { length: 50 }).notNull(),
   state: text().notNull().default('{}'),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-}, (t) => [unique().on(t.userId, t.exerciseId)]);
+}, (t) => [unique().on(t.userId, t.lessonId, t.exerciseId)]);
 
 // Password reset tokens — short-lived, single-use tokens for forgot-password flow.
 // We store ONLY a SHA-256 hash of the raw token (never plaintext) so a DB leak

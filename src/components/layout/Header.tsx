@@ -24,6 +24,7 @@ function useAdminRole() {
 interface HeaderProps {
   isMobileMenuOpen: boolean;
   onToggleMobileMenu: () => void;
+  showLessonNav?: boolean;
 }
 
 function ProfileMenu() {
@@ -120,24 +121,26 @@ function ProfileMenu() {
   );
 }
 
-export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
+export function Header({ isMobileMenuOpen, onToggleMobileMenu, showLessonNav = false }: HeaderProps) {
   const t = useT();
   return (
     <header className="sticky top-0 z-50 bg-[#0072BC] text-white py-2 px-4 shadow-md">
       <div className="flex items-center justify-between gap-2">
 
-        {/* Left: hamburger */}
-        <button
-          onClick={onToggleMobileMenu}
-          className="flex-shrink-0 p-2 hover:bg-white/20 rounded-lg transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
+        {/* Left: hamburger — only shown on lesson/level/test pages */}
+        {showLessonNav && (
+          <button
+            onClick={onToggleMobileMenu}
+            className="flex-shrink-0 p-2 hover:bg-white/20 rounded-lg transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        )}
 
         {/* Center: Home icon + UNHCR logo + title */}
         <div className="flex items-center gap-3 flex-1 min-w-0 justify-center">

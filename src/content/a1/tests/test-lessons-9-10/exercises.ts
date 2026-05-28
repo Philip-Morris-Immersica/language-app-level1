@@ -315,9 +315,9 @@ export const grammarExercises: Exercise[] = [
     id: 't05-gr-2',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 2',
-    instruction: 'Поставете прилагателните с правилния определителен член.',
+    instruction: 'Работете по модела.',
     order: 7,
-    points: 11,
+    points: 8,
     layout: 'single',
     sentences: [
       {
@@ -402,9 +402,9 @@ export const grammarExercises: Exercise[] = [
     id: 't05-gr-3',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Изберете правилния предлог.',
+    instruction: 'Поставете правилните предлози.',
     order: 8,
-    points: 8,
+    points: 6,
     layout: 'single',
     sentences: [
       {
@@ -470,9 +470,9 @@ export const grammarExercises: Exercise[] = [
     layout: 'single',
     sentences: [
       {
-        text: '_______ тръгва автобусът? (Автобусът тръгва в осем часа.)',
-        blanks: [0],
-        correctAnswers: ['Кога'],
+        text: 'Кога е следващият автобус за Варна? Следващият автобус за Варна е след един час.',
+        blanks: [],
+        correctAnswers: [],
         isExample: true,
       },
       {
@@ -511,8 +511,8 @@ export const grammarExercises: Exercise[] = [
         options: ['Къде', 'Как', 'Кога', 'Колко'],
       },
       {
-        // key 4.6: Кога е следващият автобус?
-        text: '_______ е следващият автобус? (Следващият автобус за Варна е след един час.)',
+        // key 4.6: Кога е следващият автобус за Варна?
+        text: '_______ е следващият автобус за Варна? (Следващият автобус за Варна е след един час.)',
         blanks: [0],
         correctAnswers: ['Кога'],
         options: ['Къде', 'Как', 'Кога', 'Колко'],

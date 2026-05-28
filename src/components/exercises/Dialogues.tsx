@@ -85,8 +85,8 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
     const audioPath = audioFile
       ? getTtsAudioPath(exerciseId!, 'dialogues', audioFile)
       : '';
-    const rawText = line.text.replace(/^—\s*/, '');
-    playTtsAudio(audioPath, rawText, undefined, () => setPlayingLine(null));
+    const spoken = (line.ttsText ?? line.text).replace(/^—\s*/, '');
+    playTtsAudio(audioPath, spoken, undefined, () => setPlayingLine(null));
 
     // Reveal translation for this specific line
     setRevealedLines(prev => {
@@ -116,8 +116,8 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
           'dialogues',
           `${exerciseId}-${section.id}-line-${i}`,
         );
-        const rawText = section.lines[i].text.replace(/^—\s*/, '');
-        playTtsAudio(audioPath, rawText, undefined, () => {
+        const spoken = (section.lines[i].ttsText ?? section.lines[i].text).replace(/^—\s*/, '');
+        playTtsAudio(audioPath, spoken, undefined, () => {
           if (tok.cancelled) return;
           window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, 350);
         });

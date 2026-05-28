@@ -55,7 +55,7 @@ export const exercises: Exercise[] = [
       { id: 'avtobus-nd',   imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/01-avtobus.jpg',   label: 'автобус' },
       { id: 'tramvay-nd',   imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/02-tramvay.jpg',   label: 'трамвай' },
       { id: 'troleybus-nd', imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/03-troleybus.jpg', label: 'тролей' },
-      { id: 'taksi-nd',     imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/04-taksi.jpg',     label: 'такси' },
+      { id: 'taksi-nd',     imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/04-taksi.jpg',     label: 'такси', ttsLabel: 'такси' },
       { id: 'kola-nd',      imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/05-kola.jpg',      label: 'кола' },
       { id: 'spirka-nd',    imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/06-spirka.jpg',    label: 'спирка' },
       { id: 'karta-nd',     imageUrl: '/assets/lesson-10/02-novi-dumi-1-transport/07-karta.jpg',     label: 'карта' },
@@ -195,8 +195,8 @@ export const exercises: Exercise[] = [
         id: 'а.',
         lines: [
           { voiceGender: 'male',   text: '– Един билет за Варна за 12:00 часа. Колко струва?',
-            ttsText: '– Един билет за Варна за 12 часа. Колко струва?' },
-          { voiceGender: 'female', text: '– 23 евро.', ttsText: '– Двадесет и три евро.' },
+            ttsText: '– Един билет за Варна. За дванадесет часа. Колко струва?' },
+          { voiceGender: 'female', text: '– 23 евро.', ttsText: '– Двадесет и три. Евро.' },
           { voiceGender: 'male',   text: '– Откъде тръгва автобусът?' },
           { voiceGender: 'female', text: '– От сектор 3.', ttsText: '– От сектор три.' },
           { voiceGender: 'male',   text: '– Благодаря.' },
@@ -422,7 +422,7 @@ export const exercises: Exercise[] = [
         id: 'а.',
         lines: [
           { voiceGender: 'male',   text: '– Моля, един билет за Бургас за 7:00 часа.',
-            ttsText: '– Моля, един билет за Бургас за седем часà.' },
+            ttsText: '– Моля, един билет за Бургас. За седем часа.' },
           { voiceGender: 'female', text: '– Заповядайте. Приятно пътуване!' },
         ],
       },
@@ -446,7 +446,7 @@ export const exercises: Exercise[] = [
         id: 'г.',
         lines: [
           { voiceGender: 'female', text: '– Къде сменяте влака от Стара Загора за Сливен?',
-            ttsText: '– Кꙛде сменяте влака от Стара Загора за Сливен?' },
+            ttsText: '– Къде сменяте влака от Стара Загора за Сливен?' },
           { voiceGender: 'male',   text: '– На гара Дъбово.' },
         ],
       },
@@ -1055,6 +1055,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     subtitle: 'С / СЪС',
+    prominentSubtitle: true,
     instruction: '',
     order: 31.5,
     tableTitle: 'Пътувам с / със',
@@ -1134,7 +1135,7 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 29',
     instruction: 'Запознайте се с картата на района около Орлов мост. Вие се намирате на паметника Левски (червения кръг). Попълнете празните места в инструкциите.',
     order: 33,
-    imageUrl: '/assets/lesson-10/12-dopalnitelni-upr-30-orlov-most/01-karta-orlov-most.jpg',
+    imageUrl: '/assets/lesson-10/12-dopalnitelni-upr-30-orlov-most/01-karta-orlov-most-s-tochka.jpg',
     points: 3,
     questions: [
       {
