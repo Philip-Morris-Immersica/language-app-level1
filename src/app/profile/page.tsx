@@ -5,6 +5,7 @@ import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import Link from 'next/link';
+import { getLessonMetadata } from '@/content';
 import {
   GraduationCap,
   ClipboardCheck,
@@ -272,9 +273,14 @@ export default function ProfilePage() {
 
               {data.progress.perLesson.length > 0 ? (
                 <div className="space-y-1.5">
-                  {data.progress.perLesson.map((l) => (
+                  {data.progress.perLesson.map((l) => {
+                    const meta = getLessonMetadata(l.lessonId);
+                    const lessonLabel = meta
+                      ? `${meta.number === 0 ? '' : `Урок ${meta.number}: `}${meta.title}`
+                      : l.lessonId;
+                    return (
                     <div key={l.lessonId} className="flex items-center gap-2 text-xs">
-                      <span className="font-mono text-gray-500 w-32 truncate">{l.lessonId}</span>
+                      <span className="text-gray-700 w-44 truncate font-medium">{lessonLabel}</span>
                       <span className="uppercase text-[10px] text-gray-400 w-6">{l.level}</span>
                       <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
@@ -287,7 +293,8 @@ export default function ProfilePage() {
                         {l.attemptedCount}/{l.totalCount}
                       </span>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-sm text-gray-400">{t('profile.noActivity')}</p>
@@ -385,11 +392,10 @@ function TestRow({ test, t }: { test: UserTestResult; t: (k: string) => string }
         className="w-full px-1 py-2.5 grid grid-cols-12 gap-2 items-center text-left hover:bg-gray-50/60"
       >
         <div className="col-span-4">
-          <p className="text-sm font-medium text-gray-800 flex items-center gap-1.5">
+          <p className="text-sm font-medium text-gray-800 flex items-center gap-1.5 flex-wrap">
             <span className="uppercase text-[10px] text-gray-400">{test.level}</span>
             <span>{test.title}</span>
           </p>
-          <p className="text-[11px] font-mono text-gray-400">{test.testId}</p>
         </div>
         <div className="col-span-2">{badge}</div>
         <div className="col-span-3">

@@ -85,8 +85,8 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
     const audioPath = audioFile
       ? getTtsAudioPath(exerciseId!, 'dialogues', audioFile)
       : '';
-    const rawText = line.text.replace(/^—\s*/, '');
-    playTtsAudio(audioPath, rawText, undefined, () => setPlayingLine(null));
+    const spoken = (line.ttsText ?? line.text).replace(/^—\s*/, '');
+    playTtsAudio(audioPath, spoken, undefined, () => setPlayingLine(null));
 
     // Reveal translation for this specific line
     setRevealedLines(prev => {
@@ -116,8 +116,8 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
           'dialogues',
           `${exerciseId}-${section.id}-line-${i}`,
         );
-        const rawText = section.lines[i].text.replace(/^—\s*/, '');
-        playTtsAudio(audioPath, rawText, undefined, () => {
+        const spoken = (section.lines[i].ttsText ?? section.lines[i].text).replace(/^—\s*/, '');
+        playTtsAudio(audioPath, spoken, undefined, () => {
           if (tok.cancelled) return;
           window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, 350);
         });
@@ -177,12 +177,14 @@ export function Dialogues({ subtitle, imageUrl, images, sections, exerciseId }: 
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
-      {/* Multiple images (side-by-side on desktop) */}
+      {/* Multiple images (side-by-side on desktop, centered) */}
       {images && images.length > 0 && (
-        <div className={`mb-6 grid gap-3 ${images.length === 1 ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
-          {images.map((src, i) => (
-            <img key={i} src={src} alt="" className="w-full rounded-xl object-cover shadow-sm" />
-          ))}
+        <div className="mb-6 flex justify-center">
+          <div className={`grid gap-3 w-full ${images.length === 1 ? 'max-w-sm grid-cols-1' : images.length === 2 ? 'max-w-2xl grid-cols-1 md:grid-cols-2' : 'max-w-4xl grid-cols-1 md:grid-cols-3'}`}>
+            {images.map((src, i) => (
+              <img key={i} src={src} alt="" className="w-full rounded-xl object-cover shadow-sm" />
+            ))}
+          </div>
         </div>
       )}
 

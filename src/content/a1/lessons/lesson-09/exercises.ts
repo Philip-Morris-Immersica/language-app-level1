@@ -175,20 +175,13 @@ export const exercises: Exercise[] = [
     prominentSubtitle: true,
     instruction: '',
     order: 7,
-    mapLabels: [
-      { name: '1', x: 18, y: 55 },
-      { name: '2', x: 34, y: 55 },
-      { name: '3', x: 50, y: 55 },
-      { name: '4', x: 66, y: 35 },
-      { name: '5', x: 82, y: 55 },
-    ],
-    headerImageUrl: '/assets/lesson-09/07-novi-dumi-3-pribori/01-masa-pribori.jpg',
+    headerImageUrl: '/assets/lesson-09/07-novi-dumi-3-pribori/02-pribori-s-nomera.jpg',
     cards: [
-      { id: 'vilica-nd',  imageUrl: '', label: 'вилица' },
-      { id: 'lyzhica-nd', imageUrl: '', label: 'лъжица' },
-      { id: 'nozh-nd',    imageUrl: '', label: 'нож' },
-      { id: 'chasha-nd',  imageUrl: '', label: 'чаша' },
-      { id: 'chiniya-nd', imageUrl: '', label: 'чиния' },
+      { id: 'vilica-nd',  imageUrl: '', label: '1. Вилица',  ttsLabel: 'вилица' },
+      { id: 'lyzhica-nd', imageUrl: '', label: '2. Лъжица',  ttsLabel: 'лъжица' },
+      { id: 'chiniya-nd', imageUrl: '', label: '3. Чиния',   ttsLabel: 'чиния' },
+      { id: 'nozh-nd',    imageUrl: '', label: '4. Нож',     ttsLabel: 'нож' },
+      { id: 'chasha-nd',  imageUrl: '', label: '5. Чаша',    ttsLabel: 'чаша' },
     ],
   } as IllustratedCardsExercise,
 
@@ -205,7 +198,7 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       {
-        text: 'Модел: Може ли чаша чай?',
+        text: 'Модел: Хлябът се реже с нож.',
         blanks: [], correctAnswers: [], isExample: true,
       },
       {
@@ -420,7 +413,6 @@ export const exercises: Exercise[] = [
     id: 'l09-gramatika-02',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Степенуване на прилагателните',
     instruction: '',
     order: 13,
     tableTitle: 'Степенуване на прилагателните',
@@ -515,7 +507,6 @@ export const exercises: Exercise[] = [
     id: 'l09-gramatika-03',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Сравнение с „от"',
     instruction: 'При сравнение използваме **по-** + прилагателно + **от**.',
     instructionKey: 'grammar.l09.g3.instruction',
     order: 15,
@@ -630,8 +621,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l09-info-naem',
     type: 'grammar_examples',
-    title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
-    subtitle: 'Под наем',
+    title: 'ПОД НАЕМ',
     instruction: '',
     order: 18,
     examples: [
