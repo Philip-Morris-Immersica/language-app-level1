@@ -171,6 +171,16 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
   const showFullListenButton =
     (!!exerciseId && paragraphs.length > 0) || !!audioUrl;
 
+  /**
+   * Unified listen handler for the main "Слушай" button.
+   * - With explicit audioUrl: plays the full MP3 file.
+   * - Without audioUrl: uses sequential paragraph playback (p-0 → p-1 → …)
+   *   so the button never falls back to browser speech synthesis.
+   */
+  const handleMainListen = audioUrl ? handlePlayAudio : handleSequentialListen;
+  const mainIsPlaying = audioUrl ? isPlaying : sequentialPlaying;
+  const mainIsPaused = audioUrl ? isPaused : sequentialPaused;
+
   const handleSongPlay = () => {
     if (songPlaying) {
       songAudioRef.current?.pause();
@@ -354,19 +364,19 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
           )}
           {showFullListenButton && (
             <Button
-              onClick={handlePlayAudio}
+              onClick={handleMainListen}
               className={`px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all flex items-center gap-2 ${
-                isPlaying
+                mainIsPlaying
                   ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
                   : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
               }`}
             >
-              {isPlaying ? (
+              {mainIsPlaying ? (
                 <>
                   <Pause className="w-5 h-5" />
                   {t('exercise.pause')}
                 </>
-              ) : isPaused ? (
+              ) : mainIsPaused ? (
                 <>
                   <Play className="w-5 h-5" />
                   {t('exercise.continue')}
