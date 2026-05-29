@@ -171,16 +171,6 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
   const showFullListenButton =
     (!!exerciseId && paragraphs.length > 0) || !!audioUrl;
 
-  /**
-   * Unified listen handler for the main "Слушай" button.
-   * - With explicit audioUrl: plays the full MP3 file.
-   * - Without audioUrl: uses sequential paragraph playback (p-0 → p-1 → …)
-   *   so the button never falls back to browser speech synthesis.
-   */
-  const handleMainListen = audioUrl ? handlePlayAudio : handleSequentialListen;
-  const mainIsPlaying = audioUrl ? isPlaying : sequentialPlaying;
-  const mainIsPaused = audioUrl ? isPaused : sequentialPaused;
-
   const handleSongPlay = () => {
     if (songPlaying) {
       songAudioRef.current?.pause();
@@ -334,6 +324,16 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
     setIsPlaying(true);
     setIsPaused(false);
   };
+
+  /**
+   * Unified listen handler for the main "Слушай" button.
+   * - With explicit audioUrl: plays the full MP3 file.
+   * - Without audioUrl: uses sequential paragraph playback (p-0 → p-1 → …)
+   *   so the button never falls back to browser speech synthesis.
+   */
+  const handleMainListen = audioUrl ? handlePlayAudio : handleSequentialListen;
+  const mainIsPlaying = audioUrl ? isPlaying : sequentialPlaying;
+  const mainIsPaused = audioUrl ? isPaused : sequentialPaused;
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">

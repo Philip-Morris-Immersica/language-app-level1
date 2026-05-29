@@ -635,6 +635,16 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     ru: '**казвам** = «говорить, сообщать» / **казвам се** = «называться (имя)». **връщам** = «возвращать что-то» / **връщам се** = «возвращаться (домой)».',
   },
 
+  'exercise.wb.l11.reflexive': {
+    bg: 'Попълнете изреченията с правилната форма на глагола. Добавете *СЕ*, ако е нужно.',
+    en: 'Complete the sentences with the correct verb form. Add *СЕ* if needed.',
+    fr: 'Complétez les phrases avec la bonne forme du verbe. Ajoutez *СЕ* si nécessaire.',
+    ar: 'أكمل الجمل بالشكل الصحيح للفعل. أضف *СЕ* إذا لزم الأمر.',
+    fa: 'جمله‌ها را با شکل صحیح فعل کامل کنید. در صورت نیاز *СЕ* را اضافه کنید.',
+    uk: 'Заповніть речення правильною формою дієслова. Додайте *СЕ*, якщо потрібно.',
+    ru: 'Заполните предложения правильной формой глагола. Добавьте *СЕ*, если нужно.',
+  },
+
   'grammar.l09.naem.instruction': {
     bg: 'Изрази за наем на жилище — „под наем", „давам под наем", „търся под наем".',
     en: 'Rental expressions — "под наем" (for rent), "давам под наем" (to rent out), "търся под наем" (looking to rent).',
