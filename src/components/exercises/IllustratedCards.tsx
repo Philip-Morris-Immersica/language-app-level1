@@ -70,23 +70,32 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
           <p className="mt-2 text-center text-xs text-gray-400 select-none">
             Кликнете върху картинката, за да я увеличите.
           </p>
-          {/* Optional narrator paragraph shown below the header image with a listen button */}
+          {/* Optional narrator paragraph shown below the header image — click to play TTS */}
           {exercise.headerCaption && (
-            <div className="mt-4 flex items-start gap-3 bg-[#DAF6EB] rounded-xl px-5 py-4">
-              <button
-                type="button"
-                aria-label="Слушай"
-                onClick={() => {
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Слушай"
+              onClick={() => {
+                const audioPath = exerciseId
+                  ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
+                  : '';
+                playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
                   const audioPath = exerciseId
                     ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
                     : '';
-                  playTtsAudio(audioPath, exercise.headerCaption);
-                }}
-                className="flex-shrink-0 mt-0.5 w-9 h-9 rounded-full bg-white border-2 border-[#32C189] flex items-center justify-center hover:bg-[#DAF6EB] transition-colors"
-              >
-                <Volume2 className="w-4 h-4 text-[#1F5741]" />
-              </button>
-              <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed">
+                  playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                }
+              }}
+              className="mt-4 relative bg-[#DAF6EB] rounded-xl px-5 py-4 cursor-pointer hover:brightness-95 active:scale-[0.99] transition-all select-none"
+            >
+              <div className="absolute top-3 right-4 text-[#1F5741]">
+                <Volume2 className="w-4 h-4" />
+              </div>
+              <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed pr-8">
                 {exercise.headerCaption}
               </p>
             </div>

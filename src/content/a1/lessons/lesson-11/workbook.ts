@@ -43,6 +43,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l11-wb-02',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 2',
+    instructionKey: 'exercise.wb.l11.reflexive',
     instruction: 'Попълнете изреченията с правилната форма на глагола. Добавете *СЕ*, ако е нужно.',
     order: 2,
     points: 12,

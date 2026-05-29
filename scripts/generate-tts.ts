@@ -488,7 +488,9 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
         ? MALE_VOICE
         : FEMALE_VOICE;
     // Optional narrator paragraph shown below the header image — Pro + exercise voice.
-    const caption = (ex as { headerCaption?: string }).headerCaption?.trim();
+    // Uses ttsCaptionText (numbers as words, etc.) when available; falls back to headerCaption.
+    const caption = (ex as { ttsCaptionText?: string; headerCaption?: string }).ttsCaptionText?.trim()
+      || (ex as { headerCaption?: string }).headerCaption?.trim();
     if (caption) {
       jobs.push({
         category: 'texts',

@@ -159,6 +159,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
   headerImageUrl?: string;
   /** Short paragraph shown below the header image with a TTS listen button (Pro male/female voice depending on voiceGender). */
   headerCaption?: string;
+  /** TTS-friendly version of headerCaption — numbers as words etc. Used for both pre-generated MP3 and browser fallback. */
+  ttsCaptionText?: string;
   /**
    * By default cards use up to 4 columns on large screens.
    * Use `3` for a symmetric grid (e.g. rows of three — typical for НОВИ ДУМИ).
