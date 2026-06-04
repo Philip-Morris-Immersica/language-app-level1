@@ -63,13 +63,22 @@ export interface BaseExercise {
   grammarHighlight?: GrammarHighlight; // Optional green info box shown above exercise body
   mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
   mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
+  /** When true, no numbered title header is shown (instruction-only blocks, e.g. first textbook exercise). */
+  hideHeader?: boolean;
 }
 
 // Specific exercise interfaces
 export interface FillInBlankExercise extends BaseExercise {
   type: 'fill_in_blank';
   freeText?: boolean; // When true, renders a single free-form text input per sentence
-  sentences: {
+  /** Multi-paragraph free writing with keyword check and model answer on error. */
+  freeTextBlocks?: {
+    prompt: string;
+    modelAnswer: string;
+    /** Each inner array: at least one keyword (case-insensitive) must appear in the answer. */
+    keywordGroups?: string[][];
+  }[];
+  sentences?: {
     text: string;           // "Аз съм Мохамед."
     blanks: number[];       // Positions of blanks [2] = "съм"
     correctAnswers: string[]; // ["съм"] or list of all accepted values (for freeText mode)
@@ -126,7 +135,7 @@ export interface ImageLabelingExercise extends BaseExercise {
     acceptableLabels?: string[];
   }[];
   options: string[];           // List of options for dropdown/selection
-  displayType?: 'flags' | 'default';  // For specific formatting
+  displayType?: 'flags' | 'default' | 'row';  // 'row' = 4 images in one row, uniform background
 }
 
 export interface NumberWritingExercise extends BaseExercise {
@@ -238,6 +247,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
   ttsFlash?: boolean;
   /** Show a green Heart before `text` and a red HeartCrack before `subtext` (like/dislike cards, e.g. „обичам / не обичам“). */
   showLikeDislike?: boolean;
+  /** 'centered' — two text-only examples side by side, centered (textbook grammar layout). */
+  layout?: 'default' | 'centered';
   examples: {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
@@ -299,9 +310,13 @@ export interface DialoguesExercise extends BaseExercise {
   subtitle?: string;
   imageUrl?: string;
   audioUrl?: string;
+  /** 'scene' = central image with speech bubbles around it (ДИАЛОЗИ 1). */
+  displayLayout?: 'list' | 'scene';
   sections: {
     id: string;              // 'а.', 'б.'
     imageUrl?: string;
+    /** Bubble placement when displayLayout is 'scene'. */
+    bubbleSide?: 'left' | 'right';
     lines: {
       speaker?: string;
       /** TTS only: pick male/female voice (two males in a row use Charon + Fenrir). Not shown in UI. */
@@ -363,18 +378,24 @@ export interface DragToColumnsExercise extends BaseExercise {
 
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
-  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
+  /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */
+  headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
   sentences: {
     text: string;
+    /** Допълнителен текст под изречението (напр. профил на персонаж за контекст). */
+    contextText?: string;
     blanks: number[];
     correctAnswers: string[];
     acceptableAnswers?: string[][];
     options?: string[] | string[][];
     isExample?: boolean;
     images?: string[];
+    /** For layout 'image-bubbles': which side of the central image. */
+    bubbleSide?: 'left' | 'right';
   }[];
 }
 

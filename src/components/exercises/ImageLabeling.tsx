@@ -159,10 +159,15 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
     );
   }
 
-  // Default display type - original grid layout
+  const isRowLayout = exercise.displayType === 'row';
+  const gridClass = isRowLayout
+    ? 'grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-5 mb-8'
+    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8';
+
+  // Default display type - original grid layout (or 'row' = 4 phones in one row)
   return (
     <div className="bg-white rounded-xl p-8 md:p-10 shadow-md">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className={gridClass}>
         {exercise.images.map((image) => {
           const selectedLabel = selectedLabels[image.id];
           const validationResult = validation[image.id];
@@ -171,21 +176,22 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
             <div
               key={image.id}
               className={`
-                relative rounded-xl border-2 p-6 transition-all shadow-sm
+                relative rounded-xl border-2 p-4 md:p-5 transition-all shadow-sm flex flex-col
                 ${validationResult === true ? 'border-green-500 bg-green-50' : ''}
                 ${validationResult === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
-                ${validationResult === null ? 'border-gray-200 bg-white' : ''}
+                ${validationResult === null ? 'border-gray-200' : ''}
+                ${validationResult === null && isRowLayout ? 'bg-[#f3efe6]' : validationResult === null ? 'bg-white' : ''}
               `}
             >
               {/* Image or Emoji */}
-              <div className="flex items-center justify-center mb-4 min-h-[190px]">
+              <div className={`flex items-center justify-center mb-3 ${isRowLayout ? 'min-h-[140px] md:min-h-[160px]' : 'min-h-[190px]'}`}>
                 {image.imageUrl?.startsWith('http') || image.imageUrl?.startsWith('/') ? (
                   <Image
                     src={image.imageUrl}
-                    alt="Flag"
-                    width={190}
-                    height={190}
-                    className="w-[190px] h-[190px] object-contain rounded-lg shadow-md"
+                    alt=""
+                    width={isRowLayout ? 140 : 190}
+                    height={isRowLayout ? 140 : 190}
+                    className={`object-contain rounded-lg ${isRowLayout ? 'w-full max-h-[140px] md:max-h-[160px] h-auto' : 'w-[190px] h-[190px] shadow-md'}`}
                   />
                 ) : (
                   <div className="text-8xl">

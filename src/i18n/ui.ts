@@ -9,6 +9,7 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'nav.level':          { bg: 'Ниво А1',       ar: 'المستوى A1',     fr: 'Niveau A1',     en: 'Level A1',    fa: 'سطح A1',       uk: 'Рівень A1',     ru: 'Уровень A1'    },
   'nav.lesson':         { bg: 'Урок',          ar: 'الدرس',          fr: 'Leçon',         en: 'Lesson',      fa: 'درس',          uk: 'Урок',          ru: 'Урок'          },
   'nav.alphabet':       { bg: 'Азбука',        ar: 'الأبجدية',       fr: 'Alphabet',      en: 'Alphabet',    fa: 'الفبا',        uk: 'Абетка',        ru: 'Алфавит'       },
+  'nav.reviewA1':       { bg: 'Преговор А1',   ar: 'مراجعة A1',      fr: 'Révision A1',   en: 'A1 Review',   fa: 'مرور A1',      uk: 'Повторення A1', ru: 'Повторение A1' },
   'nav.test':           { bg: 'Тест',          ar: 'اختبار',         fr: 'Test',          en: 'Test',        fa: 'آزمون',        uk: 'Тест',          ru: 'Тест'          },
 
   // ── Header / App title ────────────────────────────────────────────────────
@@ -196,6 +197,26 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     fa: 'فعل «съм» (بودن) را در زمان حال یاد بگیرید.',
     uk: 'Ознайомтеся з дієсловом «съм» (бути) у теперішньому часі.',
     ru: 'Познакомьтесь с глаголом «съм» (быть) в настоящем времени.',
+  },
+
+  // A2 — Lesson 1 „Ало, ало!"
+  'grammar.a2l01.g1.instruction': {
+    bg: 'Запознайте се с кратките винителни форми на личните местоимения.',
+    ar: 'تعرّف على الصيغ القصيرة لضمائر المفعول به (حالة النصب).',
+    fr: 'Découvrez les formes courtes des pronoms personnels à l\'accusatif.',
+    en: 'Learn the short accusative forms of the personal pronouns.',
+    fa: 'با شکل‌های کوتاه ضمایر شخصی در حالت مفعولی (آکوزاتیو) آشنا شوید.',
+    uk: 'Ознайомтеся з короткими формами особових займенників у знахідному відмінку.',
+    ru: 'Познакомьтесь с краткими винительными формами личных местоимений.',
+  },
+  'grammar.a2l01.g2.instruction': {
+    bg: 'Запознайте се с винителните форми на местоименията.',
+    ar: 'تعرّف على صيغ ضمائر المفعول به (حالة النصب).',
+    fr: 'Découvrez les formes des pronoms à l\'accusatif.',
+    en: 'Learn the accusative forms of the pronouns.',
+    fa: 'با شکل‌های مفعولی (آکوزاتیو) ضمایر آشنا شوید.',
+    uk: 'Ознайомтеся з формами займенників у знахідному відмінку.',
+    ru: 'Познакомьтесь с винительными формами местоимений.',
   },
 
   // Lesson 2

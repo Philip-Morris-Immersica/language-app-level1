@@ -70,6 +70,7 @@ interface GrammarWithExamplesProps {
   subtitle?: string;
   disableTts?: boolean;
   showLikeDislike?: boolean;
+  layout?: 'default' | 'centered';
   examples: GrammarExample[];
   exerciseId?: string;
 }
@@ -87,7 +88,7 @@ function BoldLine({ text }: { text: string }) {
   );
 }
 
-export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, exerciseId }: GrammarWithExamplesProps) {
+export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
   const t = useT();
@@ -113,6 +114,46 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
       return next;
     });
   };
+
+  const isCentered =
+    layout === 'centered' ||
+    (examples.length === 2 && examples.every((e) => !e.imageUrl && Boolean(e.lines?.length)));
+
+  if (isCentered) {
+    return (
+      <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+        {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+          {examples.map((example, index) => (
+            <div
+              key={index}
+              onClick={() => handleClick(index, example)}
+              className="rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
+            >
+              {example.text && (
+                <p className="text-xs font-bold uppercase tracking-widest text-[#0072BC] mb-4 pb-2 border-b border-[#CDE3F1]">
+                  {example.text}
+                </p>
+              )}
+              <div className="space-y-2">
+                {example.lines?.filter(Boolean).map((line, lineIndex) => (
+                  <div key={lineIndex}>
+                    <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+                      <BoldLine text={line} />
+                    </p>
+                    <InlineTranslation
+                      text={line.replace(/\*\*(.+?)\*\*/g, '$1')}
+                      visible={revealed.has(index)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   // Hero mode: single example with image → render full-width, large, always zoomable
   const isHero = examples.length === 1 && Boolean(examples[0].imageUrl);

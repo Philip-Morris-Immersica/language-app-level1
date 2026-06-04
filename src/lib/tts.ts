@@ -115,8 +115,20 @@ export function getTtsAudioPath(
   category: 'words' | 'dialogues' | 'grammar' | 'texts' | 'listening',
   filename: string,
 ): string {
+  const levelLessonMatch = exerciseId.match(/^(a2|b1|b2)-l(\d+)/);
+  if (levelLessonMatch) {
+    const [, level, lessonNum] = levelLessonMatch;
+    return `/assets/${level}-lesson-${lessonNum}/audio/tts/${category}/${filename}.mp3`;
+  }
+
   const lessonMatch = exerciseId.match(/^l(\d+)/);
   if (lessonMatch) return `/assets/lesson-${lessonMatch[1]}/audio/tts/${category}/${filename}.mp3`;
+
+  const levelTestMatch = exerciseId.match(/^(a2|b1|b2)-t(\d+)/);
+  if (levelTestMatch) {
+    const [, level, testNum] = levelTestMatch;
+    return `/assets/test-${level}-${testNum}/audio/tts/${category}/${filename}.mp3`;
+  }
 
   const testMatch = exerciseId.match(/^t(\d+)/);
   if (testMatch) {

@@ -10,12 +10,14 @@ import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface WorkbookSentence {
   text: string;
+  contextText?: string;
   blanks: number[];
   correctAnswers: string[];
   acceptableAnswers?: string[][];
   options?: string[] | string[][];
   isExample?: boolean;
   images?: string[];
+  bubbleSide?: 'left' | 'right';
 }
 
 function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx: number): string[] {
@@ -26,8 +28,9 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
 
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
-  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
   imageUrl?: string;
+  headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
@@ -46,6 +49,7 @@ export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
   imageUrl,
+  headerImages,
   listeningText,
   onComplete,
   exerciseId,
@@ -139,7 +143,7 @@ export function WorkbookFillBlank({
     onComplete?.(correctCount === totalSentences, correctCount);
   };
 
-  const renderSentence = (sentence: WorkbookSentence, sIdx: number) => {
+  const renderSentence = (sentence: WorkbookSentence, sIdx: number, compact = false) => {
     const isExample = sentence.isExample || sentence.blanks.length === 0;
     const segments = parseText(sentence.text);
     let blankCounter = 0;
@@ -154,13 +158,8 @@ export function WorkbookFillBlank({
       />
     ) : null;
 
-    return (
-      <div
-        key={sIdx}
-        className={`flex items-center gap-3 py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}
-      >
-        <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{sIdx + 1}.</span>
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0">
+    const inner = (
+        <div className={`flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 ${compact ? 'text-sm md:text-base' : ''}`}>
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
@@ -240,7 +239,24 @@ export function WorkbookFillBlank({
             </span>
           )}
         </div>
-        {imageEl}
+    );
+
+    if (compact) {
+      return <div key={sIdx} className="py-1">{inner}</div>;
+    }
+
+    return (
+      <div key={sIdx} className={`py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}>
+        <div className="flex items-center gap-3">
+          <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{sIdx + 1}.</span>
+          {inner}
+          {imageEl}
+        </div>
+        {sentence.contextText && (
+          <p className="mt-1.5 ml-7 text-sm text-gray-500 leading-relaxed italic">
+            {sentence.contextText}
+          </p>
+        )}
       </div>
     );
   };
@@ -465,9 +481,73 @@ export function WorkbookFillBlank({
     playTtsAudio(audioPath, text);
   };
 
+  const leftBubbleSentences = shuffledSentences.filter(
+    (s, i) => s.bubbleSide === 'left' || (!s.bubbleSide && i % 2 === 0),
+  );
+  const rightBubbleSentences = shuffledSentences.filter(
+    (s, i) => s.bubbleSide === 'right' || (!s.bubbleSide && i % 2 === 1),
+  );
+
+  const renderImageBubblesLayout = () => (
+    <div className="max-w-5xl mx-auto">
+      <div className="flex justify-center mb-6 lg:hidden">
+        <ImageLightbox src={imageUrl!} alt="">
+          <img src={imageUrl!} alt="" className="max-h-[480px] w-auto rounded-lg object-contain" />
+        </ImageLightbox>
+      </div>
+      <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_360px_minmax(0,1fr)] gap-x-3 gap-y-3 items-start">
+        <div className="space-y-3">
+          {leftBubbleSentences.map((s) => {
+            const sIdx = shuffledSentences.indexOf(s);
+            return (
+              <div
+                key={sIdx}
+                className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm mr-2"
+              >
+                {renderSentence(s, sIdx, true)}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-center sticky top-4">
+          <ImageLightbox src={imageUrl!} alt="">
+            <img src={imageUrl!} alt="" className="w-[360px] h-auto object-contain" />
+          </ImageLightbox>
+        </div>
+        <div className="space-y-3">
+          {rightBubbleSentences.map((s) => {
+            const sIdx = shuffledSentences.indexOf(s);
+            return (
+              <div
+                key={sIdx}
+                className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm ml-2"
+              >
+                {renderSentence(s, sIdx, true)}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="lg:hidden space-y-3">
+        {shuffledSentences.map((s, i) => (
+          <div
+            key={i}
+            className={`rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm ${
+              s.bubbleSide === 'right' ? 'ml-4' : 'mr-4'
+            }`}
+          >
+            {renderSentence(s, i, true)}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
-      {imageUrl ? (
+      {layout === 'image-bubbles' && imageUrl ? (
+        renderImageBubblesLayout()
+      ) : imageUrl ? (
         <div className="mb-6 flex justify-center">
           <div className="w-full max-w-3xl md:max-w-4xl">
             <ImageLightbox src={imageUrl} alt="">
@@ -480,6 +560,23 @@ export function WorkbookFillBlank({
           </div>
         </div>
       ) : null}
+
+      {headerImages && headerImages.length > 0 && (
+        <div className={`grid gap-4 mb-6 ${headerImages.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 max-w-2xl mx-auto'}`}>
+          {headerImages.map((img, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <ImageLightbox src={img.imageUrl} alt={img.label}>
+                <img
+                  src={img.imageUrl}
+                  alt={img.label}
+                  className="w-full rounded-lg shadow-sm object-contain max-h-72"
+                  loading="lazy"
+                />
+              </ImageLightbox>
+            </div>
+          ))}
+        </div>
+      )}
 
       {listeningText && (
         <div className="mb-6">
@@ -495,7 +592,7 @@ export function WorkbookFillBlank({
         </div>
       )}
 
-      {layout === 'qa-stacked' ? (
+      {layout === 'image-bubbles' ? null : layout === 'qa-stacked' ? (
         <div className="space-y-3">
           {(() => {
             let numCounter = 0;

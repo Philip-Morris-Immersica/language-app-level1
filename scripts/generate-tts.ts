@@ -95,7 +95,9 @@ const MAX_RETRIES = 3;
 
 const CONTENT_ID = IS_TEST
   ? `test-lessons-${testNum}`
-  : `lesson-${lessonNum!.padStart(2, '0')}`;
+  : /^\d+$/.test(lessonNum!)
+    ? `lesson-${lessonNum!.padStart(2, '0')}`
+    : lessonNum!;
 // ASSET_DIR is resolved at runtime after loading metadata for tests
 let OUTPUT_BASE = '';
 
