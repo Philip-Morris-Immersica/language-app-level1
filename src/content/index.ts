@@ -17,6 +17,8 @@ import {
   ALL_TEST_FOLDER_MAP,
   ALL_TEST_NEXT_LESSON_MAP,
   ALL_LESSON_EXERCISE_COUNTS,
+  getLessonLevel,
+  getLevelDef,
   type LessonMetadataEntry,
   type NavItem,
 } from './registry';
@@ -30,6 +32,9 @@ export {
   TEST_LEVEL_MAP,
   ALL_LESSON_IDS,
   LEVELS,
+  getLessonLevel,
+  getTestLevel,
+  getLevelDef,
   type Level,
   type LessonMetadataEntry,
   type NavItem,
@@ -55,16 +60,34 @@ export function getLessonMetadata(lessonId: string): LessonMetadataEntry | undef
   return ALL_LESSONS_METADATA.find((l) => l.id === lessonId);
 }
 
-export function getPrevLesson(currentNumber: number): LessonMetadataEntry | undefined {
-  return ALL_LESSONS_METADATA.find((l) => l.number === currentNumber - 1);
+/**
+ * Returns the lesson immediately before `currentLessonId` within the same
+ * CEFR level. Returns `undefined` when `currentLessonId` is already the
+ * first lesson of its level (or unknown). Cross-level navigation is
+ * intentional NOT supported here — use the level overview to jump levels.
+ */
+export function getPrevLesson(currentLessonId: string): LessonMetadataEntry | undefined {
+  const current = getLessonMetadata(currentLessonId);
+  if (!current) return undefined;
+  const level = getLessonLevel(currentLessonId);
+  if (!level) return undefined;
+  const inLevel = getLevelDef(level).lessonsMetadata;
+  return inLevel.find((l) => l.number === current.number - 1);
 }
 
-export function getNextLesson(currentNumber: number): LessonMetadataEntry | undefined {
-  return ALL_LESSONS_METADATA.find((l) => l.number === currentNumber + 1);
+/** Counterpart of `getPrevLesson` — next lesson in the same level. */
+export function getNextLesson(currentLessonId: string): LessonMetadataEntry | undefined {
+  const current = getLessonMetadata(currentLessonId);
+  if (!current) return undefined;
+  const level = getLessonLevel(currentLessonId);
+  if (!level) return undefined;
+  const inLevel = getLevelDef(level).lessonsMetadata;
+  return inLevel.find((l) => l.number === current.number + 1);
 }
 
-export function hasTestAfterLesson(lessonNumber: number): boolean {
-  return ALL_LESSONS_METADATA.find((l) => l.number === lessonNumber)?.hasTest ?? false;
+/** Whether the given lesson is followed by a test in its level. */
+export function hasTestAfterLesson(currentLessonId: string): boolean {
+  return getLessonMetadata(currentLessonId)?.hasTest ?? false;
 }
 
 /** Folder name on disk for a given test ID. */

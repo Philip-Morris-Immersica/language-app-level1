@@ -52,7 +52,7 @@ export default function AzboukaPage() {
 
         <LessonNav
           prevLesson={undefined}
-          nextLesson={getNextLesson(0)}
+          nextLesson={getNextLesson('lesson-00')}
           testAvailable={false}
         />
       </div>

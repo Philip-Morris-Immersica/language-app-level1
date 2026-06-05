@@ -6,7 +6,7 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
 
   // ── Navigation / Sidebar ─────────────────────────────────────────────────
   'nav.contents':       { bg: 'Съдържание',    ar: 'المحتويات',      fr: 'Contenu',       en: 'Contents',    fa: 'فهرست',        uk: 'Зміст',         ru: 'Содержание'    },
-  'nav.level':          { bg: 'Ниво А1',       ar: 'المستوى A1',     fr: 'Niveau A1',     en: 'Level A1',    fa: 'سطح A1',       uk: 'Рівень A1',     ru: 'Уровень A1'    },
+  'nav.level':          { bg: 'Ниво',          ar: 'المستوى',        fr: 'Niveau',        en: 'Level',       fa: 'سطح',          uk: 'Рівень',        ru: 'Уровень'       },
   'nav.lesson':         { bg: 'Урок',          ar: 'الدرس',          fr: 'Leçon',         en: 'Lesson',      fa: 'درس',          uk: 'Урок',          ru: 'Урок'          },
   'nav.alphabet':       { bg: 'Азбука',        ar: 'الأبجدية',       fr: 'Alphabet',      en: 'Alphabet',    fa: 'الفبا',        uk: 'Абетка',        ru: 'Алфавит'       },
   'nav.test':           { bg: 'Тест',          ar: 'اختبار',         fr: 'Test',          en: 'Test',        fa: 'آزمون',        uk: 'Тест',          ru: 'Тест'          },
@@ -146,7 +146,9 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'exercise.allAnswered':    { bg: 'Браво! Отговорихте на всички въпроси!', ar: 'أحسنت! أجبت على جميع الأسئلة!', fr: 'Bravo ! Vous avez répondu à toutes les questions !', en: 'Well done! You answered all the questions!', fa: 'آفرین! به همه سؤالات پاسخ دادید!', uk: 'Браво! Ви відповіли на всі запитання!', ru: 'Браво! Вы ответили на все вопросы!' },
   'exercise.dictionary':     { bg: 'Речник', ar: 'قاموس', fr: 'Dictionnaire', en: 'Dictionary', fa: 'فرهنگ لغت', uk: 'Словник', ru: 'Словарь' },
 
-  'level.title':            { bg: 'Ниво A1 — Уроци', ar: 'المستوى A1 — الدروس', fr: 'Niveau A1 — Leçons', en: 'Level A1 — Lessons', fa: 'سطح A1 — دروس', uk: 'Рівень A1 — Уроки', ru: 'Уровень A1 — Уроки' },
+  'level.title':            { bg: 'Уроци',           ar: 'الدروس',                fr: 'Leçons',              en: 'Lessons',              fa: 'دروس',             uk: 'Уроки',               ru: 'Уроки' },
+  'level.empty':            { bg: 'Това ниво е в подготовка.', ar: 'هذا المستوى قيد الإعداد.', fr: 'Ce niveau est en préparation.', en: 'This level is in preparation.', fa: 'این سطح در حال آماده‌سازی است.', uk: 'Цей рівень у підготовці.', ru: 'Этот уровень в подготовке.' },
+  'level.comingSoon':       { bg: 'Скоро',           ar: 'قريباً',                fr: 'Bientôt',             en: 'Coming soon',          fa: 'به‌زودی',         uk: 'Незабаром',           ru: 'Скоро' },
   'level.subtitle':         { bg: 'Български за начинаещи', ar: 'البلغارية للمبتدئين', fr: 'Bulgare pour débutants', en: 'Bulgarian for beginners', fa: 'بلغاری برای مبتدیان', uk: 'Болгарська для початківців', ru: 'Болгарский для начинающих' },
   'level.overallProgress':  { bg: 'Общ прогрес', ar: 'التقدم العام', fr: 'Progression globale', en: 'Overall progress', fa: 'پیشرفت کلی', uk: 'Загальний прогрес', ru: 'Общий прогресс' },
   'level.start':            { bg: 'Започни', ar: 'ابدأ', fr: 'Commencer', en: 'Start', fa: 'شروع', uk: 'Розпочати', ru: 'Начать' },

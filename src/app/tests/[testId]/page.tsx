@@ -1,10 +1,36 @@
 import { ClipboardCheck } from 'lucide-react';
 import { LessonLayout } from '@/components/layout/LessonLayout';
-import { loadTest } from '@/content';
+import { loadTest, getTestLevel, type Level } from '@/content';
 import { TestPageClient } from './TestPageClient';
 
 interface TestPageProps {
   params: Promise<{ testId: string }>;
+}
+
+// UNHCR brand rule: level labels stay Latin in every UI language.
+const LATIN_LABEL: Record<Level, string> = {
+  a1: 'A1',
+  a2: 'A2',
+  b1: 'B1',
+  b2: 'B2',
+};
+
+/**
+ * Parses a test id like `test-a1-3` or `test-b2-1` and returns the level
+ * label + the test number, so the placeholder screen can display the same
+ * convention for every level (e.g. "Тест A2.4").
+ */
+function describeTest(testId: string): { label: string; backHref: string } {
+  const level = getTestLevel(testId);
+  const match = testId.match(/^test-[a-z0-9]+-(\d+)$/);
+  const number = match?.[1] ?? '?';
+  if (level) {
+    return {
+      label: `${LATIN_LABEL[level]}.${number}`,
+      backHref: `/level/${level}`,
+    };
+  }
+  return { label: number, backHref: '/' };
 }
 
 export default async function TestPage({ params }: TestPageProps) {
@@ -12,8 +38,7 @@ export default async function TestPage({ params }: TestPageProps) {
   const testData = await loadTest(testId);
 
   if (!testData) {
-    const parts = testId.replace('test-a1-', '');
-    const label = `А1.${parts}`;
+    const { label, backHref } = describeTest(testId);
     return (
       <LessonLayout>
         <div className="min-h-[60vh] flex items-center justify-center px-4">
@@ -34,10 +59,10 @@ export default async function TestPage({ params }: TestPageProps) {
             </div>
             <div className="border-t border-gray-100" />
             <a
-              href="/lessons/lesson-01"
+              href={backHref}
               className="inline-flex items-center gap-2 text-sm text-[#32C189] font-medium hover:underline"
             >
-              ← Обратно към уроците
+              ← Назад към нивото
             </a>
           </div>
         </div>

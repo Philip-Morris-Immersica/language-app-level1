@@ -1,5 +1,5 @@
-import { LevelMapClient } from './LevelMapClient';
+import { LevelMapClient } from '@/components/level/LevelMapClient';
 
 export default function LevelA1Page() {
-  return <LevelMapClient />;
+  return <LevelMapClient level="a1" />;
 }

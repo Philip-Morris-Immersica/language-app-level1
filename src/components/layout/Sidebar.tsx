@@ -1,16 +1,65 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ClipboardCheck, Check } from 'lucide-react';
-import { navItems } from '@/content';
+import { ClipboardCheck, Check, Hourglass } from 'lucide-react';
+import {
+  getNavItemsForLevel,
+  LESSON_LEVEL_MAP,
+  TEST_LEVEL_MAP,
+  LEVELS,
+  type Level,
+} from '@/content';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+const LATIN_LABEL: Record<Level, string> = {
+  a1: 'A1',
+  a2: 'A2',
+  b1: 'B1',
+  b2: 'B2',
+};
+
+/**
+ * Derives the currently-active level from the page path. Falls back to A1
+ * when nothing matches (e.g. `/` or unknown routes) so first-time visitors
+ * still see the A1 sidebar.
+ *
+ * Detection rules:
+ *  - `/level/<lvl>` → that level.
+ *  - `/lessons/<id>` → `LESSON_LEVEL_MAP[id]`; legacy `/lessons/azbouka` is A1.
+ *  - `/tests/<id>` → `TEST_LEVEL_MAP[id]`.
+ */
+function detectActiveLevel(pathname: string | null): Level {
+  if (!pathname) return 'a1';
+
+  const levelMatch = pathname.match(/^\/level\/([a-z0-9]+)/);
+  if (levelMatch) {
+    const candidate = levelMatch[1] as Level;
+    if ((LEVELS as readonly string[]).includes(candidate)) return candidate;
+  }
+
+  const lessonMatch = pathname.match(/^\/lessons\/([^/?#]+)/);
+  if (lessonMatch) {
+    const id = lessonMatch[1];
+    if (id === 'azbouka') return 'a1';
+    const lvl = LESSON_LEVEL_MAP[id];
+    if (lvl) return lvl;
+  }
+
+  const testMatch = pathname.match(/^\/tests\/([^/?#]+)/);
+  if (testMatch) {
+    const lvl = TEST_LEVEL_MAP[testMatch[1]];
+    if (lvl) return lvl;
+  }
+
+  return 'a1';
 }
 
 interface LessonProgress {
@@ -83,6 +132,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [progressData, setProgressData] = useState<Record<string, LessonProgress>>({});
   const fetched = useRef(false);
 
+  const activeLevel = useMemo(() => detectActiveLevel(pathname), [pathname]);
+  const navItemsForLevel = useMemo(() => getNavItemsForLevel(activeLevel), [activeLevel]);
+
   useEffect(() => {
     if (!isOpen || fetched.current) return;
     fetched.current = true;
@@ -127,12 +179,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <h2 className="text-gray-800 font-bold text-base tracking-wide">
             {t('nav.contents')}
           </h2>
-          <p className="text-gray-400 text-xs mt-0.5">{t('nav.level')}</p>
+          <p className="text-gray-400 text-xs mt-0.5">
+            {t('nav.level')} {LATIN_LABEL[activeLevel]}
+          </p>
         </div>
 
         <div className="p-3">
+          {navItemsForLevel.length === 0 ? (
+            <div className="flex flex-col items-center text-center px-4 py-10">
+              <div className="w-12 h-12 rounded-xl bg-[#CDE3F1] text-[#0072BC] flex items-center justify-center mb-3">
+                <Hourglass className="w-6 h-6" />
+              </div>
+              <p className="text-sm text-gray-600 leading-snug">
+                {t('level.empty')}
+              </p>
+            </div>
+          ) : (
           <ul className="space-y-1">
-            {navItems.map((item) => {
+            {navItemsForLevel.map((item) => {
               /* ── Азбука ── */
               if (item.type === 'special') {
                 const active = isActive(item.id);
@@ -248,6 +312,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               return null;
             })}
           </ul>
+          )}
         </div>
       </nav>
     </>

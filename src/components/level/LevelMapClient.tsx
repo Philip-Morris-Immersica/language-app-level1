@@ -1,10 +1,37 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+/**
+ * Level-aware overview map.
+ *
+ * Renders the full grid of lessons + tests for a single CEFR level (A1, A2, B1, B2).
+ * All data — lessons, titles, group boundaries (which test follows which lessons),
+ * and test labels — is derived from the central content registry
+ * (`src/content/registry.ts`). When metadata is added for an empty level, this
+ * component picks it up automatically with no UI changes required.
+ *
+ * Visual identity is identical to the legacy A1-only LevelMap — only the data
+ * source changed from a hardcoded GROUPS array to the registry.
+ */
+
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, Play, BookOpen, ClipboardCheck, Languages } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Play, BookOpen, ClipboardCheck, Languages, Hourglass } from 'lucide-react';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { PlatformLegend } from '@/components/PlatformLegend';
+import {
+  getLevelDef,
+  type Level,
+  type LessonMetadataEntry,
+  type NavItem,
+} from '@/content';
+
+const LATIN_LABEL: Record<Level, string> = {
+  a1: 'A1',
+  a2: 'A2',
+  b1: 'B1',
+  b2: 'B2',
+};
 
 interface LessonProgress {
   completed: number;
@@ -21,52 +48,55 @@ interface Group {
   test: { id: string; label: string } | null;
 }
 
-const GROUPS: Group[] = [
-  {
-    lessons: [
-      { kind: 'alphabet' },
-      { kind: 'lesson', id: 'lesson-01', number: 1, title: 'Здравейте' },
-      { kind: 'lesson', id: 'lesson-02', number: 2, title: 'Закуска' },
-      { kind: 'lesson', id: 'lesson-03', number: 3, title: 'В ресторанта' },
-    ],
-    test: { id: 'test-a1-1', label: 'Тест – уроци 1, 2 и 3' },
-  },
-  {
-    lessons: [
-      { kind: 'lesson', id: 'lesson-04', number: 4, title: 'В супермаркета' },
-    ],
-    test: { id: 'test-a1-2', label: 'Тест – урок 4' },
-  },
-  {
-    lessons: [
-      { kind: 'lesson', id: 'lesson-05', number: 5, title: 'Градът и селото' },
-      { kind: 'lesson', id: 'lesson-06', number: 6, title: 'Моето семейство' },
-    ],
-    test: { id: 'test-a1-3', label: 'Тест – уроци 5 и 6' },
-  },
-  {
-    lessons: [
-      { kind: 'lesson', id: 'lesson-07', number: 7, title: 'Денят и часът' },
-      { kind: 'lesson', id: 'lesson-08', number: 8, title: 'Цветове и дрехи' },
-    ],
-    test: { id: 'test-a1-4', label: 'Тест – уроци 7 и 8' },
-  },
-  {
-    lessons: [
-      { kind: 'lesson', id: 'lesson-09', number: 9, title: 'Вкъщи' },
-      { kind: 'lesson', id: 'lesson-10', number: 10, title: 'На път' },
-    ],
-    test: { id: 'test-a1-5', label: 'Тест – уроци 9 и 10' },
-  },
-  {
-    lessons: [
-      { kind: 'lesson', id: 'lesson-11', number: 11, title: 'Всеки ден' },
-    ],
-    test: { id: 'test-a1-6', label: 'Тест – урок 11' },
-  },
-];
+/**
+ * Walks lesson metadata in order, accumulating non-test lessons into a group
+ * and closing the group when a lesson has `hasTest === true` (the test is
+ * attached to that group). Optionally pulls the test's user-facing label from
+ * the level's nav items (which match the sidebar).
+ *
+ * A1 special: `lesson-00` (Азбука) renders as a dedicated AlphabetCard (links
+ * to `/lessons/azbouka`, not `/lessons/lesson-00`).
+ */
+function buildGroups(
+  level: Level,
+  lessons: LessonMetadataEntry[],
+  navItems: NavItem[],
+): Group[] {
+  const testLabelById = new Map<string, string>();
+  for (const item of navItems) {
+    if (item.type === 'test') testLabelById.set(item.id, item.label);
+  }
 
-const TOTAL_ITEMS = GROUPS.reduce((sum, g) => sum + g.lessons.length + (g.test ? 1 : 0), 0);
+  const groups: Group[] = [];
+  let current: CardItem[] = [];
+
+  for (const lesson of lessons) {
+    if (level === 'a1' && lesson.id === 'lesson-00') {
+      current.push({ kind: 'alphabet' });
+      continue;
+    }
+    current.push({
+      kind: 'lesson',
+      id: lesson.id,
+      number: lesson.number,
+      title: lesson.title,
+    });
+
+    if (lesson.hasTest && lesson.testId) {
+      groups.push({
+        lessons: current,
+        test: { id: lesson.testId, label: testLabelById.get(lesson.testId) ?? lesson.testId },
+      });
+      current = [];
+    }
+  }
+
+  if (current.length > 0) {
+    groups.push({ lessons: current, test: null });
+  }
+
+  return groups;
+}
 
 function ProgressRing({ percent, size = 48 }: { percent: number; size?: number }) {
   const stroke = 4;
@@ -98,6 +128,14 @@ function ProgressRing({ percent, size = 48 }: { percent: number; size?: number }
   );
 }
 
+function LessonTitle({ title }: { title: string }) {
+  return <>{useTranslate(title)}</>;
+}
+
+function TestLabel({ label }: { label: string }) {
+  return <>{useTranslate(label)}</>;
+}
+
 function LessonCard({
   number,
   title,
@@ -122,10 +160,9 @@ function LessonCard({
     : isStarted
       ? 'border-[#0072BC]/40'
       : 'border-gray-200';
-  const bgClass = 'bg-white';
 
   return (
-    <div className={`rounded-2xl border-2 ${borderClass} ${bgClass} overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col relative`}>
+    <div className={`rounded-2xl border-2 ${borderClass} bg-white overflow-hidden transition-all duration-200 hover:shadow-lg h-full flex flex-col relative`}>
       {isDone && (
         <div className="absolute top-3 right-3 z-10">
           <div className="w-6 h-6 bg-[#32C189] rounded-full flex items-center justify-center shadow-sm">
@@ -147,7 +184,7 @@ function LessonCard({
               {t('level.lesson')} {number}
             </p>
             <h3 className="font-bold text-gray-800 text-[13px] leading-snug">
-              {title}
+              <LessonTitle title={title} />
             </h3>
           </div>
         </div>
@@ -243,7 +280,7 @@ function TestCard({ testId, label, t }: { testId: string; label: string; t: (key
               {t('level.test')}
             </p>
             <h3 className="font-bold text-[#684D0B] text-[13px] leading-snug">
-              {label}
+              {t('level.test')} – <TestLabel label={label} />
             </h3>
           </div>
         </div>
@@ -262,12 +299,38 @@ function TestCard({ testId, label, t }: { testId: string; label: string; t: (key
   );
 }
 
-export function LevelMapClient() {
+function EmptyLevelState({ t }: { t: (key: string) => string }) {
+  return (
+    <div className="rounded-2xl bg-white border-2 border-dashed border-gray-200 p-10 md:p-14 flex flex-col items-center justify-center text-center">
+      <div className="w-16 h-16 rounded-2xl bg-[#CDE3F1] text-[#0072BC] flex items-center justify-center mb-5">
+        <Hourglass className="w-8 h-8" />
+      </div>
+      <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2">
+        {t('level.empty')}
+      </h2>
+    </div>
+  );
+}
+
+export function LevelMapClient({ level }: { level: Level }) {
   const t = useT();
+  const def = getLevelDef(level);
+  const groups = useMemo(
+    () => buildGroups(level, def.lessonsMetadata, def.navItems),
+    [level, def.lessonsMetadata, def.navItems],
+  );
+  const totalItems = useMemo(
+    () => groups.reduce((sum, g) => sum + g.lessons.length + (g.test ? 1 : 0), 0),
+    [groups],
+  );
+
+  const isEmpty = def.lessonsMetadata.length === 0;
+
   const [progressData, setProgressData] = useState<Record<string, LessonProgress>>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isEmpty);
 
   useEffect(() => {
+    if (isEmpty) return;
     fetch('/api/progress/summary')
       .then(r => r.json())
       .then(data => {
@@ -275,10 +338,10 @@ export function LevelMapClient() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [isEmpty]);
 
   let weightedSum = 0;
-  for (const group of GROUPS) {
+  for (const group of groups) {
     for (const item of group.lessons) {
       if (item.kind === 'lesson') {
         const p = progressData[item.id];
@@ -288,15 +351,19 @@ export function LevelMapClient() {
       }
     }
   }
-  const overallPercent = Math.round((weightedSum / TOTAL_ITEMS) * 100);
+  const overallPercent = totalItems > 0 ? Math.round((weightedSum / totalItems) * 100) : 0;
 
-  const lessonsCompleted = GROUPS.reduce((count, g) => {
+  const lessonsCompleted = groups.reduce((count, g) => {
     return count + g.lessons.filter(item => {
       if (item.kind !== 'lesson') return false;
       const p = progressData[item.id];
       return p && p.total > 0 && p.completed >= p.total;
     }).length;
   }, 0);
+
+  const lessonsTotal = def.lessonsMetadata.filter(
+    (m) => !(level === 'a1' && m.id === 'lesson-00'),
+  ).length;
 
   if (loading) {
     return (
@@ -305,6 +372,8 @@ export function LevelMapClient() {
       </div>
     );
   }
+
+  const headingTitle = `${t('nav.level')} ${LATIN_LABEL[level]} — ${t('level.title')}`;
 
   return (
     <div className="min-h-[calc(100vh-56px)] bg-gradient-to-b from-slate-50 to-gray-50/50">
@@ -322,80 +391,86 @@ export function LevelMapClient() {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-[#0072BC]">
-                {t('level.title')}
+                {headingTitle}
               </h1>
-              <p className="text-gray-500 text-sm mt-1">
-                {t('level.subtitle')} · {lessonsCompleted}/11 {t('level.lessonsCompleted')}
-              </p>
+              {!isEmpty && (
+                <p className="text-gray-500 text-sm mt-1">
+                  {t('level.subtitle')} · {lessonsCompleted}/{lessonsTotal} {t('level.lessonsCompleted')}
+                </p>
+              )}
             </div>
-            <ProgressRing percent={overallPercent} size={56} />
+            {!isEmpty && <ProgressRing percent={overallPercent} size={56} />}
           </div>
 
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-xs text-gray-400 mb-1.5">
-              <span>{t('level.overallProgress')}</span>
-              <span className="font-semibold text-gray-600">{overallPercent}%</span>
+          {!isEmpty && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between text-xs text-gray-400 mb-1.5">
+                <span>{t('level.overallProgress')}</span>
+                <span className="font-semibold text-gray-600">{overallPercent}%</span>
+              </div>
+              <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#32C189] to-[#7DE0B9] rounded-full transition-all duration-700"
+                  style={{ width: `${overallPercent}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-[#32C189] to-[#7DE0B9] rounded-full transition-all duration-700"
-                style={{ width: `${overallPercent}%` }}
-              />
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Grouped rows */}
+      {/* Body: groups or empty state */}
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
-        <div className="space-y-5">
-          {GROUPS.map((group, gi) => {
-            const lessonCount = group.lessons.length;
-            const lessonGridClass =
-              lessonCount >= 4
-                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
-                : lessonCount === 3
-                  ? 'grid-cols-2 lg:grid-cols-3'
-                  : lessonCount === 2
-                    ? 'grid-cols-2'
-                    : 'grid-cols-1';
+        {isEmpty ? (
+          <EmptyLevelState t={t} />
+        ) : (
+          <div className="space-y-5">
+            {groups.map((group, gi) => {
+              const lessonCount = group.lessons.length;
+              const lessonGridClass =
+                lessonCount >= 4
+                  ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
+                  : lessonCount === 3
+                    ? 'grid-cols-2 lg:grid-cols-3'
+                    : lessonCount === 2
+                      ? 'grid-cols-2'
+                      : 'grid-cols-1';
 
-            return (
-              <div key={gi} className="rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100 p-4 lg:p-5 shadow-sm">
-                <div className="flex flex-col lg:flex-row gap-4">
-                  {/* Lessons — left */}
-                  <div className={`flex-1 grid ${lessonGridClass} gap-3`}>
-                    {group.lessons.map((item) => {
-                      if (item.kind === 'alphabet') {
-                        return <AlphabetCard key="azbouka" t={t} />;
-                      }
-                      if (item.kind === 'lesson') {
-                        return (
-                          <LessonCard
-                            key={item.id}
-                            number={item.number}
-                            title={item.title}
-                            lessonId={item.id}
-                            progress={progressData[item.id] || null}
-                            t={t}
-                          />
-                        );
-                      }
-                      return null;
-                    })}
-                  </div>
-
-                  {/* Test — right */}
-                  {group.test && (
-                    <div className="lg:w-[220px] shrink-0">
-                      <TestCard testId={group.test.id} label={group.test.label} t={t} />
+              return (
+                <div key={gi} className="rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100 p-4 lg:p-5 shadow-sm">
+                  <div className="flex flex-col lg:flex-row gap-4">
+                    <div className={`flex-1 grid ${lessonGridClass} gap-3`}>
+                      {group.lessons.map((item) => {
+                        if (item.kind === 'alphabet') {
+                          return <AlphabetCard key="azbouka" t={t} />;
+                        }
+                        if (item.kind === 'lesson') {
+                          return (
+                            <LessonCard
+                              key={item.id}
+                              number={item.number}
+                              title={item.title}
+                              lessonId={item.id}
+                              progress={progressData[item.id] || null}
+                              t={t}
+                            />
+                          );
+                        }
+                        return null;
+                      })}
                     </div>
-                  )}
+
+                    {group.test && (
+                      <div className="lg:w-[220px] shrink-0">
+                        <TestCard testId={group.test.id} label={group.test.label} t={t} />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Platform legend (shared component — also shown on the home page) */}
