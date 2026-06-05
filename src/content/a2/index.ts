@@ -27,7 +27,7 @@ export const A2_LESSON_LOADERS: Record<
   () => Promise<{ lessonData?: LessonData; default?: LessonData }>
 > = {
   'a2-lesson-01': () => import('./lessons/a2-lesson-01'),
-  // 'a2-lesson-02': () => import('./lessons/a2-lesson-02'),
+  'a2-lesson-02': () => import('./lessons/a2-lesson-02'),
   // 'a2-lesson-03': () => import('./lessons/a2-lesson-03'),
   // 'a2-lesson-04': () => import('./lessons/a2-lesson-04'),
   // 'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
@@ -112,7 +112,7 @@ export const A2_TEST_NEXT_LESSON_MAP: Record<string, string> = {
 
 export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'a2-lesson-01': 26,
-  'a2-lesson-02': 0,
+  'a2-lesson-02': 45,
   'a2-lesson-03': 0,
   'a2-lesson-04': 0,
   'a2-lesson-05': 0,

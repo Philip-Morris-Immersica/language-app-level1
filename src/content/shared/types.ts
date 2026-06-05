@@ -162,10 +162,14 @@ export interface IllustratedCardsExercise extends BaseExercise {
     ttsIncludeSublabels?: boolean;
     /** TTS-only text for this card (overrides label for audio; display text stays unchanged). */
     ttsLabel?: string;
+    /** body_diagram: label column beside the figure (`left` / `right`). */
+    labelSide?: 'left' | 'right';
+    /** body_diagram: vertical align 0–100 % along figure height. */
+    labelY?: number;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
-  displayMode?: 'grid' | 'presentation';  // For different display modes
+  displayMode?: 'grid' | 'presentation' | 'body_diagram';  // For different display modes
 }
 
 export interface DialogueReadingExercise extends BaseExercise {
