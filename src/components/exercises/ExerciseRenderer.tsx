@@ -87,6 +87,7 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominen
 export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: ExerciseRendererProps) {
   const number = exerciseNumber ?? exercise.order;
   const t = useT();
+  const translatedInstruction = useTranslate(exercise.instruction);
 
   // Base title: use custom title or generic "УПРАЖНЕНИЕ", strip any trailing sub-number
   const baseTitle = (exercise.title ?? t('exercise.prefix')).replace(/\s+\d+$/, '');
@@ -106,11 +107,19 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const gh = exercise.grammarHighlight;
     const ghAfter = gh && exercise.grammarHighlightAfterBody;
     const ghBefore = gh && !exercise.grammarHighlightAfterBody;
+    const hideHeader = 'hideHeader' in exercise && exercise.hideHeader === true;
     // title === '' means "continuation section" — hide header + number entirely
-    const showHeader = exercise.title !== '';
+    const showHeader = exercise.title !== '' && !hideHeader;
     return (
       <div>
         {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
+        {hideHeader && exercise.instruction && (
+          <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
+            {renderInstructionText(
+              exercise.instructionKey ? t(exercise.instructionKey) : translatedInstruction,
+            )}
+          </p>
+        )}
         {ghBefore && (
           <div className="mb-5">
             <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
@@ -148,6 +157,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           columnLabels={exercise.columnLabels}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
+          headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
@@ -254,6 +264,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           examples={exercise.examples}
           disableTts={exercise.disableTts}
           showLikeDislike={exercise.showLikeDislike}
+          layout={exercise.layout}
           exerciseId={exercise.id}
         />
       );
@@ -279,6 +290,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           audioUrl={exercise.audioUrl}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
+          displayLayout={exercise.displayLayout}
           sections={exercise.sections}
           exerciseId={exercise.id}
         />

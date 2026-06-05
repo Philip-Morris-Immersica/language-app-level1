@@ -10,12 +10,14 @@ import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface WorkbookSentence {
   text: string;
+  contextText?: string;
   blanks: number[];
   correctAnswers: string[];
   acceptableAnswers?: string[][];
   options?: string[] | string[][];
   isExample?: boolean;
   images?: string[];
+  bubbleSide?: 'left' | 'right';
 }
 
 function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx: number): string[] {
@@ -36,7 +38,7 @@ function renderBoldText(text: string): React.ReactNode {
 
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
-  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
   /** See WorkbookFillBlankExercise.columnSplitAt */
   columnSplitAt?: number;
   /** When true, skip the automatic "N." numbering prefix in front of each sentence. */
@@ -44,7 +46,10 @@ export interface WorkbookFillBlankProps {
   /** Optional captions rendered above the two columns when layout='two-column'. */
   columnLabels?: { left?: string; right?: string };
   imageUrl?: string;
+  /** Multiple images shown side-by-side at top (e.g. two houses to compare). */
   images?: { imageUrl: string; label?: string }[];
+  /** Header images shown centered above sentences (e.g. two character portraits for image-bubbles layout). */
+  headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
@@ -67,6 +72,7 @@ export function WorkbookFillBlank({
   columnLabels,
   imageUrl,
   images,
+  headerImages,
   listeningText,
   onComplete,
   exerciseId,
@@ -160,7 +166,12 @@ export function WorkbookFillBlank({
     onComplete?.(correctCount === totalSentences, correctCount);
   };
 
-  const renderSentence = (sentence: WorkbookSentence, sIdx: number, displayNum?: number) => {
+  const renderSentence = (
+    sentence: WorkbookSentence,
+    sIdx: number,
+    opts: { compact?: boolean; displayNum?: number } = {},
+  ) => {
+    const { compact = false, displayNum } = opts;
     const isExample = sentence.isExample || sentence.blanks.length === 0;
     const segments = parseText(sentence.text);
     let blankCounter = 0;
@@ -179,15 +190,8 @@ export function WorkbookFillBlank({
       </div>
     ) : null;
 
-    return (
-      <div
-        key={sIdx}
-        className={`flex items-center gap-3 py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}
-      >
-        {!hideSentenceNumbers && (
-          <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
-        )}
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 flex-1">
+    const inner = (
+        <div className={`flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 ${compact ? 'text-sm md:text-base' : 'flex-1'}`}>
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
@@ -267,7 +271,26 @@ export function WorkbookFillBlank({
             </span>
           )}
         </div>
-        {imageEl}
+    );
+
+    if (compact) {
+      return <div key={sIdx} className="py-1">{inner}</div>;
+    }
+
+    return (
+      <div key={sIdx} className={`py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}>
+        <div className="flex items-center gap-3">
+          {!hideSentenceNumbers && (
+            <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
+          )}
+          {inner}
+          {imageEl}
+        </div>
+        {sentence.contextText && (
+          <p className="mt-1.5 ml-7 text-sm text-gray-500 leading-relaxed italic">
+            {sentence.contextText}
+          </p>
+        )}
       </div>
     );
   };
@@ -492,40 +515,125 @@ export function WorkbookFillBlank({
     playTtsAudio(audioPath, text);
   };
 
+  const leftBubbleSentences = shuffledSentences.filter(
+    (s, i) => s.bubbleSide === 'left' || (!s.bubbleSide && i % 2 === 0),
+  );
+  const rightBubbleSentences = shuffledSentences.filter(
+    (s, i) => s.bubbleSide === 'right' || (!s.bubbleSide && i % 2 === 1),
+  );
+
+  const renderImageBubblesLayout = () => (
+    <div className="max-w-5xl mx-auto">
+      <div className="flex justify-center mb-6 lg:hidden">
+        <ImageLightbox src={imageUrl!} alt="">
+          <img src={imageUrl!} alt="" className="max-h-[480px] w-auto rounded-lg object-contain" />
+        </ImageLightbox>
+      </div>
+      <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_360px_minmax(0,1fr)] gap-x-3 gap-y-3 items-start">
+        <div className="space-y-3">
+          {leftBubbleSentences.map((s) => {
+            const sIdx = shuffledSentences.indexOf(s);
+            return (
+              <div
+                key={sIdx}
+                className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm mr-2"
+              >
+                {renderSentence(s, sIdx, { compact: true })}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-center sticky top-4">
+          <ImageLightbox src={imageUrl!} alt="">
+            <img src={imageUrl!} alt="" className="w-[360px] h-auto object-contain" />
+          </ImageLightbox>
+        </div>
+        <div className="space-y-3">
+          {rightBubbleSentences.map((s) => {
+            const sIdx = shuffledSentences.indexOf(s);
+            return (
+              <div
+                key={sIdx}
+                className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm ml-2"
+              >
+                {renderSentence(s, sIdx, { compact: true })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="lg:hidden space-y-3">
+        {shuffledSentences.map((s, i) => (
+          <div
+            key={i}
+            className={`rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm ${
+              s.bubbleSide === 'right' ? 'ml-4' : 'mr-4'
+            }`}
+          >
+            {renderSentence(s, i, { compact: true })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
-      {images && images.length > 0 && (
-        <div className="mb-6 flex flex-wrap justify-center gap-6">
-          {images.map((img, i) => (
-            <div key={i} className="flex flex-col items-center gap-2">
-              <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
+      {layout === 'image-bubbles' && imageUrl ? (
+        renderImageBubblesLayout()
+      ) : (
+        <>
+          {images && images.length > 0 && (
+            <div className="mb-6 flex flex-wrap justify-center gap-6">
+              {images.map((img, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
+                    <img
+                      src={img.imageUrl}
+                      alt={img.label || ''}
+                      className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                    />
+                  </ImageLightbox>
+                  {img.label && (
+                    <p className="text-sm font-bold text-gray-700">{img.label}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {imageUrl && (
+            <div className="mb-6 flex justify-center">
+              <div className="w-full max-w-lg md:max-w-2xl">
+                <ImageLightbox src={imageUrl} alt="">
+                  <img
+                    src={imageUrl}
+                    alt=""
+                    className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                  />
+                </ImageLightbox>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {headerImages && headerImages.length > 0 && (
+        <div className={`grid gap-4 mb-6 ${headerImages.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 max-w-2xl mx-auto'}`}>
+          {headerImages.map((img, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <ImageLightbox src={img.imageUrl} alt={img.label}>
                 <img
                   src={img.imageUrl}
-                  alt={img.label || ''}
-                  className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                  alt={img.label}
+                  className="w-full rounded-lg shadow-sm object-contain max-h-72"
+                  loading="lazy"
                 />
               </ImageLightbox>
-              {img.label && (
-                <p className="text-sm font-bold text-gray-700">{img.label}</p>
-              )}
             </div>
           ))}
         </div>
       )}
-
-      {imageUrl ? (
-        <div className="mb-6 flex justify-center">
-          <div className="w-full max-w-lg md:max-w-2xl">
-            <ImageLightbox src={imageUrl} alt="">
-              <img
-                src={imageUrl}
-                alt=""
-                className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
-              />
-            </ImageLightbox>
-          </div>
-        </div>
-      ) : null}
 
       {listeningText && (
         <div className="mb-6">
@@ -540,7 +648,7 @@ export function WorkbookFillBlank({
         </div>
       )}
 
-      {layout === 'qa-stacked' ? (
+      {layout === 'image-bubbles' ? null : layout === 'qa-stacked' ? (
         <div className="space-y-3">
           {(() => {
             let numCounter = 0;
@@ -571,7 +679,7 @@ export function WorkbookFillBlank({
                 {columnLabels.right}
               </h4>
             )}
-            {rightSentences.map((s, i) => renderSentence(s, i + half, i))}
+            {rightSentences.map((s, i) => renderSentence(s, i + half, { displayNum: i }))}
           </div>
         </div>
       ) : (

@@ -73,6 +73,8 @@ export interface BaseExercise {
   grammarHighlightAfterBody?: boolean;
   mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
   mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
+  /** When true, no numbered title header is shown (instruction-only blocks, e.g. first textbook exercise). */
+  hideHeader?: boolean;
   /** When true, renders the exercise subtitle with larger, bolder styling for visual prominence. */
   prominentSubtitle?: boolean;
 }
@@ -81,7 +83,14 @@ export interface BaseExercise {
 export interface FillInBlankExercise extends BaseExercise {
   type: 'fill_in_blank';
   freeText?: boolean; // When true, renders a single free-form text input per sentence
-  sentences: {
+  /** Multi-paragraph free writing with keyword check and model answer on error. */
+  freeTextBlocks?: {
+    prompt: string;
+    modelAnswer: string;
+    /** Each inner array: at least one keyword (case-insensitive) must appear in the answer. */
+    keywordGroups?: string[][];
+  }[];
+  sentences?: {
     text: string;           // "Аз съм Мохамед."
     blanks: number[];       // Positions of blanks [2] = "съм"
     correctAnswers: string[]; // ["съм"] or list of all accepted values (for freeText mode)
@@ -140,7 +149,7 @@ export interface ImageLabelingExercise extends BaseExercise {
     acceptableLabels?: string[];
   }[];
   options: string[];           // List of options for dropdown/selection
-  displayType?: 'flags' | 'default';  // For specific formatting
+  displayType?: 'flags' | 'default' | 'row';  // 'row' = 4 images in one row, uniform background
 }
 
 export interface NumberWritingExercise extends BaseExercise {
@@ -178,10 +187,14 @@ export interface IllustratedCardsExercise extends BaseExercise {
     ttsIncludeSublabels?: boolean;
     /** TTS-only text for this card (overrides label for audio; display text stays unchanged). */
     ttsLabel?: string;
+    /** body_diagram: label column beside the figure (`left` / `right`). */
+    labelSide?: 'left' | 'right';
+    /** body_diagram: vertical align 0–100 % along figure height. */
+    labelY?: number;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
-  displayMode?: 'grid' | 'presentation';  // For different display modes
+  displayMode?: 'grid' | 'presentation' | 'body_diagram';  // For different display modes
   /** When true, cards render as compact text-only boxes (no images) — just the label. Header image still shown. */
   textOnly?: boolean;
 }
@@ -265,6 +278,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
   ttsFlash?: boolean;
   /** Show a green Heart before `text` and a red HeartCrack before `subtext` (like/dislike cards, e.g. „обичам / не обичам“). */
   showLikeDislike?: boolean;
+  /** 'centered' — two text-only examples side by side, centered (textbook grammar layout). */
+  layout?: 'default' | 'centered';
   examples: {
     imageUrl: string;
     text: string;            // 'Аз съм Мохамед.'
@@ -330,9 +345,13 @@ export interface DialoguesExercise extends BaseExercise {
   /** Multiple illustration images shown side-by-side at the top (desktop: row, mobile: stack). */
   images?: string[];
   audioUrl?: string;
+  /** 'scene' = central image with speech bubbles around it (ДИАЛОЗИ 1). */
+  displayLayout?: 'list' | 'scene';
   sections: {
     id: string;              // 'а.', 'б.'
     imageUrl?: string;
+    /** Bubble placement when displayLayout is 'scene'. */
+    bubbleSide?: 'left' | 'right';
     lines: {
       speaker?: string;
       /** TTS only: pick male/female voice (two males in a row use Charon + Fenrir). Not shown in UI. */
@@ -396,7 +415,7 @@ export interface DragToColumnsExercise extends BaseExercise {
 
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
-  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single';
+  layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
   /** Override the automatic mid-point split for two-column layout. Useful when items fall into two
    *  semantically distinct groups (e.g. months 0-11 on the left, days 12-18 on the right). */
   columnSplitAt?: number;
@@ -409,15 +428,21 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
   imageUrl?: string;
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
   images?: { imageUrl: string; label?: string }[];
+  /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */
+  headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
   sentences: {
     text: string;
+    /** Допълнителен текст под изречението (напр. профил на персонаж за контекст). */
+    contextText?: string;
     blanks: number[];
     correctAnswers: string[];
     acceptableAnswers?: string[][];
     options?: string[] | string[][];
     isExample?: boolean;
     images?: string[];
+    /** For layout 'image-bubbles': which side of the central image. */
+    bubbleSide?: 'left' | 'right';
   }[];
 }
 

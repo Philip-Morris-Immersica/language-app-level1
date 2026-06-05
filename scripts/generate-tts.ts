@@ -26,137 +26,67 @@ if (!lessonNum && !testNum) {
   process.exit(1);
 }
 const IS_TEST = !!testNum;
-// --test accepts the folder suffix: e.g. --test 4 ? test-lessons-4, --test 1-2-3 ? test-lessons-1-2-3
+// --test accepts the folder suffix: e.g. --test 4 → test-lessons-4, --test 1-2-3 → test-lessons-1-2-3
 
 const modelFlag = parseArg('model') || 'gemini';
 const USE_GEMINI = modelFlag === 'gemini';
 
 const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
-/**
- * ALT presets alias to the same primary voice -- only 2 voices in dialogues:
- * Achernar (female) and Charon (male). No second timbre regardless of consecutive lines.
- */
-const FEMALE_VOICE_ALT = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
+/** Second female voice for dialogues with two women (Gemini only; Chirp reuses Achernar). */
+const FEMALE_VOICE_ALT = USE_GEMINI ? 'Despina' : 'bg-BG-Chirp3-HD-Achernar';
 const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
-const MALE_VOICE_ALT = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
+/** Second male voice for dialogues with two men (Gemini only; Chirp reuses Charon). */
+const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
 const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
-/**
- * Illustrated cards on Gemini Flash: optional stronger prompt than GEMINI_WORD_PROMPT
- * (same model + Achernar; helps tricky single words in lesson 9).
- */
-const ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID: Record<string, string> = {
-  'hladilnik-nd':
-    'Read exactly one Bulgarian word: ?????????. Native Bulgarian only, clear vowels, stress on the second syllable (???-DI-lnik). Do not anglicize.',
-  'spalnya-nd':
-    'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (SPA-lnya).',
-  'spalnya2-nd':
-    'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (SPA-lnya).',
-  'mivka-nd':
-    'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (MIV-ka).',
-  'dush-nd':
-    'Read exactly one Bulgarian word: ???. Native Bulgarian only, short and clear; one syllable.',
-  'toaletna-nd':
-    'Read exactly one Bulgarian word: ????????. Native Bulgarian only, clear stress on the second syllable (??-?-???-??).',
-  'banya-nd':
-    'Read exactly one Bulgarian word: ?????. Native Bulgarian only, clear stress on the first syllable (BA-nya).',
-  'cvete-nd':
-    'Read exactly one Bulgarian word: ??????. Native Bulgarian only, clear stress on the first syllable (TSV?-te).',
-  // Lesson 08 — Flash misread o as u, or wrong stress
-  lilav:
-    'Bulgarian color word and its forms: лилав, лилава, лилаво, лилави. Read them in order, separated by commas. Native Bulgarian only; clear vowels; stress on second syllable (li-LAV, li-LA-va, li-LA-vo, li-LA-vi).',
-  sako:
-    'Bulgarian word сако (jacket). Native Bulgarian only; clear "o" vowel in both syllables, not "u".',
-  pola:
-    'Bulgarian word пола (skirt). Native Bulgarian only; clear "o" vowel, not "u".',
-  pulover:
-    'Say only the single Bulgarian word: пуловер. One word, nothing else.',
-  ochila:
-    'Bulgarian word очила (glasses). Native Bulgarian only; clear "o" vowel, not "u".',
-  dechitsa:
-    'Bulgarian word дечица (little children). Native Bulgarian only; stress on second syllable (de-CHI-tsa).',
-};
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
 const GEMINI_BG_WORD_STRESS_PROMPT =
-  'Bulgarian food name. Speak with native word stress (????????) on the correct syllable in each word.';
+  'Bulgarian food name. Speak with native word stress (ударение) on the correct syllable in each word.';
 
-// RULE: Flash (Achernar + clarity prompt) for ALL grammar table rows.
-// Pro is ONLY for: dialogues, reading_text, listening, personal_choice, table_fill paragraphs.
-// If a specific row sounds wrong, add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID
-// or use GRAMMAR_TABLE_ROW_TTS_TEXT to rewrite the text for better Flash pronunciation.
-const GRAMMAR_TABLE_PRO_ROWS = new Set<string>([
-  // l10-gramatika-01c — Заминаващи: по-топъл и естествен прочит (клиентска заявка)
-  'l10-gramatika-01c-row-0',
-  'l10-gramatika-01c-row-1',
-  'l10-gramatika-01c-row-2',
-  // l09-gramatika-01 — петата (ordinal) vs петата (heel): Flash mis-stresses; Pro + Achernar
-  'l09-gramatika-01-row-4',
+// Grammar table row files that need Pro model instead of Flash (e.g. multi-syllable numbers, tricky pronunciation)
+const GRAMMAR_TABLE_PRO_ROWS = new Set([
+  // Lesson 00 — Alphabet letters with tricky pronunciation
+  'l00-gramatika-01-row-0',  // А — Ана
+  'l00-gramatika-01-row-4',  // Д — Дилма
+  'l00-gramatika-01-row-11', // Л — Лейла (soft Л)
+  'l00-gramatika-01-row-12', // М — Мохамед
+  'l00-gramatika-01-row-19', // У — Уляна
+  'l00-gramatika-01-row-22', // Ц — Цветелина
+  'l03-gramatika-04-row-0', // сандвич, сок — Flash mispronounces loanwords
+  'l04-gramatika-02-row-9', // хиляда
+  'l05-gramatika-07-row-0', // хиляда (l05)
+  'l05-gramatika-07-row-1', // две хиляди (l05)
+  'l05-gramatika-07-row-2', // един милион (l05)
+  'l05-gramatika-07-row-3', // два милиона (l05)
+  'l05-gramatika-07-row-4', // един милиард (l05)
+  'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
+  'l06-gramatika-08-row-6', // Вие работите / не работите
+  'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
+  'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
+  'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
+  'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
+  'l08-gramatika-02-row-3', // хубави → хубавите, малки → малките, зелени → зелените
+  'l09-gramatika-01-row-3', // четвърти — "четвърт" root, known Flash mispronunciation
 ]);
 
-// RULE: Flash for ALL grammar table notes. Use ttsNotes[] to rewrite text for better Flash pronunciation.
-const GRAMMAR_TABLE_PRO_NOTES = new Set<string>([
-  // INTENTIONALLY EMPTY — all grammar table notes use Flash by default.
+// Grammar table note files that need Pro model instead of Flash (full sentences, not isolated words)
+const GRAMMAR_TABLE_PRO_NOTES = new Set([
+  'l07-gramatika-01-note-0',  // "Дата: 10 август 2023 г. = десети август две хиляди двайсет и трета година" — full sentence
+  'l04-gramatika-02-note-0',  // "двеста шестдесет и пет"
+  'l04-gramatika-02-note-1',  // "хиляда триста осемдесет и девет"
+  'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
+  'l09-gramatika-01-note-0',  // "Понеделник е първият ден от седмицата." — full sentence
+  'l09-gramatika-02-note-0',  // "Пловдив е голям град. София е по-голям…" — full sentences
 ]);
 
-/** Grammar row: exact TTS string when `clean()` would keep the ???????? ????? but ?????????? is preferred (???? ??????? -??????). */
+/** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
 const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
-  'l03-gramatika-01-row-6': '??????????', // 16 � ????? ???? ?????? ?? ??????? ?????? �???????????�
+  'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
 
-  'l00-gramatika-01-row-9':  '? ??????',   // ? � ??????? ?? ????????? �? ??????"
-  'l00-gramatika-01-row-27': '?? ?????',   // ? � ??????? ?? ????????? �?? ?????"
-
-  // l08-gramatika-01 � ??????????? ???????????: ???????? ?.?./?.?./??.?./??.?., ????? ????? ????????????? ? ???????
-  'l08-gramatika-01-row-0': '????. ???? ????????.',
-  'l08-gramatika-01-row-1': '????. ???? ?????.',
-  'l08-gramatika-01-row-2': '????. ???? ???.',
-  'l08-gramatika-01-row-3': '????. ???? ?????.',
-
-  // l08-gramatika-02 � ????????? ?? ??????????????: ???????? ???? ? ?????????? (-??(?) ? ??.), ???? ???????
-  'l08-gramatika-02-row-0': 'хубавият, малкият, зеленият.',
-  'l08-gramatika-02-row-1': '????????. ???????. ????????.',
-  'l08-gramatika-02-row-2': '????????. ???????. ????????.',
-  'l08-gramatika-02-row-3': '????????. ???????. ????????.',
-
-  // l09-gramatika-02 � ???????????: ??? ?.?./?.?./??.?./??.?.; ????? + ?????????? ?? ??-????? ?????
-  'l09-gramatika-02-row-0': '?????. ... ??-?????. ... ???-?????.',
-  'l09-gramatika-02-row-1': '??????. ... ??-??????. ... ???-??????.',
-  'l09-gramatika-02-row-2': '??????. ... ??-??????. ... ???-??????.',
-  'l09-gramatika-02-row-3': '??????. ... ??-??????. ... ???-??????.',
-
-  // l09-gramatika-01 — поредни числителни: членувани форми; row-4 петата ≠ стъпало (PE-ta-ta)
-  'l09-gramatika-01-row-4': 'Пети. Петият. Петата. Петото. Петите.',
-  'l09-gramatika-01-row-7': 'осми, осмият, осмата, осмото, осмите.',
-  'l09-gramatika-01-row-8': 'девети, деветият, деветата, деветото, деветите.',
-  'l09-gramatika-01-row-9': 'десети, десетият, десетата, десетото, десетите.',
-
-  // l07-gramatika-01 — редни числителни: row-8 е "девето" — Flash го чете неправилно
-  'l07-gramatika-01-row-8': 'Девети. Девета. Девето. Девети.',
-
-  // l10-gramatika-01b — Пристигащи (гара разписание): числа с думи + пауза между колоните
-  'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнадесет минути. Първи коловоз. Пет минути закъснение.',
-  'l10-gramatika-01b-row-1': 'Плевен. Дванадесет часа. Трети коловоз. Без закъснение.',
-  'l10-gramatika-01b-row-2': 'Русе. Петнадесет часа и тридесет минути. Четвърти коловоз. Петнадесет минути закъснение.',
-
-  // l10-gramatika-01c — Заминаващи (гара разписание): числа с думи + пауза между колоните
-  'l10-gramatika-01c-row-0': 'Бургас, седем часа, втори коловоз, без закъснение.',
-  'l10-gramatika-01c-row-1': 'Варна, единадесет и двадесет, пети коловоз, двадесет и пет минути закъснение.',
-  'l10-gramatika-01c-row-2': 'Видин, четиринадесет и десет, шести коловоз, без закъснение.',
-
-  // l11-gramatika-01 — Спрежение: примери за всяка група в последния ред
-  'l11-gramatika-01-row-6': 'Примери. Група А: ставам, затварям, пазарувам, излизам, връщам се, вземам, лягам си, обядвам, свършвам, вечерям, срещам се, гледам, влизам, закусвам, започвам. Група И: спя, правя. Група Е: пиша, чета.',
-
-  // l11-gramatika-02 — всеки/всяка/всяко/всички: чете с повторение на местоимението пред всяка дума
-  'l11-gramatika-02-row-0': 'всеки ден, всеки месец, всеки уикенд. всяка седмица, всяка година, всяка сутрин. всяко лято, всяко село, всяко дете. всички българи, всички хора, всички деца.',
-
-  // l11-gramatika-04 — ОТИВАМ/ХОДЯ: чете и двата глагола с предлога и думата
-  'l11-gramatika-04-row-0': 'ходя на ресторант, отивам в ресторанта.',
-  'l11-gramatika-04-row-1': 'ходя на кино, отивам в киното.',
-  'l11-gramatika-04-row-2': 'ходя на гости, отивам в магазина.',
-  'l11-gramatika-04-row-3': 'ходя на работа, отивам в супермаркета.',
-  'l11-gramatika-04-row-4': 'ходя на планина, отивам в центъра.',
-  'l11-gramatika-04-row-5': 'ходя на море, отивам в офиса.',
+  'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
+  'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
@@ -166,7 +96,9 @@ const MAX_RETRIES = 3;
 
 const CONTENT_ID = IS_TEST
   ? `test-lessons-${testNum}`
-  : `lesson-${lessonNum!.padStart(2, '0')}`;
+  : /^\d+$/.test(lessonNum!)
+    ? `lesson-${lessonNum!.padStart(2, '0')}`
+    : lessonNum!;
 // ASSET_DIR is resolved at runtime after loading metadata for tests
 let OUTPUT_BASE = '';
 
@@ -177,73 +109,76 @@ const READING_TEXT_EXCLUDE = new Set(
 const SKIP_FULL_TEXT = new Set(
   lessonNum === '05' ? ['l05-ex-25'] : [],
 );
-/** reading_text with `ttsParagraphs`: still generate `-full.mp3` for the main Listen button. */
-const READING_TEXT_FORCE_FULL = new Set(['l07-ex-34', 'l08-ex-25']);
 
 const GRAMMAR_LABELS = new Set([
-  '????? ???', '?????? ???', '?????? ???', '??????????? ?????',
-  '?.?.', '?.?.', '??.?.', '??.?.',
+  'мъжки род', 'женски род', 'среден род', 'множествено число',
+  'м.р.', 'ж.р.', 'ср.р.', 'мн.ч.',
 ]);
 
-// RULE: all vocabulary uses Flash + clarity prompt.
-// For words Flash mispronounces, add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID instead.
-const VOCAB_USE_PRO_IDS = new Set<string>([
-  // INTENTIONALLY EMPTY — all vocabulary uses Flash by default.
+/** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + word prompt. */
+const VOCAB_USE_PRO_IDS = new Set([
+  'kiselo-mlyako', 'otset',
+  'smartfon',        // смартфон — Flash adds soft ь at end
+  'palen-raboten-den', // пълен работен ден — Flash distorts ъл cluster
+  'internet',        // интернет — needs explicit stress on first syllable (custom prompt below)
 ]);
 
-/** Illustrated cards where Flash mis-stresses or reads the prompt twice — use Pro + Achernar. */
-const ILLUSTRATED_CARD_PRO_IDS = new Set<string>([
-  'taksi-nd',
-  'vecherqm-nd', // "Вечерям сандвичи и чай." — сандвичи е проблемна дума за Flash
+/** Per-vocabulary custom TTS prompt when generic word prompt is not enough (Pro model). */
+const VOCAB_CUSTOM_PROMPTS: Record<string, string> = {
+  internet: 'Stress on the first syllable: ИН-тернет.',
+};
+
+/** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
+const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
+  'pushene',     // lesson 3 — Пушенето забранено!
+  'bob',         // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  // a2-lesson-01 verbs — warm tone causes consonant distortion or trailing sounds on single verbs
+  'tarsya',      // търся — needs custom stress prompt (see ILLUSTRATED_CARD_CUSTOM_PROMPTS)
+  'vklyuchvam',  // включвам — лю cluster mispronounced as ру
+  'namiram',     // намирам — р dropped
+  'zaklyuchvam', // заключвам — trailing аа
+  'zatvaryam',   // затварям — trailing яя
 ]);
 
+/** Per illustrated-card id: Pro + this custom stress prompt (overrides generic word prompt). */
+const ILLUSTRATED_CARD_CUSTOM_PROMPTS: Record<string, string> = {
+  tarsya: 'Bulgarian verb. Stress on the first syllable only: ТЪР-ся.',
+};
 
-// RULE: all flip-card words use Flash. For stress problems add a custom prompt to ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID.
-const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>([]);
+/** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
+const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>(['shopska-salata', 'sarmi', 'baklava']);
 
 /** Optional per-id prompt override (Pro) when generic stress prompt is not enough. */
 const READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID: Record<string, string> = {
   baklava:
-    'Bulgarian word ??????? (layered pastry dessert). Stress must fall on the first syllable: ?? � ??? � ??.',
+    'Bulgarian word баклава (layered pastry dessert). Stress must fall on the first syllable: БА — кла — ва.',
 };
 
-// RULE: grammar_examples use Flash by default. Pro is only for dialogues/reading_text/listening.
-// This set is intentionally empty — do not add grammar exercises here.
-const GRAMMAR_PRO_ACHERNAR_ONLY_IDS = new Set<string>([]);
-
-/** Grammar table rows where Flash needs a stronger prompt than GEMINI_WORD_PROMPT. */
-const GRAMMAR_TABLE_FLASH_PROMPT_BY_ID: Record<string, string> = {};
-
-/** Grammar table rows on Pro (Achernar): optional custom prompt when GEMINI_PROMPT is not enough. */
-const GRAMMAR_TABLE_PRO_PROMPT_BY_ID: Record<string, string> = {
-  'l09-gramatika-01-row-4':
-    'Read aloud in Bulgarian with a warm, clear tone. These are five ordinal-number forms with definite articles: пети, петият, петата, петото, петите. NOT the body word for heel. Stress петата on the first syllable (PE-ta-ta), ordinal feminine. Brief pause between each form.',
-};
-
-/** Grammar highlight lines (`Кога?` etc.): Flash + clarity prompt; optional stress hint per file. */
-const GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID: Record<string, string> = {
-  'l07-gramatika-04-highlight-0':
-    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
-  'l07-gramatika-04-highlight-1':
-    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
-  'l07-gramatika-04-highlight-2':
-    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
-  'l07-gramatika-04-highlight-3':
-    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
-  'l07-gramatika-04-highlight-4':
-    'Bulgarian time phrase. Native Bulgarian only. Stress the last syllable of часа: часА. Clear pronunciation.',
-};
+/** Illustrated cards where Flash + word prompt gives clearer stress than Pro (isolated words). */
+const ILLUSTRATED_CARD_FLASH_IDS = new Set([
+  'tsigari', // lesson 3 — цигари (ударение на -га-)
+  'shishche', // lesson 3 НОВИ ДУМИ 3 — шишче
+  '200-euro', // lesson 3 НОВИ ДУМИ 2 — двеста евро
+  '20-cent', // lesson 3 НОВИ ДУМИ 2 — двадесет евроцента
+  // lesson 1 — НОВИ ДУМИ 1 (greetings); Pro + „warm" sounds overexcited for short phrases
+  'morning',
+  'day',
+  'evening',
+  'night',
+  'hello',
+  'hello_formal',
+  'goodbye',
+  'izklyuchvam', // a2-lesson-01 — Pro adds trailing мм; Flash cleaner for this verb
+]);
 
 // ---------------------------------------------------------------------------
 // Text cleaning
 // ---------------------------------------------------------------------------
 function cleanForGeminiTTS(raw: string): string {
   return raw
-    .replace(/\*\*/g, '')          // strip markdown bold markers (e.g. **????**)
-    .replace(/^[��]\s*/gm, '')
+    .replace(/\*\*/g, '')          // strip markdown bold markers (e.g. **това**)
+    .replace(/^[–—]\s*/gm, '')
     .replace(/\s*\([^)]*\)\s*/g, ' ')
-    .replace(/\s*=\s*/g, ', ')     // �=� ? comma (TTS reads �=� as �?????�)
-    .replace(/\s+\/\s+/g, ', ')    // � / � ? comma between alternatives (e.g. �??? / ?�)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -280,11 +215,6 @@ interface Exercise {
   cards?: { id: string; label: string; sublabels?: string[]; ttsIncludeSublabels?: boolean; ttsLabel?: string }[];
   images?: { id: string; correctLabel: string }[];
   pronouns?: { pronoun: string; description?: string }[];
-  grammarHighlight?: {
-    examples?: string[];
-    exampleTtsTexts?: string[];
-    interactiveExamples?: boolean;
-  };
 }
 
 interface TtsJob {
@@ -404,11 +334,11 @@ const synthesize = USE_GEMINI
 // Dialogue voice mapping
 // ---------------------------------------------------------------------------
 const SPEAKER_VOICE_MAP: Record<string, string> = {
-  '??????': FEMALE_VOICE,
-  '????????': MALE_VOICE,
-  '?????????': MALE_VOICE,
-  '????????': MALE_VOICE,
-  '???????': FEMALE_VOICE,
+  'клиент': FEMALE_VOICE,
+  'продавач': MALE_VOICE,
+  'сервитьор': MALE_VOICE,
+  'господин': MALE_VOICE,
+  'госпожа': FEMALE_VOICE,
 };
 
 function getDialogueVoice(speaker: string | undefined, lineIndex: number): string {
@@ -419,37 +349,33 @@ function getDialogueVoice(speaker: string | undefined, lineIndex: number): strin
   return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
 }
 
-/**
- * Resolve TTS voice for a dialogue line.
- *
- * Primary vs �alt� presets are the same voice (Achernar / Charon) � no automatic
- * second speaker timbre. Male/female still follows `voiceGender` or `SPEAKER_VOICE_MAP`.
- *
- * (Legacy behaviour alternated Despina/Achird for consecutive same-gender lines; disabled per team preference.)
- */
+/** Per-section counters so consecutive same-gender lines get voice alternation. */
 function dialogueLineVoice(
   line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
   lineIndex: number,
-  state: {
-    prevGender: 'male' | 'female' | null;
-    consecutiveSameGenderTurn: number;
-  },
+  maleTurn: { n: number },
+  femaleTurn: { n: number },
+  prevGender: { g: 'male' | 'female' | null },
 ): string {
-  if (line.voiceGender === 'female' || line.voiceGender === 'male') {
-    if (state.prevGender === line.voiceGender) {
-      state.consecutiveSameGenderTurn += 1;
-    } else {
-      state.consecutiveSameGenderTurn = 0;
-    }
-    state.prevGender = line.voiceGender;
-
-    if (line.voiceGender === 'female') {
-      return state.consecutiveSameGenderTurn % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
-    }
-    return state.consecutiveSameGenderTurn % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
+  if (line.voiceGender === 'female') {
+    // Reset alt counter when gender changes so non-consecutive female lines
+    // (e.g. f, m, f) use the same primary voice — avoids accidental voice switches
+    // for the same character. Alt only engages for truly consecutive f-f lines.
+    if (prevGender.g !== 'female') femaleTurn.n = 0;
+    const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
+    femaleTurn.n++;
+    prevGender.g = 'female';
+    return v;
   }
-  state.prevGender = null;
-  state.consecutiveSameGenderTurn = 0;
+  if (line.voiceGender === 'male') {
+    // Same logic for male: m, f, m → Charon, Achernar, Charon (not Charon, Achernar, Achird)
+    if (prevGender.g !== 'male') maleTurn.n = 0;
+    const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
+    maleTurn.n++;
+    prevGender.g = 'male';
+    return v;
+  }
+  prevGender.g = null;
   return getDialogueVoice(line.speaker, lineIndex);
 }
 
@@ -463,44 +389,25 @@ function stripGrammarLabels(subtext: string): string {
 function collectVocabularyJobs(content: LessonContent): TtsJob[] {
   return content.vocabulary.map(item => {
     const usePro = VOCAB_USE_PRO_IDS.has(item.id);
+    const customPrompt = VOCAB_CUSTOM_PROMPTS[item.id];
     return {
       category: 'words',
       filename: `${item.id}.mp3`,
       text: clean(item.bulgarian),
       voice: FEMALE_VOICE,
       model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-      prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+      prompt: customPrompt ?? (usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
     };
   });
 }
 
 /**
- * Illustrated cards use words/{card.id}.mp3.
- * Flash + word-clarity prompt is the default for ALL ???? ???? cards (isolated vocabulary words).
- * Use ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID to override the prompt per card when Flash mis-stresses a word.
+ * Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01).
+ * Pro + warm prompt: short phrases sound more natural than Flash (stress/intonation on e.g. „Добър ден!“).
  */
 function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
-    // Exercise-level voice override (e.g. all cards narrated by a male character).
-    const exerciseVoice =
-      (ex as { voiceGender?: 'male' | 'female' }).voiceGender === 'male'
-        ? MALE_VOICE
-        : FEMALE_VOICE;
-    // Optional narrator paragraph shown below the header image — Pro + exercise voice.
-    // Uses ttsCaptionText (numbers as words, etc.) when available; falls back to headerCaption.
-    const caption = (ex as { ttsCaptionText?: string; headerCaption?: string }).ttsCaptionText?.trim()
-      || (ex as { headerCaption?: string }).headerCaption?.trim();
-    if (caption) {
-      jobs.push({
-        category: 'texts',
-        filename: `${ex.id}-caption.mp3`,
-        text: clean(caption),
-        voice: exerciseVoice,
-        model: GEMINI_MODEL,
-        prompt: GEMINI_PROMPT,
-      });
-    }
     for (const card of ex.cards!) {
       let joined: string;
       if (card.ttsLabel) {
@@ -511,16 +418,18 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
           : [card.label];
         joined = parts.join('. ').replace(/\s*=\s*/g, ', ');
       }
-      const usePro = ILLUSTRATED_CARD_PRO_IDS.has(card.id);
-      jobs.push({
+      const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
+      const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
+      const customPrompt = ILLUSTRATED_CARD_CUSTOM_PROMPTS[card.id];
+      const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
+      const prompt = customPrompt ?? (useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT);
+            jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(joined),
-        voice: exerciseVoice,
-        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: usePro
-          ? GEMINI_PROMPT
-          : (ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID[card.id] ?? GEMINI_WORD_PROMPT),
+        voice: FEMALE_VOICE,
+        model,
+        prompt,
       });
     }
   }
@@ -528,11 +437,11 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
 }
 
 /**
- * Image labeling: `words/{image.id}.mp3` unless `displayType === 'flags'` � then
- * `words/{exerciseId}-flag-{image.id}.mp3` (country name / correctLabel only; Flash; no collision with ???? ????).
+ * Image labeling: `words/{image.id}.mp3` unless `displayType === 'flags'` — then
+ * `words/{exerciseId}-flag-{image.id}.mp3` (country name / correctLabel only; Flash; no collision with НОВИ ДУМИ).
  * For non-flags, skip ids already covered by illustrated_cards; those use `words/{id}.mp3` from card jobs.
  */
-/** reading_text � optional `images[].ttsWordId` + `label` for flip-card word clips (`words/{ttsWordId}.mp3`). */
+/** reading_text — optional `images[].ttsWordId` + `label` for flip-card word clips (`words/{ttsWordId}.mp3`). */
 function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'reading_text' && e.images)) {
@@ -569,7 +478,7 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
     const isFlags = ex.displayType === 'flags';
     for (const img of ex.images!) {
       // Flag exercises use a dedicated filename so TTS is only correctLabel (country name),
-      // not words/{id}.mp3 from ???? ???? (e.g. country + demonyms when ttsIncludeSublabels is true).
+      // not words/{id}.mp3 from НОВИ ДУМИ (e.g. country + demonyms when ttsIncludeSublabels is true).
       if (isFlags) {
         jobs.push({
           category: 'words',
@@ -595,7 +504,7 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
-/** grammar_visual � one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
+/** grammar_visual — one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
 function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'grammar_visual' && e.pronouns)) {
@@ -622,19 +531,18 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
     for (const section of ex.sections!) {
-      const voiceState = {
-        prevGender: null as 'male' | 'female' | null,
-        consecutiveSameGenderTurn: 0,
-      };
+      const maleTurn = { n: 0 };
+      const femaleTurn = { n: 0 };
+      const prevGender = { g: null as 'male' | 'female' | null };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         // Use ttsText override when set (e.g. to expand abbreviations); display text stays unchanged
-        const rawText = (line.ttsText ?? line.text).replace(/^�\s*/, '');
+        const rawText = (line.ttsText ?? line.text).replace(/^—\s*/, '');
         jobs.push({
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, voiceState),
+          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn, prevGender),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
@@ -661,9 +569,7 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
         text: clean(rowSource),
         voice: FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: useProForRow
-          ? (GRAMMAR_TABLE_PRO_PROMPT_BY_ID[rowKey] ?? GEMINI_PROMPT)
-          : (GRAMMAR_TABLE_FLASH_PROMPT_BY_ID[rowKey] ?? GEMINI_WORD_PROMPT),
+        prompt: useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
       });
     }
     if (ex.notes) {
@@ -685,43 +591,21 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
-// RULE: grammar highlight boxes always use Flash + Achernar + clarity prompt.
-function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
-  const jobs: TtsJob[] = [];
-  for (const ex of exercises) {
-    const gh = ex.grammarHighlight;
-    if (!gh?.interactiveExamples || !gh.examples?.length) continue;
-    const usePro = !!gh.ttsPro;
-    for (let i = 0; i < gh.examples.length; i++) {
-      const raw = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
-      const highlightKey = `${ex.id}-highlight-${i}`;
-      jobs.push({
-        category: 'grammar',
-        filename: `${highlightKey}.mp3`,
-        text: clean(raw),
-        voice: FEMALE_VOICE,
-        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: usePro ? GEMINI_PROMPT : (GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID[highlightKey] ?? GEMINI_WORD_PROMPT),
-      });
-    }
-  }
-  return jobs;
-}
-
-// RULE: grammar_examples always use Flash + Achernar + clarity prompt.
-// Pro is ONLY for dialogues, reading_text, listening, personal_choice, table_fill paragraphs.
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'grammar_examples' && !e.disableTts && e.examples)) {
+    const useFlash = !!ex.ttsFlash;
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
       let parts: string;
       if (card.ttsText) {
+        // Use explicit TTS-only text (e.g. full word without abbreviation)
         parts = card.ttsText;
       } else if (card.lines) {
+        // Strip speaker labels, ✓/✗ markers, skip blank spacer lines
         parts = card.lines
           .filter(l => l.trim() !== '')
-          .map(l => l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[??]\s*/, ''))
+          .map(l => l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[✓✗]\s*/, ''))
           .join(' ');
       } else {
         const cleanedSubtext = card.subtext ? stripGrammarLabels(card.subtext) : '';
@@ -733,8 +617,8 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         filename: `${ex.id}-card-${i}.mp3`,
         text: clean(parts),
         voice,
-        model: GEMINI_FLASH_MODEL,
-        prompt: GEMINI_WORD_PROMPT,
+        model: useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL,
+        prompt: useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT,
       });
     }
   }
@@ -782,17 +666,12 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
         : defaultVoice;
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
     }
-    // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used — unless forced (main Listen button).
-    const forceFull = READING_TEXT_FORCE_FULL.has(ex.id);
-    const skipFull = !forceFull && (SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs);
+    // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used; UI uses sequential listen instead
+    const skipFull = SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs;
     if (!skipFull) {
       const voice = defaultVoice;
       const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
-      const body =
-        forceFull && ex.ttsParagraphs && ex.ttsParagraphs.length === paragraphs.length
-          ? ttsParagraphs
-          : paragraphs;
-      const fullText = clean(titlePrefix + body.join('\n'));
+      const fullText = clean(titlePrefix + paragraphs.join('\n'));
       if (paragraphs.length > 0 && fullText.length < 2000) {
         jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
       }
@@ -871,7 +750,6 @@ async function main() {
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
-    ...collectGrammarHighlightJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectTableFillParagraphJobs(exercises),
@@ -880,7 +758,7 @@ async function main() {
   ];
 
   // Deduplicate: if two jobs target the same output file, the later one wins.
-  // This ensures image_labeling "????????, ?????" overrides vocabulary "????????"
+  // This ensures image_labeling "България, София" overrides vocabulary "България"
   // for ids shared between vocabulary and image_labeling exercises.
   const jobMap = new Map<string, TtsJob>();
   for (const job of jobs) jobMap.set(`${job.category}/${job.filename}`, job);

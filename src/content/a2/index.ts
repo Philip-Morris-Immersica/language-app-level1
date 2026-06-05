@@ -2,10 +2,9 @@
  * A2 level registry.
  *
  * The lesson titles and the test grouping below are the official A2 syllabus.
- * Loaders are intentionally empty — each lesson / test is registered in
- * metadata so the home page, level map and sidebar can already render the
- * full A2 outline, but the actual lesson modules will be added one by one
- * under `src/content/a2/lessons/` and `src/content/a2/tests/`.
+ * Each lesson / test is registered in metadata so the home page, level map
+ * and sidebar render the full A2 outline; lesson modules get added one by
+ * one under `src/content/a2/lessons/` and `src/content/a2/tests/`.
  *
  * To digitalise a lesson:
  *   1. Create `src/content/a2/lessons/<lesson-id>/` with the standard five
@@ -32,8 +31,8 @@ export const A2_LESSON_LOADERS: Record<
   () => Promise<{ lessonData?: LessonData; default?: LessonData }>
 > = {
   // 'a2-lesson-00': () => import('./lessons/a2-lesson-00'),
-  // 'a2-lesson-01': () => import('./lessons/a2-lesson-01'),
-  // 'a2-lesson-02': () => import('./lessons/a2-lesson-02'),
+  'a2-lesson-01': () => import('./lessons/a2-lesson-01'),
+  'a2-lesson-02': () => import('./lessons/a2-lesson-02'),
   // 'a2-lesson-03': () => import('./lessons/a2-lesson-03'),
   // 'a2-lesson-04': () => import('./lessons/a2-lesson-04'),
   // 'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
@@ -122,4 +121,7 @@ export const A2_TEST_NEXT_LESSON_MAP: Record<string, string> = {
  * Total interactive exercises per lesson. Filled in as lessons get
  * digitalised (used by admin analytics / sidebar % computation).
  */
-export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {};
+export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
+  'a2-lesson-01': 26,
+  'a2-lesson-02': 45,
+};
