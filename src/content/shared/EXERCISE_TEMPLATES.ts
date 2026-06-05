@@ -158,6 +158,7 @@ import type {
  *   - With sublabels:    word + grammatical forms (countries: м./ж./мн.ч.)
  *   - Without audioUrl:  uses browser TTS on card click
  *   - With audioUrl:     plays MP3/WAV file
+ *   - cardsGridMaxCols: 3 — max three columns (symmetric rows on desktop)
  */
 export const TEMPLATE_illustrated_cards = {
   id: 'l0X-novi-dumi-NN',    // REPLACE: e.g. 'l02-novi-dumi-01'
@@ -689,6 +690,7 @@ export const TEMPLATE_drag_to_columns_3col = {
 /**
  * match_pairs — Свързване чрез tap (ляво → дясно, без dropdown).
  * По-визуален от dropdown_match, но по-рядко използван.
+ * Опционално: `showLeftOrdinal: false` — скрива колоната „1., 2., …" отляво (ако `left` вече е номериран).
  */
 export const TEMPLATE_match_pairs = {
   id: 'l0X-ex-NN',           // REPLACE

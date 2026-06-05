@@ -209,11 +209,11 @@ export function SyllableBlocks({ puzzles, imageUrl, columns, exerciseId }: Sylla
   return (
     <div className="bg-white rounded-xl p-4 md:p-6 shadow-md">
       {imageUrl && (
-        <div className="mb-6">
+        <div className="mb-6 flex justify-center">
           <img
             src={imageUrl}
             alt=""
-            className="w-full max-h-96 object-cover rounded-xl border border-gray-200 shadow-sm"
+            className="max-w-xs md:max-w-sm max-h-52 w-auto object-contain rounded-xl border border-gray-200 shadow-sm"
           />
         </div>
       )}

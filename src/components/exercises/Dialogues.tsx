@@ -2,18 +2,25 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Volume2, Play, Square } from 'lucide-react';
+import { Volume2, Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
-import { getTtsAudioPath, playTtsAudio, stopTtsAudio } from '@/lib/tts';
+import {
+  getTtsAudioPath,
+  playTtsAudio,
+  stopTtsAudio,
+  pauseTtsAudio,
+  resumeTtsAudio,
+} from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 
 interface DialogueLine {
   speaker?: string;
   voiceGender?: 'male' | 'female';
   text: string;
+  ttsText?: string;
   translations?: Record<string, string>;
 }
 
@@ -29,6 +36,9 @@ interface DialoguesProps {
   subtitle?: string;
   audioUrl?: string;
   imageUrl?: string;
+  /** Multiple images shown side-by-side at top (desktop: row, mobile: stack). */
+  images?: string[];
+  /** 'scene' = central image with speech bubbles around it (e.g. ДИАЛОЗИ 1, a2-lesson-01). */
   displayLayout?: 'list' | 'scene';
   sections: DialogueSection[];
   exerciseId?: string;
@@ -65,6 +75,7 @@ export function Dialogues({
   subtitle,
   sections,
   imageUrl,
+  images,
   displayLayout = 'list',
   exerciseId,
 }: DialoguesProps) {
@@ -72,7 +83,9 @@ export function Dialogues({
   const { lang } = useLanguage();
   const [playingLine, setPlayingLine] = useState<string | null>(null);
   const [playingSection, setPlayingSection] = useState<string | null>(null);
+  const [pausedSection, setPausedSection] = useState<string | null>(null);
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
+  const [revealedLines, setRevealedLines] = useState<Set<string>>(new Set());
   const sectionPlaybackRef = useRef<{ cancelled: boolean } | null>(null);
 
   useEffect(() => {
@@ -87,6 +100,7 @@ export function Dialogues({
     sectionPlaybackRef.current = null;
     stopTtsAudio();
     setPlayingSection(null);
+    setPausedSection(null);
     setPlayingLine(null);
   };
 
@@ -101,12 +115,12 @@ export function Dialogues({
 
   const handleLineClick = (e: React.MouseEvent, section: DialogueSection, lineIndex: number) => {
     e.stopPropagation();
-    if (playingSection) stopSectionPlayback();
+    if (playingSection || pausedSection) stopSectionPlayback();
     const line = section.lines[lineIndex];
     const lineKey = `${section.id}-line-${lineIndex}`;
 
     if (playingLine === lineKey) {
-      stopTtsAudio();
+      pauseTtsAudio();
       setPlayingLine(null);
       return;
     }
@@ -116,71 +130,116 @@ export function Dialogues({
     const audioPath = audioFile
       ? getTtsAudioPath(exerciseId!, 'dialogues', audioFile)
       : '';
-    const rawText = line.text.replace(/^—\s*/, '');
-    playTtsAudio(audioPath, rawText, undefined, () => setPlayingLine(null));
+    const spoken = (line.ttsText ?? line.text).replace(/^—\s*/, '');
+    playTtsAudio(audioPath, spoken, undefined, () => setPlayingLine(null));
+
+    setRevealedLines(prev => {
+      const next = new Set(prev);
+      if (next.has(lineKey)) next.delete(lineKey);
+      else next.add(lineKey);
+      return next;
+    });
   };
 
   const handlePlaySection = (e: React.MouseEvent, section: DialogueSection) => {
     e.stopPropagation();
+
+    const makeChain = (tok: { cancelled: boolean }) => {
+      const step = (i: number) => {
+        if (tok.cancelled) return;
+        if (i >= section.lines.length) {
+          if (sectionPlaybackRef.current === tok) sectionPlaybackRef.current = null;
+          setPlayingSection(null);
+          setPlayingLine(null);
+          return;
+        }
+        setPlayingLine(`${section.id}-line-${i}`);
+        const audioPath = getTtsAudioPath(
+          exerciseId!,
+          'dialogues',
+          `${exerciseId}-${section.id}-line-${i}`,
+        );
+        const spoken = (section.lines[i].ttsText ?? section.lines[i].text).replace(/^—\s*/, '');
+        playTtsAudio(audioPath, spoken, undefined, () => {
+          if (tok.cancelled) return;
+          window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, 350);
+        });
+      };
+      return step;
+    };
+
     if (playingSection === section.id) {
-      stopSectionPlayback();
+      pauseTtsAudio();
+      setPlayingSection(null);
+      setPausedSection(section.id);
       return;
     }
-    if (playingSection || playingLine) stopSectionPlayback();
+
+    if (
+      pausedSection === section.id &&
+      sectionPlaybackRef.current &&
+      !sectionPlaybackRef.current.cancelled
+    ) {
+      const token = sectionPlaybackRef.current;
+      const pausedIdx = playingLine?.startsWith(`${section.id}-line-`)
+        ? (parseInt(playingLine.split('-line-')[1], 10) || 0)
+        : 0;
+      const step = makeChain(token);
+      const resumed = resumeTtsAudio(() => {
+        if (token.cancelled) return;
+        window.setTimeout(() => { if (!token.cancelled) step(pausedIdx + 1); }, 350);
+      });
+      if (resumed) {
+        setPlayingSection(section.id);
+        setPausedSection(null);
+        return;
+      }
+      token.cancelled = true;
+      sectionPlaybackRef.current = null;
+    }
+
+    if (sectionPlaybackRef.current) sectionPlaybackRef.current.cancelled = true;
+    sectionPlaybackRef.current = null;
+    stopTtsAudio();
+    setPlayingSection(null);
+    setPausedSection(null);
+    setPlayingLine(null);
     if (!exerciseId) return;
 
     const token = { cancelled: false };
     sectionPlaybackRef.current = token;
     setPlayingSection(section.id);
-
-    const playNext = (i: number) => {
-      if (token.cancelled) return;
-      if (i >= section.lines.length) {
-        if (sectionPlaybackRef.current === token) sectionPlaybackRef.current = null;
-        setPlayingSection(null);
-        setPlayingLine(null);
-        return;
-      }
-      const line = section.lines[i];
-      const lineKey = `${section.id}-line-${i}`;
-      setPlayingLine(lineKey);
-      const audioPath = getTtsAudioPath(
-        exerciseId,
-        'dialogues',
-        `${exerciseId}-${section.id}-line-${i}`,
-      );
-      const rawText = line.text.replace(/^—\s*/, '');
-      playTtsAudio(audioPath, rawText, undefined, () => {
-        if (token.cancelled) return;
-        window.setTimeout(() => {
-          if (!token.cancelled) playNext(i + 1);
-        }, 350);
-      });
-    };
-
-    playNext(0);
+    makeChain(token)(0);
   };
 
-  const renderSectionLines = (section: DialogueSection) => {
+  const renderSectionButton = (section: DialogueSection, compact = false) => {
+    const sizeIcon = compact ? 'w-3.5 h-3.5' : 'w-4 h-4';
+    const sizeText = compact ? 'text-xs' : 'text-sm';
+    const sizePad = compact ? 'px-3 py-1.5' : 'px-4 py-2';
+    return (
+      <Button
+        onClick={(e) => handlePlaySection(e, section)}
+        className={`flex items-center gap-2 ${sizePad} rounded-lg font-semibold ${sizeText} ${compact ? 'shadow-sm' : 'shadow-md'} active:scale-95 transition-all ${
+          playingSection === section.id
+            ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+            : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+        }`}
+      >
+        {playingSection === section.id ? (
+          <><Pause className={sizeIcon} /> {t('exercise.pause')}</>
+        ) : pausedSection === section.id ? (
+          <><Play className={sizeIcon} /> {t('exercise.continue')}</>
+        ) : (
+          <><Play className={sizeIcon} /> {t('exercise.listen')}</>
+        )}
+      </Button>
+    );
+  };
+
+  const renderLineList = (section: DialogueSection, compact = false) => {
     const isRevealed = revealedSections.has(section.id);
     return (
-      <div className="space-y-2">
-        <div className="flex items-center justify-end gap-2 mb-1">
-          <Button
-            onClick={(e) => handlePlaySection(e, section)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs shadow-sm active:scale-95 transition-all ${
-              playingSection === section.id
-                ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
-                : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
-            }`}
-          >
-            {playingSection === section.id ? (
-              <><Square className="w-3.5 h-3.5" /> {t('exercise.stop')}</>
-            ) : (
-              <><Play className="w-3.5 h-3.5" /> {t('exercise.listen')}</>
-            )}
-          </Button>
-        </div>
+      <div className={compact ? 'space-y-2' : 'space-y-3'}>
         {section.lines.map((line, index) => {
           const lineKey = `${section.id}-line-${index}`;
           const isLinePlaying = playingLine === lineKey;
@@ -188,21 +247,31 @@ export function Dialogues({
             <div
               key={index}
               onClick={(e) => handleLineClick(e, section, index)}
-              className={`flex items-start gap-2 rounded-lg px-2 py-1.5 cursor-pointer transition-colors active:scale-[0.99] ${
-                isLinePlaying ? 'bg-[#DAF6EB]/50' : 'hover:bg-gray-50'
+              className={`flex items-start ${compact ? 'gap-2 rounded-lg px-2 py-1.5' : 'gap-3 rounded-lg px-3 py-2 -mx-3'} cursor-pointer transition-colors active:scale-[0.99] ${
+                isLinePlaying
+                  ? compact
+                    ? 'bg-[#DAF6EB]/50'
+                    : 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
+                  : compact
+                    ? 'hover:bg-gray-50'
+                    : 'hover:bg-gray-50 border border-transparent'
               }`}
             >
-              <Volume2 className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${
+              <Volume2 className={`${compact ? 'w-3.5 h-3.5 mt-0.5' : 'w-4 h-4 mt-1.5'} shrink-0 transition-colors ${
                 isLinePlaying ? 'text-[#32C189]' : 'text-gray-300'
               }`} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm md:text-base text-gray-800 leading-snug">
+                <p className={`${compact ? 'text-sm md:text-base leading-snug' : 'text-base md:text-lg leading-relaxed'} text-gray-800`}>
                   {line.speaker && (
                     <span className="font-bold text-[#0072BC] mr-1">{line.speaker}:</span>
                   )}
                   {line.text}
                 </p>
-                <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
+                <InlineTranslation
+                  text={line.text}
+                  visible={revealedLines.has(lineKey) || isRevealed}
+                  translations={line.translations}
+                />
               </div>
             </div>
           );
@@ -211,71 +280,14 @@ export function Dialogues({
     );
   };
 
-  const renderListSection = (section: DialogueSection) => {
-    const isRevealed = revealedSections.has(section.id);
-    return (
-      <div
-        key={section.id}
-        className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#32C189]/50"
-      >
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <div
-            onClick={() => toggleSection(section.id)}
-            className="flex items-center gap-2 cursor-pointer flex-1"
-          >
-            <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
-              {section.id}
-            </span>
-          </div>
-          <Button
-            onClick={(e) => handlePlaySection(e, section)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
-              playingSection === section.id
-                ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
-                : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
-            }`}
-          >
-            {playingSection === section.id ? (
-              <><Square className="w-4 h-4" /> {t('exercise.stop')}</>
-            ) : (
-              <><Play className="w-4 h-4" /> {t('exercise.listen')}</>
-            )}
-          </Button>
-        </div>
-
-        <div className="space-y-3">
-          {section.lines.map((line, index) => {
-            const lineKey = `${section.id}-line-${index}`;
-            const isLinePlaying = playingLine === lineKey;
-            return (
-              <div
-                key={index}
-                onClick={(e) => handleLineClick(e, section, index)}
-                className={`flex items-start gap-3 rounded-lg px-3 py-2 -mx-3 cursor-pointer transition-colors active:scale-[0.99] ${
-                  isLinePlaying
-                    ? 'bg-[#DAF6EB]/30 border border-[#32C189]/40'
-                    : 'hover:bg-gray-50 border border-transparent'
-                }`}
-              >
-                <Volume2 className={`w-4 h-4 mt-1.5 shrink-0 transition-colors ${
-                  isLinePlaying ? 'text-[#32C189]' : 'text-gray-300'
-                }`} />
-                <div className="flex-1">
-                  <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                    {line.speaker && (
-                      <span className="font-bold text-[#0072BC] mr-1">{line.speaker}:</span>
-                    )}
-                    {line.text}
-                  </p>
-                  <InlineTranslation text={line.text} visible={isRevealed} translations={line.translations} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+  const renderSectionLines = (section: DialogueSection) => (
+    <div className="space-y-2">
+      <div className="flex items-center justify-end gap-2 mb-1">
+        {renderSectionButton(section, true)}
       </div>
-    );
-  };
+      {renderLineList(section, true)}
+    </div>
+  );
 
   const isScene = displayLayout === 'scene' && Boolean(imageUrl);
   const leftSections = sections.filter((s, i) => s.bubbleSide === 'left' || (!s.bubbleSide && i % 2 === 0));
@@ -283,6 +295,30 @@ export function Dialogues({
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {/* Multiple images (side-by-side on desktop, centered) — not shown in scene mode (image is in the grid) */}
+      {!isScene && images && images.length > 0 && (
+        <div className="mb-6 flex justify-center">
+          <div className={`grid gap-3 w-full ${images.length === 1 ? 'max-w-sm grid-cols-1' : images.length === 2 ? 'max-w-2xl grid-cols-1 md:grid-cols-2' : 'max-w-4xl grid-cols-1 md:grid-cols-3'}`}>
+            {images.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={i} src={src} alt="" className="w-full rounded-xl object-cover shadow-sm" />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Legacy single image — not shown in scene mode (image is centered in the grid) */}
+      {!isScene && !images && imageUrl && (
+        <div className="mb-6 flex justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt=""
+            className="w-full max-w-md md:max-w-lg rounded-xl object-cover shadow-sm"
+          />
+        </div>
+      )}
+
       {lang !== 'bg' && (
         <p className="text-xs text-gray-400 text-center mb-4 italic">
           {t('exercise.tapToTranslate')}
@@ -374,7 +410,27 @@ export function Dialogues({
         </div>
       ) : (
         <div className="space-y-6">
-          {sections.map((section) => renderListSection(section))}
+          {sections.map((section) => (
+            <div
+              key={section.id}
+              className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#32C189]/50"
+            >
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div
+                  onClick={() => toggleSection(section.id)}
+                  className="flex items-center gap-2 cursor-pointer flex-1"
+                >
+                  {sections.length > 1 && (
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
+                      {section.id}
+                    </span>
+                  )}
+                </div>
+                {renderSectionButton(section)}
+              </div>
+              {renderLineList(section)}
+            </div>
+          ))}
         </div>
       )}
 

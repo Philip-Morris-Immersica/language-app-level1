@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { signToken } from '@/lib/auth/jwt';
+import { seedAdminFromEnv } from '@/lib/admin/seedFromEnv';
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,6 +25,8 @@ export async function POST(req: NextRequest) {
     }
 
     const token = await signToken({ userId: user.id, name: user.name, email: user.email });
+
+    await seedAdminFromEnv(user.id, user.email).catch(() => {});
 
     const response = NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } });
     response.cookies.set('auth_token', token, {

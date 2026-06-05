@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, X, LogIn, LogOut, User, ChevronDown, Home } from 'lucide-react';
+import { Menu, X, LogIn, LogOut, User, ChevronDown, Home, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,15 +8,30 @@ import { LanguageSelector } from './LanguageSelector';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
 
+function useAdminRole() {
+  const [role, setRole] = useState<string | null>(null);
+  useEffect(() => {
+    fetch('/api/admin/me', { credentials: 'include' })
+      .then((r) => r.json())
+      .then(({ admin }) => {
+        setRole(admin?.role ?? null);
+      })
+      .catch(() => setRole(null));
+  }, []);
+  return role;
+}
+
 interface HeaderProps {
   isMobileMenuOpen: boolean;
   onToggleMobileMenu: () => void;
+  showLessonNav?: boolean;
 }
 
 function ProfileMenu() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const t = useT();
+  const adminRole = useAdminRole();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -76,13 +91,23 @@ function ProfileMenu() {
             <p className="text-xs text-gray-400 truncate">{user.email}</p>
           </div>
           <Link
-            href="/"
+            href="/profile"
             onClick={() => setOpen(false)}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <User className="w-4 h-4 text-gray-400" />
             {t('auth.profile')}
           </Link>
+          {adminRole && (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#0072BC] hover:bg-[#CDE3F1]/40 transition-colors"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Admin Panel
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#D25A45] hover:bg-[#FCE2DE]/40 transition-colors"
@@ -96,24 +121,26 @@ function ProfileMenu() {
   );
 }
 
-export function Header({ isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) {
+export function Header({ isMobileMenuOpen, onToggleMobileMenu, showLessonNav = false }: HeaderProps) {
   const t = useT();
   return (
     <header className="sticky top-0 z-50 bg-[#0072BC] text-white py-2 px-4 shadow-md">
       <div className="flex items-center justify-between gap-2">
 
-        {/* Left: hamburger */}
-        <button
-          onClick={onToggleMobileMenu}
-          className="flex-shrink-0 p-2 hover:bg-white/20 rounded-lg transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
+        {/* Left: hamburger — only shown on lesson/level/test pages */}
+        {showLessonNav && (
+          <button
+            onClick={onToggleMobileMenu}
+            className="flex-shrink-0 p-2 hover:bg-white/20 rounded-lg transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        )}
 
         {/* Center: Home icon + UNHCR logo + title */}
         <div className="flex items-center gap-3 flex-1 min-w-0 justify-center">

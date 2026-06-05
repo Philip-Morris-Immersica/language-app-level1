@@ -18,6 +18,14 @@ interface IllustratedCardsProps {
 
 type CardItem = IllustratedCardsExercise['cards'][number];
 
+/** Matches `collectIllustratedCardJobs` in scripts/generate-tts.ts — audio must match visible phrasing policy. */
+function getIllustratedCardSpokenText(card: CardItem): string {
+  const tts = card.ttsLabel?.trim();
+  if (tts) return tts;
+  const parts = card.ttsIncludeSublabels ? [card.label, ...(card.sublabels ?? [])] : [card.label];
+  return parts.join('. ').replace(/\s*=\s*/g, ', ');
+}
+
 export function IllustratedCards({ exercise, onComplete, exerciseId }: IllustratedCardsProps) {
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
@@ -37,11 +45,11 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
   };
 
   const handleCardClick = (card: CardItem) => {
-    const parts = [card.label, ...(card.sublabels || [])];
+    const spoken = getIllustratedCardSpokenText(card);
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'words', card.id)
       : '';
-    playTtsAudio(audioPath, parts.join('. '));
+    playTtsAudio(audioPath, spoken);
     toggleTranslation(card.id);
     setVisitedCards(prev => new Set(prev).add(card.id));
   };
@@ -214,6 +222,36 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
           <p className="mt-2 text-center text-xs text-gray-400 select-none">
             Кликнете върху картинката, за да я увеличите.
           </p>
+          {/* Optional narrator paragraph shown below the header image — click to play TTS */}
+          {exercise.headerCaption && (
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Слушай"
+              onClick={() => {
+                const audioPath = exerciseId
+                  ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
+                  : '';
+                playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  const audioPath = exerciseId
+                    ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
+                    : '';
+                  playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                }
+              }}
+              className="mt-4 relative bg-[#DAF6EB] rounded-xl px-5 py-4 cursor-pointer hover:brightness-95 active:scale-[0.99] transition-all select-none"
+            >
+              <div className="absolute top-3 right-4 text-[#1F5741]">
+                <Volume2 className="w-4 h-4" />
+              </div>
+              <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed pr-8">
+                {exercise.headerCaption}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -224,41 +262,22 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         </p>
       )}
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {exercise.cards.map((card) => (
-          <div
-            key={card.id}
-            onClick={() => handleCardClick(card)}
-            className={`relative rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
-              visitedCards.has(card.id)
-                ? 'bg-green-50 border-[#32C189]/40'
-                : 'bg-white border-gray-200'
-            }`}
-          >
-            {/* Speaker icon */}
-            <div className="absolute top-2 right-2 text-gray-400">
-              <Volume2 className="w-4 h-4" />
-            </div>
-
-            {/* Image */}
-            {card.imageUrl && (
-              <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
-                <div className="relative w-full h-[120px] md:h-[150px] bg-white">
-                  <Image
-                    src={card.imageUrl}
-                    alt={card.label}
-                    fill
-                    className="object-contain rounded-lg"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Label */}
-            <div className="text-center">
-              <p className="text-base md:text-lg font-semibold text-gray-800">
+      {/* Cards Grid — default scales to 4 cols on lg; optional max 3 cols for symmetric rows */}
+      {exercise.textOnly ? (
+        /* Text-only mode: compact boxes with just the numbered label, no images */
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          {exercise.cards.map((card) => (
+            <div
+              key={card.id}
+              onClick={() => handleCardClick(card)}
+              className={`relative flex flex-col items-center justify-center gap-1 rounded-lg border-2 px-3 py-4 min-h-[64px] cursor-pointer transition-all hover:scale-105 active:scale-95 hover:shadow-md ${
+                visitedCards.has(card.id)
+                  ? 'bg-[#DAF6EB] border-[#32C189]/60'
+                  : 'bg-white border-gray-200 hover:border-[#32C189]/40'
+              }`}
+            >
+              <Volume2 className="absolute top-2 right-2 w-3.5 h-3.5 text-gray-300" />
+              <p className="text-base md:text-lg font-semibold text-[#262626] text-center leading-tight">
                 {card.label}
               </p>
               <InlineTranslation
@@ -266,20 +285,72 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                 visible={revealedCards.has(card.id)}
                 translations={card.translations}
               />
-              {/* Sublabels */}
-              {card.sublabels && card.sublabels.length > 0 && (
-                <div className="mt-2 space-y-0.5">
-                  {card.sublabels.map((sublabel, index) => (
-                    <p key={index} className="text-sm md:text-base text-gray-700">
-                      {sublabel}
-                    </p>
-                  ))}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div
+          className={
+            exercise.cardsGridMaxCols === 3
+              ? 'grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6'
+              : 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'
+          }
+        >
+          {exercise.cards.map((card) => (
+            <div
+              key={card.id}
+              onClick={() => handleCardClick(card)}
+              className={`relative rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
+                visitedCards.has(card.id)
+                  ? 'bg-green-50 border-[#32C189]/40'
+                  : 'bg-white border-gray-200'
+              }`}
+            >
+              {/* Speaker icon */}
+              <div className="absolute top-2 right-2 text-gray-400">
+                <Volume2 className="w-4 h-4" />
+              </div>
+
+              {/* Image */}
+              {card.imageUrl && (
+                <div className="flex items-center justify-center mb-3 min-h-[120px] md:min-h-[150px]">
+                  <div className="relative w-full h-[120px] md:h-[150px] bg-white">
+                    <Image
+                      src={card.imageUrl}
+                      alt={card.label}
+                      fill
+                      className="object-contain rounded-lg"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                  </div>
                 </div>
               )}
+
+              {/* Label */}
+              <div className="text-center">
+                <p className="text-base md:text-lg font-semibold text-gray-800">
+                  {card.label}
+                </p>
+                <InlineTranslation
+                  text={card.label}
+                  visible={revealedCards.has(card.id)}
+                  translations={card.translations}
+                />
+                {/* Sublabels */}
+                {card.sublabels && card.sublabels.length > 0 && (
+                  <div className="mt-2 space-y-0.5">
+                    {card.sublabels.map((sublabel, index) => (
+                      <p key={index} className="text-sm md:text-base text-gray-700">
+                        {sublabel}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
     </div>
   );

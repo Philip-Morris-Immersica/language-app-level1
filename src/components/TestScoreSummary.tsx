@@ -6,88 +6,12 @@ import { Button } from '@/components/ui/button';
 import { useExercisePersistenceContext } from '@/contexts/ExercisePersistenceContext';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
-import type { TestData, TestSection, Exercise } from '@/content/types';
+import type { TestData } from '@/content/types';
+import { getSectionScore } from '@/lib/testScoring';
 
 function TranslatedText({ text }: { text: string }) {
   const translated = useTranslate(text);
   return <>{translated}</>;
-}
-
-function getExerciseScore(exercise: Exercise, savedState: unknown): number | null {
-  const s = savedState as any;
-  if (!s) return null;
-
-  switch (exercise.type) {
-    case 'true_false': {
-      if (!s.checked) return null;
-      const ex = exercise as any;
-      let correct = 0;
-      for (const sentence of ex.sentences) {
-        if ((s.answers?.[sentence.id] === 'true') === sentence.isTrue) correct++;
-      }
-      return correct;
-    }
-
-    case 'workbook_fill_blank': {
-      if (!s.isSubmitted) return null;
-      const v = s.validation as Record<string, boolean | null> | undefined;
-      if (!v) return null;
-      return Object.values(v).filter(val => val === true).length;
-    }
-
-    case 'multiple_choice': {
-      if (!s.isSubmitted) return null;
-      const ex = exercise as any;
-      let correct = 0;
-      for (let i = 0; i < ex.questions.length; i++) {
-        if (s.selectedAnswers?.[i] === ex.questions[i].correctIndex) correct++;
-      }
-      return correct;
-    }
-
-    case 'word_order': {
-      if (!s.isSubmitted) return null;
-      const ex = exercise as any;
-      let correct = 0;
-      const states = s.questionStates as any[] | undefined;
-      if (!states) return null;
-      for (let i = 0; i < ex.questions.length; i++) {
-        const qs = states[i];
-        if (qs?.built?.join(' ') === ex.questions[i].correctSentence) correct++;
-      }
-      return correct;
-    }
-
-    case 'syllable_blocks': {
-      const completed = s.completed as Record<string, boolean> | undefined;
-      if (!completed) return null;
-      return Object.values(completed).filter(Boolean).length;
-    }
-
-    default:
-      return null;
-  }
-}
-
-function getSectionScore(
-  section: TestSection,
-  savedStates: Record<string, unknown>
-): { earned: number; total: number; completed: boolean } {
-  let earned = 0;
-  let total = section.maxPoints;
-  let allCompleted = true;
-
-  for (const ex of section.exercises) {
-    if (!ex.points || ex.points === 0) continue;
-    const score = getExerciseScore(ex, savedStates[ex.id]);
-    if (score === null) {
-      allCompleted = false;
-    } else {
-      earned += score;
-    }
-  }
-
-  return { earned, total, completed: allCompleted };
 }
 
 function getTier(pct: number): 'low' | 'mid' | 'high' {

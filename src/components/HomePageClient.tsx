@@ -1,20 +1,40 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Lock, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
 import { PlatformLegend } from '@/components/PlatformLegend';
+import { LEVELS, getLevelDef, type Level } from '@/content';
 
-// Level labels are ALWAYS Latin (A1, A2, B1, B2) per UNHCR convention,
-// regardless of the user's UI language.
-const LEVELS = [
-  { code: 'A1', label: 'A1', href: '/level/a1', available: true  },
-  { code: 'A2', label: 'A2', href: '#',         available: false },
-  { code: 'B1', label: 'B1', href: '#',         available: false },
-  { code: 'B2', label: 'B2', href: '#',         available: false },
-];
+// Latin labels are language-agnostic per UNHCR brand rule.
+const LATIN_LABEL: Record<Level, string> = {
+  a1: 'A1',
+  a2: 'A2',
+  b1: 'B1',
+  b2: 'B2',
+};
+
+interface LevelView {
+  code: Level;
+  label: string;
+  href: string;
+  totalItems: number;
+  hasContent: boolean;
+}
+
+/**
+ * Derives the level a lesson ID belongs to from its prefix. A1 IDs are kept
+ * un-prefixed for historical reasons (`lesson-XX`), so the absence of a known
+ * prefix means A1.
+ */
+function levelOfLessonId(id: string): Level {
+  if (id.startsWith('a2-')) return 'a2';
+  if (id.startsWith('b1-')) return 'b1';
+  if (id.startsWith('b2-')) return 'b2';
+  return 'a1';
+}
 
 function ProgressBar({ value }: { value: number }) {
   return (
@@ -31,25 +51,54 @@ export function HomePageClient() {
   const { user, loading } = useAuth();
   const t = useT();
 
-  // Hooks must run unconditionally — keep this above any early return.
-  const [a1Progress, setA1Progress] = useState(0);
+  const levelViews = useMemo<LevelView[]>(
+    () =>
+      LEVELS.map((code) => {
+        const def = getLevelDef(code);
+        const totalItems =
+          def.lessonsMetadata.length + Object.keys(def.testLoaders).length;
+        return {
+          code,
+          label: LATIN_LABEL[code],
+          href: `/level/${code}`,
+          totalItems,
+          hasContent: totalItems > 0,
+        };
+      }),
+    [],
+  );
+
+  const [progressByLevel, setProgressByLevel] = useState<Record<Level, number>>({
+    a1: 0,
+    a2: 0,
+    b1: 0,
+    b2: 0,
+  });
 
   useEffect(() => {
     if (!user) return;
-    // 11 lessons + 1 alphabet + 6 tests = 18 items, each weighted equally
-    const A1_TOTAL_ITEMS = 18;
     fetch('/api/progress/summary')
-      .then(r => r.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         if (!data.lessons) return;
-        let weightedSum = 0;
-        for (const v of Object.values(data.lessons) as { completed: number; total: number }[]) {
-          if (v.total > 0) weightedSum += v.completed / v.total;
+        const sums: Record<Level, number> = { a1: 0, a2: 0, b1: 0, b2: 0 };
+        for (const [lessonId, value] of Object.entries(
+          data.lessons as Record<string, { completed: number; total: number }>,
+        )) {
+          if (value.total <= 0) continue;
+          const lvl = levelOfLessonId(lessonId);
+          sums[lvl] += value.completed / value.total;
         }
-        setA1Progress(Math.round((weightedSum / A1_TOTAL_ITEMS) * 100));
+        const next: Record<Level, number> = { a1: 0, a2: 0, b1: 0, b2: 0 };
+        for (const view of levelViews) {
+          next[view.code] = view.totalItems > 0
+            ? Math.round((sums[view.code] / view.totalItems) * 100)
+            : 0;
+        }
+        setProgressByLevel(next);
       })
       .catch(() => {});
-  }, [user]);
+  }, [user, levelViews]);
 
   if (loading) {
     return (
@@ -124,27 +173,32 @@ export function HomePageClient() {
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {LEVELS.map((level) => {
-            const progress = level.code === 'A1' ? a1Progress : 0;
-            return level.available ? (
+          {levelViews.map((level) => {
+            const progress = progressByLevel[level.code] ?? 0;
+            return (
               <Link
                 key={level.code}
                 href={level.href}
                 className="rounded-2xl bg-[#0072BC] text-white p-8 flex flex-col items-center justify-center shadow-md hover:bg-[#005A8E] transition-colors"
               >
                 <span className="text-4xl font-bold mb-2 tracking-wide">{level.label}</span>
-                <span className="text-white/80 text-sm font-medium mb-3">{t('home.progress')}</span>
-                <ProgressBar value={progress} />
-                <span className="mt-2 text-white/70 text-xs">{progress}{t('home.completed')}</span>
+                {level.hasContent ? (
+                  <>
+                    <span className="text-white/80 text-sm font-medium mb-3">
+                      {t('home.progress')}
+                    </span>
+                    <ProgressBar value={progress} />
+                    <span className="mt-2 text-white/70 text-xs">
+                      {progress}
+                      {t('home.completed')}
+                    </span>
+                  </>
+                ) : (
+                  <span className="mt-3 inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
+                    {t('level.comingSoon')}
+                  </span>
+                )}
               </Link>
-            ) : (
-              <div
-                key={level.code}
-                className="rounded-2xl bg-gray-100 text-gray-400 p-8 flex flex-col items-center justify-center cursor-not-allowed"
-              >
-                <span className="text-4xl font-bold mb-4 tracking-wide">{level.label}</span>
-                <Lock className="w-7 h-7 opacity-40" />
-              </div>
             );
           })}
         </div>

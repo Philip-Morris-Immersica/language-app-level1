@@ -275,7 +275,10 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
         </div>
       )}
 
-      {tables.map((table, ti) => (
+      {tables.map((table, ti) => {
+        // Hide the leftmost label column entirely when all rows have an empty label.
+        const showLabelCol = table.rows.some(r => (r.label ?? '').trim() !== '');
+        return (
         <div key={ti}>
           {table.name && (
             <h4 className="text-sm md:text-base font-bold text-[#0072BC] mb-3">
@@ -287,7 +290,9 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
             <table className="w-full border-collapse text-sm md:text-base min-w-[400px]">
               <thead>
                 <tr className="bg-[#f0f7ff]">
-                  <th className="border border-gray-200 px-3 py-2 text-left font-bold text-gray-600 w-28 md:w-36" />
+                  {showLabelCol && (
+                    <th className="border border-gray-200 px-3 py-2 text-left font-bold text-gray-600 w-28 md:w-36" />
+                  )}
                   {table.columns.map((col, ci) => (
                     <th
                       key={ci}
@@ -301,9 +306,11 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
               <tbody>
                 {table.rows.map((row, ri) => (
                   <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
-                    <td className="border border-gray-200 px-3 py-2 font-semibold text-gray-800">
-                      {row.label}
-                    </td>
+                    {showLabelCol && (
+                      <td className="border border-gray-200 px-3 py-2 font-semibold text-gray-800">
+                        {row.label}
+                      </td>
+                    )}
                     {row.cells.map((cell, ci) => {
                       const key = cellKey(ti, ri, ci);
                       const isSingleOption = cell.options.length <= 1;
@@ -360,7 +367,8 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
             </table>
           </div>
         </div>
-      ))}
+        );
+      })}
 
       <div className="flex gap-3 mt-6">
         <Button

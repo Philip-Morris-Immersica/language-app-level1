@@ -26,10 +26,29 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   return options as string[];
 }
 
+function renderBoldText(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
+  /** See WorkbookFillBlankExercise.columnSplitAt */
+  columnSplitAt?: number;
+  /** When true, skip the automatic "N." numbering prefix in front of each sentence. */
+  hideSentenceNumbers?: boolean;
+  /** Optional captions rendered above the two columns when layout='two-column'. */
+  columnLabels?: { left?: string; right?: string };
   imageUrl?: string;
+  /** Multiple images shown side-by-side at top (e.g. two houses to compare). */
+  images?: { imageUrl: string; label?: string }[];
+  /** Header images shown centered above sentences (e.g. two character portraits for image-bubbles layout). */
   headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
   onComplete?: (correct: boolean, score: number) => void;
@@ -48,7 +67,11 @@ function parseText(text: string): { type: 'text' | 'blank'; value: string }[] {
 export function WorkbookFillBlank({
   sentences,
   layout = 'two-column',
+  columnSplitAt,
+  hideSentenceNumbers = false,
+  columnLabels,
   imageUrl,
+  images,
   headerImages,
   listeningText,
   onComplete,
@@ -127,10 +150,10 @@ export function WorkbookFillBlank({
       const userAnswers = answers[sIdx] || [];
       const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
         const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
-        if (sentence.acceptableAnswers?.[bIdx]) {
-          return sentence.acceptableAnswers[bIdx].some(a => a.toLowerCase() === userVal);
-        }
-        return userVal === correct.toLowerCase();
+        const matchesPrimary = userVal === correct.toLowerCase();
+        const alternates = sentence.acceptableAnswers?.[bIdx];
+        const matchesAlternate = alternates?.some(a => a.toLowerCase() === userVal) ?? false;
+        return matchesPrimary || matchesAlternate;
       });
 
       newBlankValidation[sIdx] = blankResults;
@@ -143,7 +166,12 @@ export function WorkbookFillBlank({
     onComplete?.(correctCount === totalSentences, correctCount);
   };
 
-  const renderSentence = (sentence: WorkbookSentence, sIdx: number, compact = false) => {
+  const renderSentence = (
+    sentence: WorkbookSentence,
+    sIdx: number,
+    opts: { compact?: boolean; displayNum?: number } = {},
+  ) => {
+    const { compact = false, displayNum } = opts;
     const isExample = sentence.isExample || sentence.blanks.length === 0;
     const segments = parseText(sentence.text);
     let blankCounter = 0;
@@ -151,15 +179,19 @@ export function WorkbookFillBlank({
     const blankValArr = blankValidation[sIdx];
 
     const imageEl = sentence.images && sentence.images.length > 0 ? (
-      <img
-        src={sentence.images[0]}
-        alt=""
-        className="w-24 h-24 md:w-36 md:h-36 rounded-lg object-contain shrink-0 bg-gray-50"
-      />
+      <div className="flex-none w-28 md:w-36 flex items-center justify-center pl-3">
+        <ImageLightbox src={sentence.images[0]} alt="">
+          <img
+            src={sentence.images[0]}
+            alt=""
+            className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-zoom-in"
+          />
+        </ImageLightbox>
+      </div>
     ) : null;
 
     const inner = (
-        <div className={`flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 ${compact ? 'text-sm md:text-base' : ''}`}>
+        <div className={`flex flex-wrap items-center gap-x-1 gap-y-1 min-w-0 ${compact ? 'text-sm md:text-base' : 'flex-1'}`}>
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
@@ -248,7 +280,9 @@ export function WorkbookFillBlank({
     return (
       <div key={sIdx} className={`py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}>
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{sIdx + 1}.</span>
+          {!hideSentenceNumbers && (
+            <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
+          )}
           {inner}
           {imageEl}
         </div>
@@ -419,7 +453,7 @@ export function WorkbookFillBlank({
       return (
         <div key={sIdx} className="mb-5 p-4 border-2 border-[#8B9D5F] rounded-lg bg-[#f8faf4]">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Модел:</p>
-          <p className="text-base text-gray-700">{questionPart}</p>
+          <p className="text-base text-gray-700">{renderBoldText(questionPart)}</p>
           <p className="text-base text-gray-700">
             {answerPart ? renderAnswerPart(answerPart) : null}
           </p>
@@ -464,7 +498,7 @@ export function WorkbookFillBlank({
   };
 
   // Split sentences for two-column layout: first half left, second half right
-  const half = Math.ceil(shuffledSentences.length / 2);
+  const half = columnSplitAt ?? Math.ceil(shuffledSentences.length / 2);
   const leftSentences = shuffledSentences.slice(0, half);
   const rightSentences = shuffledSentences.slice(half);
 
@@ -504,7 +538,7 @@ export function WorkbookFillBlank({
                 key={sIdx}
                 className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm mr-2"
               >
-                {renderSentence(s, sIdx, true)}
+                {renderSentence(s, sIdx, { compact: true })}
               </div>
             );
           })}
@@ -522,7 +556,7 @@ export function WorkbookFillBlank({
                 key={sIdx}
                 className="rounded-2xl border-2 border-[#CDE3F1] bg-white px-3 py-2.5 shadow-sm ml-2"
               >
-                {renderSentence(s, sIdx, true)}
+                {renderSentence(s, sIdx, { compact: true })}
               </div>
             );
           })}
@@ -536,7 +570,7 @@ export function WorkbookFillBlank({
               s.bubbleSide === 'right' ? 'ml-4' : 'mr-4'
             }`}
           >
-            {renderSentence(s, i, true)}
+            {renderSentence(s, i, { compact: true })}
           </div>
         ))}
       </div>
@@ -547,19 +581,42 @@ export function WorkbookFillBlank({
     <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
       {layout === 'image-bubbles' && imageUrl ? (
         renderImageBubblesLayout()
-      ) : imageUrl ? (
-        <div className="mb-6 flex justify-center">
-          <div className="w-full max-w-3xl md:max-w-4xl">
-            <ImageLightbox src={imageUrl} alt="">
-              <img
-                src={imageUrl}
-                alt=""
-                className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
-              />
-            </ImageLightbox>
-          </div>
-        </div>
-      ) : null}
+      ) : (
+        <>
+          {images && images.length > 0 && (
+            <div className="mb-6 flex flex-wrap justify-center gap-6">
+              {images.map((img, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
+                    <img
+                      src={img.imageUrl}
+                      alt={img.label || ''}
+                      className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                    />
+                  </ImageLightbox>
+                  {img.label && (
+                    <p className="text-sm font-bold text-gray-700">{img.label}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {imageUrl && (
+            <div className="mb-6 flex justify-center">
+              <div className="w-full max-w-lg md:max-w-2xl">
+                <ImageLightbox src={imageUrl} alt="">
+                  <img
+                    src={imageUrl}
+                    alt=""
+                    className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                  />
+                </ImageLightbox>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       {headerImages && headerImages.length > 0 && (
         <div className={`grid gap-4 mb-6 ${headerImages.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 max-w-2xl mx-auto'}`}>
@@ -580,15 +637,14 @@ export function WorkbookFillBlank({
 
       {listeningText && (
         <div className="mb-6">
-          <div
+          <button
+            type="button"
             onClick={() => speakText(listeningText)}
-            className="rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-4 cursor-pointer hover:bg-[#DAF6EB] transition-colors active:scale-[0.99]"
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-[#32C189] bg-[#DAF6EB]/30 px-5 py-3 text-sm md:text-base text-gray-800 hover:bg-[#DAF6EB] transition-colors active:scale-[0.99] cursor-pointer"
           >
-            <p className="text-sm md:text-base text-gray-800 leading-relaxed flex items-start gap-2">
-              <span className="text-[#4a6b1f] mt-0.5 shrink-0">🔊</span>
-              {listeningText}
-            </p>
-          </div>
+            <span className="text-[#4a6b1f]">🔊</span>
+            <span>Слушай</span>
+          </button>
         </div>
       )}
 
@@ -610,14 +666,24 @@ export function WorkbookFillBlank({
       ) : layout === 'two-column' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
           <div className="space-y-1">
+            {columnLabels?.left && (
+              <h4 className="text-sm font-bold text-[#1F5741] uppercase tracking-wide mb-2 pb-1 border-b-2 border-[#DAF6EB]">
+                {columnLabels.left}
+              </h4>
+            )}
             {leftSentences.map((s, i) => renderSentence(s, i))}
           </div>
           <div className="space-y-1">
-            {rightSentences.map((s, i) => renderSentence(s, i + half))}
+            {columnLabels?.right && (
+              <h4 className="text-sm font-bold text-[#1F5741] uppercase tracking-wide mb-2 pb-1 border-b-2 border-[#DAF6EB]">
+                {columnLabels.right}
+              </h4>
+            )}
+            {rightSentences.map((s, i) => renderSentence(s, i + half, { displayNum: i }))}
           </div>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className={`space-y-2 ${shuffledSentences.some(s => s.images?.length) ? 'max-w-2xl' : ''}`}>
           {shuffledSentences.map((s, i) => renderSentence(s, i))}
         </div>
       )}

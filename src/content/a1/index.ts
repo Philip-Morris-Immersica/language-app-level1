@@ -33,6 +33,8 @@ export const A1_LESSON_LOADERS: Record<
   'lesson-07': () => import('./lessons/lesson-07'),
   'lesson-08': () => import('./lessons/lesson-08'),
   'lesson-09': () => import('./lessons/lesson-09'),
+  'lesson-10': () => import('./lessons/lesson-10'),
+  'lesson-11': () => import('./lessons/lesson-11'),
 };
 
 export const A1_TEST_LOADERS: Record<
@@ -42,6 +44,9 @@ export const A1_TEST_LOADERS: Record<
   'test-a1-1': () => import('./tests/test-lessons-1-2-3'),
   'test-a1-2': () => import('./tests/test-lessons-4'),
   'test-a1-3': () => import('./tests/test-lessons-5-6'),
+  'test-a1-4': () => import('./tests/test-lessons-7-8'),
+  'test-a1-5': () => import('./tests/test-lessons-9-10'),
+  'test-a1-6': () => import('./tests/test-lessons-11'),
 };
 
 // ── Lesson metadata (static, used by sidebar / lesson page header) ────────────
@@ -92,6 +97,9 @@ export const A1_TEST_FOLDER_MAP: Record<string, string> = {
   'test-a1-1': 'test-lessons-1-2-3',
   'test-a1-2': 'test-lessons-4',
   'test-a1-3': 'test-lessons-5-6',
+  'test-a1-4': 'test-lessons-7-8',
+  'test-a1-5': 'test-lessons-9-10',
+  'test-a1-6': 'test-lessons-11',
 };
 
 // ── testId → next lesson after the test (used for "next" navigation) ──────────
@@ -101,6 +109,7 @@ export const A1_TEST_NEXT_LESSON_MAP: Record<string, string> = {
   'test-a1-3': 'lesson-07',
   'test-a1-4': 'lesson-09',
   'test-a1-5': 'lesson-11',
+  // test-a1-6 is the final A1 test — no next lesson
 };
 
 /**
@@ -116,6 +125,8 @@ export const A1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'lesson-05': 30,
   'lesson-06': 32,
   'lesson-07': 43,
-  'lesson-08': 21,
+  'lesson-08': 20,
   'lesson-09': 17,
+  'lesson-10': 23,
+  'lesson-11': 125,
 };

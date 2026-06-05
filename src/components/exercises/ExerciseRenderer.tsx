@@ -42,6 +42,7 @@ interface ExerciseHeaderProps {
   instruction: string;
   instructionKey?: string;
   subtitle?: string;
+  prominentSubtitle?: boolean;
 }
 
 /** Converts **bold** markers in instruction strings to <strong> elements. */
@@ -55,7 +56,7 @@ function renderInstructionText(text: string): React.ReactNode {
   });
 }
 
-function ExerciseHeader({ title, instruction, instructionKey, subtitle }: ExerciseHeaderProps) {
+function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
   const translatedTitle = useTranslate(title);
   const translatedInstruction = useTranslate(instruction);
@@ -66,14 +67,17 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle }: Exerci
       <h3 className="text-[#0072BC] font-bold text-xl md:text-2xl leading-tight">
         {translatedTitle}
       </h3>
+      {subtitle && (
+        <p className={prominentSubtitle
+          ? 'text-gray-700 text-base md:text-lg font-semibold mt-2'
+          : 'text-gray-400 text-xs mt-1'
+        }>
+          {translatedSubtitle}
+        </p>
+      )}
       {instruction && (
         <p className="text-gray-500 text-sm md:text-base mt-1.5 leading-snug">
           {renderInstructionText(displayInstruction)}
-        </p>
-      )}
-      {subtitle && (
-        <p className="text-gray-400 text-xs mt-1">
-          {translatedSubtitle}
         </p>
       )}
     </div>
@@ -97,23 +101,30 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   }
 
   const subtitle = 'subtitle' in exercise ? (exercise as any).subtitle as string | undefined : undefined;
+  const prominentSubtitle = exercise.prominentSubtitle;
 
   function wrap(component: React.ReactNode) {
+    const gh = exercise.grammarHighlight;
+    const ghAfter = gh && exercise.grammarHighlightAfterBody;
+    const ghBefore = gh && !exercise.grammarHighlightAfterBody;
     const hideHeader = 'hideHeader' in exercise && exercise.hideHeader === true;
+    // title === '' means "continuation section" — hide header + number entirely
+    const showHeader = exercise.title !== '' && !hideHeader;
     return (
       <div>
-        {hideHeader ? (
-          exercise.instruction ? (
-            <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
-              {renderInstructionText(
-                exercise.instructionKey ? t(exercise.instructionKey) : translatedInstruction,
-              )}
-            </p>
-          ) : null
-        ) : (
-          <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} />
+        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
+        {hideHeader && exercise.instruction && (
+          <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
+            {renderInstructionText(
+              exercise.instructionKey ? t(exercise.instructionKey) : translatedInstruction,
+            )}
+          </p>
         )}
-        {exercise.grammarHighlight && <GrammarHighlight highlight={exercise.grammarHighlight} />}
+        {ghBefore && (
+          <div className="mb-5">
+            <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
+          </div>
+        )}
         {exercise.mapLabels && exercise.mapLabels.length > 0 && (
           <MapWithLabels
             imageUrl={(exercise as any).imageUrl ?? ''}
@@ -123,6 +134,11 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           />
         )}
         {component}
+        {ghAfter && (
+          <div className="mt-8">
+            <GrammarHighlight highlight={gh} exerciseId={exercise.id} />
+          </div>
+        )}
       </div>
     );
   }
@@ -136,7 +152,11 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <WorkbookFillBlank
           sentences={exercise.sentences}
           layout={exercise.layout}
+          columnSplitAt={exercise.columnSplitAt}
+          hideSentenceNumbers={exercise.hideSentenceNumbers}
+          columnLabels={exercise.columnLabels}
           imageUrl={exercise.imageUrl}
+          images={exercise.images}
           headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
@@ -156,6 +176,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
           images={exercise.images}
+          listeningText={exercise.listeningText}
           onComplete={onComplete}
           exerciseId={exercise.id}
         />
@@ -258,6 +279,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           exerciseId={exercise.id}
           boldColumns={exercise.boldColumns}
+          widePronouns={exercise.widePronouns}
         />
       );
 
@@ -267,6 +289,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           subtitle={exercise.subtitle}
           audioUrl={exercise.audioUrl}
           imageUrl={exercise.imageUrl}
+          images={exercise.images}
           displayLayout={exercise.displayLayout}
           sections={exercise.sections}
           exerciseId={exercise.id}
@@ -298,6 +321,8 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
       return wrap(
         <ReadingText
           audioUrl={exercise.audioUrl}
+          songUrl={exercise.songUrl}
+          disableParagraphAudio={exercise.disableParagraphAudio}
           textTitle={exercise.textTitle}
           images={exercise.images}
           imageFlashcards={exercise.imageFlashcards}

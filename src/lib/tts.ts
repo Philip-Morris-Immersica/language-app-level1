@@ -145,20 +145,13 @@ export function playTtsAudio(
   rate?: number,
   onPlaybackEnd?: () => void,
 ): void {
-  // Toggle: if the same audio is already playing, stop it (second click = pause).
-  // Components benefit from this without any per-component changes.
-  if (
-    currentAudio &&
-    currentAudioUrl === audioUrl &&
-    !currentAudio.paused &&
-    !currentAudio.ended
-  ) {
-    const cb = onPlaybackEnd;
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio = null;
-    currentAudioUrl = null;
-    cb?.();
+  // Same URL already loaded: toggle pause/resume without resetting position.
+  if (currentAudio && currentAudioUrl === audioUrl) {
+    if (currentAudio.paused) {
+      currentAudio.play().catch(() => {});
+    } else {
+      currentAudio.pause();
+    }
     return;
   }
 
@@ -175,6 +168,7 @@ export function playTtsAudio(
   }
 
   const audio = new Audio(audioUrl);
+  if (rate && rate !== 1) audio.playbackRate = rate;
   currentAudio = audio;
   currentAudioUrl = audioUrl;
   const finish = () => {
@@ -228,4 +222,48 @@ export function stopTtsAudio(): void {
     currentAudioUrl = null;
   }
   stopSpeaking();
+}
+
+/**
+ * Pause the current audio without clearing the reference.
+ * Call resumeTtsAudio() afterwards to continue from the paused position.
+ * Browser TTS (speechSynthesis) does not support pause, so it is cancelled.
+ */
+/**
+ * Update the playback rate of the currently playing audio in real time.
+ * No-op if no audio is playing.
+ */
+export function setTtsAudioRate(rate: number): void {
+  if (currentAudio) currentAudio.playbackRate = rate;
+}
+
+export function pauseTtsAudio(): void {
+  if (currentAudio) {
+    currentAudio.pause();
+    // currentAudio / currentAudioUrl intentionally kept so resume works
+  }
+  stopSpeaking();
+}
+
+/**
+ * Resume a previously paused audio and replace the onPlaybackEnd callback.
+ * This is necessary for sequential playback chains: the new callback wires up
+ * the correct "play next item" logic for the resumed session.
+ * Returns true if audio was paused and resume succeeded, false otherwise.
+ */
+export function resumeTtsAudio(onPlaybackEnd?: () => void): boolean {
+  if (!currentAudio || !currentAudio.paused) return false;
+  const audio = currentAudio;
+  // Replace onended so the caller's chain continuation fires when done.
+  audio.onended = () => {
+    if (currentAudio === audio) {
+      currentAudio = null;
+      currentAudioUrl = null;
+    }
+    onPlaybackEnd?.();
+  };
+  audio.play().catch(() => {
+    onPlaybackEnd?.();
+  });
+  return true;
 }

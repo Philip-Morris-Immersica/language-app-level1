@@ -8,7 +8,7 @@ import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
@@ -62,6 +62,8 @@ interface GrammarExample {
   zoomable?: boolean;
   /** TTS generation only — which voice reads the card (see generate-tts.ts). */
   voiceGender?: 'male' | 'female';
+  /** Overrides spoken text (and MP3 source text); display uses `text` / `subtext`. Matches generate-tts.ts. */
+  ttsText?: string;
 }
 
 interface GrammarWithExamplesProps {
@@ -97,9 +99,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
     if (!disableTts) {
       const stripGrammarLinePrefix = (l: string) =>
         l.replace(/^\s*\S+:\s+/, '').replace(/^\s*[✓✗]\s*/, '');
-      const textToSpeak = example.lines
-        ? example.lines.filter(l => l.trim() !== '').map(stripGrammarLinePrefix).join(' ')
-        : [example.text, example.subtext].filter(Boolean).join(' ');
+      const textToSpeak =
+        example.ttsText?.trim() ||
+        (example.lines
+          ? example.lines.filter(l => l.trim() !== '').map(stripGrammarLinePrefix).join(' ')
+          : [example.text, example.subtext].filter(Boolean).join(' '));
       const audioPath = exerciseId
         ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-card-${index}`)
         : '';
@@ -115,9 +119,10 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
     });
   };
 
-  const isCentered =
-    layout === 'centered' ||
-    (examples.length === 2 && examples.every((e) => !e.imageUrl && Boolean(e.lines?.length)));
+  // Opt-in only: trigger centered layout exclusively via `layout: 'centered'`.
+  // The previous heuristic auto-detection (examples.length === 2 && no imageUrl && has lines)
+  // risked accidentally affecting A1 grammar exercises with similar shape — removed for safety.
+  const isCentered = layout === 'centered';
 
   if (isCentered) {
     return (
@@ -205,8 +210,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
           <div
             key={index}
             onClick={() => handleClick(index, example)}
-            className="bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
+            className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
+            {!disableTts && (
+              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+            )}
             {/* Image */}
             {example.imageUrl && (
               example.zoomable ? (
@@ -285,9 +293,12 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                   </div>
                   <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
                   {example.label && (
-                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
-                      {example.label}
-                    </p>
+                    <div className="mt-2 inline-block">
+                      <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
+                        {example.label}
+                      </p>
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                    </div>
                   )}
                 </>
               ) : (
@@ -305,9 +316,12 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     </>
                   )}
                   {example.label && (
-                    <p className="mt-2 text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1 inline-block">
-                      {example.label}
-                    </p>
+                    <div className="mt-2 inline-block">
+                      <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
+                        {example.label}
+                      </p>
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                    </div>
                   )}
                 </>
               )}

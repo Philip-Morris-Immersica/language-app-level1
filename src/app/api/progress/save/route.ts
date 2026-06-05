@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth/jwt';
 import { db } from '@/db';
 import { exerciseStatesTable } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-
 export async function POST(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value;
   if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -18,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   const stateJson = JSON.stringify(state);
 
-  // Upsert: insert or update on conflict (userId, exerciseId)
+  // Upsert: insert or update on conflict (userId, lessonId, exerciseId)
   await db.insert(exerciseStatesTable)
     .values({
       userId: payload.userId,
@@ -28,7 +26,7 @@ export async function POST(req: NextRequest) {
       updatedAt: new Date(),
     })
     .onConflictDoUpdate({
-      target: [exerciseStatesTable.userId, exerciseStatesTable.exerciseId],
+      target: [exerciseStatesTable.userId, exerciseStatesTable.lessonId, exerciseStatesTable.exerciseId],
       set: {
         state: stateJson,
         updatedAt: new Date(),

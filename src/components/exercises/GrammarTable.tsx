@@ -16,11 +16,35 @@ interface GrammarTableProps {
   subtitle?: string;
   exerciseId?: string;
   boldColumns?: number[];
+  /** When true, makes the pronoun column equal width to the data columns (50/50 split). */
+  widePronouns?: boolean;
 }
 
-function TranslatedTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
+/**
+ * Table header that stays in Bulgarian by default.
+ * Non-Bulgarian users can click to reveal a translation below (toggles on repeat click).
+ */
+function ClickTranslateTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
+  const [revealed, setRevealed] = useState(false);
+  const { lang } = useLanguage();
   const translated = useTranslate(text);
-  return <th className={className} colSpan={colSpan}>{translated}</th>;
+  const isNonBg = lang !== 'bg';
+  const showTranslation = isNonBg && revealed;
+
+  return (
+    <th
+      className={`${className}${isNonBg ? ' cursor-pointer select-none' : ''}`}
+      colSpan={colSpan}
+      onClick={isNonBg ? () => setRevealed(prev => !prev) : undefined}
+    >
+      <span>{text}</span>
+      {showTranslation && translated !== text && (
+        <span className="block text-xs font-normal text-white/75 mt-0.5 italic">
+          {translated}
+        </span>
+      )}
+    </th>
+  );
 }
 
 export function GrammarTable({
@@ -31,6 +55,7 @@ export function GrammarTable({
   subtitle,
   exerciseId,
   boldColumns = [],
+  widePronouns = false,
 }: GrammarTableProps) {
   const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
   const [revealedNotes, setRevealedNotes] = useState<Set<number>>(new Set());
@@ -83,7 +108,7 @@ export function GrammarTable({
           {tableTitle && (
             <thead>
               <tr>
-                <TranslatedTh
+                <ClickTranslateTh
                   text={tableTitle}
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
                   colSpan={columns.length > 0 ? columns.length + 1 : (rows[0]?.cells.length ?? 0) + 1}
@@ -91,9 +116,9 @@ export function GrammarTable({
               </tr>
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th className="py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]">{'\u00A0'}</th>
+                  <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
                   {columns.map((col, i) => (
-                    <TranslatedTh
+                    <ClickTranslateTh
                       key={i}
                       text={col}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap"
@@ -112,7 +137,7 @@ export function GrammarTable({
                     onClick={() => toggleRow(rIdx)}
                     className={`cursor-pointer hover:bg-[#edf5e4] transition-colors ${rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
                   >
-                    <td className="py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 min-w-[5rem] md:min-w-[7rem]">
+                    <td className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}>
                       <div className="flex items-center justify-between gap-1">
                         <span>{row.pronoun}</span>
                         <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />

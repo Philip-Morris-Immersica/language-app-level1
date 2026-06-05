@@ -30,11 +30,19 @@ export type ExerciseType =
   | 'alphabet_maze'        // Interactive letter grid — tap letters in alphabetical order
   | 'table_fill';          // Dialogue paragraphs + fillable table cells (dropdowns)
 
-// Grammar highlight info box — shown above exercise body as a green info panel
+// Grammar highlight info box — shown above exercise body as a green info panel (or below when grammarHighlightAfterBody)
 export interface GrammarHighlight {
   textKey?: string;    // Key in UI_TRANSLATIONS (pre-translated on 7 languages)
   text?: string;       // Inline Bulgarian text (auto-translated via useTranslate)
   examples?: string[]; // Optional example sentences displayed below the text
+  /** Spoken text per `examples[i]` (digits → words, cleaner pacing). Falls back to `examples[i]`. */
+  exampleTtsTexts?: string[];
+  /** When true, each example line is tappable for audio (`exerciseId` passed from ExerciseRenderer). */
+  interactiveExamples?: boolean;
+  /** When true, highlight lines use Gemini Flash + word-clarity prompt (Achernar). Default for most grammar. */
+  ttsFlash?: boolean;
+  /** When true, highlight lines use Gemini Pro (better for connected phrases / time expressions). */
+  ttsPro?: boolean;
 }
 
 // Map label — overlaid text label on a map image
@@ -60,11 +68,15 @@ export interface BaseExercise {
   points?: number;          // For scoring
   order: number;
   voiceGender?: 'male' | 'female';
-  grammarHighlight?: GrammarHighlight; // Optional green info box shown above exercise body
+  grammarHighlight?: GrammarHighlight; // Optional green info box (above body by default; see grammarHighlightAfterBody)
+  /** If true, `grammarHighlight` renders after the exercise component instead of before it. */
+  grammarHighlightAfterBody?: boolean;
   mapLabels?: MapLabel[];              // If present, renders a labeled map above the exercise body
   mapLegend?: MapLegendItem[];         // Optional collapsible legend panel shown below the labeled map
   /** When true, no numbered title header is shown (instruction-only blocks, e.g. first textbook exercise). */
   hideHeader?: boolean;
+  /** When true, renders the exercise subtitle with larger, bolder styling for visual prominence. */
+  prominentSubtitle?: boolean;
 }
 
 // Specific exercise interfaces
@@ -104,6 +116,8 @@ export interface MatchPairsExercise extends BaseExercise {
     correctRight: string;
   }[];
   shuffledRights?: string[]; // Optional pre-shuffled rights
+  /** When false, hide the row index column (e.g. left column already shows "1", "2" …). Default true. */
+  showLeftOrdinal?: boolean;
 }
 
 export interface WordOrderExercise extends BaseExercise {
@@ -152,6 +166,17 @@ export interface IllustratedCardsExercise extends BaseExercise {
   subtitle?: string;       // Optional subtitle shown below title (auto-translated)
   /** Large zoomable illustration shown above the cards grid (e.g. house cross-section, table setting). */
   headerImageUrl?: string;
+  /** Short paragraph shown below the header image with a TTS listen button (Pro male/female voice depending on voiceGender). */
+  headerCaption?: string;
+  /** TTS-friendly version of headerCaption — numbers as words etc. Used for both pre-generated MP3 and browser fallback. */
+  ttsCaptionText?: string;
+  /**
+   * By default cards use up to 4 columns on large screens.
+   * Use `3` for a symmetric grid (e.g. rows of three — typical for НОВИ ДУМИ).
+   */
+  cardsGridMaxCols?: 3;
+  /** TTS voice for ALL cards in this exercise (e.g. 'male' when the entire block is narrated by a male character like Георги). Individual cards still default to Achernar unless this is set. */
+  voiceGender?: 'male' | 'female';
   audioUrl?: string;       // For "Listen" button
   cards: {
     id: string;
@@ -170,6 +195,8 @@ export interface IllustratedCardsExercise extends BaseExercise {
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
   displayMode?: 'grid' | 'presentation' | 'body_diagram';  // For different display modes
+  /** When true, cards render as compact text-only boxes (no images) — just the label. Header image still shown. */
+  textOnly?: boolean;
 }
 
 export interface DialogueReadingExercise extends BaseExercise {
@@ -283,6 +310,8 @@ export interface GrammarTableExercise extends BaseExercise {
   notes?: string[];          // Text notes shown below the table
   ttsNotes?: string[];       // TTS-only text for notes (overrides notes[] for audio; display unchanged)
   boldColumns?: number[];
+  /** When true, makes the pronoun column equal width to the data columns. */
+  widePronouns?: boolean;
   illustrations?: {
     imageUrl: string;
     singularLabel: string;
@@ -313,6 +342,8 @@ export interface DialoguesExercise extends BaseExercise {
   title: string;             // 'ДИАЛОЗИ 1'
   subtitle?: string;
   imageUrl?: string;
+  /** Multiple illustration images shown side-by-side at the top (desktop: row, mobile: stack). */
+  images?: string[];
   audioUrl?: string;
   /** 'scene' = central image with speech bubbles around it (ДИАЛОЗИ 1). */
   displayLayout?: 'list' | 'scene';
@@ -349,6 +380,8 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Опционален текст за слушане — рендира зелен бутон „Слушай" над въпросите. */
+  listeningText?: string;
   /** Масив от снимки с подписи, показвани над въпросите. */
   images?: {
     imageUrl: string;
@@ -383,8 +416,18 @@ export interface DragToColumnsExercise extends BaseExercise {
 export interface WorkbookFillBlankExercise extends BaseExercise {
   type: 'workbook_fill_blank';
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
+  /** Override the automatic mid-point split for two-column layout. Useful when items fall into two
+   *  semantically distinct groups (e.g. months 0-11 on the left, days 12-18 on the right). */
+  columnSplitAt?: number;
+  /** When true, skip the automatic "N." numbering prefix in front of each sentence.
+   *  Useful when the sentence text itself already represents the numbering (e.g. names of months/days). */
+  hideSentenceNumbers?: boolean;
+  /** Optional captions rendered above the two columns when layout='two-column'. */
+  columnLabels?: { left?: string; right?: string };
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
+  /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
+  images?: { imageUrl: string; label?: string }[];
   /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */
   headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
@@ -424,6 +467,8 @@ export interface ReadingTextExercise extends BaseExercise {
     label: string;
     /** Stem for `words/{ttsWordId}.mp3` in the lesson TTS folder (flip-card audio). */
     ttsWordId?: string;
+    /** Optional per-language translation for `label` (keys: ar, en, …). When `hideText` + images, click toggles; falls back to auto-translate. */
+    labelTranslations?: Record<string, string>;
   }[];
   /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
   imageFlashcards?: boolean;
@@ -436,6 +481,10 @@ export interface ReadingTextExercise extends BaseExercise {
   showDictionary?: boolean;
   hideText?: boolean;
   noTranslation?: boolean;
+  /** URL of an original song/audio file — shows a separate "🎵 Слушай песента" button. */
+  songUrl?: string;
+  /** When true, paragraphs are rendered as plain text without per-paragraph click-to-play audio. */
+  disableParagraphAudio?: boolean;
   checklist?: {
     instruction: string;
     items: { id: string; text: string; isTrue: boolean }[];

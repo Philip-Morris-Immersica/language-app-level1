@@ -1,0 +1,71 @@
+---
+description: Philip's team-lead workflow — merging Nina/Alex branches, reviewing PRs, owning shared code
+alwaysApply: false
+---
+
+# Philip — Team Lead Workflow
+
+Това правило е напомняне за самия Philip (team lead). НЕ важи за Нина/Алекс.
+
+## Когато мърджваш PR от Нина или Алекс
+
+Винаги прегледай:
+
+1. **Файлова собственост** (виж [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc))
+   - Nina променя САМО `src/content/a2/` + `public/assets/a2-lesson-*/`
+   - Alex променя САМО `src/content/b1/` + `public/assets/b1-lesson-*/`
+   - Ако има промени извън — питай ги защо. Ако са оправдани (нов exercise type), приеми, но запомни да ги документираш.
+
+2. **ID конвенции** (виж branch-hygiene.mdc §ID конвенции)
+   - Lesson папки = level-префикс (`a2-lesson-NN`, `b1-lesson-NN`)
+   - Exercise IDs формат `<lesson-id>-ex-NN`
+   - Asset пътища `/public/assets/<lesson-id>/`
+
+3. **Loader registration** — провери че uncomment-натите редове в level-index файла съвпадат с реално съществуващите папки.
+
+4. **`content:lint` минава** на новите уроци:
+   ```bash
+   npm run content:lint -- --lesson <lesson-id>
+   ```
+   → 0 errors задължително.
+
+5. **`npm run build` минава локално.**
+
+6. **Бърза браузър проверка** на новите уроци + 1-2 стари A1 урока (за да си сигурен, че няма счупване на съществуваща функционалност).
+
+## Стандартен merge workflow за чужд branch
+
+```
+git fetch origin
+git checkout master && git pull
+git checkout -b <name>-merge origin/<name>   # nina-merge / alex-merge
+git merge master                              # резолни конфликти
+npm run content:lint -- --lesson <lesson>     # 0 errors
+npm run build                                  # 0 errors
+git push origin <name>-merge
+gh pr create --base master --head <name>-merge
+# review в GitHub, merge PR
+```
+
+**Никога не push-вай към `origin/<чужд-branch>`.** Те ще rebase-ват сами върху новия master.
+
+## Промяна, която изисква общо съгласие
+
+Ако нещо трябва да се промени в `shared/components/i18n`:
+
+1. **Само Philip** прави промяната в `philip` branch
+2. Мърджва се в `master` чрез PR (твоя обичаен flow)
+3. Nina и Alex rebase-ват върху новия master при следващото си стартиране
+
+## Никога
+
+- НЕ push-вай към чужд branch (`git push origin nina` от твоята машина — забранено)
+- НЕ force-push-вай към `master`
+- НЕ изтривай чужди commits без съгласие на автора (поне попитай преди revert)
+- НЕ мърджвай PR директно без локална build проверка
+
+## За референция
+
+- Текущи активни branches: `philip` (твоя), `nina` (A2), `alex` (B1)
+- Архивирани/feature branches: `feature/external-login`, `feat/multi-level-content-structure`
+- Source branch на main work: `philip` → PR → `master`

@@ -76,7 +76,7 @@ The legend explains the platform's interactive elements. Translated on all 7 lan
 | 🟢 Слушай | `legend.listen` | Зеленият бутон „Слушай" над дълги текстове/диалози свири цялото аудио. |
 | 📖 Речник | `legend.dictionary` | Бутонът „Речник" в края на някои уроци отваря списък с новите думи. |
 | 💬 AI асистент | `legend.chatbot` | Чатбот иконата отваря AI асистента за практика на български. |
-| 📚 Граматика | `legend.grammar` | Граматическият справочник е достъпен от всеки урок. |
+| 📚 Граматика | `legend.grammar` | Раздел „Граматика — справочник" в началото И в края на всеки урок (разгъваем акордеон). |
 | 🌍 Култура и начин на живот | `legend.culture` | Раздел „Култура и начин на живот" в края на всеки урок. |
 | ↺ Нов опит | `legend.reset` | Бутонът „Нов опит" изчиства всички отговори. |
 
@@ -92,7 +92,7 @@ The legend explains the platform's interactive elements. Translated on all 7 lan
 | Listen | Зелен pill бутон: `bg-white border-2 border-[#32C189] text-[#1F5741]` + `Play` icon + локализиран label „Слушай" (от `exercise.listen`) |
 | Dictionary | Кръгъл син FAB: `bg-[#0072BC]` + `BookOpen` + `ring-4 ring-[#D25A45]` |
 | Chatbot | Кръгъл `<img src="/robi.jpg">` с `ring-4 ring-[#D25A45]` |
-| Grammar | Indigo pill: `bg-indigo-50 text-indigo-700 border-indigo-200` + `BookText` icon + label от `lesson.grammarReferenceLink` |
+| Grammar | Свита глава на акордеон: `bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200` + 📚 + label от `legend.grammar.title` + `ChevronDown` icon |
 | Culture | Златен акордеон: `bg-[#FEF1D1] border-2 border-[#FFC740]/60` + 🇧🇬 + label |
 | Reset | Outline бутон: `border-2 border-gray-300 bg-white` + `RotateCcw` icon + label от `exercise.reset` |
 
@@ -103,6 +103,41 @@ The legend explains the platform's interactive elements. Translated on all 7 lan
 - Item title: `text-base sm:text-lg`, `font-semibold`, `text-gray-800` — emoji се **премахва** автоматично от началото (рендерираме реален preview).
 - Item description: `text-sm sm:text-[0.95rem]`, `text-gray-600`, `leading-relaxed`.
 - Layout: 1 колона на mobile, 2 колони от `md:` нагоре (всяка legend позиция има достатъчно място за preview + текст).
+
+## Grammar Reference Placement (CRITICAL)
+
+The grammar reference (`<GrammarReferenceSection>`) must be rendered **TWICE** on every lesson page that has a non-empty `content.grammarReference`:
+
+1. **TOP placement** — directly after the cultural notes, BEFORE the exercises. Lets learners read the rules before practising.
+2. **BOTTOM placement** — directly after the in-lesson exercises, BEFORE the workbook „Преговор". Lets learners review the rules at the end of the lesson.
+
+Both instances render the **identical** component with the **identical** `notes` data — visually they look the same. We do this because feedback showed that a "scroll to bottom" jump-link at the top is confusing — users prefer to see the actual accordion in place.
+
+Implementation in `src/app/lessons/[lessonId]/page.tsx`:
+
+```tsx
+const hasGrammarReference = !!(lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0);
+
+// TOP — after culture, before exercises
+{hasGrammarReference && (
+  <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
+)}
+
+// ... <LessonExercisesProvider> with exercises ...
+
+// BOTTOM — after exercises, before Преговор
+{hasGrammarReference && (
+  <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
+)}
+```
+
+**Do NOT:**
+- Render only one instance (top or bottom). Always render both.
+- Add an `id="grammar-reference"` (or any other id) to `GrammarReferenceSection` — duplicating the same id twice on one page is invalid HTML.
+- Add a "scroll to grammar" jump-link in the lesson header (the accordion is right there at the top — no need to scroll).
+- Add a back-link at the bottom that anchors to the grammar (the bottom accordion is right next to where the back-link would be).
+
+**Adding grammar to a new lesson:** Just populate `content.grammarReference` in the lesson's `content.ts`. Both placements render automatically.
 
 ## Audio UX Standard
 

@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:3000`
+Visit `http://localhost:3010` (the dev script pins this port — not 3000).
 
 ---
 

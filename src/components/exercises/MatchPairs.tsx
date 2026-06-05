@@ -170,13 +170,17 @@ export function MatchPairs({ exercise, onComplete }: MatchPairsProps) {
         const isSelected = selectedLeft === pairId;
         const validationResult = validation[pairId];
 
+        const showOrdinal = exercise.showLeftOrdinal !== false;
+
         return (
           <div key={pairId} className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-8 text-center">
-              <span className="text-base font-semibold text-gray-700">{index + 1}.</span>
-            </div>
+            {showOrdinal && (
+              <div className="flex-shrink-0 w-8 text-center">
+                <span className="text-base font-semibold text-gray-700">{index + 1}.</span>
+              </div>
+            )}
 
-            <div className="flex-shrink-0 w-28 md:w-40 lg:w-48">
+            <div className={`flex-shrink-0 ${showOrdinal ? 'w-28 md:w-40 lg:w-48' : 'w-16 md:w-20 lg:w-24'}`}>
               <span className="text-sm md:text-base font-medium text-gray-800 leading-snug">
                 {pair.left}
               </span>

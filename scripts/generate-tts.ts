@@ -396,7 +396,7 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
       text: clean(item.bulgarian),
       voice: FEMALE_VOICE,
       model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-      prompt: customPrompt ?? GEMINI_WORD_PROMPT,
+      prompt: customPrompt ?? (usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
     };
   });
 }
