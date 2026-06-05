@@ -45,23 +45,25 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 2,
     displayMode: 'body_diagram',
-    headerImageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/01-chovek-diagrama.jpg',
+    headerImageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/01-chovek-diagrama-lines.png',
     cards: [
-      // word labels — left / right columns beside figure (като учебника, стр. 24)
-      // labelY = % от горния ръб на изображението, калибрирано по стрелките (307×740 ref)
+      // word labels — left / right columns beside figure.
+      // Connector lines + dots are baked into the image (01-chovek-diagrama-lines.png),
+      // so each line starts exactly at the word. labelY = % from top of image and MUST
+      // match the line start in the baked image (see bake script / IMAGE-MAPPING.md).
       { id: 'nos',       imageUrl: '', label: 'нос',            ttsLabel: 'нос',           labelSide: 'left',  labelY: 11 },
-      { id: 'uho',       imageUrl: '', label: 'ухо',            ttsLabel: 'ухо',           labelSide: 'left',  labelY: 15 },
-      { id: 'grdi',      imageUrl: '', label: 'гърди',          ttsLabel: 'гърди',         labelSide: 'left',  labelY: 24 },
-      { id: 'raka',      imageUrl: '', label: 'ръка',           ttsLabel: 'ръка',          labelSide: 'left',  labelY: 30 },
-      { id: 'korem',     imageUrl: '', label: 'корем / стомах', ttsLabel: 'корем, стомах', labelSide: 'left',  labelY: 35 },
-      { id: 'prst',      imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 45 },
-      { id: 'krak',      imageUrl: '', label: 'крак',           ttsLabel: 'крак',          labelSide: 'left',  labelY: 54 },
-      { id: 'prst-krak', imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 98 },
-      { id: 'glava',     imageUrl: '', label: 'глава',          ttsLabel: 'глава',         labelSide: 'right', labelY: 6  },
-      { id: 'oko',       imageUrl: '', label: 'око',            ttsLabel: 'око',           labelSide: 'right', labelY: 9  },
-      { id: 'usta',      imageUrl: '', label: 'уста',           ttsLabel: 'уста',          labelSide: 'right', labelY: 14 },
-      { id: 'grlo',      imageUrl: '', label: 'гърло',          ttsLabel: 'гърло',         labelSide: 'right', labelY: 18 },
-      { id: 'karst',     imageUrl: '', label: 'кръст',          ttsLabel: 'кръст',         labelSide: 'right', labelY: 33 },
+      { id: 'uho',       imageUrl: '', label: 'ухо',            ttsLabel: 'ухо',           labelSide: 'left',  labelY: 17 },
+      { id: 'grdi',      imageUrl: '', label: 'гърди',          ttsLabel: 'гърди',         labelSide: 'left',  labelY: 27 },
+      { id: 'raka',      imageUrl: '', label: 'ръка',           ttsLabel: 'ръка',          labelSide: 'left',  labelY: 36 },
+      { id: 'korem',     imageUrl: '', label: 'корем / стомах', ttsLabel: 'корем, стомах', labelSide: 'left',  labelY: 45 },
+      { id: 'prst',      imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 57 },
+      { id: 'krak',      imageUrl: '', label: 'крак',           ttsLabel: 'крак',          labelSide: 'left',  labelY: 68 },
+      { id: 'prst-krak', imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 95 },
+      { id: 'glava',     imageUrl: '', label: 'глава',          ttsLabel: 'глава',         labelSide: 'right', labelY:  6 },
+      { id: 'oko',       imageUrl: '', label: 'око',            ttsLabel: 'око',           labelSide: 'right', labelY: 12 },
+      { id: 'usta',      imageUrl: '', label: 'уста',           ttsLabel: 'уста',          labelSide: 'right', labelY: 18 },
+      { id: 'grlo',      imageUrl: '', label: 'гърло',          ttsLabel: 'гърло',         labelSide: 'right', labelY: 24 },
+      { id: 'karst',     imageUrl: '', label: 'кръст',          ttsLabel: 'кръст',         labelSide: 'right', labelY: 47 },
       // organ cards — far right (сърце, зъб)
       { id: 'sartse',    imageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/02-sartse.jpg', label: 'сърце', ttsLabel: 'сърце', labelY: 28 },
       { id: 'zab',       imageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/03-zab.jpg',    label: 'зъб',   ttsLabel: 'зъб',   labelY: 47 },
@@ -100,17 +102,17 @@ export const exercises: Exercise[] = [
     points: 9,
     displayType: 'default',
     images: [
-      { id: 'oko2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/01-oko.jpg',        correctLabel: 'oko'   },
-      { id: 'usta2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/02-usta.jpg',       correctLabel: 'уста'  },
-      { id: 'raka2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/03-raka.jpg',       correctLabel: 'ръка'  },
-      { id: 'uho2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/04-uho.jpg',        correctLabel: 'ухо'   },
-      { id: 'nos2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/05-nos.jpg',        correctLabel: 'нос'   },
-      { id: 'ramo',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/06-raka-ramo.jpg',  correctLabel: 'рамо'  },
-      { id: 'grdi2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/07-gardi-sartse.jpg', correctLabel: 'гърди' },
-      { id: 'glava2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/08-glava.jpg',      correctLabel: 'глава' },
-      { id: 'krak2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/09-krak.jpg',       correctLabel: 'крак'  },
+      { id: 'oko2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/01-oko.jpg',        correctLabel: 'oko'    },
+      { id: 'usta2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/02-usta.jpg',       correctLabel: 'уста'   },
+      { id: 'prsti2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/03-raka.jpg',       correctLabel: 'пръсти' },
+      { id: 'uho2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/04-uho.jpg',        correctLabel: 'ухо'    },
+      { id: 'nos2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/05-nos.jpg',        correctLabel: 'нос'    },
+      { id: 'raka2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/06-raka-ramo.jpg',  correctLabel: 'ръка'   },
+      { id: 'sartse2',  imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/07-gardi-sartse.jpg', correctLabel: 'сърце' },
+      { id: 'glava2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/08-glava.jpg',      correctLabel: 'глава'  },
+      { id: 'krak2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/09-krak.jpg',       correctLabel: 'крак'   },
     ],
-    options: ['oko', 'уста', 'ръка', 'ухо', 'нос', 'рамо', 'гърди', 'глава', 'крак'],
+    options: ['oko', 'уста', 'пръсти', 'ухо', 'нос', 'ръка', 'сърце', 'глава', 'крак'],
   } as ImageLabelingExercise,
 
   // ─── ORDER 5 — Упр. 3 (стр. 25): подредете буквите в думи ──────────────────────────────────
@@ -146,11 +148,9 @@ export const exercises: Exercise[] = [
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 6,
     imageUrl: '/assets/a2-lesson-02/04-dialozi-1-boli-oko/01-boli-oko.jpg',
-    displayLayout: 'scene',
     sections: [
       {
         id: 'а.',
-        bubbleSide: 'left',
         lines: [
           { text: 'Какво те боли?',     voiceGender: 'female' },
           { text: 'Боли ме окото.',     voiceGender: 'male'   },
@@ -274,7 +274,7 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l02-ex-09',
     type: 'dropdown_match',
-    instruction: 'Изберете правилния отговор по модела „Имаш ли грип? – Да, имам грип."',
+    instruction: 'Вижте илюстрациите в НОВИ ДУМИ 2 по-горе. Изберете правилния отговор по модела „Имаш ли грип? – Да, имам грип."',
     order: 12,
     points: 4,
     questions: [
@@ -293,7 +293,6 @@ export const exercises: Exercise[] = [
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 13,
     imageUrl: '/assets/a2-lesson-02/06-dialozi-2-kihane/01-kihane.jpg',
-    displayLayout: 'scene',
     sections: [
       {
         id: 'а.',
@@ -423,30 +422,33 @@ export const exercises: Exercise[] = [
   // ─── ORDER 17 — Упр. 13 (стр. 27): преобразувайте по модела (+/−/?) ──────────────────────────
   {
     id: 'a2-l02-ex-13',
-    type: 'workbook_fill_blank',
-    instruction: 'Преобразувайте изреченията по модела „Ани казва всичко на Мери. → Ани й казва всичко. → Ани не й казва всичко. → Ани казва ли й всичко?"',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилното изречение по модела „Ани казва всичко на Мери. → Ани й казва всичко. → Ани не й казва всичко. → Ани казва ли й всичко?"',
     order: 17,
     points: 15,
-    layout: 'single',
-    sentences: [
-      { text: 'Ани казва всичко на Мери. → Ани й казва всичко. → Ани не й казва всичко. → Ани казва ли й всичко?', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Ани помага на Мери. (+) _______',    blanks: [1], correctAnswers: ['Ани й помага.'],             acceptableAnswers: [['ани й помага.', 'ани й помага', 'й помага']] },
-      { text: 'Ани помага на Мери. (−) _______',    blanks: [1], correctAnswers: ['Ани не й помага.'],          acceptableAnswers: [['ани не й помага.', 'ани не й помага', 'не й помага']] },
-      { text: 'Ани помага на Мери. (?) _______',    blanks: [1], correctAnswers: ['Ани помага ли й?'],          acceptableAnswers: [['ани помага ли й?', 'ани помага ли й', 'помага ли й?']] },
-      { text: 'Ани говори на Мери. (+) _______',    blanks: [1], correctAnswers: ['Ани й говори.'],             acceptableAnswers: [['ани й говори.', 'ани й говори', 'й говори']] },
-      { text: 'Ани говори на Мери. (−) _______',    blanks: [1], correctAnswers: ['Ани не й говори.'],          acceptableAnswers: [['ани не й говори.', 'ани не й говори', 'не й говори']] },
-      { text: 'Ани говори на Мери. (?) _______',    blanks: [1], correctAnswers: ['Ани говори ли й?'],          acceptableAnswers: [['ани говори ли й?', 'ани говори ли й', 'говори ли й?']] },
-      { text: 'Ани пише на Мери. (+) _______',      blanks: [1], correctAnswers: ['Ани й пише.'],               acceptableAnswers: [['ани й пише.', 'ани й пише', 'й пише']] },
-      { text: 'Ани пише на Мери. (−) _______',      blanks: [1], correctAnswers: ['Ани не й пише.'],            acceptableAnswers: [['ани не й пише.', 'ани не й пише', 'не й пише']] },
-      { text: 'Ани пише на Мери. (?) _______',      blanks: [1], correctAnswers: ['Ани пише ли й?'],            acceptableAnswers: [['ани пише ли й?', 'ани пише ли й', 'пише ли й?']] },
-      { text: 'Ани купува на Мери рокля. (+) _______', blanks: [1], correctAnswers: ['Ани й купува рокля.'],   acceptableAnswers: [['ани й купува рокля.', 'ани й купува рокля', 'й купува рокля']] },
-      { text: 'Ани купува на Мери рокля. (−) _______', blanks: [1], correctAnswers: ['Ани не й купува рокля.'], acceptableAnswers: [['ани не й купува рокля.', 'ани не й купува рокля', 'не й купува рокля']] },
-      { text: 'Ани купува на Мери рокля. (?) _______', blanks: [1], correctAnswers: ['Ани купува ли й рокля?'], acceptableAnswers: [['ани купува ли й рокля?', 'ани купува ли й рокля', 'купува ли й рокля?']] },
-      { text: 'Ани дава на Мери химикалка. (+) _______', blanks: [1], correctAnswers: ['Ани й дава химикалка.'],   acceptableAnswers: [['ани й дава химикалка.', 'ани й дава химикалка', 'й дава химикалка']] },
-      { text: 'Ани дава на Мери химикалка. (−) _______', blanks: [1], correctAnswers: ['Ани не й дава химикалка.'], acceptableAnswers: [['ани не й дава химикалка.', 'ани не й дава химикалка', 'не й дава химикалка']] },
-      { text: 'Ани дава на Мери химикалка. (?) _______', blanks: [1], correctAnswers: ['Ани дава ли й химикалка?'], acceptableAnswers: [['ани дава ли й химикалка?', 'ани дава ли й химикалка', 'дава ли й химикалка?']] },
+    questions: [
+      // помага
+      { id: 'q01', left: 'Ани помага на Мери. (+) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани й помага.' },
+      { id: 'q02', left: 'Ани помага на Мери. (−) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани не й помага.' },
+      { id: 'q03', left: 'Ани помага на Мери. (?) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани помага ли й?' },
+      // говори
+      { id: 'q04', left: 'Ани говори на Мери. (+) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани й говори.' },
+      { id: 'q05', left: 'Ани говори на Мери. (−) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани не й говори.' },
+      { id: 'q06', left: 'Ани говори на Мери. (?) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани говори ли й?' },
+      // пише
+      { id: 'q07', left: 'Ани пише на Мери. (+) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани й пише.' },
+      { id: 'q08', left: 'Ани пише на Мери. (−) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани не й пише.' },
+      { id: 'q09', left: 'Ани пише на Мери. (?) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани пише ли й?' },
+      // купува рокля
+      { id: 'q10', left: 'Ани купува на Мери рокля. (+) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани й купува рокля.' },
+      { id: 'q11', left: 'Ани купува на Мери рокля. (−) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани не й купува рокля.' },
+      { id: 'q12', left: 'Ани купува на Мери рокля. (?) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани купува ли й рокля?' },
+      // дава химикалка
+      { id: 'q13', left: 'Ани дава на Мери химикалка. (+) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани й дава химикалка.' },
+      { id: 'q14', left: 'Ани дава на Мери химикалка. (−) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани не й дава химикалка.' },
+      { id: 'q15', left: 'Ани дава на Мери химикалка. (?) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани дава ли й химикалка?' },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ─── ORDER 18 — ГРАМАТИКА 5 (стр. 28): Трябва ми ────────────────────────────────────────────
   {
@@ -503,7 +505,7 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с безличните изречения.',
     instructionKey: 'grammar.a2l02.g6.instruction',
     order: 20,
-    layout: 'centered',
+    layout: 'default',
     examples: [
       {
         imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/01-plazh-chadyr.jpg',
@@ -803,11 +805,11 @@ export const exercises: Exercise[] = [
       { id: 'hirurg',         imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/05-hirurg.jpg',           label: 'хирург',                     ttsLabel: 'хирург'        },
       { id: 'zabolakar',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/06-zabolakar.jpg',        label: 'зъболекар',                  ttsLabel: 'зъболекар'     },
       // Документи и процедури
-      { id: 'napravlenie',    imageUrl: '', label: 'направление',                         ttsLabel: 'направление'             },
-      { id: 'izsledvane',     imageUrl: '', label: 'изследване на кръв и урина',           ttsLabel: 'изследване на кръв и урина' },
-      { id: 'kravna-kartina', imageUrl: '', label: 'кръвна картина',                       ttsLabel: 'кръвна картина'          },
-      { id: 'imunizatsiya',   imageUrl: '', label: 'имунизация',                           ttsLabel: 'имунизация'              },
-      { id: 'operatsiya',     imageUrl: '', label: 'операция',                             ttsLabel: 'операция'                },
+      { id: 'napravlenie',    imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/07-napravlenie.jpg',        label: 'направление',                ttsLabel: 'направление'             },
+      { id: 'izsledvane',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/08-izsledvane-krav-urina.jpg', label: 'изследване на кръв и урина', ttsLabel: 'изследване на кръв и урина' },
+      { id: 'kravna-kartina', imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/09-kravna-kartina.jpg',     label: 'кръвна картина',             ttsLabel: 'кръвна картина'          },
+      { id: 'imunizatsiya',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/10-imunizatsiya.jpg',       label: 'имунизация',                 ttsLabel: 'имунизация'              },
+      { id: 'operatsiya',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/11-operatsiya.jpg',         label: 'операция',                   ttsLabel: 'операция'                },
     ],
   } as IllustratedCardsExercise,
 
