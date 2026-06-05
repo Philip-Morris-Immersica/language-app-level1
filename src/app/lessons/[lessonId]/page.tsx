@@ -41,9 +41,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </p>
           </div>
           <LessonNav
-            prevLesson={getPrevLesson(metadata.number)}
-            nextLesson={getNextLesson(metadata.number)}
-            testAvailable={hasTestAfterLesson(metadata.number)}
+            prevLesson={getPrevLesson(lessonId)}
+            nextLesson={getNextLesson(lessonId)}
+            testAvailable={hasTestAfterLesson(lessonId)}
             testId={metadata.testId}
           />
         </div>
@@ -116,9 +116,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
         {/* Navigation */}
         <LessonNav
-          prevLesson={getPrevLesson(metadata.number)}
-          nextLesson={getNextLesson(metadata.number)}
-          testAvailable={hasTestAfterLesson(metadata.number)}
+          prevLesson={getPrevLesson(lessonId)}
+          nextLesson={getNextLesson(lessonId)}
+          testAvailable={hasTestAfterLesson(lessonId)}
           testId={metadata.testId}
         />
       </div>
