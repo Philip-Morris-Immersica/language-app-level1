@@ -42,12 +42,14 @@ function SortableItem({
   checked,
   isCorrect,
   isLocked,
+  correctPosition,
 }: {
   id: string;
   text: string;
   checked: boolean;
   isCorrect: boolean | null;
   isLocked: boolean;
+  correctPosition?: number;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id, disabled: isLocked || checked });
@@ -92,6 +94,15 @@ function SortableItem({
         <span className="text-gray-400 mr-2">–</span>
         {text}
       </span>
+
+      {/* Position number badge (shown when checked) */}
+      {checked && !isLocked && correctPosition !== undefined && (
+        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+          isCorrect ? 'bg-green-100 text-green-700' : 'bg-[#FCE2DE] text-[#683229]'
+        }`}>
+          {correctPosition}
+        </span>
+      )}
 
       {/* Feedback icon */}
       {checked && !isLocked && (
@@ -240,6 +251,11 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                     const positionCorrect = state.checked
                       ? item.text === section.sentences[idx]
                       : null;
+                    // Correct 1-based position (undefined when item not in sentences or row is locked)
+                    const cpRaw = state.checked && !isLocked
+                      ? section.sentences.indexOf(item.text) + 1
+                      : 0;
+                    const correctPosition = cpRaw > 0 ? cpRaw : undefined;
                     return (
                       <SortableItem
                         key={item.id}
@@ -248,6 +264,7 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                         checked={state.checked}
                         isCorrect={positionCorrect}
                         isLocked={isLocked}
+                        correctPosition={correctPosition}
                       />
                     );
                   })}

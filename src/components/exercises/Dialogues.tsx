@@ -48,7 +48,7 @@ function SpeechBubble({
   return (
     <div
       className={`
-        relative rounded-2xl border-2 px-4 pt-5 pb-3 shadow-sm transition-all max-w-full
+        relative rounded-2xl border-2 px-4 pt-5 pb-3 shadow-sm transition-all max-w-full h-full
         ${side === 'left' ? 'mr-auto lg:mr-4' : 'ml-auto lg:ml-4'}
         ${isPlaying ? 'border-[#32C189] bg-[#DAF6EB]/40' : 'border-[#CDE3F1] bg-white'}
       `}
@@ -306,10 +306,18 @@ export function Dialogues({
             </ImageLightbox>
           </div>
 
-          <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_300px_minmax(0,1fr)] gap-x-4 gap-y-4 items-start">
-            <div className="space-y-4">
-              {leftSections.map((section) => (
-                <div key={section.id} onClick={() => toggleSection(section.id)} role="presentation">
+          <div
+            className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_300px_minmax(0,1fr)] gap-4"
+            style={{ gridTemplateRows: `repeat(${Math.max(leftSections.length, rightSections.length)}, auto)` }}
+          >
+            {leftSections.map((section, i) => (
+              <div
+                key={section.id}
+                className="h-full"
+                style={{ gridColumn: 1, gridRow: i + 1 }}
+                onClick={() => toggleSection(section.id)}
+                role="presentation"
+              >
                 <SpeechBubble
                   side="left"
                   sectionId={section.id}
@@ -317,19 +325,28 @@ export function Dialogues({
                 >
                   {renderSectionLines(section)}
                 </SpeechBubble>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-center sticky top-4">
+              </div>
+            ))}
+
+            <div
+              className="flex justify-center items-center sticky top-4"
+              style={{ gridColumn: 2, gridRow: `1 / ${Math.max(leftSections.length, rightSections.length) + 1}` }}
+            >
               <ImageLightbox src={imageUrl!} alt="">
                 <div className="relative w-[300px] h-[380px]">
                   <Image src={imageUrl!} alt="" fill className="object-contain" sizes="300px" />
                 </div>
               </ImageLightbox>
             </div>
-            <div className="space-y-4">
-              {rightSections.map((section) => (
-                <div key={section.id} onClick={() => toggleSection(section.id)} role="presentation">
+
+            {rightSections.map((section, i) => (
+              <div
+                key={section.id}
+                className="h-full"
+                style={{ gridColumn: 3, gridRow: i + 1 }}
+                onClick={() => toggleSection(section.id)}
+                role="presentation"
+              >
                 <SpeechBubble
                   side="right"
                   sectionId={section.id}
@@ -337,9 +354,8 @@ export function Dialogues({
                 >
                   {renderSectionLines(section)}
                 </SpeechBubble>
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
           {/* Mobile / tablet: stacked bubbles */}

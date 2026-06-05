@@ -51,7 +51,7 @@ export const exercises: Exercise[] = [
         bubbleSide: 'left',
         lines: [
           { text: 'Ало?', voiceGender: 'male' },
-          { text: 'Да, моля.', voiceGender: 'female' },
+          { text: 'Да, моля.', ttsText: 'Да моля.', voiceGender: 'female' },
         ],
       },
       {
@@ -67,15 +67,15 @@ export const exercises: Exercise[] = [
         bubbleSide: 'left',
         lines: [
           { text: 'Може ли г-жа Стоева?', ttsText: 'Може ли госпожа Стоева?', voiceGender: 'male' },
-          { text: 'Да. Момент, моля.', voiceGender: 'female' },
+          { text: 'Да, момент, моля.', ttsText: 'Да, момент моля.', voiceGender: 'female' },
         ],
       },
       {
         id: 'г.',
         bubbleSide: 'right',
         lines: [
-          { text: 'Здравейте! Диана?', voiceGender: 'male' },
-          { text: 'Имате грешка.', voiceGender: 'female' },
+          { text: 'Здравейте, Диана?', ttsText: 'Здравейте, Диана.', voiceGender: 'male' },
+          { text: 'Имате грешка.', ttsText: 'Имате греш-ка.', voiceGender: 'female' },
           { text: 'Извинете.', voiceGender: 'male' },
         ],
       },
@@ -176,38 +176,38 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Ало! Здравей, Дани!', voiceGender: 'female' },
+          { text: 'Ало! Здравей, Дани!', ttsText: 'Ало! Здравей, Дани!', voiceGender: 'female' },
           { text: 'Здравей, Фатима! Как си?', voiceGender: 'male' },
-          { text: 'Много добре. А ти?', voiceGender: 'female' },
-          { text: 'Благодаря, добре съм. Фатима, хайде на вечеря вкъщи.', voiceGender: 'male' },
+          { text: 'Много добре. А ти?', ttsText: 'Много добре. А т-и?', voiceGender: 'female' },
+          { text: 'Благодаря, добре съм. Фатима, хайде на вечеря вкъщи.', ttsText: 'Благодаря, добре съм. Фатима, хайде на вечеря вкъщи!', voiceGender: 'male' },
           { text: 'Много благодаря. Кога?', voiceGender: 'female' },
-          { text: 'Имаш ли време утре в 18:00 часа?', ttsText: 'Имаш ли време утре в осемнайсет часа?', voiceGender: 'male' },
-          { text: 'Да, свободна съм.', voiceGender: 'female' },
-          { text: 'Чудесно! До утре вечер!', voiceGender: 'male' },
+          { text: 'Имаш ли време утре в 18:00 часа?', ttsText: 'Имаш ли врЕме утре в осемнайсет часа?', voiceGender: 'male' },
+          { text: 'Да, свободна съм.', ttsText: 'Да, свободна съм.', voiceGender: 'female' },
+          { text: 'Чудесно! До утре вечер!', ttsText: 'Чудесно. До утре вечер.', voiceGender: 'male' },
         ],
       },
       {
         id: 'б.',
         lines: [
-          { text: 'Ало! Обажда се Петър Василев. Може ли Ибрахим Хасан?', voiceGender: 'male' },
-          { text: 'Няма го, съжалявам. Обадете се по-късно.', voiceGender: 'female' },
-          { text: 'Благодаря. Дочуване.', voiceGender: 'male' },
+          { text: 'Ало, обажда се Петър Василев. Може ли Ибрахим Хасан?', ttsText: 'Ало, обажда се Пе-тър Васи-лев. Може ли Иб-рахим Ха-сан?', voiceGender: 'male' },
+          { text: 'Няма го, съжалявам. Обадете се по-късно.', ttsText: 'Няма го, съжалявам. Обадете се по-кас-но.', voiceGender: 'female' },
+          { text: 'Благодаря, до чуване.', ttsText: 'Благодаря. До чу-ване.', voiceGender: 'male' },
         ],
       },
       {
         id: 'в.',
         lines: [
-          { text: 'Добър ден, може ли Татяна?', voiceGender: 'male' },
-          { text: 'Няма я. Обади се след един час.', voiceGender: 'female' },
-          { text: 'Благодаря. Лек ден!', voiceGender: 'male' },
+          { text: 'Добър ден, може ли Татяна?', ttsText: 'Добър ден, може ли Тат-яна?', voiceGender: 'male' },
+          { text: 'Няма я. Обади се след един час.', ttsText: 'Няма я. Обади се след един ч-ас.', voiceGender: 'female' },
+          { text: 'Благодаря, лек ден.', voiceGender: 'male' },
         ],
       },
       {
         id: 'г.',
         lines: [
-          { text: 'Ало, автогарата ли е?', voiceGender: 'female' },
-          { text: 'Съжалявам, имате грешка.', voiceGender: 'male' },
-          { text: 'Извинете.', voiceGender: 'female' },
+          { text: 'Ало, автогарата ли е?', ttsText: 'Ало, автогарата ли е?', voiceGender: 'female' },
+          { text: 'Съжалявам, имате грешка.', ttsText: 'Съжалявам. И-ма-те греш-ка.', voiceGender: 'male' },
+          { text: 'Извинете.', ttsText: 'Из-ви-не-те.', voiceGender: 'female' },
         ],
       },
     ],
@@ -225,17 +225,17 @@ export const exercises: Exercise[] = [
     order: 6,
     sections: [
       {
-        // Sentences are maximally scrambled — component does NOT shuffle.
+        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'а.',
         givenFirstLine: 'Ало, Светла?',
         sentences: [
           'Ало, Светла?',
-          'Обажда се Краси. Хайде на кафе.',
-          'До 5:00 часа.',
           'Да, кой се обажда?',
-          'Добре.',
-          'Днес в 5:00 часа, в кафето до офиса.',
+          'Обажда се Краси. Хайде на кафе.',
           'Добре, кога и къде?',
+          'Днес в 5:00 часа, в кафето до офиса.',
+          'До 5:00 часа.',
+          'Добре.',
         ],
       },
       {
@@ -266,30 +266,29 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        // TODO: подредбата на „д." в учебника е двусмислена — приета е логична версия.
-        // Sentences are maximally scrambled — component does NOT shuffle.
+        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'д.',
         givenFirstLine: 'Ало?',
         sentences: [
           'Ало?',
-          'Иван.',
-          'Как си?',
-          'Иван! Имате грешка.',
           'Да, моля.',
-          'Извинете.',
           'Извинете, кой се обажда?',
+          'Иван.',
+          'Иван! Имате грешка.',
+          'Как си?',
+          'Извинете.',
         ],
       },
       {
-        // Sentences are maximally scrambled — component does NOT shuffle.
+        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'е.',
         givenFirstLine: 'Ало?',
         sentences: [
           'Ало?',
-          'Хотел „Плиска" ли е?',
-          'Извинете.',
           'Да, моля.',
+          'Хотел „Плиска" ли е?',
           'Имате грешка.',
+          'Извинете.',
         ],
       },
     ],
@@ -393,30 +392,30 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 10,
     cards: [
-      { id: 'gledam',      imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/01-gledam-filma.jpg',                  label: 'Гледам филма.' },
-      { id: 'vizhdam',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/02-vizhdam-momcheto.jpg',              label: 'Виждам момчето.' },
-      { id: 'slusham',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/03-slusham-radioto.jpg',               label: 'Слушам радиото.' },
-      { id: 'chuvam',      imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/04-chuvam-telefona.jpg',               label: 'Чувам телефона.' },
-      { id: 'razbiram',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/05-razbiram-uchitelya.jpg',            label: 'Разбирам учителя.' },
-      { id: 'pitam',       imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/06-pitam-uchitelya.jpg',               label: 'Питам учителя.' },
-      { id: 'poznavam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/07-poznavam-bezhantsite.jpg',          label: 'Познавам бежанците.' },
-      { id: 'kanya',       imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/08-kanyam-decata.jpg',                 label: 'Каня децата на рожден ден.' },
-      { id: 'obicham',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/09-obicham-tsvetyata.jpg',             label: 'Обичам цветята.' },
-      { id: 'haresvam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/10-haresvam-parka.jpg',                label: 'Харесвам парка.' },
-      { id: 'tseluvam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/11-celuvam-bebe.jpg',                  label: 'Целувам бебето.' },
-      { id: 'pregrashtam', imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/12-pregryashtam-deteto.jpg',          label: 'Прегръщам детето.' },
-      { id: 'pomnya',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/01-pomnya-datata.jpg',           label: 'Помня датата.' },
-      { id: 'zabravyam',   imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/02-zabravyam-klyuchovete.jpg',   label: 'Забравям ключовете.' },
-      { id: 'tarsya',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/03-tarsya-telefona.jpg',         label: 'Търся телефона.' },
-      { id: 'namiram',     imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/04-namiram-telefona.jpg',        label: 'Намирам телефона.' },
-      { id: 'iskam',       imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/05-iskam-igrachkata.jpg',        label: 'Искам играчката.' },
-      { id: 'chakam',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/06-chakam-avtobusa.jpg',         label: 'Чакам автобуса.' },
-      { id: 'vklyuchvam',  imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/07-vklyuchvam-lampata.jpg',      label: 'Включвам лампата.' },
-      { id: 'izklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/08-izklyuchvam-lampata.jpg',     label: 'Изключвам лампата.' },
-      { id: 'otvaryam',    imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/09-otvaryam-prozoretsa.jpg',     label: 'Отварям прозореца.' },
-      { id: 'zatvaryam',   imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/10-zatvaryam-prozoretsa.jpg',    label: 'Затварям прозореца.' },
-      { id: 'otklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/11-otklyuchvam-vratata.jpg',     label: 'Отключвам вратата.' },
-      { id: 'zaklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/12-zaklyuchvam-vratata.jpg',     label: 'Заключвам вратата.' },
+      { id: 'gledam',      imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/01-gledam-filma.jpg',                  label: 'Гледам филма.',      ttsLabel: 'гледам' },
+      { id: 'vizhdam',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/02-vizhdam-momcheto.jpg',              label: 'Виждам момчето.',    ttsLabel: 'виждам' },
+      { id: 'slusham',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/03-slusham-radioto.jpg',               label: 'Слушам радиото.',    ttsLabel: 'слушам' },
+      { id: 'chuvam',      imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/04-chuvam-telefona.jpg',               label: 'Чувам телефона.',    ttsLabel: 'чувам' },
+      { id: 'razbiram',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/05-razbiram-uchitelya.jpg',            label: 'Разбирам учителя.', ttsLabel: 'разбирам' },
+      { id: 'pitam',       imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/06-pitam-uchitelya.jpg',               label: 'Питам учителя.',     ttsLabel: 'питам' },
+      { id: 'poznavam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/07-poznavam-bezhantsite.jpg',          label: 'Познавам бежанците.', ttsLabel: 'познавам' },
+      { id: 'kanya',       imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/08-kanyam-decata.jpg',                 label: 'Каня децата на рожден ден.', ttsLabel: 'каня' },
+      { id: 'obicham',     imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/09-obicham-tsvetyata.jpg',             label: 'Обичам цветята.',    ttsLabel: 'обичам' },
+      { id: 'haresvam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/10-haresvam-parka.jpg',                label: 'Харесвам парка.',    ttsLabel: 'харесвам' },
+      { id: 'tseluvam',    imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/11-celuvam-bebe.jpg',                  label: 'Целувам бебето.',    ttsLabel: 'целувам' },
+      { id: 'pregrashtam', imageUrl: '/assets/a2-lesson-01/03-glagoli-s-preki-dopulnienia/12-pregryashtam-deteto.jpg',          label: 'Прегръщам детето.', ttsLabel: 'прегръщам' },
+      { id: 'pomnya',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/01-pomnya-datata.jpg',           label: 'Помня датата.',      ttsLabel: 'помня' },
+      { id: 'zabravyam',   imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/02-zabravyam-klyuchovete.jpg',   label: 'Забравям ключовете.', ttsLabel: 'забравям' },
+      { id: 'tarsya',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/03-tarsya-telefona.jpg',         label: 'Търся телефона.',    ttsLabel: 'търся' },
+      { id: 'namiram',     imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/04-namiram-telefona.jpg',        label: 'Намирам телефона.', ttsLabel: 'намирам' },
+      { id: 'iskam',       imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/05-iskam-igrachkata.jpg',        label: 'Искам играчката.',  ttsLabel: 'искам' },
+      { id: 'chakam',      imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/06-chakam-avtobusa.jpg',         label: 'Чакам автобуса.',   ttsLabel: 'чакам' },
+      { id: 'vklyuchvam',  imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/07-vklyuchvam-lampata.jpg',      label: 'Включвам лампата.', ttsLabel: 'включвам' },
+      { id: 'izklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/08-izklyuchvam-lampata.jpg',     label: 'Изключвам лампата.', ttsLabel: 'изключвам' },
+      { id: 'otvaryam',    imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/09-otvaryam-prozoretsa.jpg',     label: 'Отварям прозореца.', ttsLabel: 'отварям' },
+      { id: 'zatvaryam',   imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/10-zatvaryam-prozoretsa.jpg',    label: 'Затварям прозореца.', ttsLabel: 'затварям.' },
+      { id: 'otklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/11-otklyuchvam-vratata.jpg',     label: 'Отключвам вратата.', ttsLabel: 'отключвам' },
+      { id: 'zaklyuchvam', imageUrl: '/assets/a2-lesson-01/04-gramatika-2-vinitelni-mestoimenia/12-zaklyuchvam-vratata.jpg',     label: 'Заключвам вратата.', ttsLabel: 'заключвам.' },
     ],
   } as IllustratedCardsExercise,
 
@@ -442,6 +441,8 @@ export const exercises: Exercise[] = [
           'Иван обича ли Мария?',
           'Иван обича ли **я**? = Обича ли **я**?',
         ],
+        // ttsText removes "=" so TTS does not read "равно"
+        ttsText: 'Иван обича Мария. Той я обича. Обича я. Иван обича ли Мария? Иван обича ли я? Обича ли я?',
         voiceGender: 'male',
       },
       {
@@ -453,6 +454,8 @@ export const exercises: Exercise[] = [
           'Мария обича ли Иван?',
           'Мария обича ли **го**? = Обича ли **го**?',
         ],
+        // ttsText removes "=" so TTS does not read "равно"
+        ttsText: 'Мария не обича Иван. Тя не го обича. Не го обича. Мария обича ли Иван? Мария обича ли го? Обича ли го?',
         voiceGender: 'female',
       },
     ],
@@ -514,25 +517,25 @@ export const exercises: Exercise[] = [
         lines: [
           { text: 'Ало, ало! Чувате ли ме?', voiceGender: 'male' },
           { text: 'Не, не Ви чувам добре.', voiceGender: 'female' },
-          { text: 'Връзката е лоша, съжалявам.', voiceGender: 'male' },
+          { text: 'Връзката е лоша, съжалявам.', ttsText: 'Връзката е лоша. Съжалявам!', voiceGender: 'male' },
         ],
       },
       {
         id: 'б.',
         lines: [
           { text: 'Здравейте. Казвам се Светла Маринова. Обаждам се във връзка с обявата за секретарка. Кога е интервюто?', voiceGender: 'female' },
-          { text: 'Здравейте, аз съм Иванов. Заповядайте този петък в 10:00 часа в офиса. Адресът е бул. „Надежда" № 106, етаж 1.', ttsText: 'Здравейте, аз съм Иванов. Заповядайте този петък в десет часа в офиса. Адресът е булевард Надежда номер сто и шест, етаж едно.', voiceGender: 'male' },
+          { text: 'Здравейте, аз съм Иванов. Заповядайте този петък в 10:00 часа в офиса. Адресът е бул. „Надежда" № 106, етаж 1.', ttsText: 'Здравейте, аз съм Иванов. Заповядайте този петък в десет часа в офиса. Адресът е булевард Надежда, номер сто и шест, е-таж едно.', voiceGender: 'male' },
           { text: 'Благодаря, до скоро.', voiceGender: 'female' },
-          { text: 'Чакаме Ви! Приятен ден!', voiceGender: 'male' },
+          { text: 'Чакаме ви. Приятен ден!', ttsText: 'Чакаме ви. Приятен де-н.', voiceGender: 'male' },
         ],
       },
       {
         id: 'в.',
         lines: [
           { text: 'Ало, търся тристаен апартамент под наем до 500 евро.', ttsText: 'Ало, търся тристаен апартамент под наем до петстотин евро.', voiceGender: 'female' },
-          { text: 'Да, имаме тристаен апартамент в жк „Люлин", близо до метрото.', ttsText: 'Да, имаме тристаен апартамент в комплекс Люлин, близо до метрото.', voiceGender: 'male' },
+          { text: 'Да, имаме тристаен апартамент в жк „Люлин", близо до метрото.', ttsText: 'Да, имаме тристаен апартамент в же ка Люлин, близо до метрото.', voiceGender: 'male' },
           { text: 'Има ли магазини и училище близо до апартамента?', voiceGender: 'female' },
-          { text: 'Да, има и детска градина.', voiceGender: 'male' },
+          { text: 'Да, има и детска градина.', ttsText: 'Да, има и детска градина.', voiceGender: 'male' },
           { text: 'Много добре.', voiceGender: 'female' },
           { text: 'Кога искате оглед на апартамента?', voiceGender: 'male' },
           { text: 'Може ли утре в 12:30?', ttsText: 'Може ли утре в дванайсет и трийсет?', voiceGender: 'female' },
@@ -550,7 +553,6 @@ export const exercises: Exercise[] = [
     title: 'ОБЯВА ЗА РАБОТА',
     instruction: 'Прочетете обявата. Тя е модел за следващото упражнение.',
     order: 15,
-    audioUrl: '/assets/a2-lesson-01/audio/tts/texts/a2-l01-obyava-rabota-full.mp3',
     paragraphs: [
       'Фирма търси секретарка за офис в София.',
       'Работно време: пълен работен ден.',
@@ -559,6 +561,16 @@ export const exercises: Exercise[] = [
       'Заплата: 2000 евро.',
       'Телефон за връзка: 0875-486352.',
     ],
+    // Phone number read digit by digit; "2000" spelled out for clarity
+    ttsParagraphs: [
+      'Фирма търси секретарка за офис в София.',
+      'Работно време: пълен работен ден.',
+      'Почивни дни: сЪ-бота и не-деля.',
+      'Езици: английски и арабски.',
+      'Заплата: две хиляди евро.',
+      'Телефон за връзка: нула, осем, седем, пет, четири, осем, шест, три, пет, две.',
+    ],
+    paragraphVoiceGenders: ['female', 'female', 'female', 'female', 'female', 'female'],
   } as ReadingTextExercise,
 
   // ORDER 16 — Обява за апартамент под наем (модел от ДИАЛОЗИ 3, за Упр. 17) — лева → евро
@@ -568,12 +580,18 @@ export const exercises: Exercise[] = [
     title: 'ОБЯВА ЗА АПАРТАМЕНТ ПОД НАЕМ',
     instruction: 'Прочетете обявата. Тя е модел за следващото упражнение.',
     order: 16,
-    audioUrl: '/assets/a2-lesson-01/audio/tts/texts/a2-l01-obyava-naem-full.mp3',
     paragraphs: [
       'Агенция „Нов дом".',
-      'Давам под наем тристаен апартамент в София, жк „Люлин", до метростанция.',
+      'Давам под наем тристаен апартамент в жк „Люлин" до метростанция.',
       'Наем: 500 евро на месец.',
     ],
+    // "жк" → "же ка" so TTS does not read it as "Жики"; remove Agency quotes for cleaner reading
+    ttsParagraphs: [
+      'Агенция Нов дом.',
+      'Давам под наем тристаен апартамент, в же ка Люлин, до метростанция.',
+      'Наем: пет стотин евро на месец.',
+    ],
+    paragraphVoiceGenders: ['female', 'female', 'female'],
   } as ReadingTextExercise,
 
   // SKIP — Упр. 10 „Прочетете диалозите по двойки" (по желание на клиента)

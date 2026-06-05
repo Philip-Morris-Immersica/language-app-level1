@@ -63,6 +63,7 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-4', // един милиард (l05)
   'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
+  'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
   'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
@@ -114,14 +115,35 @@ const GRAMMAR_LABELS = new Set([
   'м.р.', 'ж.р.', 'ср.р.', 'мн.ч.',
 ]);
 
-/** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + sentence prompt (short compounds). */
-const VOCAB_USE_PRO_IDS = new Set(['kiselo-mlyako', 'otset']);
+/** Vocabulary `words/{id}.mp3` where Flash mispronounces; use Pro + word prompt. */
+const VOCAB_USE_PRO_IDS = new Set([
+  'kiselo-mlyako', 'otset',
+  'smartfon',        // смартфон — Flash adds soft ь at end
+  'palen-raboten-den', // пълен работен ден — Flash distorts ъл cluster
+  'internet',        // интернет — needs explicit stress on first syllable (custom prompt below)
+]);
+
+/** Per-vocabulary custom TTS prompt when generic word prompt is not enough (Pro model). */
+const VOCAB_CUSTOM_PROMPTS: Record<string, string> = {
+  internet: 'Stress on the first syllable: ИН-тернет.',
+};
 
 /** Illustrated card `words/{id}.mp3` where Pro + warm prompt misplaces stress; keep Pro, use word pronunciation prompt. */
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
-  'pushene', // lesson 3 — Пушенето забранено!
-  'bob',     // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  'pushene',     // lesson 3 — Пушенето забранено!
+  'bob',         // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  // a2-lesson-01 verbs — warm tone causes consonant distortion or trailing sounds on single verbs
+  'tarsya',      // търся — needs custom stress prompt (see ILLUSTRATED_CARD_CUSTOM_PROMPTS)
+  'vklyuchvam',  // включвам — лю cluster mispronounced as ру
+  'namiram',     // намирам — р dropped
+  'zaklyuchvam', // заключвам — trailing аа
+  'zatvaryam',   // затварям — trailing яя
 ]);
+
+/** Per illustrated-card id: Pro + this custom stress prompt (overrides generic word prompt). */
+const ILLUSTRATED_CARD_CUSTOM_PROMPTS: Record<string, string> = {
+  tarsya: 'Bulgarian verb. Stress on the first syllable only: ТЪР-ся.',
+};
 
 /** reading_text flip-card `words/{ttsWordId}.mp3` — regenerate with Pro + stress prompt when accent is wrong. */
 const READING_TEXT_IMAGE_STRESS_IDS = new Set<string>(['shopska-salata', 'sarmi', 'baklava']);
@@ -146,6 +168,7 @@ const ILLUSTRATED_CARD_FLASH_IDS = new Set([
   'hello',
   'hello_formal',
   'goodbye',
+  'izklyuchvam', // a2-lesson-01 — Pro adds trailing мм; Flash cleaner for this verb
 ]);
 
 // ---------------------------------------------------------------------------
@@ -332,17 +355,27 @@ function dialogueLineVoice(
   lineIndex: number,
   maleTurn: { n: number },
   femaleTurn: { n: number },
+  prevGender: { g: 'male' | 'female' | null },
 ): string {
   if (line.voiceGender === 'female') {
+    // Reset alt counter when gender changes so non-consecutive female lines
+    // (e.g. f, m, f) use the same primary voice — avoids accidental voice switches
+    // for the same character. Alt only engages for truly consecutive f-f lines.
+    if (prevGender.g !== 'female') femaleTurn.n = 0;
     const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
     femaleTurn.n++;
+    prevGender.g = 'female';
     return v;
   }
   if (line.voiceGender === 'male') {
+    // Same logic for male: m, f, m → Charon, Achernar, Charon (not Charon, Achernar, Achird)
+    if (prevGender.g !== 'male') maleTurn.n = 0;
     const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
     maleTurn.n++;
+    prevGender.g = 'male';
     return v;
   }
+  prevGender.g = null;
   return getDialogueVoice(line.speaker, lineIndex);
 }
 
@@ -356,13 +389,14 @@ function stripGrammarLabels(subtext: string): string {
 function collectVocabularyJobs(content: LessonContent): TtsJob[] {
   return content.vocabulary.map(item => {
     const usePro = VOCAB_USE_PRO_IDS.has(item.id);
+    const customPrompt = VOCAB_CUSTOM_PROMPTS[item.id];
     return {
       category: 'words',
       filename: `${item.id}.mp3`,
       text: clean(item.bulgarian),
       voice: FEMALE_VOICE,
       model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-      prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+      prompt: customPrompt ?? GEMINI_WORD_PROMPT,
     };
   });
 }
@@ -386,8 +420,9 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
       }
       const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
       const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
+      const customPrompt = ILLUSTRATED_CARD_CUSTOM_PROMPTS[card.id];
       const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
-      const prompt = useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT;
+      const prompt = customPrompt ?? (useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT);
             jobs.push({
         category: 'words',
         filename: `${card.id}.mp3`,
@@ -498,6 +533,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
     for (const section of ex.sections!) {
       const maleTurn = { n: 0 };
       const femaleTurn = { n: 0 };
+      const prevGender = { g: null as 'male' | 'female' | null };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         // Use ttsText override when set (e.g. to expand abbreviations); display text stays unchanged
@@ -506,7 +542,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn),
+          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn, prevGender),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
