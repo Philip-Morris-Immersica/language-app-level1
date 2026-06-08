@@ -45,29 +45,9 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 2,
     displayMode: 'body_diagram',
-    headerImageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/01-chovek-diagrama-lines.png',
-    cards: [
-      // word labels — left / right columns beside figure.
-      // Connector lines + dots are baked into the image (01-chovek-diagrama-lines.png),
-      // so each line starts exactly at the word. labelY = % from top of image and MUST
-      // match the line start in the baked image (see bake script / IMAGE-MAPPING.md).
-      { id: 'nos',       imageUrl: '', label: 'нос',            ttsLabel: 'нос',           labelSide: 'left',  labelY: 11 },
-      { id: 'uho',       imageUrl: '', label: 'ухо',            ttsLabel: 'ухо',           labelSide: 'left',  labelY: 17 },
-      { id: 'grdi',      imageUrl: '', label: 'гърди',          ttsLabel: 'гърди',         labelSide: 'left',  labelY: 27 },
-      { id: 'raka',      imageUrl: '', label: 'ръка',           ttsLabel: 'ръка',          labelSide: 'left',  labelY: 36 },
-      { id: 'korem',     imageUrl: '', label: 'корем / стомах', ttsLabel: 'корем, стомах', labelSide: 'left',  labelY: 45 },
-      { id: 'prst',      imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 57 },
-      { id: 'krak',      imageUrl: '', label: 'крак',           ttsLabel: 'крак',          labelSide: 'left',  labelY: 68 },
-      { id: 'prst-krak', imageUrl: '', label: 'пръст',          ttsLabel: 'пръст',         labelSide: 'left',  labelY: 95 },
-      { id: 'glava',     imageUrl: '', label: 'глава',          ttsLabel: 'глава',         labelSide: 'right', labelY:  6 },
-      { id: 'oko',       imageUrl: '', label: 'око',            ttsLabel: 'око',           labelSide: 'right', labelY: 12 },
-      { id: 'usta',      imageUrl: '', label: 'уста',           ttsLabel: 'уста',          labelSide: 'right', labelY: 18 },
-      { id: 'grlo',      imageUrl: '', label: 'гърло',          ttsLabel: 'гърло',         labelSide: 'right', labelY: 24 },
-      { id: 'karst',     imageUrl: '', label: 'кръст',          ttsLabel: 'кръст',         labelSide: 'right', labelY: 47 },
-      // organ cards — far right (сърце, зъб)
-      { id: 'sartse',    imageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/02-sartse.jpg', label: 'сърце', ttsLabel: 'сърце', labelY: 28 },
-      { id: 'zab',       imageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/03-zab.jpg',    label: 'зъб',   ttsLabel: 'зъб',   labelY: 47 },
-    ],
+    disableAudio: true,
+    headerImageUrl: '/assets/a2-lesson-02/02-novi-dumi-1-chasti-na-tyaloto/01-chovek-diagrama-textbook.png',
+    cards: [],
   } as IllustratedCardsExercise,
 
   // ─── ORDER 3 — ГРАМАТИКА 1 (стр. 24): неправилно мн.ч. ─────────────────────────────────────
@@ -84,12 +64,15 @@ export const exercises: Exercise[] = [
     rows: [
       { pronoun: 'крак',  cells: ['крака',  'крака']  },
       { pronoun: 'зъб',   cells: ['зъби',   'зъба']   },
-      { pronoun: 'oko',   cells: ['очи',    '—']       },
+      { pronoun: 'око',   cells: ['очи',    '—']       },
       { pronoun: 'ухо',   cells: ['уши',    '—']       },
       { pronoun: 'ръка',  cells: ['ръце',   '—']       },
     ],
     notes: [
       'крак → два крака; зъб → два зъба (бройна форма при мъжки род)',
+    ],
+    ttsNotes: [
+      'крак, два крака. зъб, два зъба. бройна форма при мъжки род.',
     ],
   } as GrammarTableExercise,
 
@@ -102,17 +85,17 @@ export const exercises: Exercise[] = [
     points: 9,
     displayType: 'default',
     images: [
-      { id: 'oko2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/01-oko.jpg',        correctLabel: 'oko'    },
-      { id: 'usta2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/02-usta.jpg',       correctLabel: 'уста'   },
-      { id: 'prsti2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/03-raka.jpg',       correctLabel: 'пръсти' },
-      { id: 'uho2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/04-uho.jpg',        correctLabel: 'ухо'    },
-      { id: 'nos2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/05-nos.jpg',        correctLabel: 'нос'    },
-      { id: 'raka2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/06-raka-ramo.jpg',  correctLabel: 'ръка'   },
-      { id: 'sartse2',  imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/07-gardi-sartse.jpg', correctLabel: 'сърце' },
-      { id: 'glava2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/08-glava.jpg',      correctLabel: 'глава'  },
-      { id: 'krak2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/09-krak.jpg',       correctLabel: 'крак'   },
+      { id: 'oko2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/01-oko.jpg',           correctLabel: 'око'    },
+      { id: 'usta2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/02-usta.jpg',          correctLabel: 'уста'   },
+      { id: 'prsti2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/03-raka.jpg',          correctLabel: 'пръсти' },
+      { id: 'uho2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/04-uho.jpg',           correctLabel: 'ухо'    },
+      { id: 'nos2',     imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/05-nos.jpg',           correctLabel: 'нос'    },
+      { id: 'raka2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/06-raka-ramo.jpg',     correctLabel: 'ръка'   },
+      { id: 'sartse2',  imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/07-gardi-sartse.jpg',  correctLabel: 'сърце'  },
+      { id: 'glava2',   imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/08-glava.jpg',         correctLabel: 'глава'  },
+      { id: 'krak2',    imageUrl: '/assets/a2-lesson-02/03-upr-02-chasti-na-tyaloto/09-krak.jpg',          correctLabel: 'крак'   },
     ],
-    options: ['oko', 'уста', 'пръсти', 'ухо', 'нос', 'ръка', 'сърце', 'глава', 'крак'],
+    options: ['око', 'уста', 'пръсти', 'ухо', 'нос', 'ръка', 'сърце', 'глава', 'крак'],
   } as ImageLabelingExercise,
 
   // ─── ORDER 5 — Упр. 3 (стр. 25): подредете буквите в думи ──────────────────────────────────
@@ -121,7 +104,7 @@ export const exercises: Exercise[] = [
     type: 'syllable_blocks',
     instruction: 'Подредете буквите, за да съставите думи.',
     order: 5,
-    points: 11,
+    points: 12,
     puzzles: [
       // Ляво
       { id: 'glava-p',  syllables: ['А', 'В', 'Г', 'Л', 'А'],          correctWord: 'ГЛАВА'   },
@@ -215,7 +198,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.a2l02.g2.instruction',
     order: 9,
     tableTitle: 'Боли ме / Болят ме',
-    columns: ['Боли … (ед.ч.)', 'Болят … (мн.ч.)'],
+    columns: ['Боли … (единствено число)', 'Болят … (множествено число)'],
     rows: [
       { pronoun: 'аз',  cells: ['Боли **ме**',  'Болят **ме**']  },
       { pronoun: 'ти',  cells: ['Боли **те**',  'Болят **те**']  },
@@ -227,9 +210,14 @@ export const exercises: Exercise[] = [
       { pronoun: 'те',  cells: ['—',            'Болят **ги**']  },
     ],
     notes: [
-      'Боли ме главата. (ед.ч. — глава, крак, зъб...)',
-      'Болят ме очите. (мн.ч. — очи, уши, ръце, зъби, крака...)',
+      'Боли ме главата. (единствено число — глава, крак, зъб...)',
+      'Болят ме очите. (множествено число — очи, уши, ръце, зъби, крака...)',
       'Боли ме коремът. = Имам болки в корема.',
+    ],
+    ttsNotes: [
+      'Боли ме главата. Единствено число: глава, крак, зъб.',
+      'Болят ме очите. Множествено число: очи, уши, ръце, зъби, крака.',
+      'Боли ме коремът. Имам болки в корема.',
     ],
   } as GrammarTableExercise,
 
@@ -259,31 +247,33 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 11,
     cards: [
-      { id: 'grip',         imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/01-grip.jpg',         label: 'Имам грип.',             ttsLabel: 'грип'           },
-      { id: 'temperatura',  imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/02-temperatura.jpg',  label: 'Имам температура.',      ttsLabel: 'температура'    },
-      { id: 'hrema',        imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/03-hrema.jpg',         label: 'Имам хрема.',            ttsLabel: 'хрема'          },
-      { id: 'kashlitsa',    imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/04-kashlitsa.jpg',    label: 'Имам кашлица.',          ttsLabel: 'кашлица'        },
-      { id: 'alergiya',     imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/05-alergiya.jpg',     label: 'Имам алергия.',          ttsLabel: 'алергия'        },
-      { id: 'bronhit',      imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/06-bronhit.jpg',      label: 'Имам бронхит.',          ttsLabel: 'бронхит'        },
-      { id: 'visoko-kravno', imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/07-visoko-kravno.jpg', label: 'Имам високо кръвно.',  ttsLabel: 'високо кръвно' },
-      { id: 'nisko-kravno',  imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/08-nisko-kravno.jpg', label: 'Имам ниско кръвно.',   ttsLabel: 'ниско кръвно'  },
+      { id: 'nd2-grip',          imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/01-grip.jpg',         label: 'Имам грип.',             ttsLabel: 'Имам грип.'              },
+      { id: 'nd2-temperatura',   imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/02-temperatura.jpg',  label: 'Имам температура.',      ttsLabel: 'Имам температура.'       },
+      { id: 'nd2-hrema',         imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/03-hrema.jpg',         label: 'Имам хрема.',            ttsLabel: 'Имам хрема.'             },
+      { id: 'nd2-kashlitsa',     imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/04-kashlitsa.jpg',    label: 'Имам кашлица.',          ttsLabel: 'Имам кашлица.'           },
+      { id: 'nd2-alergiya',      imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/05-alergiya.jpg',     label: 'Имам алергия.',          ttsLabel: 'Имам алергия.'           },
+      { id: 'nd2-bronhit',       imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/06-bronhit.jpg',      label: 'Имам бронхит.',          ttsLabel: 'Имам бронхит.'           },
+      { id: 'nd2-visoko-kravno', imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/07-visoko-kravno.jpg', label: 'Имам високо кръвно.',  ttsLabel: 'Имам високо кръвно.'  },
+      { id: 'nd2-nisko-kravno',  imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/08-nisko-kravno.jpg', label: 'Имам ниско кръвно.',   ttsLabel: 'Имам ниско КРЪВНО.'   },
     ],
   } as IllustratedCardsExercise,
 
-  // ─── ORDER 12 — Упр. 9 (стр. 26): попълнете по картинките ──────────────────────────────────
+  // ─── ORDER 12 — Упр. 9 (стр. 26): свържете картинката с думата (същите картинки като в НОВИ ДУМИ 2) ──
   {
     id: 'a2-l02-ex-09',
-    type: 'dropdown_match',
-    instruction: 'Вижте илюстрациите в НОВИ ДУМИ 2 по-горе. Изберете правилния отговор по модела „Имаш ли грип? – Да, имам грип."',
+    type: 'image_labeling',
+    instruction: 'Изберете правилната дума под всяка картинка. Картинките са същите като в НОВИ ДУМИ 2 по-горе.',
     order: 12,
     points: 4,
-    questions: [
-      { id: 'q1', left: 'Имаш ли _______?',           options: ['грип', 'температура', 'хрема', 'кашлица', 'алергия', 'бронхит', 'високо кръвно', 'ниско кръвно'], correctAnswer: 'грип' },
-      { id: 'q2', left: 'Мъжът ти има ли _______?',   options: ['грип', 'температура', 'хрема', 'кашлица', 'алергия', 'бронхит', 'високо кръвно', 'ниско кръвно'], correctAnswer: 'високо кръвно' },
-      { id: 'q3', left: 'Майка ти има ли _______?',   options: ['грип', 'температура', 'хрема', 'кашлица', 'алергия', 'бронхит', 'високо кръвно', 'ниско кръвно'], correctAnswer: 'хрема' },
-      { id: 'q4', left: 'Баща ти има ли _______?',    options: ['грип', 'температура', 'хрема', 'кашлица', 'алергия', 'бронхит', 'високо кръвно', 'ниско кръвно'], correctAnswer: 'бронхит', alternateCorrectAnswers: ['кашлица'] },
+    displayType: 'row',
+    images: [
+      { id: 'bol-temperatura', imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/02-temperatura.jpg',   correctLabel: 'температура'    },
+      { id: 'bol-hrema',       imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/03-hrema.jpg',         correctLabel: 'хрема'          },
+      { id: 'bol-visoko',      imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/07-visoko-kravno.jpg', correctLabel: 'високо кръвно'  },
+      { id: 'bol-kashlitsa',   imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/04-kashlitsa.jpg',     correctLabel: 'кашлица'        },
     ],
-  } as DropdownMatchExercise,
+    options: ['температура', 'хрема', 'високо кръвно', 'кашлица'],
+  } as ImageLabelingExercise,
 
   // ─── ORDER 13 — ДИАЛОЗИ 2 (стр. 26): кихане и симптоми ─────────────────────────────────────
   {
@@ -307,14 +297,14 @@ export const exercises: Exercise[] = [
         bubbleSide: 'right',
         lines: [
           { text: 'Имам температура и кашлица и ме боли главата.', voiceGender: 'male'   },
-          { text: 'Може би е грип.',                                voiceGender: 'female' },
+          { text: 'Може би е грип.',                                voiceGender: 'female', ttsText: 'Може би е ГриП?' },
         ],
       },
       {
         id: 'в.',
         bubbleSide: 'left',
         lines: [
-          { text: 'Как сте?',                                         voiceGender: 'female' },
+          { text: 'Как сте?',                                         voiceGender: 'female', ttsText: 'КАК сте?' },
           { text: 'Имам хрема, кихам, но нямам температура.',        voiceGender: 'male'   },
           { text: 'Това е алергия.',                                  voiceGender: 'female' },
         ],
@@ -340,7 +330,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'аз',  cells: ['**ми**', 'Пиша **ми**.']   },
       { pronoun: 'ти',  cells: ['**ти**', 'Пиша **ти**.']   },
       { pronoun: 'той', cells: ['**му**', 'Пиша **му**.']   },
-      { pronoun: 'тя',  cells: ['**й**',  'Пиша **й**.']    },
+      { pronoun: 'тя',  cells: ['**ѝ**',  'Пиша **ѝ**.']    },
       { pronoun: 'то',  cells: ['**му**', 'Пиша **му**.']   },
       { pronoun: 'ние', cells: ['**ни**', 'Пиша **ни**.']   },
       { pronoun: 'Вие', cells: ['**ви**', 'Пиша **ви**.']   },
@@ -348,8 +338,13 @@ export const exercises: Exercise[] = [
     ],
     notes: [
       'Пиша на Иван. → Пиша **му**.',
-      'Пиша на Мария. → Пиша **й**.',
+      'Пиша на Мария. → Пиша **ѝ**.',
       'Внимание! Обаждам се на Васил. → Обаждам **му** се.',
+    ],
+    ttsNotes: [
+      'Пиша на Иван. Пиша му.',
+      'Пиша на Мария. Пиша и.',
+      'Внимание. Обаждам се на Васил. Обаждам му се.',
     ],
   } as GrammarTableExercise,
 
@@ -357,18 +352,18 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l02-ex-12',
     type: 'workbook_fill_blank',
-    instruction: 'Преобразувайте изреченията по модела „Аз помагам на мама. → Аз й помагам."',
+    instruction: 'Преобразувайте изреченията по модела „Аз помагам на мама. → Аз ѝ помагам."',
     order: 15,
     points: 5,
     layout: 'qa-split',
     imageUrl: '/assets/a2-lesson-02/07-upr-12-kuhnya/01-maika-dushterya-gotvyat.jpg',
     sentences: [
-      { text: 'Аз помагам на мама. | Аз й помагам.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Аз помагам на мама. | Аз ѝ помагам.', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Аз давам на Емил вода. | _______',                      blanks: [1], correctAnswers: ['Аз му давам вода.'],                       acceptableAnswers: [['аз му давам вода.', 'аз му давам вода', 'му давам вода.', 'му давам вода']] },
-      { text: 'Аз казвам на Иман „Добро утро". | _______',             blanks: [1], correctAnswers: ['Аз й казвам „Добро утро".'],               acceptableAnswers: [['аз й казвам „добро утро".', 'аз й казвам „добро утро\"', 'й казвам „добро утро"', 'й казвам добро утро']] },
+      { text: 'Аз казвам на Иман „Добро утро". | _______',             blanks: [1], correctAnswers: ['Аз ѝ казвам „Добро утро".'],               acceptableAnswers: [['аз ѝ казвам „добро утро".', 'аз й казвам „добро утро".', 'аз и казвам „добро утро".', 'ѝ казвам „добро утро"', 'й казвам „добро утро"', 'и казвам добро утро', 'ѝ казвам добро утро', 'й казвам добро утро']] },
       { text: 'Аз отговарям на децата. | _______',                     blanks: [1], correctAnswers: ['Аз им отговарям.'],                         acceptableAnswers: [['аз им отговарям.', 'аз им отговарям', 'им отговарям.', 'им отговарям']] },
       { text: 'Аз пиша на Иван и Мария. | _______',                    blanks: [1], correctAnswers: ['Аз им пиша.'],                              acceptableAnswers: [['аз им пиша.', 'аз им пиша', 'им пиша.', 'им пиша']] },
-      { text: 'Аз се обаждам на Таня по телефона. | _______',         blanks: [1], correctAnswers: ['Аз й се обаждам по телефона.'],             acceptableAnswers: [['аз й се обаждам по телефона.', 'аз й се обаждам по телефона', 'й се обаждам по телефона']] },
+      { text: 'Аз се обаждам на Таня по телефона. | _______',         blanks: [1], correctAnswers: ['Аз ѝ се обаждам по телефона.'],             acceptableAnswers: [['аз ѝ се обаждам по телефона.', 'аз й се обаждам по телефона.', 'аз и се обаждам по телефона.', 'аз ѝ се обаждам по телефона', 'ѝ се обаждам по телефона', 'й се обаждам по телефона', 'и се обаждам по телефона']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -423,30 +418,30 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l02-ex-13',
     type: 'dropdown_match',
-    instruction: 'Изберете правилното изречение по модела „Ани казва всичко на Мери. → Ани й казва всичко. → Ани не й казва всичко. → Ани казва ли й всичко?"',
+    instruction: 'Изберете правилното изречение. Всяка група е в реда: положително (+), отрицателно (−), въпросително (?). Модел: „Ани казва всичко на Мери. → Ани ѝ казва всичко. → Ани не ѝ казва всичко. → Ани казва ли ѝ всичко?"',
     order: 17,
     points: 15,
     questions: [
-      // помага
-      { id: 'q01', left: 'Ани помага на Мери. (+) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани й помага.' },
-      { id: 'q02', left: 'Ани помага на Мери. (−) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани не й помага.' },
-      { id: 'q03', left: 'Ани помага на Мери. (?) _______', options: ['Ани й помага.', 'Ани не й помага.', 'Ани помага ли й?'], correctAnswer: 'Ани помага ли й?' },
-      // говори
-      { id: 'q04', left: 'Ани говори на Мери. (+) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани й говори.' },
-      { id: 'q05', left: 'Ани говори на Мери. (−) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани не й говори.' },
-      { id: 'q06', left: 'Ани говори на Мери. (?) _______', options: ['Ани й говори.', 'Ани не й говори.', 'Ани говори ли й?'], correctAnswer: 'Ани говори ли й?' },
-      // пише
-      { id: 'q07', left: 'Ани пише на Мери. (+) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани й пише.' },
-      { id: 'q08', left: 'Ани пише на Мери. (−) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани не й пише.' },
-      { id: 'q09', left: 'Ани пише на Мери. (?) _______', options: ['Ани й пише.', 'Ани не й пише.', 'Ани пише ли й?'], correctAnswer: 'Ани пише ли й?' },
-      // купува рокля
-      { id: 'q10', left: 'Ани купува на Мери рокля. (+) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани й купува рокля.' },
-      { id: 'q11', left: 'Ани купува на Мери рокля. (−) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани не й купува рокля.' },
-      { id: 'q12', left: 'Ани купува на Мери рокля. (?) _______', options: ['Ани й купува рокля.', 'Ани не й купува рокля.', 'Ани купува ли й рокля?'], correctAnswer: 'Ани купува ли й рокля?' },
-      // дава химикалка
-      { id: 'q13', left: 'Ани дава на Мери химикалка. (+) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани й дава химикалка.' },
-      { id: 'q14', left: 'Ани дава на Мери химикалка. (−) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани не й дава химикалка.' },
-      { id: 'q15', left: 'Ани дава на Мери химикалка. (?) _______', options: ['Ани й дава химикалка.', 'Ани не й дава химикалка.', 'Ани дава ли й химикалка?'], correctAnswer: 'Ани дава ли й химикалка?' },
+      // помага → + / − / ?
+      { id: 'q01', left: 'Ани помага на Мери. (+) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани ѝ помага.' },
+      { id: 'q03', left: 'Ани помага на Мери. (−) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани не ѝ помага.' },
+      { id: 'q02', left: 'Ани помага на Мери. (?) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани помага ли ѝ?' },
+      // говори → + / − / ?
+      { id: 'q04', left: 'Ани говори на Мери. (+) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани ѝ говори.' },
+      { id: 'q06', left: 'Ани говори на Мери. (−) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани не ѝ говори.' },
+      { id: 'q05', left: 'Ани говори на Мери. (?) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани говори ли ѝ?' },
+      // пише → + / − / ?
+      { id: 'q07', left: 'Ани пише на Мери. (+) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани ѝ пише.' },
+      { id: 'q09', left: 'Ани пише на Мери. (−) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани не ѝ пише.' },
+      { id: 'q08', left: 'Ани пише на Мери. (?) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани пише ли ѝ?' },
+      // купува рокля → + / − / ?
+      { id: 'q10', left: 'Ани купува на Мери рокля. (+) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани ѝ купува рокля.' },
+      { id: 'q12', left: 'Ани купува на Мери рокля. (−) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани не ѝ купува рокля.' },
+      { id: 'q11', left: 'Ани купува на Мери рокля. (?) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани купува ли ѝ рокля?' },
+      // дава химикалка → + / − / ?
+      { id: 'q13', left: 'Ани дава на Мери химикалка. (+) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани ѝ дава химикалка.' },
+      { id: 'q15', left: 'Ани дава на Мери химикалка. (−) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани не ѝ дава химикалка.' },
+      { id: 'q14', left: 'Ани дава на Мери химикалка. (?) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани дава ли ѝ химикалка?' },
     ],
   } as DropdownMatchExercise,
 
@@ -462,18 +457,22 @@ export const exercises: Exercise[] = [
     tableTitle: 'Трябва ми…',
     columns: ['Форма', 'Пример'],
     rows: [
-      { pronoun: 'аз',  cells: ['Трябва **ми**', 'Трябва **ми** 1 лев.']   },
-      { pronoun: 'ти',  cells: ['Трябва **ти**', 'Трябва **ти** 1 лев.']   },
-      { pronoun: 'той', cells: ['Трябва **му**', 'Трябва **му** 1 лев.']   },
-      { pronoun: 'тя',  cells: ['Трябва **й**',  'Трябва **й** 1 лев.']    },
-      { pronoun: 'то',  cells: ['Трябва **му**', 'Трябва **му** 1 лев.']   },
-      { pronoun: 'ние', cells: ['Трябва **ни**', 'Трябва **ни** 1 лев.']   },
-      { pronoun: 'Вие', cells: ['Трябва **ви**', 'Трябва **ви** 1 лев.']   },
-      { pronoun: 'те',  cells: ['Трябва **им**', 'Трябва **им** 1 лев.']   },
+      { pronoun: 'аз',  cells: ['Трябва **ми**', 'Трябва **ми** един лев.']   },
+      { pronoun: 'ти',  cells: ['Трябва **ти**', 'Трябва **ти** един лев.']   },
+      { pronoun: 'той', cells: ['Трябва **му**', 'Трябва **му** един лев.']   },
+      { pronoun: 'тя',  cells: ['Трябва **ѝ**',  'Трябва **ѝ** един лев.']    },
+      { pronoun: 'то',  cells: ['Трябва **му**', 'Трябва **му** един лев.']   },
+      { pronoun: 'ние', cells: ['Трябва **ни**', 'Трябва **ни** един лев.']   },
+      { pronoun: 'Вие', cells: ['Трябва **ви**', 'Трябва **ви** един лев.']   },
+      { pronoun: 'те',  cells: ['Трябва **им**', 'Трябва **им** един лев.']   },
     ],
     notes: [
       'Трябват **ми** два лева. (мн.ч.: трябват)',
-      'Трябва ти 1 лев. | Не ти трябва 1 лев. | Трябва ли ти 1 лев?',
+      'Трябва ти един лев. | Не ти трябва един лев. | Трябва ли ти един лев?',
+    ],
+    ttsNotes: [
+      'Трябват ми два лева. Множествено число: трябват.',
+      'Трябва ти един лев. Не ти трябва един лев. Трябва ли ти един лев?',
     ],
   } as GrammarTableExercise,
 
@@ -532,7 +531,7 @@ export const exercises: Exercise[] = [
         imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/04-studeno-mi-e.jpg',
         text: 'Студено ми е.',
         lines: [],
-        ttsText: 'Студено ми е.',
+        ttsText: 'Студено МИ е.',
         voiceGender: 'female',
       },
       {
@@ -585,15 +584,19 @@ export const exercises: Exercise[] = [
       { pronoun: 'аз',  cells: ['Топло **ми** е.']  },
       { pronoun: 'ти',  cells: ['Топло **ти** е.']  },
       { pronoun: 'той', cells: ['Топло **му** е.']  },
-      { pronoun: 'тя',  cells: ['Топло **й** е.']   },
+      { pronoun: 'тя',  cells: ['Топло **ѝ** е.']   },
       { pronoun: 'то',  cells: ['Топло **му** е.']  },
       { pronoun: 'ние', cells: ['Топло **ни** е.']  },
       { pronoun: 'Вие', cells: ['Топло **ви** е.']  },
       { pronoun: 'те',  cells: ['Топло **им** е.']  },
     ],
     notes: [
-      'Топло ти е. | Не ти е топло. | Топло ли ти е?',
+      'Топло ми е. | Не ми е топло. | Топло ли ми е?',
       'Замени „топло" с: студено, трудно, лошо, приятно, интересно, лесно.',
+    ],
+    ttsNotes: [
+      'Топло ми е. Не ми е топло. Топло ли ми е?',
+      'Замени топло с: студено, трудно, лошо, приятно, интересно, лесно.',
     ],
   } as GrammarTableExercise,
 
@@ -605,13 +608,13 @@ export const exercises: Exercise[] = [
     order: 23,
     points: 7,
     questions: [
-      { id: 'q1', left: 'Аз съм Мария. Приятно _______ е.',                        options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'ми' },
-      { id: 'q2', left: 'Прозорецът е затворен. Топло ли _______ е?',              options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'ти' },
-      { id: 'q3', left: 'Той няма палто. Студено ли _______ е?',                   options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'му' },
-      { id: 'q4', left: 'Ние сме в един музей. Интересно _______ е.',              options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'ни' },
-      { id: 'q5', left: 'Тя има пет деца. Трудно _______ е.',                      options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'й'  },
-      { id: 'q6', left: 'Боли ме стомахът. Лошо _______ е.',                       options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'ми' },
-      { id: 'q7', left: 'Вие вечерят с приятели. Приятно ли _______ е?',           options: ['ми', 'ти', 'му', 'й', 'ни', 'ви', 'им'], correctAnswer: 'ви' },
+      { id: 'q1', left: 'Аз съм Мария. Приятно _______ е.',                        options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ми' },
+      { id: 'q2', left: 'Прозорецът е затворен. Топло ли _______ е?',              options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ти' },
+      { id: 'q3', left: 'Той няма палто. Студено ли _______ е?',                   options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'му' },
+      { id: 'q4', left: 'Ние сме в един музей. Интересно _______ е.',              options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ни' },
+      { id: 'q5', left: 'Тя има пет деца. Трудно _______ е.',                      options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ѝ'  },
+      { id: 'q6', left: 'Боли ме стомахът. Лошо _______ е.',                       options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ми' },
+      { id: 'q7', left: 'Вие вечерят с приятели. Приятно ли _______ е?',           options: ['ми', 'ти', 'му', 'ѝ', 'ни', 'ви', 'им'], correctAnswer: 'ви' },
     ],
   } as DropdownMatchExercise,
 
@@ -671,6 +674,10 @@ export const exercises: Exercise[] = [
       'Здрав **съм**. Не **си** здрав. Здрав ли **си**?',
       'Здрав съм. = Аз съм здрав.',
     ],
+    ttsNotes: [
+      'Здрав съм. Не си здрав. Здрав ли си?',
+      'Здрав съм. Аз съм здрав.',
+    ],
   } as GrammarTableExercise,
 
   // ─── ORDER 27 — Упр. 18 (стр. 30): изберете подходящото изречение ───────────────────────────
@@ -681,7 +688,7 @@ export const exercises: Exercise[] = [
     order: 27,
     points: 8,
     questions: [
-      { id: 'q1', left: 'Работя много всеки ден.',                options: ['Жадна съм.', 'Гладно е.', 'Уморен съм.', 'Тъжни са.', 'Весел е.', 'Болен сте.', 'Здрава е.', 'Доволен си.'], correctAnswer: 'Уморен съм.', alternateCorrectAnswers: ['Тъжни са.'] },
+      { id: 'q1', left: 'Работя много всеки ден.',                options: ['Жадна съм.', 'Гладно е.', 'Уморен съм.', 'Тъжни са.', 'Весел е.', 'Болен сте.', 'Здрава е.', 'Доволен си.'], correctAnswer: 'Уморен съм.' },
       { id: 'q2', left: 'Детето иска три кюфтета и салата.',     options: ['Жадна съм.', 'Гладно е.', 'Уморен съм.', 'Тъжни са.', 'Весел е.', 'Болен сте.', 'Здрава е.', 'Доволен си.'], correctAnswer: 'Гладно е.' },
       { id: 'q3', left: 'Искам една минерална вода.',             options: ['Жадна съм.', 'Гладно е.', 'Уморен съм.', 'Тъжни са.', 'Весел е.', 'Болен сте.', 'Здрава е.', 'Доволен си.'], correctAnswer: 'Жадна съм.' },
       { id: 'q4', left: 'Те нямат работа, нямат пари.',          options: ['Жадна съм.', 'Гладно е.', 'Уморен съм.', 'Тъжни са.', 'Весел е.', 'Болен сте.', 'Здрава е.', 'Доволен си.'], correctAnswer: 'Тъжни са.' },
@@ -760,22 +767,22 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Добър ден. Как си?',                                       voiceGender: 'female' },
-          { text: 'Благодаря, добре. А ти?',                                  voiceGender: 'male'   },
-          { text: 'Чувствам се чудесно. Имам нова работа и съм много доволен.', voiceGender: 'female' },
-          { text: 'Честито! А жена ти и децата как са?',                      voiceGender: 'male'   },
-          { text: 'И те са добре. Всички сме здрави.',                        voiceGender: 'female' },
+          { text: 'Добър ден. Как си?',                                       voiceGender: 'male'   },
+          { text: 'Благодаря, добре. А ти?',                                  voiceGender: 'female' },
+          { text: 'Чувствам се чудесно. Имам нова работа и съм много доволен.', voiceGender: 'male' },
+          { text: 'Честито! А жена ти и децата как са?',                      voiceGender: 'female' },
+          { text: 'И те са добре. Всички сме здрави.',                        voiceGender: 'male'   },
         ],
       },
       {
         id: 'б.',
         lines: [
-          { text: 'Здравей, Мария! Как е Сашо?',                              voiceGender: 'female' },
-          { text: 'Не е добре.',                                               voiceGender: 'male'   },
-          { text: 'Какво му е?',                                               voiceGender: 'female' },
-          { text: 'Болен е. Има температура и го боли гърлото.',              voiceGender: 'male'   },
-          { text: 'А ти как се чувстваш?',                                    voiceGender: 'female' },
-          { text: 'Горе-долу, благодаря. Малко съм уморена.',                 voiceGender: 'male'   },
+          { text: 'Здравей, Мария! Как е Сашо?',                              voiceGender: 'male'   },
+          { text: 'Не е добре.',                                               voiceGender: 'female' },
+          { text: 'Какво му е?',                                               voiceGender: 'male'   },
+          { text: 'Болен е. Има температура и го боли гърлото.',              voiceGender: 'female' },
+          { text: 'А ти как се чувстваш?',                                    voiceGender: 'male'   },
+          { text: 'Горе-долу, благодаря. Малко съм уморена.',                 voiceGender: 'female' },
         ],
       },
     ],
@@ -795,11 +802,11 @@ export const exercises: Exercise[] = [
     cards: [
       { id: 'poliklinika',    imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/01-poliklinika.jpg',    label: 'поликлиника',                ttsLabel: 'поликлиника'   },
       { id: 'registratura',   imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/02-registratura.jpg',   label: 'регистратура',               ttsLabel: 'регистратура'  },
-      { id: 'lichen-lekar',   imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/03-lichen-lekar.jpg',   label: 'личен лекар = джипи',        ttsLabel: 'личен лекар'   },
+      { id: 'nd4-lichen-lekar', imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/03-lichen-lekar.jpg',   label: 'личен лекар = джипи',        ttsLabel: 'Личен лекар. Джи Пи.'   },
       { id: 'lek-kabinet',    imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/04-lekarski-kabinet.jpg', label: 'лекарски кабинет',         ttsLabel: 'лекарски кабинет' },
       // Лекарски специалности
-      { id: 'pediatar',       imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/01-pediatar.jpg',         label: 'детски лекар = педиатър',    ttsLabel: 'педиатър'      },
-      { id: 'ung',            imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/02-ung.jpg',              label: 'уши-нос-гърло = УНГ',        ttsLabel: 'УНГ'           },
+      { id: 'nd4-pediatar',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/01-pediatar.jpg',         label: 'детски лекар = педиатър',    ttsLabel: 'Детски лекар. Педиатър.'      },
+      { id: 'nd4-ung',        imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/02-ung.jpg',              label: 'уши-нос-гърло = УНГ',        ttsLabel: 'Уши, нос, гърло. У Н Ге.'           },
       { id: 'kardiolog',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/03-kardiolog.jpg',        label: 'кардиолог',                  ttsLabel: 'кардиолог'     },
       { id: 'nevrolog',       imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/04-nevrolog.jpg',         label: 'невролог',                   ttsLabel: 'невролог'      },
       { id: 'hirurg',         imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/05-hirurg.jpg',           label: 'хирург',                     ttsLabel: 'хирург'        },
@@ -851,10 +858,10 @@ export const exercises: Exercise[] = [
       {
         id: 'б.',
         lines: [
-          { text: 'Добър ден, д-р Димитров.', ttsText: 'Добър ден, доктор Димитров.',                  voiceGender: 'male'   },
-          { text: 'Добър ден. Как е детето?',                                                            voiceGender: 'female' },
-          { text: 'Боли го гърлото, главата, има температура.',                                          voiceGender: 'male'   },
-          { text: 'Трябва изследване на кръв и урина.',                                                  voiceGender: 'female' },
+          { text: 'Добър ден, д-р Димитров.', ttsText: 'Добър ден, доктор Димитров.',                  voiceGender: 'female' },
+          { text: 'Добър ден. Как е детето?',                                                            voiceGender: 'male'   },
+          { text: 'Боли го гърлото, главата, има температура.',                                          voiceGender: 'female' },
+          { text: 'Трябва изследване на кръв и урина.',                                                  voiceGender: 'male'   },
         ],
       },
     ],
@@ -875,10 +882,10 @@ export const exercises: Exercise[] = [
       { id: 'recepta',       imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/01-recepta.jpg',          label: 'рецепта',               ttsLabel: 'рецепта'          },
       { id: 'lekarstva',     imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/02-lekarstva.jpg',        label: 'лекарства',             ttsLabel: 'лекарства'        },
       { id: 'sirop',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/03-sirop-za-kashlitsa.jpg', label: 'сироп за кашлица',    ttsLabel: 'сироп за кашлица' },
-      { id: 'kapki',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/04-kapki.jpg',            label: 'капки за нос / очи / уши', ttsLabel: 'капки'         },
-      { id: 'antibiotik',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/05-antibiotik.jpg',       label: 'опаковка антибиотик',   ttsLabel: 'антибиотик'       },
-      { id: 'aspirin',       imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/06-blister-aspirin.jpg',  label: 'блистер аспирин',       ttsLabel: 'аспирин'          },
-      { id: 'prahche',       imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/07-prahche-za-grip.jpg',  label: 'прахче за грип',        ttsLabel: 'прахче за грип'   },
+      { id: 'kapki',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/04-kapki.jpg',            label: 'капки за нос / очи / уши', ttsLabel: 'капки за нос, очи и уши' },
+      { id: 'nd5-antibiotik', imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/05-antibiotik.jpg',       label: 'опаковка антибиотик',   ttsLabel: 'опаковка антибиотик'       },
+      { id: 'nd5-aspirin',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/06-blister-aspirin.jpg',  label: 'блистер аспирин',       ttsLabel: 'блистер аспирин'          },
+      { id: 'nd5-prahche',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/07-prahche-za-grip.jpg',  label: 'прахче за грип',        ttsLabel: 'Прахче за грип.'  },
       { id: 'pamuk',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/08-pamuk.jpg',            label: 'памук',                 ttsLabel: 'памук'            },
       { id: 'bint',          imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/09-bint.jpg',             label: 'бинт',                  ttsLabel: 'бинт'             },
       { id: 'marlya',        imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/10-marlya.jpg',           label: 'марля',                 ttsLabel: 'марля'            },
@@ -1036,7 +1043,7 @@ export const exercises: Exercise[] = [
     ],
     paragraphs: [
       'В България хората обичат билките и домашните лекове. Когато имат хрема или кашлица, пият билков чай с мед и лимон. Когато ги боли гърлото – правят гаргара. Когато имат висока температура – пият много течности.',
-      'Популярни билки: лайка, мента, липа, лайка, розмарин, жълт кантарион. Продават се в аптеките и на пазара.',
+      'Популярни билки: лайка, мента, липа, розмарин, жълт кантарион. Продават се в аптеките и на пазара.',
     ],
     paragraphVoiceGenders: ['female', 'female'],
   } as ReadingTextExercise,
