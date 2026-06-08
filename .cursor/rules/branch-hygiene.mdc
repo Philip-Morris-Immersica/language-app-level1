@@ -1,55 +1,76 @@
 ---
-description: File ownership and ID conventions for the three-author team (Philip, Nina, Alex). Defines which folders each branch may modify and the strict naming conventions per CEFR level.
+description: File ownership и git правила между Philip / Нина / Алекс — 3 нива на свобода
 alwaysApply: true
 ---
 
 # Branch Hygiene — кой какво може да пипа
 
-Това правило важи за ВСИЧКИ. Спазва се от агента дори ако потребителят (Нина/Алекс) поиска нещо извън своя домейн — агентът трябва учтиво да откаже и да обясни, че трябва да попитат Philip.
+Това правило важи за ВСИЧКИ. Заменя предишния модел „учтиво откажи" с
+**3 нива на свобода** — повечето работа е напълно автономна; малко неща
+изискват консултация; шепа неща са твърдо забранени.
 
-## File ownership table
+## 3 нива на свобода
 
-| Branch | Може да променя | НЕ МОЖЕ да променя |
-|---|---|---|
-| `nina` | `src/content/a2/**` и `public/assets/a2-lesson-*/**` | всичко друго |
-| `alex` | `src/content/b1/**` и `public/assets/b1-lesson-*/**` | всичко друго |
-| `philip` | всичко (team lead) | — |
+### 1. СВОБОДНО — без питане, без одобрение
 
-## Споделени файлове — НЕ се пипат от Nina/Alex
+Всеки работи изцяло в своя домейн. PR review-то от Philip е лек / опционален.
 
-Дори ако „трябва" — винаги се иска от Philip:
+| Branch | Свободен домейн |
+|---|---|
+| `nina` | `src/content/a2/**`, `src/i18n/a2.ts`, `public/assets/a2-lesson-*/**` |
+| `alex` | `src/content/b1/**`, `src/i18n/b1.ts` (ако е създаден), `public/assets/b1-lesson-*/**` |
+| `philip` | Всичко (team lead) |
 
-- `src/content/shared/**` — общи типове, EXERCISE_TEMPLATES, TEST_TEMPLATES
-- `src/content/registry.ts`, `src/content/index.ts` — мулти-нивов loader
-- `src/components/**` — всички React компоненти (вкл. exercise components)
-- `src/app/**` — всички страници / routes / API endpoints
-- `src/i18n/ui.ts` — i18n ключове (на 7 езика)
-- `src/lib/**` — utility библиотеки (TTS, auth, DB, chat, admin)
-- `scripts/**` — скриптове за генериране (TTS pipeline, image организация и т.н.)
-- `public/assets/lesson-*/**` — A1 assets (Philip-овите)
-- `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.*` — конфигурации
-- Други `.cursor/rules/**` — освен собственото правило на автора (`nina-a2.mdc`, `alex-b1.mdc`)
-- Кореневи `.md` файлове (`README.md`, `ONBOARDING.md`, `LESSON_STRUCTURE.md`)
+**Важно:** `src/content/a2/**` включва `lessons/`, `tests/`, `types.ts`,
+`components/`, `exercise-components.ts` — целият A2 домейн е самодостатъчен.
+Същото за B1 след като се отвори.
 
-**Ако Nina/Alex се нуждаят от:**
-- Нов exercise type → искат от Philip да го добави в `shared/` + components
-- Нов i18n ключ → искат от Philip да го добави в `ui.ts`
-- Поправка в съществуващ компонент → искат от Philip
-- Нов TTS speaker или voice role → искат от Philip да обнови `scripts/generate-tts.ts`
+В рамките на `src/content/<level>/index.ts` се позволяват **само**:
+- Uncomment / add на `<LEVEL>_LESSON_LOADERS` и `<LEVEL>_TEST_LOADERS`
+- Попълване на `<LEVEL>_LESSON_EXERCISE_COUNTS`
 
-**НЕ дублирай нищо от `shared/` в твоето ниво.** Ако ти трябва нещо — общо го искаш.
+Структурата (имена на уроци, nav редовност, test folder map) е фиксирана от
+UNHCR syllabus-а и не се променя.
+
+### 2. ОБСЪДИ + ПРЕДУПРЕДИ — но не блокирай
+
+Ако нещо ще пипа споделен файл — агентът:
+1. Обяснява как е сега и защо.
+2. Препоръчва алтернатива в собствения домейн (вариант в `a2/components/`, override в content, ключ в `a2.ts`).
+3. Ако потребителят настоява — прави промяната в **своя домейн**, не в споделения файл.
+
+Това на практика премахва нуждата от споделени промени в нормалния поток.
+
+### 3. НИКОГА — твърди забрани
+
+Тези остават блокиращи, защото нарушаването им чупи продукта или други хора:
+
+- **НЕ push към `master` директно** — мърджът минава САМО през Pull Request от Philip.
+- **НЕ push към чужд branch** (`git push origin nina` от Alex или Philip — забранено).
+- **НЕ променяй ID конвенции** (виж таблицата по-долу) — счупват backward compatibility.
+- **НЕ променяй чужди нива** (Нина не пипа `a1`, `b1`, `b2`; Alex не пипа `a1`, `a2`, `b2`).
+- **НЕ променяй** `src/content/registry.ts`, `src/content/index.ts`, `src/content/shared/**` (само Philip).
+- **НЕ променяй** `src/components/**` директно от Нина/Алекс. За level-специфични визии → `src/content/<level>/components/`.
+- **НЕ променяй** `src/lib/**`, `src/app/**`, `src/db/**` (никога не са в content поток).
+- **НЕ променяй** `src/i18n/ui.ts` (нови ключове → `src/i18n/<level>.ts`).
+- **НЕ променяй** `scripts/**` (за TTS overrides → content полета).
+- **НЕ променяй** конфигурации (`package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.*`, `drizzle.config.ts`, `eslint.config.mjs`, `.gitattributes`).
+- **НЕ дублирай** нищо от `shared/` или `src/components/` в своя домейн без причина.
 
 ## ID конвенции (НЕ ПРОМЕНЯЙ)
 
 | Елемент | A1 формат | A2+ формат |
 |---|---|---|
 | Lesson ID | `lesson-XX` (без префикс — backward compat с БД) | `a2-lesson-XX`, `b1-lesson-XX`, `b2-lesson-XX` |
-| Exercise ID | `lXX-ex-NN` | `a2-lXX-ex-NN`, `b1-lXX-ex-NN`, ... |
-| Workbook ex. | `lXX-wb-NN` | `a2-lXX-wb-NN`, ... |
-| Нови думи | `lXX-novi-dumi-NN` | `a2-lXX-novi-dumi-NN`, ... |
-| Граматика | `lXX-gramatika-NN` | `a2-lXX-gramatika-NN`, ... |
-| Диалози | `lXX-dialozi-NN` | `a2-lXX-dialozi-NN`, ... |
-| Test ID | `test-a1-N` | `test-a2-N`, `test-b1-N`, ... |
+| Exercise ID | `lXX-ex-NN` | `a2-lXX-ex-NN`, `b1-lXX-ex-NN`, … |
+| Workbook ex. | `lXX-wb-NN` | `a2-lXX-wb-NN`, … |
+| Нови думи | `lXX-novi-dumi-NN` | `a2-lXX-novi-dumi-NN`, … |
+| Граматика | `lXX-gramatika-NN` | `a2-lXX-gramatika-NN`, … |
+| Диалози | `lXX-dialozi-NN` | `a2-lXX-dialozi-NN`, … |
+| Test ID | `test-a1-N` | `test-a2-N`, `test-b1-N`, … |
+
+A2/B1/B2 exercise types (нови): задължително префикс `<level>-` в `type` стринга
+(напр. `'a2-flashcard-grid'`) за да не се сблъскват с shared типовете.
 
 ## Asset пътища
 
@@ -69,19 +90,19 @@ alwaysApply: true
 
 ## Workflow преди commit (ЗАДЪЛЖИТЕЛЕН)
 
-1. `git status` — провери че НЯМАШ променени файлове извън твоя домейн
-2. Ако имаш — СПРИ, питай Philip какво да правиш с тях
-3. Стартирай линтера за съответните уроци:
+1. `git status` — провери че имаш файлове само в свободния си домейн.
+2. Ако има файлове извън него — спри и направи както пише в Ниво 2 (вариант в собствения домейн).
+3. Стартирай линтера:
    ```
    npm run content:lint -- --lesson <lesson-id>
    ```
-   → 0 errors задължително
-4. Commit само твоите файлове: `git add src/content/<level>/` и `git add public/assets/<level-lesson>/`
-5. Push към собствения си branch (никога към master, никога към чужд branch)
+   → 0 errors задължително.
+4. Commit само твоите файлове: `git add src/content/<level>/` + `git add public/assets/<level-lesson>/` + ако ползваш — `git add src/i18n/<level>.ts`.
+5. Push към собствения си branch (никога към master, никога към чужд branch).
 
 ## Никога
 
-- Не push-вай към чужд branch (`git push origin nina` от `alex` машината — забранено)
-- Не превключвай на `master` за commit — мърджът става САМО през Pull Request от Philip
-- Не променяй имена на уроци от `<LEVEL>_LESSONS_METADATA` (фиксирани от UNHCR syllabus-а)
-- Не променяй ID конвенциите — счупват backward compatibility
+- Не push към чужд branch (`git push origin nina` от Alex — забранено).
+- Не превключвай на `master` за commit — мърджът става САМО през Pull Request от Philip.
+- Не променяй имена на уроци от `<LEVEL>_LESSONS_METADATA` (фиксирани от UNHCR syllabus-а).
+- Не променяй ID конвенциите — счупват backward compatibility.

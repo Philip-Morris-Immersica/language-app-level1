@@ -197,6 +197,10 @@ export interface IllustratedCardsExercise extends BaseExercise {
     targetY?: number;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
+    /** TTS-only override: force Gemini Pro or Flash for this card. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini (e.g. stress hint). */
+    ttsPrompt?: string;
   }[];
   displayMode?: 'grid' | 'presentation' | 'body_diagram';  // For different display modes
   /** When true, cards render as compact text-only boxes (no images) — just the label. Header image still shown. */
@@ -312,9 +316,17 @@ export interface GrammarTableExercise extends BaseExercise {
     pronoun: string;
     cells: string[];
     pronunciations?: Record<string, string>;
+    /** TTS-only override: force Gemini Pro or Flash for this row. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini. */
+    ttsPrompt?: string;
+    /** TTS-only override: exact text spoken instead of joining pronoun + cells. */
+    ttsText?: string;
   }[];
   notes?: string[];          // Text notes shown below the table
   ttsNotes?: string[];       // TTS-only text for notes (overrides notes[] for audio; display unchanged)
+  /** TTS-only override per note index: force Gemini Pro or Flash. */
+  ttsNoteModels?: ('flash' | 'pro')[];
   boldColumns?: number[];
   /** When true, makes the pronoun column equal width to the data columns. */
   widePronouns?: boolean;
@@ -475,6 +487,10 @@ export interface ReadingTextExercise extends BaseExercise {
     ttsWordId?: string;
     /** Optional per-language translation for `label` (keys: ar, en, …). When `hideText` + images, click toggles; falls back to auto-translate. */
     labelTranslations?: Record<string, string>;
+    /** TTS-only override: force Gemini Pro or Flash for this flip-card word. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini (e.g. stress hint). */
+    ttsPrompt?: string;
   }[];
   /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
   imageFlashcards?: boolean;
@@ -637,6 +653,12 @@ export interface VocabularyItem {
   category?: string;
   imageUrl?: string;
   audioUrl?: string;
+  /** TTS-only override: text spoken instead of `bulgarian` (display stays unchanged). */
+  ttsText?: string;
+  /** TTS-only override: force Gemini Pro or Flash for this item. */
+  ttsModel?: 'flash' | 'pro';
+  /** TTS-only override: custom prompt passed to Gemini (e.g. stress hint). */
+  ttsPrompt?: string;
 }
 
 // Lesson content structure

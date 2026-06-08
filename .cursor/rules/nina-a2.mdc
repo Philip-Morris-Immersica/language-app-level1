@@ -1,88 +1,155 @@
 ---
-description: Правила за Нина — работа само в A2 ниво (src/content/a2/** и public/assets/a2-lesson-*/**)
-globs: src/content/a2/**, public/assets/a2-lesson-*/**
+description: A2 author guide за Нина — автономия в A2 домейна, насочваща (не блокираща) консултация при споделени промени
+globs: src/content/a2/**, public/assets/a2-lesson-*/**, src/i18n/a2.ts
 alwaysApply: false
 ---
 
-# A2 Lesson Author Guide — Нина
+# A2 Author Guide — Нина
 
-Аз съм **Нина**. Работя на branch **`nina`**. Моят домейн е **A2** ниво.
+Аз съм **Нина**. Работя на branch **`nina`**. Моят домейн е **A2 ниво**.
 
-## Твоят домейн (САМО тук имаш право да пишеш)
+## Принцип: автономия-първо
 
-- `src/content/a2/lessons/a2-lesson-XX/` — папките на твоите уроци
-- `src/content/a2/tests/test-a2-lessons-X-Y/` — папките на тестовете
-- `public/assets/a2-lesson-XX/` — изображения, аудио
+Цял работещ урок се прави **изцяло в моя домейн**, без да чакам Philip за нищо.
+Агентът ме **води и аргументира** (калъп, консистентност с A1, TTS политика),
+но **не ме блокира** — ако настоявам, прави го в моите файлове, не в чуждите.
 
-Всичко друго — четеш само, не променяш. Виж [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc) за пълния списък.
+## Моят домейн (СВОБОДНО — без питане)
 
-## Преди да започнеш нов урок
+| Папка / файл | За какво |
+|---|---|
+| `src/content/a2/lessons/a2-lesson-XX/**` | Урочни файлове (metadata, content, exercises, workbook, index) |
+| `src/content/a2/tests/test-a2-*/**` | Тестове |
+| `src/content/a2/types.ts` | A2-специфични `Exercise` interface-и (разширяват `BaseExercise`) |
+| `src/content/a2/components/**` | A2-специфични React компоненти (нови типове и варианти на съществуващи) |
+| `src/content/a2/exercise-components.ts` | Регистрация `type -> Component` за A2 |
+| `src/i18n/a2.ts` | A2 `instructionKey` преводи (на 7 езика) |
+| `public/assets/a2-lesson-XX/**` | Изображения и аудио |
+| `src/content/a2/index.ts` — **само** `A2_LESSON_LOADERS` (uncomment) и `A2_LESSON_EXERCISE_COUNTS` | Регистрация на нови уроци |
 
-1. Виж [src/content/a2/index.ts](mdc:src/content/a2/index.ts) — там вече има metadata за всичките 10 урока (1–10) + 4 теста. **Имената на уроците са фиксирани** там — не ги променяй.
-2. Ако `a2-lesson-XX` няма metadata → Philip още не го е регистрирал. Питай преди да започнеш.
-3. Прочети задължителните правила:
-   - [content-lessons.mdc](mdc:.cursor/rules/content-lessons.mdc) — пълен guide за структурата
-   - [content-quality-checklist.mdc](mdc:.cursor/rules/content-quality-checklist.mdc) — задължителни проверки за качество
-   - [content-tests.mdc](mdc:.cursor/rules/content-tests.mdc) — за тестове
-   - [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc) — преди генериране на аудио
-4. **КОПИРАЙ структурата на готов A1 урок** (например [src/content/a1/lessons/lesson-03/](mdc:src/content/a1/lessons/lesson-03/)) — не пиши от нулата.
+Тези файлове са моя самодостатъчен домейн. Всичко, което урокът ми изисква, се
+прави тук — `ExerciseRenderer` чете A2 компонентите автоматично, `ui.ts` чете
+`a2.ts` преводите автоматично, `generate-tts.ts` чете content TTS override-ите
+(`ttsModel`, `ttsPrompt`, `ttsText`) с приоритет пред hardcode A1 Set-овете.
+
+## Поведение на агента — насочваща консултация (НЕ блокираща)
+
+### 1. Преди да започне нов урок — сканира какво вече имаме
+
+- Чете [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — пълен списък шаблони
+- Чете 1–2 готови A1 урока + всички съществуващи A2 уроци — за стил, конвенции, ID формати
+- Знае наличните типове упражнения и стандартните инструкции (виж `content-quality-checklist.mdc` §A3)
+
+### 2. Калъп преди всичко — копирай и попълни
+
+Когато създавам нов урок:
+- **Структурата идва от готов A1 урок** (5-те файла, ID конвенциите, `order` секвенцията) — копирай и попълни.
+- **Дизайнът и инструкциите следват A1 конвенциите** — еднакъв UX за ученика, по-лесна поддръжка.
+- За всяко упражнение — копирай шаблона от `EXERCISE_TEMPLATES.ts`, не пиши от нулата.
+
+### 3. Когато искам нещо да изглежда различно — обяснява и предлага
+
+Не ми отказва. Прави следното:
+1. **Обяснява как е направено в A1** (визия, поведение, защо така).
+2. **Аргументира защо консистентността помага** (еднакъв UX, поддръжка, чист мърдж).
+3. **Препоръчва същия начин** като в A1.
+4. **Ако настоявам** — прави го по моя начин, **но в моя домейн**:
+   - Промяна на визия → пише A2 вариант в `src/content/a2/components/` (не пипа споделения компонент).
+   - Никога не променя `src/components/exercises/*` или `src/content/shared/*` сам.
+
+### 4. Нов тип упражнение — съвместен дизайн, изцяло в моя домейн
+
+Често нов урок носи нов тип упражнение — това е очаквано, не изключение. Агентът:
+1. **Сканира за най-близкия съществуващ тип** и предлага („можем да го приближим с X").
+2. **Ако наистина е нов тип**: дизайн заедно (полета, интеракция, как се оценява).
+3. **Реализира го самостоятелно** в моя домейн:
+   - Нов интерфейс в [src/content/a2/types.ts](mdc:src/content/a2/types.ts) (extends `BaseExercise`, type-string с префикс `a2-`)
+   - Компонент в [src/content/a2/components/](mdc:src/content/a2/components)
+   - Регистрация в [src/content/a2/exercise-components.ts](mdc:src/content/a2/exercise-components.ts)
+4. **Нула пипане** на `ExerciseRenderer.tsx`, `shared/types.ts`, `ui.ts`. Чист мърдж.
+
+Виж [src/content/a2/components/README.md](mdc:src/content/a2/components/README.md) за подробен how-to.
+
+### 5. TTS — обяснява и оправя в content
+
+Агентът обяснява централната политика:
+- **Гласове:** Achernar (женски, default), Charon (мъжки за `voiceGender: 'male'`)
+- **Модели:** Flash за думи/граматика, Pro за свързан текст (диалози, четене, listening)
+- **Защо:** консистентно произношение между уроците, цена, естественост
+
+Произношение се оправя **в моите content файлове** чрез override полета:
+- `ttsText` — текст за TTS, различен от показвания (диалози, vocabulary, grammar_table rows, grammar_examples cards, reading_text paragraphs)
+- `ttsModel: 'pro' \| 'flash'` — форсиране на модела (vocabulary, illustrated cards, grammar_table rows, reading_text images)
+- `ttsPrompt` — custom prompt (stress hint и т.н.) на същите места
+- `ttsLabel`, `ttsParagraphs`, `ttsNotes`, `voiceGender`, `paragraphVoiceGenders` — за специфични случаи
+
+Никога не пипаме `scripts/generate-tts.ts` сами. Виж пълните детайли в [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc).
+
+### 6. i18n за нови `instructionKey` — в моя a2.ts
+
+Когато ми трябва нов pre-translated `instructionKey` (за граматика или сложна интеракция):
+- Добавя ключа в [src/i18n/a2.ts](mdc:src/i18n/a2.ts) с префикс `a2.`
+- Всички 7 езика — bg, ar, fr, en, fa, uk, ru
+- Реда в exercise: `instructionKey: 'a2.your.key'`
+
+Никога не пипа `src/i18n/ui.ts`.
 
 ## Минимум за всеки нов урок
 
 Папка `src/content/a2/lessons/a2-lesson-XX/` с 5 файла:
 
-- `metadata.ts` — `id: 'a2-lesson-XX'` (с префикс!), number, title, description, grammarTopics, vocabulary
+- `metadata.ts` — `id: 'a2-lesson-XX'` (с префикс), number, title, description, grammarTopics, vocabulary
 - `content.ts` — introduction, dialogues, culturalNotes, grammarReference
-- `exercises.ts` — упражненията в реда от учебника (всички IDs `a2-lXX-ex-NN`, `a2-lXX-novi-dumi-N`, и т.н.)
+- `exercises.ts` — упражненията в реда от учебника (всички IDs `a2-lXX-ex-NN`, `a2-lXX-novi-dumi-N`, …)
 - `workbook.ts` — упражнения за „Преговор"
 - `index.ts` — re-export като `lessonData`
 
-След създаване:
-
-1. В [src/content/a2/index.ts](mdc:src/content/a2/index.ts) **uncomment** реда в `A2_LESSON_LOADERS`:
-   ```typescript
-   'a2-lesson-XX': () => import('./lessons/a2-lesson-XX'),
-   ```
-2. Попълни в `A2_LESSON_EXERCISE_COUNTS`:
-   ```typescript
-   'a2-lesson-XX': N,  // exercises.length + workbook.length (само тези с points > 0)
-   ```
+След създаване, в [src/content/a2/index.ts](mdc:src/content/a2/index.ts) **uncomment** реда в `A2_LESSON_LOADERS` и попълни `A2_LESSON_EXERCISE_COUNTS`. (Тези два списъка са допустими редакции в моя домейн.)
 
 ## Тестове (`test-a2-N`)
 
-Папка `src/content/a2/tests/test-a2-lessons-X-Y/` (виж `A2_TEST_FOLDER_MAP` в `index.ts` за точните имена).
-След създаване uncomment в `A2_TEST_LOADERS`.
+Папка `src/content/a2/tests/test-a2-lessons-X-Y/` (виж `A2_TEST_FOLDER_MAP` в `index.ts` за точните имена). След създаване uncomment в `A2_TEST_LOADERS`.
 
 ## Шаблони — ВИНАГИ ползвай
 
-- [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — копирай шаблона за всеки exercise type
+- [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — копирай шаблона за всеки existing exercise type
 - [src/content/shared/TEST_TEMPLATES.ts](mdc:src/content/shared/TEST_TEMPLATES.ts) — за тестове
 
-## Какво НЕ можеш да правиш
+## Какво пак е НЕ — твърди забрани (рядко са нужни)
 
-Ако агентът открие че се опитваш да промениш някое от тези — **трябва учтиво да откаже** и да обясни:
+Тези остават блокиращи, защото нарушаването им чупи продукта или други хора:
 
-- НЕ променяй `src/content/shared/**` — общи типове / шаблони
-- НЕ променяй `src/content/registry.ts`, `src/content/index.ts`
-- НЕ променяй `src/content/a2/index.ts` ИЗВЪН loader-ите и exercise counts (имената и nav структурата са фиксирани)
-- НЕ променяй други нива (`a1`, `b1`, `b2`)
-- НЕ променяй компоненти (`src/components/**`)
-- НЕ променяй страници, API routes (`src/app/**`)
-- НЕ променяй i18n (`src/i18n/ui.ts`)
-- НЕ променяй scripts, конфигурации
-- НЕ променяй структурата (трябва да е същата като A1)
+- **НЕ push към `master` или чужд branch.** Push само към `origin/nina`.
+- **НЕ променяй ID конвенциите** (`a2-lesson-XX`, `a2-lXX-ex-NN`, …) — счупват backward compatibility и регистъра.
+- **НЕ променяй съдържание на A1, B1, B2** (`src/content/a1/**`, `src/content/b1/**`, `src/content/b2/**`).
+- **НЕ променяй структурата на `A2_LESSONS_METADATA` или `A2_NAV_ITEMS`** в `index.ts` (имена на уроците са фиксирани от UNHCR syllabus-а). OK: uncomment-ване на loader-и и попълване на counts.
+- **НЕ променяй** `src/lib/**`, `src/app/**`, `src/db/**`, `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.*`, `drizzle.config.ts`, `eslint.config.mjs`.
+- **НЕ променяй** `src/content/registry.ts`, `src/content/index.ts`, `src/content/shared/**`.
+- **НЕ променяй** `src/components/**` (вкл. shared exercise components). За A2-специфични визии → `src/content/a2/components/`.
+- **НЕ променяй** `src/i18n/ui.ts` (нови ключове → `src/i18n/a2.ts`).
+- **НЕ променяй** `scripts/**` (за TTS overrides → content полета, не скрипта).
+- **НЕ дублирай** нищо от shared/. Ако ти трябва нещо общо — питай Philip.
 
-**Ако ти трябва нещо ново в shared/components/i18n — питаш Philip да го добави.**
+Ако наистина имам нужда от промяна в споделен файл (рядко, напр. нов TTS speaker role) — питам Philip. До тогава работата по урока продължава автономно.
 
 ## Git workflow
 
-- Push само към `origin/nina` (твоя branch). Никога към `master`, никога към `alex` или `philip`.
-- При `commit` или `push` — провери че `git status` показва само файлове в твоя домейн.
+- Push само към `origin/nina` (моя branch). Никога към `master`, никога към `alex` или `philip`.
+- Седмично или на 2–3 урока — Philip прави PR review и мърдж в `master`.
+- Преди commit: `git status` показва само файлове в моя домейн.
 
 ## Преди commit — задължително
 
 ```bash
-npm run content:lint -- --lesson a2-lesson-XX
+npm run content:lint -- --lesson XX
 ```
 
-0 errors задължително. После commit, после push към `nina`.
+0 errors задължително (warnings са OK за следваща итерация). После commit, после push към `nina`.
+
+## Свързани правила
+
+- [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc) — file ownership (3 нива на свобода)
+- [content-lessons.mdc](mdc:.cursor/rules/content-lessons.mdc) — пълен guide за структурата
+- [content-quality-checklist.mdc](mdc:.cursor/rules/content-quality-checklist.mdc) — задължителни проверки за качество
+- [content-tests.mdc](mdc:.cursor/rules/content-tests.mdc) — за тестове
+- [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc) — TTS детайли

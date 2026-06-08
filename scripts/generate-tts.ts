@@ -211,7 +211,16 @@ const clean = USE_GEMINI ? cleanForGeminiTTS : cleanForTTS;
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
-interface VocabularyItem { id: string; bulgarian: string; }
+interface VocabularyItem {
+  id: string;
+  bulgarian: string;
+  /** TTS-only override: text spoken instead of `bulgarian`. */
+  ttsText?: string;
+  /** TTS-only override: force Gemini Pro or Flash. */
+  ttsModel?: 'flash' | 'pro';
+  /** TTS-only override: custom prompt passed to Gemini. */
+  ttsPrompt?: string;
+}
 interface DialogueSpeaker { name: string; text: string; }
 interface Dialogue { id: string; speakers: DialogueSpeaker[]; }
 interface LessonContent { vocabulary: VocabularyItem[]; dialogues: Dialogue[]; }
@@ -228,15 +237,43 @@ interface Exercise {
   /** TTS-friendly text per paragraph (overrides `paragraphs` for audio only). */
   ttsParagraphs?: string[];
   paragraphVoiceGenders?: ('male' | 'female')[];
-  rows?: { pronoun: string; cells: string[] }[];
+  rows?: {
+    pronoun: string;
+    cells: string[];
+    /** TTS-only override: force Gemini Pro or Flash for this row. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini. */
+    ttsPrompt?: string;
+    /** TTS-only override: exact text spoken instead of joining pronoun + cells. */
+    ttsText?: string;
+  }[];
   ttsFlash?: boolean;
   examples?: { text: string; ttsText?: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female' }[];
   sections?: { id: string; lines: { text: string; ttsText?: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
   notes?: string[];
   ttsNotes?: string[];
+  /** TTS-only override per note index: force Gemini Pro or Flash. */
+  ttsNoteModels?: ('flash' | 'pro')[];
   model?: { question: string; positiveAnswer: string; negativeAnswer: string };
-  cards?: { id: string; label: string; sublabels?: string[]; ttsIncludeSublabels?: boolean; ttsLabel?: string }[];
-  images?: { id: string; correctLabel: string }[];
+  cards?: {
+    id: string;
+    label: string;
+    sublabels?: string[];
+    ttsIncludeSublabels?: boolean;
+    ttsLabel?: string;
+    /** TTS-only override: force Gemini Pro or Flash for this card. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini. */
+    ttsPrompt?: string;
+  }[];
+  images?: {
+    id: string;
+    correctLabel: string;
+    /** TTS-only override: force Gemini Pro or Flash for this image. */
+    ttsModel?: 'flash' | 'pro';
+    /** TTS-only override: custom prompt passed to Gemini. */
+    ttsPrompt?: string;
+  }[];
   pronouns?: { pronoun: string; description?: string }[];
 }
 
@@ -411,12 +448,13 @@ function stripGrammarLabels(subtext: string): string {
 // ---------------------------------------------------------------------------
 function collectVocabularyJobs(content: LessonContent): TtsJob[] {
   return content.vocabulary.map(item => {
-    const usePro = VOCAB_USE_PRO_IDS.has(item.id);
-    const customPrompt = VOCAB_CUSTOM_PROMPTS[item.id];
+    // Content-level override has priority; falls back to hardcoded A1 sets for backward compat.
+    const usePro = item.ttsModel ? item.ttsModel === 'pro' : VOCAB_USE_PRO_IDS.has(item.id);
+    const customPrompt = item.ttsPrompt ?? VOCAB_CUSTOM_PROMPTS[item.id];
     return {
       category: 'words',
       filename: `${item.id}.mp3`,
-      text: clean(item.bulgarian),
+      text: clean(item.ttsText ?? item.bulgarian),
       voice: FEMALE_VOICE,
       model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
       prompt: customPrompt ?? (usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
@@ -441,9 +479,10 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
           : [card.label];
         joined = parts.join('. ').replace(/\s*=\s*/g, ', ');
       }
-      const useFlash = ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
+      // Content-level overrides have priority; fall back to hardcoded A1 sets for backward compat.
+      const useFlash = card.ttsModel ? card.ttsModel === 'flash' : ILLUSTRATED_CARD_FLASH_IDS.has(card.id);
       const useProWordPrompt = ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS.has(card.id);
-      const customPrompt = ILLUSTRATED_CARD_CUSTOM_PROMPTS[card.id];
+      const customPrompt = card.ttsPrompt ?? ILLUSTRATED_CARD_CUSTOM_PROMPTS[card.id];
       const model = useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
       const prompt = customPrompt ?? (useFlash || useProWordPrompt ? GEMINI_WORD_PROMPT : GEMINI_PROMPT);
             jobs.push({
@@ -469,12 +508,18 @@ function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => e.type === 'reading_text' && e.images)) {
     for (const img of ex.images!) {
-      const raw = img as { label?: string; ttsWordId?: string };
+      const raw = img as {
+        label?: string;
+        ttsWordId?: string;
+        ttsModel?: 'flash' | 'pro';
+        ttsPrompt?: string;
+      };
       const id = raw.ttsWordId?.trim();
       const label = raw.label?.trim();
       if (!id || !label) continue;
-      const useProStress = READING_TEXT_IMAGE_STRESS_IDS.has(id);
-      const stressPrompt =
+      // Content-level overrides have priority; fall back to hardcoded A1 sets for backward compat.
+      const useProStress = raw.ttsModel ? raw.ttsModel === 'pro' : READING_TEXT_IMAGE_STRESS_IDS.has(id);
+      const fallbackPrompt =
         useProStress && READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID[id]
           ? READING_TEXT_IMAGE_STRESS_PROMPT_BY_ID[id]
           : GEMINI_BG_WORD_STRESS_PROMPT;
@@ -484,7 +529,7 @@ function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
         text: clean(label),
         voice: FEMALE_VOICE,
         model: useProStress ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: useProStress ? stressPrompt : GEMINI_WORD_PROMPT,
+        prompt: raw.ttsPrompt ?? (useProStress ? fallbackPrompt : GEMINI_WORD_PROMPT),
       });
     }
   }
@@ -584,21 +629,23 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
       const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
       const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
       const rowKey = `${ex.id}-row-${i}`;
-      const useProForRow = GRAMMAR_TABLE_PRO_ROWS.has(rowKey);
-      const rowSource = GRAMMAR_TABLE_ROW_TTS_TEXT[rowKey] ?? parts.join('. ');
+      // Content-level overrides have priority; fall back to hardcoded A1 sets for backward compat.
+      const useProForRow = row.ttsModel ? row.ttsModel === 'pro' : GRAMMAR_TABLE_PRO_ROWS.has(rowKey);
+      const rowSource = row.ttsText ?? GRAMMAR_TABLE_ROW_TTS_TEXT[rowKey] ?? parts.join('. ');
       jobs.push({
         category: 'grammar',
         filename: `${rowKey}.mp3`,
         text: clean(rowSource),
         voice: FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
-        prompt: useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+        prompt: row.ttsPrompt ?? (useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
       });
     }
     if (ex.notes) {
       ex.notes.forEach((note, ni) => {
         const noteKey = `${ex.id}-note-${ni}`;
-        const useProForNote = GRAMMAR_TABLE_PRO_NOTES.has(noteKey);
+        const noteModel = ex.ttsNoteModels?.[ni];
+        const useProForNote = noteModel ? noteModel === 'pro' : GRAMMAR_TABLE_PRO_NOTES.has(noteKey);
         const ttsText = ex.ttsNotes?.[ni] ?? note;
         jobs.push({
           category: 'grammar',
