@@ -12,6 +12,7 @@
   TrueFalseExercise,
   ReadingTextExercise,
 } from '@/content/types';
+import type { A2GroupedDropdownExercise } from '../../types';
 
 // ⚠️ Order follows the A2 textbook „Как се чувствате?" (стр. 24–33).
 // Пропуснати по желание на клиента: упр. 4, 5, 10, 11, 20, 21, 23, 24, 31.
@@ -417,33 +418,34 @@ export const exercises: Exercise[] = [
   // ─── ORDER 17 — Упр. 13 (стр. 27): преобразувайте по модела (+/−/?) ──────────────────────────
   {
     id: 'a2-l02-ex-13',
-    type: 'dropdown_match',
+    type: 'a2-grouped-dropdown-match',
     instruction: 'Изберете правилното изречение. Всяка група е в реда: положително (+), отрицателно (−), въпросително (?). Модел: „Ани казва всичко на Мери. → Ани ѝ казва всичко. → Ани не ѝ казва всичко. → Ани казва ли ѝ всичко?"',
     order: 17,
     points: 15,
+    groupSize: 3,
     questions: [
       // помага → + / − / ?
       { id: 'q01', left: 'Ани помага на Мери. (+) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани ѝ помага.' },
-      { id: 'q03', left: 'Ани помага на Мери. (−) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани не ѝ помага.' },
-      { id: 'q02', left: 'Ани помага на Мери. (?) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани помага ли ѝ?' },
+      { id: 'q02', left: 'Ани помага на Мери. (−) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани не ѝ помага.' },
+      { id: 'q03', left: 'Ани помага на Мери. (?) _______', options: ['Ани ѝ помага.', 'Ани помага ли ѝ?', 'Ани не ѝ помага.'], correctAnswer: 'Ани помага ли ѝ?' },
       // говори → + / − / ?
       { id: 'q04', left: 'Ани говори на Мери. (+) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани ѝ говори.' },
-      { id: 'q06', left: 'Ани говори на Мери. (−) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани не ѝ говори.' },
-      { id: 'q05', left: 'Ани говори на Мери. (?) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани говори ли ѝ?' },
+      { id: 'q05', left: 'Ани говори на Мери. (−) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани не ѝ говори.' },
+      { id: 'q06', left: 'Ани говори на Мери. (?) _______', options: ['Ани ѝ говори.', 'Ани говори ли ѝ?', 'Ани не ѝ говори.'], correctAnswer: 'Ани говори ли ѝ?' },
       // пише → + / − / ?
       { id: 'q07', left: 'Ани пише на Мери. (+) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани ѝ пише.' },
-      { id: 'q09', left: 'Ани пише на Мери. (−) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани не ѝ пише.' },
-      { id: 'q08', left: 'Ани пише на Мери. (?) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани пише ли ѝ?' },
+      { id: 'q08', left: 'Ани пише на Мери. (−) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани не ѝ пише.' },
+      { id: 'q09', left: 'Ани пише на Мери. (?) _______', options: ['Ани ѝ пише.', 'Ани пише ли ѝ?', 'Ани не ѝ пише.'], correctAnswer: 'Ани пише ли ѝ?' },
       // купува рокля → + / − / ?
       { id: 'q10', left: 'Ани купува на Мери рокля. (+) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани ѝ купува рокля.' },
-      { id: 'q12', left: 'Ани купува на Мери рокля. (−) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани не ѝ купува рокля.' },
-      { id: 'q11', left: 'Ани купува на Мери рокля. (?) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани купува ли ѝ рокля?' },
+      { id: 'q11', left: 'Ани купува на Мери рокля. (−) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани не ѝ купува рокля.' },
+      { id: 'q12', left: 'Ани купува на Мери рокля. (?) _______', options: ['Ани ѝ купува рокля.', 'Ани купува ли ѝ рокля?', 'Ани не ѝ купува рокля.'], correctAnswer: 'Ани купува ли ѝ рокля?' },
       // дава химикалка → + / − / ?
       { id: 'q13', left: 'Ани дава на Мери химикалка. (+) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани ѝ дава химикалка.' },
-      { id: 'q15', left: 'Ани дава на Мери химикалка. (−) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани не ѝ дава химикалка.' },
-      { id: 'q14', left: 'Ани дава на Мери химикалка. (?) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани дава ли ѝ химикалка?' },
+      { id: 'q14', left: 'Ани дава на Мери химикалка. (−) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани не ѝ дава химикалка.' },
+      { id: 'q15', left: 'Ани дава на Мери химикалка. (?) _______', options: ['Ани ѝ дава химикалка.', 'Ани дава ли ѝ химикалка?', 'Ани не ѝ дава химикалка.'], correctAnswer: 'Ани дава ли ѝ химикалка?' },
     ],
-  } as DropdownMatchExercise,
+  } as A2GroupedDropdownExercise,
 
   // ─── ORDER 18 — ГРАМАТИКА 5 (стр. 28): Трябва ми ────────────────────────────────────────────
   {
@@ -581,14 +583,14 @@ export const exercises: Exercise[] = [
     tableTitle: 'Топло/Студено/Трудно/Лошо/Приятно/Интересно … е.',
     columns: ['Форма'],
     rows: [
-      { pronoun: 'аз',  cells: ['Топло **ми** е.']  },
-      { pronoun: 'ти',  cells: ['Топло **ти** е.']  },
-      { pronoun: 'той', cells: ['Топло **му** е.']  },
-      { pronoun: 'тя',  cells: ['Топло **ѝ** е.']   },
-      { pronoun: 'то',  cells: ['Топло **му** е.']  },
-      { pronoun: 'ние', cells: ['Топло **ни** е.']  },
-      { pronoun: 'Вие', cells: ['Топло **ви** е.']  },
-      { pronoun: 'те',  cells: ['Топло **им** е.']  },
+      { pronoun: 'аз',  cells: ['Топло **ми** е.'],  ttsModel: 'flash', ttsText: 'аз. Топло ми е.',  ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'ти',  cells: ['Топло **ти** е.'],  ttsModel: 'flash', ttsText: 'ти. Топло ти е.',  ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'той', cells: ['Топло **му** е.'],  ttsModel: 'flash', ttsText: 'той. Топло му е.', ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'тя',  cells: ['Топло **ѝ** е.'],   ttsModel: 'flash', ttsText: 'тя. Топло й е.',   ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'то',  cells: ['Топло **му** е.'],  ttsModel: 'flash', ttsText: 'То. Топло му е.',  ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'ние', cells: ['Топло **ни** е.'],  ttsModel: 'flash', ttsText: 'ние. Топло ни е.', ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'Вие', cells: ['Топло **ви** е.'],  ttsModel: 'flash', ttsText: 'Вие. Топло Ви е.', ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
+      { pronoun: 'те',  cells: ['Топло **им** е.'],  ttsModel: 'flash', ttsText: 'те. Топло им е.',  ttsPrompt: 'Bulgarian sentence. Read the final word „е" (the verb „is") as a clear short vowel E, never as „йе" or „ye".' },
     ],
     notes: [
       'Топло ми е. | Не ми е топло. | Топло ли ми е?',
@@ -598,6 +600,7 @@ export const exercises: Exercise[] = [
       'Топло ми е. Не ми е топло. Топло ли ми е?',
       'Замени топло с: студено, трудно, лошо, приятно, интересно, лесно.',
     ],
+    ttsNoteModels: ['flash', 'flash'],
   } as GrammarTableExercise,
 
   // ─── ORDER 23 — Упр. 16 (стр. 29): попълнете правилното местоимение ─────────────────────────
@@ -630,10 +633,10 @@ export const exercises: Exercise[] = [
       { id: 'zdrav',    imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/01-zdrav.jpg',    label: 'здрав',    ttsLabel: 'здрав'    },
       { id: 'bolen',    imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/02-bolen.jpg',    label: 'болен',    ttsLabel: 'болен'    },
       { id: 'gladen',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/03-gladen.jpg',   label: 'гладен',   ttsLabel: 'гладен'   },
-      { id: 'zhaden',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/04-zhaden.jpg',   label: 'жаден',    ttsLabel: 'жаден'    },
+      { id: 'zhaden',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/04-zhaden.jpg',   label: 'жаден',    ttsLabel: 'жаден',    ttsModel: 'flash' },
       { id: 'tazhen',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/05-tazhen.jpg',   label: 'тъжен',    ttsLabel: 'тъжен'    },
       { id: 'vesel',    imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/06-vesel.jpg',    label: 'весел',    ttsLabel: 'весел'    },
-      { id: 'umoren',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/07-umoren.jpg',   label: 'уморен',   ttsLabel: 'уморен'   },
+      { id: 'umoren',   imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/07-umoren.jpg',   label: 'уморен',   ttsLabel: 'уморен',   ttsModel: 'flash' },
       { id: 'dovolen',  imageUrl: '/assets/a2-lesson-02/10-novi-dumi-3-sastoyanie/08-dovolen.jpg',  label: 'доволен',  ttsLabel: 'доволен'  },
     ],
   } as IllustratedCardsExercise,
@@ -777,7 +780,7 @@ export const exercises: Exercise[] = [
       {
         id: 'б.',
         lines: [
-          { text: 'Здравей, Мария! Как е Сашо?',                              voiceGender: 'male'   },
+          { text: 'Здравей, Мария! Как е Сашо?', ttsText: 'Здравей, Мария. Как е Сашоо?', voiceGender: 'male'   },
           { text: 'Не е добре.',                                               voiceGender: 'female' },
           { text: 'Какво му е?',                                               voiceGender: 'male'   },
           { text: 'Болен е. Има температура и го боли гърлото.',              voiceGender: 'female' },
@@ -803,20 +806,20 @@ export const exercises: Exercise[] = [
       { id: 'poliklinika',    imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/01-poliklinika.jpg',    label: 'поликлиника',                ttsLabel: 'поликлиника'   },
       { id: 'registratura',   imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/02-registratura.jpg',   label: 'регистратура',               ttsLabel: 'регистратура'  },
       { id: 'nd4-lichen-lekar', imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/03-lichen-lekar.jpg',   label: 'личен лекар = джипи',        ttsLabel: 'Личен лекар. Джи Пи.'   },
-      { id: 'lek-kabinet',    imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/04-lekarski-kabinet.jpg', label: 'лекарски кабинет',         ttsLabel: 'лекарски кабинет' },
+      { id: 'lek-kabinet',    imageUrl: '/assets/a2-lesson-02/11-novi-dumi-4-poliklinika/04-lekarski-kabinet.jpg', label: 'лекарски кабинет',         ttsLabel: 'лекарски кабинет', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
       // Лекарски специалности
-      { id: 'nd4-pediatar',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/01-pediatar.jpg',         label: 'детски лекар = педиатър',    ttsLabel: 'Детски лекар. Педиатър.'      },
-      { id: 'nd4-ung',        imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/02-ung.jpg',              label: 'уши-нос-гърло = УНГ',        ttsLabel: 'Уши, нос, гърло. У Н Ге.'           },
-      { id: 'kardiolog',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/03-kardiolog.jpg',        label: 'кардиолог',                  ttsLabel: 'кардиолог'     },
-      { id: 'nevrolog',       imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/04-nevrolog.jpg',         label: 'невролог',                   ttsLabel: 'невролог'      },
-      { id: 'hirurg',         imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/05-hirurg.jpg',           label: 'хирург',                     ttsLabel: 'хирург'        },
-      { id: 'zabolakar',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/06-zabolakar.jpg',        label: 'зъболекар',                  ttsLabel: 'зъболекар'     },
+      { id: 'nd4-pediatar',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/01-pediatar.jpg',         label: 'детски лекар = педиатър',    ttsLabel: 'Детски лекар. Педиатър.', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'      },
+      { id: 'nd4-ung',        imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/02-ung.jpg',              label: 'уши-нос-гърло = УНГ',        ttsLabel: 'Уши, нос, гърло. У Н Ге.', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'           },
+      { id: 'kardiolog',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/03-kardiolog.jpg',        label: 'кардиолог',                  ttsLabel: 'кардиолог', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'     },
+      { id: 'nevrolog',       imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/04-nevrolog.jpg',         label: 'невролог',                   ttsLabel: 'невролог', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'      },
+      { id: 'hirurg',         imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/05-hirurg.jpg',           label: 'хирург',                     ttsLabel: 'хирург', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'        },
+      { id: 'zabolakar',      imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/06-zabolakar.jpg',        label: 'зъболекар',                  ttsLabel: 'зъболекар', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'     },
       // Документи и процедури
-      { id: 'napravlenie',    imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/07-napravlenie.jpg',        label: 'направление',                ttsLabel: 'направление'             },
-      { id: 'izsledvane',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/08-izsledvane-krav-urina.jpg', label: 'изследване на кръв и урина', ttsLabel: 'изследване на кръв и урина' },
-      { id: 'kravna-kartina', imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/09-kravna-kartina.jpg',     label: 'кръвна картина',             ttsLabel: 'кръвна картина'          },
-      { id: 'imunizatsiya',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/10-imunizatsiya.jpg',       label: 'имунизация',                 ttsLabel: 'имунизация'              },
-      { id: 'operatsiya',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/11-operatsiya.jpg',         label: 'операция',                   ttsLabel: 'операция'                },
+      { id: 'napravlenie',    imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/07-napravlenie.jpg',        label: 'направление',                ttsLabel: 'направление', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'             },
+      { id: 'izsledvane',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/08-izsledvane-krav-urina.jpg', label: 'изследване на кръв и урина', ttsLabel: 'изследване на кръв и урина', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'kravna-kartina', imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/09-kravna-kartina.jpg',     label: 'кръвна картина',             ttsLabel: 'кръвна картина', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'          },
+      { id: 'imunizatsiya',   imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/10-imunizatsiya.jpg',       label: 'имунизация',                 ttsLabel: 'имунизация', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'              },
+      { id: 'operatsiya',     imageUrl: '/assets/a2-lesson-02/12-lekarski-specialnosti/11-operatsiya.jpg',         label: 'операция',                   ttsLabel: 'операция', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.'                },
     ],
   } as IllustratedCardsExercise,
 
@@ -879,18 +882,18 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 34,
     cards: [
-      { id: 'recepta',       imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/01-recepta.jpg',          label: 'рецепта',               ttsLabel: 'рецепта'          },
-      { id: 'lekarstva',     imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/02-lekarstva.jpg',        label: 'лекарства',             ttsLabel: 'лекарства'        },
-      { id: 'sirop',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/03-sirop-za-kashlitsa.jpg', label: 'сироп за кашлица',    ttsLabel: 'сироп за кашлица' },
-      { id: 'kapki',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/04-kapki.jpg',            label: 'капки за нос / очи / уши', ttsLabel: 'капки за нос, очи и уши' },
-      { id: 'nd5-antibiotik', imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/05-antibiotik.jpg',       label: 'опаковка антибиотик',   ttsLabel: 'опаковка антибиотик'       },
-      { id: 'nd5-aspirin',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/06-blister-aspirin.jpg',  label: 'блистер аспирин',       ttsLabel: 'блистер аспирин'          },
-      { id: 'nd5-prahche',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/07-prahche-za-grip.jpg',  label: 'прахче за грип',        ttsLabel: 'Прахче за грип.'  },
-      { id: 'pamuk',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/08-pamuk.jpg',            label: 'памук',                 ttsLabel: 'памук'            },
-      { id: 'bint',          imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/09-bint.jpg',             label: 'бинт',                  ttsLabel: 'бинт'             },
-      { id: 'marlya',        imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/10-marlya.jpg',           label: 'марля',                 ttsLabel: 'марля'            },
-      { id: 'termometar',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/11-termometar.jpg',       label: 'термометър',            ttsLabel: 'термометър'       },
-      { id: 'aparat-kravno', imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/12-aparat-za-kravno.jpg', label: 'апарат за кръвно',     ttsLabel: 'апарат за кръвно' },
+      { id: 'recepta',       imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/01-recepta.jpg',          label: 'рецепта',               ttsLabel: 'рецепта',          ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'lekarstva',     imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/02-lekarstva.jpg',        label: 'лекарства',             ttsLabel: 'лекарства',        ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'sirop',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/03-sirop-za-kashlitsa.jpg', label: 'сироп за кашлица',    ttsLabel: 'сироп за кашлица', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'kapki',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/04-kapki.jpg',            label: 'капки за нос / очи / уши', ttsLabel: 'капки за нос, очи и уши', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'nd5-antibiotik', imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/05-antibiotik.jpg',       label: 'опаковка антибиотик',   ttsLabel: 'опаковка антибиотик',       ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis. Stress the word „антибиотик" on the fourth syllable -О-: антиби-О-тик.' },
+      { id: 'nd5-aspirin',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/06-blister-aspirin.jpg',  label: 'блистер аспирин',       ttsLabel: 'блистер аспирин',          ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'nd5-prahche',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/07-prahche-za-grip.jpg',  label: 'прахче за грип',        ttsLabel: 'прахче за грип',   ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'pamuk',         imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/08-pamuk.jpg',            label: 'памук',                 ttsLabel: 'памук',            ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis. Stress the FIRST syllable: ПА-мук (stressed А).' },
+      { id: 'bint',          imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/09-bint.jpg',             label: 'бинт',                  ttsLabel: 'бинт',             ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
+      { id: 'marlya',        imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/10-marlya.jpg',           label: 'марля',                 ttsLabel: 'марля',            ttsModel: 'flash', ttsPrompt: 'Read the single Bulgarian word „марля" (medical gauze). Two syllables: МАР-ля. Put the stress firmly on the FIRST syllable МАР. Do NOT stress the second syllable -ля. Clear, neutral standard Bulgarian, no extra sounds.' },
+      { id: 'termometar',    imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/11-termometar.jpg',       label: 'термометър',            ttsLabel: 'термометър',       ttsModel: 'flash', ttsPrompt: 'Read the single Bulgarian word „термометър" (thermometer). Four syllables: тер-мо-ме-ТЪР. Put the stress firmly on the LAST syllable ТЪР. Do NOT stress -ме-. Clear, neutral standard Bulgarian, no extra sounds.' },
+      { id: 'aparat-kravno', imageUrl: '/assets/a2-lesson-02/13-novi-dumi-5-apteka/12-aparat-za-kravno.jpg', label: 'апарат за кръвно',     ttsLabel: 'апарат за кръвно', ttsPrompt: 'Speak in clear, neutral standard Bulgarian. Pronounce every sound from the first letter to the last, without dropping or adding any sounds. Calm, neutral tone, no emotional emphasis.' },
     ],
   } as IllustratedCardsExercise,
 

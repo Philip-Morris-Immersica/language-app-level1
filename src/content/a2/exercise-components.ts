@@ -42,6 +42,12 @@ export type CustomExerciseRenderer = ComponentType<CustomExerciseRendererProps>;
  *     'a2-my-type': MyType as unknown as CustomExerciseRenderer,
  *   };
  */
+import { GroupedDropdownMatch } from './components/GroupedDropdownMatch';
+import { ImageLabelingWide } from './components/ImageLabelingWide';
+import { WideCards } from './components/WideCards';
+
 export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
-  // empty for now — Нина populates as needed
+  'a2-grouped-dropdown-match': GroupedDropdownMatch as unknown as CustomExerciseRenderer,
+  'a2-image-labeling': ImageLabelingWide as unknown as CustomExerciseRenderer,
+  'a2-wide-cards': WideCards as unknown as CustomExerciseRenderer,
 };

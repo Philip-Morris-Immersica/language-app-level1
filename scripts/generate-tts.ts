@@ -73,7 +73,14 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'a2-l02-gramatika-05-row-5', // ние → Трябва ни един лев: Flash mispronounces "лев" as "лъев"
   'a2-l02-gramatika-05-row-6', // Вие → Трябва ви един лев: Flash mispronounces "лев" as "лъев"
   'a2-l02-gramatika-05-row-7', // те → Трябва им един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-07-row-0', // аз → Топло ми е: Flash sounds robotic on short clitic sentences
+  'a2-l02-gramatika-07-row-1', // ти → Топло ти е
+  'a2-l02-gramatika-07-row-2', // той → Топло му е
   'a2-l02-gramatika-07-row-3', // тя → Топло й е: Flash mispronounces clitic "й"
+  'a2-l02-gramatika-07-row-4', // то → Топло му е
+  'a2-l02-gramatika-07-row-5', // ние → Топло ни е
+  'a2-l02-gramatika-07-row-6', // Вие → Топло Ви е
+  'a2-l02-gramatika-07-row-7', // те → Топло им е
   'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
@@ -92,6 +99,8 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'a2-l02-gramatika-02-note-0', // "Боли ме главата. Единствено число: глава, крак, зъб." — full sentence
   'a2-l02-gramatika-02-note-1', // "Болят ме очите. Множествено число: очи, уши, ръце, зъби, крака." — full sentence
   'a2-l02-gramatika-02-note-2', // "Боли ме коремът. Имам болки в корема." — full sentence
+  'a2-l02-gramatika-07-note-0', // "Топло ми е. Не ми е топло. Топло ли ми е?" — full expressive sentences
+  'a2-l02-gramatika-07-note-1', // "Замени топло с: студено, трудно, лошо..." — list sentence
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
@@ -100,6 +109,9 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // a2-lesson-02 — ГРАМАТИКА 3: дателни местоимения — „їй" (U+045D) → „й"
+  'a2-l02-gramatika-03-row-3': 'тя. й. Пиша й.',
 
   // a2-lesson-02 — ГРАМАТИКА 5: „1 лев" → „един лев"
   'a2-l02-gramatika-05-row-0': 'аз. Трябва ми. Трябва ми един лев.',
@@ -110,6 +122,18 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
   'a2-l02-gramatika-05-row-5': 'ние. Трябва ни. Трябва ни един лев.',
   'a2-l02-gramatika-05-row-6': 'Вие. Трябва ви. Трябва ви един лев.',
   'a2-l02-gramatika-05-row-7': 'те. Трябва им. Трябва им един лев.',
+
+  // a2-lesson-02 — ГРАМАТИКА 7: безлични изречения
+  // „То." с главна буква отделя ясно местоимението от „Топло" (иначе TTS слива „то" с началото на „Топло").
+  // „їй" (U+045D) → „й" за реда на „тя".
+  'a2-l02-gramatika-07-row-0': 'аз. Топло ми - е.',
+  'a2-l02-gramatika-07-row-1': 'ти. Топло ти - е.',
+  'a2-l02-gramatika-07-row-2': 'той. Топло му - е.',
+  'a2-l02-gramatika-07-row-3': 'тя. Топло й - е.',
+  'a2-l02-gramatika-07-row-4': 'Топло му - е.',  // „то" се пропуска — TTS го разчита като „топло" в тази позиция
+  'a2-l02-gramatika-07-row-5': 'ние. Топло ни - е.',
+  'a2-l02-gramatika-07-row-6': 'Вие. Топло Ви - е.',
+  'a2-l02-gramatika-07-row-7': 'те. Топло им - е.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 
