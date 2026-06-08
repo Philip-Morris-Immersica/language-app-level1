@@ -45,11 +45,13 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
   };
 
   const handleCardClick = (card: CardItem) => {
-    const spoken = getIllustratedCardSpokenText(card);
-    const audioPath = exerciseId
-      ? getTtsAudioPath(exerciseId, 'words', card.id)
-      : '';
-    playTtsAudio(audioPath, spoken);
+    if (!exercise.disableAudio) {
+      const spoken = getIllustratedCardSpokenText(card);
+      const audioPath = exerciseId
+        ? getTtsAudioPath(exerciseId, 'words', card.id)
+        : '';
+      playTtsAudio(audioPath, spoken);
+    }
     toggleTranslation(card.id);
     setVisitedCards(prev => new Set(prev).add(card.id));
   };
@@ -76,7 +78,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
           ${visitedCards.has(card.id) ? 'text-[#1F5741]' : 'text-gray-900'}`}
         style={{ top: `${card.labelY ?? 50}%`, transform: 'translateY(-50%)' }}
       >
-        <Volume2 className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0 opacity-60" />
+        {!exercise.disableAudio && <Volume2 className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0 opacity-60" />}
         <span className="whitespace-nowrap">{card.label}</span>
       </div>
     );
@@ -91,9 +93,11 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
             : 'bg-white border-gray-200'
         }`}
       >
-        <div className="absolute top-1 right-1 text-gray-400">
-          <Volume2 className="w-3 h-3" />
-        </div>
+        {!exercise.disableAudio && (
+          <div className="absolute top-1 right-1 text-gray-400">
+            <Volume2 className="w-3 h-3" />
+          </div>
+        )}
         <div className="relative w-full h-[50px] sm:h-[64px] mb-1">
           <Image
             src={card.imageUrl}
@@ -128,7 +132,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         }`}
       >
         <span className="flex items-center gap-1.5">
-          <Volume2 className="w-3.5 h-3.5 shrink-0" />
+          {!exercise.disableAudio && <Volume2 className="w-3.5 h-3.5 shrink-0" />}
           {card.label}
         </span>
         <InlineTranslation
@@ -147,13 +151,15 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
           </p>
         )}
 
-        <p className="text-xs text-gray-400 mb-3 text-center select-none">
-          Натиснете дума, за да чуете произношението.
-        </p>
+        {!exercise.disableAudio && (
+          <p className="text-xs text-gray-400 mb-3 text-center select-none">
+            Натиснете дума, за да чуете произношението.
+          </p>
+        )}
 
         {exercise.headerImageUrl ? (
           <div className="flex gap-2 sm:gap-3 items-stretch max-w-xl mx-auto">
-            {/* Image with labels overlaid at the arrow endpoints */}
+            {/* Image with SVG connector lines + labels overlaid */}
             <div className="relative flex-1 min-w-0">
               <ImageLightbox src={exercise.headerImageUrl} alt={exercise.title}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -164,6 +170,38 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                   draggable={false}
                 />
               </ImageLightbox>
+
+              {/* SVG connector lines — drawn between labels and body part targets */}
+              <svg
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                style={{ zIndex: 5 }}
+              >
+                {wordCards.filter(c => c.targetX != null && c.targetY != null).map(card => {
+                  const fromX = card.labelSide === 'left' ? 23 : 77;
+                  const fromY = card.labelY ?? 50;
+                  const isVisited = visitedCards.has(card.id);
+                  return (
+                    <g key={`line-${card.id}`}>
+                      <line
+                        x1={fromX} y1={fromY}
+                        x2={card.targetX} y2={card.targetY}
+                        stroke={isVisited ? '#32C189' : 'rgba(0,0,0,0.28)'}
+                        strokeWidth="0.55"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      <circle
+                        cx={card.targetX} cy={card.targetY} r="0.9"
+                        fill={isVisited ? '#32C189' : 'rgba(0,0,0,0.35)'}
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </g>
+                  );
+                })}
+              </svg>
+
               {leftLabels.map(card => renderOverlayLabel(card, 'left'))}
               {rightLabels.map(card => renderOverlayLabel(card, 'right'))}
             </div>

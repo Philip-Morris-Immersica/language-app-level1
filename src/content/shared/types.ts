@@ -191,12 +191,18 @@ export interface IllustratedCardsExercise extends BaseExercise {
     labelSide?: 'left' | 'right';
     /** body_diagram: vertical align 0–100 % along figure height. */
     labelY?: number;
+    /** body_diagram: x target (0–100 % of image width) where the SVG connector line points. */
+    targetX?: number;
+    /** body_diagram: y target (0–100 % of image height) where the SVG connector line points. */
+    targetY?: number;
     audioUrl?: string;     // Individual audio for card
     translations?: Record<string, string>;  // Pre-translations per language { en: 'Good morning!', ar: '...' }
   }[];
   displayMode?: 'grid' | 'presentation' | 'body_diagram';  // For different display modes
   /** When true, cards render as compact text-only boxes (no images) — just the label. Header image still shown. */
   textOnly?: boolean;
+  /** When true, disables all audio — hides the 🔊 icon and suppresses TTS on click. */
+  disableAudio?: boolean;
 }
 
 export interface DialogueReadingExercise extends BaseExercise {

@@ -64,6 +64,16 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
   'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
+  'a2-l02-gramatika-03-row-3', // тя → й: Flash mispronounces clitic "й"
+  'a2-l02-gramatika-05-row-0', // аз → Трябва ми един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-1', // ти → Трябва ти един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-2', // той → Трябва му един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-3', // тя → Трябва й: Flash mispronounces clitic "й"
+  'a2-l02-gramatika-05-row-4', // то → Трябва му един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-5', // ние → Трябва ни един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-6', // Вие → Трябва ви един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-05-row-7', // те → Трябва им един лев: Flash mispronounces "лев" as "лъев"
+  'a2-l02-gramatika-07-row-3', // тя → Топло й е: Flash mispronounces clitic "й"
   'l08-gramatika-02-row-0', // хубав → хубавият, малък → малкият, зелен → зеленият
   'l08-gramatika-02-row-1', // хубава → хубавата, малка → малката, зелена → зелената
   'l08-gramatika-02-row-2', // хубаво → хубавото, малко → малкото, зелено → зеленото
@@ -79,6 +89,9 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
   'l05-gramatika-07-note-0',  // "След 2–4 използвайте „милиона/милиарда"..."
   'l09-gramatika-01-note-0',  // "Понеделник е първият ден от седмицата." — full sentence
   'l09-gramatika-02-note-0',  // "Пловдив е голям град. София е по-голям…" — full sentences
+  'a2-l02-gramatika-02-note-0', // "Боли ме главата. Единствено число: глава, крак, зъб." — full sentence
+  'a2-l02-gramatika-02-note-1', // "Болят ме очите. Множествено число: очи, уши, ръце, зъби, крака." — full sentence
+  'a2-l02-gramatika-02-note-2', // "Боли ме коремът. Имам болки в корема." — full sentence
 ]);
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
@@ -87,6 +100,16 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // a2-lesson-02 — ГРАМАТИКА 5: „1 лев" → „един лев"
+  'a2-l02-gramatika-05-row-0': 'аз. Трябва ми. Трябва ми един лев.',
+  'a2-l02-gramatika-05-row-1': 'ти. Трябва ти. Трябва ти един лев.',
+  'a2-l02-gramatika-05-row-2': 'той. Трябва му. Трябва му един лев.',
+  'a2-l02-gramatika-05-row-3': 'тя. Трябва й. Трябва й един лев.',
+  'a2-l02-gramatika-05-row-4': 'то. Трябва му. Трябва му един лев.',
+  'a2-l02-gramatika-05-row-5': 'ние. Трябва ни. Трябва ни един лев.',
+  'a2-l02-gramatika-05-row-6': 'Вие. Трябва ви. Трябва ви един лев.',
+  'a2-l02-gramatika-05-row-7': 'те. Трябва им. Трябва им един лев.',
 };
 const SPEAKING_RATE = 0.85; // Chirp only
 

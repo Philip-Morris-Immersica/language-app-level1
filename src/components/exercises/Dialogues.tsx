@@ -290,8 +290,6 @@ export function Dialogues({
   );
 
   const isScene = displayLayout === 'scene' && Boolean(imageUrl);
-  const leftSections = sections.filter((s, i) => s.bubbleSide === 'left' || (!s.bubbleSide && i % 2 === 0));
-  const rightSections = sections.filter((s, i) => s.bubbleSide === 'right' || (!s.bubbleSide && i % 2 === 1));
 
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
@@ -326,76 +324,26 @@ export function Dialogues({
       )}
 
       {isScene ? (
-        <div className="max-w-5xl mx-auto">
-          {/* Mobile: image on top */}
-          <div className="flex justify-center mb-6 lg:hidden">
-            <ImageLightbox src={imageUrl!} alt="">
-              <div className="relative w-72 h-96">
-                <Image
-                  src={imageUrl!}
-                  alt=""
-                  fill
-                  className="object-contain"
-                  sizes="288px"
-                />
-              </div>
-            </ImageLightbox>
-          </div>
-
-          <div
-            className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_300px_minmax(0,1fr)] gap-4"
-            style={{ gridTemplateRows: `repeat(${Math.max(leftSections.length, rightSections.length)}, auto)` }}
-          >
-            {leftSections.map((section, i) => (
-              <div
-                key={section.id}
-                className="h-full"
-                style={{ gridColumn: 1, gridRow: i + 1 }}
-                onClick={() => toggleSection(section.id)}
-                role="presentation"
-              >
-                <SpeechBubble
-                  side="left"
-                  sectionId={section.id}
-                  isPlaying={playingSection === section.id}
-                >
-                  {renderSectionLines(section)}
-                </SpeechBubble>
-              </div>
-            ))}
-
-            <div
-              className="flex justify-center items-center sticky top-4"
-              style={{ gridColumn: 2, gridRow: `1 / ${Math.max(leftSections.length, rightSections.length) + 1}` }}
-            >
+        <div className="w-full mx-auto">
+          {/* Image always on top, centered */}
+          <div className="mb-6 flex justify-center">
+            <div className="w-72 h-96 shrink-0">
               <ImageLightbox src={imageUrl!} alt="">
-                <div className="relative w-[300px] h-[380px]">
-                  <Image src={imageUrl!} alt="" fill className="object-contain" sizes="300px" />
+                <div className="relative w-72 h-96">
+                  <Image
+                    src={imageUrl!}
+                    alt=""
+                    fill
+                    className="object-contain"
+                    sizes="288px"
+                  />
                 </div>
               </ImageLightbox>
             </div>
-
-            {rightSections.map((section, i) => (
-              <div
-                key={section.id}
-                className="h-full"
-                style={{ gridColumn: 3, gridRow: i + 1 }}
-                onClick={() => toggleSection(section.id)}
-                role="presentation"
-              >
-                <SpeechBubble
-                  side="right"
-                  sectionId={section.id}
-                  isPlaying={playingSection === section.id}
-                >
-                  {renderSectionLines(section)}
-                </SpeechBubble>
-              </div>
-            ))}
           </div>
 
-          {/* Mobile / tablet: stacked bubbles */}
-          <div className="lg:hidden space-y-4">
+          {/* Dialogue bubbles side by side below the image */}
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {sections.map((section) => (
               <SpeechBubble
                 key={section.id}

@@ -10,7 +10,6 @@
   IllustratedCardsExercise,
   GrammarExamplesExercise,
   ReadingTextExercise,
-  FillInBlankExercise,
 } from '@/content/types';
 
 // ⚠️ Order follows the A2 textbook „Ало, ало!" (стр. 16–23).
@@ -36,7 +35,7 @@ export const exercises: Exercise[] = [
     options: ['телефон', 'мобилен телефон', 'смартфон', 'SIM карта'],
   } as ImageLabelingExercise,
 
-  // ORDER 2 — ДИАЛОЗИ 1 (стр. 16): телефонни мини-диалози
+  // ORDER 2 — ДИАЛОЗИ 1 (стр. 16): телефонни мини-диалози — снимката е отгоре, диалозите отдолу
   {
     id: 'a2-l01-dialozi-01',
     type: 'dialogues',
@@ -44,11 +43,9 @@ export const exercises: Exercise[] = [
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 2,
     imageUrl: '/assets/a2-lesson-01/02-dialozi-1/01-mazh-dialog.jpg',
-    displayLayout: 'scene',
     sections: [
       {
         id: 'а.',
-        bubbleSide: 'left',
         lines: [
           { text: 'Ало?', voiceGender: 'male' },
           { text: 'Да, моля.', ttsText: 'Да моля.', voiceGender: 'female' },
@@ -56,7 +53,6 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'б.',
-        bubbleSide: 'right',
         lines: [
           { text: 'Кой се обажда?', voiceGender: 'male' },
           { text: 'Обажда се Ани.', voiceGender: 'female' },
@@ -64,7 +60,6 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'в.',
-        bubbleSide: 'left',
         lines: [
           { text: 'Може ли г-жа Стоева?', ttsText: 'Може ли госпожа Стоева?', voiceGender: 'male' },
           { text: 'Да, момент, моля.', ttsText: 'Да, момент моля.', voiceGender: 'female' },
@@ -72,7 +67,6 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'г.',
-        bubbleSide: 'right',
         lines: [
           { text: 'Здравейте, Диана?', ttsText: 'Здравейте, Диана.', voiceGender: 'male' },
           { text: 'Имате грешка.', ttsText: 'Имате греш-ка.', voiceGender: 'female' },
@@ -81,7 +75,6 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'д.',
-        bubbleSide: 'left',
         lines: [
           { text: 'Може ли г-н Петров?', ttsText: 'Може ли господин Петров?', voiceGender: 'female' },
           { text: 'Съжалявам, няма го.', voiceGender: 'male' },
@@ -89,7 +82,6 @@ export const exercises: Exercise[] = [
       },
       {
         id: 'е.',
-        bubbleSide: 'right',
         lines: [
           { text: 'Дочуване.', voiceGender: 'male' },
           { text: 'Дочуване. До скоро!', voiceGender: 'female' },
@@ -98,13 +90,13 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ORDER 3 — Упр. 2 (стр. 17): глаголът „обаждам се" в правилната форма
+  // ORDER 3 — Упр. 2 (стр. 17): глаголът „обаждам се" в правилната форма — dropdown опции
   {
     id: 'a2-l01-ex-02',
     type: 'workbook_fill_blank',
-    instruction: 'Попълнете глагола **обаждам се** в правилната форма.',
+    instruction: 'Изберете правилната форма на глагола **обаждам се**.',
     order: 3,
-    points: 8,
+    points: 6,
     layout: 'single',
     sentences: [
       { text: 'Аз се обаждам на Мартин всеки ден.', blanks: [], correctAnswers: [], isExample: true },
@@ -113,36 +105,42 @@ export const exercises: Exercise[] = [
         blanks: [1],
         correctAnswers: ['се обажда'],
         acceptableAnswers: [['се обажда']],
+        options: ['се обажда', 'се обаждам', 'се обаждате'],
       },
       {
-        text: 'Вие _______ ли _______ на Марин?',
-        blanks: [1, 3],
-        correctAnswers: ['обаждате', 'се'],
-        acceptableAnswers: [['обаждате'], ['се']],
+        text: 'Вие _______ на Марин?',
+        blanks: [1],
+        correctAnswers: ['се обаждате'],
+        acceptableAnswers: [['се обаждате']],
+        options: ['се обаждате', 'се обаждаме', 'се обажда'],
       },
       {
         text: 'Понякога ние _______ на Георги и Албена и ходим на кино.',
         blanks: [2],
         correctAnswers: ['се обаждаме'],
         acceptableAnswers: [['се обаждаме']],
+        options: ['се обаждаме', 'се обажда', 'се обаждате'],
       },
       {
-        text: 'Те _______ ли _______ в офиса?',
-        blanks: [1, 3],
-        correctAnswers: ['обаждат', 'се'],
-        acceptableAnswers: [['обаждат'], ['се']],
+        text: 'Те _______ в офиса?',
+        blanks: [1],
+        correctAnswers: ['се обаждат'],
+        acceptableAnswers: [['се обаждат']],
+        options: ['се обаждат', 'се обаждате', 'се обаждам'],
       },
       {
-        text: 'Ти никога не _______ .',
+        text: 'Ти никога не _______.',
         blanks: [3],
         correctAnswers: ['се обаждаш'],
         acceptableAnswers: [['се обаждаш']],
+        options: ['се обаждаш', 'се обажда', 'се обаждаме'],
       },
       {
         text: 'Обикновено тя _______ в 7:00 часа сутринта.',
         blanks: [2],
         correctAnswers: ['се обажда'],
         acceptableAnswers: [['се обажда']],
+        options: ['се обажда', 'се обаждам', 'се обаждат'],
       },
     ],
   } as WorkbookFillBlankExercise,
@@ -156,7 +154,6 @@ export const exercises: Exercise[] = [
     points: 6,
     questions: [
       { words: ['обажда', 'Кой', 'се', '?'], correctSentence: 'Кой се обажда ?' },
-      // TODO: източникът „един да момент" е двусмислен — приет е „Да, един момент."
       { words: ['момент', 'Да,', 'един', '.'], correctSentence: 'Да, един момент .', alternateCorrectSentences: ['Един момент, да .'] },
       { words: ['няма', 'го', 'Съжалявам,', '.'], correctSentence: 'Съжалявам, няма го .' },
       { words: ['грешка', 'имате', 'Съжалявам,', '.'], correctSentence: 'Съжалявам, имате грешка .' },
@@ -225,7 +222,6 @@ export const exercises: Exercise[] = [
     order: 6,
     sections: [
       {
-        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'а.',
         givenFirstLine: 'Ало, Светла?',
         sentences: [
@@ -266,7 +262,6 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'д.',
         givenFirstLine: 'Ало?',
         sentences: [
@@ -280,7 +275,6 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        // Sentences in CORRECT dialogue order — component shuffles on render.
         id: 'е.',
         givenFirstLine: 'Ало?',
         sentences: [
@@ -384,11 +378,12 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ORDER 10 — ГЛАГОЛИ С ПРЕКИ ДОПЪЛНЕНИЯ (стр. 18–19): всички картинки в едно
+  // ORDER 10 — НОВИ ДУМИ: глаголи с преки допълнения (стр. 18–19)
   {
     id: 'a2-l01-glagoli-01',
     type: 'illustrated_cards',
-    title: 'ГЛАГОЛИ С ПРЕКИ ДОПЪЛНЕНИЯ',
+    title: 'НОВИ ДУМИ',
+    subtitle: 'глаголи с преки допълнения',
     instruction: '',
     order: 10,
     cards: [
@@ -419,14 +414,11 @@ export const exercises: Exercise[] = [
     ],
   } as IllustratedCardsExercise,
 
-  // ORDER 11 — (без упражнение — пропуснато съзнателно: в учебника между ГЛАГОЛИ и ГРАМАТИКА 2 няма отделна секция)
-
   // ORDER 12 — ГРАМАТИКА 2 (стр. 19): винителни форми — заместване на допълнението
   {
     id: 'a2-l01-gramatika-02',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Заместване на прякото допълнение с местоимение',
     instruction: 'Запознайте се с винителните форми на местоименията.',
     instructionKey: 'grammar.a2l01.g2.instruction',
     order: 12,
@@ -441,7 +433,6 @@ export const exercises: Exercise[] = [
           'Иван обича ли Мария?',
           'Иван обича ли **я**? = Обича ли **я**?',
         ],
-        // ttsText removes "=" so TTS does not read "равно"
         ttsText: 'Иван обича Мария. Той я обича. Обича я. Иван обича ли Мария? Иван обича ли я? Обича ли я?',
         voiceGender: 'male',
       },
@@ -454,55 +445,38 @@ export const exercises: Exercise[] = [
           'Мария обича ли Иван?',
           'Мария обича ли **го**? = Обича ли **го**?',
         ],
-        // ttsText removes "=" so TTS does not read "равно"
         ttsText: 'Мария не обича Иван. Тя не го обича. Не го обича. Мария обича ли Иван? Мария обича ли го? Обича ли го?',
         voiceGender: 'female',
       },
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 13 — Упр. 9 (стр. 19): преобразувайте изреченията по модела
+  // ORDER 13 — Упр. 9 (стр. 19): замени допълнението с правилното местоимение — dropdown
   {
     id: 'a2-l01-ex-09',
-    type: 'workbook_fill_blank',
-    instruction: 'Преобразувайте изреченията по модела „Каня Георги на кафе. → Каня го на кафе."',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилното местоимение по модела „Каня Георги на кафе. → Каня **го** на кафе."',
     order: 13,
-    points: 29,
-    layout: 'qa-split',
-    sentences: [
-      { text: 'Каня Георги на кафе. | Каня го на кафе.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Виждам книгата. | _______',        blanks: [1], correctAnswers: ['Виждам я.'],        acceptableAnswers: [['виждам я.', 'виждам я']] },
-      { text: 'Виждаш ли Стоил? | _______',        blanks: [1], correctAnswers: ['Виждаш ли го?'],    acceptableAnswers: [['виждаш ли го?', 'виждаш ли го']] },
-      { text: 'Слушам учителката. | _______',      blanks: [1], correctAnswers: ['Слушам я.'],        acceptableAnswers: [['слушам я.', 'слушам я']] },
-      { text: 'Чувам музиката. | _______',         blanks: [1], correctAnswers: ['Чувам я.'],         acceptableAnswers: [['чувам я.', 'чувам я']] },
-      { text: 'Искам пицата. | _______',           blanks: [1], correctAnswers: ['Искам я.'],         acceptableAnswers: [['искам я.', 'искам я']] },
-      { text: 'Искам кафето. | _______',           blanks: [1], correctAnswers: ['Искам го.'],        acceptableAnswers: [['искам го.', 'искам го']] },
-      { text: 'Искам сандвичите. | _______',       blanks: [1], correctAnswers: ['Искам ги.'],        acceptableAnswers: [['искам ги.', 'искам ги']] },
-      { text: 'Искаш ли ябълката? | _______',      blanks: [1], correctAnswers: ['Искаш ли я?'],      acceptableAnswers: [['искаш ли я?', 'искаш ли я']] },
-      { text: 'Разбирам Мони и Светла. | _______', blanks: [1], correctAnswers: ['Разбирам ги.'],     acceptableAnswers: [['разбирам ги.', 'разбирам ги']] },
-      { text: 'Каня бежанците на гости. | _______', blanks: [1], correctAnswers: ['Каня ги на гости.'], acceptableAnswers: [['каня ги на гости.', 'каня ги на гости']] },
-      { text: 'Познаваш ли Асен? | _______',       blanks: [1], correctAnswers: ['Познаваш ли го?'],  acceptableAnswers: [['познаваш ли го?', 'познаваш ли го']] },
-      { text: 'Търся парите. | _______',           blanks: [1], correctAnswers: ['Търся ги.'],        acceptableAnswers: [['търся ги.', 'търся ги']] },
-      { text: 'Чакам учителите. | _______',        blanks: [1], correctAnswers: ['Чакам ги.'],        acceptableAnswers: [['чакам ги.', 'чакам ги']] },
-      { text: 'Обичам Елена. | _______',           blanks: [1], correctAnswers: ['Обичам я.'],        acceptableAnswers: [['обичам я.', 'обичам я']] },
-      { text: 'Ана целува детето. | _______',      blanks: [1], correctAnswers: ['Ана го целува.'],   acceptableAnswers: [['ана го целува.', 'ана го целува']] },
-      { text: 'Не харесвам града. | _______',      blanks: [1], correctAnswers: ['Не го харесвам.'],  acceptableAnswers: [['не го харесвам.', 'не го харесвам']] },
-      { text: 'Отварят прозореца. | _______',      blanks: [1], correctAnswers: ['Отварят го.'],      acceptableAnswers: [['отварят го.', 'отварят го']] },
-      { text: 'Не заключвам вратата. | _______',   blanks: [1], correctAnswers: ['Не я заключвам.'],  acceptableAnswers: [['не я заключвам.', 'не я заключвам']] },
-      { text: 'Затваряме магазина. | _______',     blanks: [1], correctAnswers: ['Затваряме го.'],    acceptableAnswers: [['затваряме го.', 'затваряме го']] },
-      { text: 'Изключвам телефона. | _______',     blanks: [1], correctAnswers: ['Изключвам го.'],    acceptableAnswers: [['изключвам го.', 'изключвам го']] },
-      { text: 'Те питат учителката. | _______',    blanks: [1], correctAnswers: ['Те я питат.'],      acceptableAnswers: [['те я питат.', 'те я питат']] },
-      { text: 'Помниш ли това момче? | _______',   blanks: [1], correctAnswers: ['Помниш ли го?'],    acceptableAnswers: [['помниш ли го?', 'помниш ли го']] },
-      { text: 'Тя включва компютъра. | _______',   blanks: [1], correctAnswers: ['Тя го включва.'],   acceptableAnswers: [['тя го включва.', 'тя го включва']] },
-      { text: 'Аз гледам децата. | _______',       blanks: [1], correctAnswers: ['Аз ги гледам.'],    acceptableAnswers: [['аз ги гледам.', 'аз ги гледам']] },
-      // TODO: „Амал" може да е мъжко или женско име — приети са и го, и я.
-      { text: 'Разбираш ли Амал? | _______',       blanks: [1], correctAnswers: ['Разбираш ли го?'],  acceptableAnswers: [['разбираш ли го?', 'разбираш ли го', 'разбираш ли я?', 'разбираш ли я']] },
-      { text: 'Те прегръщат момичето. | _______',  blanks: [1], correctAnswers: ['Те го прегръщат.'], acceptableAnswers: [['те го прегръщат.', 'те го прегръщат']] },
-      { text: 'Той забравя ключа често. | _______', blanks: [1], correctAnswers: ['Той го забравя често.'], acceptableAnswers: [['той го забравя често.', 'той го забравя често']] },
-      { text: 'Заключвам офиса в 6:00 часа. | _______', blanks: [1], correctAnswers: ['Заключвам го в 6:00 часа.'], acceptableAnswers: [['заключвам го в 6:00 часа.', 'заключвам го в 6:00 часа']] },
-      { text: 'Намирам нови приятели във Фейсбук. | _______', blanks: [1], correctAnswers: ['Намирам ги във Фейсбук.'], acceptableAnswers: [['намирам ги във фейсбук.', 'намирам ги във фейсбук']] },
+    points: 16,
+    questions: [
+      { id: 'q1',  left: 'Виждам книгата. →',                options: ['Виждам я.', 'Виждам го.', 'Виждам ги.'],               correctAnswer: 'Виждам я.' },
+      { id: 'q2',  left: 'Виждаш ли Стоил? →',               options: ['Виждаш ли го?', 'Виждаш ли я?', 'Виждаш ли ги?'],      correctAnswer: 'Виждаш ли го?' },
+      { id: 'q3',  left: 'Слушам учителката. →',             options: ['Слушам я.', 'Слушам го.', 'Слушам ги.'],               correctAnswer: 'Слушам я.' },
+      { id: 'q4',  left: 'Искам пицата. →',                  options: ['Искам я.', 'Искам го.', 'Искам ги.'],                  correctAnswer: 'Искам я.' },
+      { id: 'q5',  left: 'Искам кафето. →',                  options: ['Искам го.', 'Искам я.', 'Искам ги.'],                  correctAnswer: 'Искам го.' },
+      { id: 'q6',  left: 'Искам сандвичите. →',              options: ['Искам ги.', 'Искам я.', 'Искам го.'],                  correctAnswer: 'Искам ги.' },
+      { id: 'q7',  left: 'Разбирам Мони и Светла. →',        options: ['Разбирам ги.', 'Разбирам го.', 'Разбирам я.'],        correctAnswer: 'Разбирам ги.' },
+      { id: 'q8',  left: 'Каня бежанците на гости. →',       options: ['Каня ги на гости.', 'Каня го на гости.', 'Каня я на гости.'], correctAnswer: 'Каня ги на гости.' },
+      { id: 'q9',  left: 'Познаваш ли Асен? →',              options: ['Познаваш ли го?', 'Познаваш ли я?', 'Познаваш ли ги?'], correctAnswer: 'Познаваш ли го?' },
+      { id: 'q10', left: 'Чакам учителката. →',              options: ['Чакам я.', 'Чакам го.', 'Чакам ги.'],                  correctAnswer: 'Чакам я.' },
+      { id: 'q11', left: 'Отварят прозореца. →',             options: ['Отварят го.', 'Отварят я.', 'Отварят ги.'],            correctAnswer: 'Отварят го.' },
+      { id: 'q12', left: 'Не заключвам вратата. →',          options: ['Не я заключвам.', 'Не го заключвам.', 'Не ги заключвам.'], correctAnswer: 'Не я заключвам.' },
+      { id: 'q13', left: 'Изключвам телефона. →',            options: ['Изключвам го.', 'Изключвам я.', 'Изключвам ги.'],     correctAnswer: 'Изключвам го.' },
+      { id: 'q14', left: 'Ана целува детето. →',             options: ['Ана го целува.', 'Ана я целува.', 'Ана ги целува.'],   correctAnswer: 'Ана го целува.' },
+      { id: 'q15', left: 'Намирам нови приятели. →',         options: ['Намирам ги.', 'Намирам го.', 'Намирам я.'],            correctAnswer: 'Намирам ги.' },
+      { id: 'q16', left: 'Затварям вратата. →',             options: ['Затварям я.', 'Затварям го.', 'Затварям ги.'],          correctAnswer: 'Затварям я.' },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ORDER 14 — ДИАЛОЗИ 3 (стр. 20)
   {
@@ -546,12 +520,12 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ORDER 15 — Обява за работа (модел от ДИАЛОЗИ 3, за Упр. 17) — лева → евро
+  // ORDER 15 — Обява за работа (модел от ДИАЛОЗИ 3)
   {
     id: 'a2-l01-obyava-rabota',
     type: 'reading_text',
     title: 'ОБЯВА ЗА РАБОТА',
-    instruction: 'Прочетете обявата. Тя е модел за следващото упражнение.',
+    instruction: 'Прочетете обявата.',
     order: 15,
     paragraphs: [
       'Фирма търси секретарка за офис в София.',
@@ -561,7 +535,6 @@ export const exercises: Exercise[] = [
       'Заплата: 2000 евро.',
       'Телефон за връзка: 0875-486352.',
     ],
-    // Phone number read digit by digit; "2000" spelled out for clarity
     ttsParagraphs: [
       'Фирма търси секретарка за офис в София.',
       'Работно време: пълен работен ден.',
@@ -573,19 +546,33 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['female', 'female', 'female', 'female', 'female', 'female'],
   } as ReadingTextExercise,
 
-  // ORDER 16 — Обява за апартамент под наем (модел от ДИАЛОЗИ 3, за Упр. 17) — лева → евро
+  // ORDER 16 — Упр. 11а: разбиране на обявата за работа
+  {
+    id: 'a2-l01-ex-11a',
+    type: 'dropdown_match',
+    instruction: 'Отговорете на въпросите за обявата.',
+    order: 16,
+    points: 4,
+    questions: [
+      { id: 'q1', left: 'Каква позиция търси фирмата?',    options: ['секретарка', 'счетоводителка', 'учителка'],           correctAnswer: 'секретарка' },
+      { id: 'q2', left: 'Какво е работното място?',         options: ['офис в София', 'офис в Пловдив', 'у дома'],            correctAnswer: 'офис в София' },
+      { id: 'q3', left: 'Кои езици се изискват?',           options: ['английски и арабски', 'английски и руски', 'само български'], correctAnswer: 'английски и арабски' },
+      { id: 'q4', left: 'Колко е заплатата?',               options: ['2000 евро', '1200 евро', '500 евро'],                 correctAnswer: '2000 евро' },
+    ],
+  } as DropdownMatchExercise,
+
+  // ORDER 17 — Обява за апартамент под наем (модел от ДИАЛОЗИ 3)
   {
     id: 'a2-l01-obyava-naem',
     type: 'reading_text',
     title: 'ОБЯВА ЗА АПАРТАМЕНТ ПОД НАЕМ',
-    instruction: 'Прочетете обявата. Тя е модел за следващото упражнение.',
-    order: 16,
+    instruction: 'Прочетете обявата.',
+    order: 17,
     paragraphs: [
       'Агенция „Нов дом".',
       'Давам под наем тристаен апартамент в жк „Люлин" до метростанция.',
       'Наем: 500 евро на месец.',
     ],
-    // "жк" → "же ка" so TTS does not read it as "Жики"; remove Agency quotes for cleaner reading
     ttsParagraphs: [
       'Агенция Нов дом.',
       'Давам под наем тристаен апартамент, в же ка Люлин, до метростанция.',
@@ -594,120 +581,132 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['female', 'female', 'female'],
   } as ReadingTextExercise,
 
-  // SKIP — Упр. 10 „Прочетете диалозите по двойки" (по желание на клиента)
-
-  // ORDER 17 — Упр. 11 (стр. 20): напишете две обяви по модел от ДИАЛОЗИ 3
-  // content-lint-disable example-points-mismatch — 2 free-text обяви (freeTextBlocks), не blanks
+  // ORDER 18 — Упр. 11б: разбиране на обявата за апартамент
   {
-    id: 'a2-l01-ex-11',
-    type: 'fill_in_blank',
-    title: 'УПРАЖНЕНИЕ 11',
-    instruction: 'Напишете двете обяви по моделите по-горе. Натиснете „Провери отговорите" — при грешка ще видите правилния вариант.',
-    order: 17,
-    points: 2,
-    sentences: [],
-    freeTextBlocks: [
-      {
-        prompt:
-          'ОБЯВА ЗА РАБОТА: Напишете обява за работа по модел в Диалог 3. Нека обявата да е за счетоводител в Пловдив, на четири-часов работен ден и работа на смени, с изискване да говори български и руски, заплата от 1200 евро и телефон за връзка: 00359 878459369.',
-        modelAnswer:
-          'Фирма търси счетоводител за офис в Пловдив.\nРаботно време: четиричасов работен ден.\nРабота на смени.\nЕзици: български и руски.\nЗаплата: 1200 евро.\nТелефон за връзка: 00359 878459369.',
-        keywordGroups: [
-          ['счетоводител'],
-          ['пловдив'],
-          ['четири', '4-часов', 'четиричасов'],
-          ['смени'],
-          ['руски'],
-          ['1200'],
-          ['878459369', '00359'],
-        ],
-      },
-      {
-        prompt:
-          'ОБЯВА ЗА АПАРТАМЕНТ ПОД НАЕМ: Напишете обява за апартамент под наем. Нека обявата да е за къща на два етажа с двор в гр. Варна, кв. „Чайка", на метри от Морската градина и с наем от 500 евро на месец.',
-        modelAnswer:
-          'Давам под наем къща на два етажа с двор в гр. Варна, кв. „Чайка", на метри от Морската градина.\nНаем: 500 евро на месец.',
-        keywordGroups: [
-          ['къща', 'двуетаж'],
-          ['варна'],
-          ['чайка'],
-          ['морската', 'морска градина'],
-          ['500'],
-        ],
-      },
+    id: 'a2-l01-ex-11b',
+    type: 'dropdown_match',
+    instruction: 'Отговорете на въпросите за обявата.',
+    order: 18,
+    points: 3,
+    questions: [
+      { id: 'q1', left: 'Какъв е апартаментът?',            options: ['тристаен', 'двустаен', 'едностаен'],                  correctAnswer: 'тристаен' },
+      { id: 'q2', left: 'В кой квартал е?',                 options: ['жк „Люлин"', 'жк „Лозенец"', 'жк „Надежда"'],        correctAnswer: 'жк „Люлин"' },
+      { id: 'q3', left: 'Колко е наемът на месец?',         options: ['500 евро', '1000 евро', '2000 евро'],                 correctAnswer: '500 евро' },
     ],
-  } as FillInBlankExercise,
+  } as DropdownMatchExercise,
 
-  // ORDER 19 — Упр. 12 (стр. 21, допълнително): направете въпросителни изречения
-  // TODO: учебникът дава комбинативна таблица; адаптирано до 5 фиксирани въпроса.
+  // ORDER 19 — Упр. 12 (стр. 21): направете въпросителни изречения
   {
     id: 'a2-l01-ex-12',
     type: 'word_order',
     instruction: 'Поставете думите в правилния ред, за да получите въпроси.',
     order: 19,
-    points: 5,
+    points: 6,
     questions: [
       { words: ['ли', 'ме', 'Чуваш', '?'],     correctSentence: 'Чуваш ли ме ?' },
       { words: ['го', 'ли', 'Каните', '?'],     correctSentence: 'Каните ли го ?' },
       { words: ['ли', 'я', 'Чакаш', '?'],       correctSentence: 'Чакаш ли я ?' },
       { words: ['ни', 'Разбирате', 'ли', '?'],  correctSentence: 'Разбирате ли ни ?' },
       { words: ['ли', 'ги', 'Виждаш', '?'],     correctSentence: 'Виждаш ли ги ?' },
+      { words: ['те', 'ли', 'Обичаш', '?'],     correctSentence: 'Обичаш ли те ?' },
     ],
   } as WordOrderExercise,
 
-  // ORDER 20 — Упр. 13 (стр. 21, допълнително): преобразувайте по модела
+  // ORDER 20 — Упр. 13 (стр. 21): преобразувайте по модела — dropdown
   {
     id: 'a2-l01-ex-13',
     type: 'workbook_fill_blank',
-    instruction: 'Преобразувайте изреченията по модела „Аз я обичам. → Обичам я."',
+    instruction: 'Изберете правилния вариант по модела „Аз я обичам. → Обичам я."',
     order: 20,
     points: 8,
     layout: 'qa-split',
     sentences: [
-      { text: 'Тя ме прегръща. | _______',  blanks: [1], correctAnswers: ['Прегръща ме.'], acceptableAnswers: [['прегръща ме.', 'прегръща ме']] },
-      { text: 'Той ги целува. | _______',    blanks: [1], correctAnswers: ['Целува ги.'],   acceptableAnswers: [['целува ги.', 'целува ги']] },
-      { text: 'Ние ви слушаме. | _______',   blanks: [1], correctAnswers: ['Слушаме ви.'],  acceptableAnswers: [['слушаме ви.', 'слушаме ви']] },
-      { text: 'Той я помни. | _______',      blanks: [1], correctAnswers: ['Помни я.'],     acceptableAnswers: [['помни я.', 'помни я']] },
-      { text: 'Тя го харесва. | _______',    blanks: [1], correctAnswers: ['Харесва го.'],  acceptableAnswers: [['харесва го.', 'харесва го']] },
-      { text: 'Ние я търсим. | _______',     blanks: [1], correctAnswers: ['Търсим я.'],    acceptableAnswers: [['търсим я.', 'търсим я']] },
-      { text: 'Те я питат. | _______',       blanks: [1], correctAnswers: ['Питат я.'],     acceptableAnswers: [['питат я.', 'питат я']] },
-      { text: 'Аз те познавам. | _______',   blanks: [1], correctAnswers: ['Познавам те.'], acceptableAnswers: [['познавам те.', 'познавам те']] },
+      { text: 'Аз я обичам. | Обичам я.', blanks: [], correctAnswers: [], isExample: true },
+      {
+        text: 'Тя ме прегръща. | _______',
+        blanks: [1], correctAnswers: ['Прегръща ме.'],
+        acceptableAnswers: [['прегръща ме.', 'прегръща ме']],
+        options: ['Прегръща ме.', 'Прегръщам те.', 'Тя прегръща ме.'],
+      },
+      {
+        text: 'Той ги целува. | _______',
+        blanks: [1], correctAnswers: ['Целува ги.'],
+        acceptableAnswers: [['целува ги.', 'целува ги']],
+        options: ['Целува ги.', 'Целувам ги.', 'Ги целува той.'],
+      },
+      {
+        text: 'Ние ви слушаме. | _______',
+        blanks: [1], correctAnswers: ['Слушаме ви.'],
+        acceptableAnswers: [['слушаме ви.', 'слушаме ви']],
+        options: ['Слушаме ви.', 'Слушате ни.', 'Слушам ви.'],
+      },
+      {
+        text: 'Той я помни. | _______',
+        blanks: [1], correctAnswers: ['Помни я.'],
+        acceptableAnswers: [['помни я.', 'помни я']],
+        options: ['Помни я.', 'Помни го.', 'Помня я.'],
+      },
+      {
+        text: 'Тя го харесва. | _______',
+        blanks: [1], correctAnswers: ['Харесва го.'],
+        acceptableAnswers: [['харесва го.', 'харесва го']],
+        options: ['Харесва го.', 'Харесва я.', 'Харесвам го.'],
+      },
+      {
+        text: 'Ние я търсим. | _______',
+        blanks: [1], correctAnswers: ['Търсим я.'],
+        acceptableAnswers: [['търсим я.', 'търсим я']],
+        options: ['Търсим я.', 'Търсим го.', 'Търся я.'],
+      },
+      {
+        text: 'Те я питат. | _______',
+        blanks: [1], correctAnswers: ['Питат я.'],
+        acceptableAnswers: [['питат я.', 'питат я']],
+        options: ['Питат я.', 'Питат го.', 'Питам я.'],
+      },
+      {
+        text: 'Аз те познавам. | _______',
+        blanks: [1], correctAnswers: ['Познавам те.'],
+        acceptableAnswers: [['познавам те.', 'познавам те']],
+        options: ['Познавам те.', 'Познаваш ме.', 'Познавам го.'],
+      },
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 21 — Упр. 21 (стр. 21, допълнително): попълнете местоименията в телефонния диалог (балони около снимката)
+  // ORDER 21 — Упр. 21 (стр. 21): попълнете местоименията в телефонния диалог
+  // Снимката е отгоре, диалогът е отдолу — без image-bubbles layout
   {
     id: 'a2-l01-ex-14',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 21',
-    instruction: 'Изберете правилните местоимения, за да попълните диалога.',
+    subtitle: '„Обича ме, не ме обича" е популярна детска игра за гадаене. Децата намислят име на някой, който харесват и късат листенцата на маргаритка едно по едно, като редуват фразите „Обича ме" и „Не ме обича". Думите, изречени при последното откъснато листенце, показват крайния отговор на играта.',
+    instruction: 'Попълнете празните места с подходящите местоимения.',
     order: 21,
     points: 11,
-    layout: 'image-bubbles',
+    layout: 'single',
     imageUrl: '/assets/a2-lesson-01/05-dopalnitelni-upr-14-telefon-dialog/01-telefonen-razgovor.jpg',
     sentences: [
-      { text: 'Ало, ало, скъпа! Чуваш ли _______?', blanks: [3], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
-      { text: 'Обичаш ли _______?',                  blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'right' },
-      { text: 'Връзката е много лоша. Ало! Питам _______.', blanks: [5], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
-      { text: 'Обичаш ли _______?',                  blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'right' },
-      { text: 'Чакам _______ всеки ден!',            blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
-      { text: 'Търся _______ навсякъде!',            blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'right' },
-      { text: 'Разбираш ли _______?',                blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
-      { text: 'Да, да, чувам _______.',              blanks: [3], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'right' },
-      { text: 'Не _______ обичам!',                  blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
-      { text: 'Не _______ харесвам.',                blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'right' },
-      { text: 'Съжалявам, не _______ разбирам. Изключвам телефона.', blanks: [3], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'], bubbleSide: 'left' },
+      { text: 'Ало, ало, скъпа! Чуваш ли _______?', blanks: [3], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Обичаш ли _______?',                  blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Връзката е много лоша. Ало! Питам _______.', blanks: [5], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Обичаш ли _______?',                  blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Чакам _______ всеки ден!',            blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Търся _______ навсякъде!',            blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Разбираш ли _______?',                blanks: [2], correctAnswers: ['ме'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Да, да, чувам _______.',              blanks: [3], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Не _______ обичам!',                  blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Не _______ харесвам.',                blanks: [1], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
+      { text: 'Съжалявам, не _______ разбирам. Изключвам телефона.', blanks: [3], correctAnswers: ['те'], options: ['ме', 'те', 'го', 'я'] },
     ],
   } as WorkbookFillBlankExercise,
 
-  // ORDER 22 — Упр. 15 (стр. 21, допълнително): маргаритка „Обича ме / Не ме обича"
-  // TODO: няма точен интерактивен тип за „откъсване на листенца" — показано информативно.
+  // ORDER 22 — Упр. 15 (стр. 21): маргаритка „Обича ме / Не ме обича"
   {
     id: 'a2-l01-ex-15',
     type: 'grammar_examples',
     title: 'УПРАЖНЕНИЕ 15',
-    subtitle: 'Маргаритка — обича ли Ви той или тя?',
-    instruction: 'Прочетете листенцата на маргаритката и разберете: обича ли Ви той или тя?',
+    subtitle: 'Маргаритка — обича ли ви той или тя?',
+    instruction: '„Обича ме, не ме обича" е популярна игра с маргаритка. Намисляш си име на човек и започваш да късаш листенцата едно по едно. При всяко листенце редуваш думите „Обича ме" и „Не ме обича". Това, което кажеш на последното листенце, е крайният отговор в играта.',
     order: 22,
     showLikeDislike: true,
     examples: [
@@ -720,14 +719,13 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 23 — Упр. 16 (стр. 21, допълнително): маргаритка с „разбира" (по желание на клиента)
-  // TODO: като Упр. 15 — „обича" е заменено с „разбира" по указание на клиента.
+  // ORDER 23 — Упр. 16 (стр. 21): маргаритка с „разбира"
   {
     id: 'a2-l01-ex-16',
     type: 'grammar_examples',
     title: 'УПРАЖНЕНИЕ 16',
-    subtitle: 'Маргаритка — разбира ли Ви той или тя?',
-    instruction: 'Заменете „обича" с „разбира" и прочетете листенцата: разбира ли Ви той или тя?',
+    subtitle: 'Маргаритка — разбира ли ви той или тя?',
+    instruction: 'Играйте с маргаритката, като редувате „Разбира ме" и „Не ме разбира". Думите при последното листенце показват крайния отговор.',
     order: 23,
     showLikeDislike: true,
     examples: [
@@ -740,13 +738,12 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarExamplesExercise,
 
-  // ORDER 24 — Упр. 17 (стр. 22): профили + телефонни номера в едно упражнение
-  // Прочети профила → слушай номерата → напиши номера в полето до всяко лице.
+  // ORDER 24 — Упр. 17 (стр. 22): профили + телефонни номера — изберете чутия номер
   {
     id: 'a2-l01-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Прочетете отговорите на въпроса „Колко често и за какво използвате телефона?" Изслушайте телефонните номера и ги напишете в полетата.',
+    instruction: 'Прочетете отговорите на въпроса „Колко често и за какво използвате телефона?" Изслушайте телефонните номера и изберете правилния.',
     order: 24,
     points: 7,
     layout: 'single',
@@ -759,42 +756,56 @@ export const exercises: Exercise[] = [
       {
         text: 'Милена, 24 години (тел. _______)',
         contextText: 'Колко често използвам телефона? Много, много често! Проверявам и отговарям на имейлите, влизам във Фейсбук и Инстаграм. Телефонът ми е за работа и за удоволствие.',
-        blanks: [1], correctAnswers: ['0886/392-754'], acceptableAnswers: [['0886/392-754', '0886392754', '0886 392 754']],
+        blanks: [1], correctAnswers: ['0886/392-754'],
+        acceptableAnswers: [['0886/392-754', '0886392754', '0886 392 754']],
+        options: ['0886/392-754', '0886/392-745', '0886/329-754'],
       },
       {
         text: 'Катя, 33 години (тел. _______)',
         contextText: 'Много често говоря с мъжа ми, децата, приятелите. Използвам го като часовник, календар. Нямам интернет на телефона и не искам. Имам интернет вкъщи.',
-        blanks: [1], correctAnswers: ['0894/124-761'], acceptableAnswers: [['0894/124-761', '0894124761', '0894 124 761']],
+        blanks: [1], correctAnswers: ['0894/124-761'],
+        acceptableAnswers: [['0894/124-761', '0894124761', '0894 124 761']],
+        options: ['0894/124-761', '0894/142-761', '0894/124-716'],
       },
       {
         text: 'Иво, 17 години (тел. _______)',
         contextText: 'Не излизам без телефона. Не излизам от Дискорд и Инстаграм, спя с телефона. Няма телефон, няма живот!',
-        blanks: [1], correctAnswers: ['089000743'], acceptableAnswers: [['089000743', '0890 00 743']],
+        blanks: [1], correctAnswers: ['089000743'],
+        acceptableAnswers: [['089000743', '0890 00 743']],
+        options: ['089000743', '089000734', '089000473'],
       },
       {
         text: 'Симона, 48 години (тел. _______)',
         contextText: 'Не много често. Обаждам се на приятели, но използвам повече Вайбър. Безплатно е. Децата ми не са в България и говорим само по Скайп.',
-        blanks: [1], correctAnswers: ['0899/1447281'], acceptableAnswers: [['0899/1447281', '08991447281', '0899 1447281']],
+        blanks: [1], correctAnswers: ['0899/1447281'],
+        acceptableAnswers: [['0899/1447281', '08991447281', '0899 1447281']],
+        options: ['0899/1447281', '0899/1474281', '0899/1447218'],
       },
       {
         text: 'Стефан, 29 години (тел. _______)',
         contextText: 'Използвам го през цялото време. Обаждам се, правя снимки, пращам ги на приятели, пращам SMS-и. Никога не изключвам телефона, само в самолета.',
-        blanks: [1], correctAnswers: ['0895/753380'], acceptableAnswers: [['0895/753380', '0895753380', '0895 753 380']],
+        blanks: [1], correctAnswers: ['0895/753380'],
+        acceptableAnswers: [['0895/753380', '0895753380', '0895 753 380']],
+        options: ['0895/753380', '0895/735380', '0895/753308'],
       },
       {
         text: 'Диана, 55 години (тел. _______)',
         contextText: 'Не говоря много по телефона. Забравям го често вкъщи.',
-        blanks: [1], correctAnswers: ['0848/952333'], acceptableAnswers: [['0848/952333', '0848952333', '0848 952 333']],
+        blanks: [1], correctAnswers: ['0848/952333'],
+        acceptableAnswers: [['0848/952333', '0848952333', '0848 952 333']],
+        options: ['0848/952333', '0848/952323', '0848/925333'],
       },
       {
         text: 'Симеон, 88 години (тел. _______)',
         contextText: 'Имам телефон от дъщеря ми, но имам проблем — не виждам числата добре и не чувам добре. Децата и внуците се обаждат често.',
-        blanks: [1], correctAnswers: ['0887/152399'], acceptableAnswers: [['0887/152399', '0887152399', '0887 152 399']],
+        blanks: [1], correctAnswers: ['0887/152399'],
+        acceptableAnswers: [['0887/152399', '0887152399', '0887 152 399']],
+        options: ['0887/152399', '0887/152939', '0887/125399'],
       },
     ],
   } as WorkbookFillBlankExercise,
 
-  // SKIP — Упр. 18 „А Вие колко често и за какво използвате телефона?" (по желание на клиента — свободно писане)
+  // SKIP — Упр. 18 „А Вие колко често и за какво използвате телефона?" (свободно писане — пропуснато)
 
   // ORDER 26 — ТЕКСТ + Упр. 19 (стр. 23): Мария и нейният телефон
   {

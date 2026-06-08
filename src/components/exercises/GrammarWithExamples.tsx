@@ -128,7 +128,13 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
     return (
       <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
         {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+        <div
+          className="max-w-5xl mx-auto gap-6 md:gap-8"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${examples.length}, minmax(0, 1fr))`,
+          }}
+        >
           {examples.map((example, index) => (
             <div
               key={index}

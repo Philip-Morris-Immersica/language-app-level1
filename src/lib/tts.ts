@@ -45,6 +45,8 @@ if (typeof window !== 'undefined' && window.speechSynthesis) {
 
 export function cleanForTTS(raw: string): string {
   return raw
+    .replace(/\*\*/g, '')
+    .replace(/\s*\|\s*/g, '. ')
     .replace(/\s*\/\s*/g, ', ')
     .replace(/\s*[–—]\s*/g, ', ')
     .replace(/\s*\([^)]*\)\s*/g, ' ')
