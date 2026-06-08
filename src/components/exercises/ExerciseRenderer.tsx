@@ -30,6 +30,18 @@ import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
+import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
+
+/**
+ * Custom exercise renderers contributed by per-level domains.
+ * Looked up BEFORE the built-in switch so levels can add new types (or A2-specific
+ * variants of existing types) without editing this file. See
+ * `src/content/a2/exercise-components.ts` for the A2 entries.
+ */
+const CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
+  ...A2_CUSTOM_RENDERERS,
+  // Future levels (B1, B2) can spread their maps here.
+};
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -140,6 +152,19 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           </div>
         )}
       </div>
+    );
+  }
+
+  // Custom (per-level) renderer takes priority. Levels register their renderers
+  // in their own `exercise-components.ts` so this file never needs editing.
+  const CustomRenderer = CUSTOM_RENDERERS[exercise.type];
+  if (CustomRenderer) {
+    return wrap(
+      <CustomRenderer
+        exercise={exercise as unknown as { id: string; type: string; [key: string]: unknown }}
+        onComplete={onComplete}
+        exerciseId={exercise.id}
+      />,
     );
   }
 
