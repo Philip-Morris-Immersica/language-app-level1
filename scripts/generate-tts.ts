@@ -566,7 +566,7 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
     for (const c of ex.cards!) illustratedIds.add(c.id);
   }
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'image_labeling' && e.images)) {
+  for (const ex of exercises.filter(e => (e.type === 'image_labeling' || e.type === 'a2-image-labeling') && e.images)) {
     const isFlags = ex.displayType === 'flags';
     for (const img of ex.images!) {
       // Flag exercises use a dedicated filename so TTS is only correctLabel (country name),
@@ -613,6 +613,24 @@ function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
         voice: FEMALE_VOICE,
         model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
         prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
+function collectWideCardJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'a2-wide-cards' && e.cards)) {
+    for (const card of ex.cards!) {
+      const text = (card as { ttsLabel?: string; label: string }).ttsLabel ?? card.label;
+      jobs.push({
+        category: 'words',
+        filename: `${card.id}.mp3`,
+        text: clean(text),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
       });
     }
   }
@@ -839,6 +857,7 @@ async function main() {
   const jobs: TtsJob[] = [
     ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
+    ...collectWideCardJobs(exercises),
     ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
     ...collectDialogueJobs(exercises),
