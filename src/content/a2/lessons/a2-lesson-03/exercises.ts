@@ -1,3 +1,835 @@
-﻿import type { Exercise } from '@/content/types';
+﻿import type {
+  Exercise,
+  ImageLabelingExercise,
+  IllustratedCardsExercise,
+  GrammarTableExercise,
+  GrammarExamplesExercise,
+  DialoguesExercise,
+  WorkbookFillBlankExercise,
+  DropdownMatchExercise,
+  TrueFalseExercise,
+  ReadingTextExercise,
+} from '@/content/types';
+import type { A2FreeFillExercise } from '@/content/a2/types';
 
-export const exercises: Exercise[] = [];
+// ⚠️ Order follows the A2 textbook „На гости" (стр. 34–42).
+// Пропуснати по желание на клиента: упр. 3, 4, 18, 19, 20.
+
+export const exercises: Exercise[] = [
+
+  // ─── ORDER 1 — Упр. 1 (стр. 34): напишете фрази под картинките ──────────────
+  {
+    id: 'a2-l03-ex-01',
+    type: 'image_labeling',
+    instruction: 'Изберете подходящата фраза под всяка картинка.',
+    order: 1,
+    points: 8,
+    hideHeader: true,
+    displayType: 'row',
+    images: [
+      { id: 'na-rabota',    imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/01-na-rabota.jpg',    correctLabel: 'на работа'    },
+      { id: 'na-gosti',     imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/02-na-gosti.jpg',     correctLabel: 'на гости'     },
+      { id: 'na-kafe',      imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/03-na-kafe.jpg',      correctLabel: 'на кафе'      },
+      { id: 'na-more',      imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/04-na-more.jpg',      correctLabel: 'на море'      },
+      { id: 'na-restorant', imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/05-na-restorant.jpg', correctLabel: 'на ресторант' },
+      { id: 'na-razhodka',  imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/06-na-razhodka.jpg',  correctLabel: 'на разходка'  },
+      { id: 'na-pazar',     imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/07-na-pazar.jpg',     correctLabel: 'на пазар'     },
+      { id: 'na-kino',      imageUrl: '/assets/a2-lesson-03/01-upr-01-lokacii/08-na-kino.jpg',      correctLabel: 'на кино'      },
+    ],
+    options: ['на работа', 'на гости', 'на кафе', 'на море', 'на ресторант', 'на разходка', 'на пазар', 'на кино'],
+  } as ImageLabelingExercise,
+
+  // ─── ORDER 2 — ГРАМАТИКА 1 (стр. 34): времеви изрази ────────────────────────
+  {
+    id: 'a2-l03-gramatika-01',
+    type: 'grammar_examples',
+    title: 'ГРАМАТИКА 1',
+    subtitle: 'Времеви изрази за бъдеще',
+    instruction: 'Запознайте се с времевите изрази за бъдеще.',
+    instructionKey: 'a2.gr.l03.timeExpr',
+    order: 2,
+    layout: 'centered',
+    examples: [
+      {
+        imageUrl: '',
+        text: 'Сега / близко бъдеще',
+        lines: [
+          '**днес**',
+          '**утре**',
+          '**тази вечер = довечера**',
+        ],
+        ttsText: 'Сега. Близко бъдеще. днес. утре. тази вечер, довечера.',
+        voiceGender: 'female',
+      },
+      {
+        imageUrl: '',
+        text: 'По-далечно бъдеще',
+        lines: [
+          '**следващия(т) месец**',
+          '**следващата седмица**',
+          '**следващото лято**',
+        ],
+        ttsText: 'По-далечно бъдеще. следващия месец. следващата седмица. следващото лято.',
+        voiceGender: 'female',
+      },
+    ],
+  } as GrammarExamplesExercise,
+
+  // ─── ORDER 3 — Илюстрации бъдеще време (стр. 34–35): 16 балончета ──────────
+  {
+    id: 'a2-l03-ilustracii-01',
+    type: 'illustrated_cards',
+    title: 'Бъдеще време',
+    subtitle: 'Ще ходя на работа…',
+    instruction: '',
+    order: 3,
+    cards: [
+      { id: 'bv-01', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/01-shche-hodya-na-rabota.jpg',     label: 'Ще ходя на работа.',              ttsLabel: 'Ще ходя на работа.'              },
+      { id: 'bv-02', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/02-shche-rabotya-9-17.jpg',        label: 'Ще работя от 9:00 до 17:00.',     ttsLabel: 'Ще работя от девет до седемнадесет часа.' },
+      { id: 'bv-03', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/03-shche-pisha-imeyli.jpg',        label: 'Ще пиша имейли.',                 ttsLabel: 'Ще пиша имейли.'                 },
+      { id: 'bv-04', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/04-shche-tarsya-internet.jpg',     label: 'Ще търся информация в интернет.', ttsLabel: 'Ще търся информация в интернет.' },
+      { id: 'bv-05', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/05-shche-govorya-skype.jpg',       label: 'Ще говоря по телефона и по Скайп.', ttsLabel: 'Ще говоря по телефона и по Скайп.' },
+      { id: 'bv-06', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/06-shche-obyadvam-kolege.jpg',     label: 'Ще обядвам с колегите в 12:30.', ttsLabel: 'Ще обядвам с колегите в дванадесет и половина.' },
+      { id: 'bv-07', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/07-shche-pazaruvam.jpg',           label: 'Ще пазарувам след работа.',       ttsLabel: 'Ще пазарувам след работа.'       },
+      { id: 'bv-08', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/08-shche-ticham-v-parka.jpg',      label: 'Ще тичам в парка.',               ttsLabel: 'Ще тичам в парка.'               },
+      { id: 'bv-09', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/09-shche-pluvam.jpg',              label: 'Ще плувам.',                      ttsLabel: 'Ще плувам.'                      },
+      { id: 'bv-10', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/10-shche-gotvya.jpg',              label: 'Ще готвя за вечеря.',             ttsLabel: 'Ще готвя за вечеря.'             },
+      { id: 'bv-11', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/11-shche-vecheryam.jpg',           label: 'Ще вечерям.',                     ttsLabel: 'Ще вечерям.'                     },
+      { id: 'bv-12', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/12-shche-gledam-televiziya.jpg',   label: 'Ще гледам телевизия.',            ttsLabel: 'Ще гледам телевизия.'            },
+      { id: 'bv-13', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/13-shche-slusham-muzika.jpg',      label: 'Ще слушам музика.',               ttsLabel: 'Ще слушам музика.'               },
+      { id: 'bv-14', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/14-shche-ucha-angliyski.jpg',      label: 'Ще уча английски.',               ttsLabel: 'Ще уча английски.'               },
+      { id: 'bv-15', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/15-shche-cheta-kniga.jpg',         label: 'Ще чета книга и вестници.',       ttsLabel: 'Ще чета книга и вестници.'       },
+      { id: 'bv-16', imageUrl: '/assets/a2-lesson-03/02-badeshte-vreme-illustracii/16-shche-spya.jpg',                label: 'Ще спя.',                         ttsLabel: 'Ще спя.'                         },
+    ],
+  } as IllustratedCardsExercise,
+
+  // ─── ORDER 4 — Упр. 2 (стр. 35): довършете изреченията ─────────────────────
+  // Верният отговор съответства на картинките от „Бъдеще време" (order: 3).
+  {
+    id: 'a2-l03-ex-02',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната дума, за да довършите изречението.',
+    order: 4,
+    points: 8,
+    layout: 'single',
+    sentences: [
+      { text: 'Ще пиша _____.', blanks: [1], correctAnswers: ['имейли'],      options: ['имейли',      'доклад',       'есе',       'писмо'     ] },
+      { text: 'Ще готвя _____.', blanks: [1], correctAnswers: ['за вечеря'],  options: ['за вечеря',   'обяд',         'закуска',   'салата'    ] },
+      { text: 'Ще гледам _____.', blanks: [1], correctAnswers: ['телевизия'], options: ['телевизия',   'филм',         'сериал',    'новини'    ] },
+      { text: 'Ще слушам _____.', blanks: [1], correctAnswers: ['музика'],    options: ['музика',      'радио',        'подкаст',   'новини'    ] },
+      { text: 'Ще уча _____.', blanks: [1], correctAnswers: ['английски'],    options: ['английски',   'математика',   'история',   'български' ] },
+      { text: 'Ще чета _____.', blanks: [1], correctAnswers: ['книга'],       options: ['книга',       'вестник',      'списание',  'роман'     ] },
+      { text: 'Ще вечерям _____.', blanks: [1], correctAnswers: ['вкъщи'],    options: ['вкъщи',       'в ресторант',  'навън',     'с приятели'] },
+      { text: 'Ще говоря _____.', blanks: [1], correctAnswers: ['по телефона'], options: ['по телефона', 'с приятели',  'с колеги',  'с майка ми'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 5 — ДИАЛОЗИ 1 (стр. 35): бъдещи планове ─────────────────────────
+  {
+    id: 'a2-l03-dialozi-01',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 1',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
+    order: 5,
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: 'Хайде на купон довечера!',                    voiceGender: 'male'   },
+          { text: 'Съжалявам, заета съм. Ще помагам на майка ми.', voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'б.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'Какво ще правиш тази вечер?',                                                          voiceGender: 'female' },
+          { text: 'Ще ходя на кино, ще гледам интересен филм и след това ще ходя на ресторант. А ти?',   voiceGender: 'male'   },
+          { text: 'Аз съм много уморен. Ще спя.',                                                         voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'в.',
+        lines: [
+          { text: 'Какво ще правите довечера?',                                                                                                       voiceGender: 'female' },
+          { text: 'Ще имаме гости. А вие?',                                                                                                           voiceGender: 'male'   },
+          { text: 'Ние ще ходим на разходка в парка. Децата ще играят футбол и ще карат колело. После ще ядем пица и ще пазаруваме в супермаркета.', voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'г.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'Какво ще правиш през уикенда?',                                                                                                               voiceGender: 'male'   },
+          { text: 'Ще пътувам до Пловдив с приятелката ми. Родителите ѝ живеят там. Майка ѝ има рожден ден. Ще празнуваме заедно. А ти?',                       voiceGender: 'female' },
+          { text: 'Аз ще ходя в Гърция с приятели. Времето ще е много топло, ще плуваме в морето, ще се разхождаме, а вечерта ще танцуваме.',                   voiceGender: 'male'   },
+          { text: 'Приятно прекарване!',                                                                                                                          voiceGender: 'female' },
+          { text: 'Благодаря, подобно!',                                                                                                                          voiceGender: 'male'   },
+        ],
+      },
+    ],
+  } as DialoguesExercise,
+
+  // SKIP — Упр. 3 „Прочетете диалозите по двойки" (по желание на клиента)
+  // SKIP — Упр. 4 „Работете по двойки" (по желание на клиента)
+
+  // ─── ORDER 6 — ГРАМАТИКА 2 (стр. 36): Бъдеще време +/−/? ───────────────────
+  {
+    id: 'a2-l03-gramatika-02',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 2',
+    subtitle: 'Бъдеще време',
+    instruction: 'Запознайте се с образуването на бъдеще време.',
+    instructionKey: 'a2.gr.l03.future',
+    order: 6,
+    tableTitle: 'Бъдеще време',
+    columns: ['(+)', '(–)', '(?)'],
+    rows: [
+      { pronoun: 'аз',        cells: ['**ще** работя',   '**няма да** работя',   'ще работя **ли**']   },
+      { pronoun: 'ти',        cells: ['**ще** работиш',  '**няма да** работиш',  'ще работиш **ли**']  },
+      { pronoun: 'той/тя/то', cells: ['**ще** работи',   '**няма да** работи',   'ще работи **ли**']   },
+      { pronoun: 'ние',       cells: ['**ще** работим',  '**няма да** работим',  'ще работим **ли**']  },
+      { pronoun: 'Вие',       cells: ['**ще** работите', '**няма да** работите', 'ще работите **ли**'] },
+      { pronoun: 'те',        cells: ['**ще** работят',  '**няма да** работят',  'ще работят **ли**']  },
+    ],
+    notes: [
+      'Бъдеще (+): ще + глагол (сегашно): ще работя, ще уча, ще съм',
+      'Бъдеще (–): няма да + глагол (сегашно): няма да работя, няма да уча',
+      'Бъдеще (?): ще + глагол + ли: ще работиш ли?, ще учиш ли?',
+    ],
+    ttsNotes: [
+      'Бъдеще положително: ще работя, ще уча, ще съм.',
+      'Бъдеще отрицателно: няма да работя, няма да уча.',
+      'Бъдеще въпросително: ще работиш ли? ще учиш ли?',
+    ],
+  } as GrammarTableExercise,
+
+  // ─── ORDER 7 — Упр. 5 (стр. 36): преобразувайте в бъдеще (+) ───────────────
+  {
+    id: 'a2-l03-ex-05',
+    type: 'workbook_fill_blank',
+    instruction: 'Преобразувайте изреченията в бъдеще време по модела „Всеки ден тичам в парка. → Утре ще тичам пак."',
+    order: 7,
+    points: 14,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Всеки ден тичам в парка. | Утре ще тичам пак.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Всеки ден ходя на училище. | _______',    blanks: [1], correctAnswers: ['Утре ще ходя пак.'],        acceptableAnswers: [['утре ще ходя пак.', 'утре ще ходя пак']]        },
+      { text: 'Всеки ден уча български. | _______',      blanks: [1], correctAnswers: ['Утре ще уча пак.'],         acceptableAnswers: [['утре ще уча пак.', 'утре ще уча пак']]          },
+      { text: 'Всеки ден обядвам в ресторант. | _______', blanks: [1], correctAnswers: ['Утре ще обядвам пак.'],    acceptableAnswers: [['утре ще обядвам пак.', 'утре ще обядвам пак']]  },
+      { text: 'Всеки ден вечерям вкъщи. | _______',      blanks: [1], correctAnswers: ['Утре ще вечерям пак.'],     acceptableAnswers: [['утре ще вечерям пак.', 'утре ще вечерям пак']]  },
+      { text: 'Всеки ден помагам на майка ми. | _______', blanks: [1], correctAnswers: ['Утре ще помагам пак.'],    acceptableAnswers: [['утре ще помагам пак.', 'утре ще помагам пак']]  },
+      { text: 'Всеки ден гледам телевизия. | _______',   blanks: [1], correctAnswers: ['Утре ще гледам пак.'],      acceptableAnswers: [['утре ще гледам пак.', 'утре ще гледам пак']]    },
+      { text: 'Всеки ден слушам музика. | _______',      blanks: [1], correctAnswers: ['Утре ще слушам пак.'],      acceptableAnswers: [['утре ще слушам пак.', 'утре ще слушам пак']]    },
+      { text: 'Всеки ден чета книга. | _______',         blanks: [1], correctAnswers: ['Утре ще чета пак.'],        acceptableAnswers: [['утре ще чета пак.', 'утре ще чета пак']]        },
+      { text: 'Всеки ден пиша имейли. | _______',        blanks: [1], correctAnswers: ['Утре ще пиша пак.'],        acceptableAnswers: [['утре ще пиша пак.', 'утре ще пиша пак']]        },
+      { text: 'Всеки ден говоря български. | _______',   blanks: [1], correctAnswers: ['Утре ще говоря пак.'],      acceptableAnswers: [['утре ще говоря пак.', 'утре ще говоря пак']]    },
+      { text: 'Всеки ден спя до 7:00 часа. | _______',   blanks: [1], correctAnswers: ['Утре ще спя пак.'],         acceptableAnswers: [['утре ще спя пак.', 'утре ще спя пак']]          },
+      { text: 'Всеки ден работя много. | _______',       blanks: [1], correctAnswers: ['Утре ще работя пак.'],      acceptableAnswers: [['утре ще работя пак.', 'утре ще работя пак']]    },
+      { text: 'Всеки ден ям плодове. | _______',         blanks: [1], correctAnswers: ['Утре ще ям пак.'],          acceptableAnswers: [['утре ще ям пак.', 'утре ще ям пак']]            },
+      { text: 'Всеки ден пия кафе. | _______',           blanks: [1], correctAnswers: ['Утре ще пия пак.'],         acceptableAnswers: [['утре ще пия пак.', 'утре ще пия пак']]          },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 8 — Упр. 6 (стр. 36): преобразувайте в бъдеще (–) ───────────────
+  {
+    id: 'a2-l03-ex-06',
+    type: 'workbook_fill_blank',
+    instruction: 'Преобразувайте изреченията в бъдеще отрицателно по модела „Всеки ден тичам в парка. → Утре няма да тичам."',
+    order: 8,
+    points: 14,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Всеки ден тичам в парка. | Утре няма да тичам.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Всеки ден ходя на училище. | _______',    blanks: [1], correctAnswers: ['Утре няма да ходя.'],       acceptableAnswers: [['утре няма да ходя.', 'утре няма да ходя']]       },
+      { text: 'Всеки ден уча български. | _______',      blanks: [1], correctAnswers: ['Утре няма да уча.'],        acceptableAnswers: [['утре няма да уча.', 'утре няма да уча']]         },
+      { text: 'Всеки ден обядвам в ресторант. | _______', blanks: [1], correctAnswers: ['Утре няма да обядвам.'],   acceptableAnswers: [['утре няма да обядвам.', 'утре няма да обядвам']] },
+      { text: 'Всеки ден вечерям вкъщи. | _______',      blanks: [1], correctAnswers: ['Утре няма да вечерям.'],    acceptableAnswers: [['утре няма да вечерям.', 'утре няма да вечерям']]  },
+      { text: 'Всеки ден помагам на майка ми. | _______', blanks: [1], correctAnswers: ['Утре няма да помагам.'],   acceptableAnswers: [['утре няма да помагам.', 'утре няма да помагам']]  },
+      { text: 'Всеки ден гледам телевизия. | _______',   blanks: [1], correctAnswers: ['Утре няма да гледам.'],     acceptableAnswers: [['утре няма да гледам.', 'утре няма да гледам']]    },
+      { text: 'Всеки ден слушам музика. | _______',      blanks: [1], correctAnswers: ['Утре няма да слушам.'],     acceptableAnswers: [['утре няма да слушам.', 'утре няма да слушам']]    },
+      { text: 'Всеки ден чета книга. | _______',         blanks: [1], correctAnswers: ['Утре няма да чета.'],       acceptableAnswers: [['утре няма да чета.', 'утре няма да чета']]        },
+      { text: 'Всеки ден пиша имейли. | _______',        blanks: [1], correctAnswers: ['Утре няма да пиша.'],       acceptableAnswers: [['утре няма да пиша.', 'утре няма да пиша']]        },
+      { text: 'Всеки ден говоря български. | _______',   blanks: [1], correctAnswers: ['Утре няма да говоря.'],     acceptableAnswers: [['утре няма да говоря.', 'утре няма да говоря']]    },
+      { text: 'Всеки ден спя до 7:00 часа. | _______',   blanks: [1], correctAnswers: ['Утре няма да спя.'],        acceptableAnswers: [['утре няма да спя.', 'утре няма да спя']]          },
+      { text: 'Всеки ден работя много. | _______',       blanks: [1], correctAnswers: ['Утре няма да работя.'],     acceptableAnswers: [['утре няма да работя.', 'утре няма да работя']]    },
+      { text: 'Всеки ден ям плодове. | _______',         blanks: [1], correctAnswers: ['Утре няма да ям.'],         acceptableAnswers: [['утре няма да ям.', 'утре няма да ям']]            },
+      { text: 'Всеки ден пия кафе. | _______',           blanks: [1], correctAnswers: ['Утре няма да пия.'],        acceptableAnswers: [['утре няма да пия.', 'утре няма да пия']]          },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 9 — Упр. 7 (стр. 37): напишете въпроси ──────────────────────────
+  // Преобразувано в dropdown_match: left = даденият отговор, options = въпроси.
+  // При грешка компонентът показва верния въпрос (жълта кутийка).
+  {
+    id: 'a2-l03-ex-07',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилния въпрос към всеки отговор по модела.',
+    order: 9,
+    points: 8,
+    questions: [
+      {
+        id: 'q0',
+        left: 'Да, ще уча български.',
+        options: [],
+        correctAnswer: 'Ще учите ли български?',
+        isExample: true,
+      },
+      {
+        id: 'q1',
+        left: 'Да, ще обядвам в ресторанта.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще обядваш ли в ресторанта?',
+      },
+      {
+        id: 'q2',
+        left: 'Не, няма да тичам довечера.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще тичаш ли довечера?',
+      },
+      {
+        id: 'q3',
+        left: 'Не, няма да пия кафе.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще пиеш ли кафе?',
+      },
+      {
+        id: 'q4',
+        left: 'Да, ще вечерям с приятели.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще вечеряш ли с приятели?',
+      },
+      {
+        id: 'q5',
+        left: 'Не, няма да танцувам.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще танцуваш ли?',
+      },
+      {
+        id: 'q6',
+        left: 'Не, няма да ходи довечера.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечета?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще ходи ли довечера?',
+      },
+      {
+        id: 'q7',
+        left: 'Да, ще пътувам до Германия след два дни.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще пътуваш ли до Германия?',
+      },
+      {
+        id: 'q8',
+        left: 'Да, ще плувам тази вечер.',
+        options: ['Ще обядваш ли в ресторанта?', 'Ще тичаш ли довечера?', 'Ще пиеш ли кафе?', 'Ще вечеряш ли с приятели?', 'Ще танцуваш ли?', 'Ще ходи ли довечера?', 'Ще пътуваш ли до Германия?', 'Ще плуваш ли тази вечер?'],
+        correctAnswer: 'Ще плуваш ли тази вечер?',
+      },
+    ],
+  } as DropdownMatchExercise,
+
+  // ─── ORDER 10 — Упр. 8 (стр. 37): Какво ще прави Омар? ─────────────────────
+  // Две колони: + (ще) вляво, − (няма да) вдясно. columnSplitAt: 6 = пример + 5 положителни.
+  {
+    id: 'a2-l03-ex-08',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилния глагол от менюто.',
+    order: 10,
+    points: 11,
+    layout: 'two-column',
+    columnSplitAt: 6,
+    columnLabels: { left: 'Какво ще прави Омар? (+)', right: 'Какво няма да прави Омар? (−)' },
+    imageUrl: '/assets/a2-lesson-03/03-upr-08-omar/01-omar.jpg',
+    sentences: [
+      { text: 'Тази вечер Омар ще вечеря.', blanks: [], correctAnswers: [], isExample: true },
+      // Положителни (+): говори, тича, ходи, помага, учи
+      { text: 'Тази вечер Омар ще _______ с приятели.',      blanks: [1], correctAnswers: ['говори'],  options: ['говори', 'тича', 'ходи', 'помага', 'учи', 'пише', 'гледа'],  acceptableAnswers: [['говори']] },
+      { text: 'Тази вечер Омар ще _______ в парка.',         blanks: [1], correctAnswers: ['тича'],    options: ['говори', 'тича', 'ходи', 'помага', 'учи', 'пише', 'гледа'],  acceptableAnswers: [['тича']] },
+      { text: 'Тази вечер Омар ще _______ на гости.',        blanks: [1], correctAnswers: ['ходи'],    options: ['говори', 'тича', 'ходи', 'помага', 'учи', 'пише', 'гледа'],  acceptableAnswers: [['ходи']] },
+      { text: 'Тази вечер Омар ще _______ на децата.',       blanks: [1], correctAnswers: ['помага'],  options: ['говори', 'тича', 'ходи', 'помага', 'учи', 'пише', 'гледа'],  acceptableAnswers: [['помага']] },
+      { text: 'Тази вечер Омар ще _______ български.',       blanks: [1], correctAnswers: ['учи'],     options: ['говори', 'тича', 'ходи', 'помага', 'учи', 'пише', 'гледа'],  acceptableAnswers: [['учи']] },
+      // Отрицателни (−): ходи, пътува, слуша, чете, гледа, пише
+      { text: 'Тази вечер Омар няма да _______ на пазар.',   blanks: [1], correctAnswers: ['ходи'],    options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['ходи']] },
+      { text: 'Тази вечер Омар няма да _______.',            blanks: [1], correctAnswers: ['пътува'],  options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['пътува']] },
+      { text: 'Тази вечер Омар няма да _______ музика.',     blanks: [1], correctAnswers: ['слуша'],   options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['слуша']] },
+      { text: 'Тази вечер Омар няма да _______ книга.',      blanks: [1], correctAnswers: ['чете'],    options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['чете']] },
+      { text: 'Тази вечер Омар няма да _______ телевизия.',  blanks: [1], correctAnswers: ['гледа'],   options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['гледа']] },
+      { text: 'Тази вечер Омар няма да _______ имейли.',     blanks: [1], correctAnswers: ['пише'],    options: ['ходи', 'пътува', 'слуша', 'чете', 'гледа', 'пише', 'учи'],   acceptableAnswers: [['пише']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 11 — Упр. 9 (стр. 37): Стефан и Ани няма да правят ──────────────
+  {
+    id: 'a2-l03-ex-09',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната форма за Стефан и Ани. Използвайте глаголите в скоби.',
+    order: 11,
+    points: 6,
+    layout: 'single',
+    imageUrl: '/assets/a2-lesson-03/04-upr-09-stefan-ani/01-stefan.jpg',
+    sentences: [
+      { text: 'Те няма да учат повече. (уча)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Те _______ бира. (пия)',           blanks: [1], correctAnswers: ['няма да пият'],       options: ['няма да пият', 'ще пият', 'пият'],                       acceptableAnswers: [['няма да пият']] },
+      { text: 'Те _______ късно. (ям)',            blanks: [1], correctAnswers: ['няма да ядат'],      options: ['няма да ядат', 'ще ядат', 'ядат'],                        acceptableAnswers: [['няма да ядат']] },
+      { text: 'Те _______ филм. (гледам)',         blanks: [1], correctAnswers: ['няма да гледат'],    options: ['няма да гледат', 'ще гледат', 'гледат'],                  acceptableAnswers: [['няма да гледат']] },
+      { text: 'Те _______ музика. (слушам)',       blanks: [1], correctAnswers: ['няма да слушат'],    options: ['няма да слушат', 'ще слушат', 'слушат'],                  acceptableAnswers: [['няма да слушат']] },
+      { text: 'Те _______. (пазарувам)',           blanks: [1], correctAnswers: ['няма да пазаруват'], options: ['няма да пазаруват', 'ще пазаруват', 'пазаруват'],         acceptableAnswers: [['няма да пазаруват']] },
+      { text: 'Те _______ гости. (имам)',          blanks: [1], correctAnswers: ['няма да имат'],      options: ['няма да имат', 'ще имат', 'имат'],                        acceptableAnswers: [['няма да имат']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 12 — Упр. 10 (стр. 37): свържете колонките ──────────────────────
+  {
+    id: 'a2-l03-ex-10',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилния отговор от дясната колона.',
+    order: 12,
+    points: 5,
+    questions: [
+      { id: 'q1', left: 'Ще ходиш ли на кино?',        options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'Да, филмът е в 18:00.' },
+      { id: 'q2', left: 'Ще вали ли дъжд?',            options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'Не, няма да вали.'   },
+      { id: 'q3', left: 'Къде ще спят в Пловдив?',     options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'В хотел.'           },
+      { id: 'q4', left: 'Как ще пътуваме до морето?',  options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'С автобус.'         },
+      { id: 'q5', left: 'Утре ще имаш ли свободно?',   options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'Да, ще имам.'       },
+      { id: 'q6', left: 'Къде ще живеят те?',          options: ['В Берлин.', 'Да, ще имам.', 'Да, филмът е в 18:00.', 'Не, няма да вали.', 'В хотел.', 'С автобус.'], correctAnswer: 'В Берлин.'          },
+    ],
+  } as DropdownMatchExercise,
+
+  // ─── ORDER 13 — Упр. 11 (стр. 38): ПРОМЯНА В ПЛАНОВЕТЕ — отрицателни ───────
+  {
+    id: 'a2-l03-ex-11',
+    type: 'workbook_fill_blank',
+    instruction: 'Преобразувайте изреченията в отрицателни по модела „Ева ще ходи на кафе. → Ева няма да ходи на кафе."',
+    order: 13,
+    points: 5,
+    layout: 'two-column',
+    images: [
+      { imageUrl: '/assets/a2-lesson-03/05-upr-11-promyana-planove/01-slanchevo-vreme.jpg', label: 'Слънчево' },
+      { imageUrl: '/assets/a2-lesson-03/05-upr-11-promyana-planove/02-dazhd-vyatar.jpg', label: 'Дъжд и вятър' },
+    ],
+    sentences: [
+      { text: 'Ева ще ходи на кафе. | Ева няма да ходи на кафе.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Емилия ще се разхожда. | _______',                      blanks: [1], correctAnswers: ['Емилия няма да се разхожда.'],              acceptableAnswers: [['емилия няма да се разхожда.', 'емилия няма да се разхожда']] },
+      { text: 'Нур и Зехра ще ходят на планина. | _______',            blanks: [1], correctAnswers: ['Нур и Зехра няма да ходят на планина.'],     acceptableAnswers: [['нур и зехра няма да ходят на планина.', 'нур и зехра няма да ходят на планина']] },
+      { text: 'Андрей ще ходи на пазар. | _______',                    blanks: [1], correctAnswers: ['Андрей няма да ходи на пазар.'],              acceptableAnswers: [['андрей няма да ходи на пазар.', 'андрей няма да ходи на пазар']] },
+      { text: 'Антон ще плува. | _______',                             blanks: [1], correctAnswers: ['Антон няма да плува.'],                      acceptableAnswers: [['антон няма да плува.', 'антон няма да плува']] },
+      { text: 'Сами и Рания ще вечерят в градината. | _______',       blanks: [1], correctAnswers: ['Сами и Рания няма да вечерят в градината.'],  acceptableAnswers: [['сами и рания няма да вечерят в градината.', 'сами и рания няма да вечерят в градината']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 14 — Упр. 12 (стр. 38): поставете глагола в бъдеще ──────────────
+  {
+    id: 'a2-l03-ex-12',
+    type: 'workbook_fill_blank',
+    instruction: 'Поставете глагола в правилната форма в бъдеще време по модела „Васил ще тича в парка. (тичам)".',
+    order: 14,
+    points: 14,
+    layout: 'single',
+    sentences: [
+      { text: 'Васил ще тича в парка. (тичам)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Той _______ палачинки. (закусвам)',                              blanks: [1], correctAnswers: ['ще закусва'],       acceptableAnswers: [['ще закусва']] },
+      { text: 'Ние _______ табуле. (ям)',                                       blanks: [1], correctAnswers: ['ще ядем'],          acceptableAnswers: [['ще ядем']] },
+      { text: 'Ти _______ ли днес? (работя)',                                  blanks: [1], correctAnswers: ['ще работиш'],       acceptableAnswers: [['ще работиш']] },
+      { text: 'Вие _______ ли до Белгия? (пътувам)',                           blanks: [1], correctAnswers: ['ще пътувате'],      acceptableAnswers: [['ще пътувате']] },
+      { text: 'Аз _______ портокалов сок. (пия)',                              blanks: [1], correctAnswers: ['ще пия'],           acceptableAnswers: [['ще пия']] },
+      { text: 'Тя _______ ли по телефона? (говоря)',                           blanks: [1], correctAnswers: ['ще говори'],        acceptableAnswers: [['ще говори']] },
+      { text: 'Ти _______ ли довечера? (чета)',                                blanks: [1], correctAnswers: ['ще четеш'],         acceptableAnswers: [['ще четеш']] },
+      { text: 'Ти къде _______ следващия месец? (ходя)',                       blanks: [1], correctAnswers: ['ще ходиш'],         acceptableAnswers: [['ще ходиш']] },
+      { text: 'Те _______. (плувам)',                                          blanks: [1], correctAnswers: ['ще плуват'],        acceptableAnswers: [['ще плуват']] },
+      { text: 'Те _______ в арабски ресторант. (вечерям)',                     blanks: [1], correctAnswers: ['ще вечерят'],       acceptableAnswers: [['ще вечерят']] },
+      { text: 'За обяд аз _______ шопска салата. (правя)',                     blanks: [1], correctAnswers: ['ще правя'],         acceptableAnswers: [['ще правя']] },
+      { text: 'Те къде _______ Мариана? (чакам)',                              blanks: [1], correctAnswers: ['ще чакат'],         acceptableAnswers: [['ще чакат']] },
+      { text: 'Синът му _______ в Лондон. (уча)',                              blanks: [1], correctAnswers: ['ще учи'],           acceptableAnswers: [['ще учи']] },
+      { text: 'Кой _______ на втория етаж? (живея)',                           blanks: [1], correctAnswers: ['ще живее'],         acceptableAnswers: [['ще живее']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 15 — ГРАМАТИКА 3 (стр. 38): Бъдеще на „съм" ─────────────────────
+  {
+    id: 'a2-l03-gramatika-03',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 3',
+    subtitle: 'Бъдеще време на глагола „съм"',
+    instruction: 'Запознайте се с бъдеще време на глагола „съм". Формите „ще бъда" и „ще съм" са равностойни.',
+    instructionKey: 'a2.gr.l03.futureSam',
+    order: 15,
+    tableTitle: 'Бъдеще на „съм"',
+    columns: ['ще бъда (+/–)', 'ще съм (+/–)'],
+    rows: [
+      { pronoun: 'аз',        cells: ['**ще бъда** / няма да бъда',   '**ще съм** / няма да съм']   },
+      { pronoun: 'ти',        cells: ['**ще бъдеш** / няма да бъдеш', '**ще си** / няма да си']     },
+      { pronoun: 'той/тя/то', cells: ['**ще бъде** / няма да бъде',   '**ще е** / няма да е']       },
+      { pronoun: 'ние',       cells: ['**ще бъдем** / няма да бъдем', '**ще сме** / няма да сме']   },
+      { pronoun: 'Вие',       cells: ['**ще бъдете** / няма да бъдете', '**ще сте** / няма да сте'] },
+      { pronoun: 'те',        cells: ['**ще бъдат** / няма да бъдат', '**ще са** / няма да са']     },
+    ],
+    notes: [
+      'Аз ще бъда. = Аз ще съм. (двете форми са равностойни)',
+      'Аз няма да бъда. = Аз няма да съм.',
+      'Въпрос: Ще бъдеш ли? = Ще си ли? Ще бъде ли? = Ще е ли?',
+    ],
+    ttsNotes: [
+      'Аз ще бъда. Аз ще съм. Двете форми са равностойни.',
+      'Аз няма да бъда. Аз няма да съм.',
+      'Въпрос: ще бъдеш ли? Ще си ли? Ще бъде ли? Ще е ли?',
+    ],
+  } as GrammarTableExercise,
+
+  // ─── ORDER 16 — Упр. 13 (стр. 39): ще бъда / ще съм ───────────────────────
+  {
+    id: 'a2-l03-ex-13',
+    type: 'workbook_fill_blank',
+    instruction: 'Попълнете с правилната форма на „ще бъда" или „ще съм" по модела „Утре ще бъда / ще съм свободен от 15:00 до 17:00."',
+    order: 16,
+    points: 8,
+    layout: 'single',
+    sentences: [
+      { text: 'Утре ще бъда / ще съм свободен от 15:00 до 17:00.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Ти къде _______ следващата седмица?',          blanks: [1], correctAnswers: ['ще бъдеш'],  acceptableAnswers: [['ще бъдеш', 'ще си']] },
+      { text: 'Вие _______ ли в София в петък?',               blanks: [1], correctAnswers: ['ще бъдете'], acceptableAnswers: [['ще бъдете', 'ще сте']] },
+      { text: 'Той _______ в Рим следващото лято.',            blanks: [1], correctAnswers: ['ще бъде'],   acceptableAnswers: [['ще бъде', 'ще е']] },
+      { text: 'Следващия месец тя _______ с приятелите в Гърция.', blanks: [1], correctAnswers: ['ще бъде'], acceptableAnswers: [['ще бъде', 'ще е']] },
+      { text: 'Ние _______ много заети следващите дни.',       blanks: [1], correctAnswers: ['ще бъдем'],  acceptableAnswers: [['ще бъдем', 'ще сме']] },
+      { text: 'Те _______ тук след 10 минути.',                blanks: [1], correctAnswers: ['ще бъдат'],  acceptableAnswers: [['ще бъдат', 'ще са']] },
+      { text: 'Довечера аз _______ на кино.',                  blanks: [1], correctAnswers: ['ще бъда'],   acceptableAnswers: [['ще бъда', 'ще съм']] },
+      { text: 'Тя _______ там точно в 10:00 часа.',            blanks: [1], correctAnswers: ['ще бъде'],   acceptableAnswers: [['ще бъде', 'ще е']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 17 — Упр. 14 (стр. 39): какво ще бъде времето утре ──────────────
+  {
+    id: 'a2-l03-ex-14',
+    type: 'image_labeling',
+    instruction: 'Изберете правилното изречение под всяка картинка.',
+    order: 17,
+    points: 4,
+    images: [
+      { id: 'toplo',    imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/01-termometar-25-toplo.png', correctLabel: 'Ще бъде топло.',     ttsLabel: 'Ще бъде топло.',    isExample: true },
+      { id: 'oblachno', imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/02-ne-oblachno.png',         correctLabel: 'Няма да бъде облачно.', ttsLabel: 'Няма да бъде облачно.', isExample: true },
+      { id: 'slanche',  imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/03-sluntse.jpg',             correctLabel: 'Ще бъде слънчево.'  },
+      { id: 'dazhd',    imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/04-ne-dazhd.jpg',            correctLabel: 'Няма да вали.'      },
+      { id: 'studeno',  imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/05-termometar-8-studeno.jpg', correctLabel: 'Ще бъде студено.'  },
+      { id: 'vyatar',   imageUrl: '/assets/a2-lesson-03/06-upr-14-vreme/06-ne-vyatar.jpg',            correctLabel: 'Няма да има вятър.' },
+    ],
+    options: ['Ще бъде топло.', 'Няма да бъде облачно.', 'Ще бъде слънчево.', 'Няма да вали.', 'Ще бъде студено.', 'Няма да има вятър.'],
+  } as ImageLabelingExercise,
+
+  // ─── ORDER 18 — НОВИ ДУМИ 1 (стр. 39–40): РЪСТ / ТЕГЛО / ОЧИ / КОСА ───────
+  {
+    id: 'a2-l03-novi-dumi-01',
+    type: 'illustrated_cards',
+    title: 'НОВИ ДУМИ 1',
+    subtitle: 'Външен вид',
+    instruction: '',
+    order: 18,
+    cards: [
+      // РЪСТ
+      { id: 'visok',          imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/01-visok.jpg',         label: 'висок',           ttsLabel: 'висок'          },
+      { id: 'nisak',          imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/02-nisak.jpg',         label: 'нисък',           ttsLabel: 'нисък'          },
+      { id: 'sreden-na-rast', imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/03-sreden-na-rast.jpg', label: 'среден на ръст', ttsLabel: 'среден на ръст' },
+      // ТЕГЛО
+      { id: 'slab',           imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/04-slab.jpg',          label: 'слаб',            ttsLabel: 'слаб'           },
+      { id: 'palen',          imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/05-palen.jpg',          label: 'пълен',           ttsLabel: 'пълен'          },
+      { id: 'stroen',         imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/06-stroen.jpg',         label: 'строен',          ttsLabel: 'строен'         },
+      // ОЧИ
+      { id: 'cherni-ochi',    imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/07-cherni-ochi.jpg',    label: 'черни очи',       ttsLabel: 'черни очи'      },
+      { id: 'kafyavi-ochi',   imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/08-kafyavi-ochi.jpg',   label: 'кафяви очи',      ttsLabel: 'кафяви очи'     },
+      { id: 'sini-ochi',      imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/09-sini-ochi.jpg',      label: 'сини очи',        ttsLabel: 'сини очи'       },
+      { id: 'zeleni-ochi',    imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/10-zeleni-ochi.jpg',    label: 'зелени очи',      ttsLabel: 'зелени очи'     },
+      // КОСА
+      { id: 'cherna-kosa',    imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/11-cherna-kosa.jpg',    label: 'черна коса',      ttsLabel: 'черна коса'     },
+      { id: 'kestenyava-kosa', imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/12-kestenyava-kosa.jpg', label: 'кестенява коса', ttsLabel: 'кестенява коса' },
+      { id: 'rusa-kosa',      imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/13-rusa-kosa.jpg',      label: 'руса коса',       ttsLabel: 'руса коса'      },
+      { id: 'tamna-kosa',     imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/14-tamna-kosa.jpg',     label: 'тъмна коса',      ttsLabel: 'тъмна коса'     },
+      { id: 'svetla-kosa',    imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/15-svetla-kosa.jpg',    label: 'светла коса',     ttsLabel: 'светла коса'    },
+      { id: 'dalga-kosa',     imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/16-dalga-kosa.jpg',     label: 'дълга коса',      ttsLabel: 'дълга коса'     },
+      { id: 'kasa-kosa',      imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/17-kasa-kosa.jpg',      label: 'къса коса',       ttsLabel: 'къса коса'      },
+      { id: 'prava-kosa',     imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/18-prava-kosa.jpg',     label: 'права коса',      ttsLabel: 'права коса'     },
+      { id: 'kadrava-kosa',   imageUrl: '/assets/a2-lesson-03/07-novi-dumi-1-vanshen-vid/19-kadrava-kosa.jpg',   label: 'къдрава коса',    ttsLabel: 'къдрава коса'   },
+    ],
+  } as IllustratedCardsExercise,
+
+  // ─── ORDER 19 — Упр. 15 (стр. 40): попълнете таблицата за себе си ───────────
+  // Изцяло персонална — всеки отговор е верен (a2-free-fill тип).
+  {
+    id: 'a2-l03-ex-15',
+    type: 'a2-free-fill',
+    instruction: 'Попълнете таблицата с информация за себе си.',
+    order: 19,
+    points: 4,
+    sentences: [
+      {
+        label: 'Ръст',
+        options: [
+          '140–150 см', '150–160 см', '160–170 см', '170–180 см',
+          '180–190 см', '190–200 см', '200–210 см', '210–220 см',
+        ],
+      },
+      {
+        label: 'Тегло',
+        options: [
+          '40–50 кг', '50–60 кг', '60–70 кг', '70–80 кг',
+          '80–90 кг', '90–100 кг', '100–110 кг', '110–120 кг',
+          '120–130 кг', '130–140 кг', '140–150 кг', '150–160 кг',
+        ],
+      },
+      {
+        label: 'Очи',
+        options: ['кафяви', 'сини', 'зелени', 'сиви', 'черни', 'лешникови'],
+      },
+      {
+        label: 'Коса',
+        options: [
+          'руса', 'кафява', 'черна', 'червена', 'бяла', 'сива',
+          'права', 'вълниста', 'къдрава', 'дълга', 'кратка',
+        ],
+      },
+    ],
+  } as unknown as Exercise,
+
+  // ─── ORDER 20 — Упр. 16 (стр. 40): слушайте и попълнете ────────────────────
+  // Текстът е предоставен от клиента. Аудио → TTS Фаза 2.
+  {
+    id: 'a2-l03-ex-16',
+    type: 'workbook_fill_blank',
+    instruction: 'Изслушайте и изберете подходящата дума от менюто за всяко празно поле.',
+    order: 20,
+    points: 8,
+    audioUrl: '/assets/a2-lesson-03/audio/tts/listening/a2-l03-ex-16.mp3',
+    listeningText: 'Росица има красива къдрава коса и тъмни очи. Дъщеря ѝ е средна на ръст със зелени очи. Синът ѝ е слаб, с руса коса и светли очи.',
+    layout: 'single',
+    sentences: [
+      {
+        text: 'Росица има _______ _______ коса и _______ очи.',
+        blanks: [1, 2, 3],
+        correctAnswers: ['красива', 'къдрава', 'тъмни'],
+        options: [
+          ['красива', 'средна', 'висока', 'слаба'],
+          ['къдрава', 'права', 'руса', 'дълга'],
+          ['тъмни', 'сини', 'зелени', 'светли'],
+        ],
+        acceptableAnswers: [['красива'], ['къдрава'], ['тъмни']],
+      },
+      {
+        text: 'Дъщеря ѝ е _______ на ръст със _______ очи.',
+        blanks: [1, 2],
+        correctAnswers: ['средна', 'зелени'],
+        options: [
+          ['средна', 'висока', 'ниска', 'слаба'],
+          ['зелени', 'сини', 'кафяви', 'тъмни'],
+        ],
+        acceptableAnswers: [['средна'], ['зелени']],
+      },
+      {
+        text: 'Синът ѝ е _______, с _______ коса и _______ очи.',
+        blanks: [1, 2, 3],
+        correctAnswers: ['слаб', 'руса', 'светли'],
+        options: [
+          ['слаб', 'висок', 'пълен', 'строен'],
+          ['руса', 'черна', 'тъмна', 'дълга'],
+          ['светли', 'тъмни', 'зелени', 'кафяви'],
+        ],
+        acceptableAnswers: [['слаб'], ['руса'], ['светли']],
+      },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 21 — Упр. 17 (стр. 40): как изглежда Силвия ─────────────────────
+  {
+    id: 'a2-l03-ex-17',
+    type: 'reading_text',
+    title: 'УПРАЖНЕНИЕ 17',
+    textTitle: 'Как изглежда Силвия?',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 21,
+    showDictionary: true,
+    images: [
+      { imageUrl: '/assets/a2-lesson-03/08-upr-17-silvia/01-silvia.jpg', label: 'Силвия' },
+    ],
+    paragraphs: [
+      'Тя изглежда много добре. Силвия е висока, стройна, има дълга черна коса и черни очи.',
+    ],
+    paragraphVoiceGenders: ['female'],
+  } as ReadingTextExercise,
+
+  // SKIP — Упр. 18 „Как изглеждат Явор и Яна?" (по желание на клиента + Явор липсва)
+
+  // ─── ORDER 22 — ДИАЛОЗИ 2 (стр. 40): описание на хора ──────────────────────
+  {
+    id: 'a2-l03-dialozi-02',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 2',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
+    order: 22,
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: 'Здравей, къде отиваш?',                                                                voiceGender: 'male'   },
+          { text: 'Имам среща с едно момиче.',                                                             voiceGender: 'female' },
+          { text: 'Познавам ли я?',                                                                        voiceGender: 'male'   },
+          { text: 'Не, не я познаваш.',                                                                    voiceGender: 'female' },
+          { text: 'Как изглежда?',                                                                         voiceGender: 'male'   },
+          { text: 'Много красива, висока, с дълга черна коса и сини очи. Довиждане, много бързам.',       voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'б.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'Познаваш ли новия приятел на Катя?',                                                   voiceGender: 'female' },
+          { text: 'Не, как изглежда?',                                                                    voiceGender: 'male'   },
+          { text: 'Супер – висок, с руса коса и тъмни очи.',                                              voiceGender: 'female' },
+          { text: 'Не харесвам мъже с руса коса. Предпочитам с тъмна коса и светли очи. А ти?',          voiceGender: 'male'   },
+          { text: 'Не знам. За мен е важен характерът.',                                                   voiceGender: 'female' },
+        ],
+      },
+    ],
+  } as DialoguesExercise,
+
+  // SKIP — Упр. 19 „Прочетете диалозите по двойки" (по желание на клиента)
+  // SKIP — Упр. 20 „Работете по двойки" (по желание на клиента)
+
+  // ─── ORDER 23 — ТЕКСТОВЕ / Упр. 21 (стр. 41): „НА ГОСТИ" ───────────────────
+  {
+    id: 'a2-l03-tekst-na-gosti',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    textTitle: 'На гости',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 23,
+    showDictionary: true,
+    images: [
+      { imageUrl: '/assets/a2-lesson-03/10-tekstove-na-gosti/01-foto-album.jpg', label: 'Фотоалбум' },
+    ],
+    paragraphs: [
+      'Албена е на гости на Амал. Амал е от Сирия и сега живее в София в малък апартамент, близо до центъра. Албена и Амал са в хола. На масата има снимки на семейството на Амал. Албена гледа снимките.',
+      'Албена: – Амал, кой е това?',
+      'Амал: – Това е брат ми Аймин, на 45 години. Сега е в Германия, но скоро той и семейството му ще живеят в Белгия. Там ще работи като лекар.',
+      'Албена: – Има ли деца?',
+      'Амал: – Да, има две момчета близнаци и едно момиче. Те са много щастливи, защото в Белгия ще имат голяма къща с градина. Ще учат в училище близо до къщата и ще ходят до училището пеша. Няма да пътуват с автобус или метро.',
+      'Албена: – Да, много е удобно.',
+      'Амал: – Откъде искаш – кафе или чай? Аз ще пия черен чай. Имам и вкусни бисквити.',
+      'Албена: – Предпочитам кафе, не много силно.',
+      'Амал: – А това е къщата на сестра ми Джамиле в Дубай, това е семейството ѝ. Това е кучето Роби и котката Хали. Децата много играят с кучето, но повече обичат котката.',
+      'Албена: – Харесвам градината на къщата. Има много цветя. Прекрасни са.',
+      'Амал: – Да, цветята са прекрасни. Къщата не е голяма, но е много красива и е на хубаво място. Скоро ще бъда там три седмици. Ще помагам на сестра ми, ще готвим заедно, ще пазаруваме, ще ходим на кино. Ще е чудесно!',
+    ],
+    ttsParagraphs: [
+      'Албена е на гости на Амал. Амал е от Сирия и сега живее в София в малък апартамент, близо до центъра. Албена и Амал са в хола. На масата има снимки на семейството на Амал. Албена гледа снимките.',
+      'Албена: Амал, кой е това?',
+      'Амал: Това е брат ми Аймин, на четиридесет и пет години. Сега е в Германия, но скоро той и семейството му ще живеят в Белгия. Там ще работи като лекар.',
+      'Албена: Има ли деца?',
+      'Амал: Да, има две момчета близнаци и едно момиче. Те са много щастливи, защото в Белгия ще имат голяма къща с градина. Ще учат в училище близо до къщата и ще ходят до училището пеша. Няма да пътуват с автобус или метро.',
+      'Албена: Да, много е удобно.',
+      'Амал: Откъде искаш кафе или чай? Аз ще пия черен чай. Имам и вкусни бисквити.',
+      'Албена: Предпочитам кафе, не много силно.',
+      'Амал: А това е къщата на сестра ми Джамиле в Дубай, това е семейството ѝ. Това е кучето Роби и котката Хали. Децата много играят с кучето, но повече обичат котката.',
+      'Албена: Харесвам градината на къщата. Има много цветя. Прекрасни са.',
+      'Амал: Да, цветята са прекрасни. Къщата не е голяма, но е много красива и е на хубаво място. Скоро ще бъда там три седмици. Ще помагам на сестра ми, ще готвим заедно, ще пазаруваме, ще ходим на кино. Ще е чудесно!',
+    ],
+    paragraphVoiceGenders: ['female', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 24 — Упр. 22 (стр. 41): отговорете на въпросите ─────────────────
+  {
+    id: 'a2-l03-ex-22',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилния отговор на въпросите за текста „На гости".',
+    order: 24,
+    points: 8,
+    questions: [
+      { id: 'q1', left: 'Къде е Албена?',                        options: ['На гости на Амал', 'В Германия', 'В Белгия', 'В Дубай'],                                                correctAnswer: 'На гости на Амал'           },
+      { id: 'q2', left: 'Какво има на масата?',                  options: ['Кафе и чай', 'Бисквити', 'Снимки на семейството на Амал', 'Котката Хали'],                              correctAnswer: 'Снимки на семейството на Амал' },
+      { id: 'q3', left: 'Откъде е Амал и къде живее сега?',      options: ['От Сирия, живее в София', 'От Белгия, живее в Германия', 'От Дубай, живее в София', 'От Сирия, живее в Дубай'], correctAnswer: 'От Сирия, живее в София' },
+      { id: 'q4', left: 'Кой е Аймин?',                         options: ['Брат на Амал', 'Братовчед на Амал', 'Приятел на Амал', 'Съсед на Амал'],                               correctAnswer: 'Брат на Амал'              },
+      { id: 'q5', left: 'Има ли деца Аймин?',                   options: ['Да, две момчета близнаци и едно момиче', 'Не, няма', 'Да, едно момче', 'Да, три момичета'],             correctAnswer: 'Да, две момчета близнаци и едно момиче' },
+      { id: 'q6', left: 'Как изглежда къщата на сестра на Амал?', options: ['Малка, но красива', 'Голяма с много стаи', 'Стара, но хубава', 'Нова и модерна'],                      correctAnswer: 'Малка, но красива'         },
+      { id: 'q7', left: 'Кога Амал ще ходи на гости в Дубай?',  options: ['Скоро, за три седмици', 'Следващото лято', 'Следващия месец за един ден', 'Никога'],                     correctAnswer: 'Скоро, за три седмици'    },
+      { id: 'q8', left: 'Какво ще прави тя в Дубай?',           options: ['Ще помага на сестра си, ще готвят, ще пазаруват, ще ходят на кино', 'Ще работи като лекар', 'Ще учи', 'Ще почива само'], correctAnswer: 'Ще помага на сестра си, ще готвят, ще пазаруват, ще ходят на кино' },
+    ],
+  } as DropdownMatchExercise,
+
+  // ─── ORDER 25 — Упр. 23 (стр. 41): вярно или грешно ────────────────────────
+  {
+    id: 'a2-l03-ex-23',
+    type: 'true_false',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
+    order: 25,
+    points: 8,
+    sentences: [
+      { id: 's01', text: 'Албена и Амал са в хола.',                             isTrue: true  },
+      { id: 's02', text: 'Аймин ще работи в Германия.',                          isTrue: false },
+      { id: 's03', text: 'Децата на Аймин ще ходят до училището с автобус.',     isTrue: false },
+      { id: 's04', text: 'Албена предпочита кафе.',                              isTrue: true  },
+      { id: 's05', text: 'Джамиле живее в Тунис.',                              isTrue: false },
+      { id: 's06', text: 'Децата на Джамиле имат куче.',                        isTrue: true  },
+      { id: 's07', text: 'Къщата на Джамиле е грозна.',                         isTrue: false },
+      { id: 's08', text: 'Амал ще бъде в Дубай три месеца.',                    isTrue: false },
+    ],
+  } as TrueFalseExercise,
+
+  // ─── ORDER 26 — Упр. 24 (стр. 42): „СЪБОТА – ВРЕМЕ ЗА ПОЧИВКА!" ─────────────
+  {
+    id: 'a2-l03-tekst-sabota',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    textTitle: 'Събота – Време за почивка!',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 26,
+    showDictionary: true,
+    images: [
+      { imageUrl: '/assets/a2-lesson-03/11-tekstove-subota-pochivka/01-planina-priyatelki.jpg', label: 'Приятелки в планината' },
+    ],
+    paragraphs: [
+      'Днес е петък. Утре е събота и времето ще е слънчево и топло. Какво ще правят Мая, Елена, Христо и Ясен?',
+      'Мая ще пътува до Родопите. Баба ѝ живее в малко село високо в планината. Мая често ходи там. Тази събота приятелките ще се разхождат в планината, ще правят снимки, после ще обядват и вечерят с бабата на Мая навън в градината. Ще почиват и няма да мислят за работа. Ще бъде много хубаво.',
+      'Елена е много уморена. Утре ще спи до късно. После ще пие кафе на балкона и ще слуша музика. Ще закуси палачинка с мед и орехи. Това е любимата ѝ закуска. Ще говори с приятели по Скайп и ще чете книга, по-късно ще пазарува и след 16:00 часа ще ходи на разходка с кучето в парка. Няма да чисти и готви, има нужда от почивка, защото следващата седмица ще бъде много заета. Ще има гости от чужбина в офиса и Елена ще работи много, дори през уикенда.',
+      'Христо е ученик в първи клас. Утре има рожден ден. Ще празнува вкъщи. Ще има много гости. Ще ядат вкусна храна, ще танцуват, може би ще гледат филми и ще играят на Плейстейшън. Христо чака този ден цяла година.',
+      'Ясен е компютърен специалист. Често има много работа и не почива в събота и неделя. Тази събота също няма да почива. Ще пише нов проект, ще търси информация в интернет и ще пие много кафе. Приятелите му ще ходят на купон, а Ясен ще работи в офиса. Може би следващата събота ще е свободен и ще кара колело в парка.',
+    ],
+    ttsParagraphs: [
+      'Днес е петък. Утре е събота и времето ще е слънчево и топло. Какво ще правят Мая, Елена, Христо и Ясен?',
+      'Мая ще пътува до Родопите. Баба ѝ живее в малко село високо в планината. Мая често ходи там. Тази събота приятелките ще се разхождат в планината, ще правят снимки, после ще обядват и вечерят с бабата на Мая навън в градината. Ще почиват и няма да мислят за работа. Ще бъде много хубаво.',
+      'Елена е много уморена. Утре ще спи до късно. После ще пие кафе на балкона и ще слуша музика. Ще закуси палачинка с мед и орехи. Това е любимата ѝ закуска. Ще говори с приятели по Скайп и ще чете книга, по-късно ще пазарува и след шестнадесет часа ще ходи на разходка с кучето в парка. Няма да чисти и готви, има нужда от почивка, защото следващата седмица ще бъде много заета. Ще има гости от чужбина в офиса и Елена ще работи много, дори през уикенда.',
+      'Христо е ученик в първи клас. Утре има рожден ден. Ще празнува вкъщи. Ще има много гости. Ще ядат вкусна храна, ще танцуват, може би ще гледат филми и ще играят на Плейстейшън. Христо чака този ден цяла година.',
+      'Ясен е компютърен специалист. Често има много работа и не почива в събота и неделя. Тази събота също няма да почива. Ще пише нов проект, ще търси информация в интернет и ще пие много кафе. Приятелите му ще ходят на купон, а Ясен ще работи в офиса. Може би следващата събота ще е свободен и ще кара колело в парка.',
+    ],
+    paragraphVoiceGenders: ['female', 'female', 'female', 'female', 'male'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 27 — Упр. 25 (стр. 42): отговорете на въпросите ─────────────────
+  {
+    id: 'a2-l03-ex-25',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилния отговор на въпросите за текста „Събота – Време за почивка!".',
+    order: 27,
+    points: 7,
+    questions: [
+      { id: 'q1', left: 'Къде ще пътува Мая?',                     options: ['До Родопите', 'До Пловдив', 'До морето', 'До Варна'],                                                correctAnswer: 'До Родопите'              },
+      { id: 'q2', left: 'Какво ще прави там?',                      options: ['Ще се разхожда, ще прави снимки, ще яде с баба си', 'Ще работи', 'Ще учи', 'Ще пазарува'],          correctAnswer: 'Ще се разхожда, ще прави снимки, ще яде с баба си' },
+      { id: 'q3', left: 'Каква е любимата закуска на Елена?',       options: ['Палачинка с мед и орехи', 'Яйца', 'Кафе', 'Кисело мляко'],                                          correctAnswer: 'Палачинка с мед и орехи' },
+      { id: 'q4', left: 'Какво няма да прави Елена в събота?',      options: ['Да чисти и готви', 'Да чете книга', 'Да пие кафе', 'Да се разхожда'],                               correctAnswer: 'Да чисти и готви'        },
+      { id: 'q5', left: 'Какво ще прави Христо в събота?',          options: ['Ще празнува рожден ден вкъщи', 'Ще ходи на кино', 'Ще пътува', 'Ще учи'],                           correctAnswer: 'Ще празнува рожден ден вкъщи' },
+      { id: 'q6', left: 'Защо Ясен няма да почива в събота?',      options: ['Защото ще работи на нов проект в офиса', 'Защото ще ходи на купон', 'Защото ще пътува', 'Защото ще учи'], correctAnswer: 'Защото ще работи на нов проект в офиса' },
+      { id: 'q7', left: 'Какво ще правят приятелите на Ясен?',     options: ['Ще ходят на купон', 'Ще работят', 'Ще пътуват', 'Ще учат'],                                          correctAnswer: 'Ще ходят на купон'        },
+    ],
+  } as DropdownMatchExercise,
+
+  // ─── ORDER 28 — Упр. 26 (стр. 42): свържете колонките ──────────────────────
+  {
+    id: 'a2-l03-ex-26',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилното продължение от дясната колона.',
+    order: 28,
+    points: 7,
+    questions: [
+      { id: 'q1', left: 'Мая ще пътува с',   options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'Милена'         },
+      { id: 'q2', left: 'Елена ще пие кафе', options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'на балкона'    },
+      { id: 'q3', left: 'Елена има нужда',   options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'от почивка'    },
+      { id: 'q4', left: 'Христо ще празнува', options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'вкъщи'         },
+      { id: 'q5', left: 'Ясен ще пише',      options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'нов проект'    },
+      { id: 'q6', left: 'Ясен ще работи',    options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'в офиса'       },
+      { id: 'q7', left: 'Ясен ще кара',      options: ['колело в парка', 'Милена', 'вкъщи', 'нов проект', 'от почивка', 'на балкона', 'в офиса'], correctAnswer: 'колело в парка' },
+    ],
+  } as DropdownMatchExercise,
+
+];
