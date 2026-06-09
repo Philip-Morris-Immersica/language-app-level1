@@ -14,19 +14,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Попълнете всички полета.' }, { status: 400 });
     }
 
+    console.log('[login] attempting login for:', email);
+    console.log('[login] DATABASE_URL set?', !!process.env.DATABASE_URL);
+    console.log('[login] JWT_SECRET set?', !!process.env.JWT_SECRET);
+
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1);
     if (!user) {
+      console.log('[login] user not found:', email);
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
 
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
+      console.log('[login] invalid password for:', email);
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
 
     const token = await signToken({ userId: user.id, name: user.name, email: user.email });
 
-    await seedAdminFromEnv(user.id, user.email).catch(() => {});
+    await seedAdminFromEnv(user.id, user.email).catch((err) => {
+      console.error('[login] seedAdminFromEnv failed:', err);
+    });
 
     const response = NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } });
     response.cookies.set('auth_token', token, {
@@ -37,7 +45,9 @@ export async function POST(req: NextRequest) {
       path: '/',
     });
     return response;
-  } catch {
-    return NextResponse.json({ error: 'Грешка при вход.' }, { status: 500 });
+  } catch (err) {
+    console.error('[login] unexpected error:', err);
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: 'Грешка при вход.', debug: message }, { status: 500 });
   }
 }
