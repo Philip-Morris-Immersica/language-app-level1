@@ -87,11 +87,28 @@ export interface A2WideCardsExercise extends BaseExercise {
   disableAudio?: boolean;
 }
 
+// ─── A2FreeFillExercise ───────────────────────────────────────────────────────
+// Free-text fill-in exercise where any non-empty answer is accepted as correct.
+// Used for personal information exercises (e.g. Ръст, Тегло, Очи, Коса) where
+// every student has a different correct answer.
+
+export interface A2FreeFillSentence {
+  label: string;
+  /** When provided, renders a dropdown instead of free text. Any selection is accepted. */
+  options?: string[];
+}
+
+export interface A2FreeFillExercise extends BaseExercise {
+  type: 'a2-free-fill';
+  sentences: A2FreeFillSentence[];
+}
+
 /** Union of all A2-specific exercise interfaces. */
 export type A2Exercise =
   | A2GroupedDropdownExercise
   | A2ImageLabelingExercise
-  | A2WideCardsExercise;
+  | A2WideCardsExercise
+  | A2FreeFillExercise;
 
 // Re-export BaseExercise so A2 component files can import everything from one place.
 export type { BaseExercise };
