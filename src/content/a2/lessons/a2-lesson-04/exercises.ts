@@ -1,3 +1,648 @@
-﻿import type { Exercise } from '@/content/types';
+﻿import type {
+  Exercise,
+  ImageLabelingExercise,
+  GrammarTableExercise,
+  GrammarExamplesExercise,
+  DialoguesExercise,
+  WorkbookFillBlankExercise,
+  DropdownMatchExercise,
+  TrueFalseExercise,
+  ReadingTextExercise,
+} from '@/content/types';
+import type { A2FreeFillExercise } from '@/content/a2/types';
 
-export const exercises: Exercise[] = [];
+// ⚠️ Order follows the A2 textbook „Мечти и планове" (стр. 43–50).
+// Пропуснати по желание на клиента: упр. 2, 3, 12, 13.
+
+const ASSET = '/assets/a2-lesson-04';
+
+export const exercises: Exercise[] = [
+
+  // ─── ORDER 1 — Упр. 1 (стр. 43): Димо и Галя през седмицата ─────────────────
+  {
+    id: 'a2-l04-ex-01',
+    type: 'image_labeling',
+    instruction: 'Изберете подходящото изречение под всяка картинка.',
+    order: 1,
+    points: 5,
+    hideHeader: true,
+    displayType: 'row',
+    images: [
+      { id: 'futbol',    imageUrl: `${ASSET}/01-upr-01-dimo-galya/01-futbol-dimo.jpg`,    correctLabel: 'В понеделник Димо ще играе футбол.', isExample: true },
+      { id: 'pluva',     imageUrl: `${ASSET}/01-upr-01-dimo-galya/02-pluva-dimo.jpg`,     correctLabel: 'В сряда Димо ще плува.' },
+      { id: 'kolelo',    imageUrl: `${ASSET}/01-upr-01-dimo-galya/03-kolelo-dimo.jpg`,    correctLabel: 'В петък Димо ще кара колело.' },
+      { id: 'torta',     imageUrl: `${ASSET}/01-upr-01-dimo-galya/04-torta-galya.jpg`,     correctLabel: 'Във вторник Галя ще прави торта.' },
+      { id: 'gotvi',     imageUrl: `${ASSET}/01-upr-01-dimo-galya/05-gotvi-galya.jpg`,     correctLabel: 'В четвъртък Галя ще готви.' },
+      { id: 'razhodka',  imageUrl: `${ASSET}/01-upr-01-dimo-galya/06-razhodka-galya.jpg`,  correctLabel: 'В събота Галя ще се разхожда.' },
+    ],
+    options: [
+      'В понеделник Димо ще играе футбол.',
+      'В сряда Димо ще плува.',
+      'В петък Димо ще кара колело.',
+      'Във вторник Галя ще прави торта.',
+      'В четвъртък Галя ще готви.',
+      'В събота Галя ще се разхожда.',
+    ],
+  } as ImageLabelingExercise,
+
+  // ─── ORDER 2 — ДИАЛОЗИ 1 (стр. 43–44) ───────────────────────────────────────
+  {
+    id: 'a2-l04-dialozi-01',
+    type: 'dialogues',
+    title: 'ДИАЛОЗИ 1',
+    instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
+    order: 2,
+    sections: [
+      {
+        id: 'а.',
+        lines: [
+          { text: 'Какво ще правиш в събота?', voiceGender: 'female' },
+          { text: 'Ще отида на разходка в планината. Ще замина в петък вечерта и ще се върна в неделя вечерта. Имам нужда от почивка. А ти?', voiceGender: 'male' },
+          { text: 'Аз ще съм вкъщи. Ще стана късно, след обяд ще се срещна с приятели. Може би вечерта ще отида на кино.', voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'б.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'В петък имам рожден ден. Заповядай вкъщи. Ще дойдеш ли?', voiceGender: 'male' },
+          { text: 'Да, ще дойда! Кога?', voiceGender: 'female' },
+          { text: 'След 7 часа вечерта.', voiceGender: 'male', ttsText: 'След седем часа вечерта.' },
+        ],
+      },
+      {
+        id: 'в.',
+        lines: [
+          { text: 'Много съм уморен! Ще си легна рано тази вечер.', voiceGender: 'male' },
+          { text: 'Аз ще взема душ и ще изляза с приятели.', voiceGender: 'female' },
+          { text: 'Кога ще се върнеш?', voiceGender: 'male' },
+          { text: 'Късно, утре е събота и няма да ходя на работа.', voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'г.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'Ще се обадя на Валя и ще отидем на кафе. Ти ще дойдеш ли?', voiceGender: 'female' },
+          { text: 'Не, няма да дойда. Ще отида на пазар, ще купя зеленчуци за вечеря.', voiceGender: 'male' },
+        ],
+      },
+      {
+        id: 'д.',
+        lines: [
+          { text: 'Ще затвориш ли вратата? Студено ми е.', voiceGender: 'female' },
+          { text: 'Разбира се.', voiceGender: 'male' },
+          { text: 'Ще отвориш ли прозореца? Топло ми е.', voiceGender: 'female' },
+          { text: 'Добре.', voiceGender: 'male' },
+        ],
+      },
+      {
+        id: 'е.',
+        bubbleSide: 'right',
+        lines: [
+          { text: 'Много съм нервна. Утре имам интервю за работа. Ще закъснея, ще забравя всичко!', voiceGender: 'female' },
+          { text: 'Спокойно! Няма да забравиш нищо, няма да закъснееш. Ще тръгнеш по-рано, ще пристигнеш навреме и всичко ще е наред.', voiceGender: 'female' },
+          { text: 'Супер, хайде да отидем на ресторант след това!', voiceGender: 'female' },
+          { text: 'Добре, ще отидем на хубав ресторант.', voiceGender: 'female' },
+          { text: 'Чудесно, аз ще платя сметката.', voiceGender: 'female' },
+        ],
+      },
+      {
+        id: 'ж.',
+        lines: [
+          { text: 'Утре ще започна работа по-рано и ще свърша по-рано. Ще имам повече време и ще бъда с децата.', voiceGender: 'female' },
+          { text: 'Аз ще започна нов проект и ще свърша по-късно. Довечера ще се върна след 8 часа.', voiceGender: 'male', ttsText: 'Аз ще започна нов проект и ще свърша по-късно. Довечера ще се върна след осем часа.' },
+          { text: 'Добре, през уикенда ще имаме свободно време и ще бъдем всички заедно.', voiceGender: 'female' },
+        ],
+      },
+    ],
+  } as DialoguesExercise,
+
+  // SKIP — Упр. 2 „Прочетете диалозите по двойки" (по желание на клиента)
+  // SKIP — Упр. 3 „Работете по двойки" (по желание на клиента)
+
+  // ─── ORDER 3 — ГРАМАТИКА 1 (стр. 44): несъвършен / свършен вид ─────────────
+  {
+    id: 'a2-l04-gramatika-01',
+    type: 'grammar_examples',
+    title: 'ГРАМАТИКА 1',
+    subtitle: 'Вид на глагола',
+    instruction: 'Запознайте се с разликата между несъвършен и свършен вид.',
+    instructionKey: 'a2.gr.l04.verbAspect',
+    order: 3,
+    layout: 'centered',
+    examples: [
+      {
+        imageUrl: '',
+        text: 'НЕСВЪРШЕН ВИД — много пъти',
+        lines: [
+          'Всеки ден **отивам** на училище.',
+          'Често **купувам** плодове.',
+          'През седмицата **ставам** рано.',
+          'Винаги **идвам** на работа в 8:00.',
+          'Обикновено **се връщам** вкъщи в 18:00.',
+        ],
+        ttsText: 'Несъвършен вид. Много пъти. Всеки ден отивам на училище. Често купувам плодове. През седмицата ставам рано. Винаги идвам на работа в осем часа. Обикновено се връщам вкъщи в осемнайсет часа.',
+        voiceGender: 'female',
+      },
+      {
+        imageUrl: '',
+        text: 'СВЪРШЕН ВИД — един път',
+        lines: [
+          'Утре също **ще отида** на училище.',
+          'Днес също **ще купя** плодове.',
+          'В събота **ще стана** късно.',
+          'Утре **ще дойда** в 8:30.',
+          'Довечера **ще се върна** в 19:00.',
+        ],
+        ttsText: 'Свършен вид. Един път. Утре също ще отида на училище. Днес също ще купя плодове. В събота ще стана късно. Утре ще дойда в осем и тридесет. Довечера ще се върна в деветнайсет часа.',
+        voiceGender: 'female',
+      },
+    ],
+  } as GrammarExamplesExercise,
+
+  // ─── ORDER 4 — ГРАМАТИКА 2 (стр. 44): спрежение отивам / идвам / давам ─────
+  {
+    id: 'a2-l04-gramatika-02',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 2',
+    subtitle: 'Бъдеще време на глаголите от свършен вид',
+    instruction: 'Запознайте се с бъдеще време на глаголите от свършен вид.',
+    instructionKey: 'a2.gr.l04.futurePerfective',
+    order: 4,
+    tableTitle: 'Сегашно → бъдеще (свършен вид)',
+    columns: ['отивам', 'идвам', 'давам'],
+    rows: [
+      { pronoun: 'аз',        cells: ['отивам → **ще отида**',   'идвам → **ще дойда**',   'давам → **ще дам**'],   ttsText: 'аз. отивам, ще отида. идвам, ще дойда. давам, ще дам.' },
+      { pronoun: 'ти',        cells: ['отиваш → **ще отидеш**', 'идваш → **ще дойдеш**', 'даваш → **ще дадеш**'], ttsText: 'ти. отиваш, ще отидеш. идваш, ще дойдеш. даваш, ще дадеш.' },
+      { pronoun: 'той/тя/то', cells: ['отива → **ще отиде**',   'идва → **ще дойде**',   'дава → **ще даде**'],   ttsText: 'той, тя, то. отива, ще отиде. идва, ще дойде. дава, ще даде.' },
+      { pronoun: 'ние',       cells: ['отиваме → **ще отидем**', 'идваме → **ще дойдем**', 'даваме → **ще дадем**'], ttsText: 'ние. отиваме, ще отидем. идваме, ще дойдем. даваме, ще дадем.' },
+      { pronoun: 'Вие',       cells: ['отивате → **ще отидете**', 'идвате → **ще дойдете**', 'давате → **ще дадете**'], ttsText: 'Вие. отивате, ще отидете. идвате, ще дойдете. давате, ще дадете.' },
+      { pronoun: 'те',        cells: ['отиват → **ще отидат**', 'идват → **ще дойдат**', 'дават → **ще дадат**'], ttsText: 'те. отиват, ще отидат. идват, ще дойдат. дават, ще дадат.' },
+    ],
+    notes: [
+      'Бъдеще време на свършен вид: ще + свършена форма (отида, дойда, дам…).',
+      'Несъвършен вид описва повтарящо се действие; свършеният вид — еднократно бъдещо действие.',
+    ],
+    ttsNotes: [
+      'Бъдеще време на свършен вид: ще плюс свършена форма.',
+      'Несъвършен вид — повтарящо се действие. Свършен вид — еднократно бъдещо действие.',
+    ],
+  } as GrammarTableExercise,
+
+  // ─── ORDER 5 — Упр. 4 (стр. 45): свържете глаголите ────────────────────────
+  {
+    id: 'a2-l04-ex-04',
+    type: 'dropdown_match',
+    instruction: 'Изберете свършената форма, която съответства на несъвършения глагол.',
+    order: 5,
+    points: 25,
+    questions: [
+      { id: 'g1-q0', left: '1. отивам', options: [], correctAnswer: 'отида', isExample: true },
+      { id: 'g1-q1', left: '2. идвам', options: ['дойда', 'отида', 'дам', 'стана', 'замина'], correctAnswer: 'дойда' },
+      { id: 'g1-q2', left: '3. връщам се', options: ['върна се', 'срещна се', 'легна си', 'изляза', 'затворя'], correctAnswer: 'върна се' },
+      { id: 'g1-q3', left: '4. ставам', options: ['стана', 'забравя', 'закъснея', 'отворя', 'взема'], correctAnswer: 'стана' },
+      { id: 'g1-q4', left: '5. срещам се', options: ['срещна се', 'замина', 'затворя', 'забравя', 'отида'], correctAnswer: 'срещна се' },
+      { id: 'g1-q5', left: '6. заминавам', options: ['замина', 'легна си', 'изляза', 'отворя', 'върна се'], correctAnswer: 'замина' },
+      { id: 'g1-q6', left: '7. лягам си', options: ['легна си', 'взема', 'затворя', 'забравя', 'закъснея'], correctAnswer: 'легна си' },
+      { id: 'g1-q7', left: '8. вземам', options: ['взема', 'изляза', 'отворя', 'затворя', 'забравя'], correctAnswer: 'взема' },
+      { id: 'g1-q8', left: '9. излизам', options: ['изляза', 'затворя', 'отворя', 'забравя', 'закъснея'], correctAnswer: 'изляза' },
+      { id: 'g1-q9', left: '10. затварям', options: ['затворя', 'отворя', 'забравя', 'закъснея', 'взема'], correctAnswer: 'затворя' },
+      { id: 'g1-q10', left: '11. отварям', options: ['отворя', 'затворя', 'забравя', 'закъснея', 'изляза'], correctAnswer: 'отворя' },
+      { id: 'g1-q11', left: '12. закъснявам', options: ['закъснея', 'забравя', 'отворя', 'затворя', 'легна си'], correctAnswer: 'закъснея' },
+      { id: 'g1-q12', left: '13. забравям', options: ['забравя', 'закъснея', 'отворя', 'затворя', 'взема'], correctAnswer: 'забравя' },
+      { id: 'g2-q0', left: '1. тръгвам', options: [], correctAnswer: 'тръгна', isExample: true },
+      { id: 'g2-q1', left: '2. пристигам', options: ['пристигна', 'тръгна', 'платя', 'започна', 'свърша'], correctAnswer: 'пристигна' },
+      { id: 'g2-q2', left: '3. плащам', options: ['платя', 'кажа', 'видя', 'дам', 'помогна'], correctAnswer: 'платя' },
+      { id: 'g2-q3', left: '4. започвам', options: ['започна', 'свърша', 'кажа', 'видя', 'намеря'], correctAnswer: 'започна' },
+      { id: 'g2-q4', left: '5. свършвам', options: ['свърша', 'кажа', 'видя', 'разбера', 'поканя'], correctAnswer: 'свърша' },
+      { id: 'g2-q5', left: '6. казвам', options: ['кажа', 'видя', 'дам', 'помогна', 'обадя се'], correctAnswer: 'кажа' },
+      { id: 'g2-q6', left: '7. виждам', options: ['видя', 'дам', 'помогна', 'разбера', 'намеря'], correctAnswer: 'видя' },
+      { id: 'g2-q7', left: '8. давам', options: ['дам', 'помогна', 'обадя се', 'разбера', 'поканя'], correctAnswer: 'дам' },
+      { id: 'g2-q8', left: '9. помагам', options: ['помогна', 'обадя се', 'разбера', 'намеря', 'поканя'], correctAnswer: 'помогна' },
+      { id: 'g2-q9', left: '10. обаждам се', options: ['обадя се', 'разбера', 'намеря', 'поканя', 'платя'], correctAnswer: 'обадя се' },
+      { id: 'g2-q10', left: '11. разбирам', options: ['разбера', 'намеря', 'поканя', 'видя', 'кажа'], correctAnswer: 'разбера' },
+      { id: 'g2-q11', left: '12. намирам', options: ['намеря', 'поканя', 'помогна', 'дам', 'свърша'], correctAnswer: 'намеря' },
+      { id: 'g2-q12', left: '13. каня', options: ['поканя', 'намеря', 'разбера', 'обадя се', 'платя'], correctAnswer: 'поканя' },
+    ],
+  } as DropdownMatchExercise,
+
+  // ─── ORDER 6 — Упр. 5 (стр. 45): всеки ден → утре ──────────────────────────
+  {
+    id: 'a2-l04-ex-05',
+    type: 'workbook_fill_blank',
+    instruction: 'Преобразувайте изреченията в бъдеще време по модела „Всеки ден вземам душ. (+) Утре ще взема душ също."',
+    order: 6,
+    points: 6,
+    layout: 'two-column',
+    sentences: [
+      { text: 'Всеки ден вземам душ. | Утре ще взема душ също.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Всеки ден вземам душ. (−) | _______', blanks: [1], correctAnswers: ['Утре няма да взема душ.'], acceptableAnswers: [['утре няма да взема душ.', 'утре няма да взема душ']] },
+      { text: 'Всеки ден купувам храна. (+) | _______', blanks: [1], correctAnswers: ['Утре ще купя храна също.'], acceptableAnswers: [['утре ще купя храна също.', 'утре ще купя храна също']] },
+      { text: 'Всеки ден отивам на училище. (+) | _______', blanks: [1], correctAnswers: ['Утре ще отида на училище също.'], acceptableAnswers: [['утре ще отида на училище също.', 'утре ще отида на училище също']] },
+      { text: 'Всеки ден идвам тук. (−) | _______', blanks: [1], correctAnswers: ['Утре няма да дойда тук.'], acceptableAnswers: [['утре няма да дойда тук.', 'утре няма да дойда тук']] },
+      { text: 'Всеки ден се връщам в 7:00 часа. (+) | _______', blanks: [1], correctAnswers: ['Утре ще се върна в 7:00 часа също.'], acceptableAnswers: [['утре ще се върна в 7:00 часа също.', 'утре ще се върна в седем часа също.']] },
+      { text: 'Всеки ден се срещам с приятели. (−) | _______', blanks: [1], correctAnswers: ['Утре няма да се срещна с приятели.'], acceptableAnswers: [['утре няма да се срещна с приятели.', 'утре няма да се срещна с приятели']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 7 — Упр. 6 (стр. 45): подчертайте правилната форма ───────────────
+  {
+    id: 'a2-l04-ex-06',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната форма на глагола.',
+    order: 7,
+    points: 8,
+    layout: 'single',
+    sentences: [
+      { text: 'Всеки ден **започвам** / започна работа в 8:00 часа.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Обикновено _______ / _______ работа в 17:00 часа.', blanks: [1], correctAnswers: ['свършвам'], options: ['свършвам', 'свърша'], acceptableAnswers: [['свършвам']] },
+      { text: 'Утре ще _______ / _______ Милена след работа.', blanks: [1], correctAnswers: ['видя'], options: ['виждам', 'видя'], acceptableAnswers: [['видя']] },
+      { text: 'Днес ще _______ / _______ на Иван за купона.', blanks: [1], correctAnswers: ['кажа'], options: ['казвам', 'кажа'], acceptableAnswers: [['кажа']] },
+      { text: 'Винаги _______ / _______ офиса в 9:00 часа.', blanks: [1], correctAnswers: ['отварям'], options: ['отварям', 'отворя'], acceptableAnswers: [['отварям']] },
+      { text: 'Често _______ / _______ пари на Али за наема.', blanks: [1], correctAnswers: ['давам'], options: ['давам', 'дам'], acceptableAnswers: [['давам']] },
+      { text: 'Понякога _______ / _______ рано за офиса.', blanks: [1], correctAnswers: ['тръгвам'], options: ['тръгвам', 'тръгна'], acceptableAnswers: [['тръгвам']] },
+      { text: 'Ще _______ / _______ в понеделник.', blanks: [1], correctAnswers: ['пристигна'], options: ['пристигам', 'пристигна'], acceptableAnswers: [['пристигна']] },
+      { text: 'Утре ще _______ / _______ в 5:00 часа.', blanks: [1], correctAnswers: ['дойда'], options: ['идвам', 'дойда'], acceptableAnswers: [['дойда']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 8 — Упр. 7 (стр. 45): планове за следващата седмица ─────────────
+  {
+    id: 'a2-l04-ex-07',
+    type: 'a2-free-fill',
+    instruction: 'Изберете какво ще правите всеки ден от следващата седмица.',
+    order: 8,
+    points: 0,
+    sentences: [
+      { label: 'В понеделник ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'Във вторник ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'В сряда ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'В четвъртък ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'В петък ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'В събота ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+      { label: 'В неделя ще', options: ['каня гости', 'отивам в парка', 'плащам сметките', 'купувам храна от магазина', 'излизам с приятели', 'лягам си късно', 'обаждам се на приятели'] },
+    ],
+  } as unknown as Exercise,
+
+  // ─── ORDER 9 — Упр. 8 (стр. 46): довършете диалозите ───────────────────────
+  {
+    id: 'a2-l04-ex-08',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната глаголна форма от менюто, за да довършите диалозите.',
+    order: 9,
+    points: 7,
+    layout: 'two-column',
+    sentences: [
+      { text: '— _______ ли довечера на купона?', blanks: [1], correctAnswers: ['Ще дойдеш'], options: ['Ще дойдеш', 'няма да дойда', 'ще дойде', 'ще дойдат'], acceptableAnswers: [['ще дойдеш', 'Ще дойдеш']] },
+      { text: '— Не, _______.', blanks: [1], correctAnswers: ['няма да дойда'], options: ['Ще дойдеш', 'няма да дойда', 'ще дойде', 'ще дойдат'], acceptableAnswers: [['няма да дойда']] },
+      { text: '— Кой _______?', blanks: [1], correctAnswers: ['ще дойде'], options: ['Ще дойдеш', 'няма да дойда', 'ще дойде', 'ще дойдат'], acceptableAnswers: [['ще дойде']] },
+      { text: '— Може би _______ много колеги.', blanks: [1], correctAnswers: ['ще дойдат'], options: ['Ще дойдеш', 'няма да дойда', 'ще дойде', 'ще дойдат'], acceptableAnswers: [['ще дойдат']] },
+      { text: '— _______ ли в банката утре?', blanks: [1], correctAnswers: ['Ще отидеш'], options: ['Ще отидеш', 'няма да отида', 'ще отидеш'], acceptableAnswers: [['ще отидеш', 'Ще отидеш']] },
+      { text: '— Не, _______.', blanks: [1], correctAnswers: ['няма да отида'], options: ['Ще отидеш', 'няма да отида', 'ще отидеш'], acceptableAnswers: [['няма да отида']] },
+      { text: '— Кога _______?', blanks: [1], correctAnswers: ['ще отидеш'], options: ['Ще отидеш', 'няма да отида', 'ще отидеш'], acceptableAnswers: [['ще отидеш', 'Ще отидеш']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 10 — Упр. 9 (стр. 46–47): ПОЧИВКА ПРЕЗ ЛЯТОТО ───────────────────
+  {
+    id: 'a2-l04-ex-09',
+    type: 'workbook_fill_blank',
+    title: 'ПОЧИВКА ПРЕЗ ЛЯТОТО',
+    instruction: 'Напишете изречения, като използвате дадените думи и поставите глаголите от списъка в бъдеще време.',
+    order: 10,
+    points: 18,
+    layout: 'single',
+    headerImages: [
+      { imageUrl: `${ASSET}/03-upr-09-pochivka-lyato/01-atanas-rim.jpg`, label: 'Атанас — Рим' },
+      { imageUrl: `${ASSET}/03-upr-09-pochivka-lyato/02-diana-atina.jpg`, label: 'Диана — Атина' },
+      { imageUrl: `${ASSET}/03-upr-09-pochivka-lyato/03-ivo-petya-rila.jpg`, label: 'Иво и Петя — Рила' },
+    ],
+    sentences: [
+      { text: 'През лятото Атанас ще отиде в Рим.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Той _______ с кафе и кроасани.', blanks: [1], correctAnswers: ['ще закуси'], acceptableAnswers: [['ще закуси', 'ще закусва']] },
+      { text: 'Той _______ пица.', blanks: [1], correctAnswers: ['ще обядва'], acceptableAnswers: [['ще обядва', 'ще обядва с пица']] },
+      { text: 'Той _______ спагети.', blanks: [1], correctAnswers: ['ще вечеря'], acceptableAnswers: [['ще вечеря', 'ще вечеря спагети']] },
+      { text: 'Той _______ в хотел.', blanks: [1], correctAnswers: ['ще спи'], acceptableAnswers: [['ще спи']] },
+      { text: 'Той _______ нови приятели.', blanks: [1], correctAnswers: ['ще срещне'], acceptableAnswers: [['ще срещне', 'ще се срещне']] },
+      { text: 'Той _______ сувенири.', blanks: [1], correctAnswers: ['ще купи'], acceptableAnswers: [['ще купи', 'ще купува']] },
+      { text: 'През лятото Диана ще отиде в Атина.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Тя _______ с портокалов сок, кафе и сандвичи.', blanks: [1], correctAnswers: ['ще закуси'], acceptableAnswers: [['ще закуси', 'ще закусва']] },
+      { text: 'Тя _______ риба.', blanks: [1], correctAnswers: ['ще обядва'], acceptableAnswers: [['ще обядва']] },
+      { text: 'Тя _______ салата и вино.', blanks: [1], correctAnswers: ['ще вечеря'], acceptableAnswers: [['ще вечеря']] },
+      { text: 'Тя _______ в апартамент на приятели.', blanks: [1], correctAnswers: ['ще спи'], acceptableAnswers: [['ще спи']] },
+      { text: 'Тя _______ българи.', blanks: [1], correctAnswers: ['ще срещне'], acceptableAnswers: [['ще срещне', 'ще се срещне']] },
+      { text: 'Тя _______ паметници.', blanks: [1], correctAnswers: ['ще види'], acceptableAnswers: [['ще види', 'ще вижда']] },
+      { text: 'През лятото Иво и Петя ще отидат в Рила планина.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Те _______ с плодове, чай и мед.', blanks: [1], correctAnswers: ['ще закусят'], acceptableAnswers: [['ще закусят', 'ще закусват']] },
+      { text: 'Те _______ супа и шопска салата.', blanks: [1], correctAnswers: ['ще обядват'], acceptableAnswers: [['ще обядват']] },
+      { text: 'Те _______ скара, зеленчуци и вино.', blanks: [1], correctAnswers: ['ще вечерят'], acceptableAnswers: [['ще вечерят']] },
+      { text: 'Те _______ в малък хотел.', blanks: [1], correctAnswers: ['ще спят'], acceptableAnswers: [['ще спят']] },
+      { text: 'Те _______ малко хора.', blanks: [1], correctAnswers: ['ще срещнат'], acceptableAnswers: [['ще срещнат', 'ще се срещнат']] },
+      { text: 'Те _______ красива природа.', blanks: [1], correctAnswers: ['ще видят'], acceptableAnswers: [['ще видят', 'ще виждат']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 11 — Упр. 10 (стр. 47–48): Какво ще прави Митко утре ─────────────
+  {
+    id: 'a2-l04-ex-10',
+    type: 'image_labeling',
+    instruction: 'Изберете подходящото изречение в бъдеще време под всяка картинка.',
+    order: 11,
+    points: 19,
+    hideHeader: true,
+    images: [
+      { id: 'stane',       imageUrl: `${ASSET}/04-upr-10-mitko/01-stane.jpg`,       correctLabel: 'Утре Митко ще стане в 7:00.', isExample: true },
+      { id: 'dush',        imageUrl: `${ASSET}/04-upr-10-mitko/02-dush.jpg`,        correctLabel: 'Ще вземе душ.' },
+      { id: 'zakusva',     imageUrl: `${ASSET}/04-upr-10-mitko/03-zakusva.jpg`,     correctLabel: 'Ще закусва.' },
+      { id: 'piya-mlyako', imageUrl: `${ASSET}/04-upr-10-mitko/04-piya-mlyako.jpg`, correctLabel: 'Ще пие мляко.' },
+      { id: 'izliza',      imageUrl: `${ASSET}/04-upr-10-mitko/05-izliza.jpg`,      correctLabel: 'Ще излезе от къщи в 8:00 часа.' },
+      { id: 'uchilishte',  imageUrl: `${ASSET}/04-upr-10-mitko/06-uchilishte.jpg`,  correctLabel: 'Ще отиде на училище.' },
+      { id: 'zakasnyava',  imageUrl: `${ASSET}/04-upr-10-mitko/07-zakasnyava.jpg`,  correctLabel: 'Ще закъснее за час.' },
+      { id: 'uchi',        imageUrl: `${ASSET}/04-upr-10-mitko/08-uchi.jpg`,        correctLabel: 'Ще учи.' },
+      { id: 'fanta',       imageUrl: `${ASSET}/04-upr-10-mitko/09-fanta.jpg`,       correctLabel: 'Ще купи Фанта през междучасието.' },
+      { id: 'hamburger',   imageUrl: `${ASSET}/04-upr-10-mitko/10-hamburger.jpg`,   correctLabel: 'Ще обядва хамбургер и сок.' },
+      { id: 'telefon',     imageUrl: `${ASSET}/04-upr-10-mitko/11-telefon.jpg`,     correctLabel: 'Ще се обади по телефона.' },
+      { id: 'priyateli',   imageUrl: `${ASSET}/04-upr-10-mitko/12-priyateli.jpg`,   correctLabel: 'Ще се срещне с приятели.' },
+      { id: 'kino',        imageUrl: `${ASSET}/04-upr-10-mitko/13-kino.jpg`,        correctLabel: 'Ще отиде на кино.' },
+      { id: 'patuva',      imageUrl: `${ASSET}/04-upr-10-mitko/14-patuva.jpg`,      correctLabel: 'Ще пътува.' },
+      { id: 'vrata',       imageUrl: `${ASSET}/04-upr-10-mitko/15-vrata.jpg`,       correctLabel: 'Ще отвори вратата.' },
+      { id: 'ranitsa',     imageUrl: `${ASSET}/04-upr-10-mitko/16-ranitsa.jpg`,     correctLabel: 'Ще сложи раницата.' },
+      { id: 'zelenchuci',  imageUrl: `${ASSET}/04-upr-10-mitko/17-zelenchuci.jpg`,  correctLabel: 'Няма да яде зеленчуци.' },
+      { id: 'televiziya',  imageUrl: `${ASSET}/04-upr-10-mitko/18-televiziya.jpg`,  correctLabel: 'Няма да гледа телевизия.' },
+      { id: 'spya',        imageUrl: `${ASSET}/04-upr-10-mitko/19-bolen.jpg`,       correctLabel: 'Ще е болен.' },
+      { id: 'snyava',      imageUrl: `${ASSET}/04-upr-10-mitko/20-spya-snyava.jpg`, correctLabel: 'Ще ляга да спи рано и ще мечтае за нов телефон.' },
+    ],
+    options: [
+      'Утре Митко ще стане в 7:00.',
+      'Ще вземе душ.',
+      'Ще закусва.',
+      'Ще пие мляко.',
+      'Ще излезе от къщи в 8:00 часа.',
+      'Ще отиде на училище.',
+      'Ще закъснее за час.',
+      'Ще учи.',
+      'Ще купи Фанта през междучасието.',
+      'Ще обядва хамбургер и сок.',
+      'Ще се обади по телефона.',
+      'Ще се срещне с приятели.',
+      'Ще отиде на кино.',
+      'Ще пътува.',
+      'Ще отвори вратата.',
+      'Ще сложи раницата.',
+      'Няма да яде зеленчуци.',
+      'Няма да гледа телевизия.',
+      'Ще е болен.',
+      'Ще ляга да спи рано и ще мечтае за нов телефон.',
+    ],
+  } as ImageLabelingExercise,
+
+  // ─── ORDER 12 — Упр. 11 (стр. 48): отговорете по модела ─────────────────────
+  {
+    id: 'a2-l04-ex-11',
+    type: 'workbook_fill_blank',
+    instruction: 'Попълнете положителен и отрицателен отговор по модела „Ще купите ли кафе? Да, ще купя. / Не, няма да купя."',
+    order: 12,
+    points: 20,
+    layout: 'single',
+    sentences: [
+      { text: 'Ще купите ли кафе? | Да, ще купя. / Не, няма да купя.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Ще дойдат ли утре? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще дойдат.', 'Не, няма да дойдат.'], acceptableAnswers: [['да, ще дойдат.', 'да, ще дойдат'], ['не, няма да дойдат.', 'не, няма да дойдат']] },
+      { text: 'Ще пътуваш ли довечера? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще пътувам.', 'Не, няма да пътувам.'], acceptableAnswers: [['да, ще пътувам.', 'да, ще пътувам'], ['не, няма да пътувам.', 'не, няма да пътувам']] },
+      { text: 'Ще отворите ли вратата? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще отворя.', 'Не, няма да отворя.'], acceptableAnswers: [['да, ще отворя.', 'да, ще отворим.'], ['не, няма да отворя.', 'не, няма да отворим.']] },
+      { text: 'Мария ще излезе ли тази вечер? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще излезе.', 'Не, няма да излезе.'], acceptableAnswers: [['да, ще излезе.', 'да, ще излезе'], ['не, няма да излезе.', 'не, няма да излезе']] },
+      { text: 'Явор ще отиде ли на кино? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще отиде.', 'Не, няма да отиде.'], acceptableAnswers: [['да, ще отиде.', 'да, ще отиде'], ['не, няма да отиде.', 'не, няма да отиде']] },
+      { text: 'Елена ще се върне ли за обяд? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще се върне.', 'Не, няма да се върне.'], acceptableAnswers: [['да, ще се върне.', 'да, ще се върне'], ['не, няма да се върне.', 'не, няма да се върне']] },
+      { text: 'Ще пристигнат ли навреме? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще пристигнат.', 'Не, няма да пристигнат.'], acceptableAnswers: [['да, ще пристигнат.', 'да, ще пристигнат'], ['не, няма да пристигнат.', 'не, няма да пристигнат']] },
+      { text: 'Ще помогнат ли на Румяна? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще помогнат.', 'Не, няма да помогнат.'], acceptableAnswers: [['да, ще помогнат.', 'да, ще помогнат'], ['не, няма да помогнат.', 'не, няма да помогнат']] },
+      { text: 'Ще кажете ли на Зоя? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще кажем.', 'Не, няма да кажем.'], acceptableAnswers: [['да, ще кажем.', 'да, ще кажа.'], ['не, няма да кажем.', 'не, няма да кажа.']] },
+      { text: 'Петър ще вземе ли кафе? | _______ / _______', blanks: [1, 2], correctAnswers: ['Да, ще вземе.', 'Не, няма да вземе.'], acceptableAnswers: [['да, ще вземе.', 'да, ще вземе'], ['не, няма да вземе.', 'не, няма да вземе']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // SKIP — Упр. 12 „Какво ще/няма да правите през уикенда?" (по желание на клиента)
+  // SKIP — Упр. 13 „Намерете някой от групата" (по желание на клиента)
+
+  // ─── ORDER 13 — Упр. 14 текст (стр. 49): Пловдив ───────────────────────────
+  {
+    id: 'a2-l04-tekst-plovdiv',
+    type: 'reading_text',
+    title: 'УПРАЖНЕНИЕ 14',
+    textTitle: 'План за Пловдив',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 13,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-plovdiv-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/05-upr-14-plovdiv/01-kashta-plovdiv.jpg`, label: 'Старият град, Пловдив' },
+    ],
+    paragraphs: [
+      'В сряда ще ходя в Пловдив. Ще пътувам с кола. Ще тръгна рано. Ще видя Стария град. Ще отида на кафе. Ще се разхождам много. Времето ще е слънчево. Ще се върна в София късно вечерта.',
+    ],
+    ttsParagraphs: [
+      'В сряда ще ходя в Пловдив. Ще пътувам с кола. Ще тръгна рано. Ще видя Стария град. Ще отида на кафе. Ще се разхождам много. Времето ще е слънчево. Ще се върна в София късно вечерта.',
+    ],
+    paragraphVoiceGenders: ['female'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 14 — Упр. 14 (стр. 49): вярно или грешно ────────────────────────
+  {
+    id: 'a2-l04-ex-14',
+    type: 'true_false',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
+    order: 14,
+    points: 5,
+    sentences: [
+      { id: 's01', text: 'В неделя ще ходя в Пловдив.',              isTrue: false },
+      { id: 's02', text: 'Ще пътувам с автобус.',                    isTrue: false },
+      { id: 's03', text: 'Ще се разхождам в новия град.',            isTrue: false },
+      { id: 's04', text: 'Времето ще е хубаво.',                      isTrue: true  },
+      { id: 's05', text: 'Ще се върна в София късно.',               isTrue: true  },
+    ],
+  } as TrueFalseExercise,
+
+  // ─── ORDER 15 — Упр. 15 текст (стр. 49): Калина ────────────────────────────
+  {
+    id: 'a2-l04-tekst-kalina',
+    type: 'reading_text',
+    title: 'УПРАЖНЕНИЕ 15',
+    textTitle: 'Калина заминава за Испания',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 15,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-kalina-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/06-upr-15-kalina-magazin/01-kalina-magazin.jpg`, label: 'Калина в магазин' },
+    ],
+    paragraphs: [
+      'Калина е на 30 години. Тя живее в малък град близо до Варна. Няма работа от две години. Следващия месец ще замине за Испания. Там има добри приятели. Те имат малък магазин за дрехи. Калина ще работи в магазина им. Скоро ще започне нов живот, ще срещне нови хора, ще учи испански. Ще се чувства добре, но винаги ще мисли за България. В България са семейството ѝ и най-добрите ѝ приятели.',
+    ],
+    ttsParagraphs: [
+      'Калина е на тридесет години. Тя живее в малък град близо до Варна. Няма работа от две години. Следващия месец ще замине за Испания. Там има добри приятели. Те имат малък магазин за дрехи. Калина ще работи в магазина им. Скоро ще започне нов живот, ще срещне нови хора, ще учи испански. Ще се чувства добре, но винаги ще мисли за България. В България са семейството ѝ и най-добрите ѝ приятели.',
+    ],
+    paragraphVoiceGenders: ['female'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 16 — Упр. 15 (стр. 49): вярно или грешно ────────────────────────
+  {
+    id: 'a2-l04-ex-15',
+    type: 'true_false',
+    instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
+    order: 16,
+    points: 5,
+    sentences: [
+      { id: 's01', text: 'Калина е на 40 години.',                   isTrue: false },
+      { id: 's02', text: 'Тя ще замине за Испания следващата седмица.', isTrue: false },
+      { id: 's03', text: 'Ще работи като учителка.',                 isTrue: false },
+      { id: 's04', text: 'Няма да учи испански език.',               isTrue: false },
+      { id: 's05', text: 'Калина много обича България.',             isTrue: true  },
+    ],
+  } as TrueFalseExercise,
+
+  // ─── ORDER 17 — ДОПЪЛНИТЕЛНИ Упр. 16 (стр. 49): Боряна ─────────────────────
+  {
+    id: 'a2-l04-tekst-boryana',
+    type: 'reading_text',
+    title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЕ 16',
+    textTitle: 'Неделя на Боряна',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 17,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-boryana-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/07-dopalnitelni-upr-16-boryana-supermarket/01-boryana-supermarket.jpg`, label: 'Боряна в супермаркет' },
+    ],
+    paragraphs: [
+      'Утре е неделя. Боряна няма да ходи на работа. Ще стане късно, ще вземе душ и ще отиде на пазар. Ще купи храна и ще се върне вкъщи. Ще обядва, ще гледа телевизия. После ще отиде на гости. Ще се върне късно и ще си легне след 23:00.',
+    ],
+    ttsParagraphs: [
+      'Утре е неделя. Боряна няма да ходи на работа. Ще стане късно, ще вземе душ и ще отиде на пазар. Ще купи храна и ще се върне вкъщи. Ще обядва, ще гледа телевизия. После ще отиде на гости. Ще се върне късно и ще си легне след двадесет и три часа.',
+    ],
+    paragraphVoiceGenders: ['female'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 18 — Упр. 17 (стр. 49): Веси и Боян ─────────────────────────────
+  {
+    id: 'a2-l04-ex-17',
+    type: 'workbook_fill_blank',
+    instruction: 'Попълнете изреченията за Веси и Боян по модела на текста от упр. 16.',
+    order: 18,
+    points: 10,
+    layout: 'single',
+    sentences: [
+      { text: 'Утре е неделя. Веси и Боян няма да ходят на работа.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Те _______ късно.', blanks: [1], correctAnswers: ['ще станат'], acceptableAnswers: [['ще станат']] },
+      { text: 'Те _______ душ.', blanks: [1], correctAnswers: ['ще вземат'], acceptableAnswers: [['ще вземат']] },
+      { text: 'Те _______ на пазар.', blanks: [1], correctAnswers: ['ще отидат'], acceptableAnswers: [['ще отидат']] },
+      { text: 'Те _______ храна.', blanks: [1], correctAnswers: ['ще купят'], acceptableAnswers: [['ще купят']] },
+      { text: 'Те _______ вкъщи.', blanks: [1], correctAnswers: ['ще се върнат'], acceptableAnswers: [['ще се върнат']] },
+      { text: 'Те _______.', blanks: [1], correctAnswers: ['ще обядват'], acceptableAnswers: [['ще обядват']] },
+      { text: 'Те _______ телевизия.', blanks: [1], correctAnswers: ['ще гледат'], acceptableAnswers: [['ще гледат']] },
+      { text: 'Те _______ на гости.', blanks: [1], correctAnswers: ['ще отидат'], acceptableAnswers: [['ще отидат']] },
+      { text: 'Те _______ късно.', blanks: [1], correctAnswers: ['ще се върнат'], acceptableAnswers: [['ще се върнат']] },
+      { text: 'Те _______ след 23:00.', blanks: [1], correctAnswers: ['ще си легнат'], acceptableAnswers: [['ще си легнат', 'ще легнат']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 19 — Упр. 18 (стр. 49): бъдеще време ────────────────────────────
+  {
+    id: 'a2-l04-ex-18',
+    type: 'workbook_fill_blank',
+    instruction: 'Поставете глаголите в бъдеще време по модела „Тя ще дойде в 7 часа. (дойда)".',
+    order: 19,
+    points: 9,
+    layout: 'single',
+    sentences: [
+      { text: 'Тя ще дойде в 7 часа. (дойда)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Те _______ на кино. (отида)', blanks: [1], correctAnswers: ['ще отидат'], acceptableAnswers: [['ще отидат']] },
+      { text: 'Ние _______ пари. (дам)', blanks: [1], correctAnswers: ['ще дадем'], acceptableAnswers: [['ще дадем']] },
+      { text: 'Той _______ прозореца. (отворя)', blanks: [1], correctAnswers: ['ще отвори'], acceptableAnswers: [['ще отвори']] },
+      { text: 'Те _______ пералня. (купя)', blanks: [1], correctAnswers: ['ще купят'], acceptableAnswers: [['ще купят']] },
+      { text: 'Аз _______ в понеделник. (тръгна)', blanks: [1], correctAnswers: ['ще тръгна'], acceptableAnswers: [['ще тръгна']] },
+      { text: 'Тя _______ прозореца. (затворя)', blanks: [1], correctAnswers: ['ще затвори'], acceptableAnswers: [['ще затвори']] },
+      { text: 'Вие _______ утре. (пристигна)', blanks: [1], correctAnswers: ['ще пристигнете'], acceptableAnswers: [['ще пристигнете']] },
+      { text: 'Той _______ довечера. (дойда)', blanks: [1], correctAnswers: ['ще дойде'], acceptableAnswers: [['ще дойде']] },
+      { text: 'Ние _______ гости за вечеря. (поканя)', blanks: [1], correctAnswers: ['ще поканим'], acceptableAnswers: [['ще поканим']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 20 — ТЕКСТОВЕ Упр. 19 (стр. 50): Мечтата на Али ──────────────────
+  {
+    id: 'a2-l04-tekst-ali',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    textTitle: 'Мечтата на Али',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 20,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-ali-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/08-tekstove-mechti/01-ali-gotvach.jpg`, label: 'Али' },
+    ],
+    paragraphs: [
+      'Ще взема пари от приятели и ще отворя арабски ресторант в София. Ще бъде много хубав. Аз и жена ми ще готвим арабска храна и ще имаме много клиенти. Ще работим от сутрин до вечер. Ще върна парите на приятелите и след това ще купим голям апартамент и скъпа кола. Децата ще учат в най-доброто училище. Ще пътуваме често. Ще живеем добре.',
+    ],
+    paragraphVoiceGenders: ['male'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 21 — ТЕКСТОВЕ Упр. 19 (стр. 50): Мечтата на Невена ───────────────
+  {
+    id: 'a2-l04-tekst-nevena',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    textTitle: 'Мечтата на Невена',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 21,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-nevena-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/08-tekstove-mechti/02-nevena-pitza.jpg`, label: 'Невена' },
+    ],
+    paragraphs: [
+      'Следващото лято ще отида на море в Италия. Ще замина със самолет. Ще видя много интересни места. Ще купя много дрехи. Ще ям пица за закуска, обяд и вечеря. Обичам пица. В Италия има и чудесно кафе. Ще пия кафе и ще говоря италиански. Може би ще срещна прекрасен мъж. Ще ходим в различни ресторанти и кафета. Ще се разхождаме. Ще бъде много романтично. Може би ще се върна в България, може би не. Ако не се върна, ще поканя всички приятели на гости.',
+    ],
+    paragraphVoiceGenders: ['female'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 22 — ТЕКСТОВЕ Упр. 19 (стр. 50): Мечтата на Николай ─────────────
+  {
+    id: 'a2-l04-tekst-nikolay',
+    type: 'reading_text',
+    title: 'ТЕКСТОВЕ',
+    textTitle: 'Мечтата на Николай',
+    instruction: 'Изслушайте текста и след това го прочетете сами.',
+    order: 22,
+    showDictionary: true,
+    audioUrl: `${ASSET}/audio/tts/texts/a2-l04-tekst-nikolay-p-0.mp3`,
+    images: [
+      { imageUrl: `${ASSET}/08-tekstove-mechti/03-nikolay-absolvent.jpg`, label: 'Николай' },
+    ],
+    paragraphs: [
+      'Ще уча много. Ще завърша университет в София или в Лондон. Ще говоря английски език много добре. Ще живея и работя в чужбина. Ще намеря работа. Ще е трудно, в началото няма да имам пари да купя апартамент, затова ще живея под наем. Може би ще купя мотор или колело. Ще се връщам в София често, защото семейството ми е тук. Те също ще идват на гости. Надявам се да живея добре. Ще работя много и ще се забавлявам много!',
+    ],
+    paragraphVoiceGenders: ['male'],
+  } as ReadingTextExercise,
+
+  // ─── ORDER 23 — Упр. 20 (стр. 50): отговорете на въпросите ──────────────────
+  {
+    id: 'a2-l04-ex-20',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилния отговор на въпросите за текстовете „Мечтата на…".',
+    order: 23,
+    points: 11,
+    questions: [
+      { id: 'q1',  left: 'Откъде Али ще намери пари за ресторант?', options: ['От приятели', 'От банка', 'От семейството си', 'От държавата'], correctAnswer: 'От приятели' },
+      { id: 'q2',  left: 'Какъв ресторант ще отвори?', options: ['Арабски ресторант', 'Италиански ресторант', 'Български ресторант', 'Китайски ресторант'], correctAnswer: 'Арабски ресторант' },
+      { id: 'q3',  left: 'Какво ще купи, когато има пари?', options: ['Голям апартамент и скъпа кола', 'Мотор', 'Малък магазин', 'Къща в село'], correctAnswer: 'Голям апартамент и скъпа кола' },
+      { id: 'q4',  left: 'Къде ще учат децата му?', options: ['В най-доброто училище', 'В чужбина', 'В София', 'В частно училище в Пловдив'], correctAnswer: 'В най-доброто училище' },
+      { id: 'q5',  left: 'Къде ще отиде Невена следващото лято?', options: ['На море в Италия', 'В Гърция', 'В Испания', 'В България'], correctAnswer: 'На море в Италия' },
+      { id: 'q6',  left: 'Какво ще прави в Италия?', options: ['Ще яде пица, ще пие кафе и ще говори италиански', 'Ще работи в ресторант', 'Ще учи в университет', 'Ще живее при семейството си'], correctAnswer: 'Ще яде пица, ще пие кафе и ще говори италиански' },
+      { id: 'q7',  left: 'Ще се върне ли в България?', options: ['Може би да, може би не', 'Да, сигурно', 'Не, никога', 'Да, след един месец'], correctAnswer: 'Може би да, може би не' },
+      { id: 'q8',  left: 'Къде Николай ще завърши университет?', options: ['В София или в Лондон', 'Само в София', 'Само в Лондон', 'В Германия'], correctAnswer: 'В София или в Лондон' },
+      { id: 'q9',  left: 'Къде и как ще живее?', options: ['В чужбина, под наем', 'В София, в собствен апартамент', 'В Лондон, при приятели', 'В малък град'], correctAnswer: 'В чужбина, под наем' },
+      { id: 'q10', left: 'Какво ще купи?', options: ['Мотор или колело', 'Кола', 'Апартамент', 'Магазин'], correctAnswer: 'Мотор или колело' },
+      { id: 'q11', left: 'Ще се връща ли в София?', options: ['Да, често', 'Не, никога', 'Само веднъж', 'Само през лятото'], correctAnswer: 'Да, често' },
+    ],
+  } as DropdownMatchExercise,
+
+];
