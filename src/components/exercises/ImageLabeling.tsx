@@ -38,6 +38,16 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
     [exercise.options],
   );
 
+  const getImageOptions = useMemo(() => {
+    const cache: { [imageId: string]: string[] } = {};
+    for (const img of exercise.images) {
+      if (img.imageOptions) {
+        cache[img.id] = shuffleArray(img.imageOptions);
+      }
+    }
+    return cache;
+  }, [exercise.images]);
+
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     saveState({ selectedLabels, validation, isSubmitted, flippedCards });
@@ -160,9 +170,15 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
   }
 
   const isRowLayout = exercise.displayType === 'row';
-  const gridClass = isRowLayout
-    ? 'grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-5 mb-8'
-    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8';
+  const gridClass = exercise.columns === 3
+    ? 'grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mb-8'
+    : exercise.columns === 4
+      ? 'grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-5 mb-8'
+      : exercise.columns === 2
+        ? 'grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8'
+        : isRowLayout
+          ? 'grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-5 mb-8'
+          : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8';
 
   // Default display type - original grid layout (or 'row' = 4 phones in one row)
   return (
@@ -201,14 +217,14 @@ export function ImageLabeling({ exercise, onComplete }: ImageLabelingProps) {
               </div>
 
               {/* Label selection */}
-              {shuffledOptions ? (
+              {(getImageOptions[image.id] || shuffledOptions) ? (
                 <select
                   value={selectedLabel || ''}
                   onChange={(e) => handleSelect(image.id, e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 >
                   <option value="">{t('exercise.selectOption')}</option>
-                  {shuffledOptions.map((option) => (
+                  {(getImageOptions[image.id] || shuffledOptions)!.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
