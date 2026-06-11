@@ -89,13 +89,13 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   },
 
   'a2.ex.mnozhestveno': {
-    bg: 'Напишете правилната форма за множествено число.',
-    ar: 'اكتب صيغة الجمع الصحيحة.',
-    fr: 'Écrivez la forme correcte du pluriel.',
-    en: 'Write the correct plural form.',
-    fa: 'شکل صحیح جمع را بنویسید.',
-    uk: 'Напишіть правильну форму множини.',
-    ru: 'Напишите правильную форму множественного числа.',
+    bg: 'Изберете правилната форма за множествено число.',
+    ar: 'اختر صيغة الجمع الصحيحة.',
+    fr: 'Choisissez la forme correcte du pluriel.',
+    en: 'Choose the correct plural form.',
+    fa: 'شکل صحیح جمع را انتخاب کنید.',
+    uk: 'Оберіть правильну форму множини.',
+    ru: 'Выберите правильную форму множественного числа.',
   },
 
   'a2.ex.prilagatelni': {
@@ -109,23 +109,23 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   },
 
   'a2.ex.stepenuvane': {
-    bg: 'Попълнете сравнителната и превъзходната степен на прилагателното.',
-    ar: 'اكمل درجة المقارنة والتفضيل للصفة.',
-    fr: 'Complétez le comparatif et le superlatif de l\'adjectif.',
-    en: 'Complete the comparative and superlative degree of the adjective.',
-    fa: 'درجه تطبیقی و عالی صفت را کامل کنید.',
-    uk: 'Доповніть порівняльний і найвищий ступінь прикметника.',
-    ru: 'Дополните сравнительную и превосходную степень прилагательного.',
+    bg: 'Изберете сравнителната и превъзходната степен.',
+    ar: 'اختر درجة المقارنة والتفضيل.',
+    fr: 'Choisissez le comparatif et le superlatif.',
+    en: 'Choose the comparative and superlative degree.',
+    fa: 'درجه تطبیقی و عالی را انتخاب کنید.',
+    uk: 'Оберіть порівняльний і найвищий ступінь.',
+    ru: 'Выберите сравнительную и превосходную степень.',
   },
 
   'a2.ex.stepenuvaneNarechiya': {
-    bg: 'Попълнете правилната степен на наречието.',
-    ar: 'اكمل درجة الظرف الصحيحة.',
-    fr: 'Complétez le degré correct de l\'adverbe.',
-    en: 'Complete the correct degree of the adverb.',
-    fa: 'درجه صحیح قید را کامل کنید.',
-    uk: 'Доповніть правильний ступінь прислівника.',
-    ru: 'Дополните правильную степень наречия.',
+    bg: 'Изберете правилната степен на наречието.',
+    ar: 'اختر درجة الظرف الصحيحة.',
+    fr: 'Choisissez le degré correct de l\'adverbe.',
+    en: 'Choose the correct degree of the adverb.',
+    fa: 'درجه صحیح قید را انتخاب کنید.',
+    uk: 'Оберіть правильний ступінь прислівника.',
+    ru: 'Выберите правильную степень наречия.',
   },
 
   'a2.ex.chlenuvane': {
@@ -169,13 +169,13 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   },
 
   'a2.ex.segashnoVreme': {
-    bg: 'Попълнете правилната форма на глагола в скобите.',
-    ar: 'اكمل الشكل الصحيح للفعل بين القوسين.',
-    fr: 'Complétez la forme correcte du verbe entre parenthèses.',
-    en: 'Complete the correct verb form in brackets.',
-    fa: 'شکل صحیح فعل را در پرانتزها کامل کنید.',
-    uk: 'Доповніть правильну форму дієслова в дужках.',
-    ru: 'Дополните правильную форму глагола в скобках.',
+    bg: 'Изберете правилната форма на глагола.',
+    ar: 'اختر الشكل الصحيح للفعل.',
+    fr: 'Choisissez la forme correcte du verbe.',
+    en: 'Choose the correct verb form.',
+    fa: 'شکل صحیح فعل را انتخاب کنید.',
+    uk: 'Оберіть правильну форму дієслова.',
+    ru: 'Выберите правильную форму глагола.',
   },
 
   'a2.ex.pritezhatelnaMest': {

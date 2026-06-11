@@ -64,8 +64,13 @@ export interface A2ImageLabelingExercise extends BaseExercise {
     imageUrl: string;
     correctLabel: string;
     acceptableLabels?: string[];
+    /** Per-image dropdown options (incl. the correct label). When present, this
+     *  image's dropdown shows only these (capped pool, e.g. 5); otherwise it
+     *  falls back to the shared `options` pool below. */
+    options?: string[];
   }[];
-  options: string[];
+  /** Shared options pool used for images that don't define their own `options`. */
+  options?: string[];
   points?: number;
 }
 

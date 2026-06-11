@@ -43,6 +43,17 @@ export function ImageLabelingWide({ exercise, onComplete }: Props) {
     [exercise.options],
   );
 
+  // Per-image options take priority over the shared pool (shuffled once per image).
+  const shuffledOptionsByImage = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    exercise.images.forEach(img => {
+      if (img.options && img.options.length > 0) {
+        map[img.id] = shuffleArray(img.options);
+      }
+    });
+    return map;
+  }, [exercise.images]);
+
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     saveState({ selectedLabels, validation, isSubmitted });
@@ -90,6 +101,7 @@ export function ImageLabelingWide({ exercise, onComplete }: Props) {
         {exercise.images.map((image) => {
           const selectedLabel = selectedLabels[image.id];
           const validationResult = validation[image.id];
+          const imageOptions = shuffledOptionsByImage[image.id] ?? shuffledOptions;
 
           return (
             <div
@@ -115,14 +127,14 @@ export function ImageLabelingWide({ exercise, onComplete }: Props) {
                 )}
               </div>
 
-              {shuffledOptions ? (
+              {imageOptions ? (
                 <select
                   value={selectedLabel || ''}
                   onChange={(e) => handleSelect(image.id, e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl border-2 border-gray-300 bg-white text-base font-medium focus:border-bolt-primary focus:ring-2 focus:ring-bolt-primary focus:ring-offset-2 transition-all"
                 >
                   <option value="">{t('exercise.selectOption')}</option>
-                  {shuffledOptions.map((option) => (
+                  {imageOptions.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
