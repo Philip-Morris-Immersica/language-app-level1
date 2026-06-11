@@ -147,9 +147,12 @@ export interface ImageLabelingExercise extends BaseExercise {
     imageUrl: string;
     correctLabel: string;
     acceptableLabels?: string[];
+    isExample?: boolean;
+    imageOptions?: string[];  // Per-image options (4 choices); overrides global options
   }[];
   options: string[];           // List of options for dropdown/selection
   displayType?: 'flags' | 'default' | 'row';  // 'row' = 4 images in one row, uniform background
+  columns?: 2 | 3 | 4;        // Force a specific column count (overrides displayType grid)
 }
 
 export interface NumberWritingExercise extends BaseExercise {

@@ -619,7 +619,7 @@ export function WorkbookFillBlank({
       )}
 
       {headerImages && headerImages.length > 0 && (
-        <div className={`grid gap-4 mb-6 ${headerImages.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : 'grid-cols-2 max-w-2xl mx-auto'}`}>
+        <div className={`grid gap-4 mb-6 ${headerImages.length === 1 ? 'grid-cols-1 max-w-sm mx-auto' : headerImages.length === 3 ? 'grid-cols-3 max-w-4xl mx-auto' : 'grid-cols-2 max-w-2xl mx-auto'}`}>
           {headerImages.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <ImageLightbox src={img.imageUrl} alt={img.label}>
