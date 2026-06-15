@@ -35,7 +35,7 @@ export const A2_LESSON_LOADERS: Record<
   'a2-lesson-02': () => import('./lessons/a2-lesson-02'),
   'a2-lesson-03': () => import('./lessons/a2-lesson-03'),
   'a2-lesson-04': () => import('./lessons/a2-lesson-04'),
-  // 'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
+  'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
   // 'a2-lesson-06': () => import('./lessons/a2-lesson-06'),
   // 'a2-lesson-07': () => import('./lessons/a2-lesson-07'),
   // 'a2-lesson-08': () => import('./lessons/a2-lesson-08'),
@@ -49,8 +49,8 @@ export const A2_TEST_LOADERS: Record<
 > = {
   'test-a2-1': () => import('./tests/test-lessons-1-2'),
   'test-a2-2': () => import('./tests/test-lessons-3-4'),
-  // 'test-a2-3': () => import('./tests/test-lessons-5'),
-  // 'test-a2-4': () => import('./tests/test-lessons-6'),
+  'test-a2-3': () => import('./tests/test-lessons-5'),
+  'test-a2-4': () => import('./tests/test-lessons-6'),
   // 'test-a2-5': () => import('./tests/test-lessons-7-8'),
   // 'test-a2-6': () => import('./tests/test-lessons-9-10'),
 };
@@ -127,4 +127,5 @@ export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'a2-lesson-02': 45,
   'a2-lesson-03': 31,
   'a2-lesson-04': 26,
+  'a2-lesson-05': 21,
 };

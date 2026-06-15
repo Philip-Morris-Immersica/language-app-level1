@@ -67,7 +67,7 @@ export function FreeFill({ exercise, onComplete, exerciseId }: FreeFillProps) {
               </span>
 
               {hasOptions ? (
-                <div className="relative flex-1">
+                <div className="relative w-full sm:w-80">
                   <select
                     value={value}
                     onChange={e => handleChange(idx, e.target.value)}
