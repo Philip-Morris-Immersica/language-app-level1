@@ -57,11 +57,11 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Добър ден. Имате ли свободни стаи?', voiceGender: 'female' },
+          { text: 'Добър ден. Имате ли свободни стаи?', voiceGender: 'female', ttsText: 'Добър ден. Имате ли свободни стаи?' },
           { text: 'Да, имаме. Една единична стая и две двойни – една с две легла и една с двойно легло.', voiceGender: 'male' },
-          { text: 'Може ли стая с две легла?', voiceGender: 'female' },
+          { text: 'Може ли стая с две легла?', voiceGender: 'female', ttsText: 'Може ли стая с две легла?' },
           { text: 'За колко дни?', voiceGender: 'male' },
-          { text: 'За три.', voiceGender: 'female' },
+          { text: 'За три.', voiceGender: 'female', ttsText: 'За трри.' },
         ],
       },
       {
@@ -69,7 +69,7 @@ export const exercises: Exercise[] = [
         bubbleSide: 'right',
         lines: [
           { text: 'Окей такси. Добро утро.', voiceGender: 'male' },
-          { text: 'Добро утро. Може ли такси за 9:00 часа до болница „Токуда"? Обаждам се от адрес жк „Обеля", бл. 153, вх. А.', voiceGender: 'female', ttsText: 'Добро утро. Може ли такси за девет часа до болница Токуда? Обаждам се от адрес жк Обеля, блок сто петдесет и три, вход А.' },
+          { text: 'Добро утро. Може ли такси за 9:00 часа до болница „Токуда"? Обаждам се от адрес жк „Обеля", бл. 153, вх. А.', voiceGender: 'female', ttsText: 'Добро утро. Може ли такси за девет часа до болница Токуда? Обаждам се от адрес же ка Обеля, блок сто петдесет и три, вход А.' },
           { text: 'Добре. Таксито ще дойде след 10 минути.', voiceGender: 'male', ttsText: 'Добре. Таксито ще дойде след десет минути.' },
         ],
       },
@@ -91,7 +91,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l05-gramatika-01',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Искам да',
     instruction: 'Запознайте се со спрежението на „искам да" в положителна, отрицателна и въпросителна форма.',
     instructionKey: 'a2.gr.l05.iskamDa',
     order: 3,
@@ -116,7 +115,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l05-gramatika-02',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Мога да / Трябва да',
     instruction: 'Запознайте се со спрежението на глаголите „мога да" и „трябва да".',
     instructionKey: 'a2.gr.l05.mogaTryabva',
     order: 4,
@@ -142,7 +140,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l05-gramatika-03',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Вид на глагола с искам / мога / трябва',
     instruction: 'Запознайте се с разликата: несвършен вид (много пъти) срещу свършен вид (един път).',
     instructionKey: 'a2.gr.l05.vidNaGlagola',
     order: 5,
@@ -263,23 +260,23 @@ export const exercises: Exercise[] = [
         lines: [
           { text: 'Здравейте! Ресторант „Старата къща".', voiceGender: 'female' },
           { text: 'Добър ден, може ли да резервирам маса за двама за утре вечер?', voiceGender: 'male' },
-          { text: 'За колко часа?', voiceGender: 'female' },
-          { text: 'За 19:00.', voiceGender: 'male', ttsText: 'За деветнайсет часа.' },
+          { text: 'За колко часа?', voiceGender: 'female', ttsText: 'За колко часЪ?' },
+          { text: 'За 19:00.', voiceGender: 'male', ttsText: 'За деветнайсет часЪ.' },
           { text: 'Добре, ще Ви чакаме.', voiceGender: 'female' },
-          { text: 'Благодаря.', voiceGender: 'male' },
+          { text: 'Благодаря.', voiceGender: 'male', ttsText: 'Благодаария.' },
         ],
       },
       {
         id: 'б.',
         bubbleSide: 'right',
         lines: [
-          { text: 'Здравейте, пицария „Италия" ли е?', voiceGender: 'male' },
+          { text: 'Здравейте, пицария „Италия" ли е?', voiceGender: 'male', ttsText: 'Здравейте, пицарѝя Италия ли е?' },
           { text: 'Да, слушам Ви.', voiceGender: 'female' },
           { text: 'Искам да поръчам три пици – една малка „Маргарита", една средна „Вегетариана" и една голяма „Капричоза".', voiceGender: 'male' },
           { text: 'Може ли адреса и телефона Ви?', voiceGender: 'female' },
-          { text: 'Да, улица „Хан Крум" 15, тел. 0887-43-62-09.', voiceGender: 'male', ttsText: 'Да, улица Хан Крум петнайсет, телефон нула осемстотин осемдесет и седем, четиридесет и три, шестдесет и две, нула девет.' },
-          { text: 'За колко часа?', voiceGender: 'female' },
-          { text: 'За 13:00 часа, моля.', voiceGender: 'male', ttsText: 'За тринайсет часа, моля.' },
+          { text: 'Да, улица „Хан Крум" 15, тел. 0887-43-62-09.', voiceGender: 'male', ttsText: 'Да, улица Хан Крум петнайсет, телефон нула, осем, осем, седем, четиридесет и три, шестдесет и две, нула девет.' },
+          { text: 'За колко часа?', voiceGender: 'female', ttsText: 'За колко часЪ?' },
+          { text: 'За 13:00 часа, моля.', voiceGender: 'male', ttsText: 'За тринайсет часЪ, моля.' },
         ],
       },
     ],
@@ -332,7 +329,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l05-gramatika-04',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Може ли',
     instruction: 'Запознайте се с израза „може ли" за учтива молба.',
     instructionKey: 'a2.gr.l05.mozheLi',
     order: 13,
@@ -445,7 +441,7 @@ export const exercises: Exercise[] = [
         imageUrl: `${ASSET}/04-dialozi-3-banka-obmen/01-v-bankata.jpg`,
         lines: [
           { text: 'Може ли да открия сметка?', voiceGender: 'male' },
-          { text: 'Каква сметка?', voiceGender: 'female' },
+          { text: 'Каква сметка?', voiceGender: 'female', ttsText: 'Каква сметка?' },
           { text: 'Лична – за превод на пари от Ирак в България.', voiceGender: 'male' },
         ],
       },
@@ -453,7 +449,7 @@ export const exercises: Exercise[] = [
         id: 'б.',
         bubbleSide: 'right',
         lines: [
-          { text: 'Искам да внеса пари.', voiceGender: 'female' },
+          { text: 'Искам да внеса пари.', voiceGender: 'female', ttsText: 'Искам да внеса пари.' },
           { text: 'Колко евро?', voiceGender: 'male' },
           { text: '500 евро.', voiceGender: 'female', ttsText: 'Петстотин евро.' },
         ],
@@ -473,9 +469,9 @@ export const exercises: Exercise[] = [
         lines: [
           { text: 'Добър ден. Може ли да обменя долари и евро?', voiceGender: 'male' },
           { text: 'Да, може.', voiceGender: 'female' },
-          { text: 'Какъв е курсът днес?', voiceGender: 'male' },
+          { text: 'Какъв е курсът днес?', voiceGender: 'male', ttsText: 'Какъв е курсът днес?' },
           { text: '1,76 лв. за долар и 1,95 лв. за евро.', voiceGender: 'female', ttsText: 'Едно цяло седемдесет и шест лева за долар и едно цяло деветдесет и пет лева за евро.' },
-          { text: 'Има ли комисиона?', voiceGender: 'male' },
+          { text: 'Има ли комисиона?', voiceGender: 'male', ttsText: 'Има ли комисионна?' },
           { text: 'Не, няма.', voiceGender: 'female' },
         ],
       },
@@ -506,7 +502,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l05-gramatika-05',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
-    subtitle: 'Предлог + пълна форма на личните местоимения',
     instruction: 'Запознайте се с пълните форми на личните местоимения след предлог.',
     instructionKey: 'a2.gr.l05.mestoimenia',
     order: 20,
@@ -529,7 +524,14 @@ export const exercises: Exercise[] = [
       'Дана е до мен.',
       'Ще дам адреса на нея, а не на теб.',
     ],
-    ttsNoteModels: ['pro', 'pro', 'pro', 'pro', 'pro'],
+    ttsNotes: [
+      'Цветето е за теб.',
+      'Книгата е от него.',
+      'Ще танцуваш ли със мен?',
+      'Дана е до мен.',
+      'Ще дам адреса на нея, а не на теб.',
+    ],
+    ttsNoteModels: ['flash', 'pro', 'pro', 'pro', 'pro'],
   } as GrammarTableExercise,
 
   // ─── ORDER 21 — Упр. 21 (стр. 55): напишете подходящ предлог ──────────────
@@ -603,8 +605,8 @@ export const exercises: Exercise[] = [
     cards: [
       { id: 'podstrigvane', imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/01-podstrizvane.jpg`, label: 'подстригване' },
       { id: 'boyadisvane',  imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/02-boyadisvane.jpg`,  label: 'боядисване' },
-      { id: 'kadрene',      imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/03-kudrene.jpg`,      label: 'къдрене' },
-      { id: 'seshoar',      imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/04-seshoar.jpg`,      label: 'сешоар' },
+      { id: 'kadрene',      imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/03-kudrene.jpg`,      label: 'къдрене',     ttsPrompt: 'Bulgarian word. Stress on the first syllable: КЪ-дре-не.' },
+      { id: 'seshoar',      imageUrl: `${ASSET}/06-novi-dumi-2-frizyor/04-seshoar.jpg`,      label: 'сешоар',      ttsPrompt: 'Bulgarian word. Stress on the final syllable.' },
     ],
   } as IllustratedCardsExercise,
 
@@ -619,9 +621,9 @@ export const exercises: Exercise[] = [
       {
         id: 'а.',
         lines: [
-          { text: 'Добър ден. Искам подстригване, моля.', voiceGender: 'male' },
+          { text: 'Добър ден. Искам подстригване, моля.', voiceGender: 'male', ttsText: 'Добър ден. Искам подстригване, моля.' },
           { text: 'Заповядайте. Как искате да Ви подстрижа?', voiceGender: 'female' },
-          { text: 'Два сантиметра по-късо.', voiceGender: 'male' },
+          { text: 'Два сантиметра по-късо.', voiceGender: 'male', ttsText: 'Два сантиметра по-късо.' },
         ],
       },
       {
@@ -649,11 +651,11 @@ export const exercises: Exercise[] = [
         id: 'а. Плащане на сметки',
         imageUrl: `${ASSET}/07-dialozi-5-plashtane-smetki/01-easypay-smetki.jpg`,
         lines: [
-          { text: 'Добър ден. Искам да платя тока, парното, студената и топлата вода.', voiceGender: 'female' },
-          { text: 'Добре. Кажете ми абонатен номер или телефон.', voiceGender: 'male' },
-          { text: 'Телефонът ми е 0875-342-918.', voiceGender: 'female', ttsText: 'Телефонът ми е нула осемстотин седемдесет и пет, триста четиридесет и две, деветстотин и осемнайсет.' },
-          { text: 'Али Хабаба?', voiceGender: 'male' },
-          { text: 'Да.', voiceGender: 'female' },
+          { text: 'Добър ден. Искам да платя тока, парното, студената и топлата вода.', voiceGender: 'male' },
+          { text: 'Добре. Кажете ми абонатен номер или телефон.', voiceGender: 'female' },
+          { text: 'Телефонът ми е 0875-342-918.', voiceGender: 'male', ttsText: 'Телефонът ми е нула, осем, седем, пет, три, четири, две, девет, едно, осем.' },
+          { text: 'Али Хабаба?', voiceGender: 'female' },
+          { text: 'Да.', voiceGender: 'male' },
         ],
       },
     ],
@@ -755,9 +757,9 @@ export const exercises: Exercise[] = [
     ],
     ttsParagraphs: [
       'Касим и семейството му са в България от една година. Живеят на квартира, но тя е малка за тях, защото имат две деца. Трябва им по-голямо жилище. Касим намира в интернет обява за двустаен апартамент под наем. Обажда се по телефона и на следващия ден отива да види апартамента и да говори с хазяина.',
-      'Хазяин: Добър ден. Ето апартамента. Вдясно е кухнята, вляво е холът, до него е банята, срещу нея е спалнята. Касим: Има ли парно? Хазяин: Да, има парно и топла вода. Касим: Има ли интернет? Хазяин: Да, има. Таксата е тридесет евро на месец. Касим: Добре. Няма проблем. Апартаментът е хубав. Колко е наемът? Хазяин: Осемстотин евро на месец с един наем предплата.',
+      'Добър ден. Ето апартамента. Вдясно е кухнята, вляво е холът, до него е банята, срещу нея е спалнята. Има ли парно? Да, има парно и топла вода. Има ли интернет? Да, има. Таксата е тридесет евро на месец. Добре. Няма проблем. Апартаментът е хубав. Колко е наемът? Осемстотин евро на месец с един наем предплата.',
     ],
-    paragraphVoiceGenders: ['female', 'female'],
+    paragraphVoiceGenders: ['male', 'male'],
   } as ReadingTextExercise,
 
   // ─── ORDER 31 — Упр. 35 (стр. 59): отговорете на въпросите ────────────────

@@ -7,7 +7,6 @@ export const workbookExercises: Exercise[] = [
     id: 'a2-l05-wb-01',
     type: 'workbook_fill_blank',
     title: 'ПРЕГОВОР',
-    subtitle: 'Упражнения за затвърждаване на наученото',
     instruction: 'Изберете правилната форма на „искам да" + глагола.',
     order: 32,
     points: 7,
@@ -66,7 +65,6 @@ export const workbookExercises: Exercise[] = [
   {
     id: 'a2-l05-wb-04',
     type: 'table_fill',
-    title: 'ПРЕГОВОР',
     instruction: 'Изберете правилните форми на личните местоимения.',
     order: 35,
     points: 7,

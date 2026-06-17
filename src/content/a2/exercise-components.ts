@@ -46,10 +46,13 @@ import { GroupedDropdownMatch } from './components/GroupedDropdownMatch';
 import { ImageLabelingWide } from './components/ImageLabelingWide';
 import { WideCards } from './components/WideCards';
 import { FreeFill } from './components/FreeFill';
+import { A2ReadingText } from './components/A2ReadingText';
 
 export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'a2-grouped-dropdown-match': GroupedDropdownMatch as unknown as CustomExerciseRenderer,
   'a2-image-labeling': ImageLabelingWide as unknown as CustomExerciseRenderer,
   'a2-wide-cards': WideCards as unknown as CustomExerciseRenderer,
   'a2-free-fill': FreeFill as unknown as CustomExerciseRenderer,
+  // A2 variant of the shared reading_text: centers exactly-two plain images.
+  'reading_text': A2ReadingText as unknown as CustomExerciseRenderer,
 };
