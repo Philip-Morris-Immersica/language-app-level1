@@ -37,7 +37,7 @@ export const A2_LESSON_LOADERS: Record<
   'a2-lesson-04': () => import('./lessons/a2-lesson-04'),
   'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
   'a2-lesson-06': () => import('./lessons/a2-lesson-06'),
-  // 'a2-lesson-07': () => import('./lessons/a2-lesson-07'),
+  'a2-lesson-07': () => import('./lessons/a2-lesson-07'),
   // 'a2-lesson-08': () => import('./lessons/a2-lesson-08'),
   // 'a2-lesson-09': () => import('./lessons/a2-lesson-09'),
   // 'a2-lesson-10': () => import('./lessons/a2-lesson-10'),
@@ -52,7 +52,7 @@ export const A2_TEST_LOADERS: Record<
   'test-a2-3': () => import('./tests/test-lessons-5'),
   'test-a2-4': () => import('./tests/test-lessons-6'),
   'test-a2-5': () => import('./tests/test-lessons-a2-7-8'),
-  // 'test-a2-6': () => import('./tests/test-lessons-9-10'),
+  'test-a2-6': () => import('./tests/test-lessons-a2-9-10'),
 };
 
 // ── Lesson metadata (used by sidebar / level map / lesson header) ─────────────
@@ -104,7 +104,7 @@ export const A2_TEST_FOLDER_MAP: Record<string, string> = {
   'test-a2-3': 'test-lessons-5',
   'test-a2-4': 'test-lessons-6',
   'test-a2-5': 'test-lessons-a2-7-8',
-  'test-a2-6': 'test-lessons-9-10',
+  'test-a2-6': 'test-lessons-a2-9-10',
 };
 
 // ── testId → next lesson after the test (drives the "next" navigation) ───────
@@ -129,4 +129,5 @@ export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'a2-lesson-04': 26,
   'a2-lesson-05': 21,
   'a2-lesson-06': 27,
+  'a2-lesson-07': 49,
 };
