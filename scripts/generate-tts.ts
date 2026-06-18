@@ -38,7 +38,12 @@ const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
 /** Second male voice for dialogues with two men (Gemini only; Chirp reuses Charon). */
 const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
-const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone.';
+const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Do not use any Russian, Arabic, English or other foreign accent.';
+/** Calmer Pro prompt for reading texts that should have minimal intonation (per-id opt-in below). */
+const GEMINI_BG_CALM_PROMPT =
+  'Read calmly and neutrally in clear standard Bulgarian with correct native stress, with minimal intonation and without any foreign accent.';
+/** reading_text ids that should use the calmer, low-intonation Pro prompt. */
+const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19']);
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
@@ -639,7 +644,7 @@ function collectWideCardJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'dialogues' && e.sections)) {
+  for (const ex of exercises.filter(e => (e.type === 'dialogues' || e.type === 'a2-dialogues') && e.sections)) {
     for (const section of ex.sections!) {
       const maleTurn = { n: 0 };
       const femaleTurn = { n: 0 };
@@ -705,7 +710,7 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'grammar_examples' && !e.disableTts && e.examples)) {
+  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples') && !e.disableTts && e.examples)) {
     const useFlash = !!ex.ttsFlash;
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
@@ -730,7 +735,7 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
         text: clean(parts),
         voice,
         model: useFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL,
-        prompt: useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT,
+        prompt: card.ttsPrompt ?? (useFlash ? GEMINI_WORD_PROMPT : GEMINI_PROMPT),
       });
     }
   }
@@ -771,12 +776,13 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     const perPara = ex.paragraphVoiceGenders;
     const defaultVoice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     const usePerPara = perPara && perPara.length === paragraphs.length;
+    const readingPrompt = READING_TEXT_CALM_PROMPT_IDS.has(ex.id) ? GEMINI_BG_CALM_PROMPT : GEMINI_PROMPT;
     for (let i = 0; i < paragraphs.length; i++) {
       if (!ttsParagraphs[i].trim()) continue;
       const voice = usePerPara
         ? (perPara![i] === 'male' ? MALE_VOICE : FEMALE_VOICE)
         : defaultVoice;
-      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
+      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: GEMINI_MODEL, prompt: readingPrompt });
     }
     // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used; UI uses sequential listen instead
     const skipFull = SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs;
@@ -785,7 +791,7 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
       const titlePrefix = ex.textTitle ? `${clean(ex.textTitle)}.\n` : '';
       const fullText = clean(titlePrefix + paragraphs.join('\n'));
       if (paragraphs.length > 0 && fullText.length < 2000) {
-        jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: GEMINI_PROMPT });
+        jobs.push({ category: 'texts', filename: `${ex.id}-full.mp3`, text: fullText, voice, model: GEMINI_MODEL, prompt: readingPrompt });
       }
     }
   }
