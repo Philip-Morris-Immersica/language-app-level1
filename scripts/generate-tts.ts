@@ -43,7 +43,7 @@ const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone, in clear standard B
 const GEMINI_BG_CALM_PROMPT =
   'Read calmly and neutrally in clear standard Bulgarian with correct native stress, with minimal intonation and without any foreign accent.';
 /** reading_text ids that should use the calmer, low-intonation Pro prompt. */
-const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19']);
+const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19', 'a2-l08-tekst-vakantsia']);
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
