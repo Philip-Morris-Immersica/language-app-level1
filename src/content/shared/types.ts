@@ -304,6 +304,8 @@ export interface GrammarExamplesExercise extends BaseExercise {
     voiceGender?: 'male' | 'female';
     /** TTS only: alternative text for audio (e.g. only the full word, not the abbreviation). Display text stays unchanged. */
     ttsText?: string;
+    /** TTS only: custom prompt passed to Gemini for this card (e.g. GEMINI_BG_SMOOTH_PROMPT for correct Bulgarian stress). */
+    ttsPrompt?: string;
     /** When true, the image opens in a fullscreen lightbox on click (used in non-hero multi-example grid). Hero mode (single image) is always zoomable. */
     zoomable?: boolean;
   }[];
@@ -497,6 +499,10 @@ export interface ReadingTextExercise extends BaseExercise {
   }[];
   /** Image grid as flip cards (picture front, word on back); use with `images[].ttsWordId` for TTS. */
   imageFlashcards?: boolean;
+  /** Override the default column count for the image grid (default: 1→1 col, 2+→2 cols md:3 cols). */
+  imageColumns?: number;
+  /** When true, all images render at a fixed aspect ratio (4:3) with object-cover so they appear the same size regardless of source dimensions. */
+  imageEqualHeight?: boolean;
   paragraphs: string[];
   /** Parallel to `paragraphs`: alternative TTS-friendly text for each paragraph (e.g. spell out "€/кг." as "евро за килограм"). When set, TTS uses this text instead of `paragraphs`, but the displayed text remains unchanged. */
   ttsParagraphs?: string[];

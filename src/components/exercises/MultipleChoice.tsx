@@ -145,12 +145,12 @@ export function MultipleChoice({ exercise, onComplete }: MultipleChoiceProps) {
               <div className="space-y-1.5">
                 {context && (
                   <p className="text-sm md:text-base text-gray-500 leading-relaxed">
-                    <span className="font-semibold text-gray-400 mr-1">{qIndex}.</span>
+                    <span className="font-semibold text-gray-400 mr-1">{qIndex + 1}.</span>
                     {context}
                   </p>
                 )}
                 <p className="text-base md:text-lg font-bold text-gray-800">
-                  {!context && <span className="mr-1">{qIndex}.</span>}
+                  {!context && <span className="mr-1">{qIndex + 1}.</span>}
                   {prompt}
                   <TranslatedLabel text={prompt} />
                 </p>
