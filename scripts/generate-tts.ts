@@ -44,15 +44,18 @@ const GEMINI_BG_CALM_PROMPT =
   'Read calmly and neutrally in clear standard Bulgarian with correct native stress, with minimal intonation and without any foreign accent.';
 /** reading_text ids that should use the calmer, low-intonation Pro prompt. */
 const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19']);
-/** Per-exercise custom prompt override for reading_text paragraphs (overrides CALM_PROMPT_IDS). */
-const READING_TEXT_CUSTOM_PROMPTS: Record<string, string> = {
-  'a2-l08-tekst-vakantsia':
-    'Read calmly in clear standard Bulgarian with correct native stress. ' +
-    'Stress rules for this text: „гра́да" — stress on first syllable (ГРА-да, NOT гра-ДА); ' +
-    '„са́ндвич" — stress on first syllable (СА-ндвич); ' +
-    '„кафе́" — stress on last syllable (ка-ФЕ, NOT КА-фе); ' +
-    '„по́вече" — stress on first syllable (ПО-вече, NOT по-ВЕ-че). ' +
-    'Do not use Russian, Arabic or any other foreign accent.',
+/**
+ * Per-paragraph override for reading_text clips. Pro TTS truncates/empties very
+ * SHORT phrases (single words / 2-4 word lines), and long multi-rule stress
+ * prompts make it worse. For those clips use Flash (built for words) with a
+ * short, single-focus stress hint. Keyed by `${exerciseId}-p-${index}`.
+ */
+const READING_TEXT_PARA_OVERRIDE: Record<string, { flash?: boolean; prompt: string }> = {
+  'a2-l08-tekst-vakantsia-p-6':  { flash: true, prompt: 'Speak clearly in standard Bulgarian. Stress the word „града" on the first syllable: ГРА-да (not гра-ДА).' },
+  'a2-l08-tekst-vakantsia-p-9':  { flash: true, prompt: 'Speak clearly in standard Bulgarian as a question. Stress „вечерял" on the last syllable (вече-РЯЛ) and „яде" on the first syllable (Я-де).' },
+  'a2-l08-tekst-vakantsia-p-10': { flash: true, prompt: 'Speak the Bulgarian word „сандвич" clearly, stress on the first syllable: САН-двич.' },
+  'a2-l08-tekst-vakantsia-p-12': { flash: true, prompt: 'Speak clearly in standard Bulgarian. Stress „кафе" on the last syllable: ка-ФЕ (not КА-фе).' },
+  'a2-l08-tekst-vakantsia-p-15': { flash: true, prompt: 'Speak clearly in standard Bulgarian. Stress „повече" on the first syllable: ПО-вече (not по-ВЕ-че).' },
 };
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
@@ -786,14 +789,16 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     const perPara = ex.paragraphVoiceGenders;
     const defaultVoice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     const usePerPara = perPara && perPara.length === paragraphs.length;
-    const readingPrompt = READING_TEXT_CUSTOM_PROMPTS[ex.id]
-      ?? (READING_TEXT_CALM_PROMPT_IDS.has(ex.id) ? GEMINI_BG_CALM_PROMPT : GEMINI_PROMPT);
+    const readingPrompt = READING_TEXT_CALM_PROMPT_IDS.has(ex.id) ? GEMINI_BG_CALM_PROMPT : GEMINI_PROMPT;
     for (let i = 0; i < paragraphs.length; i++) {
       if (!ttsParagraphs[i].trim()) continue;
       const voice = usePerPara
         ? (perPara![i] === 'male' ? MALE_VOICE : FEMALE_VOICE)
         : defaultVoice;
-      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: GEMINI_MODEL, prompt: readingPrompt });
+      const paraOverride = READING_TEXT_PARA_OVERRIDE[`${ex.id}-p-${i}`];
+      const paraModel = paraOverride?.flash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
+      const paraPrompt = paraOverride?.prompt ?? readingPrompt;
+      jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: paraModel, prompt: paraPrompt });
     }
     // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used; UI uses sequential listen instead
     const skipFull = SKIP_FULL_TEXT.has(ex.id) || !!usePerPara || !!ex.ttsParagraphs;
