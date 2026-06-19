@@ -38,9 +38,9 @@ export const A2_LESSON_LOADERS: Record<
   'a2-lesson-05': () => import('./lessons/a2-lesson-05'),
   'a2-lesson-06': () => import('./lessons/a2-lesson-06'),
   'a2-lesson-07': () => import('./lessons/a2-lesson-07'),
-  // 'a2-lesson-08': () => import('./lessons/a2-lesson-08'),
-  // 'a2-lesson-09': () => import('./lessons/a2-lesson-09'),
-  // 'a2-lesson-10': () => import('./lessons/a2-lesson-10'),
+  'a2-lesson-08': () => import('./lessons/a2-lesson-08'),
+  'a2-lesson-09': () => import('./lessons/a2-lesson-09'),
+  'a2-lesson-10': () => import('./lessons/a2-lesson-10'),
 };
 
 export const A2_TEST_LOADERS: Record<
@@ -129,5 +129,8 @@ export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'a2-lesson-04': 26,
   'a2-lesson-05': 21,
   'a2-lesson-06': 27,
-  'a2-lesson-07': 49,
+  'a2-lesson-07': 43,
+  'a2-lesson-08': 31,
+  'a2-lesson-09': 22,
+  'a2-lesson-10': 41,
 };

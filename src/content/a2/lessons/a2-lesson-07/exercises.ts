@@ -7,7 +7,7 @@
   GrammarExamplesExercise,
   WorkbookFillBlankExercise,
   DialoguesExercise,
-  PersonalChoiceExercise,
+  MultipleChoiceExercise,
   GrammarTableExercise,
   ReadingTextExercise,
 } from '@/content/types';
@@ -123,7 +123,7 @@ export const exercises: Exercise[] = [
           'Катя е **учителка**. Катя и Светла са **учителки**.',
           'Иво и Катя са **учители**.',
         ],
-        ttsText: 'Род и число. Иво е учител. Иво и Милèн са учители. Катя е учителка. Катя и Светла са учителки. Иво и Катя са учители.',
+        ttsText: 'Род и число. Иво е учител. Иво и Милен са учители. Катя е учителка. Катя и Светла са учителки. Иво и Катя са учители.',
         voiceGender: 'female',
       },
       {
@@ -184,7 +184,7 @@ export const exercises: Exercise[] = [
         id: 'а. В офиса',
         imageUrl: `${ASSET}/03-dialozi-1-ofis/01-ofis.jpg`,
         lines: [
-          { text: '– Какъв сте по професия?', voiceGender: 'female', ttsText: '– Какъв сте по профèсия?' },
+          { text: '– Какъв сте по професия?', voiceGender: 'female', ttsText: '– Какъв сте по професия?' },
           { text: '– Аз съм инженер. Бях директор на фирма. Сега съм пенсионер. А Вие каква сте?', voiceGender: 'male' },
           { text: '– Аз съм преводачка. Превеждам документи от английски на български.', voiceGender: 'female' },
         ],
@@ -192,29 +192,14 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ─── ORDER 8 — Упр. 6 (стр. 72): За себе си — каква/какъв сте по професия? ──
-  {
-    id: 'a2-l07-ex-06',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 6',
-    instruction: 'Отговорете на въпросите за себе си.',
-    order: 8,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Какъв/Каква сте по професия?', positiveTemplate: 'Имам професия: Да.', negativeTemplate: 'Нямам / Не работя: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Работихте ли по специалността си в родната страна?', positiveTemplate: 'Работих: Да.', negativeTemplate: 'Не работих: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ─── ORDER 9 — ГРАМАТИКА 2 (стр. 72): Минало свършено — ИХ група ──────────────
+  // ─── ORDER 8 — ГРАМАТИКА 2 (стр. 72): Минало свършено — ИХ група ──────────────
   {
     id: 'a2-l07-gramatika-02',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с минало свършено на глаголите от ИХ група.',
     instructionKey: 'a2.gr.l07.minaloIh',
-    order: 9,
+    order: 8,
     tableTitle: 'Минало свършено — ИХ група (работя → работих)',
     columns: ['(+)'],
     rows: [
@@ -238,13 +223,13 @@ export const exercises: Exercise[] = [
     ttsNoteModels: ['pro', 'pro', 'pro'],
   } as GrammarTableExercise,
 
-  // ─── ORDER 10 — Упр. 7 (стр. 72): Попълнете с правилната форма на глагола правя
+  // ─── ORDER 9 — Упр. 7 (стр. 72): Попълнете с правилната форма на глагола правя
   {
     id: 'a2-l07-ex-07',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Изберете правилната форма на глагола **правя** в минало свършено.',
-    order: 10,
+    order: 9,
     points: 4,
     layout: 'single',
     sentences: [
@@ -256,13 +241,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 11 — Упр. 8 (стр. 73): Попълнете окончанията на глаголите ──────────
+  // ─── ORDER 10 — Упр. 8 (стр. 73): Попълнете окончанията на глаголите ──────────
   {
     id: 'a2-l07-ex-08',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
     instruction: 'Изберете правилната форма в минало свършено по модела.',
-    order: 11,
+    order: 10,
     points: 7,
     layout: 'single',
     sentences: [
@@ -277,13 +262,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 12 — Упр. 9 (стр. 73): Попълнете с подходящ глагол от списъка ──────
+  // ─── ORDER 11 — Упр. 9 (стр. 73): Попълнете с подходящ глагол от списъка ──────
   {
     id: 'a2-l07-ex-09',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Изберете подходящия глагол от списъка в минало свършено.',
-    order: 12,
+    order: 11,
     points: 5,
     layout: 'single',
     sentences: [
@@ -296,13 +281,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 13 — Упр. 10 (стр. 73): Попълнете окончанията на пия и мия ─────────
+  // ─── ORDER 12 — Упр. 10 (стр. 73): Попълнете окончанията на пия и мия ─────────
   {
     id: 'a2-l07-ex-10',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Изберете правилната форма на глаголите **пия** и **мия** в минало свършено.',
-    order: 13,
+    order: 12,
     points: 5,
     layout: 'single',
     sentences: [
@@ -319,13 +304,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 14 — ДИАЛОЗИ 2 (стр. 73): Skype и ресторант ─────────────────────
+  // ─── ORDER 13 — ДИАЛОЗИ 2 (стр. 73): Skype и ресторант ─────────────────────
   {
     id: 'a2-l07-dialozi-02',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 2',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После прочетете диалозите на глас.',
-    order: 14,
+    order: 13,
     sections: [
       {
         id: 'а. Разговор по Скайп',
@@ -346,28 +331,13 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ─── ORDER 15 — Упр. 12 (стр. 73): Разговаряйте за себе си ─────────────────
-  {
-    id: 'a2-l07-ex-12',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 12',
-    instruction: 'Отговорете на въпросите за себе си.',
-    order: 15,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Работихте ли в ресторант или в магазин?', positiveTemplate: 'Работих: Да.', negativeTemplate: 'Не работих: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Учихте ли чужд език?', positiveTemplate: 'Учих: Да.', negativeTemplate: 'Не учих: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ─── ORDER 16 — Упр. 13 (стр. 73): Попълнете с като или в ───────────────────
+  // ─── ORDER 14 — Упр. 13 (стр. 73): Попълнете с като или в ───────────────────
   {
     id: 'a2-l07-ex-13',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Изберете **като** или **в** за всяко изречение.',
-    order: 16,
+    order: 14,
     points: 2,
     layout: 'single',
     sentences: [
@@ -385,14 +355,14 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 17 — ГРАМАТИКА 3 (стр. 74): ИХ група — купих ─────────────────────
+  // ─── ORDER 15 — ГРАМАТИКА 3 (стр. 74): ИХ група — купих ─────────────────────
   {
     id: 'a2-l07-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     instruction: 'Запознайте се с минало свършено на глаголите от ИХ група — купих тип.',
     instructionKey: 'a2.gr.l07.kupih',
-    order: 17,
+    order: 15,
     tableTitle: 'Минало свършено — ИХ група (купувам → купих)',
     columns: ['(+)', '(−)', '(?)'],
     rows: [
@@ -414,13 +384,13 @@ export const exercises: Exercise[] = [
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
 
-  // ─── ORDER 18 — Упр. 14 (стр. 74): Попълнете с правилната форма на глагола ───
+  // ─── ORDER 16 — Упр. 14 (стр. 74): Попълнете с правилната форма на глагола ───
   {
     id: 'a2-l07-ex-14',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 14',
     instruction: 'Изберете правилната форма на глагола в минало свършено.',
-    order: 18,
+    order: 16,
     points: 8,
     layout: 'single',
     sentences: [
@@ -436,13 +406,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 19 — Упр. 15 (стр. 74): Работете по модела ────────────────────────
+  // ─── ORDER 17 — Упр. 15 (стр. 74): Работете по модела ────────────────────────
   {
     id: 'a2-l07-ex-15',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Изберете правилната форма в минало свършено по модела: „Обикновено купувам от пазара ябълки. Вчера **купих** круши."',
-    order: 19,
+    order: 17,
     points: 3,
     layout: 'single',
     sentences: [
@@ -453,13 +423,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 20 — Упр. 16 (стр. 74): Рожден ден на Аиша ────────────────────────
+  // ─── ORDER 18 — Упр. 16 (стр. 74): Рожден ден на Аиша ────────────────────────
   {
     id: 'a2-l07-ex-16',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Попълнете изреченията с глаголните форми в минало свършено.',
-    order: 20,
+    order: 18,
     points: 8,
     layout: 'single',
     sentences: [
@@ -480,13 +450,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 21 — ДИАЛОГ 3 (стр. 74): Майка, дъщеря и куче ───────────────────
+  // ─── ORDER 19 — ДИАЛОГ 3 (стр. 74): Майка, дъщеря и куче ───────────────────
   {
     id: 'a2-l07-dialozi-03',
     type: 'dialogues',
     title: 'ДИАЛОГ 3',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После прочетете диалога на глас.',
-    order: 21,
+    order: 19,
     sections: [
       {
         id: 'а. Майка и дъщеря',
@@ -501,92 +471,83 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ─── ORDER 22 — Упр. 18 (стр. 75): За себе си ──────────────────────────────
-  {
-    id: 'a2-l07-ex-18',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 18',
-    instruction: 'Отговорете на въпросите за себе си.',
-    order: 22,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Купихте ли нещо вчера?', positiveTemplate: 'Купих: Да.', negativeTemplate: 'Не купих: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Обадихте ли се на някой вчера?', positiveTemplate: 'Обадих се: Да.', negativeTemplate: 'Не се обадих: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ─── ORDER 23 — НОВИ ДУМИ 2 (стр. 75): Нива на образование ─────────────────
+  // ─── ORDER 20 — НОВИ ДУМИ 2 (стр. 75): Нива на образование ─────────────────
   {
     id: 'a2-l07-novi-dumi-2',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
-    order: 23,
+    order: 20,
     cards: [
-      { id: 'nachalno',  imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/01-nachalno-obrazovanie.jpg`,  label: 'Начално образование (1 – 4 клас)',  ttsLabel: 'начално образование, от първи до четвърти клас' },
-      { id: 'osnovno',   imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/02-osnovno-obrazovanie.jpg`,   label: 'Основно образование (5 – 7 клас)',  ttsLabel: 'основно образование, от пети до седми клас' },
-      { id: 'sredno',    imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/03-sredno-obrazovanie.jpg`,    label: 'Средно образование (8 – 12 клас)', ttsLabel: 'средно образование, от осми до дванадесети клас' },
-      { id: 'visshe',    imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/04-visshe-obrazovanie.jpg`,    label: 'Висше образование (университет)',  ttsLabel: 'висше образование, университет' },
+      { id: 'nachalno',     imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/01-nachalno-obrazovanie.jpg`, label: 'Начално образование (1 – 4 клас)',                              ttsLabel: 'начално образование, от първи до четвърти клас' },
+      { id: 'progimnaziya', imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/04-progimnaziya.jpg`,         label: 'Прогимназия (5 – 7 клас)',                                      ttsLabel: 'прогимназия, от пети до седми клас' },
+      { id: 'osnovno',      imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/02-osnovno-obrazovanie.jpg`,  label: 'Основно образование = начално + прогимназия (1 – 7 клас)',     ttsLabel: 'основно образование — начално плюс прогимназия, от първи до седми клас' },
+      { id: 'parvi-gim',    imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/05-parvi-gim.jpg`,            label: 'Първи гимназиален етап (8 – 10 клас)',                          ttsLabel: 'първи гимназиален етап, от осми до десети клас' },
+      { id: 'vtori-gim',    imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/06-vtori-gim.jpg`,            label: 'Втори гимназиален етап (11 – 12 клас)',                         ttsLabel: 'втори гимназиален етап, от единадесети до дванайсти клас' },
+      { id: 'sredno',       imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/03-sredno-obrazovanie.jpg`,   label: 'Средно образование = първи + втори гимназиален етап (8 – 12 клас)', ttsLabel: 'средно образование — първи плюс втори гимназиален етап, от осми до дванайсти клас' },
+      { id: 'visshe',       imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/04-visshe-obrazovanie.jpg`,   label: 'Висше образование (университет)',                               ttsLabel: 'висше образование, университет' },
     ],
   } as IllustratedCardsExercise,
 
-  // ─── ORDER 24 — ГРАМАТИКА 4 (стр. 75): Видове училища и специалности ────────
+  // ─── ORDER 21 — ГРАМАТИКА 4 (стр. 75): Видове училища и специалности ────────
   {
     id: 'a2-l07-gramatika-04',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
     instruction: 'Запознайте се с нивата на образование, видовете училища и специалностите в университет.',
     instructionKey: 'a2.gr.l07.obrazovanie',
-    order: 24,
+    order: 21,
     layout: 'centered',
     examples: [
-      {
-        imageUrl: '',
-        text: 'Видове училища',
-        lines: [
-          '**основно училище** (ОУ)',
-          '**средно общообразователно училище** (СОУ)',
-          '**профилирана гимназия** (езикова, математическа)',
-          '**професионална гимназия** (техникум)',
-        ],
-        ttsText: 'Видове училища. Основно училище. Средно общообразователно училище. Профилирана гимназия — езикова или математическа. Професионална гимназия — техникум.',
-        voiceGender: 'female',
-      },
-      {
-        imageUrl: '',
-        text: 'Специалности в университет',
-        lines: [
-          'Филология (българска, английска и др.)',
-          'История · Психология · Педагогика',
-          'Физика · Информатика · Медицина',
-          'Архитектура · Право',
-        ],
-        ttsText: 'Специалности в университет: Филология, История, Психология, Педагогика, Физика, Информатика, Медицина, Архитектура, Право.',
-        voiceGender: 'female',
-      },
-      {
-        imageUrl: `${ASSET}/07-bakalavar-magistar-stapali/01-stapali-bakalavar-magistar.jpg`,
-        text: 'Бакалавър и Магистър',
-        lines: [
-          '**бакалавър** — 3–4 години университет',
-          '**магистър** — 5 години университет',
-          '',
-          'инж. = **инженер**',
-          'д-р = **доктор**',
-        ],
-        ttsText: 'Бакалавър — три или четири години университет. Магистър — пет години университет. Инж. е съкращение за инженер. Д-р е съкращение за доктор.',
-        voiceGender: 'female',
-      },
+    {
+      imageUrl: '',
+      text: 'Видове училища',
+      lines: [
+        '**основно училище** (ОУ) — 1–7 клас',
+        '**средно училище** (СУ) — 1–12 клас',
+        '**профилирана гимназия** — 8–12 клас (езикова, математическа)',
+        '**професионална гимназия** — 8–12 клас',
+      ],
+      ttsText: 'Видове училища. Основно училище — от първи до седми клас. Средно училище — от първи до дванайсти клас. Профилирана гимназия — от осми до дванайсти клас, езикова или математическа. Професионална гимназия — от осми до дванайсти клас.',
+      voiceGender: 'female',
+      ttsPrompt: GEMINI_BG_SMOOTH_PROMPT,
+    },
+    {
+      imageUrl: '',
+      text: 'Специалности в университет',
+      lines: [
+        'Филология (българска, английска и др.)',
+        'История · Психология · Педагогика',
+        'Физика · Информатика · Медицина',
+        'Архитектура · Право',
+      ],
+      ttsText: 'Специалности в университет: Филология — българска, английска и други. История. Психология. Педагогика. Физика. Информатика. Медицина. Архитектура. Право.',
+      voiceGender: 'female',
+      ttsPrompt: GEMINI_BG_SMOOTH_PROMPT,
+    },
+    {
+      imageUrl: `${ASSET}/07-bakalavar-magistar-stapali/01-stapali-bakalavar-magistar.jpg`,
+      text: 'Бакалавър и Магистър',
+      lines: [
+        '**бакалавър** — 3–4 години университет',
+        '**магистър** — 5 години университет',
+        '',
+        'инж. = **инженер**',
+        'д-р = **доктор**',
+      ],
+      ttsText: 'Бакалавър и Магистър. Бакалавър — три или четири години университет. Магистър — пет години университет. инж. е съкращение за инженер. д-р е съкращение за доктор.',
+      voiceGender: 'female',
+      ttsPrompt: GEMINI_BG_SMOOTH_PROMPT,
+    },
     ],
   } as GrammarExamplesExercise,
 
-  // ─── ORDER 25 — Упр. 19 (стр. 75): Свържете професията със специалността ─────
+  // ─── ORDER 22 — Упр. 19 (стр. 75): Свържете професията със специалността ─────
   {
     id: 'a2-l07-ex-19',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 19',
     instruction: 'Изберете специалността, която отговаря на всяка професия.',
-    order: 25,
+    order: 22,
     points: 8,
     questions: [
       { id: 'q1', left: 'лекар',               options: ['медицина', 'история', 'психология', 'физика', 'педагогика', 'архитектура', 'информатика', 'филология'],  correctAnswer: 'медицина' },
@@ -600,13 +561,13 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
-  // ─── ORDER 26 — ДИАЛОЗИ 4 (стр. 76): Образование ───────────────────────────
+  // ─── ORDER 23 — ДИАЛОЗИ 4 (стр. 76): Образование ───────────────────────────
   {
     id: 'a2-l07-dialozi-04',
     type: 'dialogues',
     title: 'ДИАЛОЗИ 4',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После прочетете диалозите на глас.',
-    order: 26,
+    order: 23,
     sections: [
       {
         id: 'а. Образование',
@@ -632,28 +593,13 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-  // ─── ORDER 27 — Упр. 21 (стр. 76): За себе си ──────────────────────────────
-  {
-    id: 'a2-l07-ex-21',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 21',
-    instruction: 'Отговорете на въпросите за себе си.',
-    order: 27,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Какво образование имате?', positiveTemplate: 'Имам образование: Да.', negativeTemplate: 'Нямам: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Завършихте ли университет? Каква специалност имате?', positiveTemplate: 'Завърших: Да.', negativeTemplate: 'Не завърших: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ─── ORDER 28 — Упр. 22 (стр. 76): Попълнете с думите основно, средно, висше ─
+  // ─── ORDER 24 — Упр. 22 (стр. 76): Попълнете с думите основно, средно, висше ─
   {
     id: 'a2-l07-ex-22',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 22',
     instruction: 'Изберете правилната дума: **основно**, **средно** или **висше**.',
-    order: 28,
+    order: 24,
     points: 3,
     layout: 'single',
     sentences: [
@@ -663,13 +609,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 29 — Упр. 23 (стр. 76): Попълнете окончанията — завърш- ────────────
+  // ─── ORDER 25 — Упр. 23 (стр. 76): Попълнете окончанията — завърш- ────────────
   {
     id: 'a2-l07-ex-23',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 23',
     instruction: 'Изберете правилното окончание на глагола **завърша** в минало свършено.',
-    order: 29,
+    order: 25,
     points: 5,
     layout: 'single',
     sentences: [
@@ -682,14 +628,14 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 30 — ГРАМАТИКА 5 (стр. 76): Местоимения ──────────────────────────
+  // ─── ORDER 26 — ГРАМАТИКА 5 (стр. 76): Местоимения ──────────────────────────
   {
     id: 'a2-l07-gramatika-05',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 5',
     instruction: 'Запознайте се с неопределителните и отрицателните местоимения.',
     instructionKey: 'a2.gr.l07.mestoimeniya',
-    order: 30,
+    order: 26,
     tableTitle: 'Местоимения',
     columns: ['Въпросителни', 'Неопределителни', 'Отрицателни'],
     rows: [
@@ -708,13 +654,13 @@ export const exercises: Exercise[] = [
     ttsNoteModels: ['pro'],
   } as GrammarTableExercise,
 
-  // ─── ORDER 31 — Упр. 24 (стр. 76): Попълнете с някой или никой ───────────────
+  // ─── ORDER 27 — Упр. 24 (стр. 76): Попълнете с някой или никой ───────────────
   {
     id: 'a2-l07-ex-24',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 24',
     instruction: 'Изберете **някой** или **никой** по модела.',
-    order: 31,
+    order: 27,
     points: 5,
     layout: 'single',
     sentences: [
@@ -747,13 +693,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 32 — Упр. 25 (стр. 77): Работете по модела — няколко ────────────
+  // ─── ORDER 28 — Упр. 25 (стр. 77): Работете по модела — няколко ────────────
   {
     id: 'a2-l07-ex-25',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 25',
     instruction: 'Изберете **няколко** в правилното изречение по модела.',
-    order: 32,
+    order: 28,
     points: 5,
     layout: 'single',
     sentences: [
@@ -766,13 +712,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 33 — Упр. 26 (стр. 77): Попълнете с някъде или никъде ─────────────
+  // ─── ORDER 29 — Упр. 26 (стр. 77): Попълнете с някъде или никъде ─────────────
   {
     id: 'a2-l07-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
     instruction: 'Изберете **някъде** или **никъде** по модела.',
-    order: 33,
+    order: 29,
     points: 4,
     layout: 'single',
     sentences: [
@@ -784,13 +730,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 34 — Упр. 27 (стр. 77): Попълнете с някога или никога ─────────────
+  // ─── ORDER 30 — Упр. 27 (стр. 77): Попълнете с някога или никога ─────────────
   {
     id: 'a2-l07-ex-27',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 27',
     instruction: 'Изберете **някога** или **никога** по модела.',
-    order: 34,
+    order: 30,
     points: 4,
     layout: 'single',
     sentences: [
@@ -802,13 +748,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 35 — Упр. 28 (стр. 77): Попълнете с нещо или нищо ────────────────
+  // ─── ORDER 31 — Упр. 28 (стр. 77): Попълнете с нещо или нищо ────────────────
   {
     id: 'a2-l07-ex-28',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 28',
     instruction: 'Изберете **нещо** или **нищо** по модела.',
-    order: 35,
+    order: 31,
     points: 4,
     layout: 'single',
     sentences: [
@@ -820,38 +766,22 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 36 — Упр. 29 (стр. 77): Отговорете на въпросите ─────────────────
-  {
-    id: 'a2-l07-ex-29',
-    type: 'personal_choice',
-    title: 'УПРАЖНЕНИЕ 29',
-    instruction: 'Отговорете на въпросите за себе си.',
-    order: 36,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Какво не правите никога?', positiveTemplate: 'Има нещо: Да.', negativeTemplate: 'Правя всичко: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Какво не ядете и не пиете никога?', positiveTemplate: 'Има нещо: Да.', negativeTemplate: 'Ям/пия всичко: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q3', question: 'Къде не ходите никога?', positiveTemplate: 'Има такова място: Да.', negativeTemplate: 'Ходя навсякъде: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-    ],
-  } as PersonalChoiceExercise,
-
-  // ─── ORDER 37 — ГРАМАТИКА 6 (стр. 77–78): Глагол → Съществително ──────────
+  // ─── ORDER 32 — ГРАМАТИКА 6 (стр. 77–78): Глагол → Съществително ──────────
   {
     id: 'a2-l07-gramatika-06',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 6',
     instruction: 'Запознайте се с думите, образувани от глаголи.',
     instructionKey: 'a2.gr.l07.glagolSushtestvitelno',
-    order: 37,
+    order: 32,
     tableTitle: 'Глагол → Съществително',
     columns: ['Съществително', 'Изречение'],
     rows: [
       { pronoun: 'разхождам се / разходя се', cells: ['разходка',              'Всеки ден ходя на разходка. Приятна разходка!'],     ttsText: 'разхождам се, разходя се. разходка. Всеки ден ходя на разходка. Приятна разходка!', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'срещам се / срещна се',     cells: ['среща',                 'Имам среща с приятели.'],                            ttsText: 'срещам се, срещна се. среща. Имам среща с приятели.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'помагам / помогна',         cells: ['помощ',                 'Трябва ми помощ. = Имам нужда от помощ.'],           ttsText: 'помагам, помогна. помощ. Трябва ми помощ. Имам нужда от помощ.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'закъснявам / закъснея',     cells: ['закъснение',            'Влакът има десет минути закъснение.'],               ttsText: 'закъснявам, закъснея. закъснèние. Влàкът има десет минути закъснèние.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'превеждам / преведа',       cells: ['преводач',              'Аз съм преводач от арабски на български.'],          ttsText: 'превеждам, преведà. преводач. Аз съм преводач от арабски на български.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'закъснявам / закъснея',     cells: ['закъснение',            'Влакът има десет минути закъснение.'],               ttsText: 'закъснявам, закъснея. закъснение. Влакът има десет минути закъснение.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'превеждам / преведа',       cells: ['преводач',              'Аз съм преводач от арабски на български.'],          ttsText: 'превеждам, преведа. преводач. Аз съм преводач от арабски на български.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'каня / поканя',             cells: ['покана',                'Благодаря за поканата!'],                            ttsText: 'каня, поканя. покана. Благодаря за поканата!', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'работя',                    cells: ['работа / работник',     'Имам нова работа! Лека работа! Петър е добър работник.'], ttsText: 'работя. работа, работник. Имам нова работа! Лека работа! Петър е добър работник.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'играя',                     cells: ['игра / играчка',        'Учениците обичат видеоигри. Децата ми имат много играчки.'], ttsText: 'играя. игра, играчка. Учениците обичат видеоигри. Децата ми имат много играчки.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
@@ -864,18 +794,18 @@ export const exercises: Exercise[] = [
     ttsNoteModels: [],
   } as GrammarTableExercise,
 
-  // ─── ORDER 38 — Упр. 30 (стр. 78): Слушайте и попълнете ───────────────────
+  // ─── ORDER 33 — Упр. 30 (стр. 78): Слушайте и попълнете ───────────────────
   // 🎧 TODO Фаза 2: audioUrl ще се генерира с npm run tts:generate -- --lesson 07
   {
     id: 'a2-l07-ex-30',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 30',
     instruction: 'Изслушайте изреченията и изберете правилното съществително.',
-    order: 38,
+    order: 33,
     points: 11,
     layout: 'single',
     audioUrl: '',  // TODO 🎧 Фаза 2
-    listeningText: 'Обичам да ходя на разходка с приятели в парка през пролетта. Старите хора често имат нужда от помощ. Малките деца много обичат играчки, по-големите обичат видеоигри. Пътуването от България до Китай е много трудно. В хладилника няма нищо за ядене и пиене. Трябва да отида в супера. В момента търсят работници за сезонна работа във Франция през лятото. Автобусите от Бургас често пристигат на автòгарата със закъснèние. Тази вечер имам среща с приятели от училище. В Държавната агенция за бежанците търсят преводачи с добър арабски език. Утре имам разговор с учителката на сина ми. Имам две покани за концерт за утре вечер. Искаш ли да дойдеш с мен?',
+    listeningText: 'Обичам да ходя на разходка с приятели в парка през пролетта. Старите хора често имат нужда от помощ. Малките деца много обичат играчки, по-големите обичат видеоигри. Пътуването от България до Китай е много трудно. В хладилника няма нищо за ядене и пиене. Трябва да отида в супера. В момента търсят работници за сезонна работа във Франция през лятото. Автобусите от Бургас често пристигат на автогарата със закъснение. Тази вечер имам среща с приятели от училище. В Държавната агенция за бежанците търсят преводачи с добър арабски език. Утре имам разговор с учителката на сина ми. Имам две покани за концерт за утре вечер. Искаш ли да дойдеш с мен?',
     sentences: [
       { text: 'Обичам да ходя на _____ с приятели в парка през пролетта.', blanks: [1], correctAnswers: ['разходка'],   options: ['разходка', 'среща', 'работа', 'пътуване'],    acceptableAnswers: [['разходка']] },
       { text: 'Старите хора често имат нужда от _____.', blanks: [1], correctAnswers: ['помощ'],      options: ['помощ', 'работа', 'покана', 'разговор'],     acceptableAnswers: [['помощ']] },
@@ -891,64 +821,40 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 39 — Упр. 31 (стр. 78): Свържете съществителното с глагола ──────
-  {
-    id: 'a2-l07-ex-31',
-    type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 31',
-    instruction: 'Изберете глагола, от който е образувано всяко съществително.',
-    subtitle: 'Например: писмо → пиша.',
-    order: 39,
-    points: 11,
-    questions: [
-      { id: 'q1',  left: 'писмо',    options: ['пиша', 'чета', 'броя'],            correctAnswer: 'пиша' },
-      { id: 'q2',  left: 'огледало', options: ['оглеждам се', 'гледам', 'чистя'],  correctAnswer: 'оглеждам се' },
-      { id: 'q3',  left: 'живот',    options: ['живея', 'лежа', 'играя'],          correctAnswer: 'живея' },
-      { id: 'q4',  left: 'обувки',   options: ['обувам', 'обличам', 'шия'],        correctAnswer: 'обувам' },
-      { id: 'q5',  left: 'танц',     options: ['танцувам', 'пея', 'скачам'],       correctAnswer: 'танцувам' },
-      { id: 'q6',  left: 'мивка',    options: ['мия', 'пера', 'готвя'],            correctAnswer: 'мия' },
-      { id: 'q7',  left: 'пералня',  options: ['пера', 'суша', 'гладя'],           correctAnswer: 'пера' },
-      { id: 'q8',  left: 'легло',    options: ['лягам', 'спя', 'сядам'],           correctAnswer: 'лягам' },
-      { id: 'q9',  left: 'готвач',   options: ['готвя', 'храня', 'режа'],          correctAnswer: 'готвя' },
-      { id: 'q10', left: 'целувка',  options: ['целувам', 'прегръщам', 'обичам'],  correctAnswer: 'целувам' },
-      { id: 'q11', left: 'училище',  options: ['уча', 'пиша', 'играя'],            correctAnswer: 'уча' },
-    ],
-  } as DropdownMatchExercise,
-
-  // ─── ORDER 40 — ДОП. упражнения (стр. 79): CV на Васил ─────────────────────
+  // ─── ORDER 34 — ДОП. упражнения (стр. 79): CV на Васил ─────────────────────
   {
     id: 'a2-l07-tekst-vasil-cv',
     type: 'reading_text',
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
     textTitle: 'Автобиография (CV) — Васил Иванов Петров',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 40,
+    order: 34,
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/09-dopalnitelni-upr-cv-vasil/01-vasil-portret.jpg`, label: 'Васил Иванов Петров' },
     ],
     paragraphs: [
       'Трите имена: Васил Иванов Петров\nАдрес: гр. София, жк „Младост" 3, бл. 307, вх. А, ет. 2, ап. 5\nТелефон: +359-897-990-205\nИмейл: vasiliv@abv.bg\nДата на раждане: 18.07.1990 г.\nНационалност: българин',
-      'ТРУДОВ СТАЖ\n2019 – сега: Преводач с английски и френски в агенция за преводи и легализация на документи, София\n2015 – 2019: Учител по английски език в Първа частна английска гимназия „Уилям Шекспир", София',
+      'ТРУДОВ СТАЖ\n2009 – сега: Преводач с английски и френски в агенция за преводи и легализация на документи, София\n2005 – 2009: Учител по английски език в Първа частна английска гимназия „Уилям Шекспир", София',
       'ОБРАЗОВАНИЕ\n2016: Специализация в Англия – Преподаване на английски като чужд език\n2010 – 2015: Софийски университет „Климент Охридски", специалност Английска филология (втора специалност Френски език)\n2004 – 2009: Втора английска езикова гимназия, София',
       'ЛИЧНИ УМЕНИЯ И КОМПЕТЕНЦИИ\nМайчин език: български\nДруги езици: английски (ниво C2), френски (ниво C2)\nКомпютърни умения: Microsoft Office',
     ],
     ttsParagraphs: [
       'Трите имена: Васил Иванов Петров. Адрес: град София, же ка Младост три, блок триста и седем, вход А, етаж две, апартамент пет. Телефон: плюс триста петдесет и девет, осемстотин деветдесет и седем, деветстотин и деветдесет, двеста и пет. Имейл: василив маймунка а бе ве точка бе ге. Дата на раждане: осемнадесети юли хиляда деветстотин и деветдесета година. Националност: българин.',
-      'Трудов стаж. От две хиляди и деветнадесета до сега: Преводач с английски и френски в агенция за преводи и легализация на документи, София. От две хиляди и петнадесета до две хиляди и деветнадесета: Учител по английски език в Първа частна английска гимназия Уилям Шекспир, София.',
+      'Трудов стаж. От две хиляди и девета до сега: Преводач с английски и френски в агенция за преводи и легализация на документи, София. От две хиляди и пета до две хиляди и девета: Учител по английски език в Първа частна английска гимназия Уилям Шекспир, София.',
       'Образование. Две хиляди и шестнадесета: Специализация в Англия — преподаване на английски като чужд език. От две хиляди и десета до две хиляди и петнадесета: Софийски университет Климент Охридски, специалност Английска филология, втора специалност Френски език. От две хиляди и четвърта до две хиляди и девета: Втора английска езикова гимназия, София.',
       'Лични умения и компетенции. Майчин език: български. Други езици: английски, ниво це две; френски, ниво це две. Компютърни умения: Microsoft Office.',
     ],
     paragraphVoiceGenders: ['male', 'male', 'male', 'male'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 41 — Упр. 32 (стр. 79): Попълнете по автобиографията на Васил ────
+  // ─── ORDER 35 — Упр. 32 (стр. 79): Попълнете по автобиографията на Васил ────
   {
     id: 'a2-l07-ex-32',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 32',
     instruction: 'Попълнете изреченията, като използвате информацията от автобиографията на Васил.',
-    order: 41,
+    order: 35,
     points: 9,
     layout: 'single',
     sentences: [
@@ -991,29 +897,67 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 42 — Упр. 33 (стр. 79): Задайте въпроси към автобиографията ───────
+  // ─── ORDER 36 — Упр. 33 (стр. 79): Разбиране на автобиографията на Васил ────
   {
     id: 'a2-l07-ex-33',
-    type: 'personal_choice',
+    type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 33',
-    instruction: 'Задайте въпроси към автобиографията на Васил и отговорете по модела. После разговаряйте за себе си.',
-    order: 42,
-    points: 0,
-    blankOptions: ['Да', 'Не'],
-    items: [
-      { id: 'q1', question: 'Задайте въпроси и отговорете: „Къде живее Васил? — Той живее в София, в жк „Младост" 3."', positiveTemplate: 'Мога да задам въпроси: Да.', negativeTemplate: 'Трудно ми е: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
-      { id: 'q2', question: 'Разкажете за себе си — вашата автобиография: трудов стаж, образование, езици.', positiveTemplate: 'Мога да разкажа: Да.', negativeTemplate: 'Трудно ми е: Не.', positiveBlank: 'Да', negativeBlank: 'Не' },
+    instruction: 'Отговорете на въпросите.',
+    order: 36,
+    points: 8,
+    questions: [
+      {
+        question: 'Къде работи Васил Петров в момента?',
+        options: ['В университет', 'В гимназия', 'В агенция за преводи', 'В международна компания'],
+        correctIndex: 2,
+      },
+      {
+        question: 'От коя година Васил работи като преводач?',
+        options: ['2005', '2006', '2009', '2010'],
+        correctIndex: 2,
+      },
+      {
+        question: 'Каква професия е имал преди да стане преводач?',
+        options: ['Журналист', 'Учител', 'Мениджър', 'Програмист'],
+        correctIndex: 1,
+      },
+      {
+        question: 'Къде е учил висшето си образование?',
+        options: ['В Англия', 'В САЩ', 'В Софийски университет', 'В технически университет'],
+        correctIndex: 2,
+      },
+      {
+        question: 'Кои езици владее на ниво C2?',
+        options: ['Немски и испански', 'Английски и френски', 'Руски и английски', 'Само английски'],
+        correctIndex: 1,
+      },
+      {
+        question: 'Каква е била неговата специализация в Англия?',
+        options: ['Превод на документи', 'Бизнес комуникация', 'Преподаване на английски като чужд език', 'Компютърни науки'],
+        correctIndex: 2,
+      },
+      {
+        question: 'В кой период е работил като учител?',
+        options: ['2000–2005', '2005–2009', '2009–2015', '1999–2004'],
+        correctIndex: 1,
+      },
+      {
+        question: 'Кое от следните твърдения е вярно?',
+        options: ['Васил живее извън България', 'Васил владее само един чужд език', 'Васил има опит в преподаването', 'Васил няма компютърни умения'],
+        correctIndex: 2,
+      },
     ],
-  } as PersonalChoiceExercise,
+  } as MultipleChoiceExercise,
 
-  // ─── ORDER 43 — ТЕКСТ (стр. 80): Мустафа ────────────────────────────────────
+  // ─── ORDER 37 — ТЕКСТ (стр. 80): Мустафа ────────────────────────────────────
   {
     id: 'a2-l07-tekst-mustafa',
     type: 'reading_text',
     title: 'ТЕКСТ',
+    subtitle: 'Прочетете текста и попълнете автобиографията на Мустафа.',
+    prominentSubtitle: true,
     textTitle: 'Мустафа',
-    instruction: 'Прочетете текста. Извадете непознатите думи и проверете превода им в речника.',
-    order: 43,
+    order: 37,
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/10-tekst-mustafa/01-mustafa-laptop.jpg`, label: 'Мустафа работи от вкъщи' },
@@ -1033,13 +977,14 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['male', 'male', 'male', 'male'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 44 — Упр. 36 (стр. 80): Попълнете автобиографията на Мустафа ──────
+  // ─── ORDER 38 — Упр. 36 (стр. 80): Попълнете автобиографията на Мустафа ──────
   {
     id: 'a2-l07-ex-36',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 36',
-    instruction: 'Изберете правилната информация от автобиографията на Мустафа.',
-    order: 44,
+    subtitle: 'Прочетете текста и попълнете автобиографията на Мустафа.',
+    prominentSubtitle: true,
+    order: 38,
     points: 10,
     questions: [
       { id: 'q1',  left: 'Име',                       options: ['Мустафа', 'Васил', 'Ахмед'],                                                                          correctAnswer: 'Мустафа' },

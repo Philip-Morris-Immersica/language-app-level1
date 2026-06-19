@@ -11,12 +11,20 @@
 } from '@/content/types';
 
 // ⚠️ Order follows the A2 textbook „Интервю за работа" (стр. 99–108).
-// Пропуснати по клиент: Упр. 2, 4, 9, 13, 14, 15, 20
+// Пропуснати по клиент: Упр. 2, 4, 9, 10, 13, 14, 15, 20
 
 const ASSET = '/assets/a2-lesson-10';
 
 const GEMINI_BG_SMOOTH_PROMPT =
   'Read aloud clearly and smoothly in standard Bulgarian with correct Bulgarian stress. Do not split words into syllables and do not use any foreign or Russian accent.';
+
+// Per-row stress fixes (Flash mis-stresses / doubles these). Used with ttsModel: 'pro'.
+const GEMINI_BG_STRESS_HODYA =
+  'Read these Bulgarian verb forms one by one, clearly, in a single calm female voice with correct native Bulgarian stress (ударение). The participles ходил, ходила, ходило, ходили are stressed on the first syllable "хо": "ходи́х, хо́дя, хо́дил, хо́дила, хо́дило, хо́дили". Read each word exactly once. Do not use any Russian or Arabic accent.';
+const GEMINI_BG_STRESS_CHAKAM =
+  'Read each Bulgarian word exactly once, clearly, in a single calm female voice with the stress on the first syllable: "ча́ках, ча́кам, ча́кал, ча́кала, ча́кало, ча́кали". Do not repeat any word. Do not use any foreign accent.';
+const GEMINI_BG_STRESS_TANTSUVAM =
+  'Read these Bulgarian verb forms clearly in a single calm female voice with the stress on the syllable "цу" in every word, never on the final vowel: "танцу́вах, танцу́вам, танцу́вал, танцу́вала, танцу́вало, танцу́вали". Read each word exactly once. Do not use any foreign accent.';
 
 export const exercises: Exercise[] = [
 
@@ -83,7 +91,7 @@ export const exercises: Exercise[] = [
         id: 'а. В БЮРОТО ПО ТРУДА',
         imageUrl: `${ASSET}/02-dialog-1-byuro-truda/01-svobodni-rabotni-mesta.jpg`,
         lines: [
-          { text: '– Здравей, Али! Как си?', voiceGender: 'male' },
+          { text: '– Здравей, Али! Как си?', ttsText: 'Али. – Здравей, Али! Как си?', voiceGender: 'male' },
           { text: '– Не много добре. Нямам работа.', voiceGender: 'male' },
           { text: '– А търсиш ли?', voiceGender: 'male' },
           { text: '– Да, разбира се. Всяка седмица идвам в Бюрото по труда. След два дни ще имам интервю за работа.', voiceGender: 'male' },
@@ -143,7 +151,6 @@ export const exercises: Exercise[] = [
     id: 'a2-l10-dialozi-02',
     type: 'a2-dialogues',
     title: 'ДИАЛОГ 2',
-    subtitle: 'СЛЕД ДВА ДНИ',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
     order: 4,
     sections: [
@@ -151,7 +158,7 @@ export const exercises: Exercise[] = [
         id: 'а. СЛЕД ДВА ДНИ',
         imageUrl: `${ASSET}/03-dialog-2-sled-dva-dni/01-dvama-mazhe-kafe.jpg`,
         lines: [
-          { text: '– Как мина интервюто, Али?', voiceGender: 'male' },
+          { text: '– Как мина интервюто, Али?', ttsText: 'Как мина интервюто, Али?', voiceGender: 'male' },
           { text: '– Много добре. Вече имам работа. Следващата седмица ще започна почасово. Ще работя по четири-пет часа на ден.', voiceGender: 'male' },
           { text: '– Доволен ли си?', voiceGender: 'male' },
           { text: '– Да, защо не. Ще получавам заплата в края на всеки месец.', voiceGender: 'male' },
@@ -224,7 +231,7 @@ export const exercises: Exercise[] = [
     id: 'a2-l10-novi-dumi-1',
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
-    subtitle: 'ПОЛУЧАВАМ / РАБОТЯ',
+    instruction: 'ПОЛУЧАВАМ / РАБОТЯ',
     textOnly: true,
     order: 6,
     cards: [
@@ -242,7 +249,6 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 6',
     instruction: 'Изберете подходящата дума или фраза.',
-    subtitle: 'помощи за безработни, заплата, аванс, почасово',
     order: 7,
     points: 4,
     layout: 'single',
@@ -316,6 +322,7 @@ export const exercises: Exercise[] = [
   } as MatchPairsExercise,
 
   // Упр. 9 — ⏭ SKIP по клиент (прочетете диалозите по двойки)
+  // Упр. 10 — ⏭ SKIP по клиент (работете по двойки — модели за пътуване)
 
   // ─── ORDER 10 — ДИАЛОЗИ 3 (стр. 100): а., б. ─────────────────────────────────
   {
@@ -344,32 +351,14 @@ export const exercises: Exercise[] = [
     ],
   } as unknown as Exercise,
 
-  // ─── ORDER 11 — Упр. 10 (стр. 100): Работете по двойки — модели ──────────────
-  // TODO: Оригиналът е „говорене по двойки" (Пътувал(а) ли си много?).
-  //       Адаптирано като reading_text с моделите за четене и запомняне на структурата.
-  {
-    id: 'a2-l10-ex-10',
-    type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 10',
-    instruction: 'Прочетете диалозите по модела.',
-    order: 11,
-    showDictionary: false,
-    paragraphs: [
-      '1. – Пътувал(а) ли си много?\n   – Не, не съм пътувал(а).\n   – Къде искаш да пътуваш?\n   – Искам да пътувам в … .',
-      '2. – Пътувал(а) ли си много?\n   – Да, пътувал(а) съм.\n   – Къде си пътувал(а)?\n   – Пътувал(а) съм в … .',
-      '3. – Ходил(а) ли си в …?\n   – Не, не съм ходил(а).\n   – А исках ли да отидеш?\n   – Да, искам. / Не, не искам, защото …',
-      '4. – Ходил(а) ли си в …?\n   – Да, ходил(а) съм.',
-    ],
-  } as ReadingTextExercise,
-
-  // ─── ORDER 12 — ГРАМАТИКА 1 (стр. 101): Минало неопределено ─────────────────
+  // ─── ORDER 11 — ГРАМАТИКА 1 (стр. 101): Минало неопределено ─────────────────
   {
     id: 'a2-l10-gramatika-01',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
     instruction: 'Запознайте се с миналото неопределено време.',
     instructionKey: 'a2.gr.l10.minaloBespredel',
-    order: 12,
+    order: 11,
     tableTitle: 'Минало неопределено време',
     columns: ['(+)', '(–)', '(?)'],
     rows: [
@@ -433,40 +422,40 @@ export const exercises: Exercise[] = [
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
 
-  // ─── ORDER 13 — Упр. 11 (стр. 101): Причастия от двувидови глаголи ───────────
+  // ─── ORDER 12 — Упр. 11 (стр. 101): Причастия от двувидови глаголи ───────────
   {
     id: 'a2-l10-ex-11',
     type: 'grammar_table',
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Запомнете формите на миналото свършено причастие.',
-    order: 13,
+    order: 12,
     tableTitle: 'Минало свършено причастие',
     columns: ['м.р. ед.ч.', 'ж.р. ед.ч.', 'ср.р. ед.ч.', 'мн.ч.'],
     rows: [
-      { pronoun: 'ходих (ходя)',      cells: ['ходил',    'ходила',    'ходило',    'ходили'],    ttsText: 'ходих: ходил, ходила, ходило, ходили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'говорих (говоря)',  cells: ['говорил',  'говорила',  'говорило',  'говорили'],  ttsText: 'говорих: говорил, говорила, говорило, говорили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'работих (работя)',  cells: ['работил',  'работила',  'работило',  'работили'],  ttsText: 'работих: работил, работила, работило, работили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'пих (пия)',         cells: ['пил',      'пила',      'пило',      'пили'],      ttsText: 'пих: пил, пила, пило, пили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'исках (искам)',     cells: ['искал',    'искала',    'искало',    'искали'],    ttsText: 'исках: искал, искала, искало, искали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'чаках (чакам)',     cells: ['чакал',    'чакала',    'чакало',    'чакали'],    ttsText: 'чаках: чакал, чакала, чакало, чакали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'писах (пиша)',      cells: ['писал',    'писала',    'писало',    'писали'],    ttsText: 'писах: писал, писала, писало, писали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'играх (играя)',     cells: ['играл',    'играла',    'играло',    'играли'],    ttsText: 'играх: играл, играла, играло, играли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'танцувах (танцувам)', cells: ['танцувал', 'танцувала', 'танцувало', 'танцували'], ttsText: 'танцувах: танцувал, танцувала, танцувало, танцували', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'гледах (гледам)',   cells: ['гледал',   'гледала',   'гледало',   'гледали'],   ttsText: 'гледах: гледал, гледала, гледало, гледали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'бях (съм)',         cells: ['бил',      'била',      'било',      'били'],      ttsText: 'бях: бил, била, било, били', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'ядох (ям)',         cells: ['ял',       'яла',       'яло',       'яли'],       ttsText: 'ядох: ял, яла, яло, яли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'четох (чета)',      cells: ['чел',      'чела',      'чело',      'чели'],      ttsText: 'четох: чел, чела, чело, чели', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'можах (мога)',      cells: ['могъл',    'могла',     'могло',     'могли'],     ttsText: 'можах: могъл, могла, могло, могли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'ходих (ходя)',      cells: ['ходил',    'ходила',    'ходило',    'ходили'],    ttsText: 'ходих, ходя. ходил, ходила, ходило, ходили', ttsModel: 'pro', ttsPrompt: GEMINI_BG_STRESS_HODYA },
+      { pronoun: 'говорих (говоря)',  cells: ['говорил',  'говорила',  'говорило',  'говорили'],  ttsText: 'говорих, говоря. говорил, говорила, говорило, говорили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'работих (работя)',  cells: ['работил',  'работила',  'работило',  'работили'],  ttsText: 'работих, работя. работил, работила, работило, работили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'пих (пия)',         cells: ['пил',      'пила',      'пило',      'пили'],      ttsText: 'пих, пия. пил, пила, пило, пили', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'исках (искам)',     cells: ['искал',    'искала',    'искало',    'искали'],    ttsText: 'исках, искам. искал, искала, искало, искали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'чаках (чакам)',     cells: ['чакал',    'чакала',    'чакало',    'чакали'],    ttsText: 'чаках, чакам. чакал, чакала, чакало, чакали', ttsModel: 'pro', ttsPrompt: GEMINI_BG_STRESS_CHAKAM },
+      { pronoun: 'писах (пиша)',      cells: ['писал',    'писала',    'писало',    'писали'],    ttsText: 'писах, пиша. писал, писала, писало, писали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'играх (играя)',     cells: ['играл',    'играла',    'играло',    'играли'],    ttsText: 'играх, играя. играл, играла, играло, играли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'танцувах (танцувам)', cells: ['танцувал', 'танцувала', 'танцувало', 'танцували'], ttsText: 'танцувах, танцувам. танцувал, танцувала, танцувало, танцували', ttsModel: 'pro', ttsPrompt: GEMINI_BG_STRESS_TANTSUVAM },
+      { pronoun: 'гледах (гледам)',   cells: ['гледал',   'гледала',   'гледало',   'гледали'],   ttsText: 'гледах, гледам. гледал, гледала, гледало, гледали', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'бях (съм)',         cells: ['бил',      'била',      'било',      'били'],      ttsText: 'бях, съм. бил, била, било, били', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'ядох (ям)',         cells: ['ял',       'яла',       'яло',       'яли'],       ttsText: 'ядох, ям. ял, яла, яло, яли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'четох (чета)',      cells: ['чел',      'чела',      'чело',      'чели'],      ttsText: 'четох, чета. чел, чела, чело, чели', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'можах (мога)',      cells: ['могъл',    'могла',     'могло',     'могли'],     ttsText: 'можах, мога. могъл, могла, могло, могли', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
     ],
   } as GrammarTableExercise,
 
-  // ─── ORDER 14 — Упр. 12 (стр. 101): Работете по модела ─────────────────────
+  // ─── ORDER 13 — Упр. 12 (стр. 101): Работете по модела ─────────────────────
   {
     id: 'a2-l10-ex-12',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 12',
     instruction: 'Изберете правилния отговор по модела.',
-    order: 14,
+    order: 13,
     points: 10,
     layout: 'single',
     sentences: [
@@ -517,13 +506,13 @@ export const exercises: Exercise[] = [
   // Упр. 13 — ⏭ SKIP по клиент (разкажете за себе си по модела)
   // Упр. 14 — ⏭ SKIP по клиент (разкажете за ваш приятел по модела)
 
-  // ─── ORDER 15 — ДИАЛОЗИ 4 (стр. 102): а., б., в. ────────────────────────────
+  // ─── ORDER 14 — ДИАЛОЗИ 4 (стр. 102): а., б., в. ────────────────────────────
   {
     id: 'a2-l10-dialozi-04',
     type: 'a2-dialogues',
     title: 'ДИАЛОЗИ 4',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
-    order: 15,
+    order: 14,
     sections: [
       {
         id: 'а. Видял ли си Георги',
@@ -554,13 +543,13 @@ export const exercises: Exercise[] = [
 
   // Упр. 15 — ⏭ SKIP по клиент (прочетете диалозите по двойки)
 
-  // ─── ORDER 16 — Упр. 16 (стр. 102): Причастие от несвършен вид ───────────────
+  // ─── ORDER 15 — Упр. 16 (стр. 102): Причастие от несвършен вид ───────────────
   {
     id: 'a2-l10-ex-16',
     type: 'grammar_table',
     title: 'УПРАЖНЕНИЕ 16',
     instruction: 'Запомнете формите на миналото несвършено причастие.',
-    order: 16,
+    order: 15,
     tableTitle: 'Минало несвършено причастие (несвършен вид)',
     columns: ['причастие (м.р./ж.р./ср.р./мн.ч.)'],
     rows: [
@@ -574,7 +563,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'излизам',    cells: ['излизал, -а, -о, -и'],   ttsText: 'излизам: излизал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'плащам',     cells: ['плащал, -а, -о, -и'],    ttsText: 'плащам: плащал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'давам',      cells: ['давал, -а, -о, -и'],     ttsText: 'давам: давал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'помагам',    cells: ['помагал, -а, -о, -и'],   ttsText: 'помагам: помагал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'помагам',    cells: ['помагал, -а, -о, -и'],   ttsText: 'помагам, помагал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'намирам',    cells: ['намирал, -а, -о, -и'],   ttsText: 'намирам: намирал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'срещам се',  cells: ['срещал се, -а, -о, -и'], ttsText: 'срещам се: срещал се', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'връщам се',  cells: ['връщал се, -а, -о, -и'], ttsText: 'връщам се: връщал се', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
@@ -582,14 +571,14 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarTableExercise,
 
-  // ─── ORDER 17 — ГРАМАТИКА 2 (стр. 102): Минало неопределено на възвратни ──────
+  // ─── ORDER 16 — ГРАМАТИКА 2 (стр. 102): Минало неопределено на възвратни ──────
   {
     id: 'a2-l10-gramatika-02',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с миналото неопределено на възвратните глаголи.',
     instructionKey: 'a2.gr.l10.minaloBezpVuzvraten',
-    order: 17,
+    order: 16,
     tableTitle: 'Минало неопределено — възвратни глаголи (+)',
     columns: ['(+)'],
     rows: [
@@ -653,13 +642,13 @@ export const exercises: Exercise[] = [
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
 
-  // ─── ORDER 18 — Упр. 17 (стр. 103): Работете по модела (се срещали) ───────────
+  // ─── ORDER 17 — Упр. 17 (стр. 103): Работете по модела (се срещали) ───────────
   {
     id: 'a2-l10-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изберете правилния отговор по модела.',
-    order: 18,
+    order: 17,
     points: 6,
     layout: 'single',
     sentences: [
@@ -693,13 +682,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 19 — Упр. 18 (стр. 103): го/я (виждал го, я) ─────────────────────
+  // ─── ORDER 18 — Упр. 18 (стр. 103): го/я (виждал го, я) ─────────────────────
   {
     id: 'a2-l10-ex-18',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 18',
     instruction: 'Изберете правилния отговор по модела.',
-    order: 19,
+    order: 18,
     points: 4,
     layout: 'single',
     sentences: [
@@ -726,7 +715,7 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 20 — ДИАЛОГ 5 „Коледно намаление" (стр. 103) ─────────────────────
+  // ─── ORDER 19 — ДИАЛОГ 5 „Коледно намаление" (стр. 103) ─────────────────────
   // Упр. 19 = четене на Диалог 5 → покрито чрез диалога
   // Упр. 20 — ⏭ SKIP по клиент (трансформирайте формите)
   {
@@ -734,7 +723,7 @@ export const exercises: Exercise[] = [
     type: 'a2-dialogues',
     title: 'ДИАЛОГ 5',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
-    order: 20,
+    order: 19,
     sections: [
       {
         id: 'а. КОЛЕДНО НАМАЛЕНИЕ',
@@ -747,13 +736,13 @@ export const exercises: Exercise[] = [
     ],
   } as unknown as Exercise,
 
-  // ─── ORDER 21 — ДИАЛОЗИ 6 (стр. 103–104): а., б., в. ────────────────────────
+  // ─── ORDER 20 — ДИАЛОЗИ 6 (стр. 103–104): а., б., в. ────────────────────────
   {
     id: 'a2-l10-dialozi-06',
     type: 'a2-dialogues',
     title: 'ДИАЛОЗИ 6',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
-    order: 21,
+    order: 20,
     sections: [
       {
         id: 'а. Почивка в Турция',
@@ -780,21 +769,21 @@ export const exercises: Exercise[] = [
         imageUrl: `${ASSET}/08-dialozi-6v/01-petya-balkon.jpg`,
         lines: [
           { text: '– Петя не е вкъщи. Сигурно още не се е върнала от работа.', voiceGender: 'female' },
-          { text: '– Но колата й е пред блока!', voiceGender: 'female' },
+          { text: '– Но колата й е пред блока!', ttsText: '– Но колата ѝ е пред блока!', voiceGender: 'female' },
           { text: '– Може би е отишла на работа с метро.', voiceGender: 'female' },
         ],
       },
     ],
   } as unknown as Exercise,
 
-  // ─── ORDER 22 — Упр. 22 (стр. 104): Отговорете на въпросите ─────────────────
+  // ─── ORDER 21 — Упр. 22 (стр. 104): Отговорете на въпросите ─────────────────
   // (Клиентът го изброява като „Упр. 21")
   {
     id: 'a2-l10-ex-22',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 22',
     instruction: 'Изберете правилния отговор.',
-    order: 22,
+    order: 21,
     points: 5,
     questions: [
       {
@@ -850,14 +839,14 @@ export const exercises: Exercise[] = [
     ],
   } as MultipleChoiceExercise,
 
-  // ─── ORDER 23 — ГРАМАТИКА 3 (стр. 104): Маркери мин.свършено/неопределено ────
+  // ─── ORDER 22 — ГРАМАТИКА 3 (стр. 104): Маркери мин.свършено/неопределено ────
   {
     id: 'a2-l10-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
     instruction: 'Запознайте се с маркерите за минало свършено и неопределено.',
     instructionKey: 'a2.gr.l10.markeriVreme',
-    order: 23,
+    order: 22,
     tableTitle: 'Маркери за минало свършено / неопределено',
     columns: ['Минало свършено', 'Минало неопределено'],
     rows: [
@@ -888,7 +877,8 @@ export const exercises: Exercise[] = [
       {
         pronoun: '',
         cells: ['през 2015 година, …', 'някога'],
-        ttsText: 'Минало свършено: през две хиляди и петнадесета година. Минало неопределено: някога.',
+        ttsText: 'Минало свършено: през две хиляди и петнайста година. Минало неопределено: някога.',
+        ttsModel: 'pro',
         ttsPrompt: GEMINI_BG_SMOOTH_PROMPT,
       },
       {
@@ -924,13 +914,13 @@ export const exercises: Exercise[] = [
     ],
   } as GrammarTableExercise,
 
-  // ─── ORDER 24 — Упр. 23 (стр. 104): Работете по модела (никога/много пъти) ───
+  // ─── ORDER 23 — Упр. 23 (стр. 104): Работете по модела (никога/много пъти) ───
   {
     id: 'a2-l10-ex-23',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 23',
     instruction: 'Изберете правилния отговор по модела.',
-    order: 24,
+    order: 23,
     points: 8,
     layout: 'single',
     sentences: [
@@ -971,13 +961,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 25 — Упр. 24 (стр. 104): Сигурно/може би + глагол ────────────────
+  // ─── ORDER 24 — Упр. 24 (стр. 104): Сигурно/може би + глагол ────────────────
   {
     id: 'a2-l10-ex-24',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 24',
     instruction: 'Изберете правилната форма на глагола по модела.',
-    order: 25,
+    order: 24,
     points: 4,
     layout: 'single',
     sentences: [
@@ -1018,13 +1008,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 26 — Упр. 25 (стр. 104): Може би се е обадила ────────────────────
+  // ─── ORDER 25 — Упр. 25 (стр. 104): Може би се е обадила ────────────────────
   {
     id: 'a2-l10-ex-25',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 25',
     instruction: 'Изберете правилния отговор по модела.',
-    order: 26,
+    order: 25,
     points: 3,
     layout: 'single',
     sentences: [
@@ -1058,13 +1048,13 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 27 — Упр. 26 (стр. 105): Глагол в скоби ─────────────────────────
+  // ─── ORDER 26 — Упр. 26 (стр. 105): Глагол в скоби ─────────────────────────
   {
     id: 'a2-l10-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
     instruction: 'Изберете правилната форма на глагола — минало свършено или минало неопределено.',
-    order: 27,
+    order: 26,
     points: 4,
     layout: 'single',
     sentences: [
@@ -1105,14 +1095,14 @@ export const exercises: Exercise[] = [
     ],
   } as WorkbookFillBlankExercise,
 
-  // ─── ORDER 28 — Упр. 27 (стр. 105): Интервю за работа — Али Рамадан ─────────
+  // ─── ORDER 27 — Упр. 27 (стр. 105): Интервю за работа — Али Рамадан ─────────
   {
     id: 'a2-l10-tekst-ali-interview',
     type: 'reading_text',
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
     textTitle: 'Интервю за работа',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 28,
+    order: 27,
     showDictionary: true,
     paragraphs: [
       '– Добър ден. Заповядайте, седнете. Как се казвате?',
@@ -1155,13 +1145,13 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'female'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 29 — Упр. 28 (стр. 105): Вярно или грешно? ───────────────────────
+  // ─── ORDER 28 — Упр. 28 (стр. 105): Вярно или грешно? ───────────────────────
   {
     id: 'a2-l10-ex-28',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 28',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 29,
+    order: 28,
     points: 12,
     sentences: [
       { id: 'tf1',  text: 'Али кандидатства за работа като сервитьор.',        isTrue: false },
@@ -1179,13 +1169,13 @@ export const exercises: Exercise[] = [
     ],
   } as TrueFalseExercise,
 
-  // ─── ORDER 30 — Упр. 29 (стр. 105): Прочетете съветите ─────────────────────
+  // ─── ORDER 29 — Упр. 29 (стр. 105): Прочетете съветите ─────────────────────
   {
     id: 'a2-l10-ex-29',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 29',
     instruction: 'Определете кои съвети преди интервю за работа са верни (✓) или неверни (✗).',
-    order: 30,
+    order: 29,
     points: 6,
     sentences: [
       { id: 'c1', text: 'Добре е да изпратите добре написано CV.',                      isTrue: true  },
@@ -1197,14 +1187,14 @@ export const exercises: Exercise[] = [
     ],
   } as TrueFalseExercise,
 
-  // ─── ORDER 31 — Упр. 30 (стр. 106): Текст — Елена от Сирия ─────────────────
+  // ─── ORDER 30 — Упр. 30 (стр. 106): Текст — Елена от Сирия ─────────────────
   {
     id: 'a2-l10-tekst-elena',
     type: 'reading_text',
     title: 'ТЕКСТОВЕ',
     textTitle: 'История на една имигрантка в България',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 31,
+    order: 30,
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/09-tekst-elena/01-zhena-shapka-cherno.jpg`,        label: 'Имигрантка в България',     ttsWordId: 'elena-img-01' },
@@ -1238,14 +1228,14 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['female', 'female', 'female', 'female', 'female', 'female', 'female'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 32 — Упр. 31 (стр. 106): Отговорете на въпросите — Елена ───────────
+  // ─── ORDER 31 — Упр. 31 (стр. 106): Отговорете на въпросите — Елена ───────────
   // (Клиентът означава като „29 & 30")
   {
     id: 'a2-l10-ex-31',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 31',
     instruction: 'Изберете правилния отговор.',
-    order: 32,
+    order: 31,
     points: 9,
     questions: [
       {
@@ -1341,7 +1331,7 @@ export const exercises: Exercise[] = [
     ],
   } as MultipleChoiceExercise,
 
-  // ─── ORDER 33 — Упр. 32 (стр. 107): Текст — Пулус (неврохирург) ──────────────
+  // ─── ORDER 32 — Упр. 32 (стр. 107): Текст — Пулус (неврохирург) ──────────────
   // (Клиентът означава като „31 & 32")
   {
     id: 'a2-l10-tekst-pulus',
@@ -1349,8 +1339,10 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 32',
     textTitle: 'История на един имигрант в България',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 33,
+    order: 32,
     showDictionary: true,
+    voiceGender: 'male',
+    audioUrl: '/assets/a2-lesson-10/audio/tts/texts/a2-l10-tekst-pulus-full.mp3',
     images: [
       { imageUrl: `${ASSET}/10-tekst-pulus/01-nevrohirurg.jpg`, label: 'Пулус — неврохирург', ttsWordId: 'pulus-img-01' },
     ],
@@ -1360,22 +1352,15 @@ export const exercises: Exercise[] = [
       'После специализира три години в една софийска болница, защото мечтата му е да стане хирург. И успява. Сега е неврохирург, прави операции, грижи се много за пациентите и обича работата си.',
       'През цялото време до него са двете му сестри, които го подкрепят и окуражават. Тримата са християни и в неделя ходят заедно на църква. Искат да живеят и да бъдат полезни в страната ни, която за тях и за сестрите му е втора родина.',
     ],
-    ttsParagraphs: [
-      'Пулус е иракчанин. Той учи пет години медицина в Багдад, но не завършва, защото идва в България като бежанец.',
-      'Пулус пристига в България преди петнадесет години. Иска да продължи образованието си по медицина, но няма документи и трябва да започне всичко отначало. Учи сериозно български език. След три години успява да влезе в Медицинска академия и я завършва с отличен успех след упоритата работа.',
-      'После специализира три години в една софийска болница, защото мечтата му е да стане хирург. И успява. Сега е неврохирург, прави операции, грижи се много за пациентите и обича работата си.',
-      'През цялото време до него са двете му сестри, които го подкрепят и окуражават. Тримата са християни и в неделя ходят заедно на църква. Искат да живеят и да бъдат полезни в страната ни, която за тях и за сестрите му е втора родина.',
-    ],
-    paragraphVoiceGenders: ['male', 'male', 'male', 'male'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 34 — Упр. 33 (стр. 107): Отговорете на въпросите — Пулус ───────────
+  // ─── ORDER 33 — Упр. 33 (стр. 107): Отговорете на въпросите — Пулус ───────────
   {
     id: 'a2-l10-ex-33',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 33',
     instruction: 'Изберете правилния отговор.',
-    order: 34,
+    order: 33,
     points: 13,
     questions: [
       {
@@ -1511,14 +1496,14 @@ export const exercises: Exercise[] = [
     ],
   } as MultipleChoiceExercise,
 
-  // ─── ORDER 35 — Упр. 34 (стр. 108): Текст — Рамин (архитект) ────────────────
+  // ─── ORDER 34 — Упр. 34 (стр. 108): Текст — Рамин (архитект) ────────────────
   {
     id: 'a2-l10-tekst-ramin',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 34',
     textTitle: 'История на един имигрант в България',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 35,
+    order: 34,
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/11-tekst-ramin/01-ramin-arhitekt.jpg`, label: 'Рамин — архитект', ttsWordId: 'ramin-img-01' },
@@ -1538,13 +1523,13 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['male', 'male', 'male', 'male'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 36 — Упр. 35 (стр. 108): Вярно или грешно? — Рамин ───────────────
+  // ─── ORDER 35 — Упр. 35 (стр. 108): Вярно или грешно? — Рамин ───────────────
   {
     id: 'a2-l10-ex-35',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 35',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 36,
+    order: 35,
     points: 7,
     sentences: [
       { id: 'r1', text: 'Рамин е бежанец от Ирак.',                                           isTrue: false },
@@ -1557,13 +1542,13 @@ export const exercises: Exercise[] = [
     ],
   } as TrueFalseExercise,
 
-  // ─── ORDER 37 — Упр. 36 (стр. 108): Какво е общото между тримата? ─────────────
+  // ─── ORDER 36 — Упр. 36 (стр. 108): Какво е общото между тримата? ─────────────
   {
     id: 'a2-l10-ex-36',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 36',
     instruction: 'Прочетете текстовете за Елена, Пулус и Рамин и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 37,
+    order: 36,
     points: 5,
     sentences: [
       { id: 'p1', text: 'И тримата са бежанци, дошли в България.',                     isTrue: true  },
@@ -1574,13 +1559,13 @@ export const exercises: Exercise[] = [
     ],
   } as TrueFalseExercise,
 
-  // ─── ORDER 38 — Упр. 37 (стр. 108): За какво мечтаете Вие? ────────────────────
+  // ─── ORDER 37 — Упр. 37 (стр. 108): За какво мечтаете Вие? ────────────────────
   {
     id: 'a2-l10-ex-37',
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 37',
     instruction: 'Прочетете текстовете и определете дали твърденията за героите са верни (✓) или неверни (✗).',
-    order: 38,
+    order: 37,
     points: 6,
     sentences: [
       { id: 'dream1', text: 'Мечтата на Пулус беше да стане хирург.',                    isTrue: true  },

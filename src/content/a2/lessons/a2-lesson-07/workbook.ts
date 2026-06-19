@@ -13,7 +13,7 @@ export const workbookExercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'ПРЕГОВОР',
     instruction: 'Изберете правилната форма на глаголите в минало свършено.',
-    order: 45,
+    order: 39,
     points: 14,
     layout: 'single',
     sentences: [
@@ -67,7 +67,7 @@ export const workbookExercises: Exercise[] = [
     id: 'a2-l07-wb-02',
     type: 'drag_to_columns',
     instruction: 'Поставете думите в правилната колона.',
-    order: 46,
+    order: 40,
     items: ['видя', 'вечерям', 'вървя', 'гледам', 'живея', 'завърша', 'закъснея', 'играя', 'кажа', 'купя', 'мия', 'обядвам', 'пиша', 'пия', 'получа', 'правя', 'работя', 'разбера', 'разговарям', 'стана', 'ходя', 'върна се'],
     columns: [
       {
@@ -93,7 +93,7 @@ export const workbookExercises: Exercise[] = [
     id: 'a2-l07-wb-03',
     type: 'table_fill',
     instruction: 'Попълнете таблицата с липсващите местоимения.',
-    order: 47,
+    order: 41,
     points: 6,
     tables: [
     {

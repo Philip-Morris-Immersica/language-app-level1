@@ -108,12 +108,69 @@ export interface A2FreeFillExercise extends BaseExercise {
   sentences: A2FreeFillSentence[];
 }
 
+// ─── A2DialoguesExercise ──────────────────────────────────────────────────────
+// Same as the shared DialoguesExercise but each `section` may carry its own
+// `imageUrl`, rendered centered above that section's lines. Used when a single
+// dialogue exercise groups several sub-dialogues (а., б., в.) that each have a
+// distinct illustration.
+
+export interface A2DialogueLine {
+  speaker?: string;
+  voiceGender?: 'male' | 'female';
+  text: string;
+  ttsText?: string;
+  translations?: Record<string, string>;
+}
+
+export interface A2DialogueSection {
+  id: string;
+  bubbleSide?: 'left' | 'right';
+  imageUrl?: string;
+  lines: A2DialogueLine[];
+}
+
+export interface A2DialoguesExercise extends BaseExercise {
+  type: 'a2-dialogues';
+  title: string;
+  subtitle?: string;
+  imageUrl?: string;
+  images?: string[];
+  displayLayout?: 'list' | 'scene';
+  sections: A2DialogueSection[];
+}
+
+// ─── A2GrammarExamplesExercise ────────────────────────────────────────────────
+// Same as the shared GrammarExamplesExercise; the matching A2 component only
+// changes the `layout: 'centered'` rendering (truly-centered, content-width
+// cards). Delegates to the shared component for any other layout.
+
+export interface A2GrammarExampleItem {
+  imageUrl?: string;
+  text?: string;
+  subtext?: string;
+  label?: string;
+  lines?: string[];
+  translations?: Record<string, string>;
+  ttsText?: string;
+  voiceGender?: 'male' | 'female';
+}
+
+export interface A2GrammarExamplesExercise extends BaseExercise {
+  type: 'a2-grammar-examples';
+  title: string;
+  layout?: 'default' | 'centered';
+  disableTts?: boolean;
+  examples: A2GrammarExampleItem[];
+}
+
 /** Union of all A2-specific exercise interfaces. */
 export type A2Exercise =
   | A2GroupedDropdownExercise
   | A2ImageLabelingExercise
   | A2WideCardsExercise
-  | A2FreeFillExercise;
+  | A2FreeFillExercise
+  | A2DialoguesExercise
+  | A2GrammarExamplesExercise;
 
 // Re-export BaseExercise so A2 component files can import everything from one place.
 export type { BaseExercise };

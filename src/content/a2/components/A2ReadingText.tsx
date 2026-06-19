@@ -46,6 +46,10 @@ interface ReadingTextProps {
   textTitle?: string;
   images?: ReadingTextImage[];
   imageFlashcards?: boolean;
+  /** Override image grid column count (default: 1→1 col, 2→centered 2 cols, 3+→2 / md:3 cols). */
+  imageColumns?: number;
+  /** Fixed 4:3 containers with object-cover so all images appear the same size. */
+  imageEqualHeight?: boolean;
   paragraphs: string[];
   paragraphTranslations?: Record<string, string>[];
   showDictionary?: boolean;
@@ -110,7 +114,7 @@ function TtsButton({
   );
 }
 
-function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, images, imageFlashcards, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
+function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, images, imageFlashcards, imageColumns, imageEqualHeight, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -571,15 +575,38 @@ function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, 
       ) : !hideText && images && images.length > 0 ? (
         // A2-CHANGE: center exactly-two plain images (max-w-2xl mx-auto) instead of
         // leaving an empty third column on desktop (`md:grid-cols-3`).
-        <div className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-xl md:max-w-2xl mx-auto' : images.length === 2 ? 'grid-cols-2 max-w-2xl mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid mb-6 ${
+          images.length === 1
+            ? 'gap-3 grid-cols-1 max-w-xl md:max-w-2xl mx-auto'
+            : images.length === 2
+              ? 'gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+              : imageColumns === 4
+                ? 'gap-3 grid-cols-2 md:grid-cols-4'
+                : imageColumns === 3
+                  ? 'gap-3 grid-cols-2 md:grid-cols-3'
+                  : imageColumns === 2
+                    ? 'gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+                    : 'gap-3 grid-cols-2 md:grid-cols-3'
+        }`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
-              <img
-                src={img.imageUrl}
-                alt={img.label}
-                className={`w-full rounded-lg shadow-sm object-contain ${images.length === 1 ? 'max-h-96 md:max-h-[480px]' : 'max-h-72'}`}
-                loading="lazy"
-              />
+              {imageEqualHeight ? (
+                <div className="w-full aspect-[4/3] overflow-hidden rounded-lg shadow-sm">
+                  <img
+                    src={img.imageUrl}
+                    alt={img.label}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <img
+                  src={img.imageUrl}
+                  alt={img.label}
+                  className={`w-full rounded-lg shadow-sm object-contain ${images.length === 1 ? 'max-h-96 md:max-h-[480px]' : 'max-h-72'}`}
+                  loading="lazy"
+                />
+              )}
               {img.label && (
                 <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
               )}
@@ -805,6 +832,8 @@ export function A2ReadingText({
       textTitle={ex.textTitle}
       images={ex.images}
       imageFlashcards={ex.imageFlashcards}
+      imageColumns={ex.imageColumns}
+      imageEqualHeight={ex.imageEqualHeight}
       paragraphs={ex.paragraphs}
       paragraphTranslations={ex.paragraphTranslations}
       showDictionary={ex.showDictionary}
