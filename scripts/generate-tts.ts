@@ -43,7 +43,17 @@ const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone, in clear standard B
 const GEMINI_BG_CALM_PROMPT =
   'Read calmly and neutrally in clear standard Bulgarian with correct native stress, with minimal intonation and without any foreign accent.';
 /** reading_text ids that should use the calmer, low-intonation Pro prompt. */
-const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19', 'a2-l08-tekst-vakantsia']);
+const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19']);
+/** Per-exercise custom prompt override for reading_text paragraphs (overrides CALM_PROMPT_IDS). */
+const READING_TEXT_CUSTOM_PROMPTS: Record<string, string> = {
+  'a2-l08-tekst-vakantsia':
+    'Read calmly in clear standard Bulgarian with correct native stress. ' +
+    'Stress rules for this text: „гра́да" — stress on first syllable (ГРА-да, NOT гра-ДА); ' +
+    '„са́ндвич" — stress on first syllable (СА-ндвич); ' +
+    '„кафе́" — stress on last syllable (ка-ФЕ, NOT КА-фе); ' +
+    '„по́вече" — stress on first syllable (ПО-вече, NOT по-ВЕ-че). ' +
+    'Do not use Russian, Arabic or any other foreign accent.',
+};
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
 /** Isolated words where Flash mis-stresses; Pro + explicit stress hint (l03 tekstove flip cards). */
@@ -776,7 +786,8 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
     const perPara = ex.paragraphVoiceGenders;
     const defaultVoice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     const usePerPara = perPara && perPara.length === paragraphs.length;
-    const readingPrompt = READING_TEXT_CALM_PROMPT_IDS.has(ex.id) ? GEMINI_BG_CALM_PROMPT : GEMINI_PROMPT;
+    const readingPrompt = READING_TEXT_CUSTOM_PROMPTS[ex.id]
+      ?? (READING_TEXT_CALM_PROMPT_IDS.has(ex.id) ? GEMINI_BG_CALM_PROMPT : GEMINI_PROMPT);
     for (let i = 0; i < paragraphs.length; i++) {
       if (!ttsParagraphs[i].trim()) continue;
       const voice = usePerPara
