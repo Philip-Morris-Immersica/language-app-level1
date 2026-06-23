@@ -50,12 +50,15 @@ import { A2ReadingText } from './components/A2ReadingText';
 import { A2Dialogues } from './components/A2Dialogues';
 import { A2GrammarExamples } from './components/A2GrammarExamples';
 import { A2GrammarTable } from './components/A2GrammarTable';
+import { A2MatchPairs } from './components/A2MatchPairs';
 
 export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'a2-grouped-dropdown-match': GroupedDropdownMatch as unknown as CustomExerciseRenderer,
   'a2-image-labeling': ImageLabelingWide as unknown as CustomExerciseRenderer,
   'a2-wide-cards': WideCards as unknown as CustomExerciseRenderer,
   'a2-free-fill': FreeFill as unknown as CustomExerciseRenderer,
+  // A2 match_pairs variant: shows an optional „Модел" example above the pairs.
+  'a2-match-pairs': A2MatchPairs as unknown as CustomExerciseRenderer,
   // A2 variant of the shared dialogues: renders a per-section image (а., б., в.).
   'a2-dialogues': A2Dialogues as unknown as CustomExerciseRenderer,
   // A2 variant of the shared grammar_examples: truly-centered cards (centered layout).

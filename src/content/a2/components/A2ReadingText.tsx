@@ -114,6 +114,23 @@ function TtsButton({
   );
 }
 
+/** Remove **markdown** bold markers — used for TTS fallback text and translation source. */
+function stripMarkdown(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, '$1');
+}
+
+/** Render a line with **bold** segments as <strong>. Mirrors GrammarWithExamples.BoldLine. */
+function BoldText({ text }: { text: string }) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? <strong key={i}>{part}</strong> : <span key={i}>{part}</span>
+      )}
+    </>
+  );
+}
+
 function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, images, imageFlashcards, imageColumns, imageEqualHeight, paragraphs, paragraphTranslations, showDictionary, hideText, noTranslation, checklist, exerciseId, onComplete }: ReadingTextProps) {
   const t = useT();
   const { lang } = useLanguage();
@@ -675,7 +692,7 @@ function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, 
                     ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${index}`)
                     : '';
                   setPlayingParaIndex(index);
-                  playTtsAudio(audioPath, paragraph, undefined, () => setPlayingParaIndex(null));
+                  playTtsAudio(audioPath, stripMarkdown(paragraph), undefined, () => setPlayingParaIndex(null));
 
                   if (!noTranslation) {
                     setRevealedParas(prev => {
@@ -702,15 +719,15 @@ function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, 
                     {paragraph.includes('\n') ? (
                       paragraph.split('\n').map((line, li) => (
                         <p key={li} className="text-base md:text-lg text-gray-800 leading-relaxed">
-                          {line}
+                          <BoldText text={line} />
                         </p>
                       ))
                     ) : (
                       <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                        {paragraph}
+                        <BoldText text={paragraph} />
                       </p>
                     )}
-                    {!noTranslation && <InlineTranslation text={paragraph} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
+                    {!noTranslation && <InlineTranslation text={stripMarkdown(paragraph)} visible={revealedParas.has(index)} translations={paragraphTranslations?.[index]} />}
                   </div>
                 </div>
               </div>

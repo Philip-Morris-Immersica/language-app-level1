@@ -86,10 +86,10 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОГ 1',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
     order: 2,
+    imageUrl: `${ASSET}/02-dialog-1-byuro-truda/01-svobodni-rabotni-mesta.jpg`,
     sections: [
       {
         id: 'а. В БЮРОТО ПО ТРУДА',
-        imageUrl: `${ASSET}/02-dialog-1-byuro-truda/01-svobodni-rabotni-mesta.jpg`,
         lines: [
           { text: '– Здравей, Али! Как си?', ttsText: 'Али. – Здравей, Али! Как си?', voiceGender: 'male' },
           { text: '– Не много добре. Нямам работа.', voiceGender: 'male' },
@@ -153,10 +153,10 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОГ 2',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
     order: 4,
+    imageUrl: `${ASSET}/03-dialog-2-sled-dva-dni/01-dvama-mazhe-kafe.jpg`,
     sections: [
       {
         id: 'а. СЛЕД ДВА ДНИ',
-        imageUrl: `${ASSET}/03-dialog-2-sled-dva-dni/01-dvama-mazhe-kafe.jpg`,
         lines: [
           { text: '– Как мина интервюто, Али?', ttsText: 'Как мина интервюто, Али?', voiceGender: 'male' },
           { text: '– Много добре. Вече имам работа. Следващата седмица ще започна почасово. Ще работя по четири-пет часа на ден.', voiceGender: 'male' },
@@ -287,9 +287,10 @@ export const exercises: Exercise[] = [
   // ─── ORDER 8 — Упр. 7 (стр. 100): Свържете антонимите ────────────────────────
   {
     id: 'a2-l10-ex-07',
-    type: 'match_pairs',
+    type: 'a2-match-pairs',
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Свържете антонимите от двете колони.',
+    model: 'голям – малък',
     order: 8,
     points: 5,
     pairs: [
@@ -300,7 +301,7 @@ export const exercises: Exercise[] = [
       { id: 'p5', left: 'ниска заплата',          correctRight: 'висока заплата' },
     ],
     shuffledRights: ['имам работа', 'висока заплата', 'лош шеф', 'работя на пълно работно', 'намирам работа'],
-  } as MatchPairsExercise,
+  } as unknown as Exercise,
 
   // ─── ORDER 9 — Упр. 8 (стр. 100): Слушайте и отбележете ─────────────────────
   // TODO: Учебникът описва „слушане" — учителят изрежда думи, учениците слушат.

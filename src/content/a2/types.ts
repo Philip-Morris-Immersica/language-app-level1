@@ -27,7 +27,7 @@
  * and register it in `src/content/a2/exercise-components.ts`.
  */
 
-import type { BaseExercise } from '../shared/types';
+import type { BaseExercise, MatchPairsExercise } from '../shared/types';
 
 // ─── A2GroupedDropdownExercise ────────────────────────────────────────────────
 // Same as DropdownMatchExercise but renders questions in a grouped grid where
@@ -163,6 +163,17 @@ export interface A2GrammarExamplesExercise extends BaseExercise {
   examples: A2GrammarExampleItem[];
 }
 
+// ─── A2MatchPairsExercise ─────────────────────────────────────────────────────
+// Same as the shared MatchPairsExercise, plus an optional `model` worked example
+// rendered (in Bulgarian, never auto-translated) ABOVE the pairs and OUTSIDE the
+// instruction. Used for antonym-matching drills where a sample pair helps.
+
+export interface A2MatchPairsExercise extends Omit<MatchPairsExercise, 'type'> {
+  type: 'a2-match-pairs';
+  /** Worked example shown above the pairs, e.g. 'добър – лош'. */
+  model?: string;
+}
+
 /** Union of all A2-specific exercise interfaces. */
 export type A2Exercise =
   | A2GroupedDropdownExercise
@@ -170,7 +181,8 @@ export type A2Exercise =
   | A2WideCardsExercise
   | A2FreeFillExercise
   | A2DialoguesExercise
-  | A2GrammarExamplesExercise;
+  | A2GrammarExamplesExercise
+  | A2MatchPairsExercise;
 
 // Re-export BaseExercise so A2 component files can import everything from one place.
 export type { BaseExercise };

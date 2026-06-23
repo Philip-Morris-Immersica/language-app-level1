@@ -2,7 +2,6 @@
   Exercise,
   ImageLabelingExercise,
   IllustratedCardsExercise,
-  MatchPairsExercise,
   GrammarTableExercise,
   WorkbookFillBlankExercise,
   MultipleChoiceExercise,
@@ -67,19 +66,20 @@ export const exercises: Exercise[] = [
   // ─── ORDER 3 — Упр. 2 (стр. 92): Свържете антонимите ────────────────────────
   {
     id: 'a2-l09-ex-02',
-    type: 'match_pairs',
+    type: 'a2-match-pairs',
     title: 'УПРАЖНЕНИЕ 2',
     instruction: 'Свържете думите с техните антоними.',
+    model: 'добър – лош',
     order: 3,
     points: 4,
     pairs: [
-      { id: 'p1', left: 'щастлив',  correctRight: 'тъжен' },
-      { id: 'p2', left: 'весел',    correctRight: 'нещастен' },
+      { id: 'p1', left: 'щастлив',  correctRight: 'нещастен' },
+      { id: 'p2', left: 'весел',    correctRight: 'тъжен' },
       { id: 'p3', left: 'доволен',  correctRight: 'недоволен' },
       { id: 'p4', left: 'спокоен',  correctRight: 'неспокоен' },
     ],
     shuffledRights: ['тъжен', 'нещастен', 'недоволен', 'неспокоен'],
-  } as MatchPairsExercise,
+  } as unknown as Exercise,
 
   // Упр. 3 — ⏭ SKIP по клиент (напишете изречения с нови думи)
 
@@ -637,19 +637,33 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['male'],
   } as ReadingTextExercise,
 
+  // ─── ORDER 20.5 — Една по-голяма обща снимка над двете части на упр. 19 ──────
+  // Headerless (title: '' → не консумира номер, не рендира хедър/инструкция).
+  // Заменя дублираните малки снимки в 19a и 19b с една голяма центрирана.
+  {
+    id: 'a2-l09-ex-19-image',
+    type: 'reading_text',
+    title: '',
+    instruction: '',
+    order: 20.5,
+    noTranslation: true,
+    hideText: false,
+    images: [
+      { imageUrl: `${ASSET}/08-dopalnitelni-upr-19-iva-vanya/01-iva-vanya.jpg`, label: 'Ива и Ваня' },
+    ],
+    paragraphs: [],
+  } as unknown as Exercise,
+
   // ─── ORDER 21 — ДОП. Упр. (стр. 96): Бележка на Ива за Ваня — част а. ───────
   {
     id: 'a2-l09-ex-19a',
     type: 'workbook_fill_blank',
-    title: 'ДОПЪЛНИТЕЛНО УПРАЖНЕНИЕ',
+    title: 'УПРАЖНЕНИЕ',
     instruction: 'а. Попълнете бележката на Ива за Ваня.',
     order: 21,
     points: 8,
     layout: 'single',
     hideSentenceNumbers: true,
-    images: [
-      { imageUrl: `${ASSET}/08-dopalnitelni-upr-19-iva-vanya/01-iva-vanya.jpg`, label: 'Ива и Ваня' },
-    ],
     sentences: [
       {
         text: 'Мила Ваня, утре не ставай рано.\n_____ телевизия.\nНе _____ апартамента.\nНе _____, има много храна в хладилника.\n_____ пица за обяд. Тя е във фризера.\n_____ на Иван за проекта.\n_____ гости.\n_____ на театър.\n_____ с приятели и вечеряй с тях навън.\nДо скоро и приятна почивка!',
@@ -681,9 +695,6 @@ export const exercises: Exercise[] = [
     points: 9,
     layout: 'single',
     hideSentenceNumbers: true,
-    images: [
-      { imageUrl: `${ASSET}/08-dopalnitelni-upr-19-iva-vanya/01-iva-vanya.jpg`, label: 'Ива и Ваня' },
-    ],
     sentences: [
       {
         text: 'Ива,\nМоля те, всеки ден ставай рано.\nНе _____ за работа. (закъснявам)\n_____ топла храна. (купувам)\n_____ плодове и зеленчуци. (купувам)\n_____ с приятели след работа в парка. (разхождам се)\n_____ рано вкъщи. (връщам се)\nНе _____ преди 11:00. (закъснявам)\nНе _____ ми имейли. (пиша)\n_____ ми по Скайп. (обаждам се)\n_____ след работа в парка. (обядвам)',
@@ -746,9 +757,10 @@ export const exercises: Exercise[] = [
   // ─── ORDER 24 — Упр. 22 (стр. 97): Свържете думите по модела ────────────────
   {
     id: 'a2-l09-ex-22',
-    type: 'match_pairs',
+    type: 'a2-match-pairs',
     title: 'УПРАЖНЕНИЕ 22',
-    instruction: 'Свържете думите от двете колони по модела.',
+    instruction: 'Свържете антонимите от двете колони.',
+    model: 'висок – нисък',
     order: 24,
     points: 9,
     pairs: [
@@ -763,7 +775,7 @@ export const exercises: Exercise[] = [
       { id: 'p9', left: 'сериозен',    correctRight: 'несериозен' },
     ],
     shuffledRights: ['нетърпелив', 'лош', 'глупав', 'безотговорен', 'нечестен', 'груб', 'несериозен', 'песимист', 'скучен'],
-  } as MatchPairsExercise,
+  } as unknown as Exercise,
 
   // ─── ORDER 25 — Упр. 23 (стр. 97): Напишете подходящата дума ────────────────
   {
@@ -777,15 +789,15 @@ export const exercises: Exercise[] = [
     sentences: [
       { text: 'Човек, който е на 80 години, е **стар**. (Модел)', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Човек, който знае много, е _____.',
-        blanks: [1], correctAnswers: ['умен'], options: ['умен', 'мъдър', 'добър', 'образован'], acceptableAnswers: [['умен', 'мъдър', 'образован']] },
+        blanks: [1], correctAnswers: ['умен'], options: ['умен', 'мързелив', 'уморен', 'гладен'], acceptableAnswers: [['умен']] },
       { text: 'Човек, който не иска да работи, е _____.',
         blanks: [1], correctAnswers: ['мързелив'], options: ['мързелив', 'уморен', 'болен', 'скучен'], acceptableAnswers: [['мързелив']] },
       { text: 'Човек, който работи много, е _____.',
-        blanks: [1], correctAnswers: ['работлив'], options: ['работлив', 'умен', 'отговорен', 'сериозен'], acceptableAnswers: [['работлив', 'отговорен', 'сериозен']] },
+        blanks: [1], correctAnswers: ['работлив'], options: ['работлив', 'умен', 'мързелив', 'гладен'], acceptableAnswers: [['работлив']] },
       { text: 'Човек, който има висока температура, е _____.',
         blanks: [1], correctAnswers: ['болен'], options: ['болен', 'уморен', 'тъжен', 'разстроен'], acceptableAnswers: [['болен']] },
       { text: 'Човек, който плаче, е _____.',
-        blanks: [1], correctAnswers: ['тъжен'], options: ['тъжен', 'разстроен', 'уморен', 'нещастен'], acceptableAnswers: [['тъжен', 'разстроен', 'нещастен']] },
+        blanks: [1], correctAnswers: ['тъжен'], options: ['тъжен', 'уморен', 'болен', 'гладен'], acceptableAnswers: [['тъжен']] },
     ],
   } as WorkbookFillBlankExercise,
 

@@ -2,6 +2,7 @@ import type {
   Exercise,
   ReadingTextExercise,
   WorkbookFillBlankExercise,
+  TrueFalseExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -46,86 +47,26 @@ export const listeningExercises: Exercise[] = [
 
   {
     id: 'a2-t3-sl-mcq',
-    type: 'workbook_fill_blank',
-    instruction: 'Изслушайте отново текста и отговорете с Да, Не или Няма информация.',
+    type: 'true_false',
+    title: 'УПРАЖНЕНИЕ 2',
+    instruction: 'Изслушайте отново текста и отговорете с „да" или „не".',
     order: 2,
     points: 11,
-    layout: 'single',
     sentences: [
-      {
-        text: 'Силвия обича да слуша музика. Няма информация.',
-        blanks: [],
-        correctAnswers: [],
-        isExample: true,
-      },
-      {
-        text: 'Силвия трябва да говори испански много добре. ___',
-        blanks: [7],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Силвия иска да завърши университет в Лондон. ___',
-        blanks: [7],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Силвия ще пътува из Испания. ___',
-        blanks: [5],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Тя ще живее под наем в центъра. ___',
-        blanks: [7],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Може би тя ще живее с приятелка. ___',
-        blanks: [7],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'В Барселона е много скъпо. ___',
-        blanks: [5],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Светлин е от София. ___',
-        blanks: [4],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Светлин иска да живее в Пловдив. ___',
-        blanks: [6],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Той иска да отвори малък ресторант. ___',
-        blanks: [6],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Родителите на Светлин ще му дадат пари. ___',
-        blanks: [7],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Той иска да купи къща в село до Варна. ___',
-        blanks: [9],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
+      { id: 's00', text: 'Силвия обича да чете.',                            isTrue: true,  isExample: true },
+      { id: 's01', text: 'Силвия трябва да говори испански много добре.',     isTrue: true  },
+      { id: 's02', text: 'Може би тя ще живее с приятелка.',                  isTrue: true  },
+      { id: 's03', text: 'Силвия иска да завърши университет в Лондон.',      isTrue: false },
+      { id: 's04', text: 'Силвия ще пътува из Испания.',                      isTrue: true  },
+      { id: 's05', text: 'В Барселона е много скъпо.',                        isTrue: true  },
+      { id: 's06', text: 'Тя ще живее под наем в центъра.',                   isTrue: false },
+      { id: 's07', text: 'Светлин е от София.',                               isTrue: true  },
+      { id: 's08', text: 'Светлин иска да живее в Пловдив.',                  isTrue: false },
+      { id: 's09', text: 'Светлин иска да отвори ресторант близо до морето.', isTrue: true  },
+      { id: 's10', text: 'Родителите на Светлин ще му дадат пари.',          isTrue: true  },
+      { id: 's11', text: 'Светлин иска да купи къща в село до Варна.',        isTrue: false },
     ],
-  } as WorkbookFillBlankExercise,
+  } as TrueFalseExercise,
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
