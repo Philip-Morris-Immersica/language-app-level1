@@ -637,23 +637,6 @@ export const exercises: Exercise[] = [
     paragraphVoiceGenders: ['male'],
   } as ReadingTextExercise,
 
-  // ─── ORDER 20.5 — Една по-голяма обща снимка над двете части на упр. 19 ──────
-  // Headerless (title: '' → не консумира номер, не рендира хедър/инструкция).
-  // Заменя дублираните малки снимки в 19a и 19b с една голяма центрирана.
-  {
-    id: 'a2-l09-ex-19-image',
-    type: 'reading_text',
-    title: '',
-    instruction: '',
-    order: 20.5,
-    noTranslation: true,
-    hideText: false,
-    images: [
-      { imageUrl: `${ASSET}/08-dopalnitelni-upr-19-iva-vanya/01-iva-vanya.jpg`, label: 'Ива и Ваня' },
-    ],
-    paragraphs: [],
-  } as unknown as Exercise,
-
   // ─── ORDER 21 — ДОП. Упр. (стр. 96): Бележка на Ива за Ваня — част а. ───────
   {
     id: 'a2-l09-ex-19a',
@@ -664,6 +647,9 @@ export const exercises: Exercise[] = [
     points: 8,
     layout: 'single',
     hideSentenceNumbers: true,
+    headerImages: [
+      { imageUrl: `${ASSET}/08-dopalnitelni-upr-19-iva-vanya/01-iva-vanya.jpg`, label: 'Ива и Ваня' },
+    ],
     sentences: [
       {
         text: 'Мила Ваня, утре не ставай рано.\n_____ телевизия.\nНе _____ апартамента.\nНе _____, има много храна в хладилника.\n_____ пица за обяд. Тя е във фризера.\n_____ на Иван за проекта.\n_____ гости.\n_____ на театър.\n_____ с приятели и вечеряй с тях навън.\nДо скоро и приятна почивка!',
