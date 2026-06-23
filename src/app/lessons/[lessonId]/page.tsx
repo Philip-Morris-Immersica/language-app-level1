@@ -89,9 +89,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <h2 className="text-3xl font-bold text-bolt-blue">
                 <T k="lesson.exercises" />
               </h2>
-              {lessonData.exercises.map((exercise: any, index: number) => (
-                <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
-              ))}
+              {(() => {
+                let displayNumber = 0;
+                return lessonData.exercises.map((exercise: any) => {
+                  // Continuation parts of a split exercise (title === '' or hideHeader: true)
+                  // render no header, so they must NOT consume a visible number — otherwise
+                  // the sequence skips digits (… 9 → 11 → 13 …).
+                  const showsHeader = exercise.title !== '' && exercise.hideHeader !== true;
+                  if (showsHeader) displayNumber += 1;
+                  return <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={displayNumber} />;
+                });
+              })()}
             </div>
           )}
 
@@ -106,9 +114,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <>
               <ReviewSectionDivider />
               <div className="space-y-8">
-                {lessonData.workbookExercises.map((exercise: any, index: number) => (
-                  <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={index + 1} />
-                ))}
+                {(() => {
+                  let displayNumber = 0;
+                  return lessonData.workbookExercises.map((exercise: any) => {
+                    const showsHeader = exercise.title !== '' && exercise.hideHeader !== true;
+                    if (showsHeader) displayNumber += 1;
+                    return <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={displayNumber} />;
+                  });
+                })()}
               </div>
             </>
           )}

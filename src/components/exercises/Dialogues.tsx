@@ -358,7 +358,11 @@ export function Dialogues({
         </div>
       ) : (
         <div className="space-y-6">
-          {sections.map((section) => (
+          {sections.map((section) => {
+            const dotIdx = section.id.indexOf('. ');
+            const circleLabel = dotIdx !== -1 ? section.id.slice(0, dotIdx + 1) : section.id;
+            const sectionTitle = dotIdx !== -1 ? section.id.slice(dotIdx + 2) : '';
+            return (
             <div
               key={section.id}
               className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#32C189]/50"
@@ -369,16 +373,20 @@ export function Dialogues({
                   className="flex items-center gap-2 cursor-pointer flex-1"
                 >
                   {sections.length > 1 && (
-                    <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white">
-                      {section.id}
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white shrink-0">
+                      {circleLabel}
                     </span>
+                  )}
+                  {sectionTitle && (
+                    <span className="text-sm font-semibold text-gray-600">{sectionTitle}</span>
                   )}
                 </div>
                 {renderSectionButton(section)}
               </div>
               {renderLineList(section)}
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
 

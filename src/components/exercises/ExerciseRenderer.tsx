@@ -81,7 +81,7 @@ function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominen
       </h3>
       {subtitle && (
         <p className={prominentSubtitle
-          ? 'text-gray-700 text-base md:text-lg font-semibold mt-2'
+          ? 'text-gray-500 text-sm md:text-base mt-1.5 leading-snug'
           : 'text-gray-400 text-xs mt-1'
         }>
           {translatedSubtitle}
@@ -351,6 +351,8 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           textTitle={exercise.textTitle}
           images={exercise.images}
           imageFlashcards={exercise.imageFlashcards}
+          imageColumns={exercise.imageColumns}
+          imageEqualHeight={exercise.imageEqualHeight}
           paragraphs={exercise.paragraphs}
           paragraphTranslations={exercise.paragraphTranslations}
           showDictionary={exercise.showDictionary}

@@ -2,13 +2,14 @@ import type {
   Exercise,
   ReadingTextExercise,
   WorkbookFillBlankExercise,
+  TrueFalseExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // КОМПОНЕНТ СЛУШАНЕ (9 т.)
 // Текст за Росица на рожден ден на Ина — hideText: true (само TTS бутон).
 // Числата са записани с думи в listeningText.
-// Вярно/Не/Няма информация — MCQ без title (слепва се с текст упр.).
+// УПРАЖНЕНИЕ 2 — true_false с икони Да/Не (9 бинарни въпроса = 9 т.).
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const listeningExercises: Exercise[] = [
@@ -46,74 +47,24 @@ export const listeningExercises: Exercise[] = [
 
   {
     id: 'a2-t4-sl-mcq',
-    type: 'workbook_fill_blank',
-    instruction: 'Изслушайте отново текста и отговорете с Да, Не или Няма информация.',
+    type: 'true_false',
+    title: 'УПРАЖНЕНИЕ 2',
+    instruction: 'Слушайте текста и отговорете на въпросите с ДА или НЕ.',
     order: 2,
     points: 9,
-    layout: 'single',
     sentences: [
-      {
-        text: 'Приятелката на Росица е омъжена. Няма информация.',
-        blanks: [],
-        correctAnswers: [],
-        isExample: true,
-      },
-      {
-        text: 'Партито започна в 20:00. ___',
-        blanks: [4],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Росица закъсня с половин час. ___',
-        blanks: [4],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Тя се срещна с нови хора. ___',
-        blanks: [6],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Имаше много малко гости. ___',
-        blanks: [5],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Храната беше лоша. ___',
-        blanks: [3],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Тортата беше шоколадова. ___',
-        blanks: [3],
-        correctAnswers: ['Няма информация'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Гостите тръгнаха рано сутринта. ___',
-        blanks: [4],
-        correctAnswers: ['Не'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Гостите много харесаха партито. ___',
-        blanks: [4],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
-      {
-        text: 'Ина имаше много цветя и подаръци. ___',
-        blanks: [6],
-        correctAnswers: ['Да'],
-        options: ['Да', 'Не', 'Няма информация'],
-      },
+      { id: 'ex',  text: 'Росица беше на рожден ден на приятелка.', isTrue: true,  isExample: true },
+      { id: 's01', text: 'Росица закъсня за партито.',              isTrue: true  },
+      { id: 's02', text: 'Партито започна в 20:00.',                isTrue: false },
+      { id: 's03', text: 'Ина се срещна с нови хора.',              isTrue: true  },
+      { id: 's04', text: 'Имаше много малко гости.',                isTrue: false },
+      { id: 's05', text: 'Гостите много харесаха партито.',         isTrue: true  },
+      { id: 's06', text: 'Храната беше лоша.',                      isTrue: false },
+      { id: 's07', text: 'Преди партито Росица имаше много работа.', isTrue: true  },
+      { id: 's08', text: 'Гостите тръгнаха рано сутринта.',         isTrue: false },
+      { id: 's09', text: 'Ина имаше много цветя и подаръци.',       isTrue: true  },
     ],
-  } as WorkbookFillBlankExercise,
+  } as TrueFalseExercise,
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -152,13 +103,13 @@ export const readingExercises: Exercise[] = [
     layout: 'single',
     sentences: [
       {
-        text: 'Де бяха Валя и Марин миналия уикенд? В Созопол.',
+        text: 'Къде бяха Валя и Марин миналия уикенд? В Созопол.',
         blanks: [],
         correctAnswers: [],
         isExample: true,
       },
       {
-        text: 'Където е Созопол? ___',
+        text: 'Къде е Созопол? ___',
         blanks: [3],
         correctAnswers: ['На морето, около 360 километра от София.'],
         options: [
@@ -174,7 +125,7 @@ export const readingExercises: Exercise[] = [
         options: ['В петък сутринта.', 'В четвъртък следобед.', 'В събота сутринта.'],
       },
       {
-        text: 'Где е хотелът? ___',
+        text: 'Къде е хотелът? ___',
         blanks: [3],
         correctAnswers: ['На брега на морето.'],
         options: ['На брега на морето.', 'В центъра на Созопол.', 'Близо до ресторанта.'],
@@ -198,7 +149,7 @@ export const readingExercises: Exercise[] = [
         options: ['Късно вечерта.', 'Рано сутринта.', 'По обяд.'],
       },
       {
-        text: 'Где вечеряха в петък? ___',
+        text: 'Къде вечеряха в петък? ___',
         blanks: [4],
         correctAnswers: ['В малък семеен ресторант.'],
         options: [
@@ -214,7 +165,7 @@ export const readingExercises: Exercise[] = [
         options: ['В 11:00 часа.', 'В 10:00 часа.', 'В 13:00 часа.'],
       },
       {
-        text: 'Где се разходиха в събота? ___',
+        text: 'Къде се разходиха в събота? ___',
         blanks: [5],
         correctAnswers: ['По брега на морето.'],
         options: ['По брега на морето.', 'В стария град.', 'В парка до хотела.'],
@@ -230,7 +181,7 @@ export const readingExercises: Exercise[] = [
         ],
       },
       {
-        text: 'Где слушаха музика и танцуваха? ___',
+        text: 'Къде слушаха музика и танцуваха? ___',
         blanks: [5],
         correctAnswers: ['В нов ресторант, близо до хотела.'],
         options: [
@@ -315,7 +266,7 @@ export const grammarExercises: Exercise[] = [
         options: ['бях', 'беше', 'бяхме', 'бяхте', 'бяха'],
       },
       {
-        text: 'Вие където ___ на почивка?',
+        text: 'Вие къде ___ на почивка?',
         blanks: [2],
         correctAnswers: ['бяхте'],
         options: ['бях', 'беше', 'бяхме', 'бяхте', 'бяха'],
@@ -407,10 +358,10 @@ export const grammarExercises: Exercise[] = [
     id: 'a2-t4-gr-3',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Напишете формата на минало свършено (аорист) за 1 л. ед.ч. по модела.',
+    instruction: 'Изберете правилната форма на минало свършено за „аз" по модела.',
     order: 7,
     points: 17,
-    layout: 'two-column',
+    layout: 'single',
     sentences: [
       { text: 'вечерям → вечерях', blanks: [], correctAnswers: [], isExample: true },
       {

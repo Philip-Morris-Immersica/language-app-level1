@@ -1,3 +1,119 @@
-﻿import type { Exercise } from '@/content/types';
+﻿import type {
+  Exercise,
+  WorkbookFillBlankExercise,
+} from '@/content/types';
 
-export const workbookExercises: Exercise[] = [];
+export const workbookExercises: Exercise[] = [
+
+  // ─── ORDER 28 — WB 1: Трябва да…! → повелителна форма ──────────────────────
+  {
+    id: 'a2-l09-wb-01',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната повелителна форма по модела.',
+    order: 28,
+    points: 9,
+    layout: 'single',
+    sentences: [
+      { text: 'Трябва да пиете много вода! → **Пийте** много вода! (Модел)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Не трябва да ядете много сладко! → _____!',
+        blanks: [1], correctAnswers: ['Не яжте много сладко'],   options: ['Не яжте много сладко', 'Не яждайте много сладко', 'Не яж много сладко'], acceptableAnswers: [['Не яжте много сладко', 'не яжте много сладко']] },
+      { text: 'Трябва да спите 8 часа всяка нощ! → _____!',
+        blanks: [1], correctAnswers: ['Спете 8 часа всяка нощ'], options: ['Спете 8 часа всяка нощ', 'Спи 8 часа всяка нощ', 'Спете всяка нощ 8 часа'], acceptableAnswers: [['Спете 8 часа всяка нощ', 'спете 8 часа всяка нощ']] },
+      { text: 'Не трябва да гледате много телевизия! → _____!',
+        blanks: [1], correctAnswers: ['Не гледайте много телевизия'], options: ['Не гледайте много телевизия', 'Не гледай много телевизия', 'Не гледате много телевизия'], acceptableAnswers: [['Не гледайте много телевизия', 'не гледайте много телевизия']] },
+      { text: 'Трябва да спортувате редовно! → _____!',
+        blanks: [1], correctAnswers: ['Спортувайте редовно'], options: ['Спортувайте редовно', 'Спортувай редовно', 'Спортувайте се редовно'], acceptableAnswers: [['Спортувайте редовно', 'спортувайте редовно']] },
+      { text: 'Не трябва да вечеряте късно! → _____!',
+        blanks: [1], correctAnswers: ['Не вечеряйте късно'], options: ['Не вечеряйте късно', 'Не вечеряй късно', 'Не вечеряте'], acceptableAnswers: [['Не вечеряйте късно', 'не вечеряйте късно']] },
+      { text: 'Трябва да слушате хубава музика! → _____!',
+        blanks: [1], correctAnswers: ['Слушайте хубава музика'], options: ['Слушайте хубава музика', 'Слушай хубава музика', 'Чуйте хубава музика'], acceptableAnswers: [['Слушайте хубава музика', 'слушайте хубава музика']] },
+      { text: 'Не трябва да работите през уикенда! → _____!',
+        blanks: [1], correctAnswers: ['Не работете през уикенда'], options: ['Не работете през уикенда', 'Не работете', 'Не работи'], acceptableAnswers: [['Не работете през уикенда', 'не работете през уикенда']] },
+      { text: 'Трябва да учите чужди езици! → _____!',
+        blanks: [1], correctAnswers: ['Учете чужди езици'], options: ['Учете чужди езици', 'Учи чужди езици', 'Научете чужди езици'], acceptableAnswers: [['Учете чужди езици', 'учете чужди езици']] },
+      { text: 'Не трябва да сте песимисти! → _____!',
+        blanks: [1], correctAnswers: ['Не бъдете песимисти'], options: ['Не бъдете песимисти', 'Не бъди песимист', 'Не сте песимисти'], acceptableAnswers: [['Не бъдете песимисти', 'не бъдете песимисти']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 29 — WB 2: положителна → отрицателна заповед ─────────────────────
+  {
+    id: 'a2-l09-wb-02',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната отрицателна форма по модела.',
+    order: 29,
+    points: 7,
+    layout: 'single',
+    sentences: [
+      { text: 'Купи хляб! → **Не купувай** хляб! (Модел)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Кажи адреса! → _____ адреса!',
+        blanks: [1], correctAnswers: ['Не казвай'], options: ['Не казвай', 'Не кажи', 'Не казвайте'], acceptableAnswers: [['Не казвай', 'не казвай']] },
+      { text: 'Дай бонбоните! → _____ бонбоните!',
+        blanks: [1], correctAnswers: ['Не давай'], options: ['Не давай', 'Не дай', 'Не давайте'], acceptableAnswers: [['Не давай', 'не давай']] },
+      { text: 'Направи торта! → _____ торта!',
+        blanks: [1], correctAnswers: ['Не прави'], options: ['Не прави', 'Не направи', 'Не правете'], acceptableAnswers: [['Не прави', 'не прави']] },
+      { text: 'Отвори прозореца! → _____ прозореца!',
+        blanks: [1], correctAnswers: ['Не отваряй'], options: ['Не отваряй', 'Не отвори', 'Не отваряйте'], acceptableAnswers: [['Не отваряй', 'не отваряй']] },
+      { text: 'Включи телевизора! → _____ телевизора!',
+        blanks: [1], correctAnswers: ['Не включвай'], options: ['Не включвай', 'Не включи', 'Не включвайте'], acceptableAnswers: [['Не включвай', 'не включвай']] },
+      { text: 'Плати сметката! → _____ сметката!',
+        blanks: [1], correctAnswers: ['Не плащай'], options: ['Не плащай', 'Не плати', 'Не плащайте'], acceptableAnswers: [['Не плащай', 'не плащай']] },
+      { text: 'Изпрати имейла! → _____ имейла!',
+        blanks: [1], correctAnswers: ['Не изпращай'], options: ['Не изпращай', 'Не изпрати', 'Не изпращайте'], acceptableAnswers: [['Не изпращай', 'не изпращай']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 30 — WB 3: отрицателна → положителна (неправилни глаголи) ─────────
+  {
+    id: 'a2-l09-wb-03',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилната положителна форма по модела.',
+    order: 30,
+    points: 7,
+    layout: 'single',
+    sentences: [
+      { text: 'Не отивай там! → **Иди** там! (Модел)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Не влизай! → _____!',
+        blanks: [1], correctAnswers: ['Влез'], options: ['Влез', 'Влизай', 'Влизай ти'], acceptableAnswers: [['Влез', 'влез']] },
+      { text: 'Не се обаждай! → _____ се!',
+        blanks: [1], correctAnswers: ['Обади'], options: ['Обади', 'Обаждай', 'Обадете'], acceptableAnswers: [['Обади', 'обади']] },
+      { text: 'Не ставай! → _____!',
+        blanks: [1], correctAnswers: ['Стани'], options: ['Стани', 'Ставай', 'Станете'], acceptableAnswers: [['Стани', 'стани']] },
+      { text: 'Не спирай! → _____!',
+        blanks: [1], correctAnswers: ['Спри'], options: ['Спри', 'Спирай', 'Спрете'], acceptableAnswers: [['Спри', 'спри']] },
+      { text: 'Не идвай! → _____!',
+        blanks: [1], correctAnswers: ['Ела'], options: ['Ела', 'Иди', 'Елате'], acceptableAnswers: [['Ела', 'ела']] },
+      { text: 'Не се връщай! → _____ се!',
+        blanks: [1], correctAnswers: ['Върни'], options: ['Върни', 'Връщай', 'Върнете'], acceptableAnswers: [['Върни', 'върни']] },
+      { text: 'Не излизай! → _____!',
+        blanks: [1], correctAnswers: ['Излез'], options: ['Излез', 'Излизай', 'Излезте'], acceptableAnswers: [['Излез', 'излез']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  // ─── ORDER 31 — WB 4: Попълнете правилния съюз ───────────────────────────────
+  {
+    id: 'a2-l09-wb-04',
+    type: 'workbook_fill_blank',
+    instruction: 'Изберете правилния съюз.',
+    subtitle: 'а, ако, когато, защото, но, или, че',
+    order: 31,
+    points: 7,
+    layout: 'single',
+    sentences: [
+      { text: 'Ела, **когато** можеш. (Модел)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Не искам чай, _____ кафе.',
+        blanks: [1], correctAnswers: ['а'], options: ['а', 'но', 'или', 'защото'], acceptableAnswers: [['а']] },
+      { text: 'Да отидем на кино _____ на концерт?',
+        blanks: [1], correctAnswers: ['или'], options: ['или', 'а', 'но', 'ако'], acceptableAnswers: [['или']] },
+      { text: 'Мисля, _____ трябва да купим нов лаптоп.',
+        blanks: [1], correctAnswers: ['че'], options: ['че', 'но', 'ако', 'когато'], acceptableAnswers: [['че']] },
+      { text: 'Искам да дойда на кино, _____ не мога.',
+        blanks: [1], correctAnswers: ['но'], options: ['но', 'а', 'или', 'ако'], acceptableAnswers: [['но']] },
+      { text: 'Не мога да дойда, _____ имам много работа.',
+        blanks: [1], correctAnswers: ['защото'], options: ['защото', 'но', 'когато', 'ако'], acceptableAnswers: [['защото']] },
+      { text: '_____ имам много пари, ще купя къща близо до София или на морето.',
+        blanks: [1], correctAnswers: ['Ако'], options: ['Ако', 'Когато', 'Защото', 'Но'], acceptableAnswers: [['Ако', 'ако', 'Когато', 'когато']] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+];
