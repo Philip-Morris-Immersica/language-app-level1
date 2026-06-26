@@ -36,6 +36,20 @@ Edit [src/i18n/ui.ts](mdc:src/i18n/ui.ts). Add one line in the correct section:
 
 Language order: **bg, ar, fr, en, fa, uk, ru** — always this order, always all 7.
 
+### Per-level translation files (A2 / B1 / B2 authors)
+
+`ui.ts` is shared infrastructure — only Philip edits it directly. Level authors
+add their `instructionKey` strings to a level-scoped file instead, which is
+merged into `ui.ts` automatically:
+
+| Level | File | Merged via |
+|---|---|---|
+| A2 (Nina) | `src/i18n/a2.ts` (`A2_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, A2_TRANSLATIONS)` in `ui.ts` |
+| B1 (Alex) | `src/i18n/b1.ts` (`B1_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, B1_TRANSLATIONS)` in `ui.ts` |
+
+Same shape and same 7-language rule as above. Prefix keys with the level
+(`'a2.…'`, `'b1.…'`) to avoid collisions. Never duplicate an existing `ui.ts` key.
+
 RTL languages: `ar` (Arabic) and `fa` (Farsi/Persian).
 
 ## Key naming conventions

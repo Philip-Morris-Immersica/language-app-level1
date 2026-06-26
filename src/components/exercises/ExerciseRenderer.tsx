@@ -31,16 +31,19 @@ import { TableFill } from './TableFill';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
+import { B1_CUSTOM_RENDERERS } from '@/content/b1/exercise-components';
 
 /**
  * Custom exercise renderers contributed by per-level domains.
- * Looked up BEFORE the built-in switch so levels can add new types (or A2-specific
- * variants of existing types) without editing this file. See
- * `src/content/a2/exercise-components.ts` for the A2 entries.
+ * Looked up BEFORE the built-in switch so levels can add new types (or
+ * level-specific variants of existing types) without editing this file. See
+ * `src/content/a2/exercise-components.ts` and `src/content/b1/exercise-components.ts`
+ * for the per-level entries.
  */
 const CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   ...A2_CUSTOM_RENDERERS,
-  // Future levels (B1, B2) can spread their maps here.
+  ...B1_CUSTOM_RENDERERS,
+  // Future levels (B2) can spread their maps here.
 };
 
 interface ExerciseRendererProps {
@@ -181,6 +184,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           hideSentenceNumbers={exercise.hideSentenceNumbers}
           columnLabels={exercise.columnLabels}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}

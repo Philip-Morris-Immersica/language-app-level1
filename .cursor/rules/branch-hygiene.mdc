@@ -18,12 +18,14 @@ alwaysApply: true
 | Branch | Свободен домейн |
 |---|---|
 | `nina` | `src/content/a2/**`, `src/i18n/a2.ts`, `public/assets/a2-lesson-*/**` |
-| `alex` | `src/content/b1/**`, `src/i18n/b1.ts` (ако е създаден), `public/assets/b1-lesson-*/**` |
+| `alex` | `src/content/b1/**`, `src/i18n/b1.ts`, `public/assets/b1-lesson-*/**` |
 | `philip` | Всичко (team lead) |
 
 **Важно:** `src/content/a2/**` включва `lessons/`, `tests/`, `types.ts`,
 `components/`, `exercise-components.ts` — целият A2 домейн е самодостатъчен.
-Същото за B1 след като се отвори.
+**B1 домейнът вече е отворен със същата структура:** `src/content/b1/**` включва
+`lessons/`, `tests/`, `types.ts`, `components/`, `exercise-components.ts`, а
+`src/i18n/b1.ts` е създаден и закачен в `ui.ts`. B1 е самодостатъчен точно като A2.
 
 В рамките на `src/content/<level>/index.ts` се позволяват **само**:
 - Uncomment / add на `<LEVEL>_LESSON_LOADERS` и `<LEVEL>_TEST_LOADERS`
