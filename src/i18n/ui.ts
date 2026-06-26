@@ -1,5 +1,6 @@
 import type { SupportedLang } from './languages';
 import { A2_TRANSLATIONS } from './a2';
+import { B1_TRANSLATIONS } from './b1';
 
 // All static UI strings used throughout the app.
 // Keys map to translated strings in each of the 7 supported languages.
@@ -839,7 +840,9 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
 };
 
 // Merge per-level translation dictionaries. Keys defined in `A2_TRANSLATIONS`
-// become available via `useT('a2.…')` exactly like any other UI key.
+// / `B1_TRANSLATIONS` become available via `useT('a2.…')` / `useT('b1.…')`
+// exactly like any other UI key.
 Object.assign(UI_TRANSLATIONS, A2_TRANSLATIONS);
+Object.assign(UI_TRANSLATIONS, B1_TRANSLATIONS);
 
 export type UIKey = keyof typeof UI_TRANSLATIONS;
