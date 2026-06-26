@@ -24,7 +24,7 @@ per-level i18n, TTS content overrides) прави нормалните PR-и о�
 
 1. **Файлова собственост** (виж [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc))
    - Nina свободен домейн: `src/content/a2/**`, `src/i18n/a2.ts`, `public/assets/a2-lesson-*/`
-   - Alex свободен домейн: `src/content/b1/**`, `src/i18n/b1.ts` (ако е създаден), `public/assets/b1-lesson-*/`
+   - Alex свободен домейн: `src/content/b1/**`, `src/i18n/b1.ts`, `public/assets/b1-lesson-*/`
    - **Ако всичко е в техния домейн → бърз мърдж, без задълбочен преглед.**
    - Ако има промени извън — виж секцията „Споделени промени" по-долу.
 
