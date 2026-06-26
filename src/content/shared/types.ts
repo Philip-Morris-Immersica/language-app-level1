@@ -449,6 +449,8 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
   columnLabels?: { left?: string; right?: string };
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
+  /** When true, the image is shown without zoom/lightbox. Useful for simple reference photos. */
+  noZoom?: boolean;
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
   images?: { imageUrl: string; label?: string }[];
   /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */

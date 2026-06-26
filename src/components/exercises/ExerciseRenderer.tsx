@@ -184,6 +184,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           hideSentenceNumbers={exercise.hideSentenceNumbers}
           columnLabels={exercise.columnLabels}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}
