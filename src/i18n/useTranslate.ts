@@ -3,7 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 import { TRANSLATION_OVERRIDES } from './translationOverrides';
+import GENERATED_TRANSLATIONS_JSON from './generated/translations.json';
 import type { SupportedLang } from './languages';
+
+// Build-time pre-translation (Фаза 4Б, scripts/pretranslate.ts) — GPT-5.5, whole
+// lesson/test context + shared grammar glossary. Sits BELOW the hand-written
+// TRANSLATION_OVERRIDES (which always wins when present for a given language)
+// and ABOVE the live-GT emergency fallback (used only for strings the script
+// hasn't covered yet, e.g. new content added after the last run).
+const GENERATED_TRANSLATIONS = GENERATED_TRANSLATIONS_JSON as Record<string, Partial<Record<SupportedLang, string>>>;
 
 // v2: bumped prefix to invalidate old entries cached under the collision-prone
 // 16-bit hash below (e.g. „Не е евтино." and „Максимум: 99 точки" used to
@@ -60,6 +68,9 @@ async function translateText(text: string, targetLang: string): Promise<string> 
   // A key with no entry for this language falls through to live translation below.
   const override = TRANSLATION_OVERRIDES[text.trim()]?.[targetLang as SupportedLang];
   if (override) return override;
+
+  const generated = GENERATED_TRANSLATIONS[text.trim()]?.[targetLang as SupportedLang];
+  if (generated) return generated;
 
   const cacheKey = getCacheKey(text, targetLang);
   const cached = localStorage.getItem(cacheKey);

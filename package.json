@@ -19,6 +19,7 @@
     "tts:digits": "dotenv -e .env.local -- tsx scripts/generate-digit-tts.ts",
     "check:audio": "node scripts/check-audio-integrity.mjs",
     "content:lint": "tsx scripts/content-lint.ts",
+    "pretranslate": "dotenv -e .env.local -- tsx scripts/pretranslate.ts",
     "prebuild": "node scripts/check-audio-integrity.mjs",
     "lesson6:pdf": "node --max-old-space-size=8192 ./node_modules/tsx/dist/cli.mjs scripts/lesson6-extract-pdfs.mjs",
     "lesson6:text": "node --max-old-space-size=4096 scripts/lesson6-extract-text.mjs",
