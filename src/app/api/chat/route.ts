@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     lessonContext: lessonId,
     testContext: testId,
     currentPage,
+    currentExercise,
     conversationId,
   } = body as {
     message: string;
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
     lessonContext?: string | null;
     testContext?: string | null;
     currentPage?: string;
+    currentExercise?: { number: number; id: string } | null;
     conversationId?: number;
   };
 
@@ -114,12 +116,18 @@ export async function POST(req: NextRequest) {
 
   const completedLessons = progressRows.map((r) => r.lessonId);
 
+  // Progress counts only CHECKABLE exercises. The exercise summary now also
+  // includes presentation-only items (vocabulary, dialogues, …) so the bot can
+  // resolve any on-screen number, but those must not inflate the progress total.
+  const checkableExercises = pageContext
+    ? pageContext.exercises.filter((e) => e.checkable)
+    : [];
   const pageProgress = contextId && pageContext
     ? summarizeLessonProgress(
         contextId,
         currentPageStates,
-        pageContext.exercises.length,
-        new Set(pageContext.exercises.map((e) => e.id)),
+        checkableExercises.length,
+        new Set(checkableExercises.map((e) => e.id)),
       )
     : null;
 
@@ -162,6 +170,7 @@ export async function POST(req: NextRequest) {
     completedLessons,
     currentPage: currentPage ?? null,
     pageProgress,
+    currentExercise: currentExercise ?? null,
   });
 
   const messages = buildMessages(systemPrompt, history, cleanMessage);

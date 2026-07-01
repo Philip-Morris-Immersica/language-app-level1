@@ -10,8 +10,12 @@ import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
 import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
 
-function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
+function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   const [error, setError] = useState(false);
+  // Next.js 15 throws (crashing the whole page) if `alt` is undefined. Grammar
+  // examples don't always have text/lines, so always fall back to an empty
+  // string (valid, treated as decorative).
+  const safeAlt = alt ?? '';
 
   if (error) {
     return (
@@ -20,7 +24,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
           <svg className="w-12 h-12 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-xs">{alt}</p>
+          <p className="text-xs">{safeAlt}</p>
         </div>
       </div>
     );
@@ -29,7 +33,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   return (
     <Image
       src={src}
-      alt={alt}
+      alt={safeAlt}
       fill
       className="object-contain"
       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

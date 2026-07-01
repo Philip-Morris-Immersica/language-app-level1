@@ -589,7 +589,7 @@ export const TEMPLATE_word_order = {
   points: 4,                  // REPLACE
   questions: [
     {
-      words: ['Откъде', 'е', 'Хасан', '?'],     // REPLACE — shuffled words shown to user
+      words: ['Хасан', '?', 'е', 'Откъде'],     // REPLACE — shuffled words shown to user (NOT in correct order!)
       correctSentence: 'Откъде е Хасан ?',       // REPLACE — correct order (spaces around ?)
       alternateCorrectSentences: ['Хасан откъде е ?'],  // REPLACE or remove — other valid orderings
       hint: 'Хасан е от Сирия.',                 // REPLACE or remove

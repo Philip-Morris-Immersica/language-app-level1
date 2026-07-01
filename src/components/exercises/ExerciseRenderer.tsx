@@ -53,7 +53,9 @@ interface ExerciseRendererProps {
 }
 
 interface ExerciseHeaderProps {
-  title: string;
+  /** Bulgarian section label without the leading number (e.g. "ГРАМАТИКА"), or null for the generic "УПРАЖНЕНИЕ" prefix. */
+  titleBase: string | null;
+  number: number | null;
   instruction: string;
   instructionKey?: string;
   subtitle?: string;
@@ -71,16 +73,22 @@ function renderInstructionText(text: string): React.ReactNode {
   });
 }
 
-function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
+function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
-  const translatedTitle = useTranslate(title);
+  // Custom Bulgarian labels (e.g. "ГРАМАТИКА", "НОВИ ДУМИ") go through translation.
+  // The generic "УПРАЖНЕНИЕ" prefix is already localized via t() — translating it
+  // again (as Bulgarian source text) is what caused titles like "19. EXERCISE" to
+  // break or vanish for some numbers, since the API was fed already-English text.
+  const translatedBase = useTranslate(titleBase ?? '');
+  const baseDisplay = titleBase ? translatedBase : t('exercise.prefix');
+  const displayTitle = number != null ? `${number}. ${baseDisplay}` : baseDisplay;
   const translatedInstruction = useTranslate(instruction);
   const translatedSubtitle = useTranslate(subtitle ?? '');
   const displayInstruction = instructionKey ? t(instructionKey) : translatedInstruction;
   return (
     <div className="mb-5 pb-4 border-b border-gray-100">
       <h3 className="text-[#0072BC] font-bold text-xl md:text-2xl leading-tight">
-        {translatedTitle}
+        {displayTitle}
       </h3>
       {subtitle && (
         <p className={prominentSubtitle
@@ -104,10 +112,10 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   const t = useT();
   const translatedInstruction = useTranslate(exercise.instruction);
 
-  // Base title: use custom title or generic "УПРАЖНЕНИЕ", strip any trailing sub-number
-  const baseTitle = (exercise.title ?? t('exercise.prefix')).replace(/\s+\d+$/, '');
-  // Sequential prefix: "1. НОВИ ДУМИ", "8. ГРАМАТИКА", "3. УПРАЖНЕНИЕ"
-  const resolvedTitle = number != null ? `${number}. ${baseTitle}` : baseTitle;
+  // Custom Bulgarian label (НОВИ ДУМИ / ГРАМАТИКА / ДИАЛОЗИ / ПРЕГОВОР...) without its
+  // trailing sub-number, or null to fall back to the generic "УПРАЖНЕНИЕ" prefix.
+  // Translation + the "N. " prefix are both resolved inside ExerciseHeader.
+  const titleBase = exercise.title ? exercise.title.replace(/\s+\d+$/, '') : null;
 
   /** Some child components only call onComplete(isCorrect); normalize to (correct, score). */
   function wrapOneArgOnComplete(scoreIfCorrect: number) {
@@ -125,9 +133,14 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const hideHeader = 'hideHeader' in exercise && exercise.hideHeader === true;
     // title === '' means "continuation section" — hide header + number entirely
     const showHeader = exercise.title !== '' && !hideHeader;
+    // Non-visual hooks: let the chatbot know which exercise is on screen. Only
+    // on numbered (header-showing) exercises so it matches the bot's numbering.
+    const trackingProps = showHeader && number != null
+      ? { 'data-exercise-id': exercise.id, 'data-exercise-number': number }
+      : {};
     return (
-      <div>
-        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
+      <div {...trackingProps}>
+        {showHeader && <ExerciseHeader titleBase={titleBase} number={number ?? null} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
         {hideHeader && exercise.instruction && (
           <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
             {renderInstructionText(

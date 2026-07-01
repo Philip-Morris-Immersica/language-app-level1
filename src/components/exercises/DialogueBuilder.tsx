@@ -251,9 +251,13 @@ export function DialogueBuilder({ sections, exerciseId }: DialogueBuilderProps) 
                     const positionCorrect = state.checked
                       ? item.text === section.sentences[idx]
                       : null;
-                    // Correct 1-based position (undefined when item not in sentences or row is locked)
+                    // Correct 1-based position (undefined when item not in sentences or row is locked).
+                    // When the item is already at the right spot, use its own index directly —
+                    // `indexOf` would return the position of the FIRST matching text, which is
+                    // wrong whenever a section has duplicate lines (e.g. two people both saying
+                    // "Добър вечер!"), causing missing/duplicated position numbers.
                     const cpRaw = state.checked && !isLocked
-                      ? section.sentences.indexOf(item.text) + 1
+                      ? (positionCorrect ? idx + 1 : section.sentences.indexOf(item.text) + 1)
                       : 0;
                     const correctPosition = cpRaw > 0 ? cpRaw : undefined;
                     return (

@@ -2,13 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
+import { TRANSLATION_OVERRIDES } from './translationOverrides';
+import type { SupportedLang } from './languages';
 
-const CACHE_PREFIX = 'tr_cache_';
+// v2: bumped prefix to invalidate old entries cached under the collision-prone
+// 16-bit hash below (e.g. „Не е евтино." and „Максимум: 99 точки" used to
+// collide and show each other's translation).
+const CACHE_PREFIX = 'tr_cache_v2_';
 
 function getCacheKey(text: string, lang: string) {
-  // Simple hash to keep localStorage key short
-  const hash = Array.from(text).reduce((acc, c) => (acc * 31 + c.charCodeAt(0)) & 0xffff, 0);
-  return `${CACHE_PREFIX}${lang}_${hash}`;
+  // 32-bit FNV-1a hash — much lower collision odds than the old 16-bit hash,
+  // while still keeping the localStorage key short (unlike storing raw text).
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  // Mix in the length too, as extra protection against short-string collisions.
+  return `${CACHE_PREFIX}${lang}_${(hash >>> 0).toString(36)}_${text.length}`;
 }
 
 function postProcess(text: string, lang: string): string {
@@ -44,6 +55,12 @@ function postProcess(text: string, lang: string): string {
 }
 
 async function translateText(text: string, targetLang: string): Promise<string> {
+  // Manual, human-quality translations take priority over live Google Translate —
+  // see translationOverrides.ts for why (grammar terminology, flagged mistranslations).
+  // A key with no entry for this language falls through to live translation below.
+  const override = TRANSLATION_OVERRIDES[text.trim()]?.[targetLang as SupportedLang];
+  if (override) return override;
+
   const cacheKey = getCacheKey(text, targetLang);
   const cached = localStorage.getItem(cacheKey);
   if (cached) return cached;
