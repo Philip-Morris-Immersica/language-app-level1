@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Check, X, RotateCcw, Play, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import {
   Select,
   SelectContent,
@@ -49,6 +50,22 @@ interface TableFillProps {
   paragraphs?: Paragraph[];
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
+}
+
+/** Table name / column header — shows an automatic translation underneath for non-Bulgarian users (no click needed). */
+function TranslatedLabel({ text, className }: { text: string; className?: string }) {
+  const { lang } = useLanguage();
+  const translated = useTranslate(text);
+  return (
+    <>
+      <span>{text}</span>
+      {lang !== 'bg' && translated !== text && (
+        <span className={`block font-normal italic ${className ?? 'text-[10px] text-[#0072BC]/70 mt-0.5'}`}>
+          {translated}
+        </span>
+      )}
+    </>
+  );
 }
 
 export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableFillProps) {
@@ -282,7 +299,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
         <div key={ti}>
           {table.name && (
             <h4 className="text-sm md:text-base font-bold text-[#0072BC] mb-3">
-              {table.name}
+              <TranslatedLabel text={table.name} className="text-xs text-[#0072BC]/70 font-normal mt-0.5" />
             </h4>
           )}
 
@@ -298,7 +315,7 @@ export function TableFill({ tables, paragraphs, onComplete, exerciseId }: TableF
                       key={ci}
                       className="border border-gray-200 px-3 py-2 text-center font-bold text-[#0072BC]"
                     >
-                      {COLUMN_KEY_MAP[col] ? t(COLUMN_KEY_MAP[col]) : col}
+                      {COLUMN_KEY_MAP[col] ? t(COLUMN_KEY_MAP[col]) : <TranslatedLabel text={col} />}
                     </th>
                   ))}
                 </tr>
