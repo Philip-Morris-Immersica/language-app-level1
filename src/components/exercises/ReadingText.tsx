@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Play, Pause, Check, X, BookOpen, Volume2, Turtle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Music } from 'lucide-react';
@@ -117,6 +118,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
   const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>({});
   const [checkSubmitted, setCheckSubmitted] = useState(false);
   const completedRef = useRef(false);
+  const translatedChecklistInstruction = useTranslate(checklist?.instruction ?? '');
 
   /** Sequential „Слушай“ (paragraph p-0, then p-1, …) when no single `audioUrl` full file */
   const [sequentialPlaying, setSequentialPlaying] = useState(false);
@@ -274,6 +276,20 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
     if (exerciseId && ttsWordId) {
       const audioPath = getTtsAudioPath(exerciseId, 'words', ttsWordId);
       playTtsAudio(audioPath, label);
+    } else {
+      speakBulgarian(label);
+    }
+  };
+
+  /** Plays a single image's label (context images, e.g. ЯМ/ПИЯ before a grammar exercise) without flipping. */
+  const handleImageLabelPlay = (label: string, ttsWordId?: string) => {
+    if (sequentialPlaying) stopSequentialPlayback();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+    if (exerciseId && ttsWordId) {
+      playTtsAudio(getTtsAudioPath(exerciseId, 'words', ttsWordId), label);
     } else {
       speakBulgarian(label);
     }
@@ -468,9 +484,9 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
             {images.map((img, i) => (
               <div
                 key={i}
-                className="flex flex-col items-stretch h-full min-w-0"
+                className="relative isolate flex flex-col items-stretch h-full min-w-0 overflow-hidden"
               >
-                <div className="flex-1 flex items-center justify-center min-h-[11rem] md:min-h-[14rem]">
+                <div className="flex-1 flex items-center justify-center min-h-[11rem] md:min-h-[14rem] overflow-hidden">
                   <img
                     src={img.imageUrl}
                     alt={img.label}
@@ -478,7 +494,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
                     loading="lazy"
                   />
                 </div>
-                <div className="mt-3 flex flex-col items-center grow justify-end">
+                <div className="relative z-10 mt-3 flex flex-col items-center grow justify-end bg-white">
                   {img.label &&
                     (noTranslation || lang === 'bg' ? (
                       <span className="text-xs md:text-sm text-gray-500 font-medium text-center">
@@ -615,7 +631,14 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
                 />
               )}
               {img.label && (
-                <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
+                <button
+                  type="button"
+                  onClick={() => handleImageLabelPlay(img.label, img.ttsWordId)}
+                  className="mt-1.5 flex items-center gap-1.5 text-xs md:text-sm text-gray-500 font-medium hover:text-[#1F5741] transition-colors"
+                >
+                  <Volume2 className="w-3.5 h-3.5 flex-shrink-0" />
+                  {img.label}
+                </button>
               )}
             </div>
           ))}
@@ -729,7 +752,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
       {checklist && (
         <div className="mt-8 pt-6 border-t-2 border-gray-200">
           <p className="text-sm md:text-base font-semibold text-gray-700 mb-4">
-            {checklist.instruction}
+            {translatedChecklistInstruction}
           </p>
           <div className="space-y-2">
             {checklist.items.map((item) => {

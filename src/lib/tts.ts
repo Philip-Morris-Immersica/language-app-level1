@@ -180,15 +180,23 @@ export function playTtsAudio(
     }
     onPlaybackEnd?.();
   };
-  audio.onended = finish;
-  audio.play().catch(() => {
+  // A 404/network error fires the element's `error` event, not necessarily a
+  // rejection of play() — without this handler, a missing MP3 silently never
+  // plays and never falls back to browser TTS (perceived as "audio doesn't start").
+  let failed = false;
+  const handleFailure = () => {
+    if (failed) return;
+    failed = true;
     if (currentAudio === audio) {
       currentAudio = null;
       currentAudioUrl = null;
     }
     if (fallbackText) speakBulgarian(fallbackText, rate);
     onPlaybackEnd?.();
-  });
+  };
+  audio.onended = finish;
+  audio.onerror = handleFailure;
+  audio.play().catch(handleFailure);
 }
 
 /**

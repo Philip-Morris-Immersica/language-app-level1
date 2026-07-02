@@ -1,0 +1,459 @@
+﻿A1 Level – UNHCR Team Feedback
+Feedback on Design & Style of the Platform
+Уроците са твърде дълги и човек се уморява. Дали е възможно да се разделят на отделни секции или отделни уроци, които да са по-кратки?
+Предложение: можем да предложим логично групиране на части от урока в някакви подточки (напр. първата група нови думи с упражнения). 
+Дали има възможност за поздрав и интерактивност при покрит материал (подобно на Дуолинго): например да ти изписва “Поздравления, Вие завършихте урок 1! Добра работа!” или нещо подобно?
+На началната страница долу - под легендата дали може да изпишем:
+Тази платформа е изградена въз основа на учебните материали “Български език за бежанци”, разработени в периода 2014-2023 г. по проекти на ВКБООН с Български Червен кръст и “Каритас София”, с авторски колектив: Маргарита Андонова, Радост Събева, Жана Загорова. За целите на дигиталния формат някои от упражненията в учебните материали бяха променени от екипа, разработил платформата. 
+Оригиналните учебни пособия могат да бъдат изтеглени от следния линк: https://www.unhcr.org/bg/resources/learning-materials 
+ВКБООН благодари на авторския колектив и партньорите от гражданския сектор за дългогодишното сътрудничество в сферата на обучението по български език.
+
+Feedback on the Language Content/Exercises
+Общи: 
+В таблиците със спрежение на глаголи: за второ лице, мн число да сложим навсякъде “вие/Вие”, а не само едната или другата форма.
+Още веднъж поглед навсякъде: да бъдат уеднаквени знаците за слушане (в някои упражнения има хем два бутона, хем е написано в условието, в други - няма знак, че аудио съществува). 
+Все още има малки подзаглавия, които са излишни. Не съм ги описвала на всяко упражнение, но моля, минете и вие. Нека погледнем финално и премахнем всичко, което не носи допълнителна информация:
+
+Коментари по уроци
+Урок за азбуката (нулев)
+Описание на урока - в изречението “Ще научите 30-те букви...” да махнем “в техния печатен и ръкописен вид” - нали махнахме ръкописния. Да остане: “Ще научите 30-те букви, ще се упражните....”
+Упражнение 2 (азбука): 
+Има ли възможност да се върна и като натисна бутона на дадена буква, отново да я произнася? 
+Проблем с произношението на Д, Ж, М, П (казва препоръчвам), Р, Т, У, Ф, Х, Ц, Ч, Ш. 
+Няма бутон, от който да си личи, че има произношение. 
+Липсва прозорецът с граматика в началото (има го само в края), а на другите уроци е както се разбрахме и в началото, и в края. 
+Твърде малко упражнения за запаметяване на азбуката - твърде бързо се преминава към изписването на думи.
+Предложение: възможно ли е да добавим още упражнения?
+Идеи: 
+Аудио произнасяне на звук (например М) и от multiple choice да изберат кой звук чуват. Можем да сложим три отделни упражнения с по 10 звука (оставям на вас да ги наредите в разбъркан, не по азбучен ред - ако предпочитате и аз мога да го направя). 
+С коя буква започва следната дума (и се изписва например “мама”)? Натиснете, за да я чуете. И имат пак да избират от multiple choice. 
+Думите могат да са: баба, кафе, дом, вода, гора, жаба, зъб, игра, лимон, нос, облак, пате, риба, стол, тигър, ухо, футбол, хотел, цвете, чай, шал, щит, юг, ябълка
+Проблем е, че ако човек няма клавиатура на български - а той, като е чужденец, обикновено няма, не може да попълва упражненията. Дали може да се сложи виртуална клавиатура?
+Урок 1:
+Упр. 21., текст в: Тhe numbers don’t seem to be correct, as there is no 2, a double 8:
+ There are also mistakes, but the exercise is noted as “correct”
+
+Упр. 21, текст г. “Откъде сте” трябва да се зададе от Ева, но тя е тази, която отговаря първо:  
+
+Преговор, упр. 5: Не са разбъркани самите думи
+
+Урок 2:
+Упр. 23 - да сложим аудио
+
+Урок 3:
+Упр. 18 – в условието да сложим глаголите ЯМ и ПИЯ в големи букви. 
+Упр. 19 - ПИЯ
+Упр. 20 - ЯМ
+Упр. 25 - ако може моделът да е графично отделен от условието. 
+
+Тест след урок 1, 2 и 3:
+Слушане Упр. 1 - не тръгва аудиото
+Четене Упр. 1 - не тръгва аудиото
+Граматика Упр. 2 - не са разместени думите, които трябва да се подредят
+
+Урок 4:
+Да преместим упражнение 15 след упражнение 19
+Упр. 24 - да сменим условието: Изберете правилната форма. 
+Упр. 25 - КУПУВАМ с главни букви в условието
+Упр. 26 - ЕВТИНО и СКЪПО
+Упр. 30 - КУПУВАМ
+
+Тест след урок 4
+В описанието под заглавието да направим глаголите ЯМ и ПИЯ с големи букви.
+Граматика - упр. 1, не работи аудиото
+
+Урок 5:
+Подзаглавие: глагол ЖИВЕЯ
+Упр. 3 и упр. 5 - да махнем картата (не е необходима за изпълнение на условието) и да оставим условие: За всяка снимка изберете правилната дума. 
+Упр. 7 - условието да стане: Разгледайте картата. Кои от следните места ги има на нея? 
+Упр. 11 - Изслушайте краткия текст и попълнете визитката на Мария Петрова. 
+Упр. 23 - Разгледайте картата и отбележете с “Вярно” или “Грешно”. 
+Упр. 24 - Разгледайте картата и отговорете на въпросите. 
+Упр. 31 - да махнем втория ред от таблицата (Дума)
+В таблицата с обяснение на правилото:
+След цифра 2-3-4 или друго използвайте “милиона/милиарда”. Когато няма цифра използвайте “милиони/милиарди”.
+Упр. 42 - нека се казва просто 42. Упражнение, махаме малкото заглавийце
+
+Урок 6:
+В подзаглавието глаголи ИМАМ/НЯМАМ
+Упр. 21 - няма символ, че че има аудио. 
+Упр. 31 - моделът да бъде визуално отделен от условието.
+
+Урок 7:
+Упр. 8 - липсва март
+Упр. 31 - не виждам смисъл да има опция за увеличаване на картинката - на практика не се увеличава, а и няма смисъл. 
+Упр. 35 - Запознайте се със спрежението на глагола ОТИВАМ. 
+
+Урок 8: 
+Упр. 24 - има някакво малко грешно подзаглавие
+Урок 9:
+Упр. 22 - има някакво малко грешно подзаглавие
+
+Тест след урок 9 и 10:
+Слушане, упр. 2 - липсва условие: Изберете правилната дума от падащото меню. 
+Нека няма трета/последна/последни в самото изречение, а да са част от падащото меню. Например:
+----- чанта е на момичето с ----  яке. И падащо меню Трета/Третата/Третия/Третите/Третото и т.н.
+
+Урок 11:
+Упр. 10 – Да махнем от условието последното изречение - има го отново веднага след това. 
+Упр. 11 - Да махнем модела от подзаглавието. Има го в първото изречение. Да махнем едните цифри. 
+Упр. 22 В подзглавието на таблицата (светло зелено): Дълга форма/ Кратка форма
+Той/тя/то се мие.
+ 
+Проблеми с произношение: 
+Урок 1, упр. 2 - “Добър вечер”
+Урок 1, упр. 8 - “той” 
+Урок 1, упр. 14 - Аз съм Тала, аз съм бежанкА от Сирия; аз съм Петя, аз не съм бежанкА
+Урок 3, упр. 11 - шИшче
+Урок 3, упр 17 - те ядат/не ядат/ядат ли - звучи неестествено
+Урок 3, упр. 24 - ядене
+Урок 4, упр. 19 – 250 грамА, един лиТЪР
+Урок 5, упр. 8 - б. Къде живее МарИЯ?
+Урок 5, упр. 9 - сеЛО
+Урок 5, упр. 12, 5. Произнася телефона грешно накрая (567ми)
+Урок 5, упр. 21 - последната таблица - казва някакви звездички
+Урок 6, упр. 2 - деТе
+Урок 6, упр. 13 - не прочита “й”
+Урок 6, упр. 43 - втори текст: ...от 2022А година.
+Урок 7, упр. 21, чЕтвърт
+Урок 7, упр. 23, през нощТА
+Урок 7, упр. 23, в таблицата: 11 часа преди обЯд, три часА следобед
+Урок 7, упр. 28, учим български от 10 до 12 часА, закусвам преди 10 часА, обядвам след 12 часА (ако може да го казва по-автентично). 
+Урок 7, упр. 37 а. До утре! (второто); б. приятен УИКЕНД. В. Отивам на кино. А ТИ?
+Урок 8, упр. 5, пулОвер
+Урок 10, упр. 4, а. ХартИен
+Урок 10, упр. 7, а. ... за 12 часА. б. Колко чАса е пътят?
+Урок 10, упр. 8, автоГАРАТА
+Урок 10, упр. 11, 8 часА и 15 минути, 12 часа
+Урок 10, упр. 13, а. 7:00 часА; г. гАра Дъбово
+Урок 10, упр. 17, Кога е СЛЕДВАЩИЯТ? (трета таблица), Откъде тръгва АВТОБУСЪТ? (пета таблица)
+Урок 10, упр. 30 - таксИ
+Урок 10, упр. 34 - първи диалог: мЕтростанция сЕрдика, пицарИи  
+Урок 11, упр. 2 - Пиша имейли на ПРИЯТЕЛИ. 
+Урок 11, упр. 10, текст г. Приятна ВЕЧЕР.
+Урок 11, упр. 13, последна таблица - ХОДЯ (казва го по букви)
+Урок 11, упр. 24 Връщам се от работа вкъщи в 18:00 ч. (произнася грешно часа). 
+Урок 11, упр. 26 После обядва и играе с деЦАТА навън. 
+Урок 11, упр. 31 - пети абзац: Вечерта СВЕКЪРЪТ й кани...
+
+Проблеми с AI превода в английската версия (вероятно има и подобни и в другите езици, но нямаме капацитет на този етап да проверим). 
+Общи: 
+В “Култура и начин на живот” - големият текст е на бг, а английският - е малък. В частта за граматика всичко е само на английски. Дали може да имаме еднакъв подход - или всичко е само на английски, или и в двете части го имаме като голям текст на английски и малък на български - това се отнася за превода на всички езици. 
+В зелените таблици с граматика: трябва да кликнеш на заглавието, за да излезе преводът. Дали може да се вижда без клик?
+Има проблем в повечето уроци с упр. 19: ще видите, нещо се чупи и дава друго заглавие. 
+Урок 0:
+Упр. 6 - кафе (да е coffee, не cafe), такси (да е taxi, not fees), зехтин (olive oil)
+
+Урок 1: 
+Упр. 8 - те “they”
+Упр. 13, диалог а - приятно ми е “Nice to meet you”
+Упр. 16 - в условието “Learn how to make interrogative sentences”
+Упр. 20, диалог в. “Добре, а Вие как сте” - “Good, how are you” - а не telephone
+Упр. 25 - условие - вместо telephone да е Answer the questions
+Упр. 26 - няма превод “Read the text and decide whether the following statements are true or  false”. 
+
+Урок 2: Упр. 2 – coffee
+Упр. 7 - То не обича салам. “It doesn’t like salami”. 
+Ние не обичаме кашкавал. “We dont like yellow cheese”
+Упр. 14 When the word which follows the preposition “с” (with) also starts with “с” оr “з”, the preposition turns into “със” for euphony. 
+Упр. 17 There is no croissant and coffee. 
+Упр. 20 Match the words according to the pattern: един (masculine), една (feminine) or едно (neuter)
+Упр. 21 Choose the correct form: един (masculine), една (feminine) or едно (neuter)
+Упр. 22 - 3 – three, ne ice cream 😊
+Упр. 28 Няма превод “Listen to the text and decide whether the statements are true or false”
+Преговор, упр. 1 Write един (masculine), една (feminine) or едно (neuter)
+Преговор, упр. 4 Answer the questions.
+
+Урок 3: 
+Упр. 11 кюфте - meatball (не meatballS)
+Упр. 16 Те не пият “they do not drink” 
+Упр. 21 “in the evening”
+Упр. 30 Write един (masculine), една (feminine) or едно (neuter)
+Упр. 32 
+She is from Ukraine. Her name is Anastasia. For breakfast, she has sandwiches and tea. For lunch, she has soup and chicken with rice. She drinks water. For dinner, she has salad and fish with potatoes.
+Упр. 33
+Tihomir has lunch at the "Gradina" restaurant. He eats tarator, baked fish with French fries, and a Shopska salad. For dessert, he has crème caramel. He drinks sparkling water. He pays 28 euros. The bill is 25 euros, plus three euros for a tip. He likes the "Gradina" restaurant.
+Ahmed is Arab. He likes lamb and doesn't eat pork. He's having dinner at an Arab restaurant right now. He orders lamb skewers and hummus, and baklava for dessert. He drinks ayran. The bill comes to 29 euros.
+Sandy is Syrian. She is at a restaurant with Amira and Stefan. Sandy is having chicken and potatoes for lunch. She is drinking mineral water. For dessert, she’s having ice cream. Amira doesn’t eat meat. She’s a vegetarian. She’s having tarator and pizza for lunch. She’s drinking sparkling water. Stefan is also a vegetarian. He’s having lentil soup, a Shopska salad, and cake for lunch. He’s drinking juice.
+Тест след урок 1,2,3
+Listenining Упр. 1 - вижда се някакъв текст на английски зад двете картинки
+Readining Упр. 1 - няма превод на текста
+
+Урок 4:
+Упр. 5 -  Finish the sentences
+Упр. 7 и упр. 10 – Choose between един or една, and fill in the plural. 
+Упр. 13 What – masculine; What – feminine; What – neutral
+Упр. 14 Условие - Answer the questions. 
+Упр. 21 Среден род - neuter
+Упр. 22 and 23 - Choose the correct form: два (masculine) or две (feminine, neuter)
+Упр. 26 - втора картинка - появява се надпис Maximum: 99 points, вместо It is not cheap. Упр. 28 - а. Заповядайте. - There you go. Ето, заповядайте. There you go.; б. Заповядайте. There you go. В. Заповядайте. There you go. Г. Three kilos. 
+Упр. 34 
+Elena buys bread, yogurt, fresh milk, meat, eggs, olives, cheese, yellow cheese, and fish at the supermarket. She buys fruits and vegetables at the market. She really likes apples, peaches, cherries, and bananas. She doesn’t like strawberries. She likes all vegetables except cabbage and mushrooms. She eats a lot of fruits and vegetables.
+Упр. 36 Answer the questions. 
+Упр. 38 Answer the questions. 
+Преговор, упр. 1 Fill in КАКЪВ, КАКВА, КАКВО or КАКВИ and choose the right answer. 
+Упр. 2 Fill in ДВА or ДВЕ
+Тест след урок 4
+Граматика, упр. 4 Choose the correct question word: КАКЪВ, КАКВА, КАКВО or КАКВИ
+
+Урок 5:
+Упр. 4 - Поща - Post Office
+Упр. 16 - в таблицата не се превеждат “основна форма” и “окончание”
+Също: Членуване в единствено число - Definite Articles in Singular
+В женски род: окончанието - вместо she да е “ta”, примерите “the bank, the street”
+Среден род (neuter): то - “to”, the cafe, the school
+Упр. 19
+Членуване - множествено число Definite Articles in Plural
+Окончания “te”, “te”, “ta”
+Примери - the markets, the cities; the cafes, the schools. 
+Упр. 20 - Place the words in the correct column based on the definite article.
+Упр. 22 - до - next to – next to the box; пред - in front of – in front of the box; срещу - opposite – opposite the box; 
+В таблицата: next to the museum; close to the hotel;
+Упр. 27 Match each command with the correct symbol (arrow).
+Упр. 29 - няма превод на “форма”
+Тhere is one person here. 
+Упр. 30 Fill in the words ЧОВЕК, ДУШИ, ХОРА.
+Упр. 41 Answer the questions. 
+Упр. 44 Answer the questions. 
+
+Урок 6:
+Упр. 3 - не превежда малкия текст под таблицата “Кликнете на която и да е буква от думата”. 
+Упр. 7
+В заглавието “ I have/ I do not have”
+Той, тя, то - has/ does not have
+Упр. 13
+На английски да няма превод в последната колонка (ми, ти и тн), защото няма английски аналог
+Упр. 15
+Write the appropriate possessive pronoun – ми, ти, му, й, ни, ви, им
+Упр. 18 
+Complete with the appropriate form of the verb СЪМ
+Упр. 25
+Слаб - пълен (thin – fat)
+Работлив - мързелив (hardworking – lazy)
+Упр. 27
+Без превод на английски в таблицата хубави хора
+Упр. 30
+Complete the sentences. 
+Упр. 32
+Attention. The verb УЧА has... 
+В таблицата - 
+Той - he does not work
+Тя - she does not work
+Ние - we do not work
+Упр. 33 Put the verb РАБОТЯ into the correct form. 
+Упр. 34 Put the verb УЧА into the correct form. 
+Упр. 35
+Do you work?
+No, I do not work. 
+Упр. 37
+Първи абзац: He has a restaurant for Arabic bread.
+Упр. 39
+We live in Sofia. Vitosha Mountain is near the city. It is tall and beautiful.
+Упр. 43
+We are two boys from Syria. Our names are Kusay and Mohamed. We attend the Lebanese School in Sofia, and during the summer we take a Bulgarian language course.
+Упр. 44
+Answer the questions. 
+Упр. 46 Answer the questions.
+Тест след урок 6
+Граматика, упр. 1
+Choose the correct form: ДВЕ or ДВА
+
+Урок 7:
+Упр. 9 - в таблицата 
+Masculine/Feminine/Neuter/Plural
+Second, third, fifth, sixth - повтаряме една и съща форма на английски в четирите кутийки
+Упр. 12, б.
+Which date is today?
+Упр. 13
+Горещо е. It is hot. 
+Облачно е. Има облаци. It is cloudy. There are clouds. 
+Не превежда вторите изречения. 
+Упр. 19 - изобщо не го изписва. 
+
+19. EXERCISE
+Упр. 21 What time is it?
+Упр. 23
+Morning – in the morning
+Afternoon – in the afternoon
+Evening – in the evening
+Упр. 34
+
+Изцяло липсва. 34. EXERCISE
+Упр. 35
+GO (не I’m going)
+I go/You go/He,she,it goes/We go/you go/they go
+Упр. 36
+Choose the correct form of the verb ОТИВАМ
+Упр. 37
+А. Thank you, you too.
+Б. To you, too. See you on Monday. 
+В. Hello. How are you?.... Where are you going? 
+Упр. 41 - във втория абзац. He has a sandwich....
+
+Урок 8:
+В подзаглавието: (this, that, these, those), definite articles for adjectives
+Във второто подзаглавие: this, that, these, those and to put definite articles to adjectives. 
+Упр. 1 син - blue
+Упр. 5 боти - boots
+Упр. 13
+Verb НОСЯ (wear) - present tense
+Упр. 15
+а. No, thanks.
+b. Yes, we have, but only black ones. Do you want?
+Упр. 16
+Без превод на думите в таблицата и в примера отдолу - става объркване.
+Упр. 17
+Choose the correct word: този, тази, това or тези. 
+Упр. 18
+В заглавието на таблицата: Definite Articles for Adjectives – без превод на отделните редове, става объркване (заради липсващи такива граматични форми на английски)
+Упр. 19 - отново липсва заглавието
+19. EXERCISE
+Упр. 20
+а. Заповядайте - There you go!
+Упр. 21
+Choose the correct definite article of the adjective. 
+Упр. 26
+Втори абзац: she prefers....
+Трети абзац: She has many .... 
+Четвърти: She prefers... 
+Преговор
+Нека упражненията да си вървят със заглавия 1. EXERCISE, 2. EXERCISE, 3. EXERCISE
+Упр. 3. 
+Complete the sentences with ТОЗИ, ТАЗИ, ТОВА or ТЕЗИ
+Тест след 7 и 8 урок
+Слушане, упр. 1
+Вижда се някакъв текст зад картинките: 
+
+Четене, упр. 3
+Answer with YES or NO as per the text. 
+
+Урок 9:
+Упр. 2 сапун - soap
+Упр. 8 В подзаглавието. They change when in different gender or number.
+Без превод на таблицата.  
+Упр. 12
+В заглавието - Comperative and Superlative Degrees of the Adjectives
+Във втория ред: Adjective/Comparative Degree/Superlative Degree
+Родове (първа колона)- masculine/feminine/neuter/plural
+И след това в четирите реда едно и също big-bigger-the biggest
+В примера, трето изречение: Sofia is the biggest city in Bulgaria. 
+Упр. 14
+Трета таблица: Comparison with “than”
+Упр. 19 - липсва 
+19. EXERCISE
+Упр. 22
+Wonderful! How many rooms are there?
+There's a pharmacy and a small café on the first floor. 
+
+Урок 10:
+Упр. 7
+б. At 7 o'clock in the morning. 
+Упр. 8
+Автобусът тръгва от автогарата. The bus leaves from the bus station. 
+Упр. 11
+Варна - 25 mins. 
+Упр. 13
+а. There you go. 
+Упр. 17
+Втора таблица: When does the the bus arrive?
+Осма таблица: How many tickets do you want? HOW MANY
+12a таблица (предпоследен ред): Which platform is the bus arriving at?
+13а таблица: ЛИ (question word)
+Упр. 19 19.EXERCISE
+Упр. 30 без превод в условието С/СЪС, такси - taxi
+Тест след урок 9 и 10
+Граматика, упр. 2
+Follow the pattern. 
+
+Урок 11:
+В подзаглавието: conjugation of verbs in the three groups (A, E, И), general pronouns (всеки, всяка, всяко, всички)... verbs ХОДЯ and ОТИВАМ
+Упр. 2
+I take a shower. I make breakfast. I meet with friends. I watch TV. I read a book. I sleep until 7:00. 
+Упр. 4
+Без превод на таблицата - става объркване
+Упр. 7
+Have a nice course. 
+б. Hello, Maxim. Are you free?
+в. Hello, Leila. What are you doing? What is your husband doing?
+г. Good afternoon, Anna. Where are you going?
+Упр. 8
+В таблицата - без превод в заглавието
+Masculine/Feminine/Neuter/Plural
+Упр. 9
+Choose the correct form: всеки, всяка, всяко or всички
+Упр. 10
+With “never” the verb is in the negative form: Аз никога не закусвам. (примерът не се превежда). 
+Упр. 13 Без превод на таблицата
+Упр. 14 Choose the correct prepositions: В or НА. 
+Упр. 15 Select ОТИВАМ or ХОДЯ
+Упр. 16 Hello! Where are you going?
+Упр. 18
+В заглавието на таблицата: Main Form/Comparative Form/Superlative Form
+Вподзаглавието: Main/Comparative/Superlative
+well-better-the best
+Badly-worse-the worst
+Early-earlier-the earliest
+Late-later-the latest
+Quickly – more quickly – most quickly
+Slowly – more slowly- most slowly
+Cheap – cheaper – cheapest
+Expensive – more expensive – most expensive
+Little – less – least
+A lot – more – most
+В забележка - без превод
+Упр. 19 19. EXERCISE
+Put the adverbs in the comparative and superlative form. 
+Упр. 21
+Мия - мия се wash – wash myself
+The mother washed her child. I'm washing myself. 
+Dress – get dressed
+The mother dresses her child. I get dressed. 
+Undress – get undressed
+The mother undresses her child. I get undressed. 
+Put on shoes – put on shoes (to myself)
+The mother is putting shoes on her child. I am putting on my shoes.
+Take off shoes – take off shoes 
+The mother takes off her child's shoes. I take off my shoes.
+Упр. 22 
+I wash myself. (и на двете колонки)
+You wash yourself.
+He washed himself./She washes herself./It washes itself. 
+We wash ourselves.
+You wash yourselves. 
+They wash themselves. 
+Упр. 24
+В подзаглавието: Verb/Meaning/Example
+Упр. 26
+Mariam is a very nice girl. She is from Syria. She is ten years old. She is currently staying at a refugee center in Sofia and is learning Bulgarian.
+Every morning, she gets up at nine o'clock, washes up in the bathroom, gets dressed, puts on her shoes, and eats breakfast. Then she goes to the Bulgarian language classroom. There, she studies every day except Sundays from 10:30 a.m. to 1:00 p.m.
+After that, she and her friends listen to Syrian music and dance. Then she has lunch and plays with the children outside.
+Упр. 28
+He lives and works in Ruse. 
+He starts work at 9:00. 
+He finishes work at 17:00.... They have dinner together at 20:00. 
+Упр. 31
+Втори абзац: Many young man want to marry Bogdanka. 
+Трети абзац: Only those who want to work at his house do so.
+Пети: That evening, her father-in-law invited everyone to dinner except Bogdanka. 
+Преговор, упр. 1
+Fill in with ВСЕКИ, ВСЯКА, ВСЯКО or ВСИЧКИ. 
+
+Тест след 11 урок:
+В подзаглавието: ... pronouns ВСЕКИ, ВСЯКА, ВСЯКО, ВСИЧКИ
+Граматика, упр. 3
+Fill in with ВСЕКИ, ВСЯКА, ВСЯКО or ВСИЧКИ.
+Feedback on the AI Assistant
+AI agent is not available - на няколко от колегите въобще не им се появи иконката. Нямам принтскрийн за съжаление, но видях. 
+
+Identified Mistakes/Inconsistencies
+Когато го попитам за конкретно упражнение, невинаги разбира за кое говоря. Например: 
+
+
+Само че упражнение 18 не е въобще за това. 
+
+Има слабости при гласови команди.
+ Как да спрегна глагола СЪМ.
+
+При начална страница има техническа грешка: Имам нужда от помощ (спейс)
+
+

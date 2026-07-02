@@ -141,8 +141,8 @@ export const grammarExercises: Exercise[] = [
     order: 7,
     noTranslation: true,
     images: [
-      { imageUrl: '/assets/test-a1-2/gramatika/momche-yade.jpg', label: 'ям' },
-      { imageUrl: '/assets/test-a1-2/gramatika/momche-pie.jpg', label: 'пия' },
+      { imageUrl: '/assets/test-a1-2/gramatika/momche-yade.jpg', label: 'ям', ttsWordId: 'yam' },
+      { imageUrl: '/assets/test-a1-2/gramatika/momche-pie.jpg', label: 'пия', ttsWordId: 'piya' },
     ],
     paragraphs: [],
   } as ReadingTextExercise,

@@ -152,6 +152,10 @@ interface BuildSystemPromptArgs {
   completedLessons?: string[];
   currentPage?: string | null;
   pageProgress?: LessonProgressSummary | null;
+  /** The exercise the user is looking at right now (from the on-screen
+   *  IntersectionObserver). `number` is the on-screen number; `id` disambiguates
+   *  which section it belongs to when numbers repeat (lesson vs Преговор). */
+  currentExercise?: { number: number; id: string } | null;
 }
 
 export function buildSystemPrompt({
@@ -163,6 +167,7 @@ export function buildSystemPrompt({
   completedLessons,
   currentPage,
   pageProgress,
+  currentExercise,
 }: BuildSystemPromptArgs): string {
   const langName = LANG_NAMES[userLanguage] ?? userLanguage;
   const levelLabel = level?.toUpperCase() ?? 'A1';
@@ -194,12 +199,22 @@ export function buildSystemPrompt({
     system += `\nIf the user asks "where am I?" or "what are we studying?", tell them they are on lesson: ${lesson.lessonTitle} (${lesson.lessonId}).`;
 
     if (lesson.exercises.length > 0) {
-      system += `\n\nEXERCISES IN THIS LESSON (with correct answers — use them to teach, follow the pedagogical approach above. The user numbers exercises starting at 1; the order below matches that numbering.):`;
-      lesson.exercises.forEach((ex, i) => {
-        system += `\n• #${i + 1} [${ex.id}] ${ex.title} (${ex.type})`;
+      const renderExercise = (ex: (typeof lesson.exercises)[number]) => {
+        system += `\n• ${ex.screenNumber}. ${ex.title} [${ex.id}] (${ex.type})`;
         if (ex.instruction) system += `\n  Instruction: ${ex.instruction}`;
-        system += `\n  Correct:\n${indent(ex.answers, 4)}`;
-      });
+        if (ex.checkable && ex.answers) system += `\n  Correct:\n${indent(ex.answers, 4)}`;
+      };
+
+      const mainExercises = lesson.exercises.filter((ex) => ex.section !== 'review');
+      const reviewExercises = lesson.exercises.filter((ex) => ex.section === 'review');
+
+      system += `\n\nEXERCISES IN THIS LESSON — the number before each item is EXACTLY the number the user sees on screen (e.g. "5." is the exercise labelled 5 on the page). ALWAYS refer to exercises by these numbers. The bracketed value like [l03-ex-05] is an INTERNAL id for your matching only — NEVER show it to the user; refer to an exercise only as "упражнение 5" / "exercise 5". Presentation-only items (vocabulary, dialogues, grammar tables) are listed too, without a "Correct" block.`;
+      mainExercises.forEach(renderExercise);
+
+      if (reviewExercises.length > 0) {
+        system += `\n\nПРЕГОВОР / REVIEW block — a SEPARATE section shown below the main exercises. Its numbering restarts at 1, so "Преговор, упражнение 2" is NOT the same as "упражнение 2" in the list above.`;
+        reviewExercises.forEach(renderExercise);
+      }
     }
   } else if (pageContext?.kind === 'test') {
     const test = pageContext;
@@ -214,8 +229,8 @@ export function buildSystemPrompt({
       system += `\n\nTEST SECTIONS & EXERCISES (correct answers are intentionally omitted — see TEST POLICY):`;
       for (const sec of test.sections) {
         system += `\n\n[Section ${sec.id}] ${sec.name} (${sec.maxPoints} pts)`;
-        sec.exercises.forEach((ex, i) => {
-          system += `\n  • #${i + 1} [${ex.id}] ${ex.title} (${ex.type}${typeof ex.points === 'number' ? `, ${ex.points} pts` : ''})`;
+        sec.exercises.forEach((ex) => {
+          system += `\n  • ${ex.screenNumber}. ${ex.title} [${ex.id}] (${ex.type}${typeof ex.points === 'number' ? `, ${ex.points} pts` : ''})`;
           if (ex.instruction) system += `\n    Instruction: ${ex.instruction}`;
         });
       }
@@ -224,6 +239,14 @@ export function buildSystemPrompt({
     system += ` This appears to be a lesson page. Ask the user what they need help with in this lesson.`;
   } else if (currentPage && currentPage.includes('test')) {
     system += ` This appears to be a test page. TEST POLICY applies — do not reveal any answers; explain rules and what is being tested instead.`;
+  }
+
+  // Which exercise is scrolled into view right now — lets the bot resolve
+  // "this exercise" / "help me here" without a number, and match the user's
+  // on-screen position. Matched to the list above by id (numbers repeat across
+  // the lesson/Преговор blocks).
+  if (currentExercise) {
+    system += `\n\nON SCREEN RIGHT NOW: the user is looking at exercise ${currentExercise.number} (internal id ${currentExercise.id} — for your matching only, do NOT show it). If they say "this exercise", "here", or ask without giving a number, assume they mean exercise ${currentExercise.number}. Refer to it only as "упражнение ${currentExercise.number}".`;
   }
 
   system += `\n\nUSER PROFILE:\nResponse language: ${langName}`;
