@@ -21,7 +21,6 @@ export const exercises: Exercise[] = [
     id: 'l00-gramatika-01',
     type: 'grammar_table',
     title: 'АЗБУКА',
-    subtitle: 'Българската азбука — 30 букви',
     instruction: 'Запознайте се с буквите на българската азбука.',
     order: 1,
     tableTitle: 'Кирилицата',

@@ -1054,7 +1054,6 @@ export const exercises: Exercise[] = [
     id: 'l10-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'С / СЪС',
     prominentSubtitle: true,
     instruction: '',
     order: 31.5,

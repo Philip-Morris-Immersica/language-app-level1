@@ -80,8 +80,8 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-2', // един милион (l05)
   'l05-gramatika-07-row-3', // два милиона (l05)
   'l05-gramatika-07-row-4', // един милиард (l05)
-  'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
+  'l10-gramatika-03-row-3', // такси — известна проблемна дума (виж tts-audio.mdc), Flash сгрешава ударението
   'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
   'a2-l02-gramatika-03-row-3', // тя → й: Flash mispronounces clitic "й"
   'a2-l02-gramatika-05-row-0', // аз → Трябва ми един лев: Flash mispronounces "лев" as "лъев"
@@ -124,6 +124,15 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
 const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
+  // Фаза 6 — TTS корекции (числа/часове с думи; „й“ в контекст)
+  'l06-gramatika-04-row-3': 'тя. Семейството й.', // „й“ се пропуска изолирано → в контекст
+  'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнайсет минути. Първи коловоз. Пет минути закъснение.',
+  'l10-gramatika-01b-row-1': 'Плевен. Дванайсет часът. Трети коловоз. Няма закъснение.', // "часа" в точен час без минути → "часът" (виж tts-audio.mdc)
+  'l10-gramatika-01b-row-2': 'Русе. Петнайсет часа и трийсет минути. Четвърти коловоз. Петнайсет минути закъснение.',
+  'l10-gramatika-01c-row-1': 'Варна. Единайсет часа и двайсет минути. Пети коловоз. Двайсет и пет минути закъснение.',
+  'l10-gramatika-03-row-3': 'такси. с такси.', // моделът е Pro (виж GRAMMAR_TABLE_PRO_ROWS) — Flash сгрешаваше ударението
+  'l11-gramatika-07-row-3': 'връщам се. идвам обратно от някъде. Връщам се от работа вкъщи в осемнайсет часа.',
+
   'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
@@ -722,6 +731,34 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/**
+ * grammar_examples with an interactive `grammarHighlight` block — one MP3 per
+ * example line: `grammar/{exerciseId}-highlight-{i}.mp3` (Flash + word prompt,
+ * matching the rest of the grammar audio). Uses `exampleTtsTexts[i]` when set.
+ */
+function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises) {
+    const gh = (ex as Exercise & {
+      grammarHighlight?: { interactiveExamples?: boolean; examples?: string[]; exampleTtsTexts?: string[] };
+    }).grammarHighlight;
+    if (!gh || gh.interactiveExamples !== true || !gh.examples) continue;
+    for (let i = 0; i < gh.examples.length; i++) {
+      const src = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
+      if (!src?.trim()) continue;
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-highlight-${i}.mp3`,
+        text: clean(src),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples') && !e.disableTts && e.examples)) {
@@ -887,6 +924,7 @@ async function main() {
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
+    ...collectGrammarHighlightJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectTableFillParagraphJobs(exercises),

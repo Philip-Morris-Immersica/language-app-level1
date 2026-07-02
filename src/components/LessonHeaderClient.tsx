@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
 import { markLessonVisited } from '@/lib/progress';
+import { renderBoldText } from '@/lib/renderBoldText';
 
 interface LessonHeaderClientProps {
   lessonId: string;
@@ -37,7 +38,7 @@ export function LessonHeaderClient({ lessonId, number, title, description, gramm
         {t('lesson.prefix')} {number}: {translatedTitle}
       </h1>
       {description && (
-        <p className="text-lg text-gray-600">{translatedDescription}</p>
+        <p className="text-lg text-gray-600">{renderBoldText(translatedDescription)}</p>
       )}
       {grammarTopics && grammarTopics.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">

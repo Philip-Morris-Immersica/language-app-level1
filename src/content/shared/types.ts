@@ -335,6 +335,8 @@ export interface GrammarTableExercise extends BaseExercise {
   boldColumns?: number[];
   /** When true, makes the pronoun column equal width to the data columns. */
   widePronouns?: boolean;
+  /** Header label for the pronoun column (light-green header row). Defaults to blank. */
+  pronounColumnLabel?: string;
   illustrations?: {
     imageUrl: string;
     singularLabel: string;
@@ -403,6 +405,8 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Когато е true, снимката се показва без zoom/lightbox — за референтни таблици, при които уголемяването няма смисъл. */
+  noZoom?: boolean;
   /** Опционален текст за слушане — рендира зелен бутон „Слушай" над въпросите. */
   listeningText?: string;
   /** Масив от снимки с подписи, показвани над въпросите. */

@@ -346,7 +346,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l04.g1.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Видове въпроси (14)',
     instruction: 'Запознайте се с въпросителните думи какъв, каква, какво, какви.',
     order: 13,
     examples: [
@@ -424,7 +423,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l04.g2.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Граматика – Бройни числителни (1)',
     instruction: 'Запознайте се с числата от 100 до 1000.',
     order: 15,
     tableTitle: 'Бройни числителни 100–1000',
@@ -467,23 +465,6 @@ export const exercises: Exercise[] = [
       { id: 'q6', left: '522', options: ['сто и пет', 'сто и осемнадесет', 'двеста петдесет и три', 'триста шестдесет и осем', 'петстотин двадесет и две', 'осемстотин тридесет и три'], correctAnswer: 'петстотин двадесет и две' },
     ],
   } as DropdownMatchExercise,
-
-  // ORDER 24.5: Упр. 15 – Кое число е изписано с букви? (Page 38) — moved after Упр. 19
-  {
-    id: 'l04-ex-15',
-    type: 'multiple_choice',
-    title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
-    order: 24.5,
-    points: 5,
-    questions: [
-      { question: 'двеста и петнадесет',       options: ['215', '315', '150', '512', '710'], correctIndex: 0 },
-      { question: 'триста и петнадесет',        options: ['215', '315', '150', '512', '710'], correctIndex: 1 },
-      { question: 'сто и петдесет',             options: ['215', '315', '150', '512', '710'], correctIndex: 2 },
-      { question: 'петстотин и дванадесет',     options: ['215', '315', '150', '512', '710'], correctIndex: 3 },
-      { question: 'седемстотин и десет',        options: ['215', '315', '150', '512', '710'], correctIndex: 4 },
-    ],
-  } as MultipleChoiceExercise,
 
   // ─────────────────────────────────────────────────────────────────────────
   // СТРАНИЦА 39
@@ -532,7 +513,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l04.g3.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Граматика – Число на съществителните (3)',
     instruction: 'Запознайте се с формите два и две.',
     order: 21,
     tableTitle: 'Числителното два / две',
@@ -599,7 +579,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-19',
     type: 'dropdown_match',
-    instruction: 'Свържете лицата с правилната форма на глагола.',
+    instruction: 'Изберете правилната форма.',
     order: 24,
     points: 8,
     questions: [
@@ -614,6 +594,23 @@ export const exercises: Exercise[] = [
     ],
   } as DropdownMatchExercise,
 
+  // ORDER 24.5: Упр. 15 – Кое число е изписано с букви? (Page 38) — преместено след Упр. 19 (по клиентска обр. връзка)
+  {
+    id: 'l04-ex-15',
+    type: 'multiple_choice',
+    title: 'УПРАЖНЕНИЕ 15',
+    instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
+    order: 24.5,
+    points: 5,
+    questions: [
+      { question: 'двеста и петнадесет',       options: ['215', '315', '150', '512', '710'], correctIndex: 0 },
+      { question: 'триста и петнадесет',        options: ['215', '315', '150', '512', '710'], correctIndex: 1 },
+      { question: 'сто и петдесет',             options: ['215', '315', '150', '512', '710'], correctIndex: 2 },
+      { question: 'петстотин и дванадесет',     options: ['215', '315', '150', '512', '710'], correctIndex: 3 },
+      { question: 'седемстотин и десет',        options: ['215', '315', '150', '512', '710'], correctIndex: 4 },
+    ],
+  } as MultipleChoiceExercise,
+
   // ─────────────────────────────────────────────────────────────────────────
   // СТРАНИЦА 40
   // ─────────────────────────────────────────────────────────────────────────
@@ -622,7 +619,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-20',
     type: 'workbook_fill_blank',
-    instruction: 'Поставете глагола купувам в правилната форма.',
+    instruction: 'Поставете глагола **купувам** в правилната форма.',
     order: 25,
     points: 5,
     layout: 'single' as const,
@@ -642,8 +639,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l04.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Граматика – Наречия (13)',
-    instruction: 'Запознайте се с наречията евтино и скъпо.',
+    instruction: 'Запознайте се с наречията **евтино** и **скъпо**.',
     order: 26,
     examples: [
       { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/01-kafe-evtino.jpg', text: 'Едно евро. Евтино е.', subtext: 'Не е скъпо.' },
@@ -759,7 +755,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l04-ex-26',
     type: 'workbook_fill_blank',
-    instruction: 'Направете изречения с думите, като поставите глагола купувам в правилната форма.',
+    instruction: 'Направете изречения с думите, като поставите глагола **купувам** в правилната форма.',
     order: 30,
     points: 7,
     layout: 'single' as const,

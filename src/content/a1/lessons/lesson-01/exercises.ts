@@ -181,7 +181,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Лични местоимения',
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
     pronouns: [
@@ -215,7 +214,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g2.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Глагол СЪМ',
     instruction: 'Запознайте се с формите на глагола „съм".',
     order: 10,
     examples: [
@@ -333,7 +331,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g3.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Аз съм / Аз не съм',
     instruction: 'Запознайте се с конструкциите „аз съм" и „аз не съм".',
     order: 15,
     examples: [
@@ -421,7 +418,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Въпроси и отговори',
     instruction: 'Запознайте се с въпросителните изречения. Кликнете върху картинката, за да ги чуете.',
     order: 14,
     examples: [
@@ -611,7 +607,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'то',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'ние', cells: ['сме', 'не сме', 'ли сме'] },
-      { pronoun: 'Вие', cells: ['сте', 'не сте', 'ли сте'] },
+      { pronoun: 'вие/Вие', cells: ['сте', 'не сте', 'ли сте'] },
       { pronoun: 'те',  cells: ['са',  'не са',  'ли са']  },
     ],
     notes: [

@@ -7,6 +7,7 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { renderBoldText } from '@/lib/renderBoldText';
 
 interface GrammarTableProps {
   tableTitle?: string;
@@ -18,6 +19,8 @@ interface GrammarTableProps {
   boldColumns?: number[];
   /** When true, makes the pronoun column equal width to the data columns (50/50 split). */
   widePronouns?: boolean;
+  /** Header label for the pronoun column (light-green header row). Defaults to blank. */
+  pronounColumnLabel?: string;
 }
 
 /**
@@ -50,6 +53,7 @@ export function GrammarTable({
   exerciseId,
   boldColumns = [],
   widePronouns = false,
+  pronounColumnLabel,
 }: GrammarTableProps) {
   const { lang } = useLanguage();
   const t = useT();
@@ -96,7 +100,14 @@ export function GrammarTable({
               </tr>
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
+                  {pronounColumnLabel ? (
+                    <ClickTranslateTh
+                      text={pronounColumnLabel}
+                      className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 whitespace-nowrap ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
+                    />
+                  ) : (
+                    <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
+                  )}
                   {columns.map((col, i) => (
                     <ClickTranslateTh
                       key={i}
@@ -180,7 +191,7 @@ export function GrammarTable({
               className="border-2 border-[#7ab356] rounded-lg px-5 py-3 bg-[#f4faee] text-center cursor-pointer hover:bg-[#edf5e4] transition-colors"
             >
               <div className="flex items-center justify-center gap-2">
-                <p className="text-sm md:text-base font-semibold text-gray-800">{note}</p>
+                <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(note)}</p>
                 <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
               </div>
               <InlineTranslation text={note} visible={true} />
