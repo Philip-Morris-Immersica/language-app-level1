@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Play, Pause, Check, X, BookOpen, Volume2, Turtle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Music } from 'lucide-react';
@@ -117,6 +118,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
   const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>({});
   const [checkSubmitted, setCheckSubmitted] = useState(false);
   const completedRef = useRef(false);
+  const translatedChecklistInstruction = useTranslate(checklist?.instruction ?? '');
 
   /** Sequential „Слушай“ (paragraph p-0, then p-1, …) when no single `audioUrl` full file */
   const [sequentialPlaying, setSequentialPlaying] = useState(false);
@@ -750,7 +752,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
       {checklist && (
         <div className="mt-8 pt-6 border-t-2 border-gray-200">
           <p className="text-sm md:text-base font-semibold text-gray-700 mb-4">
-            {checklist.instruction}
+            {translatedChecklistInstruction}
           </p>
           <div className="space-y-2">
             {checklist.items.map((item) => {

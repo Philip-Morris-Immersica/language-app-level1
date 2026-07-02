@@ -23,6 +23,16 @@
  *   TableFill.tsx          → tables[].name, tables[].columns[], paragraphs[].text
  *   MultipleChoice.tsx     → questions[].options[] (emoji/parenthetical stripped,
  *                            same transform the component applies at render time)
+ *   GrammarWithExamples.tsx→ examples[].text / .subtext / .label / .lines[]
+ *                            (lines cleaned of **bold** + leading ✓/✗ marker,
+ *                            matching the component's own transform)
+ *   GrammarVisual.tsx      → pronouns[].pronoun, pronouns[].description
+ *   Dialogues.tsx          → sections[].lines[].text
+ *   ReadingText.tsx        → textTitle, paragraphs[], images[].label,
+ *                            checklist.instruction
+ *   IllustratedCards.tsx   → cards[].label, cards[].sublabels[], headerCaption
+ *   PersonalChoice.tsx     → model.question / .positiveAnswer / .negativeAnswer,
+ *                            items[].question
  *   CultureSection.tsx     → culturalNotes[].title / .content (only when they are
  *                            plain strings, not already-pre-filled per-lang Records)
  *   LessonHeaderClient.tsx → lesson.title, lesson.description, grammarTopics[]
@@ -178,6 +188,59 @@ function collectFromExercise(ex: Exercise, hits: FieldHit[], pathPrefix: string)
       });
       break;
     }
+    case 'grammar_examples': {
+      (ex.examples ?? []).forEach((example, ei) => {
+        add(`examples[${ei}].text`, example.text);
+        add(`examples[${ei}].subtext`, example.subtext);
+        add(`examples[${ei}].label`, example.label);
+        (example.lines ?? []).forEach((line, li) => {
+          if (line === '') return;
+          // Matches GrammarWithExamples.tsx: strip **bold** markers, then a leading ✓/✗ marker.
+          const plain = line.replace(/\*\*(.+?)\*\*/g, '$1').replace(/^\s*[✓✗]\s*/, '').trim();
+          add(`examples[${ei}].lines[${li}]`, plain);
+        });
+      });
+      break;
+    }
+    case 'grammar_visual': {
+      (ex.pronouns ?? []).forEach((p, pi) => {
+        add(`pronouns[${pi}].pronoun`, p.pronoun);
+        add(`pronouns[${pi}].description`, p.description);
+      });
+      break;
+    }
+    case 'dialogues': {
+      (ex.sections ?? []).forEach((section, si) => {
+        (section.lines ?? []).forEach((line, li) => {
+          add(`sections[${si}].lines[${li}].text`, line.text);
+        });
+      });
+      break;
+    }
+    case 'reading_text': {
+      add('textTitle', ex.textTitle);
+      (ex.paragraphs ?? []).forEach((p, pi) => add(`paragraphs[${pi}]`, p));
+      (ex.images ?? []).forEach((img, ii) => add(`images[${ii}].label`, img.label));
+      if (ex.checklist?.instruction) add('checklist.instruction', ex.checklist.instruction);
+      break;
+    }
+    case 'illustrated_cards': {
+      add('headerCaption', ex.headerCaption);
+      (ex.cards ?? []).forEach((card, ci) => {
+        add(`cards[${ci}].label`, card.label);
+        (card.sublabels ?? []).forEach((sub, si) => add(`cards[${ci}].sublabels[${si}]`, sub));
+      });
+      break;
+    }
+    case 'personal_choice': {
+      if (ex.model) {
+        add('model.question', ex.model.question);
+        add('model.positiveAnswer', ex.model.positiveAnswer);
+        add('model.negativeAnswer', ex.model.negativeAnswer);
+      }
+      (ex.items ?? []).forEach((item, ii) => add(`items[${ii}].question`, item.question));
+      break;
+    }
   }
 }
 
@@ -290,7 +353,8 @@ const SYSTEM_PROMPT = `Ти си професионален преводач, л
 Задача: преведи всеки подаден български низ на ВСИЧКИТЕ 6 езика: en, ar, fr, fa, uk, ru.
 
 Правила:
-- Пази български собствени имена, примерни думи и изрази в скоби непреведени, освен ако не е поискан точно техен превод (виж контекста и речника).
+- Имена на хора и населени места (в диалози, разкази, примерни изречения) — ТРАНСЛИТЕРИРАЙ ги на съответната писменост/език (напр. „Виталий" → „Vitaliy", „Бургас" → „Burgas", „Пловдив" → „Plovdiv"), никога не ги оставяй на кирилица в превод, чиято останала част е на друга писменост.
+- Единствено в граматичните таблици/примери, където конкретна българска дума/окончание е предмет на урока (напр. клетка с „пазар, студент" в таблица за членуване), запази българската дума в оригинал и добави превод/пояснение до нея — тук НЕ се транслитерира, а се обяснява.
 - Пази markdown **удебеляване** точно около съответната дума/окончание в превода (не го премахвай, не го местиш).
 - Тон: неутрален, учтив, подходящ за възрастен обучаем на ниво A1 — кратко и ясно, без сложни конструкции.
 - Речник (glossary) с граматична терминология — ако даден низ или част от него присъства в речника, ползвай ТОЧНО подадения превод, никога не измисляй алтернативен превод на речникови термини.

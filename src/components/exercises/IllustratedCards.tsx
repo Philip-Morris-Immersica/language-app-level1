@@ -29,6 +29,7 @@ function getIllustratedCardSpokenText(card: CardItem): string {
 export function IllustratedCards({ exercise, onComplete, exerciseId }: IllustratedCardsProps) {
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
+  const [captionRevealed, setCaptionRevealed] = useState(false);
   const t = useT();
   const { lang } = useLanguage();
 
@@ -271,6 +272,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                   ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
                   : '';
                 playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                setCaptionRevealed((v) => !v);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -278,6 +280,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                     ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
                     : '';
                   playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                  setCaptionRevealed((v) => !v);
                 }
               }}
               className="mt-4 relative bg-[#DAF6EB] rounded-xl px-5 py-4 cursor-pointer hover:brightness-95 active:scale-[0.99] transition-all select-none"
@@ -288,6 +291,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
               <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed pr-8">
                 {exercise.headerCaption}
               </p>
+              <InlineTranslation text={exercise.headerCaption} visible={captionRevealed} />
             </div>
           )}
         </div>
