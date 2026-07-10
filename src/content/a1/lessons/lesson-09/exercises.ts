@@ -25,6 +25,11 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилната дума за всяка картинка.',
     order: 1,
+    sectionStart: {
+      title: 'Мебели, стаи и предлози за място',
+      subtitle: 'Мебели в дома, стаите в къщата, прибори за хранене и предлози за място',
+      theme: 'vocabulary',
+    },
     points: 4,
     displayType: 'default',
     images: [
@@ -237,6 +242,11 @@ export const exercises: Exercise[] = [
     instruction: 'Поредни числителни — **първи**, **първа**, **първо**, **първите**.',
     instructionKey: 'grammar.l09.g1.instruction',
     order: 9,
+    sectionStart: {
+      title: 'Поредни числителни',
+      subtitle: 'Поредни числителни за дни, месеци и етажи',
+      theme: 'grammar',
+    },
     tableTitle: 'Поредни числителни',
     columns: ['Мъжки род', 'Женски род', 'Среден род', 'Мн. число'],
     rows: [
@@ -414,6 +424,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 2',
     instruction: '',
     order: 13,
+    sectionStart: {
+      title: 'Степенуване на прилагателните',
+      subtitle: 'Сравнителна и превъзходна степен, сравнение с „от"',
+      theme: 'grammar',
+    },
     tableTitle: 'Степенуване на прилагателните',
     columns: ['Положителна', 'Сравнителна', 'Превъзходна'],
     rows: [
@@ -623,6 +638,11 @@ export const exercises: Exercise[] = [
     title: 'ПОД НАЕМ',
     instruction: '',
     order: 18,
+    sectionStart: {
+      title: 'Апартаменти под наем',
+      subtitle: 'Обяви за търсене и даване под наем на апартаменти',
+      theme: 'reading',
+    },
     examples: [
       {
         imageUrl: '',
@@ -754,6 +774,11 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 23,
+    sectionStart: {
+      title: 'Диалог и текст за дома',
+      subtitle: 'Диалог за нов апартамент и текст за къщата на Ани',
+      theme: 'dialogue',
+    },
     imageUrl: '/assets/lesson-09/22-upr-18-dialog-mariya-valya/01-hol.png',
     sections: [
       {

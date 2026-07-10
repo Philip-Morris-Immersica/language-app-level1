@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise, ReadingTextExercise, TrueFalseExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise, ReadingTextExercise, TrueFalseExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -10,6 +10,11 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Кликнете върху знамето, за да видите думата и чуете произношението.',
     order: 1,
+    sectionStart: {
+      title: 'Поздрави и националности',
+      subtitle: 'Знамена, поздрави и нови думи за запознанство',
+      theme: 'vocabulary',
+    },
     points: 9,
     displayType: 'flags',
     images: [
@@ -122,59 +127,6 @@ export const exercises: Exercise[] = [
     ]
   } as SyllableBlocksExercise,
 
-  // ORDER 4: Exercise 5 - Write country name (Page 10, bottom) - Simple text input
-  {
-    id: 'l01-ex-05',
-    type: 'fill_in_blank',
-    instruction: 'Напишете името на Вашата страна.',
-    order: 4,
-    points: 1,
-    freeText: true,
-    sentences: [
-      { text: '_', blanks: [0], correctAnswers: [
-        'Афганистан', 'Албания', 'Алжир', 'Андора', 'Ангола', 'Антигуа и Барбуда',
-        'Аржентина', 'Армения', 'Австралия', 'Австрия', 'Азербайджан',
-        'Бахамите', 'Бахамски острови', 'Бахрейн', 'Бангладеш', 'Барбадос',
-        'Беларус', 'Белгия', 'Белиз', 'Бенин', 'Бутан', 'Боливия',
-        'Босна и Херцеговина', 'Ботсвана', 'Бразилия', 'Бруней', 'България',
-        'Буркина Фасо', 'Бурунди', 'Кабо Верде', 'Камбоджа', 'Камерун', 'Канада',
-        'Централноафриканска република', 'Чад', 'Чили', 'Китай', 'Колумбия',
-        'Коморски острови', 'Коморите', 'Конго', 'Коста Рика', 'Котдивоар',
-        'Кот д\'Ивоар', 'Хърватия', 'Куба', 'Кипър', 'Чехия', 'Чешка република',
-        'Дания', 'Джибути', 'Доминика', 'Доминиканска република', 'Еквадор',
-        'Египет', 'Ел Салвадор', 'Екваториална Гвинея', 'Еритрея', 'Естония',
-        'Есватини', 'Свазиленд', 'Етиопия', 'Фиджи', 'Финландия', 'Франция',
-        'Габон', 'Гамбия', 'Грузия', 'Германия', 'Гана', 'Гърция', 'Гренада',
-        'Гватемала', 'Гвинея', 'Гвинея-Бисау', 'Гайана', 'Хаити', 'Хондурас',
-        'Унгария', 'Исландия', 'Индия', 'Индонезия', 'Иран', 'Ирак', 'Ирландия',
-        'Израел', 'Италия', 'Ямайка', 'Япония', 'Йордания', 'Казахстан', 'Кения',
-        'Кирибати', 'Косово', 'Кувейт', 'Киргизстан', 'Лаос', 'Латвия', 'Ливан',
-        'Лесото', 'Либерия', 'Либия', 'Лихтенщайн', 'Литва', 'Люксембург',
-        'Мадагаскар', 'Малави', 'Малайзия', 'Малдивите', 'Малдивски острови',
-        'Мали', 'Малта', 'Маршалови острови', 'Мавритания', 'Мавриций', 'Мексико',
-        'Микронезия', 'Молдова', 'Монако', 'Монголия', 'Черна гора', 'Черногория',
-        'Мароко', 'Мозамбик', 'Мианмар', 'Бирма', 'Намибия', 'Науру', 'Непал',
-        'Нидерландия', 'Холандия', 'Нова Зеландия', 'Никарагуа', 'Нигер',
-        'Нигерия', 'Северна Македония', 'Македония', 'Норвегия', 'Оман',
-        'Пакистан', 'Палау', 'Палестина', 'Панама', 'Папуа Нова Гвинея',
-        'Парагвай', 'Перу', 'Филипини', 'Полша', 'Португалия', 'Катар',
-        'Румъния', 'Русия', 'Руанда', 'Сейнт Китс и Невис', 'Сейнт Лусия',
-        'Света Лусия', 'Сейнт Винсент и Гренадини', 'Самоа', 'Сан Марино',
-        'Сао Томе и Принсипи', 'Саудитска Арабия', 'Сенегал', 'Сърбия',
-        'Сейшели', 'Сейшелски острови', 'Сиера Леоне', 'Сингапур', 'Словакия',
-        'Словения', 'Соломонови острови', 'Сомалия', 'Южна Африка', 'Южна Корея',
-        'Корея', 'Южен Судан', 'Испания', 'Шри Ланка', 'Судан', 'Суринам',
-        'Швеция', 'Швейцария', 'Сирия', 'Таджикистан', 'Танзания', 'Тайланд',
-        'Тимор-Лещи', 'Източен Тимор', 'Того', 'Тонга', 'Тринидад и Тобаго',
-        'Тунис', 'Турция', 'Туркменистан', 'Тувалу', 'Уганда', 'Украйна',
-        'Обединени арабски емирства', 'ОАЕ', 'Великобритания', 'Обединено кралство',
-        'САЩ', 'Съединени американски щати', 'Съединените щати', 'Америка',
-        'Уругвай', 'Узбекистан', 'Вануату', 'Ватикан', 'Венецуела', 'Виетнам',
-        'Йемен', 'Замбия', 'Зимбабве', 'Тайван', 'Северна Корея',
-      ] },
-    ],
-  } as FillInBlankExercise,
-
   // ORDER 8: ГРАМАТИКА 1 - Personal pronouns (Page 11, top) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-01',
@@ -183,6 +135,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 1',
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
+    sectionStart: {
+      title: 'Местоимения и глаголът „съм"',
+      subtitle: 'Лични местоимения и сегашно време на глагола съм',
+      theme: 'grammar',
+    },
     pronouns: [
       { pronoun: 'аз', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/1.az.jpg' },
       { pronoun: 'ти', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/2.ti.jpg' },
@@ -304,6 +261,11 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 1',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 13,
+    sectionStart: {
+      title: 'Запознанства и диалози',
+      subtitle: 'Диалози за запознанство, отрицание и въпросителни думи',
+      theme: 'dialogue',
+    },
     sections: [
       {
         id: 'а.',
@@ -774,6 +736,11 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 22,
+    sectionStart: {
+      title: 'Текстове за четене',
+      subtitle: 'Кратки текстове за бежанци и техните истории',
+      theme: 'reading',
+    },
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
       'Ние сме Лейла и Исам. Ние сме бежанци от Ливан и сега сме в България.',

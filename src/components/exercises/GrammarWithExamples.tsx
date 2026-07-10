@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
-import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { AudioIcon } from '@/components/AudioIcon';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   const [error, setError] = useState(false);
@@ -97,7 +97,6 @@ function BoldLine({ text }: { text: string }) {
 export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const { lang } = useLanguage();
-  const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
@@ -143,8 +142,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             <div
               key={index}
               onClick={() => handleClick(index, example)}
-              className="rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
+              className="relative rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
             >
+              {!disableTts && (
+                <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
+              )}
               {example.text && (
                 <p className="text-xs font-bold uppercase tracking-widest text-[#0072BC] mb-4 pb-2 border-b border-[#CDE3F1]">
                   {example.text}
@@ -158,7 +160,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     </p>
                     <InlineTranslation
                       text={line.replace(/\*\*(.+?)\*\*/g, '$1')}
-                      visible={revealed.has(index)}
+                      visible={lang !== 'bg' || revealed.has(index)}
                     />
                   </div>
                 ))}
@@ -187,14 +189,17 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
           {hasText && (
             <div
               onClick={() => handleClick(0, example)}
-              className="mt-4 text-center cursor-pointer space-y-1"
+              className="mt-4 flex items-start justify-center gap-2 cursor-pointer"
             >
-              {example.lines
-                ? example.lines.filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
-                  ))
-                : <p className="text-base font-semibold text-gray-700">{example.text}</p>
-              }
+              {!disableTts && <AudioIcon className="w-4 h-4 mt-1" />}
+              <div className="text-center space-y-1">
+                {example.lines
+                  ? example.lines.filter(Boolean).map((line, i) => (
+                      <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
+                    ))
+                  : <p className="text-base font-semibold text-gray-700">{example.text}</p>
+                }
+              </div>
             </div>
           )}
           <p className="mt-3 text-center text-xs text-gray-400 select-none">
@@ -208,11 +213,6 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
       {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-      {lang !== 'bg' && disableTts && (
-        <p className="text-xs text-gray-400 text-center mb-4 italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
 
       {/* Examples grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -223,7 +223,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {!disableTts && (
-              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
             )}
             {/* Image */}
             {example.imageUrl && (
@@ -280,7 +280,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                           <BoldLine text={line} />
                         </p>
                         {translationSource.trim() && (
-                          <InlineTranslation text={translationSource} visible={revealed.has(index)} />
+                          <InlineTranslation text={translationSource} visible={lang !== 'bg' || revealed.has(index)} />
                         )}
                       </div>
                     );
@@ -294,20 +294,20 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                       <HighlightPrepositions text={example.text} />
                     </p>
                   </div>
-                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
+                  <InlineTranslation text={example.text} visible={lang !== 'bg' || revealed.has(index)} translations={example.translations} />
                   <div className="flex items-center justify-center gap-2 mt-2">
                     <ThumbsDown className="w-5 h-5 md:w-6 md:h-6 fill-red-500 text-red-500 flex-shrink-0" />
                     <p className="text-sm md:text-base text-gray-600 italic">
                       <HighlightPrepositions text={example.subtext} />
                     </p>
                   </div>
-                  <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
+                  <InlineTranslation text={example.subtext} visible={lang !== 'bg' || revealed.has(index)} />
                   {example.label && (
                     <div className="mt-2 inline-block">
                       <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
                         {example.label}
                       </p>
-                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                      <InlineTranslation text={example.label} visible={lang !== 'bg' || revealed.has(index)} />
                     </div>
                   )}
                 </>
@@ -316,13 +316,13 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                   <p className="text-base md:text-lg font-bold text-gray-800">
                     <HighlightPrepositions text={example.text} />
                   </p>
-                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
+                  <InlineTranslation text={example.text} visible={lang !== 'bg' || revealed.has(index)} translations={example.translations} />
                   {example.subtext && (
                     <>
                       <p className="text-sm md:text-base text-gray-600 italic">
                         <HighlightPrepositions text={example.subtext} />
                       </p>
-                      <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
+                      <InlineTranslation text={example.subtext} visible={lang !== 'bg' || revealed.has(index)} />
                     </>
                   )}
                   {example.label && (
@@ -330,7 +330,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                       <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
                         {example.label}
                       </p>
-                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
+                      <InlineTranslation text={example.label} visible={lang !== 'bg' || revealed.has(index)} />
                     </div>
                   )}
                 </>

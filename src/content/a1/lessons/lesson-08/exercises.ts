@@ -27,13 +27,18 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 1',
     instruction: '',
     order: 1,
+    sectionStart: {
+      title: 'Цветове',
+      subtitle: 'Нови думи за цветове, съчетаване с храни и знамена на различни държави',
+      theme: 'vocabulary',
+    },
     cards: [
       { id: 'rozov',    imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/01-rozov.svg',    label: 'розов',    sublabels: ['розова', 'розово', 'розови'] },
       { id: 'cherven',  imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/02-cherven.svg',  label: 'червен',   sublabels: ['червена', 'червено', 'червени'] },
       { id: 'zhalt',    imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/03-zhalt.svg',    label: 'жълт',     sublabels: ['жълта', 'жълто', 'жълти'] },
       { id: 'oranzhev', imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/04-oranzhev.svg', label: 'оранжев',  sublabels: ['оранжева', 'оранжево', 'оранжеви'] },
       { id: 'lilav',    imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/05-lilav.svg',    label: 'лилав',    sublabels: ['лилава', 'лилаво', 'лилави'], ttsLabel: 'лилав, лилава, лилаво, лилави' },
-      { id: 'sin',      imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/06-sin.svg',      label: 'син',      sublabels: ['синя', 'синьо', 'сини'] },
+      { id: 'sin',      imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/06-sin.svg',      label: 'син',      sublabels: ['синя', 'синьо', 'сини'], translations: { en: 'blue' } },
       { id: 'zelen',    imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/07-zelen.svg',    label: 'зелен',    sublabels: ['зелена', 'зелено', 'зелени'] },
       { id: 'kafyav',   imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/08-kafyav.svg',   label: 'кафяв',    sublabels: ['кафява', 'кафяво', 'кафяви'] },
       { id: 'cheren',   imageUrl: '/assets/lesson-08/03-novi-dumi-1-tsvetove/09-cheren.svg',   label: 'черен',    sublabels: ['черна', 'черно', 'черни'] },
@@ -184,6 +189,11 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 2',
     instruction: '',
     order: 5,
+    sectionStart: {
+      title: 'Дрехи и сезони',
+      subtitle: 'Нови думи за дрехи и аксесоари, подходящо облекло за всеки сезон',
+      theme: 'vocabulary',
+    },
     cards: [
       { id: 'kostyum',          imageUrl: '/assets/lesson-08/06-novi-dumi-2-drehi-ilustratsii/15-kostyum.jpg',          label: 'костюм' },
       { id: 'pantalon',         imageUrl: '/assets/lesson-08/06-novi-dumi-2-drehi-ilustratsii/14-pantalon.jpg',         label: 'панталон' },
@@ -387,6 +397,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА',
     instruction: 'Глагол **нося** — сегашно време.',
     order: 12.5,
+    sectionStart: {
+      title: 'В магазина за дрехи',
+      subtitle: 'Глаголът нося, показателните местоимения този/тази/това/тези, членуване на прилагателните и диалози при пазаруване',
+      theme: 'grammar',
+    },
     tableTitle: 'НОСЯ',
     columns: ['Форма'],
     rows: [
@@ -586,7 +601,7 @@ export const exercises: Exercise[] = [
           { text: '— Извинете, може ли тази тениска?', voiceGender: 'female' as const },
           { text: '— Бялата?', voiceGender: 'male' as const },
           { text: '— Не, червената.', voiceGender: 'female' as const },
-          { text: '— Заповядайте!', voiceGender: 'male' as const },
+          { text: '— Заповядайте!', voiceGender: 'male' as const, translations: { en: '— There you go!' } },
           { text: '— Благодаря!', voiceGender: 'female' as const },
         ],
       },
@@ -714,6 +729,11 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 3',
     instruction: '',
     order: 22,
+    sectionStart: {
+      title: 'В чантата',
+      subtitle: 'Нови думи за документи и лични вещи, допълнителни упражнения за цветове',
+      theme: 'vocabulary',
+    },
     textOnly: true,
     headerImageUrl: '/assets/lesson-08/27-novi-dumi-3-chanta-dokumenti/s-nomera.jpg',
     cards: [
@@ -886,6 +906,11 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 25,
+    sectionStart: {
+      title: 'Текстове за четене',
+      subtitle: 'Текст за Милена, детска песен и упражнения за преговор',
+      theme: 'reading',
+    },
     audioUrl: '', // TODO: TTS Фаза 2
     images: [{ imageUrl: '/assets/lesson-08/32-tekst-upr-25-milena-ofis/01-milena-ofis.jpg', label: '' }],
     paragraphs: [

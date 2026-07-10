@@ -29,6 +29,11 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Изберете думите под картинките.',
     order: 1,
+    sectionStart: {
+      title: 'Храни, плодове и зеленчуци',
+      subtitle: 'Нови думи и упражнения за месо, плодове и зеленчуци',
+      theme: 'vocabulary',
+    },
     points: 4,
     displayType: 'default',
     images: [
@@ -348,6 +353,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 1',
     instruction: 'Запознайте се с въпросителните думи какъв, каква, какво, какви.',
     order: 13,
+    sectionStart: {
+      title: 'Числа и въпросителни думи',
+      subtitle: 'Какъв/каква/какво/какви, числа 100–1000, два/две и глаголът купувам',
+      theme: 'grammar',
+    },
     examples: [
       { imageUrl: '', text: 'Какъв чай обичате?', subtext: 'Черен чай.', label: 'Какъв — мъжки род' },
       { imageUrl: '', text: 'Каква пица обичате?', subtext: 'Пица с домати и гъби.', label: 'Каква — женски род' },
@@ -641,6 +651,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 4',
     instruction: 'Запознайте се с наречията **евтино** и **скъпо**.',
     order: 26,
+    sectionStart: {
+      title: 'Евтино или скъпо',
+      subtitle: 'Наречия евтино и скъпо, и диалози при пазаруване',
+      theme: 'dialogue',
+    },
     examples: [
       { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/01-kafe-evtino.jpg', text: 'Едно евро. Евтино е.', subtext: 'Не е скъпо.' },
       { imageUrl: '/assets/lesson-04/09-gramatika-4-evtino-skupo/02-kafe-skupo.jpg',  text: 'Две евро и петдесет цента. Скъпо е.', subtext: 'Не е евтино.' },
@@ -738,6 +753,11 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 24',
     instruction: 'Кое число е изписано с букви? Изберете правилния отговор.',
     order: 29,
+    sectionStart: {
+      title: 'Числа, купувам и рецепти',
+      subtitle: 'Числа с думи, глаголът купувам и съставки на позната храна',
+      theme: 'vocabulary',
+    },
     points: 6,
     questions: [
       { question: 'триста и двадесет', options: ['320', '230', '302', '220'], correctIndex: 0 },
@@ -844,6 +864,11 @@ export const exercises: Exercise[] = [
     audioUrl: '/assets/lesson-04/audio/tts/texts/l04-ex-30-full.mp3',
     imageFlashcards: true,
     order: 34,
+    sectionStart: {
+      title: 'Текстове за храна и пазар',
+      subtitle: 'Четива за хранителни навици, вярно-грешно и въпроси по съдържанието',
+      theme: 'reading',
+    },
     images: [
       { imageUrl: '/assets/lesson-04/14-tekstove-snimki/07-yabalki.jpg', label: 'ябълки',   ttsWordId: 'yabalki' },
       { imageUrl: '/assets/lesson-04/14-tekstove-snimki/08-dini.jpg',    label: 'дини',     ttsWordId: 'dini' },

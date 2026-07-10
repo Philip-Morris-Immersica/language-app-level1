@@ -26,6 +26,11 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-01',
+    sectionStart: {
+      title: 'Видове градски транспорт',
+      subtitle: 'Сгради, транспорт и диалози в града',
+      theme: 'vocabulary',
+    },
     type: 'image_labeling',
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилното название за всяка сграда.',
@@ -342,6 +347,11 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-03',
+    sectionStart: {
+      title: 'Пътуване с влак',
+      subtitle: 'Железопътна лексика, разписания и гарата',
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3 — Железопътен транспорт',
     instruction: '',
@@ -620,6 +630,11 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-gramatika-02a',
+    sectionStart: {
+      title: 'Въпросителни думи за транспорт',
+      subtitle: 'Въпросителни думи и въпроси за пътуване',
+      theme: 'grammar',
+    },
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с въпросителните думи за транспорт.',
@@ -791,6 +806,11 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-21',
+    sectionStart: {
+      title: 'Текстове за пътуване',
+      subtitle: 'Текстове за четене с въпроси',
+      theme: 'reading',
+    },
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
@@ -941,6 +961,11 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-04',
+    sectionStart: {
+      title: 'Метро и разходка в София',
+      subtitle: 'Метро, такси, самолет и разходка в столицата',
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     instruction: '',

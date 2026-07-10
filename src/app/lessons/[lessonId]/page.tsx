@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { LessonNav } from '@/components/layout/LessonNav';
@@ -8,6 +9,7 @@ import { T } from '@/components/T';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
 import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
 import { ReviewSectionDivider } from '@/components/ReviewSectionDivider';
+import { LessonParts } from '@/components/LessonParts';
 import { VocabularyDrawer } from '@/components/VocabularyDrawer';
 import { CultureSection } from '@/components/CultureSection';
 import { GrammarReferenceSection } from '@/components/GrammarReferenceSection';
@@ -91,14 +93,69 @@ export default async function LessonPage({ params }: LessonPageProps) {
               </h2>
               {(() => {
                 let displayNumber = 0;
-                return lessonData.exercises.map((exercise: any) => {
+                const renderNode = (exercise: any) => {
                   // Continuation parts of a split exercise (title === '' or hideHeader: true)
                   // render no header, so they must NOT consume a visible number — otherwise
                   // the sequence skips digits (… 9 → 11 → 13 …).
                   const showsHeader = exercise.title !== '' && exercise.hideHeader !== true;
                   if (showsHeader) displayNumber += 1;
-                  return <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={displayNumber} />;
-                });
+                  return (
+                    <ExerciseRenderer key={exercise.id} exercise={exercise} exerciseNumber={displayNumber} />
+                  );
+                };
+
+                const exercises = lessonData.exercises as any[];
+                const hasSections = exercises.some((e) => e.sectionStart);
+
+                // Lessons without section markers render flat, exactly as before.
+                if (!hasSections) {
+                  return exercises.map((exercise) => renderNode(exercise));
+                }
+
+                // Group exercises into collapsible "parts", splitting at each
+                // sectionStart. Anything before the first marker is "leading" and
+                // renders plainly above the parts.
+                const leading: ReactNode[] = [];
+                const parts: {
+                  title: string;
+                  subtitle?: string;
+                  theme?: string;
+                  exerciseIds: string[];
+                  nodes: ReactNode[];
+                }[] = [];
+
+                for (const exercise of exercises) {
+                  if (exercise.sectionStart) {
+                    parts.push({
+                      title: exercise.sectionStart.title,
+                      subtitle: exercise.sectionStart.subtitle,
+                      theme: exercise.sectionStart.theme,
+                      exerciseIds: [],
+                      nodes: [],
+                    });
+                  }
+                  const node = renderNode(exercise);
+                  if (parts.length === 0) {
+                    leading.push(node);
+                  } else {
+                    const current = parts[parts.length - 1];
+                    current.nodes.push(node);
+                    current.exerciseIds.push(exercise.id);
+                  }
+                }
+
+                return (
+                  <LessonParts
+                    leading={leading.length > 0 ? <div className="space-y-8">{leading}</div> : null}
+                    parts={parts.map((p) => ({
+                      title: p.title,
+                      subtitle: p.subtitle,
+                      theme: p.theme,
+                      exerciseIds: p.exerciseIds,
+                      children: <div className="space-y-8">{p.nodes}</div>,
+                    }))}
+                  />
+                );
               })()}
             </div>
           )}

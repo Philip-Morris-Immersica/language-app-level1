@@ -57,6 +57,8 @@ export const listeningExercises: Exercise[] = [
   {
     id: 't05-sl-vprosy',
     type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 2',
+    instruction: 'Изберете правилния отговор на база на изслушания текст.',
     order: 2,
     points: 5,
     layout: 'single',

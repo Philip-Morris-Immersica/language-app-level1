@@ -77,6 +77,12 @@ export interface BaseExercise {
   hideHeader?: boolean;
   /** When true, renders the exercise subtitle with larger, bolder styling for visual prominence. */
   prominentSubtitle?: boolean;
+  /** When set, renders a prominent section divider BEFORE this exercise. */
+  sectionStart?: {
+    title: string;        // plain Bulgarian, NO markdown
+    subtitle?: string;    // optional short Bulgarian description, NO markdown
+    theme?: 'vocabulary' | 'grammar' | 'dialogue' | 'reading' | 'review';
+  };
 }
 
 // Specific exercise interfaces

@@ -73,6 +73,7 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l00-gramatika-01-row-12', // М — Мохамед
   'l00-gramatika-01-row-19', // У — Уляна
   'l00-gramatika-01-row-22', // Ц — Цветелина
+  'l00-gramatika-01-row-24', // Ш — Шадия
   'l03-gramatika-04-row-0', // сандвич, сок — Flash mispronounces loanwords
   'l04-gramatika-02-row-9', // хиляда
   'l05-gramatika-07-row-0', // хиляда (l05)
@@ -137,6 +138,15 @@ const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // Азбука — буквите да се четат чисто, без прикачено „ъ" на съгласните (клиентска бележка):
+  // четем малката буква в контекста на примерното име, без изолираната главна буква.
+  'l00-gramatika-01-row-0':  'а, Ана',       // А
+  'l00-gramatika-01-row-4':  'д, Дилма',     // Д
+  'l00-gramatika-01-row-12': 'м, Мохамед',   // М
+  'l00-gramatika-01-row-19': 'у, Уляна',     // У
+  'l00-gramatika-01-row-22': 'ц, Цветелина', // Ц
+  'l00-gramatika-01-row-24': 'ш, Шадия',     // Ш
 
   // a2-lesson-02 — ГРАМАТИКА 3: дателни местоимения — „їй" (U+045D) → „й"
   'a2-l02-gramatika-03-row-3': 'тя. й. Пиша й.',
@@ -207,6 +217,7 @@ const VOCAB_CUSTOM_PROMPTS: Record<string, string> = {
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene',     // lesson 3 — Пушенето забранено!
   'bob',         // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  'pulover',     // lesson 8 — пуловер (стар клип беше счупен — четеше промпта; Pro + word prompt)
   // a2-lesson-01 verbs — warm tone causes consonant distortion or trailing sounds on single verbs
   'tarsya',      // търся — needs custom stress prompt (see ILLUSTRATED_CARD_CUSTOM_PROMPTS)
   'vklyuchvam',  // включвам — лю cluster mispronounced as ру

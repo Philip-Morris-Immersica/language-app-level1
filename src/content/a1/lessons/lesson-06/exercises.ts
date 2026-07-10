@@ -1,7 +1,6 @@
 import type {
   Exercise,
   DragToColumnsExercise,
-  FillInBlankExercise,
   IllustratedCardsExercise,
   WordSearchExercise,
   SyllableBlocksExercise,
@@ -36,6 +35,11 @@ export const exercises: Exercise[] = [
     imageUrl: '/assets/lesson-06/01-upr-01-imena/01-oblak-imena.jpg',
     order: 1,
     points: 39,
+    sectionStart: {
+      title: 'Семейството',
+      subtitle: 'Имена и нови думи за членовете на семейството',
+      theme: 'vocabulary',
+    },
     items: [
       'Жана', 'Красимир', 'Вероника', 'Борис', 'Джоана', 'Анастасия',
       'Ивана', 'Мария', 'Иван', 'Георги', 'Милена', 'Мохамед', 'Ахмед',
@@ -209,6 +213,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 1',
     instruction: 'Запознайте се с глаголите **имам** и **нямам**.',
     order: 7,
+    sectionStart: {
+      title: 'Имам и нямам',
+      subtitle: 'Притежателни местоимения, числителни за хора и възраст',
+      theme: 'grammar',
+    },
     tableTitle: 'ИМАМ / НЯМАМ',
     columns: ['(+)', '(–)'],
     rows: [
@@ -658,6 +667,11 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 2',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 19,
+    sectionStart: {
+      title: 'Родословното дърво',
+      subtitle: 'Диалози, нови думи и упражнения за роднински връзки',
+      theme: 'dialogue',
+    },
     sections: [
       {
         id: 'а.',
@@ -1371,6 +1385,11 @@ export const exercises: Exercise[] = [
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
     instruction: 'Изслушайте текстовете и след това ги прочетете сами.',
     order: 37,
+    sectionStart: {
+      title: 'Разкази от първо лице',
+      subtitle: 'Текстове и въпроси за бежанци и техните семейства в България',
+      theme: 'reading',
+    },
     images: [
       { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/01-semeystvo-tekst-mohamed.jpg', label: 'Мохамед' },
       { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/02-bana-i-detsa.jpg', label: 'Бана' },
@@ -1495,28 +1514,8 @@ export const exercises: Exercise[] = [
     ],
   } as ReadingTextExercise,
 
-  // ORDER 42: Упр. 38 – Опишете се по модела (Page 63)
-  // Free-writing exercise — student describes themselves following the Boris text model.
-  // Uses freeText fill_in_blank so the platform saves the input without grading it.
-  {
-    id: 'l06-ex-38',
-    type: 'fill_in_blank',
-    title: 'УПРАЖНЕНИЕ 38',
-    instruction: 'Опишете се по модела. Напишете текст за себе си (3–5 изречения).',
-    order: 42,
-    points: 0,
-    freeText: true,
-    grammarHighlight: {
-      text: '📝 Модел: „Казвам се Борис. Аз съм от София, женен съм и имам две малки деца – едно момче и едно момиче. На 30 години съм. Жена ми е учителка по български език в голямо училище. Работя в „Каритас". Обичам работата с бежанци."',
-    },
-    sentences: [
-      {
-        text: 'Казвам се ___. Аз съм от ___. На ___ години съм. ___.',
-        blanks: [0, 1, 2, 3],
-        correctAnswers: [],
-      },
-    ],
-  } as FillInBlankExercise,
+  // SKIP Упр. 38 — Опишете се по модела (free-writing removed; l06-ex-37 already
+  // shows the Boris model text as a proper reading exercise)
 
   // ──────────────────────────────────────────────────────────
   // СТРАНИЦА 64 — ОТ ПЪРВО ЛИЦЕ

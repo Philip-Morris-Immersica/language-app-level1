@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Volume2 } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { renderBoldText } from '@/lib/renderBoldText';
+import { AudioIcon } from '@/components/AudioIcon';
 
 interface GrammarTableProps {
   tableTitle?: string;
@@ -80,7 +80,7 @@ export function GrammarTable({
   return (
     <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
       <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
-        <Volume2 className="w-3 h-3" />
+        <AudioIcon className="w-3 h-3" />
         {t('exercise.tapRowToHear')}
       </p>
 
@@ -131,7 +131,7 @@ export function GrammarTable({
                     <td className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}>
                       <div className="flex items-center justify-between gap-1">
                         <span>{row.pronoun}</span>
-                        <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
+                        <AudioIcon className="w-3.5 h-3.5" />
                       </div>
                     </td>
                     {row.cells.map((cell, cIdx) => (
@@ -192,7 +192,7 @@ export function GrammarTable({
             >
               <div className="flex items-center justify-center gap-2">
                 <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(note)}</p>
-                <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
+                <AudioIcon className="w-3.5 h-3.5" />
               </div>
               <InlineTranslation text={note} visible={true} />
             </div>

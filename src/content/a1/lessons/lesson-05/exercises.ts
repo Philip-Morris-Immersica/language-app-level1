@@ -27,6 +27,11 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Знаете ли тези места? Изберете в кои градове се намират.',
     order: 1,
+    sectionStart: {
+      title: 'Места в града и селото',
+      subtitle: 'Нови думи за сгради и места, снимки и упражнения за разпознаване',
+      theme: 'vocabulary',
+    },
     points: 5,
     displayType: 'default',
     images: [
@@ -182,6 +187,11 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 1',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 9,
+    sectionStart: {
+      title: 'Адрес и диалози',
+      subtitle: 'Диалози за адрес и съкратени форми за улица, квартал и блок',
+      theme: 'dialogue',
+    },
     sections: [
       {
         id: 'а', // NOTE: subpoints use Cyrillic letters а,б,в,г as required
@@ -271,13 +281,34 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте краткия текст и попълнете визитката на Мария Петрова.',
     order: 12,
     layout: 'single',
-    points: 3,
+    points: 6,
     listeningText: 'Мария живее в София, в квартал „Младост“ 2, блок 243, вход А, етаж 2, апартамент 5.',
     sentences: [
       { text: 'Мария Петрова', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Град: _______', blanks: [0], correctAnswers: ['София'] },
-      { text: 'кв./жк: _______', blanks: [0], correctAnswers: ['Младост 2'], acceptableAnswers: [['Младост 2', '„Младост“ 2']] },
-      { text: 'бл. _______, вх. _______, ет. _______, ап. _______', blanks: [0, 1, 2, 3], correctAnswers: ['243', 'А', '2', '5'] },
+      {
+        text: 'Град: _______',
+        blanks: [0],
+        correctAnswers: ['София'],
+        options: ['София', 'Пловдив', 'Варна', 'Русе'],
+      },
+      {
+        text: 'кв./жк: _______',
+        blanks: [0],
+        correctAnswers: ['Младост 2'],
+        acceptableAnswers: [['Младост 2', '„Младост“ 2']],
+        options: ['Младост 2', 'Люлин 3', 'Лозенец', 'Дружба 1'],
+      },
+      {
+        text: 'бл. _______, вх. _______, ет. _______, ап. _______',
+        blanks: [0, 1, 2, 3],
+        correctAnswers: ['243', 'А', '2', '5'],
+        options: [
+          ['243', '108', '56'],
+          ['А', 'Б', 'В'],
+          ['2', '3', '4'],
+          ['5', '6', '7'],
+        ],
+      },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -331,6 +362,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 1',
     instruction: 'Глагол **живея** в сегашно време — прегледайте таблицата и примера.',
     order: 14,
+    sectionStart: {
+      title: 'Глагол живея и членуване',
+      subtitle: 'Спрежение на глагола живея и определителен член в единствено и множествено число',
+      theme: 'grammar',
+    },
     tableTitle: 'Живея (живе–)',
     columns: ['Форма'],
     rows: [
@@ -508,6 +544,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 4',
     instruction: 'Запознайте се с предлозите и примерите.',
     order: 23,
+    sectionStart: {
+      title: 'Предлози, посоки и числа',
+      subtitle: 'Предлози за място, посоки, бройни форми за хора и големи числа',
+      theme: 'grammar',
+    },
     examples: [
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/01-v.jpg',         text: 'в — в кутията, в центъра',    subtext: '', ttsText: 'в. в кутията, в центъра.' },
       { imageUrl: '/assets/lesson-05/25-gramatika-4-predlozi-myasto/02-na.jpg',         text: 'на — на масата',              subtext: '', ttsText: 'на. на масата.' },
@@ -824,6 +865,11 @@ export const exercises: Exercise[] = [
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
     instruction: 'Попълнете празните места в диалозите.',
     order: 36,
+    sectionStart: {
+      title: 'Текстове за градове и села',
+      subtitle: 'Допълнителни упражнения и четива за Варна, Пловдив, села и лични истории',
+      theme: 'reading',
+    },
     points: 5,
     layout: 'qa-split',
     sentences: [

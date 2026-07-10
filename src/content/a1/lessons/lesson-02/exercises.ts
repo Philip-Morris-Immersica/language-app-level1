@@ -30,6 +30,11 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Изберете думите под картинките.',
     order: 1,
+    sectionStart: {
+      title: 'Храни и напитки',
+      subtitle: 'Нови думи за храни и напитки и упражнения с въпроса „Какво е това?"',
+      theme: 'vocabulary',
+    },
     points: 4,
     images: [
       { id: 'pizza',     imageUrl: '/assets/lesson-02/exercise-01-write-words/02-pizza.jpg',     correctLabel: 'пица' },
@@ -50,7 +55,7 @@ export const exercises: Exercise[] = [
     cards: [
       { id: 'voda',          imageUrl: '/assets/lesson-02/novi-dumi-1-food/01-voda.jpg',          label: 'вода' },
       { id: 'chay',          imageUrl: '/assets/lesson-02/novi-dumi-1-food/02-chay.jpg',          label: 'чай' },
-      { id: 'kafe',          imageUrl: '/assets/lesson-02/novi-dumi-1-food/03-kafe.jpg',          label: 'кафе' },
+      { id: 'kafe',          imageUrl: '/assets/lesson-02/novi-dumi-1-food/03-kafe.jpg',          label: 'кафе', translations: { en: 'coffee' } },
       { id: 'kapuchino',     imageUrl: '/assets/lesson-02/novi-dumi-1-food/04-kapuchino.jpg',     label: 'капучино' },
       { id: 'sok',           imageUrl: '/assets/lesson-02/novi-dumi-1-food/05-sok.jpg',           label: 'сок' },
       { id: 'pryasno-mlyako', imageUrl: '/assets/lesson-02/novi-dumi-1-food/06-pryasno-mlyako.jpg', label: 'прясно мляко' },
@@ -158,6 +163,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с глагола **обичам**.',
     order: 7,
+    sectionStart: {
+      title: 'Глаголите „обичам" и „искам"',
+      subtitle: 'Изразяване на предпочитания, предлозите „с" и „без" и диалози',
+      theme: 'grammar',
+    },
     showLikeDislike: true,
     examples: [
       {
@@ -568,6 +578,11 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 5',
     instruction: 'Запознайте се с „има" и „няма". Натиснете за произношение.',
     order: 23,
+    sectionStart: {
+      title: 'Има, няма и род на съществителните',
+      subtitle: 'Глаголът „има/няма" и родовите форми един, една, едно',
+      theme: 'grammar',
+    },
     examples: [
       {
         imageUrl: '/assets/lesson-02/gramatika-5/masa-detail-01.jpg',
@@ -695,8 +710,13 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 7',
     instruction: '',
     order: 29,
+    sectionStart: {
+      title: 'Числителни 0–10',
+      subtitle: 'Бройни числителни и упражнения за броене',
+      theme: 'vocabulary',
+    },
     cards: [
-      { id: 'n1',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-01.jpg', label: 'едно' },
+      { id: 'n1',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-01.jpg', label: 'едно', translations: { en: 'one' } },
       { id: 'n2',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-02.jpg', label: 'две' },
       { id: 'n3',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-03.jpg', label: 'три' },
       { id: 'n4',  imageUrl: '/assets/lesson-02/gramatika-7/chislo-04.jpg', label: 'четири' },
@@ -766,6 +786,11 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 23',
     instruction: 'Коя дума НЕ принадлежи на групата? Маркирайте излишната дума.',
     order: 33,
+    sectionStart: {
+      title: 'Текстове за четене',
+      subtitle: 'Упражнения за затвърждаване, диалози и текстове за четене',
+      theme: 'reading',
+    },
     points: 4,
     questions: [
       {

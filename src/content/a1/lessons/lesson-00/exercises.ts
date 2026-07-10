@@ -232,7 +232,7 @@ export const exercises: Exercise[] = [
     cards: [
       { id: 'futbol', imageUrl: '', label: 'футбол' },
       { id: 'banan', imageUrl: '', label: 'банан' },
-      { id: 'kafe', imageUrl: '', label: 'кафе' },
+      { id: 'kafe', imageUrl: '', label: 'кафе', translations: { en: 'coffee' } },
       { id: 'taksi', imageUrl: '', label: 'такси' },
       { id: 'salata', imageUrl: '', label: 'салата' },
       { id: 'chay', imageUrl: '', label: 'чай' },

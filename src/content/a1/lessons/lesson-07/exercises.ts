@@ -37,6 +37,11 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилния поздрав под всяка картинка.',
     order: 1,
+    sectionStart: {
+      title: 'Поздрави, дни и месеци',
+      subtitle: 'Поздрави за деня, дните от седмицата и месеците в годината',
+      theme: 'vocabulary',
+    },
     points: 4,
     displayType: 'default',
     images: [
@@ -230,6 +235,11 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с редните числителни. Натиснете върху ред за произношение.',
     instructionKey: 'grammar.l07.g1.instruction',
     order: 9,
+    sectionStart: {
+      title: 'Редни числителни и дати',
+      subtitle: 'Редни числителни от първи до десети и диалози за дни и дати',
+      theme: 'grammar',
+    },
     tableTitle: 'Редни числителни',
     columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч.'],
     rows: [
@@ -386,6 +396,11 @@ export const exercises: Exercise[] = [
   // ORDER 13: НОВИ ДУМИ 4 — Какво е времето днес?
   {
     id: 'l07-novi-dumi-04',
+    sectionStart: {
+      title: 'Времето и сезоните',
+      subtitle: 'Нови думи за времето и четирите сезона',
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     subtitle: 'Какво е времето днес?',
@@ -731,6 +746,11 @@ export const exercises: Exercise[] = [
   // На екрана: като учебник (= и /). За TTS: `ttsText` с точки за паузи където е зададено.
   {
     id: 'l07-gramatika-03',
+    sectionStart: {
+      title: 'Часът и денонощието',
+      subtitle: 'Колко е часът и частите на денонощието',
+      theme: 'grammar',
+    },
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
     instruction: 'Запознайте се с часовника. Натиснете за произношение.',
@@ -1225,6 +1245,11 @@ export const exercises: Exercise[] = [
   // ORDER 32: НОВИ ДУМИ 6 — Посоки на света
   {
     id: 'l07-novi-dumi-06',
+    sectionStart: {
+      title: 'Посоки, пътувания и празници',
+      subtitle: 'Нови думи за посоки, пътуване и празници',
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 6',
     subtitle: 'Посоки на света',
@@ -1611,6 +1636,11 @@ export const exercises: Exercise[] = [
   // ORDER 42: Упр. 34 — Прочетете текста (Ибрахим)
   {
     id: 'l07-ex-34',
+    sectionStart: {
+      title: 'Текст за четене',
+      subtitle: 'Текстове за времето и всекидневието',
+      theme: 'reading',
+    },
     type: 'reading_text',
     title: 'ТЕКСТ',
     textTitle: 'Ибрахим',
