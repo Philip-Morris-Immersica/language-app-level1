@@ -25,5 +25,22 @@
 import type { SupportedLang } from './languages';
 
 export const B1_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
-  // (empty for now — populated as B1 lessons add pre-translated instructions)
+  'b1.exercise.dragToMatch': {
+    bg: 'Плъзнете дума от списъка върху полето, с което съвпада.',
+    ar: 'اسحب كلمة من القائمة إلى الحقل المطابق لها.',
+    fr: 'Faites glisser un mot de la liste vers le champ correspondant.',
+    en: 'Drag a word from the list onto its matching field.',
+    fa: 'یک کلمه را از فهرست به فیلد مطابق آن بکشید.',
+    uk: 'Перетягніть слово зі списку до відповідного поля.',
+    ru: 'Перетащите слово из списка в соответствующее поле.',
+  },
+  'b1.exercise.dropHere': {
+    bg: '— пусни тук —',
+    ar: '— أفلت هنا —',
+    fr: '— déposer ici —',
+    en: '— drop here —',
+    fa: '— اینجا رها کنید —',
+    uk: '— відпустіть тут —',
+    ru: '— отпустите здесь —',
+  },
 };

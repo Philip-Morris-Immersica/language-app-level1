@@ -1,14 +1,12 @@
 import type {
   Exercise,
-  IllustratedCardsExercise,
   ReadingTextExercise,
   TableFillExercise,
   WorkbookFillBlankExercise,
   MultipleChoiceExercise,
-  MatchPairsExercise,
   DialoguesExercise,
+  GrammarTableExercise,
 } from '@/content/types';
-
 // ⚠️ Следваме реда от учебника (B1, Урок 1 — „Животът в града и на село"), стр. 6–13.
 // Източник на снимки: images_organized/IMAGE-MAPPING.md (5 папки, 24 файла).
 // Кулурните бележки идват от текстовете на упр. 11, 21 и 24 — папката „cultural lesson" беше празна.
@@ -17,41 +15,42 @@ import type {
 export const exercises: Exercise[] = [
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 6 — Упр. 1 (животни) → дигитализиран като НОВИ ДУМИ 1
+  // СТР. 6 — Упр. 1 (животни) → дигитализиран като НОВИ ДУМИ, разделен визуално
+  // на 3 групи (домашни животни / домашни любимци / диви животни) — както в учебника.
   // Устното „Кои животни харесвате?" се пропуска (по клиент).
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-novi-dumi-01',
-    type: 'illustrated_cards',
-    title: 'НОВИ ДУМИ 1 — Животни',
+    type: 'b1-illustrated-cards-grouped',
+    title: 'НОВИ ДУМИ — Животни',
     instruction: 'Кликнете върху животното, за да видите думата и чуете произношението.',
     order: 1,
     cards: [
       // Домашни животни
-      { id: 'kon',      imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/01-kon.jpg',      label: 'кон' },
-      { id: 'magare',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/02-magare.jpg',   label: 'магаре' },
-      { id: 'krava',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/03-krava.jpg',    label: 'крава' },
-      { id: 'tele',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/04-tele.jpg',     label: 'теле' },
-      { id: 'kokoshka', imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/05-kokoshka.jpg', label: 'кокошка' },
-      { id: 'pile',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/06-pile.jpg',     label: 'пиле' },
-      { id: 'ovtsa',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/07-ovtsa.jpg',    label: 'овца', ttsLabel: 'овца' },
-      { id: 'agne',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/08-agne.jpg',     label: 'агне' },
+      { id: 'kon',      imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/01-kon.jpg',      label: 'кон',      groupLabel: 'Домашни животни' },
+      { id: 'magare',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/02-magare.jpg',   label: 'магаре',   groupLabel: 'Домашни животни' },
+      { id: 'krava',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/03-krava.jpg',    label: 'крава',    groupLabel: 'Домашни животни' },
+      { id: 'tele',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/04-tele.jpg',     label: 'теле',     groupLabel: 'Домашни животни' },
+      { id: 'kokoshka', imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/05-kokoshka.jpg', label: 'кокошка',  groupLabel: 'Домашни животни' },
+      { id: 'pile',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/06-pile.jpg',     label: 'пиле',     groupLabel: 'Домашни животни' },
+      { id: 'ovtsa',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/07-ovtsa.jpg',    label: 'овца', ttsLabel: 'овца', groupLabel: 'Домашни животни' },
+      { id: 'agne',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/08-agne.jpg',     label: 'агне',     groupLabel: 'Домашни животни' },
       // Домашни любимци
-      { id: 'kuche',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/09-kuche.jpg',    label: 'куче' },
-      { id: 'kotka',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/10-kotka.jpg',    label: 'котка' },
-      { id: 'ptitsa',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/11-ptitsa.jpg',   label: 'птица' },
-      { id: 'ribka',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/12-ribka.jpg',    label: 'рибка' },
+      { id: 'kuche',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/09-kuche.jpg',    label: 'куче',     groupLabel: 'Домашни любимци' },
+      { id: 'kotka',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/10-kotka.jpg',    label: 'котка',    groupLabel: 'Домашни любимци' },
+      { id: 'ptitsa',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/11-ptitsa.jpg',   label: 'птица',    groupLabel: 'Домашни любимци' },
+      { id: 'ribka',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/12-ribka.jpg',    label: 'рибка',    groupLabel: 'Домашни любимци' },
       // Диви животни
-      { id: 'vylk',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/13-vylk.jpg',     label: 'вълк' },
-      { id: 'mechka',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/14-mechka.jpg',   label: 'мечка' },
-      { id: 'lisitsa',  imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/15-lisitsa.jpg',  label: 'лисица' },
-      { id: 'zaek',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/16-zaek.jpg',     label: 'заек' },
-      { id: 'slon',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/17-slon.jpg',     label: 'слон' },
-      { id: 'lyv',      imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/18-lyv.jpg',      label: 'лъв' },
-      { id: 'tigyr',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/19-tigyr.jpg',    label: 'тигър', ttsLabel: 'тигър' },
-      { id: 'maymuna',  imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/20-maymuna.jpg',  label: 'маймуна', ttsLabel: 'маймуна' },
+      { id: 'vylk',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/13-vylk.jpg',     label: 'вълк',     groupLabel: 'Диви животни' },
+      { id: 'mechka',   imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/14-mechka.jpg',   label: 'мечка',    groupLabel: 'Диви животни' },
+      { id: 'lisitsa',  imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/15-lisitsa.jpg',  label: 'лисица',   groupLabel: 'Диви животни' },
+      { id: 'zaek',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/16-zaek.jpg',     label: 'заек',     groupLabel: 'Диви животни' },
+      { id: 'slon',     imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/17-slon.jpg',     label: 'слон',     groupLabel: 'Диви животни' },
+      { id: 'lyv',      imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/18-lyv.jpg',      label: 'лъв',      groupLabel: 'Диви животни' },
+      { id: 'tigyr',    imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/19-tigyr.jpg',    label: 'тигър', ttsLabel: 'тигър', groupLabel: 'Диви животни' },
+      { id: 'maymuna',  imageUrl: '/assets/b1-lesson-01/01-upr-01-zhivotni/20-maymuna.jpg',  label: 'маймуна', ttsLabel: 'маймуна', groupLabel: 'Диви животни' },
     ],
-  } as IllustratedCardsExercise,
+  } as unknown as Exercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 7 — Упр. 2 (текст за Митко) → reading_text
@@ -60,7 +59,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-02',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 2',
+    title: 'ТЕКСТОВЕ 2',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 2,
     audioUrl: '/assets/b1-lesson-01/audio/tts/texts/b1-l01-ex-02-full.mp3',
@@ -74,15 +73,85 @@ export const exercises: Exercise[] = [
   } as ReadingTextExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // ГРАМАТИКА 1–3 — Число на съществителните имена (много / бройна форма 2,3,4)
+  // Липсваше в дигитализацията — таблицата от учебника (стр. 7) с примерите преди
+  // упражненията за множествено число. Виж и подробния prose вариант в content.ts
+  // (grammarReference „Множествено число на съществителните имена").
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: 'b1-l01-gramatika-01',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 1',
+    instruction: 'Запознайте се с формите за множествено число и бройна форма (за 2, 3, 4).',
+    order: 3,
+    tableTitle: 'Мъжки род',
+    columns: ['много', '2, 3, 4'],
+    rows: [
+      { pronoun: 'театър',    cells: ['театри', 'театъра'],    ttsText: 'театър, театри, театъра' },
+      { pronoun: 'компютър',  cells: ['компютри', 'компютъра'],  ttsText: 'компютър, компютри, компютъра' },
+      { pronoun: 'учебник',   cells: ['учебници', 'учебника'],   ttsText: 'учебник, учебници, учебника' },
+      { pronoun: 'вестник',   cells: ['вестници', 'вестника'],   ttsText: 'вестник, вестници, вестника' },
+      { pronoun: 'крак',      cells: ['крака', 'крака'],      ttsText: 'крак, крака, крака' },
+      { pronoun: 'кон',       cells: ['коне', 'коня'],       ttsText: 'кон, кОне, коня' },
+      { pronoun: 'ученик',    cells: ['ученици', 'ученика'],    ttsText: 'ученик, ученици, ученика' },
+      { pronoun: 'работник',  cells: ['работници', 'работника'],  ttsText: 'работник, работници, работника' },
+      { pronoun: 'мъж',       cells: ['мъже', 'мъже'],       ttsText: 'мъж, мъже, мъже' },
+      { pronoun: 'брат',      cells: ['братя', 'братя'],      ttsText: 'брат, братя, братя' },
+      { pronoun: 'баща',      cells: ['бащи', 'бащи'],      ttsText: 'баща, бащи, бащи' },
+      { pronoun: 'дядо',      cells: ['дядовци', 'дядовци'],      ttsText: 'дядо, дядовци, дядовци' },
+      { pronoun: 'човек',     cells: ['хора', 'души'],     ttsText: 'човек, хора, дУши' },
+    ],
+    notes: [
+      'При лица (мъж, брат, баща, дядо, човек) бройната форма е: двама, трима, четирима.',
+    ],
+  } as GrammarTableExercise,
+
+  {
+    id: 'b1-l01-gramatika-02',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 2',
+    order: 4,
+    tableTitle: 'Женски род',
+    columns: ['много', '2, 3, 4'],
+    rows: [
+      { pronoun: 'ръка',   cells: ['ръце', 'ръце'] },
+      { pronoun: 'овца',   cells: ['овце', 'овце'] },
+      { pronoun: 'нощ',    cells: ['нощи', 'нощи'] },
+      { pronoun: 'вечер',  cells: ['вечери', 'вечери'] },
+      { pronoun: 'песен',  cells: ['песни', 'песни'] },
+    ],
+    notes: [
+      'Думи без множествено число: захар, сол, пролет, есен, младост, старост, радост.',
+    ],
+  } as GrammarTableExercise,
+
+  {
+    id: 'b1-l01-gramatika-03',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА 3',
+    order: 5,
+    tableTitle: 'Среден род',
+    columns: ['много', '2, 3, 4'],
+    rows: [
+      { pronoun: 'мляко',  cells: ['млека', 'млека'], ttsText: 'мляко, млекА, млекА' },
+      { pronoun: 'яйце',   cells: ['яйца', 'яйца'] },
+      { pronoun: 'дете',   cells: ['деца', 'деца'] },
+      { pronoun: 'цвете',  cells: ['цветя', 'цветя'] },
+      { pronoun: 'око',    cells: ['очи', 'очи'] },
+      { pronoun: 'ухо',    cells: ['уши', 'уши'] },
+    ],
+  } as GrammarTableExercise,
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 7 — Първата таблица към Упр. 2: „Попълнете окончанията за мн.ч."
   // Малка table_fill — само първата ред-група за м.р., ж.р. и ср.р.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-02b',
     type: 'table_fill',
-    title: 'УПРАЖНЕНИЕ 2 — Таблица',
+    title: 'УПРАЖНЕНИЕ',
     instruction: 'Попълнете окончанията за множествено число в трите таблици.',
-    order: 3,
+    order: 6,
     points: 12,
     paragraphs: [],
     tables: [
@@ -149,21 +218,32 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-
-
-
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 8 — Упр. 3 (животни от текста на упр. 2 в мн.ч. и бр. форма)
+  // Свито от 12 на 8 думи (по клиент) — по 3 за м.р./ж.р., 2 за ср.р. Добавен модел.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-03',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 3',
     instruction: 'Изберете формите за множествено число и бройна форма (за съществителните от м.р.) на животните от текста в упр. 2.',
-    order: 4,
-    points: 24,
+    order: 7,
+    points: 16,
     paragraphs: [],
     tables: [
+      {
+        name: 'Модел',
+        columns: ['много', 'два'],
+        rows: [
+          {
+            label: 'един заек',
+            cells: [
+              { correctAnswers: ['зайци'], options: ['зайци'] },
+              { correctAnswers: ['заека'], options: ['заека'] },
+            ],
+          },
+        ],
+      },
       {
         name: 'Мъжки род',
         columns: ['много', 'два'],
@@ -189,20 +269,6 @@ export const exercises: Exercise[] = [
               { correctAnswers: ['лъва'],   options: ['лъвове', 'лъвци', 'лъва', 'лъвовете'] },
             ],
           },
-          {
-            label: 'един тигър',
-            cells: [
-              { correctAnswers: ['тигри'],  options: ['тигри', 'тигрове', 'тигъра', 'тиграта'] },
-              { correctAnswers: ['тигъра'], options: ['тигри', 'тигрове', 'тигъра', 'тиграта'] },
-            ],
-          },
-          {
-            label: 'един слон',
-            cells: [
-              { correctAnswers: ['слонове'], options: ['слонове', 'слони', 'слона', 'слоновете'] },
-              { correctAnswers: ['слона'],   options: ['слонове', 'слони', 'слона', 'слоновете'] },
-            ],
-          },
         ],
       },
       {
@@ -224,24 +290,10 @@ export const exercises: Exercise[] = [
             ],
           },
           {
-            label: 'една мечка',
-            cells: [
-              { correctAnswers: ['мечки'], options: ['мечки', 'мечкове', 'мечкита', 'мечките'] },
-              { correctAnswers: ['мечки'], options: ['мечки', 'мечкове', 'мечкита', 'мечките'] },
-            ],
-          },
-          {
             label: 'една лисица',
             cells: [
               { correctAnswers: ['лисици'], options: ['лисици', 'лисицата', 'лисиците', 'лисицова'] },
               { correctAnswers: ['лисици'], options: ['лисици', 'лисицата', 'лисиците', 'лисицова'] },
-            ],
-          },
-          {
-            label: 'една маймуна',
-            cells: [
-              { correctAnswers: ['маймуни'], options: ['маймуни', 'маймунки', 'маймунете', 'маймуните'] },
-              { correctAnswers: ['маймуни'], options: ['маймуни', 'маймунки', 'маймунете', 'маймуните'] },
             ],
           },
         ],
@@ -271,36 +323,40 @@ export const exercises: Exercise[] = [
 
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 8 — Упр. 4 (по клиент): „Напишете думите в множествено число."
+  // Свободен текст → дропдаун; layout single (вместо two-column, което пренумерира
+  // втората колона от 1); добавен модел.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-04',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 4',
-    instruction: 'Напишете думите в множествено число.',
-    order: 5,
+    instruction: 'Изберете формата за множествено число на всяка дума.',
+    order: 8,
     points: 20,
-    layout: 'two-column',
+    layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: 'крак → _______',     blanks: [0], correctAnswers: ['крака'] },
-      { text: 'часовник → _______', blanks: [0], correctAnswers: ['часовници'] },
-      { text: 'компютър → _______', blanks: [0], correctAnswers: ['компютри'] },
-      { text: 'човек → _______',    blanks: [0], correctAnswers: ['хора'] },
-      { text: 'мъж → _______',      blanks: [0], correctAnswers: ['мъже'] },
-      { text: 'брат → _______',     blanks: [0], correctAnswers: ['братя'] },
-      { text: 'дядо → _______',     blanks: [0], correctAnswers: ['дядовци'] },
-      { text: 'чичо → _______',     blanks: [0], correctAnswers: ['чичовци'] },
-      { text: 'нощ → _______',      blanks: [0], correctAnswers: ['нощи'] },
-      { text: 'вечер → _______',    blanks: [0], correctAnswers: ['вечери'] },
-      { text: 'сутрин → _______',   blanks: [0], correctAnswers: ['сутрини'] },
-      { text: 'ръка → _______',     blanks: [0], correctAnswers: ['ръце'] },
-      { text: 'песен → _______',    blanks: [0], correctAnswers: ['песни'] },
-      { text: 'филия → _______',    blanks: [0], correctAnswers: ['филии'] },
-      { text: 'яйце → _______',     blanks: [0], correctAnswers: ['яйца'] },
-      { text: 'цвете → _______',    blanks: [0], correctAnswers: ['цветя'] },
-      { text: 'мляко → _______',    blanks: [0], correctAnswers: ['млека'] },
-      { text: 'момче → _______',    blanks: [0], correctAnswers: ['момчета'] },
-      { text: 'момиче → _______',   blanks: [0], correctAnswers: ['момичета'] },
-      { text: 'дете → _______',     blanks: [0], correctAnswers: ['деца'] },
+      { text: 'Модел: стол → столове', blanks: [], correctAnswers: [], isExample: true },
+      { text: '1. крак → _______',     blanks: [0], correctAnswers: ['крака'],     options: ['крака', 'кракове', 'крак', 'краката'] },
+      { text: '2. часовник → _______', blanks: [0], correctAnswers: ['часовници'], options: ['часовници', 'часовника', 'часовник', 'часовниците'] },
+      { text: '3. компютър → _______', blanks: [0], correctAnswers: ['компютри'],  options: ['компютри', 'компютъра', 'компютрите', 'компютър'] },
+      { text: '4. човек → _______',    blanks: [0], correctAnswers: ['хора'],      options: ['хора', 'човеци', 'човеки', 'хората'] },
+      { text: '5. мъж → _______',      blanks: [0], correctAnswers: ['мъже'],      options: ['мъже', 'мъжове', 'мъж', 'мъжете'] },
+      { text: '6. брат → _______',     blanks: [0], correctAnswers: ['братя'],     options: ['братя', 'братове', 'брати', 'братята'] },
+      { text: '7. дядо → _______',     blanks: [0], correctAnswers: ['дядовци'],   options: ['дядовци', 'дядове', 'дяда', 'дядовците'] },
+      { text: '8. чичо → _______',     blanks: [0], correctAnswers: ['чичовци'],   options: ['чичовци', 'чичове', 'чича', 'чичовците'] },
+      { text: '9. нощ → _______',      blanks: [0], correctAnswers: ['нощи'],      options: ['нощи', 'нощта', 'нощ', 'нощите'] },
+      { text: '10. вечер → _______',    blanks: [0], correctAnswers: ['вечери'],    options: ['вечери', 'вечерта', 'вечер', 'вечерите'] },
+      { text: '11. сутрин → _______',   blanks: [0], correctAnswers: ['сутрини'],   options: ['сутрини', 'сутринта', 'сутрин', 'сутрините'] },
+      { text: '12. ръка → _______',     blanks: [0], correctAnswers: ['ръце'],      options: ['ръце', 'ръки', 'ръкава', 'ръцете'] },
+      { text: '13. песен → _______',    blanks: [0], correctAnswers: ['песни'],     options: ['песни', 'песента', 'песен', 'песните'] },
+      { text: '14. филия → _______',    blanks: [0], correctAnswers: ['филии'],     options: ['филии', 'филия', 'филийки', 'филиите'] },
+      { text: '15. яйце → _______',     blanks: [0], correctAnswers: ['яйца'],      options: ['яйца', 'яйцета', 'яйце', 'яйцата'] },
+      { text: '16. цвете → _______',    blanks: [0], correctAnswers: ['цветя'],     options: ['цветя', 'цветета', 'цвете', 'цветята'] },
+      { text: '17. мляко → _______',    blanks: [0], correctAnswers: ['млека'],     options: ['млека', 'млекове', 'мляко', 'млеката'] },
+      { text: '18. момче → _______',    blanks: [0], correctAnswers: ['момчета'],   options: ['момчета', 'момчове', 'момче', 'момчетата'] },
+      { text: '19. момиче → _______',   blanks: [0], correctAnswers: ['момичета'],  options: ['момичета', 'момичетата', 'момиче', 'момичевци'] },
+      { text: '20. дете → _______',     blanks: [0], correctAnswers: ['деца'],      options: ['деца', 'детета', 'дете', 'децата'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -310,36 +366,47 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-05',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 5',
+    title: 'ТЕКСТОВЕ 5',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
-    order: 6,
+    order: 9,
     paragraphs: [
       'Боряна работи в Червен кръст в София. Всеки ден има срещи с хора от различни страни.',
       'С бежанците от Близкия изток – сирийци, иракчани, палестинци и други, тя говори на арабски. С хората от останалите страни говори на английски. С всички се разбира добре.',
       'Боряна се среща с колеги от Червен кръст, които работят в други европейски страни. В София идват англичани, белгийци, французи, гърци, германци и други. Те искат да обменят опит с българските колеги за работата с бежанците, за проблемите им, за техните нужди.',
       'Служителите в Червен кръст обичат да работят с хора от различни страни и националности.',
     ],
+    ttsParagraphs: [
+      'БОряна работи в Червен кръст в София. Всеки ден има срещи с хора от различни страни.',
+      'С бежанците от Близкия изток – сирийци, иракчани, палестинци и други, тя говори на арабски. С хората от останалите страни говори на английски. С всички се разбира добре.',
+      'БОряна се среща с колеги от Червен кръст, които работят в други европейски страни. В София идват англичани, белгийци, французи, гърци, германци и други. Те искат да обменят опит с българските колеги за работата с бежанците, за проблемите им, за техните нужди.',
+      'Служителите в Червен кръст обичат да работят с хора от различни страни и националности.',
+    ],
     paragraphVoiceGenders: ['female', 'female', 'female', 'female'],
     showDictionary: true,
   } as ReadingTextExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 9 — Упр. 6: национальности — попълнете таблицата
+  // Добавен демонстрационен ред (сириец → сирийка → сирийци) — вижда се и в
+  // grammarReference „Множествено число" (женски род на -ка).
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-06',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 6',
     instruction: 'Попълнете таблицата с формите за националности (ж.р. и мн.ч.).',
-    order: 7,
-    points: 24,
+    order: 10,
+    points: 12,
     paragraphs: [],
+    grammarHighlight: {
+      text: 'Внимание! сириец → сирийка (ж.р.) → сирийци (мн.ч.) — с „ий", не с „и".',
+    },
     tables: [
       {
         name: 'Националности',
         columns: ['една', 'много'],
         rows: [
+          { label: 'сириец (модел)', cells: [{ correctAnswers: ['сирийка'], options: ['сирийка'] }, { correctAnswers: ['сирийци'], options: ['сирийци'] }] },
           { label: 'палестинец',  cells: [{ correctAnswers: ['палестинка'],  options: ['палестинка', 'палестински', 'палестинова', 'палестинче'] },          { correctAnswers: ['палестинци'],  options: ['палестинци', 'палестини', 'палестинките', 'палестинова'] }] },
           { label: 'ливанец',     cells: [{ correctAnswers: ['ливанка'],     options: ['ливанка', 'ливанки', 'ливанска', 'ливаниха'] },                       { correctAnswers: ['ливанци'],     options: ['ливанци', 'ливани', 'ливанските', 'ливанова'] }] },
           { label: 'иранец',      cells: [{ correctAnswers: ['иранка'],      options: ['иранка', 'ирани', 'иранска', 'иранига'] },                            { correctAnswers: ['иранци'],      options: ['иранци', 'ирани', 'иранките', 'иранова'] }] },
@@ -357,69 +424,80 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 9 — Упр. 7: „Работете по модела"
+  // СТР. 9 — Упр. 7: определителен член — пълен и кратък. Дропдаунът вече показва
+  // цялата дума (не само окончанието); модел добавен; двойната номерация (вградени
+  // „1./2./…" в текста) е премахната — номерата идват само от компонента.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-07',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Изберете определителния член, където е нужно.',
-    order: 8,
+    order: 11,
     points: 18,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: '1. Това е учебник. Учебник_______ е нов. Ние харесваме учебник_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '2. Това е яке. Яке_______ е евтино. Той купува яке_______.',               blanks: [0, 1], correctAnswers: ['то', 'то'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '3. Това са столове. Столове_______ са удобни. Ние сядаме на столове_______.', blanks: [0, 1], correctAnswers: ['те', 'те'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '4. Това е молив. Молив_______ е син. Детето иска молив_______.',           blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '5. Това е сладолед. Сладолед_______ е в хладилника. Момчето взема сладолед_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '6. Ния има шал. Шал_______ ѝ е красив. Тя носи шал_______.',                blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '7. На двора има котка. Котка_______ е малка. Ние играем с котка_______.',  blanks: [0, 1], correctAnswers: ['та', 'та'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '8. Ние имаме куче. Куче_______ се казва Чарли. Много обичаме куче_______.', blanks: [0, 1], correctAnswers: ['то', 'то'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
-      { text: '9. Те имат апартамент. Апартамент_______ им е голям. Те чистят всеки петък апартамент_______.', blanks: [0, 1], correctAnswers: ['ът', 'а'], options: ['ът', 'ят', 'а', 'я', 'то', 'та', 'те', '—'] },
+      { text: 'Модел: Това е стол. Столът е нов. Виждам стола.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '1. Това е учебник. _______ е нов. Ние харесваме _______.', blanks: [0, 1], correctAnswers: ['учебникът', 'учебника'], options: [['учебникът', 'учебника', 'учебниците', 'учебникa'], ['учебника', 'учебникът', 'учебниците', 'учебникa']] },
+      { text: '2. Това е яке. _______ е евтино. Той купува _______.',      blanks: [0, 1], correctAnswers: ['якето', 'якето'], options: ['якето', 'яке', 'яката', 'якетата'] },
+      { text: '3. Това са столове. _______ са удобни. Ние сядаме на _______.', blanks: [0, 1], correctAnswers: ['столовете', 'столовете'], options: ['столовете', 'столове', 'столовета', 'столовите'] },
+      { text: '4. Това е молив. _______ е син. Детето иска _______.',      blanks: [0, 1], correctAnswers: ['моливът', 'молива'], options: [['моливът', 'молива', 'моливите'], ['молива', 'моливът', 'моливите']] },
+      { text: '5. Това е сладолед. _______ е в хладилника. Момчето взема _______.', blanks: [0, 1], correctAnswers: ['сладоледът', 'сладоледа'], options: [['сладоледът', 'сладоледа', 'сладоледите'], ['сладоледа', 'сладоледът', 'сладоледите']] },
+      { text: '6. Ния има шал. _______ ѝ е красив. Тя носи _______.',       blanks: [0, 1], correctAnswers: ['шалът', 'шала'], options: [['шалът', 'шала', 'шалове'], ['шала', 'шалът', 'шалове']] },
+      { text: '7. На двора има котка. _______ е малка. Ние играем с _______.', blanks: [0, 1], correctAnswers: ['котката', 'котката'], options: ['котката', 'котки', 'котките', 'котка'] },
+      { text: '8. Ние имаме куче. _______ се казва Чарли. Много обичаме _______.', blanks: [0, 1], correctAnswers: ['кучето', 'кучето'], options: ['кучето', 'куче', 'кучетата', 'кучета'] },
+      { text: '9. Те имат апартамент. _______ им е голям. Те чистят всеки петък _______.', blanks: [0, 1], correctAnswers: ['апартаментът', 'апартамента'], options: [['апартаментът', 'апартамента', 'апартаментите'], ['апартамента', 'апартаментът', 'апартаментите']] },
     ],
   } as WorkbookFillBlankExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 9 — Упр. 8: член, „където е нужно"
+  // СТР. 9 — Упр. 8: член, „където е нужно". Дропдаун с цяла дума; двойна
+  // номерация премахната; изречението за „—" е преместено в grammarHighlight.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-08',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
-    instruction: 'Изберете подходящия определителен член, където е нужно. „—" означава, че член не се поставя.',
-    order: 9,
+    instruction: 'Изберете подходящия определителен член, където е нужно.',
+    order: 12,
     points: 9,
     layout: 'single',
+    hideSentenceNumbers: true,
+    grammarHighlight: {
+      text: '„—" означава, че член не се поставя.',
+    },
     sentences: [
       { text: 'Модел: Учениците влизат в училището.', blanks: [], correctAnswers: [], isExample: true },
-      { text: '1. Купувам една баничка_______ и един чай_______.', blanks: [0, 1], correctAnswers: ['—', '—'], options: ['—', 'ът', 'та', 'то', 'а'] },
-      { text: '2. Този подарък_______ е за теб.',                   blanks: [0],    correctAnswers: ['—'],     options: ['—', 'ът', 'а', 'ят'] },
-      { text: '3. През зима_______ вали много сняг.',               blanks: [0],    correctAnswers: ['та'],    options: ['—', 'та', 'ът', 'то'] },
-      { text: '4. Хотел_______ е в център_______ на град_______.',  blanks: [0, 1, 2], correctAnswers: ['ът', 'а', 'а'], options: ['—', 'ът', 'ят', 'а', 'я'] },
-      { text: '5. Познаваш ли това момиче_______?',                  blanks: [0],    correctAnswers: ['—'],     options: ['—', 'то', 'та', 'те'] },
-      { text: '6. Отивам в ресторант_______ „Хепи".',                blanks: [0],    correctAnswers: ['—'],     options: ['—', 'ът', 'а', 'ят'] },
+      { text: '1. Купувам една _______ и един _______.', blanks: [0, 1], correctAnswers: ['баничка', 'чай'], options: [['баничка', 'баничката', '—'], ['чай', 'чаят', '—']] },
+      { text: '2. Този _______ е за теб.',                   blanks: [0],    correctAnswers: ['подарък'],     options: ['подарък', 'подаръкът', '—'] },
+      { text: '3. През _______ вали много сняг.',            blanks: [0],    correctAnswers: ['зимата'],      options: ['зимата', 'зима', '—'] },
+      { text: '4. _______ е в _______ на _______.',          blanks: [0, 1, 2], correctAnswers: ['хотелът', 'центъра', 'града'], options: [['хотелът', 'хотел', '—'], ['центъра', 'център', '—'], ['града', 'град', '—']] },
+      { text: '5. Познаваш ли това _______?',                  blanks: [0],    correctAnswers: ['момиче'],     options: ['момиче', 'момичето', '—'] },
+      { text: '6. Отивам в _______ „Хепи".',                   blanks: [0],    correctAnswers: ['ресторант'],  options: ['ресторант', 'ресторантът', '—'] },
     ],
   } as WorkbookFillBlankExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 9 — Упр. 9: попълнете определителния член на думите в таблицата.
+  // СТР. 9 — Упр. 9: пълен член на думите в таблицата (-ТЕЛ/-АР/-Й/+Я).
+  // Терминологията е коригирана на „пълен член" (не „определителна форма").
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-09',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 9',
-    instruction: 'Изберете определителния член (пълен) на думите в таблиците.',
-    order: 10,
+    instruction: 'Изберете пълния определителен член на думите в таблиците.',
+    order: 13,
     points: 16,
     paragraphs: [],
+    grammarHighlight: {
+      text: 'При м.р. на -тел, -ар, -й и в няколко други думи пълният член е -ЯТ (не -ЪТ): учителят, лекарят, чаят, денят.',
+    },
     tables: [
       {
-        name: '-ТЕЛ + Я(Т)',
-        columns: ['Определена форма'],
+        name: '-ТЕЛ → -ЯТ',
+        columns: ['Пълен член'],
         rows: [
           { label: 'преподавател',  cells: [{ correctAnswers: ['преподавателят'],  options: ['преподавателят', 'преподавателът', 'преподавателя', 'преподавателят е'] }] },
           { label: 'писател',       cells: [{ correctAnswers: ['писателят'],       options: ['писателят', 'писателът', 'писателя', 'писателят е'] }] },
@@ -428,8 +506,8 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        name: '-АР + Я(Т)',
-        columns: ['Определена форма'],
+        name: '-АР → -ЯТ',
+        columns: ['Пълен член'],
         rows: [
           { label: 'зъболекар', cells: [{ correctAnswers: ['зъболекарят'], options: ['зъболекарят', 'зъболекарът', 'зъболекара', 'зъболекарта'] }] },
           { label: 'аптекар',   cells: [{ correctAnswers: ['аптекарят'],   options: ['аптекарят', 'аптекарът', 'аптекара', 'аптекарта'] }] },
@@ -438,47 +516,47 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        name: '-Й → Я(Т)',
-        columns: ['Определена форма'],
+        name: '-Й → -ЯТ',
+        columns: ['Пълен член'],
         rows: [
-          { label: 'чай → ча_______',         cells: [{ correctAnswers: ['чаят'],     options: ['чаят', 'чаят е', 'чая', 'чайт'] }] },
-          { label: 'тролей → троле_______',   cells: [{ correctAnswers: ['тролеят'],  options: ['тролеят', 'тролеят е', 'тролея', 'тролейт'] }] },
-          { label: 'трамвай → трамва_______', cells: [{ correctAnswers: ['трамваят'], options: ['трамваят', 'трамваят е', 'трамвая', 'трамвайт'] }] },
-          { label: 'герой → геро_______',     cells: [{ correctAnswers: ['героят'],   options: ['героят', 'героят е', 'героя', 'геройт'] }] },
+          { label: 'чай',     cells: [{ correctAnswers: ['чаят'],     options: ['чаят', 'чаят е', 'чая', 'чайт'] }] },
+          { label: 'тролей',  cells: [{ correctAnswers: ['тролеят'],  options: ['тролеят', 'тролеят е', 'тролея', 'тролейт'] }] },
+          { label: 'трамвай', cells: [{ correctAnswers: ['трамваят'], options: ['трамваят', 'трамваят е', 'трамвая', 'трамвайт'] }] },
+          { label: 'герой',   cells: [{ correctAnswers: ['героят'],   options: ['героят', 'героят е', 'героя', 'геройт'] }] },
         ],
       },
       {
-        name: '+ Я(Т)',
-        columns: ['Определена форма'],
+        name: 'Изключения → -ЯТ',
+        columns: ['Пълен член'],
         rows: [
-          { label: 'път_______', cells: [{ correctAnswers: ['пътят'],  options: ['пътят', 'пътът', 'пътя', 'пътята'] }] },
-          { label: 'кон_______', cells: [{ correctAnswers: ['конят'],  options: ['конят', 'конът', 'коня', 'конята'] }] },
-          { label: 'цар_______', cells: [{ correctAnswers: ['царят'],  options: ['царят', 'царът', 'царя', 'царята'] }] },
-          { label: 'крал_______', cells: [{ correctAnswers: ['кралят'], options: ['кралят', 'кралът', 'краля', 'кралята'] }] },
+          { label: 'път', cells: [{ correctAnswers: ['пътят'],  options: ['пътят', 'пътът', 'пътя', 'пътята'] }] },
+          { label: 'кон', cells: [{ correctAnswers: ['конят'],  options: ['конят', 'конът', 'коня', 'конята'] }] },
+          { label: 'цар', cells: [{ correctAnswers: ['царят'],  options: ['царят', 'царът', 'царя', 'царята'] }] },
+          { label: 'крал', cells: [{ correctAnswers: ['кралят'], options: ['кралят', 'кралът', 'краля', 'кралята'] }] },
         ],
       },
     ],
   } as TableFillExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 9 — Упр. 10: подходящ определителен член
+  // СТР. 9 — Упр. 10: подходящ определителен член (пълен или кратък)
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-10',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Изберете подходящия определителен член (пълен или кратък).',
-    order: 11,
+    order: 14,
     points: 7,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
       { text: 'Модел: Пътят до селото е лош.', blanks: [], correctAnswers: [], isExample: true },
-      { text: '1. Аптекар_______ говори с клиенти.',                blanks: [0], correctAnswers: ['ят'], options: ['ят', 'я', 'ът', 'а', 'та', 'те'] },
-      { text: '2. Казвам на лекар_______ какво ме боли.',           blanks: [0], correctAnswers: ['я'],  options: ['я', 'ят', 'а', 'ът'] },
-      { text: '3. Днес на пазар_______ няма много хора.',           blanks: [0], correctAnswers: ['а'],  options: ['а', 'ът', 'я', 'ят'] },
-      { text: '4. Работа на учител_______ е трудна.',               blanks: [0], correctAnswers: ['я'],  options: ['я', 'ят', 'а', 'ът'] },
-      { text: '5. Това са крал_______ и кралица_______ на страна_______.', blanks: [0, 1, 2], correctAnswers: ['ят', 'та', 'та'], options: ['ят', 'я', 'ът', 'а', 'та', 'то', 'те'] },
+      { text: '1. _______ говори с клиенти.', blanks: [0], correctAnswers: ['аптекарят'], options: ['аптекарят', 'аптекарът', 'аптекара', 'аптекаря'] },
+      { text: '2. Казвам на _______ какво ме боли.', blanks: [0], correctAnswers: ['лекаря'], options: ['лекаря', 'лекарят', 'лекара', 'лекарът'] },
+      { text: '3. Днес на _______ няма много хора.', blanks: [0], correctAnswers: ['пазара'], options: ['пазара', 'пазарът', 'пазарят', 'пазаря'] },
+      { text: '4. Работа на _______ е трудна.', blanks: [0], correctAnswers: ['учителя'], options: ['учителя', 'учителят', 'учителът', 'учителите'] },
+      { text: '5. Това са _______ и _______ на _______.', blanks: [0, 1, 2], correctAnswers: ['кралят', 'кралицата', 'страната'], options: [['кралят', 'кралът', 'краля', 'кралете'], ['кралицата', 'кралица', 'кралиците', 'кралицат'], ['страната', 'страна', 'страните', 'странат']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -488,9 +566,9 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-11',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 11',
+    title: 'ТЕКСТОВЕ 11',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
-    order: 12,
+    order: 15,
     images: [
       { imageUrl: '/assets/b1-lesson-01/02-upr-11-semeystvo/01-semeystvo.jpg', label: 'Семейство Кенан и Лейла' },
     ],
@@ -512,7 +590,7 @@ export const exercises: Exercise[] = [
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 12',
     instruction: 'Отговорете на въпросите по текста за Кенан и Лейла.',
-    order: 13,
+    order: 16,
     points: 7,
     questions: [
       {
@@ -563,10 +641,10 @@ export const exercises: Exercise[] = [
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-13',
-    type: 'match_pairs',
+    type: 'b1-match-pairs-dragdrop',
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Свържете антонимите.',
-    order: 14,
+    order: 17,
     points: 10,
     pairs: [
       { id: 'p1',  left: 'отговорен',  correctRight: 'безотговорен' },
@@ -580,18 +658,18 @@ export const exercises: Exercise[] = [
       { id: 'p9',  left: 'щастлив',    correctRight: 'нещастен' },
       { id: 'p10', left: 'усмихнат',   correctRight: 'сериозен' },
     ],
-  } as MatchPairsExercise,
+  } as unknown as Exercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 10 — Упр. 14: попълнете прилагателните по модела
+  // СТР. 10 — Упр. 14: попълнете прилагателните по модела (1 модел за таблицата)
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-14',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 14',
-    instruction: 'Попълнете формите на прилагателните по модела (сладък, сладка, сладко, сладки).',
-    order: 15,
-    points: 18,
+    instruction: 'Попълнете формите на прилагателните по модела.',
+    order: 18,
+    points: 24,
     paragraphs: [],
     tables: [
       {
@@ -614,12 +692,6 @@ export const exercises: Exercise[] = [
               { correctAnswers: ['добри'], options: ['добър', 'добра', 'добро', 'добри'] },
             ],
           },
-        ],
-      },
-      {
-        name: 'Модел: строен → стройна → стройно → стройни',
-        columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч.'],
-        rows: [
           { label: 'спокоен',
             cells: [
               { correctAnswers: ['спокоен'],  options: ['спокоен', 'спокойна', 'спокойно', 'спокойни'] },
@@ -636,12 +708,6 @@ export const exercises: Exercise[] = [
               { correctAnswers: ['случайни'], options: ['случаен', 'случайна', 'случайно', 'случайни'] },
             ],
           },
-        ],
-      },
-      {
-        name: 'Модел: беден → бедна → бедно → бедни',
-        columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч.'],
-        rows: [
           { label: 'самотен',
             cells: [
               { correctAnswers: ['самотен'], options: ['самотен', 'самотна', 'самотно', 'самотни'] },
@@ -663,43 +729,52 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 10 — Упр. 15: сравнителна / превъзходна степен
+  // СТР. 10 — Упр. 15: сравнителна И превъзходна степен на всеки ред (обединени
+  // редовете от модела); намален само на 1 модел.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-15',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Изберете сравнителната и превъзходната степен на прилагателните по модела.',
-    order: 16,
+    order: 19,
     points: 8,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
       { text: 'Модел: Чаят е по-топъл от млякото. Капучиното е най-топло. (топъл)', blanks: [], correctAnswers: [], isExample: true },
-      { text: '1. Блузата е _______ обувките. (скъп)', blanks: [0], correctAnswers: ['по-скъпа от'], options: ['по-скъпа от', 'най-скъпа от', 'по-скъп от', 'най-скъп от'] },
-      { text: '   Якето е _______. (скъп)',            blanks: [0], correctAnswers: ['най-скъпо'], options: ['най-скъпо', 'по-скъпо', 'най-скъп', 'най-скъпа'] },
-      { text: '2. Пловдив е _______ Варна. (голям)',    blanks: [0], correctAnswers: ['по-голям от'], options: ['по-голям от', 'най-голям от', 'по-голяма от', 'най-голяма от'] },
-      { text: '   София е _______. (голям)',            blanks: [0], correctAnswers: ['най-голяма'], options: ['най-голяма', 'по-голяма', 'най-голям', 'по-голям'] },
-      { text: '3. Пирин е _______ Родопите. (висок)',   blanks: [0], correctAnswers: ['по-висок от'], options: ['по-висок от', 'най-висок от', 'по-висока от', 'най-висока от'] },
-      { text: '   Рила е _______. (висок)',             blanks: [0], correctAnswers: ['най-висока'], options: ['най-висока', 'по-висока', 'най-висок', 'по-висок'] },
-      { text: '4. Тортата е _______ шоколада. (сладък)', blanks: [0], correctAnswers: ['по-сладка от'], options: ['по-сладка от', 'най-сладка от', 'по-сладък от', 'най-сладък от'] },
-      { text: '   Захарта е _______. (сладък)',          blanks: [0], correctAnswers: ['най-сладка'], options: ['най-сладка', 'по-сладка', 'най-сладък', 'по-сладък'] },
+      { text: '1. Блузата е _______ обувките. Якето е _______. (скъп)', blanks: [0, 1], correctAnswers: ['по-скъпа от', 'най-скъпо'], options: [['по-скъпа от', 'най-скъпа от', 'по-скъп от', 'най-скъп от'], ['най-скъпо', 'по-скъпо', 'най-скъп', 'най-скъпа']] },
+      { text: '2. Пловдив е _______ Варна. София е _______. (голям)',    blanks: [0, 1], correctAnswers: ['по-голям от', 'най-голяма'], options: [['по-голям от', 'най-голям от', 'по-голяма от', 'най-голяма от'], ['най-голяма', 'по-голяма', 'най-голям', 'по-голям']] },
+      { text: '3. Пирин е _______ Родопите. Рила е _______. (висок)',   blanks: [0, 1], correctAnswers: ['по-висок от', 'най-висока'], options: [['по-висок от', 'най-висок от', 'по-висока от', 'най-висока от'], ['най-висока', 'по-висока', 'най-висок', 'по-висок']] },
+      { text: '4. Тортата е _______ шоколада. Захарта е _______. (сладък)', blanks: [0, 1], correctAnswers: ['по-сладка от', 'най-сладка'], options: [['по-сладка от', 'най-сладка от', 'по-сладък от', 'най-сладък от'], ['най-сладка', 'по-сладка', 'най-сладък', 'по-сладък']] },
     ],
   } as WorkbookFillBlankExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 11 — Упр. 16: прилагателни от държави / градове
+  // СТР. 11 — Упр. 16: прилагателни от държави / градове (добавен модел
+  // България/Украйна отгоре — вече попълнен, вижда се в учебника).
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-16',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 16',
-    instruction: 'Попълнете формите на прилагателните от държави и градове по модела (български, българска, българско, българи).',
-    order: 17,
+    instruction: 'Попълнете формите на прилагателните от държави и градове по модела.',
+    order: 20,
     points: 24,
     paragraphs: [],
+    grammarHighlight: {
+      text: 'Внимание! Франция → френски, френска, френско, френски. Германия → немски, немска, немско, немски (или германска, германско, германски — и двете форми са верни).',
+    },
     tables: [
+      {
+        name: 'Модел',
+        columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч. / демоним'],
+        rows: [
+          { label: 'България', cells: [{ correctAnswers: ['български'], options: ['български'] }, { correctAnswers: ['българска'], options: ['българска'] }, { correctAnswers: ['българско'], options: ['българско'] }, { correctAnswers: ['българи'], options: ['българи'] }] },
+          { label: 'Украйна',  cells: [{ correctAnswers: ['украински'], options: ['украински'] }, { correctAnswers: ['украинска'], options: ['украинска'] }, { correctAnswers: ['украинско'], options: ['украинско'] }, { correctAnswers: ['украински'], options: ['украински'] }] },
+        ],
+      },
       {
         name: 'Прилагателни от държави и градове',
         columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч. / демоним'],
@@ -757,7 +832,6 @@ export const exercises: Exercise[] = [
     ],
   } as TableFillExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 11 — Упр. 17: прилагателни в изречения
   // ═══════════════════════════════════════════════════════════════════════════
@@ -765,11 +839,13 @@ export const exercises: Exercise[] = [
     id: 'b1-l01-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Изберете прилагателното, образувано от съществителното в скоби. Работете по модела („Той обича сирийска храна. (Сирия)").',
-    order: 18,
+    instruction: 'Изберете прилагателното, образувано от съществителното в скоби.',
+    order: 21,
     points: 7,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
+      { text: 'Модел: Той обича сирийска храна. (Сирия)', blanks: [], correctAnswers: [], isExample: true },
       { text: '1. Слизам на метростанция „_______ университет „Св. Климент Охридски". (София)', blanks: [0], correctAnswers: ['Софийски'], options: ['Софийски', 'Софийска', 'Софийско', 'Софиянци'] },
       { text: '2. Те учат _______ език. (Англия)',                                                blanks: [0], correctAnswers: ['английски'], options: ['английски', 'английска', 'английско', 'англичани'] },
       { text: '3. Хамза има хубава _______ кола. (Германия)',                                     blanks: [0], correctAnswers: ['немска'], acceptableAnswers: [['немска', 'германска']], options: ['немска', 'немски', 'немско', 'германска'] },
@@ -786,9 +862,9 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-18',
     type: 'dialogues',
-    title: 'УПРАЖНЕНИЕ 18 — Диалог в магазин',
+    title: 'ТЕКСТОВЕ — Диалог в магазин',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
-    order: 19,
+    order: 22,
     imageUrl: '/assets/b1-lesson-01/03-upr-18-magazin-drehi/01-magazin-drehi.jpg',
     sections: [
       {
@@ -802,25 +878,29 @@ export const exercises: Exercise[] = [
     ],
   } as DialoguesExercise,
 
-
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 11 — Упр. 19: определителен член на прилагателните
+  // СТР. 11 — Упр. 19: определителен член на прилагателните (добавен модел)
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-19',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 19',
     instruction: 'Изберете определителния член на прилагателните, като работите по модела.',
-    order: 20,
+    order: 23,
     points: 7,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: '1. Сутрин купувам две кафета – дълго и късо. Дълго_______ кафе е за мен, а късо_______ е за колежката ми.', blanks: [0, 1], correctAnswers: ['то', 'то'], options: ['то', 'та', 'те', 'ия', 'ият'] },
-      { text: '2. През зимата нося вълнени ръкавици. Вълнени_______ ръкавици са топли.', blanks: [0], correctAnswers: ['те'], options: ['те', 'та', 'то', 'ия'] },
-      { text: '3. Имам нов телефон. Вече мога да правя снимки с нов_______ телефон.',     blanks: [0], correctAnswers: ['ия'], options: ['ия', 'ият', 'ата', 'ите'] },
-      { text: '4. Карам японска кола. Доволен съм от японска_______ кола.',                blanks: [0], correctAnswers: ['та'], options: ['та', 'то', 'те', 'ата'] },
-      { text: '5. Използвам малък лаптоп. Малк_______ лаптоп е много удобен.',             blanks: [0], correctAnswers: ['ият'], options: ['ият', 'ия', 'ата', 'ото'] },
-      { text: '6. Всички обичат италианска храна. Италианска_______ храна е много вкусна.', blanks: [0], correctAnswers: ['та'], options: ['та', 'то', 'те', 'ата'] },
+      { text: 'Модел: Имам син шал. Синият шал е копринен. Харесвам синия шал.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Модел: Имам нова рокля. Новата рокля е розова.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Модел: Имам червено портмоне. Червеното портмоне е хубаво.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Модел: Имам черни дънки. Черните дънки са модерни.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '1. Сутрин купувам две кафета – дълго и късо. _______ кафе е за мен, а _______ е за колежката ми.', blanks: [0, 1], correctAnswers: ['дългото', 'късото'], options: [['дългото', 'дългата', 'дългите'], ['късото', 'късата', 'късите']] },
+      { text: '2. През зимата нося вълнени ръкавици. _______ ръкавици са топли.', blanks: [0], correctAnswers: ['вълнените'], options: ['вълнените', 'вълнената', 'вълненият', 'вълненото'] },
+      { text: '3. Имам нов телефон. Вече мога да правя снимки с _______ телефон.', blanks: [0], correctAnswers: ['новия'], options: ['новия', 'новият', 'новата', 'новите'] },
+      { text: '4. Карам японска кола. Доволен съм от _______ кола.', blanks: [0], correctAnswers: ['японската'], options: ['японската', 'японското', 'японските', 'японския'] },
+      { text: '5. Използвам малък лаптоп. _______ лаптоп е много удобен.', blanks: [0], correctAnswers: ['малкият'], options: ['малкият', 'малкия', 'малката', 'малкото'] },
+      { text: '6. Всички обичат италианска храна. _______ храна е много вкусна.', blanks: [0], correctAnswers: ['италианската'], options: ['италианската', 'италианското', 'италианския', 'италианските'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -832,18 +912,19 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изберете определителния член при числителните, като работите по модела.',
-    order: 21,
+    order: 24,
     points: 8,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
       { text: 'Модел (м.р. неодушевени): Имам три учебника. Единият учебник е по български език, а двата са по английски.', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Модел (м.р. лица): Той има трима братя. Единият е учител, а двамата са лекари.', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Модел (ж.р.): Имам три сестри. Едната е омъжена, а двете не са.', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Модел (ср.р.): Имам три деца. Едното е момче, а двете са момичета.', blanks: [], correctAnswers: [], isExample: true },
-      { text: '1. Имам три парфюма. Един_______ е френски, а два_______ са английски.', blanks: [0, 1], correctAnswers: ['ият', 'та'], options: ['ият', 'та', 'те', 'ото', 'ия'] },
-      { text: '2. На масата има четири палачинки. Една_______ е със сирене, три_______ са с шоколад.', blanks: [0, 1], correctAnswers: ['та', 'те'], options: ['та', 'те', 'то', 'ят', 'ите'] },
-      { text: '3. За обяд купувам пет кюфтета. Две_______ са за мен, три_______ са за сина ми.',         blanks: [0, 1], correctAnswers: ['те', 'те'], options: ['те', 'та', 'то', 'ите'] },
-      { text: '4. В стаята има три бебета. Едно_______ е момче, а две_______ са момчета.',              blanks: [0, 1], correctAnswers: ['то', 'те'], options: ['то', 'та', 'те', 'ите'] },
+      { text: '1. Имам три парфюма. _______ е френски, а _______ са английски.', blanks: [0, 1], correctAnswers: ['единият', 'двата'], options: [['единият', 'единия', 'едната', 'едното'], ['двата', 'двете', 'трите', 'двамата']] },
+      { text: '2. На масата има четири палачинки. _______ е със сирене, _______ са с шоколад.', blanks: [0, 1], correctAnswers: ['едната', 'трите'], options: [['едната', 'едината', 'едното', 'четирите'], ['трите', 'двете', 'едната', 'четирите']] },
+      { text: '3. За обяд купувам пет кюфтета. _______ са за мен, _______ са за сина ми.', blanks: [0, 1], correctAnswers: ['двете', 'трите'], options: [['двете', 'двата', 'петте', 'трите'], ['трите', 'двете', 'петте', 'двата']] },
+      { text: '4. В стаята има три бебета. _______ е момче, а _______ са момчета.', blanks: [0, 1], correctAnswers: ['едното', 'двете'], options: [['едното', 'едната', 'единият', 'трите'], ['двете', 'двата', 'трите', 'едното']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -853,15 +934,20 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-21',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 21',
+    title: 'ТЕКСТОВЕ 21',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
-    order: 22,
+    order: 25,
     images: [
       { imageUrl: '/assets/b1-lesson-01/04-upr-21-apteka/01-apteka-bolen.jpg', label: 'Миро в аптеката' },
     ],
     paragraphs: [
       'Миро следва в Софийския университет. Той е студент по химия.',
       'И днес, както всеки ден, е на лекции, но се чувства зле. Боли го силно главата и има температура, затова той си тръгва по-рано. Върви бавно към поликлиниката, която е близо до университета. Там лекарят го преглежда и му предписва лекарства. Миро отива в близката аптека, но там е много скъпо. Той купува лекарствата от друга аптека, където е по-евтино. После се прибира вкъщи и започва да се лекува.',
+      'На следващия ден е по-добре.',
+    ],
+    ttsParagraphs: [
+      'Миро следва в Софийския университет. Той е студент по химия.',
+      'И днес, както всеки ден, е на лекции, но се чувства зле. Боли го силно главата и има температура, затова той си тръгва по-рано. Върви бавно към поликлиниката, която е близо до университета. Там лекарят го преглежда и му предписва лекарства. Миро отива в близката аптека, но там е много скъпо. Той купува лекарствата от друга аптека, където е по-евтино. После се прибира вкъщи и започва да се леку-ва.',
       'На следващия ден е по-добре.',
     ],
     paragraphVoiceGenders: ['male', 'male', 'male'],
@@ -874,9 +960,9 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-21q',
     type: 'multiple_choice',
-    title: 'УПРАЖНЕНИЕ 21 — Въпроси',
+    title: 'УПРАЖНЕНИЕ — Въпроси',
     instruction: 'Отговорете на въпросите по текста за Миро.',
-    order: 23,
+    order: 26,
     points: 7,
     questions: [
       {
@@ -901,22 +987,22 @@ export const exercises: Exercise[] = [
       },
       {
         question: 'Какво прави лекарят?',
-        options: ['Преглежда Миро.', 'Говори по телефона.', 'Пише документи.', 'Чете научна литература.'],
+        options: ['Преглежда Миро', 'Говори по телефона', 'Пише документи', 'Чете научна литература'],
         correctIndex: 0,
       },
       {
         question: 'Защо не купува лекарства от близката аптека?',
         options: [
-          'Там е много скъпо.',
-          'Няма подходящо лекарство.',
-          'Аптеката е затворена.',
-          'Не успява да намери рецептата от лекаря.',
+          'Там е много скъпо',
+          'Няма подходящо лекарство',
+          'Аптеката е затворена',
+          'Не успява да намери рецептата от лекаря',
         ],
         correctIndex: 0,
       },
       {
         question: 'Как е Миро на следващия ден?',
-        options: ['По-болен.', 'Тъжен.', 'По-добре.', 'Щастлив.'],
+        options: ['По-болен', 'Тъжен', 'По-добре', 'Щастлив'],
         correctIndex: 2,
       },
     ],
@@ -929,39 +1015,40 @@ export const exercises: Exercise[] = [
     id: 'b1-l01-ex-22',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 22',
-    instruction: 'Изберете подходящото наречие за всяко изречение. Работете по модела („Спортистът бяга бързо.").',
-    order: 24,
+    instruction: 'Изберете подходящото наречие за всяко изречение. Работете по модела.',
+    order: 27,
     points: 5,
     layout: 'single',
     sentences: [
-      { text: '1. Боли ме стомахът. Чувствам се _______.',                              blanks: [0], correctAnswers: ['зле'],     options: ['зле', 'добре', 'много', 'рано', 'бързо', 'евтино'] },
-      { text: '2. Той учи български. Вече може да говори _______.',                     blanks: [0], correctAnswers: ['добре'],  options: ['добре', 'зле', 'много', 'евтино', 'бързо', 'рано'] },
-      { text: '3. Ани _______ обича да пътува и да прави снимки.',                       blanks: [0], correctAnswers: ['много'],  options: ['много', 'малко', 'добре', 'зле', 'евтино', 'рано'] },
-      { text: '4. Плодовете и зеленчуците на този пазар не са скъпи. Тук е _______.',   blanks: [0], correctAnswers: ['евтино'], options: ['евтино', 'скъпо', 'добре', 'бързо', 'много', 'зле'] },
-      { text: '5. Винаги тръгвам _______ за работа. Не обичам да закъснявам.',           blanks: [0], correctAnswers: ['рано'],   options: ['рано', 'късно', 'бавно', 'добре', 'много', 'евтино'] },
+      { text: 'Модел: Спортистът бяга бързо.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Боли ме стомахът. Чувствам се _______.',                              blanks: [0], correctAnswers: ['зле'],     options: ['зле', 'добре', 'много', 'рано', 'бързо', 'евтино'] },
+      { text: 'Той учи български. Вече може да говори _______.',                     blanks: [0], correctAnswers: ['добре'],  options: ['добре', 'зле', 'много', 'евтино', 'бързо', 'рано'] },
+      { text: 'Ани _______ обича да пътува и да прави снимки.',                       blanks: [0], correctAnswers: ['много'],  options: ['много', 'малко', 'добре', 'зле', 'евтино', 'рано'] },
+      { text: 'Плодовете и зеленчуците на този пазар не са скъпи. Тук е _______.',   blanks: [0], correctAnswers: ['евтино'], options: ['евтино', 'скъпо', 'добре', 'бързо', 'много', 'зле'] },
+      { text: 'Винаги тръгвам _______ за работа. Не обичам да закъснявам.',           blanks: [0], correctAnswers: ['рано'],   options: ['рано', 'късно', 'бавно', 'добре', 'много', 'евтино'] },
     ],
   } as WorkbookFillBlankExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 12 — Упр. 23: сравнителна степен на наречия
+  // СТР. 12 — Упр. 23: сравнителна степен на наречия (обединени редовете; модел
+  // преместен над таблицата и извън инструкцията)
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l01-ex-23',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 23',
-    instruction: 'Работете по модела („Борис се връща от работа в 17:30. Яна се връща в 18:00. Марина се връща в 19:00. → Яна се връща по-късно от Борис. Марина се връща най-късно.").',
-    order: 25,
+    instruction: 'Изберете сравнителната и превъзходната степен по модела.',
+    order: 28,
     points: 8,
     layout: 'single',
+    hideSentenceNumbers: true,
     sentences: [
-      { text: '1. Бялата блуза струва 15 евро, синята — 18 евро, а лилавата — 20 евро. Синята блуза е _______ бялата.', blanks: [0], correctAnswers: ['по-скъпа от'], options: ['по-скъпа от', 'най-скъпа от', 'по-евтина от', 'най-евтина от'] },
-      { text: '   Лилавата блуза е _______.',                                                                              blanks: [0], correctAnswers: ['най-скъпа'],     options: ['най-скъпа', 'по-скъпа', 'най-евтина', 'по-евтина'] },
-      { text: '2. От центъра до офиса Ана върви 15 минути, Петър — 20 минути, а Гергана — 25 минути. Петър върви _______ Ана.', blanks: [0], correctAnswers: ['по-бавно от'], options: ['по-бавно от', 'най-бавно от', 'по-бързо от', 'най-бързо от'] },
-      { text: '   Гергана върви _______.',                                                                                  blanks: [0], correctAnswers: ['най-бавно'],     options: ['най-бавно', 'по-бавно', 'най-бързо', 'по-бързо'] },
-      { text: '3. Днес температурата е 18 градуса, вчера беше 23 градуса, а онзи ден — 27 градуса. Вчера беше _______ днес.',  blanks: [0], correctAnswers: ['по-топло от'], options: ['по-топло от', 'най-топло от', 'по-студено от', 'най-студено от'] },
-      { text: '   Онзи ден беше _______.',                                                                                  blanks: [0], correctAnswers: ['най-топло'],     options: ['най-топло', 'по-топло', 'най-студено', 'по-студено'] },
-      { text: '4. Калин купува 3 килограма ябълки, Явор купува 7 килограма, а Пламен — 10 килограма. Явор купува _______ Калин.', blanks: [0], correctAnswers: ['повече от'],  options: ['повече от', 'най-много от', 'по-малко от', 'най-малко от'] },
-      { text: '   Пламен купува _______.',                                                                                  blanks: [0], correctAnswers: ['най-много'],     options: ['най-много', 'повече', 'най-малко', 'по-малко'] },
+      { text: 'Модел: Борис се връща от работа в 17:30. Яна се връща в 18:00. Марина се връща в 19:00.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Яна се връща по-късно от Борис. Марина се връща най-късно.', blanks: [], correctAnswers: [], isExample: true },
+      { text: '1. Бялата блуза струва 15 евро, синята — 18 евро, а лилавата — 20 евро. Синята блуза е _______ бялата. Лилавата блуза е _______.', blanks: [0, 1], correctAnswers: ['по-скъпа от', 'най-скъпа'], options: [['по-скъпа от', 'най-скъпа от', 'по-евтина от', 'най-евтина от'], ['най-скъпа', 'по-скъпа', 'най-евтина', 'по-евтина']] },
+      { text: '2. От центъра до офиса Ана върви 15 минути, Петър — 20 минути, а Гергана — 25 минути. Петър върви _______ Ана. Гергана върви _______.', blanks: [0, 1], correctAnswers: ['по-бавно от', 'най-бавно'], options: [['по-бавно от', 'най-бавно от', 'по-бързо от', 'най-бързо от'], ['най-бавно', 'по-бавно', 'най-бързо', 'по-бързо']] },
+      { text: '3. Днес температурата е 18 градуса, вчера беше 23 градуса, а онзи ден — 27 градуса. Вчера беше _______ днес. Онзи ден беше _______.', blanks: [0, 1], correctAnswers: ['по-топло от', 'най-топло'], options: [['по-топло от', 'най-топло от', 'по-студено от', 'най-студено от'], ['най-топло', 'по-топло', 'най-студено', 'по-студено']] },
+      { text: '4. Калин купува 3 килограма ябълки, Явор купува 7 килограма, а Пламен — 10 килограма. Явор купува _______ Калин. Пламен купува _______.', blanks: [0, 1], correctAnswers: ['повече от', 'най-много'], options: [['повече от', 'най-много от', 'по-малко от', 'най-малко от'], ['най-много', 'повече', 'най-малко', 'по-малко']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -971,9 +1058,9 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-24',
     type: 'reading_text',
-    title: 'УПРАЖНЕНИЕ 24',
+    title: 'ТЕКСТОВЕ 24',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
-    order: 26,
+    order: 29,
     textTitle: 'СТОЛИЦАТА НА БЪЛГАРИЯ',
     images: [
       { imageUrl: '/assets/b1-lesson-01/05-tekstove-upr-24-stolitsata/01-sofia-aerial.jpg', label: 'София — въздушна снимка' },
@@ -1010,9 +1097,9 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l01-ex-24q',
     type: 'multiple_choice',
-    title: 'УПРАЖНЕНИЕ 24 — Въпроси',
+    title: 'УПРАЖНЕНИЕ — Въпроси',
     instruction: 'Отговорете на въпросите по текста „Столицата на България".',
-    order: 27,
+    order: 30,
     points: 8,
     questions: [
       {
