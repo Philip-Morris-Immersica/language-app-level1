@@ -8,48 +8,57 @@ export const content: LessonContent = {
   sections: [],
 
   vocabulary: [
-    // Ежедневие
-    { id: 'ejednevie', bulgarian: 'ежедневие', ttsText: 'ежеднЕвие', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "ежедневие" (daily life), four syllables: е-же-дне-вие. Pronounce the consonant "д" as a clear dental "d" sound (like in "day"), never as "b". Do not add an extra "y" (й) glide sound before the final "е". Stress on the third syllable "не" (uppercase E). Read smoothly as one natural word, no pauses between syllables.', translations: { en: 'daily life, everyday routine', fr: 'vie quotidienne', ar: 'الحياة اليومية', fa: 'زندگی روزمره', ru: 'повседневная жизнь', uk: 'повсякдення' } },
-    { id: 'zakuska', bulgarian: 'закуска, закуски', translations: { en: 'breakfast', fr: 'petit-déjeuner', ar: 'فطور', fa: 'صبحانه', ru: 'завтрак', uk: 'сніданок' } },
-    { id: 'brasna-se', bulgarian: 'бръсна се', translations: { en: 'to shave', fr: 'se raser', ar: 'يحلق', fa: 'اصلاح کردن', ru: 'бриться', uk: 'голитися' } },
-    { id: 'oblicham-se', bulgarian: 'обличам се', translations: { en: 'to get dressed', fr: "s'habiller", ar: 'يرتدي الملابس', fa: 'لباس پوشیدن', ru: 'одеваться', uk: 'одягатися' } },
-    { id: 'sabuzhdam', bulgarian: 'събуждам', translations: { en: 'to wake (someone) up', fr: 'réveiller', ar: 'يوقظ', fa: 'بیدار کردن', ru: 'будить', uk: 'будити' } },
-    { id: 'detska-gradina', bulgarian: 'детска градина', translations: { en: 'kindergarten', fr: 'école maternelle', ar: 'روضة أطفال', fa: 'مهد کودک', ru: 'детский сад', uk: 'дитячий садок' } },
-    { id: 'avtochasti', bulgarian: 'авточасти', ttsText: 'авточа̀сти', ttsModel: 'flash', ttsPrompt: 'Bulgarian word "авточасти" has four syllables: ав-то-час-ти. Only ONE syllable is stressed — "час" (marked with the accent). The other three syllables — "ав", "то", "ти" — are all completely unstressed; do not add any stress on "ав". Read it once, as a flat statement, not a question. Do not repeat the word.', translations: { en: 'car parts', fr: 'pièces automobiles', ar: 'قطع غيار السيارات', fa: 'قطعات خودرو', ru: 'автозапчасти', uk: 'автозапчастини' } },
-    { id: 'pazarche', bulgarian: 'пазарче, пазар', translations: { en: 'small market, market', fr: 'petit marché', ar: 'سوق صغير', fa: 'بازارچه', ru: 'рынок, базарчик', uk: 'ринок, базарчик' } },
-    { id: 'zelenchutsi', bulgarian: 'зеленчуци', ttsText: 'зеленЧУци', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "зеленчуци" (vegetables). Pronounce the letter "л" as a clear consonant sound, never as "у" or "w". Stress on the third syllable: зе-лен-ЧУ-ци.', translations: { en: 'vegetables', fr: 'légumes', ar: 'خضروات', fa: 'سبزیجات', ru: 'овощи', uk: 'овочі' } },
-    { id: 'razhodka', bulgarian: 'разходка, разходки', translations: { en: 'walk, stroll', fr: 'promenade', ar: 'نزهة', fa: 'قدم زدن', ru: 'прогулка', uk: 'прогулянка' } },
-    { id: 'servira', bulgarian: 'сервирам', translations: { en: 'to serve (food)', fr: 'servir', ar: 'يقدّم الطعام', fa: 'سرو کردن', ru: 'подавать (еду)', uk: 'подавати (їжу)' } },
+    // б
+    { id: 'bavya-se', bulgarian: 'бавя се, -иш / забавя се, -иш', ttsText: 'бавя се, бавиш се / забавя се, забавиш се', ttsModel: 'pro', translations: { en: 'to be late', fr: 'être en retard / se mettre en retard', ar: 'يتأخر', fa: 'دیر کردن', ru: 'опаздывать / опоздать', uk: 'запізнюватися / запізнитися' } },
 
-    // Работа и училище
-    { id: 'kolega-serv', bulgarian: 'колега, колеги', translations: { en: 'colleague, -s', fr: 'collègue', ar: 'زميل', fa: 'همکار', ru: 'коллега', uk: 'колега' } },
-    { id: 'operativka', bulgarian: 'оперативка', translations: { en: 'staff meeting, briefing', fr: 'réunion de travail', ar: 'اجتماع عمل', fa: 'جلسه کاری', ru: 'планёрка', uk: 'нарада' } },
-    { id: 'ekskurziya', bulgarian: 'екскурзия, екскурзии', translations: { en: 'excursion, trip', fr: 'excursion', ar: 'رحلة', fa: 'گردش', ru: 'экскурсия', uk: 'екскурсія' } },
-    { id: 'test', bulgarian: 'тест, тестове', translations: { en: 'test', fr: 'test, contrôle', ar: 'اختبار', fa: 'آزمون', ru: 'тест, контрольная', uk: 'тест, контрольна' } },
-    { id: 'pritesnen', bulgarian: 'притеснен, -а, -о, -и', ttsText: 'притеснЕн, притеснЕна, притеснЕно, притеснЕни', ttsModel: 'pro', ttsPrompt: 'Bulgarian adjective, four forms in a row. Stress on "не" in every form: при-тес-НЕН, при-тес-НЕ-на, при-тес-НЕ-но, при-тес-НЕ-ни. Read the uppercase syllable as stressed. Pause briefly between forms.', translations: { en: 'worried, nervous', fr: 'inquiet, nerveux', ar: 'قلق', fa: 'نگران', ru: 'обеспокоенный', uk: 'занепокоєний' } },
-    { id: 'prizvanie', bulgarian: 'призвание', translations: { en: 'vocation, calling', fr: 'vocation', ar: 'رسالة، دعوة مهنية', fa: 'رسالت شغلی', ru: 'призвание', uk: 'покликання' } },
-    { id: 'metro', bulgarian: 'метро', translations: { en: 'metro, underground', fr: 'métro', ar: 'مترو', fa: 'مترو', ru: 'метро', uk: 'метро' } },
-    { id: 'navreme', bulgarian: 'навреме', translations: { en: 'on time', fr: "à l'heure", ar: 'في الوقت المحدد', fa: 'به‌موقع', ru: 'вовремя', uk: 'вчасно' } },
+    // в
+    { id: 'veryatno', bulgarian: 'вероятно', ttsModel: 'pro', translations: { en: 'probably', fr: 'probablement', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'вероятно', uk: 'вірогідно' } },
+    { id: 'vtora-upotreba', bulgarian: 'втора употреба', ttsModel: 'pro', translations: { en: 'second-hand', fr: "d'occasion", ar: 'مستعمل', fa: 'دست دوم', ru: 'секонд-хэнд', uk: 'секонд-хенд' } },
 
-    // Домакинска работа
-    { id: 'domakinya', bulgarian: 'домакиня', translations: { en: 'housewife, homemaker', fr: 'femme au foyer', ar: 'ربة منزل', fa: 'خانه‌دار', ru: 'домохозяйка', uk: 'домогосподарка' } },
-    { id: 'chistene', bulgarian: 'чистене', ttsText: 'чИстене', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "чистене" (cleaning). Pronounce the initial "ч" clearly as the English "ch" sound (like in "chair"), never as "ц" (ts). Stress on the first syllable: ЧИС-те-не.', translations: { en: 'cleaning', fr: 'nettoyage', ar: 'تنظيف', fa: 'نظافت', ru: 'уборка', uk: 'прибирання' } },
-    { id: 'gotvene', bulgarian: 'готвене', ttsText: 'гОтвене', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "готвене" (cooking). Articulate every consonant clearly and distinctly, especially the "тв" cluster — do not blur or drop it. Stress on the first syllable: ГОТ-ве-не.', translations: { en: 'cooking', fr: 'cuisine', ar: 'طبخ', fa: 'آشپزی', ru: 'готовка', uk: 'готування' } },
-    { id: 'prane', bulgarian: 'пране', translations: { en: 'laundry, washing', fr: 'lessive', ar: 'غسيل الملابس', fa: 'شست‌وشوی لباس', ru: 'стирка', uk: 'прання' } },
-    { id: 'gladene', bulgarian: 'гладене', translations: { en: 'ironing', fr: 'repassage', ar: 'كي الملابس', fa: 'اتو کردن', ru: 'глажка', uk: 'прасування' } },
-    { id: 'pazaruvane', bulgarian: 'пазаруване', ttsText: 'пазарУване', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "пазаруване" (shopping). Read fluently as one natural word in standard Bulgarian. Stress on the third syllable: па-за-РУ-ва-не.', translations: { en: 'shopping', fr: 'courses, achats', ar: 'التسوق', fa: 'خرید', ru: 'покупки', uk: 'покупки' } },
-    { id: 'palachinki', bulgarian: 'палачинки', ttsText: 'палаЧИНки', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "палачинки" (pancakes). Read in clear standard Bulgarian pronunciation with no Russian accent. Stress on the third syllable: па-ла-ЧИН-ки.', translations: { en: 'pancakes', fr: 'crêpes', ar: 'فطائر محلاة', fa: 'پنکیک', ru: 'блины', uk: 'млинці' } },
-    { id: 'obeshtavam', bulgarian: 'обещавам', translations: { en: 'to promise', fr: 'promettre', ar: 'يعد', fa: 'قول دادن', ru: 'обещать', uk: 'обіцяти' } },
+    // д
+    { id: 'dovezhdam', bulgarian: 'довеждам, -аш / доведа, -еш', ttsText: 'довеждам, довеждаш / доведа, доведеш', ttsModel: 'pro', translations: { en: 'to bring', fr: 'amener', ar: 'يُحضر', fa: 'آوردن', ru: 'приводить / привести', uk: 'приводити / привести' } },
 
-    // Умна къща
-    { id: 'umna-kashta', bulgarian: 'умна къща', translations: { en: 'smart home', fr: 'maison intelligente', ar: 'منزل ذكي', fa: 'خانه هوشمند', ru: 'умный дом', uk: 'розумний дім' } },
-    { id: 'elektrouredi', bulgarian: 'електроуреди', ttsText: 'електроУреди', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "електроуреди". Say it only ONCE — do not repeat the word and do not demonstrate it twice. Read it as one smooth word, no pause in the middle. Stress on the syllable "у": елек-тро-У-ре-ди.', translations: { en: 'electrical appliances', fr: 'appareils électroménagers', ar: 'أجهزة كهربائية', fa: 'لوازم برقی', ru: 'электроприборы', uk: 'електроприлади' } },
-    { id: 'osvetlenie', bulgarian: 'осветление', translations: { en: 'lighting', fr: 'éclairage', ar: 'إضاءة', fa: 'روشنایی', ru: 'освещение', uk: 'освітлення' } },
-    { id: 'shtori', bulgarian: 'щори', ttsText: 'щОри', ttsModel: 'pro', ttsPrompt: 'Bulgarian word "щори" (blinds). Pronounce the consonant "р" clearly as a tapped Bulgarian "r" sound, never as "л" (l). Pronounce the vowel "o" in the first syllable clearly as "o", never as "u". Stress on the first syllable: ЩО-ри.', translations: { en: 'blinds', fr: 'stores', ar: 'ستائر', fa: 'کرکره', ru: 'жалюзи', uk: 'жалюзі' } },
-    { id: 'alarma', bulgarian: 'аларма', translations: { en: 'alarm', fr: 'alarme', ar: 'إنذار', fa: 'زنگ خطر', ru: 'сигнализация', uk: 'сигналізація' } },
-    { id: 'solarni-paneli', bulgarian: 'соларни панели', ttsText: 'сола̀рни панѐли', ttsModel: 'pro', ttsPrompt: 'Bulgarian phrase "соларни панели" (solar panels). The grave accent mark above a vowel shows the stressed syllable — read the phrase fluently and naturally, do not spell it out. Pronounce every "л" as a clear lateral consonant (tongue tip touches the roof of the mouth, like English "l" in "lamp") — never as "н" (n) or "й" (y). Read as a flat statement, not a question — do not raise the pitch at the end.', translations: { en: 'solar panels', fr: 'panneaux solaires', ar: 'ألواح شمسية', fa: 'پنل خورشیدی', ru: 'солнечные панели', uk: 'сонячні панелі' } },
-    { id: 'distantsionno', bulgarian: 'дистанционно', translations: { en: 'remote control; remotely', fr: 'télécommande; à distance', ar: 'جهاز تحكم عن بعد', fa: 'کنترل از راه دور', ru: 'пульт; дистанционно', uk: 'пульт; дистанційно' } },
-    { id: 'smartfon', bulgarian: 'смартфон', ttsText: 'смартфо̀н', ttsModel: 'flash', ttsPrompt: 'Bulgarian word "смартфон". Say it only ONCE — do not repeat it. Stress on the last syllable "фон", not on "смарт". Do not add any extra sound at the end.', translations: { en: 'smartphone', fr: 'smartphone', ar: 'هاتف ذكي', fa: 'گوشی هوشمند', ru: 'смартфон', uk: 'смартфон' } },
+    // з
+    { id: 'zavezhdam', bulgarian: 'завеждам, -аш / заведа, -еш', ttsText: 'завеждам, завеждаш / заведа, заведеш', ttsModel: 'pro', translations: { en: 'to bring, to take to', fr: 'emmener', ar: 'يأخذ إلى', fa: 'بردن به', ru: 'отводить / отвести', uk: 'відводити / відвести' } },
+    { id: 'zanayat', bulgarian: 'занаят, -и', ttsText: 'занаят, занаяти', ttsModel: 'pro', translations: { en: 'craft, -s', fr: 'artisanat, métier', ar: 'حرفة، حِرَف', fa: 'صنعت دستی', ru: 'ремесло', uk: 'ремесло' } },
+
+    // и
+    { id: 'izlozhba', bulgarian: 'изложба, -и', ttsText: 'изложба, изложби', ttsModel: 'pro', translations: { en: 'exhibition, -s', fr: 'exposition', ar: 'معرض، معارض', fa: 'نمایشگاه', ru: 'выставка', uk: 'виставка' } },
+
+    // м
+    { id: 'mekitsa', bulgarian: 'мекица, -и', ttsText: 'мекица, мекици', ttsModel: 'pro', translations: { en: 'fried dough', fr: 'beignet bulgare', ar: 'عجينة مقلية', fa: 'شیرینی سرخ‌شده', ru: 'мекица (жареное тесто)', uk: 'мекиця (смажене тісто)' } },
+
+    // н
+    { id: 'navyarno', bulgarian: 'навярно', ttsModel: 'pro', translations: { en: 'probably', fr: 'sans doute', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'наверное', uk: 'напевно' } },
+
+    // о
+    { id: 'ozdravyavam', bulgarian: 'оздравявам, -аш / оздравея, -еш', ttsText: 'оздравявам, оздравяваш / оздравея, оздравееш', ttsModel: 'pro', translations: { en: 'to heal, to recover', fr: 'guérir', ar: 'يتعافى', fa: 'بهبود یافتن', ru: 'выздоравливать / выздороветь', uk: 'одужувати / одужати' } },
+    { id: 'otdavna', bulgarian: 'отдавна', ttsModel: 'pro', translations: { en: 'long ago, for a long time', fr: 'depuis longtemps', ar: 'منذ زمن طويل', fa: 'مدت‌هاست', ru: 'давно', uk: 'давно' } },
+    { id: 'otkazvam', bulgarian: 'отказвам, -аш / откажа, -еш', ttsText: 'отказвам, отказваш / откажа, откажеш', ttsModel: 'pro', translations: { en: 'to refuse', fr: 'refuser', ar: 'يرفض', fa: 'رد کردن', ru: 'отказывать / отказать', uk: 'відмовляти / відмовити' } },
+
+    // п
+    { id: 'peka', bulgarian: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
+    { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
+    { id: 'pekarna', bulgarian: 'пекарна, -и', ttsText: 'пекарна, пекарни', ttsModel: 'pro', translations: { en: 'bakery, -ies', fr: 'boulangerie', ar: 'مخبز، مخابز', fa: 'نانوایی', ru: 'пекарня', uk: 'пекарня' } },
+    { id: 'poddarjam', bulgarian: 'поддържам, -аш', ttsText: 'поддържам, поддържаш', ttsModel: 'pro', translations: { en: 'to support', fr: 'soutenir', ar: 'يدعم', fa: 'حمایت کردن', ru: 'поддерживать', uk: 'підтримувати' } },
+    { id: 'popylvam', bulgarian: 'попълвам, -аш / попълня, -иш', ttsText: 'попълвам, попълваш / попълня, попълниш', ttsModel: 'pro', translations: { en: 'to fill in', fr: 'remplir', ar: 'يملأ', fa: 'پر کردن', ru: 'заполнять / заполнить', uk: 'заповнювати / заповнити' } },
+    { id: 'presicham', bulgarian: 'пресичам, -аш / пресека, пресечеш', ttsText: 'пресичам, пресичаш / пресека, пресечеш', ttsModel: 'pro', translations: { en: 'to cross', fr: 'traverser', ar: 'يعبر', fa: 'رد شدن از', ru: 'переходить / перейти', uk: 'переходити / перейти' } },
+    { id: 'prodylzhavam', bulgarian: 'продължавам, -аш / продължа, -иш', ttsText: 'продължавам, продължаваш / продължа, продължиш', ttsModel: 'pro', translations: { en: 'to continue', fr: 'continuer', ar: 'يواصل', fa: 'ادامه دادن', ru: 'продолжать / продолжить', uk: 'продовжувати / продовжити' } },
+
+    // р
+    { id: 'radvam-se', bulgarian: 'радвам се, -аш / зарадвам се, -аш', ttsText: 'радвам се, радваш се / зарадвам се, зарадваш се', ttsModel: 'pro', translations: { en: 'to be glad, to be happy about', fr: 'se réjouir', ar: 'يفرح', fa: 'خوشحال بودن', ru: 'радоваться / порадоваться', uk: 'радіти / зрадіти' } },
+
+    // с
+    { id: 'srychen', bulgarian: 'сръчен, сръчна, -о, -и', ttsText: 'сръчен, сръчна, сръчно, сръчни', ttsModel: 'pro', translations: { en: 'skillful', fr: 'habile, adroit', ar: 'ماهر', fa: 'ماهر', ru: 'умелый, ловкий', uk: 'вправний' } },
+    { id: 'staraya-se', bulgarian: 'старая се, -еш / постарая се, -еш', ttsText: 'старая се, стараеш се / постарая се, постараеш се', ttsModel: 'pro', translations: { en: 'to try hard', fr: "s'appliquer, faire des efforts", ar: 'يجتهد', fa: 'تلاش کردن', ru: 'стараться / постараться', uk: 'старатися / постаратися' } },
+    { id: 'stroitel', bulgarian: 'строител, -и', ttsText: 'строител, строители', ttsModel: 'pro', translations: { en: 'builder, -s', fr: 'constructeur, bâtisseur', ar: 'بنّاء، بنّاؤون', fa: 'سازنده', ru: 'строитель', uk: 'будівельник' } },
+
+    // у
+    { id: 'usluzhiv', bulgarian: 'услужлив, -а, -о, -и', ttsText: 'услужлив, услужлива, услужливо, услужливи', ttsModel: 'pro', translations: { en: 'helpful', fr: 'serviable', ar: 'متعاون', fa: 'خدمتگزار', ru: 'услужливый', uk: 'послужливий' } },
+    { id: 'uyuten', bulgarian: 'уютен, уютна, -о, -и', ttsText: 'уютен, уютна, уютно, уютни', ttsModel: 'pro', translations: { en: 'cozy', fr: 'confortable, douillet', ar: 'مريح ودافئ', fa: 'دنج', ru: 'уютный', uk: 'затишний' } },
+
+    // х
+    { id: 'hudozhnik', bulgarian: 'художник, художници', ttsModel: 'pro', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
   ],
 
   grammarReference: [
