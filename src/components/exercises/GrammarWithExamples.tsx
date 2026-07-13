@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
@@ -96,7 +95,6 @@ function BoldLine({ text }: { text: string }) {
 
 export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const { lang } = useLanguage();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
@@ -160,7 +158,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     </p>
                     <InlineTranslation
                       text={line.replace(/\*\*(.+?)\*\*/g, '$1')}
-                      visible={lang !== 'bg' || revealed.has(index)}
+                      visible={revealed.has(index)}
                     />
                   </div>
                 ))}
@@ -280,7 +278,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                           <BoldLine text={line} />
                         </p>
                         {translationSource.trim() && (
-                          <InlineTranslation text={translationSource} visible={lang !== 'bg' || revealed.has(index)} />
+                          <InlineTranslation text={translationSource} visible={revealed.has(index)} />
                         )}
                       </div>
                     );
@@ -294,20 +292,20 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                       <HighlightPrepositions text={example.text} />
                     </p>
                   </div>
-                  <InlineTranslation text={example.text} visible={lang !== 'bg' || revealed.has(index)} translations={example.translations} />
+                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
                   <div className="flex items-center justify-center gap-2 mt-2">
                     <ThumbsDown className="w-5 h-5 md:w-6 md:h-6 fill-red-500 text-red-500 flex-shrink-0" />
                     <p className="text-sm md:text-base text-gray-600 italic">
                       <HighlightPrepositions text={example.subtext} />
                     </p>
                   </div>
-                  <InlineTranslation text={example.subtext} visible={lang !== 'bg' || revealed.has(index)} />
+                  <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
                   {example.label && (
                     <div className="mt-2 inline-block">
                       <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
                         {example.label}
                       </p>
-                      <InlineTranslation text={example.label} visible={lang !== 'bg' || revealed.has(index)} />
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
                     </div>
                   )}
                 </>
@@ -316,13 +314,13 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                   <p className="text-base md:text-lg font-bold text-gray-800">
                     <HighlightPrepositions text={example.text} />
                   </p>
-                  <InlineTranslation text={example.text} visible={lang !== 'bg' || revealed.has(index)} translations={example.translations} />
+                  <InlineTranslation text={example.text} visible={revealed.has(index)} translations={example.translations} />
                   {example.subtext && (
                     <>
                       <p className="text-sm md:text-base text-gray-600 italic">
                         <HighlightPrepositions text={example.subtext} />
                       </p>
-                      <InlineTranslation text={example.subtext} visible={lang !== 'bg' || revealed.has(index)} />
+                      <InlineTranslation text={example.subtext} visible={revealed.has(index)} />
                     </>
                   )}
                   {example.label && (
@@ -330,7 +328,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                       <p className="text-xs font-semibold text-[#2d5a1b] bg-[#f0f7e8] border border-[#8BC34A]/40 rounded-full px-3 py-1">
                         {example.label}
                       </p>
-                      <InlineTranslation text={example.label} visible={lang !== 'bg' || revealed.has(index)} />
+                      <InlineTranslation text={example.label} visible={revealed.has(index)} />
                     </div>
                   )}
                 </>

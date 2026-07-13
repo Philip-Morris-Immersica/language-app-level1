@@ -30,6 +30,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Напитки в кафенето',
       subtitle: 'Кръстословица, нови думи и упражнения за напитки',
+      titleI18n: {
+        en: 'Drinks at the café',
+        fr: 'Boissons au café',
+        ar: 'المشروبات في المقهى',
+        fa: 'نوشیدنی‌ها در کافه',
+        uk: 'Напої в кафе',
+        ru: 'Напитки в кафе',
+      },
+      subtitleI18n: {
+        en: 'Crossword, new words and exercises about drinks',
+        fr: 'Mots croisés, nouveaux mots et exercices sur les boissons',
+        ar: 'كلمات متقاطعة وكلمات جديدة وتمارين عن المشروبات',
+        fa: 'جدول کلمات، کلمات جدید و تمرین‌هایی درباره‌ی نوشیدنی‌ها',
+        uk: 'Кросворд, нові слова та вправи про напої',
+        ru: 'Кроссворд, новые слова и упражнения о напитках',
+      },
       theme: 'vocabulary',
     },
     points: 8,
@@ -108,6 +124,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Числа и пари',
       subtitle: 'Числителни от десет до сто и разплащане в евро',
+      titleI18n: {
+        en: 'Numbers and money',
+        fr: 'Les nombres et l\'argent',
+        ar: 'الأعداد والنقود',
+        fa: 'اعداد و پول',
+        uk: 'Числа та гроші',
+        ru: 'Числа и деньги',
+      },
+      subtitleI18n: {
+        en: 'Numbers from ten to a hundred and paying in euros',
+        fr: 'Les nombres de dix à cent et le paiement en euros',
+        ar: 'الأعداد من عشرة إلى مئة والدفع باليورو',
+        fa: 'اعداد از ده تا صد و پرداخت با یورو',
+        uk: 'Числа від десяти до ста та оплата в євро',
+        ru: 'Числа от десяти до ста и оплата в евро',
+      },
       theme: 'grammar',
     },
     tableTitle: 'Бройни числителни 10–100',
@@ -312,6 +344,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Поръчка в ресторанта',
       subtitle: 'Храни, диалози за маса, меню и сметка в ресторант',
+      titleI18n: {
+        en: 'Ordering at the restaurant',
+        fr: 'Commander au restaurant',
+        ar: 'الطلب في المطعم',
+        fa: 'سفارش در رستوران',
+        uk: 'Замовлення в ресторані',
+        ru: 'Заказ в ресторане',
+      },
+      subtitleI18n: {
+        en: 'Foods, dialogues at the table, menu and the bill at a restaurant',
+        fr: 'Aliments, dialogues à table, menu et addition au restaurant',
+        ar: 'الأطعمة وحوارات على الطاولة والقائمة والحساب في المطعم',
+        fa: 'غذاها، گفتگوها سر میز، منو و صورت‌حساب در رستوران',
+        uk: 'Страви, діалоги за столом, меню та рахунок у ресторані',
+        ru: 'Блюда, диалоги за столом, меню и счёт в ресторане',
+      },
       theme: 'dialogue',
     },
     cards: [
@@ -424,7 +472,7 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: 'e',
+        id: 'д',
         imageUrl: '/assets/lesson-03/dialogues-2/smetka.jpg',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Може ли сметката?', translations: { en: 'Can I have the bill?', ar: 'هل يمكنني الحصول على الفاتورة؟', fr: 'L\'addition, s\'il vous plaît.', fa: 'می‌توانم صورتحساب را داشته باشم؟', uk: 'Можна рахунок?', ru: 'Можно счёт?' } },
@@ -491,6 +539,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Глаголите „пия" и „ям"',
       subtitle: 'Спрежение на глаголите пия и ям и хранения през деня',
+      titleI18n: {
+        en: 'The verbs „пия" (to drink) and „ям" (to eat)',
+        fr: 'Les verbes « пия » (boire) et « ям » (manger)',
+        ar: 'الفعلان «пия» (يشرب) و«ям» (يأكل)',
+        fa: 'فعل‌های «пия» (نوشیدن) و «ям» (خوردن)',
+        uk: 'Дієслова „пия" (пити) і „ям" (їсти)',
+        ru: 'Глаголы „пия" (пить) и „ям" (есть)',
+      },
+      subtitleI18n: {
+        en: 'Conjugation of the verbs „пия" and „ям" and meals during the day',
+        fr: 'La conjugaison des verbes « пия » et « ям » et les repas de la journée',
+        ar: 'تصريف الفعلين «пия» و«ям» ووجبات اليوم',
+        fa: 'صرف فعل‌های «пия» و «ям» و وعده‌های غذایی در طول روز',
+        uk: 'Дієвідмінювання дієслів „пия" і „ям" та прийоми їжі протягом дня',
+        ru: 'Спряжение глаголов „пия" и „ям" и приёмы пищи в течение дня',
+      },
       theme: 'grammar',
     },
     tableTitle: 'Сегашно време – Е група: пия',
@@ -726,7 +790,7 @@ export const exercises: Exercise[] = [
     order: 22,
     sections: [
       {
-        id: 'a',
+        id: 'а',
         lines: [
           { speaker: 'A', voiceGender: 'female', text: 'Какво закусваш?', translations: { en: 'What do you have for breakfast?', ar: 'ماذا تتناول على الفطور؟', fr: 'Qu\'est-ce que tu prends au petit-déjeuner ?', fa: 'صبحانه چه می‌خوری؟', uk: 'Що ти снідаєш?', ru: 'Что ты ешь на завтрак?' } },
           { speaker: 'Б', voiceGender: 'male',   text: 'Сутрин ям сандвич и пия кафе.', translations: { en: 'In the morning I eat a sandwich and drink coffee.', ar: 'في الصباح آكل ساندويتش وأشرب قهوة.', fr: 'Le matin, je mange un sandwich et je bois du café.', fa: 'صبح ساندویچ می‌خورم و قهوه می‌نوشم.', uk: 'Вранці я їм сандвіч і п\'ю каву.', ru: 'Утром я ем сэндвич и пью кофе.' } },
@@ -802,6 +866,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Множествено число и текстове за храна',
       subtitle: 'Форми за множествено число и истории от различни ресторанти',
+      titleI18n: {
+        en: 'The plural and texts about food',
+        fr: 'Le pluriel et textes sur la nourriture',
+        ar: 'صيغة الجمع ونصوص عن الطعام',
+        fa: 'جمع و متن‌هایی درباره‌ی غذا',
+        uk: 'Множина та тексти про їжу',
+        ru: 'Множественное число и тексты о еде',
+      },
+      subtitleI18n: {
+        en: 'Plural forms and stories from different restaurants',
+        fr: 'Les formes du pluriel et des histoires de différents restaurants',
+        ar: 'صيغ الجمع وقصص من مطاعم مختلفة',
+        fa: 'صورت‌های جمع و داستان‌هایی از رستوران‌های مختلف',
+        uk: 'Форми множини та історії з різних ресторанів',
+        ru: 'Формы множественного числа и истории из разных ресторанов',
+      },
       theme: 'reading',
     },
     tableTitle: 'Глагол → Съществително',

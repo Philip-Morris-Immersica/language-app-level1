@@ -8,6 +8,7 @@ import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
 import { LessonExercisesProvider } from '@/components/LessonExercisesProvider';
+import { buildCelebrationPlan } from '@/lib/celebration';
 import { ReviewSectionDivider } from '@/components/ReviewSectionDivider';
 import { LessonParts } from '@/components/LessonParts';
 import { VocabularyDrawer } from '@/components/VocabularyDrawer';
@@ -55,6 +56,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const vocabulary = lessonData.content?.vocabulary || [];
   const hasGrammarReference = !!(lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0);
+  const celebrationPlan = buildCelebrationPlan(lessonData, lessonId);
 
   return (
     <LessonLayout>
@@ -84,7 +86,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
         )}
 
-        <LessonExercisesProvider lessonId={lessonId}>
+        <LessonExercisesProvider lessonId={lessonId} celebrationPlan={celebrationPlan}>
           {/* In-lesson exercises */}
           {lessonData.exercises && lessonData.exercises.length > 0 && (
             <div className="space-y-8">
@@ -119,6 +121,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
                 const parts: {
                   title: string;
                   subtitle?: string;
+                  titleI18n?: Record<string, string>;
+                  subtitleI18n?: Record<string, string>;
                   theme?: string;
                   exerciseIds: string[];
                   nodes: ReactNode[];
@@ -129,6 +133,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     parts.push({
                       title: exercise.sectionStart.title,
                       subtitle: exercise.sectionStart.subtitle,
+                      titleI18n: exercise.sectionStart.titleI18n,
+                      subtitleI18n: exercise.sectionStart.subtitleI18n,
                       theme: exercise.sectionStart.theme,
                       exerciseIds: [],
                       nodes: [],
@@ -150,6 +156,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     parts={parts.map((p) => ({
                       title: p.title,
                       subtitle: p.subtitle,
+                      titleI18n: p.titleI18n,
+                      subtitleI18n: p.subtitleI18n,
                       theme: p.theme,
                       exerciseIds: p.exerciseIds,
                       children: <div className="space-y-8">{p.nodes}</div>,

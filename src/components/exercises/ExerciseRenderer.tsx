@@ -29,6 +29,7 @@ import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
+import { AudioChoice } from './AudioChoice';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
@@ -429,6 +430,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
         />
       );
+
+    case 'audio_choice':
+      return wrap(<AudioChoice exercise={exercise} onComplete={onComplete} />);
 
     case 'verb_conjugation':
     case 'number_writing':

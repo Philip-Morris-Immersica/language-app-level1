@@ -30,6 +30,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Места в града и селото',
       subtitle: 'Нови думи за сгради и места, снимки и упражнения за разпознаване',
+      titleI18n: {
+        en: 'Places in the town and the village',
+        fr: 'Lieux en ville et au village',
+        ar: 'أماكن في المدينة والقرية',
+        fa: 'مکان‌ها در شهر و روستا',
+        uk: 'Місця в місті та селі',
+        ru: 'Места в городе и селе',
+      },
+      subtitleI18n: {
+        en: 'New words for buildings and places, photos and recognition exercises',
+        fr: 'Nouveaux mots pour les bâtiments et les lieux, photos et exercices de reconnaissance',
+        ar: 'كلمات جديدة عن المباني والأماكن، وصور وتمارين تمييز',
+        fa: 'کلمات جدید برای ساختمان‌ها و مکان‌ها، عکس‌ها و تمرین‌های تشخیص',
+        uk: 'Нові слова для будівель і місць, фото та вправи на впізнавання',
+        ru: 'Новые слова для зданий и мест, фотографии и упражнения на распознавание',
+      },
       theme: 'vocabulary',
     },
     points: 5,
@@ -190,6 +206,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Адрес и диалози',
       subtitle: 'Диалози за адрес и съкратени форми за улица, квартал и блок',
+      titleI18n: {
+        en: 'Address and dialogues',
+        fr: 'Adresse et dialogues',
+        ar: 'العنوان والحوارات',
+        fa: 'نشانی و گفتگوها',
+        uk: 'Адреса та діалоги',
+        ru: 'Адрес и диалоги',
+      },
+      subtitleI18n: {
+        en: 'Dialogues about addresses and abbreviations for „улица" (street), „квартал" (neighbourhood) and „блок" (residential block)',
+        fr: 'Dialogues sur l\'adresse et les abréviations pour « улица » (rue), « квартал » (quartier) et « блок » (immeuble)',
+        ar: 'حوارات عن العنوان والاختصارات لـ«улица» (شارع) و«квартал» (حيّ) و«блок» (عمارة)',
+        fa: 'گفتگوها درباره‌ی نشانی و صورت‌های کوتاه «улица» (خیابان)، «квартал» (محله) و «блок» (بلوک)',
+        uk: 'Діалоги про адресу та скорочення для „улица" (вулиця), „квартал" (квартал) і „блок" (блок)',
+        ru: 'Диалоги об адресе и сокращения для „улица" (улица), „квартал" (квартал) и „блок" (блок)',
+      },
       theme: 'dialogue',
     },
     sections: [
@@ -363,8 +395,24 @@ export const exercises: Exercise[] = [
     instruction: 'Глагол **живея** в сегашно време — прегледайте таблицата и примера.',
     order: 14,
     sectionStart: {
-      title: 'Глагол живея и членуване',
+      title: 'Глаголът „живея" и членуването',
       subtitle: 'Спрежение на глагола живея и определителен член в единствено и множествено число',
+      titleI18n: {
+        en: 'The verb „живея" (to live) and the definite article',
+        fr: 'Le verbe « живея » (habiter) et l\'article défini',
+        ar: 'الفعل «живея» (يعيش) وأداة التعريف',
+        fa: 'فعل «живея» (زندگی کردن) و حرف تعریف معیّن',
+        uk: 'Дієслово „живея" (жити) і означений артикль',
+        ru: 'Глагол „живея" (жить) и определённый артикль',
+      },
+      subtitleI18n: {
+        en: 'Conjugation of the verb „живея" and the definite article in the singular and plural',
+        fr: 'La conjugaison du verbe « живея » et l\'article défini au singulier et au pluriel',
+        ar: 'تصريف الفعل «живея» وأداة التعريف في المفرد والجمع',
+        fa: 'صرف فعل «живея» و حرف تعریف معیّن در مفرد و جمع',
+        uk: 'Дієвідмінювання дієслова „живея" та означений артикль в однині та множині',
+        ru: 'Спряжение глагола „живея" и определённый артикль в единственном и множественном числе',
+      },
       theme: 'grammar',
     },
     tableTitle: 'Живея (живе–)',
@@ -547,6 +595,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Предлози, посоки и числа',
       subtitle: 'Предлози за място, посоки, бройни форми за хора и големи числа',
+      titleI18n: {
+        en: 'Prepositions, directions and numbers',
+        fr: 'Prépositions, directions et nombres',
+        ar: 'حروف الجر والاتجاهات والأعداد',
+        fa: 'حروف اضافه، جهت‌ها و اعداد',
+        uk: 'Прийменники, напрямки та числа',
+        ru: 'Предлоги, направления и числа',
+      },
+      subtitleI18n: {
+        en: 'Prepositions of place, directions, counting forms for people and large numbers',
+        fr: 'Les prépositions de lieu, les directions, les formes de dénombrement pour les personnes et les grands nombres',
+        ar: 'حروف جر المكان، والاتجاهات، وصيغ العدّ للأشخاص، والأعداد الكبيرة',
+        fa: 'حروف اضافه‌ی مکان، جهت‌ها، صورت‌های شمارش برای افراد و اعداد بزرگ',
+        uk: 'Прийменники місця, напрямки, лічильні форми для людей та великі числа',
+        ru: 'Предлоги места, направления, счётные формы для людей и большие числа',
+      },
       theme: 'grammar',
     },
     examples: [
@@ -661,7 +725,7 @@ export const exercises: Exercise[] = [
     imageUrl: '/assets/lesson-05/28-dialozi-2-posoka-karta/01-turisti-s-karta.jpg',
     sections: [
       {
-        id: 'a',
+        id: 'а',
         lines: [
           { text: '— Извинете, къде е общината?' },
           { text: '— Вървете направо, след банката завийте наляво.' },
@@ -868,6 +932,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Текстове за градове и села',
       subtitle: 'Допълнителни упражнения и четива за Варна, Пловдив, села и лични истории',
+      titleI18n: {
+        en: 'Texts about towns and villages',
+        fr: 'Textes sur les villes et les villages',
+        ar: 'نصوص عن المدن والقرى',
+        fa: 'متن‌هایی درباره‌ی شهرها و روستاها',
+        uk: 'Тексти про міста та села',
+        ru: 'Тексты о городах и сёлах',
+      },
+      subtitleI18n: {
+        en: 'Additional exercises and readings about Varna, Plovdiv, villages and personal stories',
+        fr: 'Exercices supplémentaires et lectures sur Varna, Plovdiv, les villages et des histoires personnelles',
+        ar: 'تمارين إضافية ونصوص للقراءة عن فارنا وبلوفديف والقرى وقصص شخصية',
+        fa: 'تمرین‌های بیشتر و خواندنی‌هایی درباره‌ی وارنا، پلوودیف، روستاها و داستان‌های شخصی',
+        uk: 'Додаткові вправи та тексти про Варну, Пловдив, села та особисті історії',
+        ru: 'Дополнительные упражнения и тексты о Варне, Пловдиве, сёлах и личных историях',
+      },
       theme: 'reading',
     },
     points: 5,

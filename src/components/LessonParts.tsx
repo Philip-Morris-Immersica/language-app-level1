@@ -12,6 +12,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useTranslate } from '@/i18n/useTranslate';
+import { useT } from '@/i18n/useT';
+import { useLanguage } from '@/i18n/LanguageContext';
 import { useExercisePersistenceContext } from '@/contexts/ExercisePersistenceContext';
 
 /**
@@ -34,6 +36,9 @@ const THEME_ICONS: Record<string, LucideIcon> = {
 export interface LessonPart {
   title: string;
   subtitle?: string;
+  /** Hand-written translations of `title`/`subtitle` keyed by lang code; fall back to auto-translate. */
+  titleI18n?: Record<string, string>;
+  subtitleI18n?: Record<string, string>;
   theme?: string;
   /** Ids of the exercises inside this part — used to auto-unlock on resume. */
   exerciseIds: string[];
@@ -89,6 +94,8 @@ export function LessonParts({ parts, leading }: LessonPartsProps) {
               index={i}
               title={part.title}
               subtitle={part.subtitle}
+              titleI18n={part.titleI18n}
+              subtitleI18n={part.subtitleI18n}
               theme={part.theme}
               locked={locked}
               open={isOpen}
@@ -109,6 +116,8 @@ interface PartHeaderProps {
   index: number;
   title: string;
   subtitle?: string;
+  titleI18n?: Record<string, string>;
+  subtitleI18n?: Record<string, string>;
   theme?: string;
   locked: boolean;
   open: boolean;
@@ -116,10 +125,19 @@ interface PartHeaderProps {
   onToggle: () => void;
 }
 
-function PartHeader({ index, title, subtitle, theme, locked, open, actionable, onToggle }: PartHeaderProps) {
-  const partWord = useTranslate('Част');
-  const translatedTitle = useTranslate(title);
-  const translatedSubtitle = useTranslate(subtitle || '');
+function PartHeader({ index, title, subtitle, titleI18n, subtitleI18n, theme, locked, open, actionable, onToggle }: PartHeaderProps) {
+  const t = useT();
+  const { lang } = useLanguage();
+  const partWord = t('lesson.part');
+  // Auto-translate always runs (hook rule); prefer the hand-written translation when present.
+  const autoTitle = useTranslate(title);
+  const autoSubtitle = useTranslate(subtitle || '');
+  const isBg = lang === 'bg';
+  // The Bulgarian title is always the bold anchor. A translated line is shown beneath it
+  // for non-Bulgarian users (hand translation if available, otherwise Google).
+  const translatedTitle = titleI18n?.[lang] ?? autoTitle;
+  const showTitleTranslation = !isBg && !!translatedTitle && translatedTitle !== title;
+  const displaySubtitle = isBg ? subtitle : (subtitleI18n?.[lang] ?? autoSubtitle);
   const Icon = THEME_ICONS[theme || 'default'] || THEME_ICONS.default;
   const partLabel = `${partWord} ${index + 1}`;
 
@@ -139,7 +157,10 @@ function PartHeader({ index, title, subtitle, theme, locked, open, actionable, o
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-xs md:text-sm font-bold uppercase tracking-wider text-[#737373]/70">{partLabel}</div>
-          <h2 className="text-xl md:text-2xl font-bold leading-tight text-[#737373] truncate">{translatedTitle}</h2>
+          <h2 className="text-xl md:text-2xl font-bold leading-tight text-[#737373] truncate">{title}</h2>
+          {showTitleTranslation && (
+            <p className="text-sm md:text-base font-semibold leading-tight text-[#737373]/80 truncate">{translatedTitle}</p>
+          )}
         </div>
       </button>
     );
@@ -159,8 +180,11 @@ function PartHeader({ index, title, subtitle, theme, locked, open, actionable, o
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-xs md:text-sm font-bold uppercase tracking-wider text-[#0072BC]">{partLabel}</div>
-        <h2 className="text-xl md:text-2xl font-bold leading-tight text-[#05568B]">{translatedTitle}</h2>
-        {subtitle && <p className="text-sm md:text-base mt-0.5 text-[#05568B]/70">{translatedSubtitle}</p>}
+        <h2 className="text-xl md:text-2xl font-bold leading-tight text-[#05568B]">{title}</h2>
+        {showTitleTranslation && (
+          <p className="text-base md:text-lg font-semibold leading-tight text-[#05568B]/85 mt-0.5">{translatedTitle}</p>
+        )}
+        {displaySubtitle && <p className="text-sm md:text-base mt-1 text-[#05568B]/70">{displaySubtitle}</p>}
       </div>
       <ChevronDown
         className={`shrink-0 w-6 h-6 md:w-7 md:h-7 text-[#0072BC] transition-transform ${open ? 'rotate-180' : ''}`}

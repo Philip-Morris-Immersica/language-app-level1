@@ -5,10 +5,14 @@ import { History, X } from 'lucide-react';
 import { ExercisePersistenceContext } from '@/contexts/ExercisePersistenceContext';
 import { setCurrentExercise, clearCurrentExercise } from '@/lib/chat/currentExercise';
 import { useTranslate } from '@/i18n/useTranslate';
+import { CelebrationController } from '@/components/celebration/CelebrationController';
+import type { CelebrationPlan } from '@/lib/celebration';
 
 interface LessonExercisesProviderProps {
   lessonId: string;
   children: ReactNode;
+  /** Completion-celebration plan (null outside the pilot lesson). */
+  celebrationPlan?: CelebrationPlan | null;
 }
 
 interface ResumeBannerProps {
@@ -75,7 +79,7 @@ function useDebouncedSave(lessonId: string) {
   }, [lessonId]);
 }
 
-export function LessonExercisesProvider({ lessonId, children }: LessonExercisesProviderProps) {
+export function LessonExercisesProvider({ lessonId, children, celebrationPlan = null }: LessonExercisesProviderProps) {
   const [savedStates, setSavedStates] = useState<Record<string, unknown>>({});
   const [loaded, setLoaded] = useState(false);
   const [lastExerciseId, setLastExerciseId] = useState<string | null>(null);
@@ -239,6 +243,7 @@ export function LessonExercisesProvider({ lessonId, children }: LessonExercisesP
         />
       )}
       {children}
+      <CelebrationController plan={celebrationPlan} savedStates={savedStates} ready={loaded} />
     </ExercisePersistenceContext.Provider>
   );
 }

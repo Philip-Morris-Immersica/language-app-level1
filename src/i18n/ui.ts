@@ -113,6 +113,8 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'exercise.allCorrect':   { bg: 'Браво! Всички отговори са верни!', ar: 'أحسنت! جميع الإجابات صحيحة!', fr: 'Bravo ! Toutes les réponses sont correctes !', en: 'Well done! All answers are correct!', fa: 'آفرین! همه پاسخ‌ها درست هستند!', uk: 'Браво! Всі відповіді правильні!', ru: 'Браво! Все ответы верны!' },
   'exercise.reviewErrors': { bg: 'Проверете грешните отговори (маркирани в червено).', ar: 'راجع الإجابات الخاطئة (المميزة باللون الأحمر).', fr: 'Vérifiez les mauvaises réponses (en rouge).', en: 'Check the wrong answers (marked in red).', fa: 'پاسخ‌های اشتباه را بررسی کنید (با قرمز مشخص شده).', uk: 'Перевірте неправильні відповіді (виділені червоним).', ru: 'Проверьте неправильные ответы (выделены красным).' },
   'exercise.model':        { bg: 'Модел:', ar: 'نموذج:', fr: 'Modèle :', en: 'Model:', fa: 'مدل:', uk: 'Зразок:', ru: 'Образец:' },
+  'exercise.audioChooseLetter':      { bg: 'Чуйте звука и изберете буквата.', ar: 'استمع إلى الصوت واختر الحرف.', fr: 'Écoutez le son et choisissez la lettre.', en: 'Listen to the sound and choose the letter.', fa: 'صدا را بشنوید و حرف را انتخاب کنید.', uk: 'Прослухайте звук і виберіть букву.', ru: 'Прослушайте звук и выберите букву.' },
+  'exercise.audioWordFirstLetter':   { bg: 'Натиснете за звук и изберете с коя буква започва думата.', ar: 'انقر للاستماع واختر الحرف الذي تبدأ به الكلمة.', fr: 'Cliquez pour écouter et choisissez la lettre par laquelle commence le mot.', en: 'Tap to hear the word and choose the letter it starts with.', fa: 'برای شنیدن کلیک کنید و حرفی که کلمه با آن شروع می‌شود را انتخاب کنید.', uk: 'Натисніть, щоб почути слово, і виберіть букву, з якої воно починається.', ru: 'Нажмите, чтобы услышать слово, и выберите букву, с которой оно начинается.' },
   // ── Grammar table column headers ──
   'grammar.masculine':     { bg: 'мъжки',        ar: 'مذكر',       fr: 'masculin',    en: 'masculine',    fa: 'مذکر',       uk: 'чоловічий',     ru: 'мужской'       },
   'grammar.feminine':      { bg: 'женски',        ar: 'مؤنث',       fr: 'féminin',     en: 'feminine',     fa: 'مؤنث',       uk: 'жіночий',       ru: 'женский'       },
@@ -120,6 +122,7 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'grammar.plural':        { bg: 'множествено',   ar: 'جمع',        fr: 'pluriel',     en: 'plural',       fa: 'جمع',        uk: 'множина',       ru: 'множественное' },
   // ── Lesson page strings (extra keys; lesson.exercises / workbook / openWorkbook above) ──
   'lesson.prefix':       { bg: 'Урок',            ar: 'الدرس',          fr: 'Leçon',         en: 'Lesson',       fa: 'درس',            uk: 'Урок',           ru: 'Урок'           },
+  'lesson.part':         { bg: 'Част',            ar: 'جزء',            fr: 'Partie',        en: 'Part',         fa: 'بخش',            uk: 'Частина',        ru: 'Часть'          },
   'lesson.workbookDesc':   { bg: 'Има още {n} упражнения в работната тетрадка за допълнителна практика.', ar: 'يوجد {n} تمارين إضافية في كتاب التمارين.', fr: 'Il y a {n} exercices supplémentaires dans le cahier.', en: 'There are {n} more exercises in the workbook for extra practice.', fa: 'در کتاب تمرین {n} تمرین دیگر وجود دارد.', uk: 'У робочому зошиті є ще {n} вправ для додаткової практики.', ru: 'В рабочей тетради есть ещё {n} упражнений для дополнительной практики.' },
   'lesson.review':         { bg: 'Преговор', ar: 'مراجعة', fr: 'Révision', en: 'Review', fa: 'مرور', uk: 'Повторення', ru: 'Повторение' },
   'lesson.reviewDesc':     { bg: 'Упражнения за затвърждаване на наученото.', ar: 'تمارين لتثبيت ما تعلمته.', fr: 'Exercices pour consolider vos acquis.', en: 'Exercises to reinforce what you\'ve learned.', fa: 'تمرین‌هایی برای تثبیت آموخته‌ها.', uk: 'Вправи для закріплення вивченого.', ru: 'Упражнения для закрепления изученного.' },
@@ -152,6 +155,9 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'exercise.answered':       { bg: 'Отговорено', ar: 'تمت الإجابة', fr: 'Répondu', en: 'Answered', fa: 'پاسخ داده شده', uk: 'Відповідь дана', ru: 'Ответ дан' },
   'exercise.allAnswered':    { bg: 'Браво! Отговорихте на всички въпроси!', ar: 'أحسنت! أجبت على جميع الأسئلة!', fr: 'Bravo ! Vous avez répondu à toutes les questions !', en: 'Well done! You answered all the questions!', fa: 'آفرین! به همه سؤالات پاسخ دادید!', uk: 'Браво! Ви відповіли на всі запитання!', ru: 'Браво! Вы ответили на все вопросы!' },
   'exercise.dictionary':     { bg: 'Речник', ar: 'قاموس', fr: 'Dictionnaire', en: 'Dictionary', fa: 'فرهنگ لغت', uk: 'Словник', ru: 'Словарь' },
+  'exercise.closeDictionary': { bg: 'Затвори речника', ar: 'إغلاق القاموس', fr: 'Fermer le dictionnaire', en: 'Close dictionary', fa: 'بستن فرهنگ لغت', uk: 'Закрити словник', ru: 'Закрыть словарь' },
+  'exercise.words':          { bg: 'думи', ar: 'كلمات', fr: 'mots', en: 'words', fa: 'کلمه', uk: 'слів', ru: 'слов' },
+  'exercise.tapToReturn':    { bg: 'Натиснете, за да върнете', ar: 'انقر للإرجاع', fr: 'Appuyez pour remettre', en: 'Tap to put it back', fa: 'برای بازگرداندن ضربه بزنید', uk: 'Натисніть, щоб повернути', ru: 'Нажмите, чтобы вернуть' },
 
   'level.title':            { bg: 'Уроци',           ar: 'الدروس',                fr: 'Leçons',              en: 'Lessons',              fa: 'دروس',             uk: 'Уроки',               ru: 'Уроки' },
   'level.empty':            { bg: 'Това ниво е в подготовка.', ar: 'هذا المستوى قيد الإعداد.', fr: 'Ce niveau est en préparation.', en: 'This level is in preparation.', fa: 'این سطح در حال آماده‌سازی است.', uk: 'Цей рівень у підготовці.', ru: 'Этот уровень в подготовке.' },
@@ -403,6 +409,15 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     fa: 'اعداد 0 تا 10 را یاد بگیرید. برای شنیدن ضربه بزنید.',
     uk: 'Ознайомтеся з числами від 0 до 10. Натисніть для прослуховування.',
     ru: 'Познакомьтесь с числами от 0 до 10. Нажмите для прослушивания.',
+  },
+  'exercise.l02.ex20.instruction': {
+    bg: 'Натиснете числата в нарастващ ред, от 0 до 11.',
+    en: 'Tap the numbers in ascending order, from 0 to 11.',
+    ar: 'اضغط على الأرقام بترتيب تصاعدي، من 0 إلى 11.',
+    fr: "Appuyez sur les nombres dans l'ordre croissant, de 0 à 11.",
+    fa: 'روی اعداد به ترتیب صعودی، از 0 تا 11 ضربه بزنید.',
+    uk: 'Натисніть на числа за зростаючим порядком, від 0 до 11.',
+    ru: 'Нажимайте на числа по возрастанию, от 0 до 11.',
   },
 
   // Lesson 3

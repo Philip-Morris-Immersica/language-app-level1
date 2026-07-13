@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface Column {
   id: string;
@@ -32,6 +34,15 @@ function shortenTitle(title: string): string {
     .replace('среден род', 'ср.р.');
 }
 
+/** Renders a column title translated to the active language. Abbreviation
+ * (е.g. "мъжки род" → "м.р.") only applies in Bulgarian — the shortened forms
+ * are Bulgarian-specific and don't map onto translated text. */
+function ColumnTitle({ title, compact }: { title: string; compact?: boolean }) {
+  const { lang } = useLanguage();
+  const translated = useTranslate(title);
+  return <>{compact && lang === 'bg' ? shortenTitle(title) : translated}</>;
+}
+
 function ColumnDropZone({
   column,
   submitted,
@@ -43,13 +54,13 @@ function ColumnDropZone({
   compact?: boolean;
   onRemove?: (item: string) => void;
 }) {
-  const displayTitle = compact ? shortenTitle(column.title) : column.title;
+  const t = useT();
   return (
     <div className={`bg-gray-50 border-2 border-gray-300 rounded-xl ${compact ? 'p-2' : 'p-4'}`}>
       <div className="flex items-center justify-center gap-1 mb-1.5 pb-1.5 border-b-2 border-gray-200">
         <span className={compact ? 'text-sm' : 'text-lg'}>{column.icon}</span>
         <h3 className={`font-bold text-gray-800 ${compact ? 'text-[10px] leading-tight' : 'text-sm'}`}>
-          {displayTitle}
+          <ColumnTitle title={column.title} compact={compact} />
         </h3>
         <span className={`text-gray-500 ${compact ? 'text-[9px]' : 'text-xs'}`}>({column.items.length})</span>
       </div>
@@ -62,7 +73,7 @@ function ColumnDropZone({
                 !submitted && onRemove ? 'cursor-pointer hover:bg-[#FCE2DE]/40 hover:border-[#D25A45]/50 active:scale-95 transition-all' : ''
               }`}
               onClick={() => !submitted && onRemove && onRemove(item)}
-              title={!submitted && onRemove ? 'Натиснете, за да върнете' : undefined}
+              title={!submitted && onRemove ? t('exercise.tapToReturn') : undefined}
             >
               {item}
               {!submitted && onRemove && (
@@ -353,7 +364,7 @@ export function DragToColumns({
               <div>
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <span className="text-2xl text-gray-400">⬅️</span>
-                  <span className="text-base font-bold text-gray-800">{columns[0]?.title}</span>
+                  <span className="text-base font-bold text-gray-800">{columns[0] && <ColumnTitle title={columns[0].title} />}</span>
                 </div>
                 {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} onRemove={(item) => handleRemoveFromColumn(columns[0].id, item)} />}
               </div>
@@ -376,7 +387,7 @@ export function DragToColumns({
                 {isMultiColumn && (
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-2xl text-gray-400">⬇️</span>
-                    <span className="text-base font-bold text-gray-800">{columns[2]?.title}</span>
+                    <span className="text-base font-bold text-gray-800">{columns[2] && <ColumnTitle title={columns[2].title} />}</span>
                   </div>
                 )}
               </div>
@@ -384,7 +395,7 @@ export function DragToColumns({
               {/* Right: label + drop zone */}
               <div>
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <span className="text-base font-bold text-gray-800">{columns[1]?.title}</span>
+                  <span className="text-base font-bold text-gray-800">{columns[1] && <ColumnTitle title={columns[1].title} />}</span>
                   <span className="text-2xl text-gray-400">➡️</span>
                 </div>
                 {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} onRemove={(item) => handleRemoveFromColumn(columns[1].id, item)} />}
@@ -408,7 +419,7 @@ export function DragToColumns({
               {/* Left: label + drop zone stacked */}
               <div className="min-w-0">
                 <div className="flex flex-col items-center justify-center mb-1.5">
-                  <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{shortenTitle(columns[0]?.title ?? '')}</span>
+                  <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{columns[0] && <ColumnTitle title={columns[0].title} compact />}</span>
                   <span className="text-lg text-gray-400">⬅️</span>
                 </div>
                 {columns[0] && <ColumnDropZone column={columns[0]} submitted={submitted} compact onRemove={(item) => handleRemoveFromColumn(columns[0].id, item)} />}
@@ -431,7 +442,7 @@ export function DragToColumns({
                 {isMultiColumn && (
                   <div className="flex items-center gap-1 mt-1">
                     <span className="text-sm text-gray-400">⬇️</span>
-                    <span className="text-[10px] font-bold text-gray-800">{shortenTitle(columns[2]?.title ?? '')}</span>
+                    <span className="text-[10px] font-bold text-gray-800">{columns[2] && <ColumnTitle title={columns[2].title} compact />}</span>
                   </div>
                 )}
               </div>
@@ -439,7 +450,7 @@ export function DragToColumns({
               {/* Right: label + drop zone stacked */}
               <div className="min-w-0">
                 <div className="flex flex-col items-center justify-center mb-1.5">
-                  <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{shortenTitle(columns[1]?.title ?? '')}</span>
+                  <span className="text-[10px] font-bold text-gray-800 text-center leading-tight">{columns[1] && <ColumnTitle title={columns[1].title} compact />}</span>
                   <span className="text-lg text-gray-400">➡️</span>
                 </div>
                 {columns[1] && <ColumnDropZone column={columns[1]} submitted={submitted} compact onRemove={(item) => handleRemoveFromColumn(columns[1].id, item)} />}

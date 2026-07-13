@@ -38,6 +38,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Семейството',
       subtitle: 'Имена и нови думи за членовете на семейството',
+      titleI18n: {
+        en: 'The family',
+        fr: 'La famille',
+        ar: 'العائلة',
+        fa: 'خانواده',
+        uk: 'Родина',
+        ru: 'Семья',
+      },
+      subtitleI18n: {
+        en: 'Names and new words for family members',
+        fr: 'Prénoms et nouveaux mots pour les membres de la famille',
+        ar: 'الأسماء وكلمات جديدة عن أفراد العائلة',
+        fa: 'نام‌ها و کلمات جدید برای اعضای خانواده',
+        uk: 'Імена та нові слова для членів родини',
+        ru: 'Имена и новые слова для членов семьи',
+      },
       theme: 'vocabulary',
     },
     items: [
@@ -214,8 +230,24 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с глаголите **имам** и **нямам**.',
     order: 7,
     sectionStart: {
-      title: 'Имам и нямам',
+      title: 'Глаголите „имам" и „нямам"',
       subtitle: 'Притежателни местоимения, числителни за хора и възраст',
+      titleI18n: {
+        en: 'The verbs „имам" (to have) and „нямам" (not to have)',
+        fr: 'Les verbes « имам » (avoir) et « нямам » (ne pas avoir)',
+        ar: 'الفعلان «имам» (يملك) و«нямам» (لا يملك)',
+        fa: 'فعل‌های «имам» (داشتن) و «нямам» (نداشتن)',
+        uk: 'Дієслова „имам" (мати) і „нямам" (не мати)',
+        ru: 'Глаголы „имам" (иметь) и „нямам" (не иметь)',
+      },
+      subtitleI18n: {
+        en: 'Possessive pronouns, numerals for people and age',
+        fr: 'Les pronoms possessifs, les numéraux pour les personnes et l\'âge',
+        ar: 'ضمائر الملكية، وأعداد الأشخاص، والعمر',
+        fa: 'ضمایر ملکی، اعداد برای افراد و سن',
+        uk: 'Присвійні займенники, числівники для людей та вік',
+        ru: 'Притяжательные местоимения, числительные для людей и возраст',
+      },
       theme: 'grammar',
     },
     tableTitle: 'ИМАМ / НЯМАМ',
@@ -670,6 +702,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Родословното дърво',
       subtitle: 'Диалози, нови думи и упражнения за роднински връзки',
+      titleI18n: {
+        en: 'The family tree',
+        fr: 'L\'arbre généalogique',
+        ar: 'شجرة العائلة',
+        fa: 'شجره‌نامه',
+        uk: 'Родинне дерево',
+        ru: 'Семейное древо',
+      },
+      subtitleI18n: {
+        en: 'Dialogues, new words and exercises about family relationships',
+        fr: 'Dialogues, nouveaux mots et exercices sur les liens de parenté',
+        ar: 'حوارات وكلمات جديدة وتمارين عن صلات القرابة',
+        fa: 'گفتگوها، کلمات جدید و تمرین‌هایی درباره‌ی نسبت‌های خویشاوندی',
+        uk: 'Діалоги, нові слова та вправи про родинні зв\'язки',
+        ru: 'Диалоги, новые слова и упражнения о родственных связях',
+      },
       theme: 'dialogue',
     },
     sections: [
@@ -1388,6 +1436,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Разкази от първо лице',
       subtitle: 'Текстове и въпроси за бежанци и техните семейства в България',
+      titleI18n: {
+        en: 'First-person stories',
+        fr: 'Récits à la première personne',
+        ar: 'قصص بضمير المتكلم',
+        fa: 'روایت‌های اول‌شخص',
+        uk: 'Розповіді від першої особи',
+        ru: 'Рассказы от первого лица',
+      },
+      subtitleI18n: {
+        en: 'Texts and questions about refugees and their families in Bulgaria',
+        fr: 'Textes et questions sur les réfugiés et leurs familles en Bulgarie',
+        ar: 'نصوص وأسئلة عن اللاجئين وعائلاتهم في بلغاريا',
+        fa: 'متن‌ها و پرسش‌هایی درباره‌ی پناهندگان و خانواده‌هایشان در بلغارستان',
+        uk: 'Тексти та запитання про біженців та їхні родини в Болгарії',
+        ru: 'Тексты и вопросы о беженцах и их семьях в Болгарии',
+      },
       theme: 'reading',
     },
     images: [

@@ -338,6 +338,12 @@ interface Exercise {
     ttsPrompt?: string;
   }[];
   pronouns?: { pronoun: string; description?: string }[];
+  /** audio_choice — one MP3 per question (letter name or word). */
+  questions?: {
+    id: string;
+    word?: string;
+    ttsText: string;
+  }[];
 }
 
 interface TtsJob {
@@ -626,6 +632,32 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
         category: 'words',
         filename: `${img.id}.mp3`,
         text: clean(img.correctLabel),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
+/**
+ * audio_choice — one MP3 per WORD question: `words/{question.id}.mp3`.
+ * Pure-letter questions (no `word`) are intentionally SKIPPED here — they reuse
+ * the already-validated per-letter clips from the alphabet maze
+ * (public/assets/lesson-00/audio/tts/maze/l00-maze-letter-{0..29}.mp3, see
+ * src/lib/letterTTS.ts) so letter pronunciation stays consistent across the
+ * lesson instead of a second, separately-generated recording.
+ */
+function collectAudioChoiceJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'audio_choice' && e.questions)) {
+    for (const q of ex.questions!) {
+      if (!q.word) continue;
+      jobs.push({
+        category: 'words',
+        filename: `${q.id}.mp3`,
+        text: clean(q.ttsText),
         voice: FEMALE_VOICE,
         model: GEMINI_FLASH_MODEL,
         prompt: GEMINI_WORD_PROMPT,
@@ -932,6 +964,7 @@ async function main() {
     ...collectWideCardJobs(exercises),
     ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
+    ...collectAudioChoiceJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),

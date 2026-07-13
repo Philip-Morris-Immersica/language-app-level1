@@ -32,6 +32,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Храни, плодове и зеленчуци',
       subtitle: 'Нови думи и упражнения за месо, плодове и зеленчуци',
+      titleI18n: {
+        en: 'Foods, fruits and vegetables',
+        fr: 'Aliments, fruits et légumes',
+        ar: 'الأطعمة والفواكه والخضروات',
+        fa: 'غذاها، میوه‌ها و سبزیجات',
+        uk: 'Продукти, фрукти та овочі',
+        ru: 'Продукты, фрукты и овощи',
+      },
+      subtitleI18n: {
+        en: 'New words and exercises about meat, fruits and vegetables',
+        fr: 'Nouveaux mots et exercices sur la viande, les fruits et les légumes',
+        ar: 'كلمات جديدة وتمارين عن اللحوم والفواكه والخضروات',
+        fa: 'کلمات جدید و تمرین‌هایی درباره‌ی گوشت، میوه و سبزیجات',
+        uk: 'Нові слова та вправи про м\'ясо, фрукти та овочі',
+        ru: 'Новые слова и упражнения о мясе, фруктах и овощах',
+      },
       theme: 'vocabulary',
     },
     points: 4,
@@ -356,6 +372,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Числа и въпросителни думи',
       subtitle: 'Какъв/каква/какво/какви, числа 100–1000, два/две и глаголът купувам',
+      titleI18n: {
+        en: 'Numbers and question words',
+        fr: 'Les nombres et les mots interrogatifs',
+        ar: 'الأعداد وأدوات الاستفهام',
+        fa: 'اعداد و کلمات پرسشی',
+        uk: 'Числа та питальні слова',
+        ru: 'Числа и вопросительные слова',
+      },
+      subtitleI18n: {
+        en: '„Какъв/каква/какво/какви" (what kind of), numbers 100–1000, „два/две" (two) and the verb „купувам" (to buy)',
+        fr: '« Какъв/каква/какво/какви » (quel/quelle), les nombres 100–1000, « два/две » (deux) et le verbe « купувам » (acheter)',
+        ar: '«какъв/каква/какво/какви» (أيّ)، الأعداد 100–1000، «два/две» (اثنان) والفعل «купувам» (يشتري)',
+        fa: '«какъв/каква/какво/какви» (چه‌جور)، اعداد ۱۰۰–۱۰۰۰، «два/две» (دو) و فعل «купувам» (خریدن)',
+        uk: '„Какъв/каква/какво/какви" (який/яка), числа 100–1000, „два/две" (два/дві) і дієслово „купувам" (купувати)',
+        ru: '„Какъв/каква/какво/какви" (какой/какая), числа 100–1000, „два/две" (два/две) и глагол „купувам" (покупать)',
+      },
       theme: 'grammar',
     },
     examples: [
@@ -654,6 +686,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Евтино или скъпо',
       subtitle: 'Наречия евтино и скъпо, и диалози при пазаруване',
+      titleI18n: {
+        en: 'Cheap or expensive',
+        fr: 'Bon marché ou cher',
+        ar: 'رخيص أم غالٍ',
+        fa: 'ارزان یا گران',
+        uk: 'Дешево чи дорого',
+        ru: 'Дёшево или дорого',
+      },
+      subtitleI18n: {
+        en: 'The adverbs „евтино" (cheaply) and „скъпо" (expensively), and shopping dialogues',
+        fr: 'Les adverbes « евтино » (bon marché) et « скъпо » (cher), et des dialogues d\'achat',
+        ar: 'الظرفان «евтино» (بثمن رخيص) و«скъпо» (بثمن غالٍ)، وحوارات التسوق',
+        fa: 'قیدهای «евтино» (ارزان) و «скъпо» (گران)، و گفتگوهای خرید',
+        uk: 'Прислівники „евтино" (дешево) і „скъпо" (дорого) та діалоги під час покупок',
+        ru: 'Наречия „евтино" (дёшево) и „скъпо" (дорого) и диалоги при покупках',
+      },
       theme: 'dialogue',
     },
     examples: [
@@ -756,6 +804,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Числа, купувам и рецепти',
       subtitle: 'Числа с думи, глаголът купувам и съставки на позната храна',
+      titleI18n: {
+        en: 'Numbers, „купувам" (to buy) and recipes',
+        fr: 'Les nombres, « купувам » (acheter) et des recettes',
+        ar: 'الأعداد و«купувам» (يشتري) والوصفات',
+        fa: 'اعداد، «купувам» (خریدن) و دستور پخت‌ها',
+        uk: 'Числа, „купувам" (купувати) і рецепти',
+        ru: 'Числа, „купувам" (покупать) и рецепты',
+      },
+      subtitleI18n: {
+        en: 'Numbers in words, the verb „купувам" and ingredients of familiar dishes',
+        fr: 'Les nombres en toutes lettres, le verbe « купувам » et les ingrédients de plats connus',
+        ar: 'الأعداد بالكلمات، والفعل «купувам»، ومكوّنات أطعمة مألوفة',
+        fa: 'اعداد به‌صورت کلمه، فعل «купувам» و مواد لازم غذاهای آشنا',
+        uk: 'Числа словами, дієслово „купувам" та інгредієнти знайомих страв',
+        ru: 'Числа словами, глагол „купувам" и ингредиенты знакомых блюд',
+      },
       theme: 'vocabulary',
     },
     points: 6,
@@ -867,6 +931,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Текстове за храна и пазар',
       subtitle: 'Четива за хранителни навици, вярно-грешно и въпроси по съдържанието',
+      titleI18n: {
+        en: 'Texts about food and the market',
+        fr: 'Textes sur la nourriture et le marché',
+        ar: 'نصوص عن الطعام والسوق',
+        fa: 'متن‌هایی درباره‌ی غذا و بازار',
+        uk: 'Тексти про їжу та ринок',
+        ru: 'Тексты о еде и рынке',
+      },
+      subtitleI18n: {
+        en: 'Readings about eating habits, true-false and comprehension questions',
+        fr: 'Lectures sur les habitudes alimentaires, vrai-faux et questions de compréhension',
+        ar: 'نصوص للقراءة عن العادات الغذائية، وصح-خطأ، وأسئلة الفهم',
+        fa: 'خواندنی‌هایی درباره‌ی عادات غذایی، درست-نادرست و پرسش‌های درک مطلب',
+        uk: 'Тексти про харчові звички, правда-неправда та запитання на розуміння',
+        ru: 'Тексты о пищевых привычках, верно-неверно и вопросы на понимание',
+      },
       theme: 'reading',
     },
     images: [

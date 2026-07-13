@@ -4,6 +4,7 @@ import type {
   AlphabetMazeExercise,
   ImageLabelingExercise,
   IllustratedCardsExercise,
+  AudioChoiceExercise,
 } from '@/content/types';
 
 export const exercises: Exercise[] = [
@@ -133,7 +134,129 @@ export const exercises: Exercise[] = [
   } as AlphabetMazeExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 3: Упражнения 3+4 комбинирани — Държави, знамена и столици
+  // ORDER 3–5: Упражнения 08–10 — Чуй звука, избери буквата (нови, извън PDF)
+  // Добавени по обратна връзка от клиента: "твърде бързо се минава от
+  // буквите към думи". Три упражнения по 10 звука, покриват всичките
+  // 30 букви от азбуката. Разбъркани — НЕ по азбучен ред.
+  // ttsText = името на буквата за TTS; Й → "и кратко", Ь → "ер малък"
+  // (виж tts-audio правило — известни проблемни букви).
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'l00-ex-08',
+    type: 'audio_choice',
+    instructionKey: 'exercise.audioChooseLetter',
+    instruction: 'Чуйте звука и изберете буквата.',
+    order: 3,
+    points: 10,
+    questions: [
+      { id: 'l00-ex-08-m', ttsText: 'М', options: ['Н', 'М', 'П'], correctIndex: 1 },
+      { id: 'l00-ex-08-o', ttsText: 'О', options: ['О', 'С', 'Е'], correctIndex: 0 },
+      { id: 'l00-ex-08-zh', ttsText: 'Ж', options: ['Х', 'Ж', 'Ф'], correctIndex: 1 },
+      { id: 'l00-ex-08-t', ttsText: 'Т', options: ['Г', 'Т', 'П'], correctIndex: 1 },
+      { id: 'l00-ex-08-ya', ttsText: 'Я', options: ['Ю', 'Я', 'В'], correctIndex: 1 },
+      { id: 'l00-ex-08-b', ttsText: 'Б', options: ['Б', 'В', 'Ь'], correctIndex: 0 },
+      { id: 'l00-ex-08-f', ttsText: 'Ф', options: ['Р', 'Ф', 'Ю'], correctIndex: 1 },
+      { id: 'l00-ex-08-i', ttsText: 'И', options: ['Н', 'И', 'Й'], correctIndex: 1 },
+      { id: 'l00-ex-08-sht', ttsText: 'Щ', options: ['Ш', 'Щ', 'Ц'], correctIndex: 1 },
+      { id: 'l00-ex-08-r', ttsText: 'Р', options: ['Ф', 'Р', 'В'], correctIndex: 1 },
+    ],
+  } as AudioChoiceExercise,
+
+  {
+    id: 'l00-ex-09',
+    type: 'audio_choice',
+    instructionKey: 'exercise.audioChooseLetter',
+    instruction: 'Чуйте звука и изберете буквата.',
+    order: 4,
+    points: 10,
+    questions: [
+      { id: 'l00-ex-09-d', ttsText: 'Д', options: ['Л', 'Д', 'А'], correctIndex: 1 },
+      { id: 'l00-ex-09-u', ttsText: 'У', options: ['Ч', 'У', 'Ц'], correctIndex: 1 },
+      { id: 'l00-ex-09-ts', ttsText: 'Ц', options: ['Щ', 'Ц', 'У'], correctIndex: 1 },
+      { id: 'l00-ex-09-n', ttsText: 'Н', options: ['М', 'Н', 'П'], correctIndex: 1 },
+      { id: 'l00-ex-09-yu', ttsText: 'Ю', options: ['Я', 'Ю', 'В'], correctIndex: 1 },
+      { id: 'l00-ex-09-v', ttsText: 'В', options: ['Б', 'В', 'Р'], correctIndex: 1 },
+      { id: 'l00-ex-09-sh', ttsText: 'Ш', options: ['Щ', 'Ш', 'Ц'], correctIndex: 1 },
+      { id: 'l00-ex-09-e', ttsText: 'Е', options: ['З', 'Е', 'С'], correctIndex: 1 },
+      { id: 'l00-ex-09-h', ttsText: 'Х', options: ['К', 'Х', 'Ж'], correctIndex: 1 },
+      { id: 'l00-ex-09-y', ttsText: 'и кратко', options: ['И', 'Й', 'Ь'], correctIndex: 1 },
+    ],
+  } as AudioChoiceExercise,
+
+  {
+    id: 'l00-ex-10',
+    type: 'audio_choice',
+    instructionKey: 'exercise.audioChooseLetter',
+    instruction: 'Чуйте звука и изберете буквата.',
+    order: 5,
+    points: 10,
+    questions: [
+      { id: 'l00-ex-10-g', ttsText: 'Г', options: ['П', 'Г', 'Т'], correctIndex: 1 },
+      { id: 'l00-ex-10-schwa', ttsText: 'Ъ', options: ['Ь', 'Ъ', 'Ю'], correctIndex: 1 },
+      { id: 'l00-ex-10-l', ttsText: 'Л', options: ['А', 'Л', 'Д'], correctIndex: 1 },
+      { id: 'l00-ex-10-p', ttsText: 'П', options: ['Н', 'П', 'Г'], correctIndex: 1 },
+      { id: 'l00-ex-10-z', ttsText: 'З', options: ['Е', 'З', 'В'], correctIndex: 1 },
+      { id: 'l00-ex-10-ch', ttsText: 'Ч', options: ['У', 'Ч', 'Ц'], correctIndex: 1 },
+      { id: 'l00-ex-10-a', ttsText: 'А', options: ['Л', 'А', 'Д'], correctIndex: 1 },
+      { id: 'l00-ex-10-softsign', ttsText: 'ер малък', options: ['Ъ', 'Ь', 'Й'], correctIndex: 1 },
+      { id: 'l00-ex-10-s', ttsText: 'С', options: ['О', 'С', 'Е'], correctIndex: 1 },
+      { id: 'l00-ex-10-k', ttsText: 'К', options: ['Х', 'К', 'Ж'], correctIndex: 1 },
+    ],
+  } as AudioChoiceExercise,
+
+  // ═══════════════════════════════════════════════════════════════════
+  // ORDER 6–7: Упражнения 11–12 — С коя буква започва думата? (нови, извън PDF)
+  // Втора част от обратната връзка: дума + бутон за слушане → изберете
+  // първата буква. 24 думи общо, разделени в две упражнения по 12.
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'l00-ex-11',
+    type: 'audio_choice',
+    instructionKey: 'exercise.audioWordFirstLetter',
+    instruction: 'Натиснете за звук и изберете с коя буква започва думата.',
+    order: 6,
+    points: 12,
+    questions: [
+      { id: 'l00-ex-11-baba', word: 'баба', ttsText: 'баба', options: ['Б', 'В', 'П', 'Д'], correctIndex: 0 },
+      { id: 'l00-ex-11-kafe', word: 'кафе', ttsText: 'кафе', options: ['Г', 'К', 'Х', 'Ф'], correctIndex: 1 },
+      { id: 'l00-ex-11-dom', word: 'дом', ttsText: 'дом', options: ['Д', 'Л', 'О', 'Т'], correctIndex: 0 },
+      { id: 'l00-ex-11-voda', word: 'вода', ttsText: 'вода', options: ['В', 'Б', 'Р', 'Ф'], correctIndex: 0 },
+      { id: 'l00-ex-11-gora', word: 'гора', ttsText: 'гора', options: ['П', 'Г', 'Т', 'Д'], correctIndex: 1 },
+      { id: 'l00-ex-11-zhaba', word: 'жаба', ttsText: 'жаба', options: ['Х', 'Ж', 'З', 'Ф'], correctIndex: 1 },
+      { id: 'l00-ex-11-zab', word: 'зъб', ttsText: 'зъб', options: ['Е', 'З', 'В', 'С'], correctIndex: 1 },
+      { id: 'l00-ex-11-igra', word: 'игра', ttsText: 'игра', options: ['Н', 'И', 'Й', 'У'], correctIndex: 1 },
+      { id: 'l00-ex-11-limon', word: 'лимон', ttsText: 'лимон', options: ['А', 'Л', 'Д', 'Н'], correctIndex: 1 },
+      { id: 'l00-ex-11-nos', word: 'нос', ttsText: 'нос', options: ['М', 'Н', 'П', 'И'], correctIndex: 1 },
+      { id: 'l00-ex-11-oblak', word: 'облак', ttsText: 'облак', options: ['О', 'С', 'Е', 'А'], correctIndex: 0 },
+      { id: 'l00-ex-11-pate', word: 'пате', ttsText: 'пате', options: ['Н', 'П', 'Г', 'Т'], correctIndex: 1 },
+    ],
+  } as AudioChoiceExercise,
+
+  {
+    id: 'l00-ex-12',
+    type: 'audio_choice',
+    instructionKey: 'exercise.audioWordFirstLetter',
+    instruction: 'Натиснете за звук и изберете с коя буква започва думата.',
+    order: 7,
+    points: 12,
+    questions: [
+      { id: 'l00-ex-12-riba', word: 'риба', ttsText: 'риба', options: ['Ф', 'Р', 'В', 'Б'], correctIndex: 1 },
+      { id: 'l00-ex-12-stol', word: 'стол', ttsText: 'стол', options: ['С', 'О', 'Е', 'З'], correctIndex: 0 },
+      { id: 'l00-ex-12-tigar', word: 'тигър', ttsText: 'тигър', options: ['Г', 'Т', 'П', 'Д'], correctIndex: 1 },
+      { id: 'l00-ex-12-uho', word: 'ухо', ttsText: 'ухо', options: ['У', 'Ч', 'Ц', 'О'], correctIndex: 0 },
+      { id: 'l00-ex-12-futbol', word: 'футбол', ttsText: 'футбол', options: ['Р', 'Ф', 'В', 'П'], correctIndex: 1 },
+      { id: 'l00-ex-12-hotel', word: 'хотел', ttsText: 'хотел', options: ['К', 'Х', 'Ж', 'Г'], correctIndex: 1 },
+      { id: 'l00-ex-12-cvete', word: 'цвете', ttsText: 'цвете', options: ['Щ', 'Ц', 'Ч', 'У'], correctIndex: 1 },
+      { id: 'l00-ex-12-chay', word: 'чай', ttsText: 'чай', options: ['У', 'Ч', 'Ц', 'Ш'], correctIndex: 1 },
+      { id: 'l00-ex-12-shal', word: 'шал', ttsText: 'шал', options: ['Щ', 'Ш', 'Ц', 'С'], correctIndex: 1 },
+      { id: 'l00-ex-12-shtit', word: 'щит', ttsText: 'щит', options: ['Ш', 'Щ', 'Ц', 'Ч'], correctIndex: 1 },
+      { id: 'l00-ex-12-yug', word: 'юг', ttsText: 'юг', options: ['Я', 'Ю', 'В', 'У'], correctIndex: 1 },
+      { id: 'l00-ex-12-yabalka', word: 'ябълка', ttsText: 'ябълка', options: ['Ю', 'Я', 'А', 'В'], correctIndex: 1 },
+    ],
+  } as AudioChoiceExercise,
+
+  // ═══════════════════════════════════════════════════════════════════
+  // ORDER 8: Упражнения 3+4 комбинирани — Държави, знамена и столици
   // (Page 7 bottom + Page 8 top)
   // Учебник: Упр. 3 "Свържете държавите и знамената" + Упр. 4 "Напишете столиците"
   // Обединени: знаме → държава (столица) в един dropdown.
@@ -143,7 +266,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-03',
     type: 'image_labeling',
     instruction: 'Изберете правилната държава за всяко знаме.',
-    order: 3,
+    order: 8,
     points: 10,
     displayType: 'flags',
     images: [
@@ -173,7 +296,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 4: Упражнение 5 — Континенти (Page 8, middle-left)
+  // ORDER 9: Упражнение 5 — Континенти (Page 8, middle-left)
   // Учебник: Напишете имената на континентите.
   // Банка с думи: Австралия, Азия, Америка, Африка, Европа
   // Австралия е дадена като пример.
@@ -182,7 +305,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-05',
     type: 'image_labeling',
     instruction: 'Изберете имената на континентите.',
-    order: 4,
+    order: 9,
     points: 5,
     images: [
       { id: 'avstraliya', imageUrl: '/assets/lesson-00/exercise-05-continents/01-avstraliya.jpg', correctLabel: 'Австралия' },
@@ -195,7 +318,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 5: Упражнение 6 — Храни (Page 8, middle-right)
+  // ORDER 10: Упражнение 6 — Храни (Page 8, middle-right)
   // Учебник: Напишете думите под картинките.
   // Банка с думи: пица, сандвич, спагети, хамбургер, шоколад
   // Шоколад е дадена като пример.
@@ -204,7 +327,7 @@ export const exercises: Exercise[] = [
     id: 'l00-ex-06',
     type: 'image_labeling',
     instruction: 'Изберете думите под картинките.',
-    order: 5,
+    order: 10,
     points: 5,
     images: [
       { id: 'pitsa', imageUrl: '/assets/lesson-00/exercise-06-food/01-pitsa.jpg', correctLabel: 'пица' },
@@ -217,7 +340,7 @@ export const exercises: Exercise[] = [
   } as ImageLabelingExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 6: Упражнение 7 — Международни думи (Page 8, bottom-left)
+  // ORDER 11: Упражнение 7 — Международни думи (Page 8, bottom-left)
   // Учебник: Знаете ли тези думи?
   // Информационна секция — разпознаване на международни думи в кирилица.
   // Няма points — целта е запознаване с познати думи на кирилица.
@@ -228,7 +351,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 1',
     instruction: 'Познавате ли тези думи? Те са чуждици и звучат подобно в много езици.',
-    order: 6,
+    order: 11,
     cards: [
       { id: 'futbol', imageUrl: '', label: 'футбол' },
       { id: 'banan', imageUrl: '', label: 'банан' },
@@ -245,7 +368,7 @@ export const exercises: Exercise[] = [
   } as IllustratedCardsExercise,
 
   // ═══════════════════════════════════════════════════════════════════
-  // ORDER 7: Упражнение 8 — Училищни принадлежности (Page 8, bottom-right)
+  // ORDER 12: Упражнение 8 — Училищни принадлежности (Page 8, bottom-right)
   // Учебник: Прочетете думите и ги запомнете.
   // Информационна секция — речникови карти с картинки.
   // Няма points — целта е запознаване.
@@ -255,7 +378,7 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     instruction: 'Натиснете за произношение.',
-    order: 7,
+    order: 12,
     cards: [
       { id: 'uchebnik', imageUrl: '/assets/lesson-00/novi-dumi-2-school/01-uchebnik.jpg', label: 'учебник' },
       { id: 'tetradka', imageUrl: '/assets/lesson-00/novi-dumi-2-school/02-tetradka.jpg', label: 'тетрадка' },

@@ -30,6 +30,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Цветове',
       subtitle: 'Нови думи за цветове, съчетаване с храни и знамена на различни държави',
+      titleI18n: {
+        en: 'Colours',
+        fr: 'Les couleurs',
+        ar: 'الألوان',
+        fa: 'رنگ‌ها',
+        uk: 'Кольори',
+        ru: 'Цвета',
+      },
+      subtitleI18n: {
+        en: 'New words for colours, matching them with foods and the flags of different countries',
+        fr: 'Nouveaux mots pour les couleurs, association avec des aliments et drapeaux de différents pays',
+        ar: 'كلمات جديدة عن الألوان، ومطابقتها مع الأطعمة وأعلام دول مختلفة',
+        fa: 'کلمات جدید برای رنگ‌ها، تطبیق آن‌ها با غذاها و پرچم کشورهای مختلف',
+        uk: 'Нові слова для кольорів, поєднання з їжею та прапори різних країн',
+        ru: 'Новые слова для цветов, сочетание с едой и флаги разных стран',
+      },
       theme: 'vocabulary',
     },
     cards: [
@@ -192,6 +208,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Дрехи и сезони',
       subtitle: 'Нови думи за дрехи и аксесоари, подходящо облекло за всеки сезон',
+      titleI18n: {
+        en: 'Clothes and seasons',
+        fr: 'Vêtements et saisons',
+        ar: 'الملابس والفصول',
+        fa: 'لباس‌ها و فصل‌ها',
+        uk: 'Одяг та пори року',
+        ru: 'Одежда и времена года',
+      },
+      subtitleI18n: {
+        en: 'New words for clothes and accessories, suitable clothing for each season',
+        fr: 'Nouveaux mots pour les vêtements et accessoires, la tenue adaptée à chaque saison',
+        ar: 'كلمات جديدة عن الملابس والإكسسوارات، والملابس المناسبة لكل فصل',
+        fa: 'کلمات جدید برای لباس‌ها و لوازم جانبی، پوشش مناسب هر فصل',
+        uk: 'Нові слова для одягу та аксесуарів, доречний одяг для кожної пори року',
+        ru: 'Новые слова для одежды и аксессуаров, подходящая одежда для каждого сезона',
+      },
       theme: 'vocabulary',
     },
     cards: [
@@ -400,6 +432,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'В магазина за дрехи',
       subtitle: 'Глаголът нося, показателните местоимения този/тази/това/тези, членуване на прилагателните и диалози при пазаруване',
+      titleI18n: {
+        en: 'At the clothes shop',
+        fr: 'Au magasin de vêtements',
+        ar: 'في متجر الملابس',
+        fa: 'در فروشگاه لباس',
+        uk: 'У магазині одягу',
+        ru: 'В магазине одежды',
+      },
+      subtitleI18n: {
+        en: 'The verb „нося" (to wear), the demonstrative pronouns „този/тази/това/тези" (this/these), the definite article on adjectives and shopping dialogues',
+        fr: 'Le verbe « нося » (porter), les pronoms démonstratifs « този/тази/това/тези » (ce/cette/ces), l\'article défini des adjectifs et des dialogues d\'achat',
+        ar: 'الفعل «нося» (يرتدي)، وأسماء الإشارة «този/тази/това/тези» (هذا/هذه/هؤلاء)، وتعريف الصفات، وحوارات التسوق',
+        fa: 'فعل «нося» (پوشیدن)، ضمایر اشاره‌ی «този/тази/това/тези» (این/این‌ها)، حرف تعریف صفت‌ها و گفتگوهای خرید',
+        uk: 'Дієслово „нося" (носити), вказівні займенники „този/тази/това/тези" (цей/ця/це/ці), означений артикль прикметників та діалоги під час покупок',
+        ru: 'Глагол „нося" (носить), указательные местоимения „този/тази/това/тези" (этот/эта/это/эти), определённый артикль прилагательных и диалоги при покупках',
+      },
       theme: 'grammar',
     },
     tableTitle: 'НОСЯ',
@@ -732,6 +780,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'В чантата',
       subtitle: 'Нови думи за документи и лични вещи, допълнителни упражнения за цветове',
+      titleI18n: {
+        en: 'In the bag',
+        fr: 'Dans le sac',
+        ar: 'في الحقيبة',
+        fa: 'در کیف',
+        uk: 'У сумці',
+        ru: 'В сумке',
+      },
+      subtitleI18n: {
+        en: 'New words for documents and personal belongings, additional exercises on colours',
+        fr: 'Nouveaux mots pour les documents et les effets personnels, exercices supplémentaires sur les couleurs',
+        ar: 'كلمات جديدة عن الوثائق والأغراض الشخصية، وتمارين إضافية عن الألوان',
+        fa: 'کلمات جدید برای مدارک و وسایل شخصی، تمرین‌های بیشتر درباره‌ی رنگ‌ها',
+        uk: 'Нові слова для документів та особистих речей, додаткові вправи на кольори',
+        ru: 'Новые слова для документов и личных вещей, дополнительные упражнения по цветам',
+      },
       theme: 'vocabulary',
     },
     textOnly: true,
@@ -909,6 +973,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Текстове за четене',
       subtitle: 'Текст за Милена, детска песен и упражнения за преговор',
+      titleI18n: {
+        en: 'Reading texts',
+        fr: 'Textes de lecture',
+        ar: 'نصوص للقراءة',
+        fa: 'متن‌های خواندنی',
+        uk: 'Тексти для читання',
+        ru: 'Тексты для чтения',
+      },
+      subtitleI18n: {
+        en: 'A text about Milena, a children\'s song and review exercises',
+        fr: 'Un texte sur Milena, une chanson pour enfants et des exercices de révision',
+        ar: 'نص عن ميلينا، وأغنية للأطفال، وتمارين للمراجعة',
+        fa: 'متنی درباره‌ی میلنا، یک آهنگ کودکانه و تمرین‌های مرور',
+        uk: 'Текст про Мілену, дитяча пісня та вправи для повторення',
+        ru: 'Текст о Милене, детская песня и упражнения для повторения',
+      },
       theme: 'reading',
     },
     audioUrl: '', // TODO: TTS Фаза 2

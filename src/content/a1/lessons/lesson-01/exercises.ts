@@ -13,6 +13,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Поздрави и националности',
       subtitle: 'Знамена, поздрави и нови думи за запознанство',
+      titleI18n: {
+        en: 'Greetings and nationalities',
+        fr: 'Salutations et nationalités',
+        ar: 'التحيات والجنسيات',
+        fa: 'سلام‌ها و ملیت‌ها',
+        uk: 'Вітання та національності',
+        ru: 'Приветствия и национальности',
+      },
+      subtitleI18n: {
+        en: 'Flags, greetings and new words for getting acquainted',
+        fr: 'Drapeaux, salutations et nouveaux mots pour faire connaissance',
+        ar: 'الأعلام والتحيات وكلمات جديدة للتعارف',
+        fa: 'پرچم‌ها، سلام‌ها و کلمات جدید برای آشنایی',
+        uk: 'Прапори, вітання та нові слова для знайомства',
+        ru: 'Флаги, приветствия и новые слова для знакомства',
+      },
       theme: 'vocabulary',
     },
     points: 9,
@@ -138,6 +154,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Местоимения и глаголът „съм"',
       subtitle: 'Лични местоимения и сегашно време на глагола съм',
+      titleI18n: {
+        en: 'Pronouns and the verb „съм" (to be)',
+        fr: 'Les pronoms et le verbe « съм » (être)',
+        ar: 'الضمائر والفعل «съм» (يكون)',
+        fa: 'ضمایر و فعل «съм» (بودن)',
+        uk: 'Займенники і дієслово „съм" (бути)',
+        ru: 'Местоимения и глагол „съм" (быть)',
+      },
+      subtitleI18n: {
+        en: 'Personal pronouns and the present tense of the verb „съм"',
+        fr: 'Les pronoms personnels et le présent du verbe « съм »',
+        ar: 'الضمائر الشخصية وصيغة المضارع للفعل «съм»',
+        fa: 'ضمایر شخصی و زمان حال فعل «съм»',
+        uk: 'Особові займенники і теперішній час дієслова „съм"',
+        ru: 'Личные местоимения и настоящее время глагола „съм"',
+      },
       theme: 'grammar',
     },
     pronouns: [
@@ -264,6 +296,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Запознанства и диалози',
       subtitle: 'Диалози за запознанство, отрицание и въпросителни думи',
+      titleI18n: {
+        en: 'Introductions and dialogues',
+        fr: 'Présentations et dialogues',
+        ar: 'التعارف والحوارات',
+        fa: 'معرفی و گفتگوها',
+        uk: 'Знайомства та діалоги',
+        ru: 'Знакомства и диалоги',
+      },
+      subtitleI18n: {
+        en: 'Dialogues for getting acquainted, negation and question words',
+        fr: 'Dialogues pour faire connaissance, la négation et les mots interrogatifs',
+        ar: 'حوارات للتعارف، والنفي، وأدوات الاستفهام',
+        fa: 'گفتگوهای آشنایی، نفی و کلمات پرسشی',
+        uk: 'Діалоги для знайомства, заперечення та питальні слова',
+        ru: 'Диалоги для знакомства, отрицание и вопросительные слова',
+      },
       theme: 'dialogue',
     },
     sections: [
@@ -739,6 +787,22 @@ export const exercises: Exercise[] = [
     sectionStart: {
       title: 'Текстове за четене',
       subtitle: 'Кратки текстове за бежанци и техните истории',
+      titleI18n: {
+        en: 'Reading texts',
+        fr: 'Textes de lecture',
+        ar: 'نصوص للقراءة',
+        fa: 'متن‌های خواندنی',
+        uk: 'Тексти для читання',
+        ru: 'Тексты для чтения',
+      },
+      subtitleI18n: {
+        en: 'Short texts about refugees and their stories',
+        fr: 'Courts textes sur les réfugiés et leurs histoires',
+        ar: 'نصوص قصيرة عن اللاجئين وقصصهم',
+        fa: 'متن‌های کوتاه درباره‌ی پناهندگان و داستان‌هایشان',
+        uk: 'Короткі тексти про біженців та їхні історії',
+        ru: 'Короткие тексты о беженцах и их историях',
+      },
       theme: 'reading',
     },
     paragraphs: [

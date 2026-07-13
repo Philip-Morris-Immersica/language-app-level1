@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
@@ -25,9 +25,10 @@ interface GrammarTableProps {
 
 /**
  * Table header — Bulgarian text stays primary; the translation for
- * non-Bulgarian users is shown automatically underneath (no click needed).
+ * non-Bulgarian users is revealed on tap (click the header row), matching the
+ * tap-to-reveal behaviour used across the rest of the platform.
  */
-function ClickTranslateTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
+function ClickTranslateTh({ text, className, colSpan, revealed }: { text: string; className: string; colSpan?: number; revealed: boolean }) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
   const isNonBg = lang !== 'bg';
@@ -35,7 +36,7 @@ function ClickTranslateTh({ text, className, colSpan }: { text: string; classNam
   return (
     <th className={className} colSpan={colSpan}>
       <span>{text}</span>
-      {isNonBg && translated !== text && (
+      {isNonBg && revealed && translated !== text && (
         <span className="block text-xs font-normal text-white/75 mt-0.5 italic">
           {translated}
         </span>
@@ -57,9 +58,21 @@ export function GrammarTable({
 }: GrammarTableProps) {
   const { lang } = useLanguage();
   const t = useT();
+  const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
+  const [revealedNotes, setRevealedNotes] = useState<Set<number>>(new Set());
+  const [headerRevealed, setHeaderRevealed] = useState(false);
 
-  // Clicking a row/note plays its pronunciation. Translations are shown
-  // automatically for non-Bulgarian users (no click needed to reveal them).
+  const toggle = (setter: React.Dispatch<React.SetStateAction<Set<number>>>, idx: number) => {
+    setter(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
+
+  // Clicking a row/note plays its pronunciation AND reveals its translation
+  // (tap-to-reveal, consistent with cards, dialogues and reading texts).
   const playRow = (idx: number) => {
     const isNumericPronoun = /^\d[\d\s]*$/.test(rows[idx].pronoun.trim());
     const speakableCells = rows[idx].cells.filter(c => !c.trim().startsWith('-'));
@@ -68,6 +81,7 @@ export function GrammarTable({
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx}`)
       : '';
     playTtsAudio(audioPath, parts.join('. '));
+    toggle(setRevealedRows, idx);
   };
 
   const playNote = (idx: number, note: string) => {
@@ -75,6 +89,7 @@ export function GrammarTable({
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
       : '';
     playTtsAudio(audioPath, note);
+    toggle(setRevealedNotes, idx);
   };
 
   return (
@@ -91,19 +106,21 @@ export function GrammarTable({
           {/* Table title spanning all columns */}
           {tableTitle && (
             <thead>
-              <tr>
+              <tr onClick={() => setHeaderRevealed(v => !v)} className={lang !== 'bg' ? 'cursor-pointer' : undefined}>
                 <ClickTranslateTh
                   text={tableTitle}
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
                   colSpan={columns.length > 0 ? columns.length + 1 : (rows[0]?.cells.length ?? 0) + 1}
+                  revealed={headerRevealed}
                 />
               </tr>
               {columns.length > 0 && (
-                <tr className="bg-[#7ab356] text-white">
+                <tr onClick={() => setHeaderRevealed(v => !v)} className={`bg-[#7ab356] text-white ${lang !== 'bg' ? 'cursor-pointer' : ''}`}>
                   {pronounColumnLabel ? (
                     <ClickTranslateTh
                       text={pronounColumnLabel}
                       className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 whitespace-nowrap ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
+                      revealed={headerRevealed}
                     />
                   ) : (
                     <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
@@ -113,6 +130,7 @@ export function GrammarTable({
                       key={i}
                       text={col}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap"
+                      revealed={headerRevealed}
                     />
                   ))}
                 </tr>
@@ -143,7 +161,7 @@ export function GrammarTable({
                       </td>
                     ))}
                   </tr>
-                  {lang !== 'bg' && (
+                  {lang !== 'bg' && revealedRows.has(rIdx) && (
                     <tr className="bg-[#e8f4fd]">
                       {row.pronunciations ? (
                         <td
@@ -194,7 +212,7 @@ export function GrammarTable({
                 <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(note)}</p>
                 <AudioIcon className="w-3.5 h-3.5" />
               </div>
-              <InlineTranslation text={note} visible={true} />
+              <InlineTranslation text={note} visible={revealedNotes.has(i)} />
             </div>
           ))}
         </div>
