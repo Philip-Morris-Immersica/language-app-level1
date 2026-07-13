@@ -62,19 +62,91 @@ function postProcess(text: string, lang: string): string {
   return text;
 }
 
+// Phase-5 wrapped many instruction words in **bold** (e.g. "ходя" → "**ходя**"),
+// but the overrides/generated dictionaries were built against the pre-sweep,
+// non-bold text for some entries — so an exact lookup on the new bold string
+// misses and falls through to (slower, lower-quality) live Google Translate.
+// Stripping emphasis markers gives a safe additive fallback key to try.
+function stripMarkdownEmphasis(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1');
+}
+
+// The bold sweep turned pre-existing ALL-CAPS instruction words into lowercase
+// **bold** (e.g. "ХОДЯ" → "**ходя**"), but the dictionaries were keyed on the
+// old CAPS text — so even after stripping "**", a lowercase key still won't hit
+// the CAPS entry. This case-insensitive, markdown-stripped index recovers those
+// orphaned translations. It is used ONLY as a last dictionary fallback (after
+// exact + stripped matches) and ONLY for reasonably long keys, where a case
+// collision between two genuinely different source strings is implausible.
+const NORMALIZED_MIN_LEN = 12;
+
+function normalizeLookupKey(text: string): string {
+  return stripMarkdownEmphasis(text).toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+let normalizedOverrides: Map<string, Partial<Record<SupportedLang, string>>> | null = null;
+let normalizedGenerated: Map<string, Partial<Record<SupportedLang, string>>> | null = null;
+
+function buildNormalizedIndex(
+  dict: Record<string, Partial<Record<SupportedLang, string>>>,
+): Map<string, Partial<Record<SupportedLang, string>>> {
+  const map = new Map<string, Partial<Record<SupportedLang, string>>>();
+  for (const key of Object.keys(dict)) {
+    const norm = normalizeLookupKey(key);
+    if (norm.length < NORMALIZED_MIN_LEN) continue;
+    if (!map.has(norm)) map.set(norm, dict[key]); // first entry wins on collision
+  }
+  return map;
+}
+
+function normalizedLookup(
+  dict: 'overrides' | 'generated',
+  text: string,
+  targetLang: string,
+): string | undefined {
+  const norm = normalizeLookupKey(text);
+  if (norm.length < NORMALIZED_MIN_LEN) return undefined;
+  if (dict === 'overrides') {
+    if (!normalizedOverrides) normalizedOverrides = buildNormalizedIndex(TRANSLATION_OVERRIDES);
+    return normalizedOverrides.get(norm)?.[targetLang as SupportedLang];
+  }
+  if (!normalizedGenerated) normalizedGenerated = buildNormalizedIndex(GENERATED_TRANSLATIONS);
+  return normalizedGenerated.get(norm)?.[targetLang as SupportedLang];
+}
+
 async function translateText(text: string, targetLang: string): Promise<string> {
+  const trimmed = text.trim();
+  const normalized = stripMarkdownEmphasis(trimmed);
+  const hasMarkdown = normalized !== trimmed;
+
   // Manual, human-quality translations take priority over live Google Translate —
   // see translationOverrides.ts for why (grammar terminology, flagged mistranslations).
-  // A key with no entry for this language falls through to live translation below.
-  const override = TRANSLATION_OVERRIDES[text.trim()]?.[targetLang as SupportedLang];
+  // Try the raw string first (exact match), then fall back to the markdown-stripped
+  // variant for entries still keyed on the pre-bold-sweep text. A key with no entry
+  // for this language (in either form) falls through to live translation below.
+  const override =
+    TRANSLATION_OVERRIDES[trimmed]?.[targetLang as SupportedLang] ??
+    (hasMarkdown ? TRANSLATION_OVERRIDES[normalized]?.[targetLang as SupportedLang] : undefined) ??
+    normalizedLookup('overrides', trimmed, targetLang);
   if (override) return override;
 
-  const generated = GENERATED_TRANSLATIONS[text.trim()]?.[targetLang as SupportedLang];
+  const generated =
+    GENERATED_TRANSLATIONS[trimmed]?.[targetLang as SupportedLang] ??
+    (hasMarkdown ? GENERATED_TRANSLATIONS[normalized]?.[targetLang as SupportedLang] : undefined) ??
+    normalizedLookup('generated', trimmed, targetLang);
   if (generated) return generated;
 
   const cacheKey = getCacheKey(text, targetLang);
   const cached = localStorage.getItem(cacheKey);
   if (cached) return cached;
+
+  if (hasMarkdown) {
+    const normalizedCached = localStorage.getItem(getCacheKey(normalized, targetLang));
+    if (normalizedCached) return normalizedCached;
+  }
 
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=bg&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;

@@ -3,6 +3,7 @@
 import type { Exercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
+import { renderBoldText } from '@/lib/renderBoldText';
 import { FillInBlank } from './FillInBlank';
 import { MultipleChoice } from './MultipleChoice';
 import { MatchPairs } from './MatchPairs';
@@ -28,6 +29,7 @@ import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
+import { AudioChoice } from './AudioChoice';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
@@ -63,15 +65,7 @@ interface ExerciseHeaderProps {
 }
 
 /** Converts **bold** markers in instruction strings to <strong> elements. */
-function renderInstructionText(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
+const renderInstructionText = renderBoldText;
 
 function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
@@ -95,7 +89,7 @@ function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtit
           ? 'text-gray-500 text-sm md:text-base mt-1.5 leading-snug'
           : 'text-gray-400 text-xs mt-1'
         }>
-          {translatedSubtitle}
+          {renderInstructionText(translatedSubtitle)}
         </p>
       )}
       {instruction && (
@@ -217,6 +211,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <DropdownMatch
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
@@ -322,6 +317,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
           boldColumns={exercise.boldColumns}
           widePronouns={exercise.widePronouns}
+          pronounColumnLabel={exercise.pronounColumnLabel}
         />
       );
 
@@ -434,6 +430,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
         />
       );
+
+    case 'audio_choice':
+      return wrap(<AudioChoice exercise={exercise} onComplete={onComplete} />);
 
     case 'verb_conjugation':
     case 'number_writing':

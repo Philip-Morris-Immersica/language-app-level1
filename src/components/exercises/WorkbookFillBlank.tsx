@@ -7,6 +7,7 @@ import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { renderBoldText } from '@/lib/renderBoldText';
 
 interface WorkbookSentence {
   text: string;
@@ -24,16 +25,6 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   if (!options || options.length === 0) return [];
   if (Array.isArray(options[0])) return (options as string[][])[blankIdx] || [];
   return options as string[];
-}
-
-function renderBoldText(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
 }
 
 export interface WorkbookFillBlankProps {

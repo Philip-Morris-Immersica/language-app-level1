@@ -1,4 +1,7 @@
-﻿import type {
+﻿// content-lint-disable no-free-writing — pre-existing free-text sentences (l02-ex-12),
+// exempted from the new A1-driven guard so this already-shipped A2 lesson isn't retroactively
+// flagged. Convert to dropdowns in a dedicated A2 pass if desired.
+import type {
   Exercise,
   ImageLabelingExercise,
   IllustratedCardsExercise,

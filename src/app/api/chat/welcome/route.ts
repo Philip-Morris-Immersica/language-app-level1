@@ -54,27 +54,37 @@ export async function GET(req: NextRequest) {
     const bgRow = bgRows[0];
     const langRow = langRows[0];
 
+    // Defensive trim: strips stray whitespace from chips/text already saved
+    // in the DB before the PUT route started trimming on write.
+    const trimChips = (raw: string): string[] | null => {
+      try {
+        const parsed = JSON.parse(raw) as unknown;
+        if (!Array.isArray(parsed)) return null;
+        return parsed
+          .map((chip) => (typeof chip === 'string' ? chip.trim() : chip))
+          .filter((chip): chip is string => typeof chip === 'string' && chip !== '');
+      } catch {
+        return null;
+      }
+    };
+
     let bgChips: string[] | null = null;
-    if (bgRow?.suggestionChips) {
-      try { bgChips = JSON.parse(bgRow.suggestionChips); } catch { /* ignore */ }
-    }
+    if (bgRow?.suggestionChips) bgChips = trimChips(bgRow.suggestionChips);
     let langChips: string[] | null = null;
-    if (langRow?.suggestionChips) {
-      try { langChips = JSON.parse(langRow.suggestionChips); } catch { /* ignore */ }
-    }
+    if (langRow?.suggestionChips) langChips = trimChips(langRow.suggestionChips);
 
     // --- MESSAGE ---
     let message: string;
     let messageSource: string | null = null;
     if (lang === 'bg') {
-      message = bgRow?.text ?? HARDCODED_WELCOME_MESSAGES.bg;
+      message = bgRow?.text.trim() ?? HARDCODED_WELCOME_MESSAGES.bg;
     } else if (langRow?.text) {
       // Admin explicitly customised this language → use it directly
-      message = langRow.text;
+      message = langRow.text.trim();
     } else if (bgRow?.text) {
       // Admin customised only BG → ask client to translate it
       message = HARDCODED_WELCOME_MESSAGES[lang] ?? HARDCODED_WELCOME_MESSAGES.en;
-      messageSource = bgRow.text;
+      messageSource = bgRow.text.trim();
     } else {
       message = HARDCODED_WELCOME_MESSAGES[lang] ?? HARDCODED_WELCOME_MESSAGES.en;
     }

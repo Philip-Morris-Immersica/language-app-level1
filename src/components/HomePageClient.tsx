@@ -206,6 +206,23 @@ export function HomePageClient() {
 
       {/* Legend appears DIRECTLY below the level cards (Обратна връзка 2). */}
       <PlatformLegend />
+
+      {/* Attribution note — required credit for the original UNHCR learning materials (feedback #2). */}
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 pb-10 -mt-4">
+        <p className="text-xs text-gray-500 leading-relaxed text-center">
+          {t('homepage.attribution.text')}
+          {' '}
+          {t('homepage.attribution.linkText')}:{' '}
+          <a
+            href="https://www.unhcr.org/bg/resources/learning-materials"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#0072BC]"
+          >
+            https://www.unhcr.org/bg/resources/learning-materials
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
