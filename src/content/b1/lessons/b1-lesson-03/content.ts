@@ -12,8 +12,8 @@ export const content: LessonContent = {
     { id: 'bavya-se', bulgarian: 'бавя се, -иш / забавя се, -иш', ttsText: 'бавя се, бавиш се / забавя се, забавиш се', ttsModel: 'pro', translations: { en: 'to be late', fr: 'être en retard / se mettre en retard', ar: 'يتأخر', fa: 'دیر کردن', ru: 'опаздывать / опоздать', uk: 'запізнюватися / запізнитися' } },
 
     // в
-    { id: 'veryatno', bulgarian: 'вероятно', ttsModel: 'pro', translations: { en: 'probably', fr: 'probablement', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'вероятно', uk: 'вірогідно' } },
-    { id: 'vtora-upotreba', bulgarian: 'втора употреба', ttsModel: 'pro', translations: { en: 'second-hand', fr: "d'occasion", ar: 'مستعمل', fa: 'دست دوم', ru: 'секонд-хэнд', uk: 'секонд-хенд' } },
+    { id: 'veryatno', bulgarian: 'вероятно', ttsModel: 'pro', ttsPrompt: 'Declarative statement. Flat, neutral tone. No rising intonation.', translations: { en: 'probably', fr: 'probablement', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'вероятно', uk: 'вірогідно' } },
+    { id: 'vtora-upotreba', bulgarian: 'втора употреба', ttsModel: 'pro', ttsPrompt: 'Declarative statement. Flat, neutral tone. No rising intonation.', translations: { en: 'second-hand', fr: "d'occasion", ar: 'مستعمل', fa: 'دست دوم', ru: 'секонд-хэнд', uk: 'секонд-хенд' } },
 
     // д
     { id: 'dovezhdam', bulgarian: 'довеждам, -аш / доведа, -еш', ttsText: 'довеждам, довеждаш / доведа, доведеш', ttsModel: 'pro', translations: { en: 'to bring', fr: 'amener', ar: 'يُحضر', fa: 'آوردن', ru: 'приводить / привести', uk: 'приводити / привести' } },
@@ -58,7 +58,7 @@ export const content: LessonContent = {
     { id: 'uyuten', bulgarian: 'уютен, -а, -о, -и', ttsText: 'уютен, уютна, уютно, уютни', ttsModel: 'pro', translations: { en: 'cozy', fr: 'confortable, douillet', ar: 'مريح ودافئ', fa: 'دنج', ru: 'уютный', uk: 'затишний' } },
 
     // х
-    { id: 'hudozhnik', bulgarian: 'художник, -и', ttsText: 'художник, художници', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Stress on the second syllable -DO- in both forms: hu-DO-zhnik, hu-DO-zhnitsi.', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
+    { id: 'hudozhnik', bulgarian: 'художник, художници', ttsText: 'художник, художници', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Stress on the second syllable -DO- in both forms: hu-DO-zhnik, hu-DO-zhnitsi.', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
   ],
 
   grammarReference: [
