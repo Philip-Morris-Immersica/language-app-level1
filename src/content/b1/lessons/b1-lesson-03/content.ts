@@ -26,23 +26,23 @@ export const content: LessonContent = {
     { id: 'izlozhba', bulgarian: 'изложба, -и', ttsText: 'изложба, изложби', ttsModel: 'pro', translations: { en: 'exhibition, -s', fr: 'exposition', ar: 'معرض، معارض', fa: 'نمایشگاه', ru: 'выставка', uk: 'виставка' } },
 
     // м
-    { id: 'mekitsa', bulgarian: 'мекица, -и', ttsText: 'мекица, мекици', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Stress falls on the second syllable -KI- in both forms: me-KI-tsa, me-KI-tsi. Do not stress the first syllable.', translations: { en: 'fried dough', fr: 'beignet bulgare', ar: 'عجينة مقلية', fa: 'شیرینی سرخ‌شده', ru: 'мекица (жареное тесто)', uk: 'мекиця (смажене тісто)' } },
+    { id: 'mekitsa', bulgarian: 'мекица, -и', ttsText: 'ме-КИ-ца, ме-КИ-ци', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Stress on the syllable in capitals: -KI-.', translations: { en: 'fried dough', fr: 'beignet bulgare', ar: 'عجينة مقلية', fa: 'شیرینی سرخ‌شده', ru: 'мекица (жареное тесто)', uk: 'мекиця (смажене тісто)' } },
 
     // н
     { id: 'navyarno', bulgarian: 'навярно', ttsModel: 'pro', translations: { en: 'probably', fr: 'sans doute', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'наверное', uk: 'напевно' } },
 
     // о
     { id: 'ozdravyavam', bulgarian: 'оздравявам, -аш / оздравея, -еш', ttsText: 'оздравявам, оздравяваш / оздравея, оздравееш', ttsModel: 'pro', translations: { en: 'to heal, to recover', fr: 'guérir', ar: 'يتعافى', fa: 'بهبود یافتن', ru: 'выздоравливать / выздороветь', uk: 'одужувати / одужати' } },
-    { id: 'otdavna', bulgarian: 'отдавна', ttsModel: 'flash', translations: { en: 'long ago, for a long time', fr: 'depuis longtemps', ar: 'منذ زمن طويل', fa: 'مدت‌هاست', ru: 'давно', uk: 'давно' } },
+    { id: 'otdavna', bulgarian: 'отдавна', ttsText: 'отдавна.', ttsModel: 'pro', ttsPrompt: 'Say the complete word clearly to the end.', translations: { en: 'long ago, for a long time', fr: 'depuis longtemps', ar: 'منذ زمن طويل', fa: 'مدت‌هاست', ru: 'давно', uk: 'давно' } },
     { id: 'otkazvam', bulgarian: 'отказвам, -аш / откажа, -еш', ttsText: 'отказвам, отказваш / откажа, откажеш', ttsModel: 'pro', translations: { en: 'to refuse', fr: 'refuser', ar: 'يرفض', fa: 'رد کردن', ru: 'отказывать / отказать', uk: 'відмовляти / відмовити' } },
 
     // п
-    { id: 'peka', bulgarian: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
-    { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
-    { id: 'pekarna', bulgarian: 'пекарна, -и', ttsText: 'пекарна, пекарни', ttsModel: 'pro', translations: { en: 'bakery, -ies', fr: 'boulangerie', ar: 'مخبز، مخابز', fa: 'نانوایی', ru: 'пекарня', uk: 'пекарня' } },
+    { id: 'peka', bulgarian: 'пека, -еш', ttsText: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
+    { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Pronounce every р as a clear tapped Bulgarian r, never as l.', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
+    { id: 'pekarna', bulgarian: 'пекарна, -и', ttsText: 'пекарна, пекарни', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Pronounce every р as a clear tapped Bulgarian r, never as l. The plural ends in -rni, not just -ri.', translations: { en: 'bakery, -ies', fr: 'boulangerie', ar: 'مخبز، مخابز', fa: 'نانوایی', ru: 'пекарня', uk: 'пекарня' } },
     { id: 'poddarjam', bulgarian: 'поддържам, -аш', ttsText: 'поддържам, поддържаш', ttsModel: 'pro', translations: { en: 'to support', fr: 'soutenir', ar: 'يدعم', fa: 'حمایت کردن', ru: 'поддерживать', uk: 'підтримувати' } },
     { id: 'popylvam', bulgarian: 'попълвам, -аш / попълня, -иш', ttsText: 'попълвам, попълваш / попълня, попълниш', ttsModel: 'pro', translations: { en: 'to fill in', fr: 'remplir', ar: 'يملأ', fa: 'پر کردن', ru: 'заполнять / заполнить', uk: 'заповнювати / заповнити' } },
-    { id: 'presicham', bulgarian: 'пресичам, -аш / пресека, пресечеш', ttsText: 'пресичам, пресичаш / пресека, пресечеш', ttsModel: 'pro', translations: { en: 'to cross', fr: 'traverser', ar: 'يعبر', fa: 'رد شدن از', ru: 'переходить / перейти', uk: 'переходити / перейти' } },
+    { id: 'presicham', bulgarian: 'пресичам, -аш / пресека, -еш', ttsText: 'пресичам, пресичаш / пресека, пресечеш', ttsModel: 'pro', translations: { en: 'to cross', fr: 'traverser', ar: 'يعبر', fa: 'رد شدن از', ru: 'переходить / перейти', uk: 'переходити / перейти' } },
     { id: 'prodylzhavam', bulgarian: 'продължавам, -аш / продължа, -иш', ttsText: 'продължавам, продължаваш / продължа, продължиш', ttsModel: 'pro', translations: { en: 'to continue', fr: 'continuer', ar: 'يواصل', fa: 'ادامه دادن', ru: 'продолжать / продолжить', uk: 'продовжувати / продовжити' } },
 
     // р
@@ -55,7 +55,7 @@ export const content: LessonContent = {
 
     // у
     { id: 'usluzhiv', bulgarian: 'услужлив, -а, -о, -и', ttsText: 'услужлив, услужлива, услужливо, услужливи', ttsModel: 'pro', translations: { en: 'helpful', fr: 'serviable', ar: 'متعاون', fa: 'خدمتگزار', ru: 'услужливый', uk: 'послужливий' } },
-    { id: 'uyuten', bulgarian: 'уютен, уютна, -о, -и', ttsText: 'уютен, уютна, уютно, уютни', ttsModel: 'pro', translations: { en: 'cozy', fr: 'confortable, douillet', ar: 'مريح ودافئ', fa: 'دنج', ru: 'уютный', uk: 'затишний' } },
+    { id: 'uyuten', bulgarian: 'уютен, -а, -о, -и', ttsText: 'уютен, уютна, уютно, уютни', ttsModel: 'pro', translations: { en: 'cozy', fr: 'confortable, douillet', ar: 'مريح ودافئ', fa: 'دنج', ru: 'уютный', uk: 'затишний' } },
 
     // х
     { id: 'hudozhnik', bulgarian: 'художник, -и', ttsText: 'художник, художници', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Stress on the second syllable -DO- in both forms: hu-DO-zhnik, hu-DO-zhnitsi.', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
