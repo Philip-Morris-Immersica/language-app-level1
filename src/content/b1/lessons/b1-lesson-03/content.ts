@@ -20,25 +20,25 @@ export const content: LessonContent = {
 
     // з
     { id: 'zavezhdam', bulgarian: 'завеждам, -аш / заведа, -еш', ttsText: 'завеждам, завеждаш / заведа, заведеш', ttsModel: 'pro', translations: { en: 'to bring, to take to', fr: 'emmener', ar: 'يأخذ إلى', fa: 'بردن به', ru: 'отводить / отвести', uk: 'відводити / відвести' } },
-    { id: 'zanayat', bulgarian: 'занаят, -и', ttsText: 'занаят, занаяти', ttsModel: 'pro', translations: { en: 'craft, -s', fr: 'artisanat, métier', ar: 'حرفة، حِرَف', fa: 'صنعت دستی', ru: 'ремесло', uk: 'ремесло' } },
+    { id: 'zanayat', bulgarian: 'занаят, -и', ttsText: 'занаят, занаяти', ttsModel: 'pro', ttsPrompt: 'Bulgarian noun "занаят" (craft), plural "занаяти". Stress on the second syllable in both forms: за-НА-ят, за-НА-я-ти. Pronounce the final "т" as a clear crisp dental "t" — never as "п" (p) or softened. The plural ending is "-ти" not "-пи". Read both forms clearly.', translations: { en: 'craft, -s', fr: 'artisanat, métier', ar: 'حرفة، حِرَف', fa: 'صنعت دستی', ru: 'ремесло', uk: 'ремесло' } },
 
     // и
     { id: 'izlozhba', bulgarian: 'изложба, -и', ttsText: 'изложба, изложби', ttsModel: 'pro', translations: { en: 'exhibition, -s', fr: 'exposition', ar: 'معرض، معارض', fa: 'نمایشگاه', ru: 'выставка', uk: 'виставка' } },
 
     // м
-    { id: 'mekitsa', bulgarian: 'мекица, -и', ttsText: 'мекица, мекици', ttsModel: 'pro', translations: { en: 'fried dough', fr: 'beignet bulgare', ar: 'عجينة مقلية', fa: 'شیرینی سرخ‌شده', ru: 'мекица (жареное тесто)', uk: 'мекиця (смажене тісто)' } },
+    { id: 'mekitsa', bulgarian: 'мекица, -и', ttsText: 'мекица, мекици', ttsModel: 'pro', ttsPrompt: 'Bulgarian noun мекИца (fried dough), plural мекИци. Stress falls on the second syllable И in both forms: ме-КИ-ца, ме-КИ-ци. Do not stress the first syllable ме.', translations: { en: 'fried dough', fr: 'beignet bulgare', ar: 'عجينة مقلية', fa: 'شیرینی سرخ‌شده', ru: 'мекица (жареное тесто)', uk: 'мекиця (смажене тісто)' } },
 
     // н
     { id: 'navyarno', bulgarian: 'навярно', ttsModel: 'pro', translations: { en: 'probably', fr: 'sans doute', ar: 'على الأرجح', fa: 'احتمالاً', ru: 'наверное', uk: 'напевно' } },
 
     // о
     { id: 'ozdravyavam', bulgarian: 'оздравявам, -аш / оздравея, -еш', ttsText: 'оздравявам, оздравяваш / оздравея, оздравееш', ttsModel: 'pro', translations: { en: 'to heal, to recover', fr: 'guérir', ar: 'يتعافى', fa: 'بهبود یافتن', ru: 'выздоравливать / выздороветь', uk: 'одужувати / одужати' } },
-    { id: 'otdavna', bulgarian: 'отдавна', ttsModel: 'pro', translations: { en: 'long ago, for a long time', fr: 'depuis longtemps', ar: 'منذ زمن طويل', fa: 'مدت‌هاست', ru: 'давно', uk: 'давно' } },
+    { id: 'otdavna', bulgarian: 'отдавна', ttsModel: 'pro', ttsPrompt: 'Bulgarian adverb "отдавна" (long ago, for a long time). Read the complete word clearly to the end: от-ДАВ-на. Stress on "дав". The final syllable "на" must be fully audible — do not cut it short. Speak at a natural, unhurried pace.', translations: { en: 'long ago, for a long time', fr: 'depuis longtemps', ar: 'منذ زمن طويل', fa: 'مدت‌هاست', ru: 'давно', uk: 'давно' } },
     { id: 'otkazvam', bulgarian: 'отказвам, -аш / откажа, -еш', ttsText: 'отказвам, отказваш / откажа, откажеш', ttsModel: 'pro', translations: { en: 'to refuse', fr: 'refuser', ar: 'يرفض', fa: 'رد کردن', ru: 'отказывать / отказать', uk: 'відмовляти / відмовити' } },
 
     // п
     { id: 'peka', bulgarian: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
-    { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
+    { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', ttsPrompt: 'Bulgarian noun "пекар" (baker), plural "пекари". Pronounce the "р" as a clear tapped Bulgarian "r" in both forms — do not drop, blur or soften it. Stress: ПЕ-кар, пе-КА-ри.', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
     { id: 'pekarna', bulgarian: 'пекарна, -и', ttsText: 'пекарна, пекарни', ttsModel: 'pro', translations: { en: 'bakery, -ies', fr: 'boulangerie', ar: 'مخبز، مخابز', fa: 'نانوایی', ru: 'пекарня', uk: 'пекарня' } },
     { id: 'poddarjam', bulgarian: 'поддържам, -аш', ttsText: 'поддържам, поддържаш', ttsModel: 'pro', translations: { en: 'to support', fr: 'soutenir', ar: 'يدعم', fa: 'حمایت کردن', ru: 'поддерживать', uk: 'підтримувати' } },
     { id: 'popylvam', bulgarian: 'попълвам, -аш / попълня, -иш', ttsText: 'попълвам, попълваш / попълня, попълниш', ttsModel: 'pro', translations: { en: 'to fill in', fr: 'remplir', ar: 'يملأ', fa: 'پر کردن', ru: 'заполнять / заполнить', uk: 'заповнювати / заповнити' } },
@@ -49,7 +49,7 @@ export const content: LessonContent = {
     { id: 'radvam-se', bulgarian: 'радвам се, -аш / зарадвам се, -аш', ttsText: 'радвам се, радваш се / зарадвам се, зарадваш се', ttsModel: 'pro', translations: { en: 'to be glad, to be happy about', fr: 'se réjouir', ar: 'يفرح', fa: 'خوشحال بودن', ru: 'радоваться / порадоваться', uk: 'радіти / зрадіти' } },
 
     // с
-    { id: 'srychen', bulgarian: 'сръчен, сръчна, -о, -и', ttsText: 'сръчен, сръчна, сръчно, сръчни', ttsModel: 'pro', translations: { en: 'skillful', fr: 'habile, adroit', ar: 'ماهر', fa: 'ماهر', ru: 'умелый, ловкий', uk: 'вправний' } },
+    { id: 'srychen', bulgarian: 'сръчен, -а, -о, -и', ttsText: 'сръчен, сръчна, сръчно, сръчни', ttsModel: 'pro', translations: { en: 'skillful', fr: 'habile, adroit', ar: 'ماهر', fa: 'ماهر', ru: 'умелый, ловкий', uk: 'вправний' } },
     { id: 'staraya-se', bulgarian: 'старая се, -еш / постарая се, -еш', ttsText: 'старая се, стараеш се / постарая се, постараеш се', ttsModel: 'pro', translations: { en: 'to try hard', fr: "s'appliquer, faire des efforts", ar: 'يجتهد', fa: 'تلاش کردن', ru: 'стараться / постараться', uk: 'старатися / постаратися' } },
     { id: 'stroitel', bulgarian: 'строител, -и', ttsText: 'строител, строители', ttsModel: 'pro', translations: { en: 'builder, -s', fr: 'constructeur, bâtisseur', ar: 'بنّاء، بنّاؤون', fa: 'سازنده', ru: 'строитель', uk: 'будівельник' } },
 
@@ -58,7 +58,7 @@ export const content: LessonContent = {
     { id: 'uyuten', bulgarian: 'уютен, уютна, -о, -и', ttsText: 'уютен, уютна, уютно, уютни', ttsModel: 'pro', translations: { en: 'cozy', fr: 'confortable, douillet', ar: 'مريح ودافئ', fa: 'دنج', ru: 'уютный', uk: 'затишний' } },
 
     // х
-    { id: 'hudozhnik', bulgarian: 'художник, художници', ttsModel: 'pro', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
+    { id: 'hudozhnik', bulgarian: 'художник, -и', ttsText: 'художник, художници', ttsModel: 'pro', translations: { en: 'artist, -s', fr: 'artiste', ar: 'فنان، فنانون', fa: 'هنرمند', ru: 'художник', uk: 'художник' } },
   ],
 
   grammarReference: [
