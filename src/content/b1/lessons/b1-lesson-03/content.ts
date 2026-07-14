@@ -37,7 +37,7 @@ export const content: LessonContent = {
     { id: 'otkazvam', bulgarian: 'отказвам, -аш / откажа, -еш', ttsText: 'отказвам, отказваш / откажа, откажеш', ttsModel: 'pro', translations: { en: 'to refuse', fr: 'refuser', ar: 'يرفض', fa: 'رد کردن', ru: 'отказывать / отказать', uk: 'відмовляти / відмовити' } },
 
     // п
-    { id: 'peka', bulgarian: 'пека, -еш', ttsText: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
+    { id: 'peka', bulgarian: 'пека, печеш', ttsText: 'пека, печеш', ttsModel: 'pro', translations: { en: 'to roast, to bake', fr: 'rôtir, cuire au four', ar: 'يشوي، يخبز', fa: 'کباب کردن، پختن', ru: 'жарить, печь', uk: 'смажити, пекти' } },
     { id: 'pekar', bulgarian: 'пекар, -и', ttsText: 'пекар, пекари', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Pronounce every р as a clear tapped Bulgarian r, never as l.', translations: { en: 'baker, -s', fr: 'boulanger', ar: 'خباز، خبازون', fa: 'نانوا', ru: 'пекарь', uk: 'пекар' } },
     { id: 'pekarna', bulgarian: 'пекарна, -и', ttsText: 'пекарна, пекарни', ttsModel: 'pro', ttsPrompt: 'Bulgarian word. Pronounce every р as a clear tapped Bulgarian r, never as l. The plural ends in -rni, not just -ri.', translations: { en: 'bakery, -ies', fr: 'boulangerie', ar: 'مخبز، مخابز', fa: 'نانوایی', ru: 'пекарня', uk: 'пекарня' } },
     { id: 'poddarjam', bulgarian: 'поддържам, -аш', ttsText: 'поддържам, поддържаш', ttsModel: 'pro', translations: { en: 'to support', fr: 'soutenir', ar: 'يدعم', fa: 'حمایت کردن', ru: 'поддерживать', uk: 'підтримувати' } },
