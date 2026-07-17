@@ -30,25 +30,48 @@ interface A2GrammarTableProps extends CustomExerciseRendererProps {
       pronoun: string;
       cells: string[];
       pronunciations?: Record<string, string>;
+      /** TTS-only override text (e.g. adds "Мъжки род." prefix, drops markdown/parentheses). Mirrors generate-tts.ts. */
+      ttsText?: string;
     }[];
     notes?: string[];
     ttsNotes?: string[];
     subtitle?: string;
     boldColumns?: number[];
     widePronouns?: boolean;
+    /** When true, the first (pronoun/label) column is not rendered — the row shows
+     *  only the example cell(s). Used for reference tables where the key word is
+     *  already highlighted inside the sentence (e.g. „Въпросителни думи"). */
+    hidePronounColumn?: boolean;
     [key: string]: unknown;
   };
 }
 
 /**
- * Renders inline `**bold**` markdown inside a table cell (e.g. `лимон**и**`
- * → „лимон**и**" with the ending bold, matching the textbook convention of
- * bolding noun/adjective endings in example tables).
+ * Renders inline `**bold**` markdown inside a single line of table-cell text
+ * (e.g. `лимон**и**` → „лимон**и**" with the ending bold, matching the textbook
+ * convention of bolding noun/adjective endings in example tables).
  */
-function renderCellWithBold(text: string): React.ReactNode {
+function renderLineWithBold(text: string, keyPrefix: string): React.ReactNode {
   if (!text.includes('**')) return text;
   const parts = text.split(/\*\*(.+?)\*\*/g);
-  return parts.map((part, i) => (i % 2 === 1 ? <strong key={i}>{part}</strong> : part));
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={`${keyPrefix}-${i}`}>{part}</strong> : part,
+  );
+}
+
+/**
+ * Renders a table cell. A newline (`\n`) inside the cell text splits the value
+ * into separate stacked lines — used for example lists where each example
+ * should sit on its own row (e.g. the „Предлози за време" table), matching the
+ * printed textbook layout. Inline `**bold**` still works within each line.
+ */
+function renderCellWithBold(text: string): React.ReactNode {
+  if (!text.includes('\n')) return renderLineWithBold(text, 'l0');
+  return text.split('\n').map((line, i) => (
+    <span key={i} className="block">
+      {renderLineWithBold(line, `l${i}`)}
+    </span>
+  ));
 }
 
 function ClickTranslateTh({
@@ -93,6 +116,7 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
     subtitle,
     boldColumns = [],
     widePronouns = false,
+    hidePronounColumn = false,
   } = exercise;
 
   const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
@@ -101,15 +125,19 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
   const t = useT();
 
   const toggleRow = (idx: number) => {
-    const isNumericPronoun = /^\d[\d\s]*$/.test(rows[idx].pronoun.trim());
-    const speakableCells = rows[idx].cells.filter(c => !c.trim().startsWith('-'));
+    const row = rows[idx];
+    const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
+    const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
     const parts = isNumericPronoun
       ? speakableCells
-      : [rows[idx].pronoun, ...speakableCells];
+      : [row.pronoun, ...speakableCells];
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx}`)
       : '';
-    playTtsAudio(audioPath, parts.join('. '));
+    // Mirror generate-tts.ts: a `ttsText` override (cleaner wording, no
+    // markdown/parentheses) takes priority over the raw displayed cells for
+    // the browser-TTS fallback used when the MP3 hasn't been generated yet.
+    playTtsAudio(audioPath, row.ttsText ?? parts.join('. ').replace(/\*\*/g, ''));
 
     setRevealedRows(prev => {
       const next = new Set(prev);
@@ -157,23 +185,25 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                   text={tableTitle}
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
                   colSpan={
-                    columns.length > 0
-                      ? columns.length + 1
-                      : (rows[0]?.cells.length ?? 0) + 1
+                    (columns.length > 0
+                      ? columns.length
+                      : (rows[0]?.cells.length ?? 0)) + (hidePronounColumn ? 0 : 1)
                   }
                 />
               </tr>
               {columns.length > 0 && (
                 <tr className="bg-[#7ab356] text-white">
-                  <th
-                    className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${
-                      widePronouns
-                        ? 'w-1/2'
-                        : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'
-                    }`}
-                  >
-                    {'\u00A0'}
-                  </th>
+                  {!hidePronounColumn && (
+                    <th
+                      className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${
+                        widePronouns
+                          ? 'w-1/2'
+                          : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'
+                      }`}
+                    >
+                      {'\u00A0'}
+                    </th>
+                  )}
                   {columns.map((col, i) => (
                     <ClickTranslateTh
                       key={i}
@@ -195,16 +225,18 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                     rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'
                   }`}
                 >
-                  <td
-                    className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${
-                      widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span>{row.pronoun}</span>
-                      <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
-                    </div>
-                  </td>
+                  {!hidePronounColumn && (
+                    <td
+                      className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${
+                        widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-1">
+                        <span>{row.pronoun}</span>
+                        <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
+                      </div>
+                    </td>
+                  )}
                   {row.cells.map((cell, cIdx) => (
                     <td
                       key={cIdx}
@@ -214,13 +246,20 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                           : 'font-medium'
                       }`}
                     >
-                      {renderCellWithBold(cell)}
+                      {hidePronounColumn && cIdx === row.cells.length - 1 ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <span>{renderCellWithBold(cell)}</span>
+                          <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
+                        </div>
+                      ) : (
+                        renderCellWithBold(cell)
+                      )}
                     </td>
                   ))}
                 </tr>
                 {revealedRows.has(rIdx) && lang !== 'bg' && (
                   <tr className="bg-[#e8f4fd]">
-                    {row.pronunciations ? (
+                    {row.pronunciations && !hidePronounColumn ? (
                       <td
                         colSpan={row.cells.length + 1}
                         className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 text-center"
@@ -234,13 +273,15 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                       </td>
                     ) : (
                       <>
-                        <td className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 text-center">
-                          <InlineTranslation
-                            text={row.pronoun}
-                            visible={true}
-                            className="mt-0"
-                          />
-                        </td>
+                        {!hidePronounColumn && (
+                          <td className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 text-center">
+                            <InlineTranslation
+                              text={row.pronoun}
+                              visible={true}
+                              className="mt-0"
+                            />
+                          </td>
+                        )}
                         {row.cells.map((cell, cIdx) => (
                           <td
                             key={cIdx}

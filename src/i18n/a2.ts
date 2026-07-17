@@ -188,6 +188,26 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     ru: 'Выберите правильную форму глагола.',
   },
 
+  'a2.ex.glagolFormaFill': {
+    bg: 'Попълнете изреченията с правилната форма на глагола.',
+    ar: 'أكمل الجمل بالصيغة الصحيحة للفعل.',
+    fr: 'Complétez les phrases avec la forme correcte du verbe.',
+    en: 'Complete the sentences with the correct verb form.',
+    fa: 'جملات را با شکل صحیح فعل کامل کنید.',
+    uk: 'Доповніть речення правильною формою дієслова.',
+    ru: 'Дополните предложения правильной формой глагола.',
+  },
+
+  'a2.ex.predloziDvizhenie': {
+    bg: 'Изберете правилния предлог за движение.',
+    ar: 'اختر حرف الجر الصحيح للحركة.',
+    fr: 'Choisissez la préposition de mouvement correcte.',
+    en: 'Choose the correct preposition of movement.',
+    fa: 'حرف اضافه حرکت صحیح را انتخاب کنید.',
+    uk: 'Оберіть правильний прийменник руху.',
+    ru: 'Выберите правильный предлог движения.',
+  },
+
   'a2.ex.pritezhatelnaMest': {
     bg: 'Изберете правилната кратка притежателна форма.',
     ar: 'اختر صيغة الملكية القصيرة الصحيحة.',
