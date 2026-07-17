@@ -52,6 +52,34 @@ export interface A2GroupedDropdownExercise extends BaseExercise {
   points?: number;
 }
 
+// ─── A2PictureDropdownExercise ────────────────────────────────────────────────
+// Picture + dropdown per question, rendered in a SINGLE column (top-to-bottom) so
+// a chronological sequence reads naturally. Images are a bit larger than the
+// shared DropdownMatch image-mode. Used for the „дневен режим" routine drill.
+
+export interface A2PictureDropdownQuestion {
+  id: string;
+  /** Used as image alt / accessible label. */
+  left: string;
+  leftImageUrl: string;
+  options: string[];
+  correctAnswer: string;
+  alternateCorrectAnswers?: string[];
+  isExample?: boolean;
+}
+
+export interface A2PictureDropdownExercise extends BaseExercise {
+  type: 'a2-picture-dropdown';
+  questions: A2PictureDropdownQuestion[];
+  points?: number;
+  /**
+   * Card layout. Default `'list'` = single column, image left / dropdown right
+   * (chronological drill). `'grid'` = image-on-top cards laid out like the A2
+   * image-labeling grid, each card carrying a sequential number badge.
+   */
+  layout?: 'list' | 'grid';
+}
+
 // ─── A2ImageLabelingExercise ──────────────────────────────────────────────────
 // Same as the shared ImageLabelingExercise (select a label under each image, then
 // check) but rendered 5-per-row on desktop (2 rows of 5 for 10 items). Used in the
@@ -174,15 +202,37 @@ export interface A2MatchPairsExercise extends Omit<MatchPairsExercise, 'type'> {
   model?: string;
 }
 
+// ─── A2DragToColumnsExercise ──────────────────────────────────────────────────
+// Same as the shared DragToColumnsExercise; the matching A2 component only
+// changes the "tap to remove" hover color from the red/error family to a
+// neutral grey, since that hover fires on every placed item regardless of
+// correctness (real correctness feedback only appears after checking) and
+// the red color was misread as "this is wrong" before the student even checks.
+
+export interface A2DragToColumnsExercise extends BaseExercise {
+  type: 'a2-drag-to-columns';
+  imageUrl?: string;
+  points?: number;
+  items: string[];
+  columns: {
+    id: string;
+    title: string;
+    icon?: string;
+    correctItems: string[];
+  }[];
+}
+
 /** Union of all A2-specific exercise interfaces. */
 export type A2Exercise =
   | A2GroupedDropdownExercise
+  | A2PictureDropdownExercise
   | A2ImageLabelingExercise
   | A2WideCardsExercise
   | A2FreeFillExercise
   | A2DialoguesExercise
   | A2GrammarExamplesExercise
-  | A2MatchPairsExercise;
+  | A2MatchPairsExercise
+  | A2DragToColumnsExercise;
 
 // Re-export BaseExercise so A2 component files can import everything from one place.
 export type { BaseExercise };

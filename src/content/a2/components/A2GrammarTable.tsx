@@ -40,6 +40,17 @@ interface A2GrammarTableProps extends CustomExerciseRendererProps {
   };
 }
 
+/**
+ * Renders inline `**bold**` markdown inside a table cell (e.g. `лимон**и**`
+ * → „лимон**и**" with the ending bold, matching the textbook convention of
+ * bolding noun/adjective endings in example tables).
+ */
+function renderCellWithBold(text: string): React.ReactNode {
+  if (!text.includes('**')) return text;
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return parts.map((part, i) => (i % 2 === 1 ? <strong key={i}>{part}</strong> : part));
+}
+
 function ClickTranslateTh({
   text,
   className,
@@ -203,7 +214,7 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                           : 'font-medium'
                       }`}
                     >
-                      {cell}
+                      {renderCellWithBold(cell)}
                     </td>
                   ))}
                 </tr>

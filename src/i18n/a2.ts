@@ -98,6 +98,16 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     ru: 'Выберите правильную форму множественного числа.',
   },
 
+  'a2.ex.mnozhestvenoHora': {
+    bg: 'Изберете правилната форма за множествено число.',
+    ar: 'اختر صيغة الجمع الصحيحة.',
+    fr: 'Choisissez la bonne forme du pluriel.',
+    en: 'Choose the correct plural form.',
+    fa: 'شکل جمع صحیح را انتخاب کنید.',
+    uk: 'Оберіть правильну форму множини.',
+    ru: 'Выберите правильную форму множественного числа.',
+  },
+
   'a2.ex.prilagatelni': {
     bg: 'Изберете правилната форма на прилагателното по род и число.',
     ar: 'اختر الشكل الصحيح للصفة حسب الجنس والعدد.',

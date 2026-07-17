@@ -1,5 +1,5 @@
 import type { Exercise } from '@/content/types';
-import type { A2ImageLabelingExercise, A2WideCardsExercise } from '../../types';
+import type { A2ImageLabelingExercise, A2WideCardsExercise, A2PictureDropdownExercise, A2DragToColumnsExercise } from '../../types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // A2-LESSON-00 „Преговор A1" — всички упражнения (стр. 6–15)
@@ -45,10 +45,12 @@ export const exercises: Exercise[] = [
       {
         id: 'bg', imageUrl: `${BASE}/02-upr-02-darzhavi-nacionalnosti/01-balgariya.jpg`,
         label: 'България', sublabels: ['българин', 'българка', 'българи'],
+        ttsPrompt: 'Произнеси думата България като една цяла дума, с естествено темпо и ясно българско „р".',
       },
       {
         id: 'sy', imageUrl: `${BASE}/02-upr-02-darzhavi-nacionalnosti/02-siriya.jpg`,
         label: 'Сирия', sublabels: ['сириец', 'сирийка', 'сирийци'],
+        ttsPrompt: 'Произнеси думата Сирия като една цяла дума, с естествено темпо и ясно българско „р".',
       },
       {
         id: 'iq', imageUrl: `${BASE}/02-upr-02-darzhavi-nacionalnosti/03-irak.jpg`,
@@ -189,11 +191,11 @@ export const exercises: Exercise[] = [
     points: 12,
     images: [
       { id: 'salata',    imageUrl: `${BASE}/05-upr-06-hrani-napitki/01-salata.jpg`,    correctLabel: 'салата',   options: ['салата', 'супа', 'омлет', 'пица', 'спагети']   },
-      { id: 'kyufteta',  imageUrl: `${BASE}/05-upr-06-hrani-napitki/02-kyufteta.jpg`,  correctLabel: 'кюфтета',  options: ['кюфтета', 'омлет', 'супа', 'салата', 'пица']   },
-      { id: 'omlet',     imageUrl: `${BASE}/05-upr-06-hrani-napitki/03-omlet.jpg`,     correctLabel: 'омлет',    options: ['омлет', 'кюфтета', 'салата', 'супа', 'пица']   },
+      { id: 'kyufteta',  imageUrl: `${BASE}/05-upr-06-hrani-napitki/02-kyufteta.jpg`,  correctLabel: 'кюфте',    options: ['кюфте', 'омлет', 'супа', 'салата', 'пица']     },
+      { id: 'omlet',     imageUrl: `${BASE}/05-upr-06-hrani-napitki/03-omlet.jpg`,     correctLabel: 'омлет',    options: ['омлет', 'кюфте', 'салата', 'супа', 'пица']     },
       { id: 'supa',      imageUrl: `${BASE}/05-upr-06-hrani-napitki/04-supa.jpg`,      correctLabel: 'супа',     options: ['супа', 'салата', 'спагети', 'омлет', 'пица']   },
       { id: 'pitsa',     imageUrl: `${BASE}/05-upr-06-hrani-napitki/05-pitsa.jpg`,     correctLabel: 'пица',     options: ['пица', 'спагети', 'салата', 'супа', 'омлет']   },
-      { id: 'spageti',   imageUrl: `${BASE}/05-upr-06-hrani-napitki/06-spageti.jpg`,   correctLabel: 'спагети',  options: ['спагети', 'пица', 'супа', 'салата', 'кюфтета'] },
+      { id: 'spageti',   imageUrl: `${BASE}/05-upr-06-hrani-napitki/06-spageti.jpg`,   correctLabel: 'спагети',  options: ['спагети', 'пица', 'супа', 'салата', 'кюфте']   },
       { id: 'voda',      imageUrl: `${BASE}/05-upr-06-hrani-napitki/07-voda.jpg`,      correctLabel: 'вода',     options: ['вода', 'сок', 'чай', 'кафе', 'кола']          },
       { id: 'kafe',      imageUrl: `${BASE}/05-upr-06-hrani-napitki/08-kafe.jpg`,      correctLabel: 'кафе',     options: ['кафе', 'чай', 'капучино', 'вода', 'сок']      },
       { id: 'chay',      imageUrl: `${BASE}/05-upr-06-hrani-napitki/09-chay.jpg`,      correctLabel: 'чай',      options: ['чай', 'кафе', 'вода', 'сок', 'капучино']      },
@@ -231,7 +233,7 @@ export const exercises: Exercise[] = [
     instructionKey: 'a2.ex.semeystvo',
     order: 9,
     points: 13,
-    imageUrl: `${BASE}/07-upr-08a-semeystvo-dimitrovi/01-semeystvo-dimitrovi.jpg`,
+    imageUrl: `${BASE}/07-upr-08a-semeystvo-dimitrovi/01-semeystvo-dimitrovi.png`,
     questions: [
       { id: 'f01', left: 'Мария е … на Георги.',          options: ['майка', 'баща', 'сестра', 'баба'],         correctAnswer: 'майка'    },
       { id: 'f02', left: 'Иван е … на Георги.',           options: ['баща', 'дядо', 'брат', 'чичо'],            correctAnswer: 'баща'     },
@@ -255,7 +257,7 @@ export const exercises: Exercise[] = [
     id: 'a2-l00-ex-08b',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ',
-    instruction: 'Изберете антонима на всяка дума.',
+    instruction: 'Изберете думата с противоположно значение на посочената.',
     order: 10,
     points: 6,
     questions: [
@@ -268,29 +270,94 @@ export const exercises: Exercise[] = [
     ],
   },
 
-  // ORDER 11 — Упр. 9: Таблица (дни, месеци, сезони, времето, посоки) — справочна
-  // По обратна връзка таблицата се запазва с цялата информация, а интерактивната
-  // проверка (dropdown_match) идва веднага след нея.
+  // ORDER 11 — Упр. 9: Дни, месеци, сезони, времето, посоки — справочни блокове
+  // По обратна връзка: думите се четат групирани (една група на блок, вертикален
+  // списък), а не смесено по редове. Всяка дума има собствено произношение.
+  // Блоковете след първия ползват title: '' (без хедър) → един общ хедър за всички.
   {
-    id: 'a2-l00-gramatika-01',
+    id: 'a2-l00-gramatika-01a',
     type: 'grammar_table',
     title: 'УПРАЖНЕНИЕ 9',
-    instruction: 'Запознайте се с таблицата. Натиснете за произношение.',
+    instruction: 'Натиснете върху дума за произношение.',
     order: 11,
-    columns: ['Ден', 'Месец', 'Сезон', 'Време', 'Посока'],
+    tableTitle: 'Дни',
+    columns: [],
     rows: [
-      { pronoun: '1.',  cells: ['понеделник', 'януари',    'пролет', 'слънчево',  'север'], ttsText: 'понеделник. януари. пролет. слънчево. север.' },
-      { pronoun: '2.',  cells: ['вторник',    'февруари',  'лято',   'облачно',   'юг'],    ttsText: 'вторник. февруари. лято. облачно. юг.' },
-      { pronoun: '3.',  cells: ['сряда',      'март',      'есен',   'дъждовно',  'изток'], ttsText: 'сряда. март. есен. дъждовно. изток.' },
-      { pronoun: '4.',  cells: ['четвъртък',  'април',     'зима',   'снежно',    'запад'], ttsText: 'четвъртък. април. зима. снежно. запад.' },
-      { pronoun: '5.',  cells: ['петък',      'май',       '',       'ветровито', ''],      ttsText: 'петък. май. ветровито.' },
-      { pronoun: '6.',  cells: ['събота',     'юни',       '',       'мъгливо',   ''],      ttsText: 'събота. юни. мъгливо.' },
-      { pronoun: '7.',  cells: ['неделя',     'юли',       '',       'топло',     ''],      ttsText: 'неделя. юли. топло.' },
-      { pronoun: '8.',  cells: ['',           'август',    '',       'студено',   ''],      ttsText: 'август. студено.' },
-      { pronoun: '9.',  cells: ['',           'септември', '',       '',          ''],      ttsText: 'септември.' },
-      { pronoun: '10.', cells: ['',           'октомври',  '',       '',          ''],      ttsText: 'октомври.' },
-      { pronoun: '11.', cells: ['',           'ноември',   '',       '',          ''],      ttsText: 'ноември.' },
-      { pronoun: '12.', cells: ['',           'декември',  '',       '',          ''],      ttsText: 'декември.' },
+      { pronoun: 'понеделник', cells: [] },
+      { pronoun: 'вторник',    cells: [] },
+      { pronoun: 'сряда',      cells: [] },
+      { pronoun: 'четвъртък',  cells: [] },
+      { pronoun: 'петък',      cells: [] },
+      { pronoun: 'събота',     cells: [] },
+      { pronoun: 'неделя',     cells: [] },
+    ],
+  },
+  {
+    id: 'a2-l00-gramatika-01b',
+    type: 'grammar_table',
+    title: '',
+    order: 11.1,
+    tableTitle: 'Месеци',
+    columns: [],
+    rows: [
+      { pronoun: 'януари',    cells: [] },
+      { pronoun: 'февруари',  cells: [] },
+      { pronoun: 'март',      cells: [] },
+      { pronoun: 'април',     cells: [] },
+      { pronoun: 'май',       cells: [] },
+      { pronoun: 'юни',       cells: [] },
+      { pronoun: 'юли',       cells: [] },
+      { pronoun: 'август',    cells: [] },
+      { pronoun: 'септември', cells: [] },
+      { pronoun: 'октомври',  cells: [] },
+      { pronoun: 'ноември',   cells: [] },
+      { pronoun: 'декември',  cells: [] },
+    ],
+  },
+  {
+    id: 'a2-l00-gramatika-01c',
+    type: 'grammar_table',
+    title: '',
+    order: 11.2,
+    tableTitle: 'Сезони',
+    columns: [],
+    rows: [
+      { pronoun: 'пролет', cells: [] },
+      { pronoun: 'лято',   cells: [] },
+      { pronoun: 'есен',   cells: [] },
+      { pronoun: 'зима',   cells: [] },
+    ],
+  },
+  {
+    id: 'a2-l00-gramatika-01d',
+    type: 'grammar_table',
+    title: '',
+    order: 11.3,
+    tableTitle: 'Време',
+    columns: [],
+    rows: [
+      { pronoun: 'слънчево',  cells: [] },
+      { pronoun: 'облачно',   cells: [] },
+      { pronoun: 'дъждовно',  cells: [] },
+      { pronoun: 'снежно',    cells: [] },
+      { pronoun: 'ветровито', cells: [] },
+      { pronoun: 'мъгливо',   cells: [] },
+      { pronoun: 'топло',     cells: [] },
+      { pronoun: 'студено',   cells: [] },
+    ],
+  },
+  {
+    id: 'a2-l00-gramatika-01e',
+    type: 'grammar_table',
+    title: '',
+    order: 11.4,
+    tableTitle: 'Посоки',
+    columns: [],
+    rows: [
+      { pronoun: 'север', cells: [] },
+      { pronoun: 'юг',    cells: [] },
+      { pronoun: 'изток', cells: [] },
+      { pronoun: 'запад', cells: [] },
     ],
   },
 
@@ -412,24 +479,25 @@ export const exercises: Exercise[] = [
   // ORDER 16 — Упр. 14: Рутина на Георги
   {
     id: 'a2-l00-ex-14',
-    type: 'dropdown_match',
+    type: 'a2-picture-dropdown',
     title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Изберете правилния глагол или израз под всяка картинка.',
+    instruction: 'Какво прави Георги всеки ден? Изберете правилния глагол или израз за всяка картинка.',
     order: 16,
     points: 10,
+    layout: 'grid',
     questions: [
-      { id: 'r01', left: 'Картинка 1 (8:00 ч.) — …',    options: ['Става в 8:00 часа.', 'Взема душ.', 'Закусва.', 'Ляга.'],              correctAnswer: 'Става в 8:00 часа.'   },
-      { id: 'r02', left: 'Картинка 2 (баня) — …',          options: ['Взема душ.', 'Закусва.', 'Пазарува.', 'Спи.'],                       correctAnswer: 'Взема душ.'           },
-      { id: 'r03', left: 'Картинка 3 (сутрин) — …',        options: ['Закусва.', 'Обядва.', 'Вечеря.', 'Взема душ.'],                      correctAnswer: 'Закусва.'             },
-      { id: 'r04', left: 'Картинка 4 (ресторант) — …',     options: ['Обядва в ресторант.', 'Закусва.', 'Вечеря.', 'Среща се с приятели.'],correctAnswer: 'Обядва в ресторант.'  },
-      { id: 'r05', left: 'Картинка 5 (приятели) — …',      options: ['Среща се с приятели.', 'Пазарува.', 'Гледа телевизия.', 'Обядва.'],  correctAnswer: 'Среща се с приятели.' },
-      { id: 'r06', left: 'Картинка 6 (супер) — …',         options: ['Пазарува в супера.', 'Готви.', 'Почива.', 'Обядва.'],                correctAnswer: 'Пазарува в супера.'   },
-      { id: 'r07', left: 'Картинка 7 (телевизор) — …',     options: ['Гледа телевизия.', 'Пише имейли.', 'Чете книга.', 'Спи.'],          correctAnswer: 'Гледа телевизия.'     },
-      { id: 'r08', left: 'Картинка 8 (компютър) — …',      options: ['Пише имейли.', 'Гледа телевизия.', 'Чете книга.', 'Пазарува.'],     correctAnswer: 'Пише имейли.'         },
-      { id: 'r09', left: 'Картинка 9 (след 23:00 ч.) — …', options: ['Ляга след 23:00 часа.', 'Спи.', 'Закусва.', 'Гледа телевизия.'],    correctAnswer: 'Ляга след 23:00 часа.'},
-      { id: 'r10', left: 'Картинка 10 (до 8:00 ч.) — …',   options: ['Спи до 8:00 часа.', 'Ляга.', 'Отдъхва.', 'Почива.'],               correctAnswer: 'Спи до 8:00 часа.'    },
+      { id: 'r01', left: 'Става в 8:00 часа',   leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/01-stava-8ch.jpg`,      options: ['Става в 8:00 часа.', 'Взема душ.', 'Закусва.', 'Ляга.'],              correctAnswer: 'Става в 8:00 часа.'   },
+      { id: 'r02', left: 'Взема душ',           leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/02-dush.jpg`,           options: ['Взема душ.', 'Закусва.', 'Пазарува.', 'Спи.'],                       correctAnswer: 'Взема душ.'           },
+      { id: 'r03', left: 'Закусва',             leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/03-zakuska.jpg`,        options: ['Закусва.', 'Обядва.', 'Вечеря.', 'Взема душ.'],                      correctAnswer: 'Закусва.'             },
+      { id: 'r04', left: 'Обядва в ресторант',  leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/04-restorant.jpg`,     options: ['Обядва в ресторант.', 'Закусва.', 'Вечеря.', 'Среща се с приятели.'],correctAnswer: 'Обядва в ресторант.'  },
+      { id: 'r05', left: 'Среща се с приятели', leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/05-priyateli.jpg`,     options: ['Среща се с приятели.', 'Пазарува.', 'Гледа телевизия.', 'Обядва.'],  correctAnswer: 'Среща се с приятели.' },
+      { id: 'r06', left: 'Пазарува в супера',   leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/06-super.jpg`,         options: ['Пазарува в супера.', 'Готви.', 'Почива.', 'Обядва.'],                correctAnswer: 'Пазарува в супера.'   },
+      { id: 'r07', left: 'Гледа телевизия',     leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/07-televiziya.jpg`,    options: ['Гледа телевизия.', 'Пише имейли.', 'Чете книга.', 'Спи.'],          correctAnswer: 'Гледа телевизия.'     },
+      { id: 'r08', left: 'Пише имейли',         leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/08-imeyli.jpg`,        options: ['Пише имейли.', 'Гледа телевизия.', 'Чете книга.', 'Пазарува.'],     correctAnswer: 'Пише имейли.'         },
+      { id: 'r09', left: 'Ляга след 23:00 часа',leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/09-lyaga-sled-23ch.jpg`,options: ['Ляга след 23:00 часа.', 'Спи.', 'Закусва.', 'Гледа телевизия.'],    correctAnswer: 'Ляга след 23:00 часа.'},
+      { id: 'r10', left: 'Спи до 8:00 часа',    leftImageUrl: `${BASE}/12-upr-14-georgi-rutina/10-spi-do-8ch.jpg`,    options: ['Спи до 8:00 часа.', 'Ляга.', 'Отдъхва.', 'Почива.'],               correctAnswer: 'Спи до 8:00 часа.'    },
     ],
-  },
+  } as A2PictureDropdownExercise,
 
   // ═══════════════════════════════════════════════════════════════════════
   // ГРАМАТИКА (стр. 10–15)
@@ -455,9 +523,24 @@ export const exercises: Exercise[] = [
       { pronoun: 'те',  cells: ['са',   'не са',   'ли са']   },
     ],
     notes: [
-      'Аз съм сириец. = Сириец съм.',
+      'Личното местоимение (аз, ти, той и т.н.) може да се изпусне. Тогава глаголът „съм" отива след подлога. Например:',
+      'Аз съм сириец. → Сириец съм.',
+      'Тя е учителка. → Учителка е.',
+      'Той е инженер. → Инженер е.',
+      'Ние сме приятели. → Приятели сме.',
     ],
-    ttsNotes: ['Аз съм сириец. Сириец съм.'],
+    ttsNotes: [
+      'Личното местоимение, аз, ти, той и така нататък, може да се изпусне. Тогава глаголът съм отива след подлога. Например:',
+      'Аз съм сириец. Сириец съм.',
+      'Тя е учителка. Учителка е.',
+      'Той е инженер. Инженер е.',
+      'Ние сме приятели. Приятели сме.',
+    ],
+    // note-0: думата „подлога" се изписва без диакритичен знак за ударение —
+    // Gemini изпуска думата при combining accent (U+0300). Естественото
+    // българско ударение е на първата сричка (ПО-длог), а Pro моделът чете с
+    // правилно native ударение, затова знак не е нужен.
+    ttsNoteModels: ['pro'],
   },
 
   // ORDER 18 — Упр. 15а: Изберете правилното местоимение
@@ -474,7 +557,7 @@ export const exercises: Exercise[] = [
       { id: 's02', left: '… си българин.',     options: ['Ти', 'Аз', 'Той', 'Вие', 'Те'],   correctAnswer: 'Ти'  },
       { id: 's03', left: '… е афганистанец.',  options: ['Той', 'Тя', 'То', 'Аз', 'Ти'],   correctAnswer: 'Той', alternateCorrectAnswers: ['Тя', 'То'] },
       { id: 's04', left: '… е арабка.',        options: ['Тя', 'Аз', 'Ти', 'Той', 'Ние'],   correctAnswer: 'Тя'  },
-      { id: 's05', left: '… е от Украйна.',    options: ['Той', 'Тя', 'То', 'Ние', 'Те'],   correctAnswer: 'Той', alternateCorrectAnswers: ['Тя', 'То'] },
+      { id: 's05', left: '… е от Украйна.',    options: ['Той', 'Аз', 'Вие', 'Ние', 'Те'],   correctAnswer: 'Той' },
       { id: 's06', left: '… сме ливанци.',     options: ['Ние', 'Аз', 'Той', 'Вие', 'Те'],          correctAnswer: 'Ние' },
       { id: 's07', left: '… сте алжирци.',     options: ['Вие', 'Аз', 'Ти', 'Ние', 'Те'],                 correctAnswer: 'Вие' },
       { id: 's08', left: '… са африканци.',    options: ['Те', 'Аз', 'Той', 'Ние', 'Вие'],          correctAnswer: 'Те'  },
@@ -538,21 +621,21 @@ export const exercises: Exercise[] = [
     id: 'a2-l00-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА — Род на съществителните',
-    subtitle: 'Мъжки, женски, среден род',
     instruction: 'Запознайте се с моделите за определяне на рода. Натиснете за произношение.',
     order: 21,
-    tableTitle: 'Числителни имена за род',
-    columns: ['Мъжки род (ЕДИН)', 'Женски род (ЕДНА)', 'Среден род (ЕДНО)'],
+    tableTitle: 'Род на съществителните',
+    columns: ['', 'Пример'],
     rows: [
-      { pronoun: 'Пример', cells: ['десерт', 'баница', 'кебапче'] },
-      { pronoun: 'Окончание', cells: ['съгласна', '-а / -я', '-е / -о'], ttsText: 'Окончание. Съгласна. А или Я. Е или О.' },
+      { pronoun: 'м.р.', cells: ['един', 'хляб, чай'], ttsText: 'Мъжки род. Един. Хляб, чай.' },
+      { pronoun: 'ж.р.', cells: ['една', 'пица, филия'], ttsText: 'Женски род. Една. Пица, филия.' },
+      { pronoun: 'ср.р.', cells: ['едно', 'кафе, масло'], ttsText: 'Среден род. Едно. Кафе, масло.' },
     ],
   },
 
   // ORDER 22 — Упр. 16: Поставете думите в правилната колона
   {
     id: 'a2-l00-ex-16',
-    type: 'drag_to_columns',
+    type: 'a2-drag-to-columns',
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Поставете думите в правилната колона.',
     instructionKey: 'a2.ex.rodSashtestvitelni',
@@ -566,24 +649,24 @@ export const exercises: Exercise[] = [
     columns: [
       {
         id: 'mazh',
-        title: 'ЕДИН (мъжки род)',
+        title: 'ЕДИН',
         icon: '♂',
         correctItems: ['десерт', 'дюнер', 'кроасан', 'салам', 'сладолед', 'чай', 'шоколад'],
       },
       {
         id: 'zhen',
-        title: 'ЕДНА (женски род)',
+        title: 'ЕДНА',
         icon: '♀',
         correctItems: ['баница', 'захар', 'мусака', 'сметана', 'цигара'],
       },
       {
         id: 'sred',
-        title: 'ЕДНО (среден род)',
+        title: 'ЕДНО',
         icon: '⚬',
         correctItems: ['кебапче', 'кюфте', 'шишче', 'яйце'],
       },
     ],
-  },
+  } as A2DragToColumnsExercise,
 
   // ORDER 23 — Упр. 17: Множествено число — справочна таблица
   {
@@ -595,31 +678,19 @@ export const exercises: Exercise[] = [
     tableTitle: 'Множествено число на съществителните',
     columns: ['Единствено число', 'Много (мн.ч.)', 'Два/Две'],
     rows: [
-      // Женски род
-      { pronoun: 'ж.р.', cells: ['ябълка', 'ябълки', 'две ябълки'], ttsText: 'ябълка. ябълки. две ябълки.' },
-      { pronoun: '', cells: ['круша', 'круши', 'две круши'], ttsText: 'круша. круши. две круши.' },
-      { pronoun: '', cells: ['диня', 'дини', 'две дини'], ttsText: 'диня. дини. две дини.' },
-      { pronoun: '', cells: ['праскова', 'праскови', 'две праскови'], ttsText: 'праскова. праскови. две праскови.' },
-      { pronoun: '', cells: ['слива', 'сливи', 'две сливи'], ttsText: 'слива. сливи. две сливи.' },
-      { pronoun: '', cells: ['ягода', 'ягоди', 'две ягоди'], ttsText: 'ягода. ягоди. две ягоди.' },
-      { pronoun: '', cells: ['череша', 'череши', 'две череши'], ttsText: 'череша. череши. две череши.' },
-      { pronoun: '', cells: ['чушка', 'чушки', 'две чушки'], ttsText: 'чушка. чушки. две чушки.' },
-      // Среден род
-      { pronoun: 'ср.р.', cells: ['кафе', 'кафета', 'две кафета'], ttsText: 'кафе. кафета. две кафета.' },
-      { pronoun: '', cells: ['пиле', 'пилета', 'две пилета'], ttsText: 'пиле. пилета. две пилета.' },
       // Мъжки род
-      { pronoun: 'м.р.', cells: ['лимон', 'лимони', 'два лимона'], ttsText: 'лимон. лимони. два лимона.' },
-      { pronoun: '', cells: ['портокал', 'портокали', 'два портокала'], ttsText: 'портокал. портокали. два портокала.' },
-    ],
-    notes: [
-      'Ж.р.: -а/-я → -и; -ка → -ки; -га → -ги.',
-      'Ср.р.: -е/-о → -ета; -ие → -ия.',
-      'М.р.: + -и или + -а (за изброени с числа).',
-    ],
-    ttsNotes: [
-      'Женски род: а или я дава и; ка дава ки; га дава ги.',
-      'Среден род: е или о дава ета; ие дава ия.',
-      'Мъжки род: прибавя се и, или а за изброени с числа.',
+      { pronoun: 'м.р.', cells: ['лимон', 'лимон**и**', 'два лимон**а**'], ttsText: 'лимон. лимони. два лимона.' },
+      { pronoun: '', cells: ['портокал', 'портокал**и**', 'два портокал**а**'], ttsText: 'портокал. портокали. два портокала.', ttsModel: 'pro' },
+      // Женски род
+      { pronoun: 'ж.р.', cells: ['ябълка', 'ябълк**и**', 'две ябълк**и**'], ttsText: 'ябълка. ябълки. две ябълки.' },
+      { pronoun: '', cells: ['круша', 'круш**и**', 'две круш**и**'], ttsText: 'круша. круши. две круши.' },
+      // Среден род
+      { pronoun: 'ср.р.', cells: ['кафе', 'кафе**та**', 'две кафе**та**'], ttsText: 'кафе. кафета. две кафета.' },
+      {
+        pronoun: '', cells: ['пиле', 'пиле**та**', 'две пиле**та**'], ttsText: 'пиле. пилета. две пилета.',
+        ttsModel: 'pro',
+        ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronounce the consonant "л" as a hard, dark /l/ (твърдо българско Л), never a soft/palatalized л.',
+      },
     ],
   },
 
@@ -631,21 +702,27 @@ export const exercises: Exercise[] = [
     instruction: 'Изберете правилната форма за множествено число.',
     instructionKey: 'a2.ex.mnozhestveno',
     order: 24,
-    points: 12,
+    points: 18,
     layout: 'two-column',
     sentences: [
-      { text: 'гъба → _______',        blanks: [2], correctAnswers: ['гъби'],       options: ['гъби', 'гъбове', 'гъба']             },
-      { text: 'маруля → _______',       blanks: [2], correctAnswers: ['марули'],     options: ['марули', 'марулета', 'маруля']       },
-      { text: 'краставица → _______',   blanks: [2], correctAnswers: ['краставици'], options: ['краставици', 'краставичи', 'краставица'] },
-      { text: 'тиквичка → _______',     blanks: [2], correctAnswers: ['тиквички'],   options: ['тиквички', 'тиквичета', 'тиквичка']  },
-      { text: 'смокиня → _______',      blanks: [2], correctAnswers: ['смокини'],    options: ['смокини', 'смокинета', 'смокиня']    },
-      { text: 'морков → _______',       blanks: [2], correctAnswers: ['моркови'],    options: ['моркови', 'морковета', 'морков']     },
-      { text: 'картоф → _______',       blanks: [2], correctAnswers: ['картофи'],    options: ['картофи', 'картофове', 'картоф']     },
-      { text: 'домат → _______',        blanks: [2], correctAnswers: ['домати'],     options: ['домати', 'доматове', 'домат']        },
-      { text: 'масло → _______',        blanks: [2], correctAnswers: ['масла'],      options: ['масла', 'маслета', 'масло']          },
-      { text: 'мляко → _______',        blanks: [2], correctAnswers: ['млека'],      options: ['млека', 'млекове', 'мляко']          },
-      { text: 'боб → _______',          blanks: [2], correctAnswers: ['бобове'],     options: ['бобове', 'боби', 'боб']              },
-      { text: 'ориз → _______',         blanks: [2], correctAnswers: ['ориза'], acceptableAnswers: [['ориза', 'ориз']], options: ['ориза', 'оризи', 'оризове'] },
+      { text: 'гъба → много _______',       blanks: [3], correctAnswers: ['гъби'],    options: ['гъби', 'гъбове', 'гъба']             },
+      { text: 'домат → два _______',        blanks: [3], correctAnswers: ['домата'],  options: ['домата', 'домати', 'домат']          },
+      { text: 'краставица → много _______', blanks: [3], correctAnswers: ['краставици'], options: ['краставици', 'краставичи', 'краставица'] },
+      { text: 'масло → много _______',      blanks: [3], correctAnswers: ['масла'],   options: ['масла', 'маслета', 'масло']          },
+      { text: 'банан → два _______',        blanks: [3], correctAnswers: ['банана'],  options: ['банана', 'банани', 'банан']          },
+      { text: 'ягода → две _______',        blanks: [3], correctAnswers: ['ягоди'],   options: ['ягоди', 'ягодета', 'ягода']          },
+      { text: 'плод → много _______',       blanks: [3], correctAnswers: ['плодове'], options: ['плодове', 'плоди', 'плод']            },
+      { text: 'морков → два _______',       blanks: [3], correctAnswers: ['моркова'], options: ['моркова', 'моркови', 'морков']        },
+      { text: 'пъпеш → много _______',      blanks: [3], correctAnswers: ['пъпеши'],  options: ['пъпеши', 'пъпешове', 'пъпеш']         },
+      { text: 'диня → две _______',         blanks: [3], correctAnswers: ['дини'],    options: ['дини', 'динета', 'диня']             },
+      { text: 'праскова → много _______',   blanks: [3], correctAnswers: ['праскови'], options: ['праскови', 'прасковета', 'праскова'] },
+      { text: 'слива → две _______',        blanks: [3], correctAnswers: ['сливи'],   options: ['сливи', 'сливета', 'слива']          },
+      { text: 'смокиня → две _______',      blanks: [3], correctAnswers: ['смокини'], options: ['смокини', 'смокинета', 'смокиня']    },
+      { text: 'мляко → две _______',        blanks: [3], correctAnswers: ['млека'],   options: ['млека', 'млекове', 'мляко']          },
+      { text: 'тиквичка → много _______',   blanks: [3], correctAnswers: ['тиквички'], options: ['тиквички', 'тиквичета', 'тиквичка'] },
+      { text: 'маруля → две _______',       blanks: [3], correctAnswers: ['марули'],  options: ['марули', 'марулета', 'маруля']        },
+      { text: 'череша → две _______',       blanks: [3], correctAnswers: ['череши'],  options: ['череши', 'черешета', 'череша']        },
+      { text: 'чушка → много _______',      blanks: [3], correctAnswers: ['чушки'],   options: ['чушки', 'чушкета', 'чушка']           },
     ],
   },
 
@@ -1057,6 +1134,70 @@ export const exercises: Exercise[] = [
     ],
   },
 
+  // ORDER 40.1 — Множествено число, мъжки род (за хора) — справка
+  {
+    id: 'a2-l00-gramatika-11b',
+    type: 'grammar_table',
+    title: 'ГРАМАТИКА — Множествено число, мъжки род (за хора)',
+    instruction: 'Запознайте се с формите за множествено число на мъжки род при думи за хора. Натиснете за произношение.',
+    order: 40.1,
+    tableTitle: 'Множествено число, мъжки род — за хора',
+    columns: ['Много (мн.ч.)', 'Двама / трима / четирима'],
+    rows: [
+      { pronoun: 'син',    cells: ['синове',  'синове'], ttsText: 'син. синове. синове.' },
+      { pronoun: 'учител', cells: ['учители', 'учители'], ttsText: 'учител. учители. учители.' },
+      { pronoun: 'човек',  cells: ['хора',    'души'], ttsText: 'човек. хора. души.' },
+    ],
+    notes: [
+      'мъж – мъже',
+      'брат – братя',
+      'дядо – дядовци',
+      'внук – внуци',
+      'дете – деца',
+      'един човек, двама души, много хора.',
+    ],
+    ttsNotes: [
+      'мъж. мъже.',
+      'брат. братя.',
+      'дядо. дядовци.',
+      'внук. внуци.',
+      'дете. деца.',
+      'един човек, двама души, много хора.',
+    ],
+  },
+
+  // ORDER 40.2 — Множествено число, мъжки род (за хора) — упражнение
+  {
+    id: 'a2-l00-ex-24a',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 26',
+    instruction: 'Изберете правилната форма за множествено число.',
+    instructionKey: 'a2.ex.mnozhestvenoHora',
+    order: 40.2,
+    points: 4,
+    layout: 'single',
+    sentences: [
+      {
+        text: 'Аз имам един брат и една сестра, той има двама _______ и три _______.',
+        blanks: [8, 11],
+        correctAnswers: ['братя', 'сестри'],
+        options: [['братя', 'братове', 'брата'], ['сестри', 'сестра', 'сестрички']],
+      },
+      {
+        text: 'Тя има един внук, той има много ________.',
+        blanks: [7],
+        correctAnswers: ['внуци'],
+        options: [['внуци', 'внукове', 'внучки']],
+      },
+      {
+        text: 'Ние имаме едно дете, вие имате много ________.',
+        blanks: [7],
+        correctAnswers: ['деца'],
+        options: [['деца', 'детета', 'децата']],
+      },
+    ],
+  },
+
   // ORDER 41 — Упр. 25: Кратки притежателни местоимения — справка
   {
     id: 'a2-l00-gramatika-12',
@@ -1082,7 +1223,7 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l00-ex-25',
     type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 26',
+    title: 'УПРАЖНЕНИЕ 27',
     instruction: 'Изберете правилната кратка притежателна форма.',
     instructionKey: 'a2.ex.pritezhatelnaMest',
     order: 42,
@@ -1120,7 +1261,7 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l00-ex-26',
     type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 27',
+    title: 'УПРАЖНЕНИЕ 28',
     instruction: 'Изберете правилното показателно местоимение.',
     instructionKey: 'a2.ex.pokazatelniMest',
     order: 44,
@@ -1158,7 +1299,7 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l00-ex-27',
     type: 'dropdown_match',
-    title: 'УПРАЖНЕНИЕ 28',
+    title: 'УПРАЖНЕНИЕ 29',
     instruction: 'Изберете правилното обобщително местоимение.',
     instructionKey: 'a2.ex.obobshtitelniMest',
     order: 46,
