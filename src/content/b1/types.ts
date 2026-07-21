@@ -88,8 +88,72 @@ export interface B1MatchPairsDragDropExercise extends BaseExercise {
   showLeftOrdinal?: boolean;
 }
 
+/**
+ * b1-grammar-table — variant of the shared `grammar_table` that can fully
+ * disable audio (no 🔊 icons, no click-to-play, no "tap row to hear" hint).
+ *
+ * Why a B1-local fork instead of extending the shared `GrammarTableExercise`:
+ * the shared type/component has no audio toggle — adding one there is a
+ * shared-code change (Philip's call). This variant is otherwise identical to
+ * `grammar_table` (same `columns`/`rows`/`notes` shape), so lessons can switch
+ * type back and forth without touching the data. When `disableAudio` is not
+ * set, it behaves exactly like the shared table (with audio).
+ */
+export interface B1GrammarTableExercise extends BaseExercise {
+  type: 'b1-grammar-table';
+  title: string;
+  tableTitle?: string;
+  columns?: string[];
+  rows?: {
+    pronoun: string;
+    cells: string[];
+    pronunciations?: Record<string, string>;
+    ttsModel?: 'flash' | 'pro';
+    ttsPrompt?: string;
+    ttsText?: string;
+  }[];
+  notes?: string[];
+  ttsNotes?: string[];
+  ttsNoteModels?: ('flash' | 'pro')[];
+  boldColumns?: number[];
+  widePronouns?: boolean;
+  /** When true, disables all audio — hides the 🔊 icons, the "tap to hear" hint, and click-to-play. */
+  disableAudio?: boolean;
+}
+
+/**
+ * b1-sort-to-columns — variant of the shared `drag_to_columns` for classification
+ * exercises with MORE THAN 3 groups.
+ *
+ * Why a B1-local fork instead of extending the shared `DragToColumnsExercise`:
+ * the shared `DragToColumns.tsx` component is swipe-gesture based and only ever
+ * wires up 3 directions (left / right / down) to `columns[0..2]` — a 4th column
+ * is rendered in the "all placed" summary grid but is *never reachable* during
+ * the actual sorting step, since there's no 4th swipe direction. That's a
+ * shared-component limitation (Philip's call to fix for `drag_to_columns`
+ * globally); this fork uses a simple tap-word-then-tap-group interaction that
+ * scales to any number of columns, so nothing is ever unreachable. Content
+ * shape (`items`, `columns[].correctItems`) is identical to
+ * `DragToColumnsExercise`, so lessons can switch type back and forth without
+ * touching the data.
+ */
+export interface B1SortToColumnsExercise extends BaseExercise {
+  type: 'b1-sort-to-columns';
+  items: string[];
+  columns: {
+    id: string;
+    title: string;
+    icon?: string;
+    correctItems: string[];
+  }[];
+}
+
 // Union of all B1-specific exercise interfaces.
-export type B1Exercise = B1IllustratedCardsGroupedExercise | B1MatchPairsDragDropExercise;
+export type B1Exercise =
+  | B1IllustratedCardsGroupedExercise
+  | B1MatchPairsDragDropExercise
+  | B1GrammarTableExercise
+  | B1SortToColumnsExercise;
 
 // Re-export BaseExercise so B1 component files can import everything from one place.
 export type { BaseExercise };

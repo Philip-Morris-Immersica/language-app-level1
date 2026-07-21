@@ -43,4 +43,22 @@ export const B1_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     uk: '— відпустіть тут —',
     ru: '— отпустите здесь —',
   },
+  'b1.exercise.tapToSortHowTo': {
+    bg: 'Как да играете:',
+    ar: 'كيف تلعب:',
+    fr: 'Comment jouer :',
+    en: 'How to play:',
+    fa: 'روش بازی:',
+    uk: 'Як грати:',
+    ru: 'Как играть:',
+  },
+  'b1.exercise.tapToSortInstruction': {
+    bg: 'Натиснете дума от списъка, после натиснете групата, в която тя влиза.',
+    ar: 'اضغط على كلمة من القائمة، ثم اضغط على المجموعة التي تنتمي إليها.',
+    fr: 'Appuyez sur un mot de la liste, puis appuyez sur le groupe auquel il appartient.',
+    en: 'Tap a word from the list, then tap the group it belongs to.',
+    fa: 'روی کلمه‌ای از فهرست بزنید، سپس روی گروهی که به آن تعلق دارد بزنید.',
+    uk: 'Натисніть слово зі списку, потім натисніть групу, до якої воно належить.',
+    ru: 'Нажмите на слово из списка, затем нажмите на группу, к которой оно относится.',
+  },
 };
