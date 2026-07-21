@@ -66,13 +66,22 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
 
   const playRow = (idx: number) => {
     if (disableAudio) return;
-    const isNumericPronoun = /^\d[\d\s]*$/.test(rows[idx].pronoun.trim());
-    const speakableCells = rows[idx].cells.filter(c => !c.trim().startsWith('-'));
-    const parts = isNumericPronoun ? speakableCells : [rows[idx].pronoun, ...speakableCells];
+    const row = rows[idx];
+    let text: string;
+    if (row.ttsText) {
+      // Explicit override — read only this text (e.g. skip the descriptive
+      // left-column label and speak just the right-hand examples).
+      text = row.ttsText;
+    } else {
+      const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
+      const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
+      const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
+      text = parts.join('. ');
+    }
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx}`)
       : '';
-    playTtsAudio(audioPath, parts.join('. '));
+    playTtsAudio(audioPath, text);
   };
 
   const playNote = (idx: number, note: string) => {

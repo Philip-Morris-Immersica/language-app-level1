@@ -15,13 +15,13 @@ export const content: LessonContent = {
     { id: 'knizharnitsa', bulgarian: 'книжарница, -и', ttsText: 'книжарница, книжарници', ttsModel: 'pro', translations: { en: 'bookstore, -s', fr: 'librairie', ar: 'مكتبة لبيع الكتب', fa: 'کتاب‌فروشی', ru: 'книжный магазин', uk: 'книгарня' } },
 
     // л
-    { id: 'lovya-riba', bulgarian: 'ловя риба', ttsText: 'ловя риба', ttsModel: 'pro', translations: { en: 'to fish', fr: 'pêcher', ar: 'يصطاد السمك', fa: 'ماهی گرفتن', ru: 'ловить рыбу', uk: 'ловити рибу' } },
+    { id: 'lovya-riba', bulgarian: 'ловя риба', ttsText: 'ловя риба', ttsModel: 'pro', ttsPrompt: 'Прочетете на книжовен български с правилни ударения.', translations: { en: 'to fish', fr: 'pêcher', ar: 'يصطاد السمك', fa: 'ماهی گرفتن', ru: 'ловить рыбу', uk: 'ловити рибу' } },
 
     // о
     { id: 'ochevidno', bulgarian: 'очевидно', ttsModel: 'pro', translations: { en: 'obviously', fr: 'évidemment', ar: 'من الواضح', fa: 'به‌وضوح', ru: 'очевидно', uk: 'очевидно' } },
 
     // п
-    { id: 'peka-se', bulgarian: 'пека се, печеш се', ttsText: 'пека се, печеш се', ttsModel: 'pro', translations: { en: 'to sunbathe', fr: 'se faire bronzer', ar: 'يأخذ حمّام شمس', fa: 'آفتاب گرفتن', ru: 'загорать', uk: 'засмагати' } },
+    { id: 'peka-se', bulgarian: 'пека се, печеш се', ttsText: 'пека се, печеш се', ttsModel: 'pro', ttsPrompt: 'Read clearly in standard Bulgarian with a calm neutral tone. Say "пека се", then "печеш се". In "печеш" stress falls on the second syllable (pe-CHEH se).', translations: { en: 'to sunbathe', fr: 'se faire bronzer', ar: 'يأخذ حمّام شمس', fa: 'آفتاب گرفتن', ru: 'загорать', uk: 'засмагати' } },
     { id: 'polyana', bulgarian: 'поляна, -и', ttsText: 'поляна, поляни', ttsModel: 'pro', translations: { en: 'meadow, -s', fr: 'prairie, clairière', ar: 'مرج، مروج', fa: 'چمنزار', ru: 'поляна', uk: 'галявина' } },
     { id: 'predi', bulgarian: 'преди', ttsModel: 'pro', translations: { en: 'ago, before', fr: 'il y a, avant', ar: 'قبل، منذ', fa: 'پیش، قبل', ru: 'назад, раньше', uk: 'тому, раніше' } },
 
@@ -29,7 +29,7 @@ export const content: LessonContent = {
     { id: 'roman', bulgarian: 'роман, -и', ttsText: 'роман, романи', ttsModel: 'pro', translations: { en: 'novel, -s', fr: 'roman', ar: 'رواية، روايات', fa: 'رمان', ru: 'роман', uk: 'роман' } },
 
     // с
-    { id: 'serviram', bulgarian: 'сервирам, -аш', ttsText: 'сервирам, сервираш', ttsModel: 'pro', translations: { en: 'to serve (food)', fr: 'servir (un plat)', ar: 'يقدّم الطعام', fa: 'سرو کردن (غذا)', ru: 'подавать (еду)', uk: 'подавати (їжу)' } },
+    { id: 'serviram', bulgarian: 'сервирам, сервираш', ttsText: 'сервирам. Сервираш.', ttsModel: 'flash', translations: { en: 'to serve (food)', fr: 'servir (un plat)', ar: 'يقدّم الطعام', fa: 'سرو کردن (غذا)', ru: 'подавать (еду)', uk: 'подавати (їжу)' } },
 
     // т
     { id: 'terasa', bulgarian: 'тераса, -и', ttsText: 'тераса, тераси', ttsModel: 'pro', translations: { en: 'terrace, -s', fr: 'terrasse', ar: 'شرفة، تراس', fa: 'تراس', ru: 'терраса', uk: 'тераса' } },
