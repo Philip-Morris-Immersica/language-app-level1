@@ -26,6 +26,18 @@ import type { SupportedLang } from './languages';
 
 export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
 
+  // ── a2-lesson-01 „Ало, ало!" ────────────────────────────────────────────
+
+  'a2.grammar.l01.zamestvane.instruction': {
+    bg: 'Запознайте се с правилото за заместване на прякото допълнение.',
+    ar: 'تعرَّف على قاعدة استبدال المفعول به المباشر.',
+    fr: "Familiarisez-vous avec la règle de remplacement du complément d'objet direct.",
+    en: 'Learn the rule for replacing the direct object.',
+    fa: 'با قاعده جایگزینی مفعول مستقیم آشنا شوید.',
+    uk: 'Ознайомтеся з правилом заміни прямого додатка.',
+    ru: 'Ознакомьтесь с правилом замены прямого дополнения.',
+  },
+
   // ── a2-lesson-00 „Преговор A1" ──────────────────────────────────────────
 
   'a2.ex.nationalnosti': {

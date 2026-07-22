@@ -222,6 +222,45 @@ export interface A2DragToColumnsExercise extends BaseExercise {
   }[];
 }
 
+// ─── A2DialogueBuilderExercise ────────────────────────────────────────────────
+// Same as the shared DialogueBuilderExercise, but each `section` may set
+// `lockFirst: false` to unlock the first line — then ALL sentences are shuffled
+// and every row is draggable. Needed for short 3-phrase dialogues where locking
+// the first line leaves almost nothing to rearrange.
+
+export interface A2DialogueBuilderSection {
+  id: string;
+  givenFirstLine: string;
+  sentences: string[];
+  alternateOrders?: string[][];
+  /** When false, the first line is NOT fixed and all sentences shuffle. Default: true. */
+  lockFirst?: boolean;
+}
+
+export interface A2DialogueBuilderExercise extends BaseExercise {
+  type: 'a2-dialogue-builder';
+  title?: string;
+  sections: A2DialogueBuilderSection[];
+}
+
+// ─── A2WordOrderExercise ──────────────────────────────────────────────────────
+// Same shape as the shared WordOrderExercise; the matching A2 component only
+// hardens initialization + checking so stale/partial persisted state can't make
+// the „Провери" button silently no-op (the shared component's known failure).
+
+export interface A2WordOrderQuestion {
+  words: string[];
+  correctSentence: string;
+  alternateCorrectSentences?: string[];
+  hint?: string;
+}
+
+export interface A2WordOrderExercise extends BaseExercise {
+  type: 'a2-word-order';
+  points?: number;
+  questions: A2WordOrderQuestion[];
+}
+
 /** Union of all A2-specific exercise interfaces. */
 export type A2Exercise =
   | A2GroupedDropdownExercise
@@ -232,7 +271,9 @@ export type A2Exercise =
   | A2DialoguesExercise
   | A2GrammarExamplesExercise
   | A2MatchPairsExercise
-  | A2DragToColumnsExercise;
+  | A2DragToColumnsExercise
+  | A2DialogueBuilderExercise
+  | A2WordOrderExercise;
 
 // Re-export BaseExercise so A2 component files can import everything from one place.
 export type { BaseExercise };
