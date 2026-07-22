@@ -235,10 +235,10 @@ export const exercises: Exercise[] = [
     points: 13,
     imageUrl: `${BASE}/07-upr-08a-semeystvo-dimitrovi/01-semeystvo-dimitrovi.png`,
     questions: [
-      { id: 'f01', left: 'Мария е … на Георги.',          options: ['майка', 'баща', 'сестра', 'баба'],         correctAnswer: 'майка'    },
+      { id: 'f01', left: 'Мария е … на Георги.',          options: ['майка', 'баща', 'сестра', 'баба'],         correctAnswer: 'майка',   isExample: true },
       { id: 'f02', left: 'Иван е … на Георги.',           options: ['баща', 'дядо', 'брат', 'чичо'],            correctAnswer: 'баща'     },
-      { id: 'f03', left: 'Ана е … на Георги.',            options: ['сестра', 'дъщеря', 'майка', 'братовчедка'],correctAnswer: 'сестра'   },
-      { id: 'f04', left: 'Георги е … на Ана.',            options: ['брат', 'баща', 'дядо', 'чичо'],            correctAnswer: 'брат'     },
+      { id: 'f03', left: 'Ана е … на Георги.',            options: ['съпруга', 'сестра', 'дъщеря', 'майка'],    correctAnswer: 'съпруга'  },
+      { id: 'f04', left: 'Георги е … на Ана.',            options: ['съпруг', 'баща', 'дядо', 'чичо'],          correctAnswer: 'съпруг'   },
       { id: 'f05', left: 'Мила е … на Павел.',            options: ['сестра', 'дъщеря', 'майка', 'баба'],       correctAnswer: 'сестра'   },
       { id: 'f06', left: 'Павел е … на Мила.',            options: ['брат', 'баща', 'дядо', 'чичо'],            correctAnswer: 'брат'     },
       { id: 'f07', left: 'Мила е … на Георги и Ана.',     options: ['дъщеря', 'майка', 'сестра', 'внучка'],     correctAnswer: 'дъщеря'   },
@@ -356,7 +356,7 @@ export const exercises: Exercise[] = [
     rows: [
       { pronoun: 'север', cells: [] },
       { pronoun: 'юг',    cells: [] },
-      { pronoun: 'изток', cells: [] },
+      { pronoun: 'изток', cells: [], ttsModel: 'pro', ttsPrompt: 'Bulgarian word изток. Stress the first syllable, like EEZ-tok, not eez-TOK.' }, // Flash reads „изток" with a foreign accent / wrong stress
       { pronoun: 'запад', cells: [], ttsModel: 'pro' }, // Flash reads „запад" with an English accent
     ],
   },
@@ -1075,7 +1075,7 @@ export const exercises: Exercise[] = [
       { id: 'pm05', left: 'Лаптопът е … масата.',               options: ['на', 'в', 'до', 'под', 'над'],  correctAnswer: 'на'    },
       { id: 'pm06', left: 'Масата е … дивана и табуретката.',   options: ['между', 'до', 'на', 'пред', 'зад'], correctAnswer: 'между' },
       { id: 'pm07', left: 'Гардеробът е … спалнята.',           options: ['в', 'на', 'до', 'пред', 'зад'], correctAnswer: 'в'     },
-      { id: 'pm08', left: 'Диванът е … вратата.',               options: ['до', 'в', 'на', 'пред', 'зад'], correctAnswer: 'до'    },
+      { id: 'pm08', left: 'Диванът е … вратата.',               options: ['срещу', 'до', 'на', 'пред', 'зад'], correctAnswer: 'срещу' },
       { id: 'pm09', left: 'Ваната е … банята.',                 options: ['в', 'на', 'до', 'пред', 'зад'], correctAnswer: 'в'     },
       { id: 'pm10', left: 'Цветето е … вратата.',               options: ['зад', 'до', 'в', 'на', 'пред'], correctAnswer: 'зад'   },
       { id: 'pm11', left: 'Перялнята е … мивката.',             options: ['до', 'в', 'на', 'пред', 'зад'], correctAnswer: 'до'    },
@@ -1722,7 +1722,7 @@ export const exercises: Exercise[] = [
     rows: [
       { pronoun: 'м.р.',  cells: ['**кой** мъж'],   ttsText: 'Мъжки род. кой мъж.' },
       { pronoun: 'ж.р.',  cells: ['**коя** жена'],  ttsText: 'Женски род. коя жена.' },
-      { pronoun: 'ср.р.', cells: ['**кое** дете'],  ttsText: 'Среден род. коЕ дете.', ttsModel: 'pro', ttsPrompt: 'Произнеси „кое“ с ударение на втората сричка: ко-Е. Ясно и на стандартен български.' },
+      { pronoun: 'ср.р.', cells: ['**кое** дете'],  ttsText: 'Среден род. Коè дете.', ttsModel: 'pro', ttsPrompt: 'Bulgarian word дете. Pronounce clearly with a Д sound, never with a Б sound.' },
       { pronoun: 'мн.ч.', cells: ['**кои** хора'],  ttsText: 'Множествено число. кои хора.' },
     ],
   },

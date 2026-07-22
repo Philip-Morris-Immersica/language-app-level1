@@ -231,7 +231,7 @@ export function A2GrammarTable({ exercise }: A2GrammarTableProps) {
                         widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-1">
+                      <div className="flex items-center justify-center gap-2">
                         <span>{row.pronoun}</span>
                         <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
                       </div>
