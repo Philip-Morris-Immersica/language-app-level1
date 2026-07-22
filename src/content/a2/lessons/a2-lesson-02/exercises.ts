@@ -5,7 +5,6 @@
   GrammarTableExercise,
   GrammarExamplesExercise,
   DialoguesExercise,
-  WorkbookFillBlankExercise,
   DropdownMatchExercise,
   SyllableBlocksExercise,
   WordSearchExercise,
@@ -62,17 +61,11 @@ export const exercises: Exercise[] = [
     tableTitle: 'Неправилно мн.ч.',
     columns: ['мн.ч.', 'два / две…'],
     rows: [
-      { pronoun: 'крак',  cells: ['крака',  'крака']  },
-      { pronoun: 'зъб',   cells: ['зъби',   'зъба']   },
-      { pronoun: 'око',   cells: ['очи',    '—']       },
-      { pronoun: 'ухо',   cells: ['уши',    '—']       },
-      { pronoun: 'ръка',  cells: ['ръце',   '—']       },
-    ],
-    notes: [
-      'крак → два крака; зъб → два зъба (бройна форма при мъжки род)',
-    ],
-    ttsNotes: [
-      'крак, два крака. зъб, два зъба. бройна форма при мъжки род.',
+      { pronoun: 'крак',  cells: ['крака́',  'два кра́ка'], ttsModel: 'pro', ttsText: 'крак. крака́. два кра́ка.', ttsPrompt: 'Bulgarian noun stress lesson. Read „крак". Then the plural „крака" stressed on the LAST syllable: кра-КА. Then „два крака" where the counting form „крака" is stressed on the FIRST syllable: два КРА-ка. Keep the two stresses clearly different. Neutral standard Bulgarian.' },
+      { pronoun: 'зъб',   cells: ['зъ́би',   'два зъ́ба'],  ttsModel: 'pro', ttsText: 'зъб. зъби. два зъба.', ttsPrompt: 'Bulgarian noun stress lesson. Read „зъб", then „зъби" and „два зъба", both stressed on the FIRST syllable ЗЪ. Neutral standard Bulgarian, pronounce every sound clearly.' },
+      { pronoun: 'око',   cells: ['очи',    'две очи'],   ttsModel: 'pro', ttsText: 'око. очи. две очи.' },
+      { pronoun: 'ухо',   cells: ['уши',    'две уши'],   ttsModel: 'pro', ttsText: 'ухо. уши. две уши.' },
+      { pronoun: 'ръка',  cells: ['ръце',   'две ръце'],  ttsModel: 'pro', ttsText: 'ръка. ръце. две ръце.' },
     ],
   } as GrammarTableExercise,
 
@@ -159,14 +152,14 @@ export const exercises: Exercise[] = [
     tableTitle: 'Боли ме / Болят ме',
     columns: ['Боли … (единствено число)', 'Болят … (множествено число)'],
     rows: [
-      { pronoun: 'аз',  cells: ['Боли **ме**',  'Болят **ме**']  },
-      { pronoun: 'ти',  cells: ['Боли **те**',  'Болят **те**']  },
-      { pronoun: 'той', cells: ['Боли **го**',  'Болят **го**']  },
-      { pronoun: 'тя',  cells: ['Боли **я**',   'Болят **я**']   },
-      { pronoun: 'Вие', cells: ['Боли **Ви**',  'Болят **Ви**']  },
-      { pronoun: 'ние', cells: ['—',            'Болят **ни**']  },
-      { pronoun: 'вие', cells: ['—',            'Болят **ви**']  },
-      { pronoun: 'те',  cells: ['—',            'Болят **ги**']  },
+      { pronoun: 'аз',     cells: ['Боли **ме**',              'Болят **ме**'],                ttsText: 'аз. Боли ме. Болят ме.'   },
+      { pronoun: 'ти',     cells: ['Боли **те**',              'Болят **те**'],                ttsText: 'ти. Боли те. Болят те.'   },
+      { pronoun: 'той',    cells: ['Боли **го**',              'Болят **го**'],                ttsText: 'той. Боли го. Болят го.'  },
+      { pronoun: 'тя',     cells: ['Боли **я**',               'Болят **я**'],                 ttsText: 'тя. Боли я. Болят я.'     },
+      { pronoun: 'то',     cells: ['Боли **го**',              'Болят **го**'],                ttsText: 'то. Боли го. Болят го.'   },
+      { pronoun: 'ние',    cells: ['Боли **ни**',              'Болят **ни**'],                ttsText: 'ние. Боли ни. Болят ни.'  },
+      { pronoun: 'вие/Ви', cells: ['Боли **ви** / Боли **Ви**', 'Болят **ви** / Болят **Ви**'], ttsText: 'вие. Боли ви. Боли Ви. Болят ви. Болят Ви.' },
+      { pronoun: 'те',     cells: ['Боли **ги**',              'Болят **ги**'],                ttsText: 'те. Боли ги. Болят ги.'   },
     ],
     notes: [
       'Боли ме главата. (единствено число — глава, крак, зъб...)',
@@ -252,8 +245,8 @@ export const exercises: Exercise[] = [
       { id: 'nd2-kashlitsa',     imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/04-kashlitsa.jpg',    label: 'Имам кашлица.',          ttsLabel: 'Имам кашлица.'           },
       { id: 'nd2-alergiya',      imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/05-alergiya.jpg',     label: 'Имам алергия.',          ttsLabel: 'Имам алергия.'           },
       { id: 'nd2-bronhit',       imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/06-bronhit.jpg',      label: 'Имам бронхит.',          ttsLabel: 'Имам бронхит.'           },
-      { id: 'nd2-visoko-kravno', imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/07-visoko-kravno.jpg', label: 'Имам високо кръвно.',  ttsLabel: 'Имам високо кръвно.'  },
-      { id: 'nd2-nisko-kravno',  imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/08-nisko-kravno.jpg', label: 'Имам ниско кръвно.',   ttsLabel: 'Имам ниско КРЪВНО.'   },
+      { id: 'nd2-visoko-kravno', imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/07-visoko-kravno.jpg', label: 'Имам високо кръвно.',  ttsLabel: 'Имам високо кръвно.', ttsModel: 'pro', ttsPrompt: 'Read the Bulgarian sentence „Имам високо кръвно." at a normal, natural pace. Articulate the word „кръвно" clearly: КРЪВ-но — hard К, the vowel Ъ, a clear В, then -но. It is NOT „пръзно". Neutral standard Bulgarian, calm tone, no extra sounds.'  },
+      { id: 'nd2-nisko-kravno',  imageUrl: '/assets/a2-lesson-02/05-novi-dumi-2-bolesti/08-nisko-kravno.jpg', label: 'Имам ниско кръвно.',   ttsLabel: 'Имам ниско кръвно.',  ttsModel: 'pro', ttsPrompt: 'Read the Bulgarian sentence „Имам ниско кръвно." at a normal, natural pace. Articulate the word „кръвно" clearly: КРЪВ-но — hard К, the vowel Ъ, a clear В, then -но. It is NOT „пръзно". Neutral standard Bulgarian, calm tone, no extra sounds.'   },
     ],
   } as IllustratedCardsExercise,
 
@@ -261,7 +254,7 @@ export const exercises: Exercise[] = [
   {
     id: 'a2-l02-ex-09',
     type: 'image_labeling',
-    instruction: 'Изберете правилната дума под всяка картинка. Картинките са същите като в НОВИ ДУМИ 2 по-горе.',
+    instruction: 'Изберете правилната дума под всяка картинка.',
     order: 12,
     points: 4,
     displayType: 'row',
@@ -288,7 +281,7 @@ export const exercises: Exercise[] = [
         bubbleSide: 'left',
         lines: [
           { text: 'Имате ли високо кръвно?',                                 voiceGender: 'female' },
-          { text: 'Не, кръвното ми е нормално – 120 на 80.',                voiceGender: 'male', ttsText: 'Не, кръвното ми е нормално. Сто и двадесет на осемдесет.' },
+          { text: 'Не, кръвното ми е нормално – 120 на 80.',                voiceGender: 'male', ttsText: 'Не, КРЪВНОТО ми е нормално. Сто и двадесет на осемдесет.' },
         ],
       },
       {
@@ -328,7 +321,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'аз',  cells: ['**ми**', 'Пиша **ми**.']   },
       { pronoun: 'ти',  cells: ['**ти**', 'Пиша **ти**.']   },
       { pronoun: 'той', cells: ['**му**', 'Пиша **му**.']   },
-      { pronoun: 'тя',  cells: ['**ѝ**',  'Пиша **ѝ**.']    },
+      { pronoun: 'тя',  cells: ['**ѝ**',  'Пиша **ѝ**.'], ttsModel: 'pro', ttsText: 'тя. и. Пиша и.', ttsPrompt: 'Bulgarian dative pronoun. Read the word „ѝ" and „Пиша ѝ" pronouncing „ѝ" exactly like the vowel „и" (ee), a short clear EE sound. Neutral standard Bulgarian.' },
       { pronoun: 'то',  cells: ['**му**', 'Пиша **му**.']   },
       { pronoun: 'ние', cells: ['**ни**', 'Пиша **ни**.']   },
       { pronoun: 'Вие', cells: ['**ви**', 'Пиша **ви**.']   },
@@ -349,21 +342,20 @@ export const exercises: Exercise[] = [
   // ─── ORDER 15 — Упр. 12 (стр. 27): преобразувайте с дателни ────────────────────────────────
   {
     id: 'a2-l02-ex-12',
-    type: 'workbook_fill_blank',
-    instruction: 'Преобразувайте изреченията по модела „Аз помагам на мама. → Аз ѝ помагам."',
+    type: 'dropdown_match',
+    instruction: 'Изберете правилното изречение с кратко дателно местоимение по модела „Аз помагам на мама. → Аз ѝ помагам."',
     order: 15,
     points: 5,
-    layout: 'qa-split',
     imageUrl: '/assets/a2-lesson-02/07-upr-12-kuhnya/01-maika-dushterya-gotvyat.jpg',
-    sentences: [
-      { text: 'Аз помагам на мама. | Аз ѝ помагам.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Аз давам на Емил вода. | _______',                      blanks: [1], correctAnswers: ['Аз му давам вода.'],                       acceptableAnswers: [['аз му давам вода.', 'аз му давам вода', 'му давам вода.', 'му давам вода']] },
-      { text: 'Аз казвам на Иман „Добро утро". | _______',             blanks: [1], correctAnswers: ['Аз ѝ казвам „Добро утро".'],               acceptableAnswers: [['аз ѝ казвам „добро утро".', 'аз й казвам „добро утро".', 'аз и казвам „добро утро".', 'ѝ казвам „добро утро"', 'й казвам „добро утро"', 'и казвам добро утро', 'ѝ казвам добро утро', 'й казвам добро утро']] },
-      { text: 'Аз отговарям на децата. | _______',                     blanks: [1], correctAnswers: ['Аз им отговарям.'],                         acceptableAnswers: [['аз им отговарям.', 'аз им отговарям', 'им отговарям.', 'им отговарям']] },
-      { text: 'Аз пиша на Иван и Мария. | _______',                    blanks: [1], correctAnswers: ['Аз им пиша.'],                              acceptableAnswers: [['аз им пиша.', 'аз им пиша', 'им пиша.', 'им пиша']] },
-      { text: 'Аз се обаждам на Таня по телефона. | _______',         blanks: [1], correctAnswers: ['Аз ѝ се обаждам по телефона.'],             acceptableAnswers: [['аз ѝ се обаждам по телефона.', 'аз й се обаждам по телефона.', 'аз и се обаждам по телефона.', 'аз ѝ се обаждам по телефона', 'ѝ се обаждам по телефона', 'й се обаждам по телефона', 'и се обаждам по телефона']] },
+    questions: [
+      { id: 'q0', left: 'Аз помагам на мама. →',              options: [], correctAnswer: 'Аз ѝ помагам.', isExample: true },
+      { id: 'q1', left: 'Аз давам на Емил вода. →',            options: ['Аз ѝ давам вода.', 'Аз му давам вода.', 'Аз им давам вода.'],                                                 correctAnswer: 'Аз му давам вода.'                 },
+      { id: 'q2', left: 'Аз казвам на Иман „Добро утро". →',   options: ['Аз ѝ казвам „Добро утро".', 'Аз му казвам „Добро утро".', 'Аз им казвам „Добро утро".'],                        correctAnswer: 'Аз ѝ казвам „Добро утро".'         },
+      { id: 'q3', left: 'Аз отговарям на децата. →',           options: ['Аз му отговарям.', 'Аз им отговарям.', 'Аз ѝ отговарям.'],                                                     correctAnswer: 'Аз им отговарям.'                  },
+      { id: 'q4', left: 'Аз пиша на Иван и Мария. →',          options: ['Аз им пиша.', 'Аз му пиша.', 'Аз ѝ пиша.'],                                                                   correctAnswer: 'Аз им пиша.'                       },
+      { id: 'q5', left: 'Аз се обаждам на Таня по телефона. →', options: ['Аз му се обаждам по телефона.', 'Аз ѝ се обаждам по телефона.', 'Аз им се обаждам по телефона.'],             correctAnswer: 'Аз ѝ се обаждам по телефона.'      },
     ],
-  } as WorkbookFillBlankExercise,
+  } as DropdownMatchExercise,
 
   // ─── ORDER 16 — ГРАМАТИКА 4 (стр. 27): отрицание и въпрос с дателни ─────────────────────────
   {
@@ -494,41 +486,14 @@ export const exercises: Exercise[] = [
   // ─── ORDER 20 — ГРАМАТИКА 6 (стр. 28): безлични изречения (Топло ми е / Трудно ми е) ────────
   {
     id: 'a2-l02-gramatika-06',
-    type: 'grammar_examples',
+    type: 'a2-grammar-examples',
     title: 'ГРАМАТИКА 6',
     instruction: 'Запознайте се с безличните изречения.',
     instructionKey: 'grammar.a2l02.g6.instruction',
     order: 20,
-    layout: 'default',
+    layout: 'image-rows',
     examples: [
-      {
-        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/01-plazh-chadyr.jpg',
-        text: 'През лятото е топло.',
-        lines: ['Топло **ми** е.'],
-        ttsText: 'През лятото е топло. Топло ми е.',
-        voiceGender: 'male',
-      },
-      {
-        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/02-toplo-mi-e.jpg',
-        text: 'Топло ми е.',
-        lines: [],
-        ttsText: 'Топло ми е.',
-        voiceGender: 'male',
-      },
-      {
-        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/03-zima-snezhanka.jpg',
-        text: 'През зимата е студено.',
-        lines: ['Студено **ми** е.'],
-        ttsText: 'През зимата е студено. Студено ми е.',
-        voiceGender: 'female',
-      },
-      {
-        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/04-studeno-mi-e.jpg',
-        text: 'Студено ми е.',
-        lines: [],
-        ttsText: 'Студено МИ е.',
-        voiceGender: 'female',
-      },
+      // Ред 1 — уча
       {
         imageUrl: '/assets/a2-lesson-02/09-gramatika-5-trudno-interesno/01-trudno-angliyski.jpg',
         text: 'Уча английски. Трудно ми е.',
@@ -543,8 +508,38 @@ export const exercises: Exercise[] = [
         ttsText: 'Уча български. Интересно ми е.',
         voiceGender: 'male',
       },
+      // Ред 2 — топло
+      {
+        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/01-plazh-chadyr.jpg',
+        text: 'През лятото е топло.',
+        lines: [],
+        ttsText: 'През лятото е топло.',
+        voiceGender: 'male',
+      },
+      {
+        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/02-toplo-mi-e.jpg',
+        text: 'Топло ми е.',
+        lines: [],
+        ttsText: 'Топло ми е.',
+        voiceGender: 'male',
+      },
+      // Ред 3 — студено
+      {
+        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/03-zima-snezhanka.jpg',
+        text: 'През зимата е студено.',
+        lines: [],
+        ttsText: 'През зимата е студено.',
+        voiceGender: 'female',
+      },
+      {
+        imageUrl: '/assets/a2-lesson-02/08-gramatika-4-toplo-studeno/04-studeno-mi-e.jpg',
+        text: 'Студено ми е.',
+        lines: [],
+        ttsText: 'Студено ми е.',
+        voiceGender: 'female',
+      },
     ],
-  } as GrammarExamplesExercise,
+  } as unknown as GrammarExamplesExercise,
 
   // ─── ORDER 21 — Упр. 15 (стр. 28): изберете подходящото изречение (модел + 5 опции) ────────────
   {
@@ -1030,16 +1025,20 @@ export const exercises: Exercise[] = [
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/01-chay-bilki.jpg',        label: 'Билков чай',          ttsWordId: 'bilkov-chay' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/02-podpravki-kesove.jpg',  label: 'Билки и подправки',   ttsWordId: 'bilki-podpravki' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/03-med-limon.jpg',         label: 'Мед и лимон',         ttsWordId: 'med-limon' },
-      { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/04-rozmarin.jpg',          label: 'Розмарин',            ttsWordId: 'rozmarin' },
+      { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/04-rozmarin.jpg',          label: 'Розмарин',            ttsWordId: 'rozmarin', ttsModel: 'pro', ttsPrompt: 'Bulgarian herb name. Stress on the first syllable only: РОЗ-марин.' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/05-bilki-v-kupa.jpg',      label: 'Свежи билки',         ttsWordId: 'svezhi-bilki' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/06-susheni-bilki.jpg',     label: 'Сушени билки',        ttsWordId: 'susheni-bilki' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/07-havanche.jpg',          label: 'Хаванче с билки',     ttsWordId: 'havanche' },
       { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/08-burkani-podpravki.jpg', label: 'Буркани с подправки', ttsWordId: 'burkani-podpravki' },
-      { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/09-chay-lapa.jpg',         label: 'Чай от лапа',         ttsWordId: 'chay-lapa' },
+      { imageUrl: '/assets/a2-lesson-02/15-kultura-bilki-snimki/09-chay-lapa.jpg',         label: 'Насипен чай',         ttsWordId: 'chay-lapa', ttsModel: 'pro', ttsPrompt: 'Bulgarian phrase „насипен чай". The word „насипен" has stress ONLY on the second syllable, on the vowel и: на-СИ-пен (rhymes with „see"). Do NOT stress the first or last syllable. Then pronounce „чай" cleanly and clearly: a crisp „ч" sound followed by a clear „ай" diphthong, not slurred or muffled.' },
     ],
     paragraphs: [
       'В България хората обичат билките и домашните лекове. Когато имат хрема или кашлица, пият билков чай с мед и лимон. Когато ги боли гърлото – правят гаргара. Когато имат висока температура – пият много течности.',
       'Популярни билки: лайка, мента, липа, розмарин, жълт кантарион. Продават се в аптеките и на пазара.',
+    ],
+    ttsParagraphs: [
+      'В България хората обичат билките и домашните лекове. Когато имат хрема или кашлица, пият билков чай с мед и лимон. Когато ги боли гърлото – правят гаргара. Когато имат висока температура – пият много течности.',
+      'Популярни билки: лайка, мента, липа, ròзмарин, жълт кантарион. Продават се в аптеките и на пазара.',
     ],
     paragraphVoiceGenders: ['female', 'female'],
   } as ReadingTextExercise,
