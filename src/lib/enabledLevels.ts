@@ -1,18 +1,21 @@
 /**
- * Level gating — which CEFR levels are publicly accessible.
+ * Level gating — which CEFR levels are publicly reachable, decided PER DOMAIN.
  *
- * Controlled by a single environment variable so we can ship the SAME codebase
- * to production (A1 only) and to the internal/dev deployment (all levels)
- * without maintaining a separate branch or clone.
+ * Goal: one Vercel project (one Neon DB, one set of secrets) serving TWO links:
+ *   • the public release domain  → shows ONLY A1
+ *   • every other domain (internal, previews, localhost) → shows ALL levels
  *
- *   NEXT_PUBLIC_ENABLED_LEVELS="a1"        → only A1 is reachable (production)
- *   NEXT_PUBLIC_ENABLED_LEVELS="a1,a2"     → A1 + A2 reachable
- *   (unset / empty)                        → ALL levels reachable (dev default)
+ * This is done at request time from the `Host` header, so a single deployment
+ * behaves differently depending on which domain the visitor used — no second
+ * project and no copying of secrets required.
  *
- * The variable is `NEXT_PUBLIC_` so the same value is available both on the
- * server (route guards) and in the browser (home page cards). It is inlined at
- * build time, so flipping it requires a redeploy — which is exactly what we
- * want for a controlled public release.
+ * The A1-only domains are listed below. You can also extend the list without a
+ * code change via the optional env var `NEXT_PUBLIC_A1_ONLY_HOSTS`
+ * (comma-separated hostnames).
+ *
+ * A legacy global override `NEXT_PUBLIC_ENABLED_LEVELS` is still honoured (it
+ * forces the enabled set for the whole deployment regardless of host) — handy
+ * for a fully locked build if ever needed.
  *
  * NOTE: this is a UX/navigation gate, not a security boundary. Disabled levels
  * are hidden and their routes return `notFound()`; the (lazy-loaded) content
@@ -21,27 +24,58 @@
 
 import { LEVELS, type Level } from '@/content';
 
-/** Returns the set of levels that are currently enabled/reachable. */
-export function getEnabledLevels(): Level[] {
-  const raw = process.env.NEXT_PUBLIC_ENABLED_LEVELS?.trim();
+/** Domains that must show ONLY A1 (the public release link). */
+const A1_ONLY_HOSTS: readonly string[] = [
+  'bulgarian-for-refugees-unhcr.vercel.app',
+];
 
-  // Unset or empty → everything on (keeps dev/local behaviour unchanged).
-  if (!raw) return [...LEVELS];
-
-  const requested = raw
-    .split(',')
-    .map((s) => s.trim().toLowerCase());
-
-  const enabled = LEVELS.filter((lvl) => requested.includes(lvl));
-
-  // Safety net: never lock out A1 (the always-shipped level). If the env value
-  // is malformed and matches nothing, fall back to A1 so the app is never empty.
-  if (enabled.length === 0) return ['a1'];
-
-  return enabled;
+/** Normalises a Host header value: lowercased, port stripped. */
+function normaliseHost(host: string | null | undefined): string {
+  if (!host) return '';
+  return host.toLowerCase().split(':')[0].trim();
 }
 
-/** Whether a specific level is currently enabled/reachable. */
-export function isLevelEnabled(level: Level): boolean {
-  return getEnabledLevels().includes(level);
+/** Extra A1-only hosts supplied via env (comma-separated), if any. */
+function extraA1OnlyHosts(): string[] {
+  const raw = process.env.NEXT_PUBLIC_A1_ONLY_HOSTS?.trim();
+  if (!raw) return [];
+  return raw.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+}
+
+/** Whether the given host is one of the A1-only public domains. */
+function isA1OnlyHost(host: string | null | undefined): boolean {
+  const h = normaliseHost(host);
+  if (!h) return false;
+  return A1_ONLY_HOSTS.includes(h) || extraA1OnlyHosts().includes(h);
+}
+
+/** Parses the legacy global override, or `null` if unset/empty. */
+function globalOverride(): Level[] | null {
+  const raw = process.env.NEXT_PUBLIC_ENABLED_LEVELS?.trim();
+  if (!raw) return null;
+  const requested = raw.split(',').map((s) => s.trim().toLowerCase());
+  const enabled = LEVELS.filter((lvl) => requested.includes(lvl));
+  // Never lock everything out — fall back to A1 if the value matches nothing.
+  return enabled.length > 0 ? enabled : ['a1'];
+}
+
+/**
+ * Returns the levels reachable for a given request host.
+ *  1. A global `NEXT_PUBLIC_ENABLED_LEVELS` override wins if present.
+ *  2. Otherwise, A1-only public domains → `['a1']`.
+ *  3. Otherwise (internal domain / preview / localhost) → all levels.
+ */
+export function getEnabledLevelsForHost(host: string | null | undefined): Level[] {
+  const override = globalOverride();
+  if (override) return override;
+  if (isA1OnlyHost(host)) return ['a1'];
+  return [...LEVELS];
+}
+
+/** Whether a specific level is reachable for the given request host. */
+export function isLevelEnabledForHost(
+  level: Level,
+  host: string | null | undefined,
+): boolean {
+  return getEnabledLevelsForHost(host).includes(level);
 }

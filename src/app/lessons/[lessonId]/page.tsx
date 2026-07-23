@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { LessonNav } from '@/components/layout/LessonNav';
 import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
+import { headers } from 'next/headers';
 import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson, loadLesson, getLessonLevel } from '@/content';
-import { isLevelEnabled } from '@/lib/enabledLevels';
+import { isLevelEnabledForHost } from '@/lib/enabledLevels';
 import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
@@ -30,10 +31,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound();
   }
 
-  // Level gating — lessons from a disabled level are not publicly reachable.
+  // Level gating (per request host) — lessons from a disabled level 404.
   const lessonLevel = getLessonLevel(lessonId);
-  if (lessonLevel && !isLevelEnabled(lessonLevel)) {
-    notFound();
+  if (lessonLevel) {
+    const host = (await headers()).get('host');
+    if (!isLevelEnabledForHost(lessonLevel, host)) {
+      notFound();
+    }
   }
 
   const lessonData = await loadLesson(lessonId);

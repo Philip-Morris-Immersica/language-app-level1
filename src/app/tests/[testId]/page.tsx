@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { ClipboardCheck } from 'lucide-react';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { loadTest, getTestLevel, type Level } from '@/content';
-import { isLevelEnabled } from '@/lib/enabledLevels';
+import { isLevelEnabledForHost } from '@/lib/enabledLevels';
 import { TestPageClient } from './TestPageClient';
 
 interface TestPageProps {
@@ -38,10 +39,13 @@ function describeTest(testId: string): { label: string; backHref: string } {
 export default async function TestPage({ params }: TestPageProps) {
   const { testId } = await params;
 
-  // Level gating — tests from a disabled level are not publicly reachable.
+  // Level gating (per request host) — tests from a disabled level 404.
   const testLevel = getTestLevel(testId);
-  if (testLevel && !isLevelEnabled(testLevel)) {
-    notFound();
+  if (testLevel) {
+    const host = (await headers()).get('host');
+    if (!isLevelEnabledForHost(testLevel, host)) {
+      notFound();
+    }
   }
 
   const testData = await loadTest(testId);

@@ -7,7 +7,6 @@ import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
 import { PlatformLegend } from '@/components/PlatformLegend';
 import { LEVELS, getLevelDef, type Level } from '@/content';
-import { isLevelEnabled } from '@/lib/enabledLevels';
 
 // Latin labels are language-agnostic per UNHCR brand rule.
 const LATIN_LABEL: Record<Level, string> = {
@@ -49,27 +48,31 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
-export function HomePageClient() {
+interface HomePageClientProps {
+  /** Levels reachable for the current request host (resolved on the server). */
+  enabledLevels: Level[];
+}
+
+export function HomePageClient({ enabledLevels }: HomePageClientProps) {
   const { user, loading } = useAuth();
   const t = useT();
 
-  const levelViews = useMemo<LevelView[]>(
-    () =>
-      LEVELS.map((code) => {
-        const def = getLevelDef(code);
-        const totalItems =
-          def.lessonsMetadata.length + Object.keys(def.testLoaders).length;
-        return {
-          code,
-          label: LATIN_LABEL[code],
-          href: `/level/${code}`,
-          totalItems,
-          hasContent: totalItems > 0,
-          enabled: isLevelEnabled(code),
-        };
-      }),
-    [],
-  );
+  const levelViews = useMemo<LevelView[]>(() => {
+    const enabledSet = new Set<Level>(enabledLevels);
+    return LEVELS.map((code) => {
+      const def = getLevelDef(code);
+      const totalItems =
+        def.lessonsMetadata.length + Object.keys(def.testLoaders).length;
+      return {
+        code,
+        label: LATIN_LABEL[code],
+        href: `/level/${code}`,
+        totalItems,
+        hasContent: totalItems > 0,
+        enabled: enabledSet.has(code),
+      };
+    });
+  }, [enabledLevels]);
 
   const [progressByLevel, setProgressByLevel] = useState<Record<Level, number>>({
     a1: 0,
