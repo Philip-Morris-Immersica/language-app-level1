@@ -25,7 +25,6 @@ export const exercises: Exercise[] = [
     instruction: 'Изберете правилната дума под всяка картинка.',
     order: 1,
     points: 4,
-    hideHeader: true,
     displayType: 'row',
     images: [
       { id: 'mazh',    imageUrl: '/assets/a2-lesson-02/01-upr-01-hora/01-mazh.jpg',    correctLabel: 'мъж'     },
