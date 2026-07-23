@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Lock } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { useT } from '@/i18n/useT';
 import { PlatformLegend } from '@/components/PlatformLegend';
 import { LEVELS, getLevelDef, type Level } from '@/content';
+import { isLevelEnabled } from '@/lib/enabledLevels';
 
 // Latin labels are language-agnostic per UNHCR brand rule.
 const LATIN_LABEL: Record<Level, string> = {
@@ -22,6 +23,7 @@ interface LevelView {
   href: string;
   totalItems: number;
   hasContent: boolean;
+  enabled: boolean;
 }
 
 /**
@@ -63,6 +65,7 @@ export function HomePageClient() {
           href: `/level/${code}`,
           totalItems,
           hasContent: totalItems > 0,
+          enabled: isLevelEnabled(code),
         };
       }),
     [],
@@ -175,6 +178,26 @@ export function HomePageClient() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
           {levelViews.map((level) => {
             const progress = progressByLevel[level.code] ?? 0;
+
+            // Disabled levels (controlled by NEXT_PUBLIC_ENABLED_LEVELS) render
+            // as a non-clickable, muted card with a lock — reachable neither by
+            // click nor by direct URL (routes return notFound()).
+            if (!level.enabled) {
+              return (
+                <div
+                  key={level.code}
+                  aria-disabled="true"
+                  className="rounded-2xl bg-[#0072BC]/40 text-white p-8 flex flex-col items-center justify-center shadow-inner cursor-not-allowed select-none"
+                >
+                  <span className="text-4xl font-bold mb-2 tracking-wide">{level.label}</span>
+                  <Lock className="w-5 h-5 mt-1 mb-2 opacity-80" />
+                  <span className="inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
+                    {t('level.comingSoon')}
+                  </span>
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={level.code}

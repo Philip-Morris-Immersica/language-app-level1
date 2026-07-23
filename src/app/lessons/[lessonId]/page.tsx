@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { LessonLayout } from '@/components/layout/LessonLayout';
 import { LessonNav } from '@/components/layout/LessonNav';
 import { ExerciseRenderer } from '@/components/exercises/ExerciseRenderer';
-import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson, loadLesson } from '@/content';
+import { getLessonMetadata, getPrevLesson, getNextLesson, hasTestAfterLesson, loadLesson, getLessonLevel } from '@/content';
+import { isLevelEnabled } from '@/lib/enabledLevels';
 import { LessonIntroText } from '@/components/LessonIntroText';
 import { T } from '@/components/T';
 import { LessonHeaderClient } from '@/components/LessonHeaderClient';
@@ -26,6 +27,12 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const metadata = getLessonMetadata(lessonId);
 
   if (!metadata) {
+    notFound();
+  }
+
+  // Level gating — lessons from a disabled level are not publicly reachable.
+  const lessonLevel = getLessonLevel(lessonId);
+  if (lessonLevel && !isLevelEnabled(lessonLevel)) {
     notFound();
   }
 
