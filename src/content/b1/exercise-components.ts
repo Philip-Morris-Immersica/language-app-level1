@@ -27,7 +27,9 @@ import type { ComponentType } from 'react';
 import { IllustratedCardsGrouped } from './components/IllustratedCardsGrouped';
 import { MatchPairsDragDrop } from './components/MatchPairsDragDrop';
 import { GrammarTable } from './components/GrammarTable';
+import { GrammarExamples } from './components/GrammarExamples';
 import { SortToColumns } from './components/SortToColumns';
+import { TableFill } from './components/TableFill';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -49,5 +51,8 @@ export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'b1-illustrated-cards-grouped': IllustratedCardsGrouped as unknown as CustomExerciseRenderer,
   'b1-match-pairs-dragdrop': MatchPairsDragDrop as unknown as CustomExerciseRenderer,
   'b1-grammar-table': GrammarTable as unknown as CustomExerciseRenderer,
+  'b1-grammar-examples': GrammarExamples as unknown as CustomExerciseRenderer,
   'b1-sort-to-columns': SortToColumns as unknown as CustomExerciseRenderer,
+  // Override shared table_fill: hide empty column-header rows (B1-only).
+  table_fill: TableFill as unknown as CustomExerciseRenderer,
 };

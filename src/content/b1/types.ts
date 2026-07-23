@@ -111,14 +111,69 @@ export interface B1GrammarTableExercise extends BaseExercise {
     ttsModel?: 'flash' | 'pro';
     ttsPrompt?: string;
     ttsText?: string;
+    /** Caption / label row — no click-to-play, no 🔊 icon */
+    noAudio?: boolean;
+  }[];
+  /**
+   * Multiple green tables in one section. First two render side-by-side on md+;
+   * the rest (e.g. „Внимание!") span full width below.
+   * When set, top-level `tableTitle`/`columns`/`rows` are ignored.
+   */
+  panels?: {
+    tableTitle?: string;
+    columns?: string[];
+    rows: {
+      pronoun: string;
+      cells: string[];
+      pronunciations?: Record<string, string>;
+      ttsModel?: 'flash' | 'pro';
+      ttsPrompt?: string;
+      ttsText?: string;
+      noAudio?: boolean;
+    }[];
+    /** Full-width panel (e.g. „Внимание!") instead of side-by-side */
+    fullWidth?: boolean;
   }[];
   notes?: string[];
   ttsNotes?: string[];
   ttsNoteModels?: ('flash' | 'pro')[];
   boldColumns?: number[];
   widePronouns?: boolean;
+  /** Left-align example sentences (default is centered). Useful for long example rows. */
+  alignLeft?: boolean;
   /** When true, disables all audio — hides the 🔊 icons, the "tap to hear" hint, and click-to-play. */
   disableAudio?: boolean;
+  /**
+   * Visual layout:
+   * - `table` (default) — green HTML table (reference grids, conjugations).
+   * - `example-cards` — A2-style blue cards: title + divider + centered example lines
+   *   (for „таблици с примери" / sentence examples, not multi-column reference tables).
+   */
+  variant?: 'table' | 'example-cards';
+}
+
+/**
+ * b1-grammar-examples — dialogue / illustrated examples with working **bold**
+ * and per-line voices. Shared `grammar_examples` hero mode prints literal asterisks.
+ */
+export interface B1GrammarExamplesExercise extends BaseExercise {
+  type: 'b1-grammar-examples';
+  title: string;
+  subtitle?: string;
+  instruction?: string;
+  disableTts?: boolean;
+  examples: {
+    imageUrl: string;
+    text: string;
+    subtext?: string;
+    lines?: string[];
+    voiceGender?: 'male' | 'female';
+    ttsText?: string;
+    ttsModel?: 'flash' | 'pro';
+    ttsPrompt?: string;
+    zoomable?: boolean;
+    label?: string;
+  }[];
 }
 
 /**
@@ -153,6 +208,7 @@ export type B1Exercise =
   | B1IllustratedCardsGroupedExercise
   | B1MatchPairsDragDropExercise
   | B1GrammarTableExercise
+  | B1GrammarExamplesExercise
   | B1SortToColumnsExercise;
 
 // Re-export BaseExercise so B1 component files can import everything from one place.
