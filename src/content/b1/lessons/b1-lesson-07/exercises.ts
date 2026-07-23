@@ -13,7 +13,7 @@ import type {
 //   • Урокът НЯМА отделни секции „НОВИ ДУМИ" / „ДИАЛОЗИ" — граматиката е разпределена
 //     в кутии между упражненията (ГРАМАТИКА 1–10).
 //   • Речникът е в content.ts (18 думи от dictionary/).
-//   • „Подчертайте местоименията" → grammar_examples с **получер** местоимения.
+//   • „Местоименията са в зелено" → grammar_examples с **зелени** местоимения.
 //   • Упр. 17: в учебника са 2 изречения (стр. 50–51); добавено 3-ро по модела
 //     (❓ TODO: провери срещу печатния учебник).
 //   • Упр. 21: в учебника са 3 изречения (стр. 52); разширено до 8 точки с 4 двойки
@@ -30,7 +30,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-01',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 1',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 1,
     examples: [
       {
@@ -77,7 +77,7 @@ export const exercises: Exercise[] = [
     type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 1',
     tableTitle: 'Кратки форми във винителен падеж',
-    instruction: 'Обърнете внимание как пълните форми се заменят с кратки местоимения след глагола.',
+    instruction: 'Обърнете внимание как пълните форми се заменят с кратки местоимения преди или след глагола.',
     order: 2,
     variant: 'example-cards',
     columns: [],
@@ -124,7 +124,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-03',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Изберете правилния отговор.',
+    instruction: 'Изберете правилния отговор от падащото меню като следвате модела.',
     order: 4,
     points: 5,
     layout: 'single',
@@ -145,7 +145,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-04',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 4',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 5,
     examples: [
       {
@@ -160,7 +160,7 @@ export const exercises: Exercise[] = [
       {
         imageUrl: '',
         text: '',
-        lines: ['– Да. Препоръчвам ти д-р Иванова. Тя е много добър специалист. Искаш ли да **ѝ** се обадим?'],
+        lines: ['– Да. Препоръчвам **ти** д-р Иванова. Тя е много добър специалист. Искаш ли да **ѝ** се обадим?'],
         ttsText: 'Да. Препоръчвам ти доктор Иванова. Тя е много добър специалист. Искаш ли да ѝ се обадим?',
         voiceGender: 'female',
         ttsModel: 'pro',
@@ -179,9 +179,9 @@ export const exercises: Exercise[] = [
     order: 6,
     variant: 'example-cards',
     rows: [
-      { pronoun: '', cells: ['Иво помага на Али. → Иво **му** помага.'], ttsText: 'Иво помага на Али. Иво му помага.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая.' },
-      { pronoun: '', cells: ['Иво **не му** помага.'], ttsText: 'Иво не му помага.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая. Не казвай „помагра".' },
-      { pronoun: '', cells: ['Иво помага **ли му**?'], ttsText: 'Иво помага ли му?', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая. Не казвай „помагра".' },
+      { pronoun: '', cells: ['Иво помага на Али. → Иво **му** помага.'], ttsText: 'Иво помаГа на алИ. Иво му помаГа.', ttsModel: 'flash', ttsPrompt: 'Bulgarian. Capital Г = hard G (помага, never помада). Name алИ: stress FINAL syllable И (a-LÍ), short vowels — do not lengthen. Read each sentence once only — do not repeat.' },
+      { pronoun: '', cells: ['Иво **не му** помага.'], ttsText: 'Иво не му помаГа.', ttsModel: 'flash', ttsPrompt: 'Bulgarian. Say exactly once: Иво не му помаГа. Capital Г = hard G, never помада. Do not repeat the sentence.' },
+      { pronoun: '', cells: ['Иво помага **ли му**?'], ttsText: 'Иво помаГа ли му?', ttsModel: 'flash', ttsPrompt: 'Bulgarian yes-no question with rising tone. Read exactly four words once: Иво помаГа ли му? Capital Г = hard G (гора), never помада. Do not scramble or repeat.' },
       { pronoun: '', cells: ['Той се обажда на Радина. → Той **ѝ** се обажда.'], ttsText: 'Той се обажда на Радина. Той ѝ се обажда.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Не монотонно, не роботски, без чужд акцент.' },
       { pronoun: '', cells: ['**Не ѝ** се обажда.'], ttsText: 'Не ѝ се обажда.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Не монотонно, не роботски, без чужд акцент.' },
       { pronoun: '', cells: ['Обажда **ли ѝ** се?'], ttsText: 'Обажда ли ѝ се?', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Не монотонно, не роботски, без чужд акцент.' },
@@ -193,9 +193,9 @@ export const exercises: Exercise[] = [
         tableTitle: 'Примери за мъжки род',
         columns: [],
         rows: [
-          { pronoun: '', cells: ['Иво помага на Али. → Иво **му** помага.'], ttsText: 'Иво помага на Али. Иво му помага.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая.' },
-          { pronoun: '', cells: ['Иво **не му** помага.'], ttsText: 'Иво не му помага.', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая. Не казвай „помагра".' },
-          { pronoun: '', cells: ['Иво помага **ли му**?'], ttsText: 'Иво помага ли му?', ttsModel: 'pro', ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „по́мага" — завършва на А, без Р накрая. Не казвай „помагра".' },
+          { pronoun: '', cells: ['Иво помага на Али. → Иво **му** помага.'], ttsText: 'Иво помаГа на алИ. Иво му помаГа.', ttsModel: 'flash', ttsPrompt: 'Bulgarian. Capital Г = hard G (помага, never помада). Name алИ: stress FINAL syllable И (a-LÍ), short vowels — do not lengthen. Read each sentence once only — do not repeat.' },
+          { pronoun: '', cells: ['Иво **не му** помага.'], ttsText: 'Иво не му помаГа.', ttsModel: 'flash', ttsPrompt: 'Bulgarian. Say exactly once: Иво не му помаГа. Capital Г = hard G, never помада. Do not repeat the sentence.' },
+          { pronoun: '', cells: ['Иво помага **ли му**?'], ttsText: 'Иво помаГа ли му?', ttsModel: 'flash', ttsPrompt: 'Bulgarian yes-no question with rising tone. Read exactly four words once: Иво помаГа ли му? Capital Г = hard G (гора), never помада. Do not scramble or repeat.' },
         ],
       },
       {
@@ -255,7 +255,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-06',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 6',
-    instruction: 'Изберете краткото дателно местоимение.',
+    instruction: 'Изберете краткото дателно местоимение от падащото меню като следвате модела.',
     order: 8,
     points: 3,
     layout: 'single',
@@ -274,7 +274,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-07',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 7',
-    instruction: 'Изберете изречението с кратко дателно местоимение.',
+    instruction: 'Изберете изречението с кратко дателно местоимение от падащото меню като следвате модела.',
     order: 9,
     points: 3,
     layout: 'single',
@@ -293,7 +293,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-08',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 8',
-    instruction: 'Изберете изречението с кратко дателно местоимение.',
+    instruction: 'Изберете изречението с кратко дателно местоимение от падащото меню като следвате модела.',
     order: 10,
     points: 3,
     layout: 'single',
@@ -312,7 +312,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-09',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 9',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 11,
     examples: [
       {
@@ -328,7 +328,7 @@ export const exercises: Exercise[] = [
       {
         imageUrl: '',
         text: '',
-        lines: ['– Да, чете **им я** всяка вечер, защото знае, че **я** обичат много.'],
+        lines: ['– Да, чете **им** **я** всяка вечер, защото знае, че **я** обичат много.'],
         ttsText: 'Да, чете им я всяка вечер, защото знае, че я обичат много.',
         voiceGender: 'female',
         ttsModel: 'pro',
@@ -364,7 +364,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-10',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 10',
-    instruction: 'Изберете изречението с двойни кратки местоимения.',
+    instruction: 'Изберете изречението с двойни кратки местоимения от падащото меню като следвате модела.',
     order: 13,
     points: 8,
     layout: 'single',
@@ -388,7 +388,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-11',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 11',
-    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 14,
     examples: [
       {
@@ -406,7 +406,7 @@ export const exercises: Exercise[] = [
         text: '',
         lines: ['– Да, искам да **я** посрещна.'],
         ttsText: 'Да, искам да я посрещна.',
-        ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Не монотонно, не роботски, без чужд акцент. Глаголът е „посре́щна" с А в края (по-срещ-на), не „посрещне".',
+        ttsPrompt: 'Clear standard Bulgarian, warm natural tone. Verb is посрещна — ends with -на (one А), never -нама and never посращна. Middle vowel is Е: по-срещ-на.',
         voiceGender: 'female',
         ttsModel: 'pro',
       },
@@ -452,7 +452,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-12',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 12',
-    instruction: 'Изберете изречението с кратко местоимение.',
+    instruction: 'Изберете изречението с кратко местоимение от падащото меню като следвате модела.',
     order: 15,
     points: 6,
     layout: 'single',
@@ -474,7 +474,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-13',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 13',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 16,
     examples: [
       {
@@ -499,7 +499,8 @@ export const exercises: Exercise[] = [
         imageUrl: '',
         text: '',
         lines: ['– Чудесно, съгласен съм с **теб**.'],
-        ttsText: 'Чудесно, съгласен съм с теб.',
+        ttsText: 'Чудесно, съгласен съм с ТЕБ.',
+        ttsPrompt: 'Clear standard Bulgarian. Exactly once: съгласен съм с ТЕБ. Short с (not със). ТЕБ is the pronoun teb — never так, never тебе.',
         voiceGender: 'male',
         ttsModel: 'pro',
       },
@@ -531,7 +532,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-14',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 14',
-    instruction: 'Изберете пълната форма във винителен падеж за всяко лице.',
+    instruction: 'Изберете пълната форма във винителен падеж за всяко лице като следвате модела.',
     order: 18,
     points: 8,
     paragraphs: [],
@@ -560,7 +561,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-15',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 15',
-    instruction: 'Изберете пълната форма на местоимението.',
+    instruction: 'Изберете пълната форма на местоимението от падащото меню като следвате модела.',
     order: 19,
     points: 6,
     layout: 'single',
@@ -581,15 +582,15 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-16',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 16',
-    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 20,
     examples: [
       {
         imageUrl: '/assets/b1-lesson-07/06-upr-16-uchitelka-klas/01-uchitelka-studenti.jpg',
         text: 'а.',
         lines: ['– Ще **ни** обясните ли това правило?'],
-        ttsText: 'Ще ни обясните ли това правило?',
-        ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Не монотонно, не роботски, без чужд акцент. Думата е „пра́вило" (пра-ви-ло), не „правулу".',
+        ttsText: 'Ще ни об-яс-ни́-те ли това правило?',
+        ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Глаголът е „обясни́те": об-яс-НИ-те с ЯС в средата (като „ясно"). Тиретата са само за яснота — една дума. ЗАБРАНЕНО: „огъсните", „огясните", „обгъсните". Думата „пра́вило" — пра-ви-ло, не „правулу".',
         voiceGender: 'female',
         ttsModel: 'pro',
         zoomable: false,
@@ -630,7 +631,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Изберете четирите форми с кратко местоимение.',
+    instruction: 'Изберете четирите форми с кратко местоимение от падащото меню като следвате модела.',
     order: 21,
     points: 12,
     layout: 'single',
@@ -670,7 +671,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-18',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 18',
-    instruction: 'Изберете изречението с кратко дателно местоимение.',
+    instruction: 'Изберете изречението с кратко дателно местоимение от падащото меню като следвате модела.',
     order: 22,
     points: 3,
     layout: 'single',
@@ -689,7 +690,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-19',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 19',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 23,
     examples: [
       {
@@ -790,7 +791,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-20',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 20',
-    instruction: 'Изберете формата с кратко местоимение.',
+    instruction: 'Изберете формата с кратко местоимение от падащото меню като следвате модела.',
     order: 25,
     points: 4,
     layout: 'single',
@@ -810,7 +811,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-21',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 21',
-    instruction: 'Изберете формите с кратки местоимения.',
+    instruction: 'Изберете формите с кратки местоимения от падащото меню като следвате модела.',
     order: 26,
     points: 8,
     layout: 'single',
@@ -834,7 +835,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-22',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 22',
-    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 27,
     examples: [
       {
@@ -842,7 +843,7 @@ export const exercises: Exercise[] = [
         text: '',
         lines: ['– Мамо, не **ми** купувай малък шоколад. Купи **ми** най-големия.'],
         ttsText: 'Мамо, не ми купувай малък шоколад. Купи ми най-големия.',
-        ttsPrompt: 'Speak as a young Bulgarian child — soft playful childlike tone, clear standard Bulgarian. Same voice as the other child lines.',
+        ttsPrompt: 'Speak as a young Bulgarian child (about 6–8 years old): higher pitch, soft playful childlike voice, slightly pleading tone. Clear standard Bulgarian pronunciation. NOT an adult male voice. Sound like a kid asking mum for chocolate.',
         voiceGender: 'male',
         ttsModel: 'pro',
         zoomable: false,
@@ -852,7 +853,7 @@ export const exercises: Exercise[] = [
         text: '',
         lines: ['– Не трябва да ядеш толкова сладко.'],
         ttsText: 'Не трябва да ядеш толкова сладко.',
-        ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Думата е „сла́дко" с ДК — сла-дко. Не казвай „слапто".',
+        ttsPrompt: 'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо. Не монотонно, не роботски. Думата е „сла́дко" с ДК — сла-дко. Не казвай „слапто". Adult mother voice.',
         voiceGender: 'female',
         ttsModel: 'pro',
       },
@@ -861,7 +862,7 @@ export const exercises: Exercise[] = [
         text: '',
         lines: ['– Моля те, купи **ми го**.'],
         ttsText: 'Моля те, купи ми го.',
-        ttsPrompt: 'Speak as a young Bulgarian child — soft playful childlike tone, clear standard Bulgarian. Same voice as the other child lines.',
+        ttsPrompt: 'Speak as a young Bulgarian child (about 6–8 years old): higher pitch, soft playful childlike voice, slightly pleading tone. Clear standard Bulgarian pronunciation. NOT an adult male voice. Same child as the first line.',
         voiceGender: 'male',
         ttsModel: 'pro',
       },
@@ -875,7 +876,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-gramatika-06',
     type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 6',
-    instruction: 'Обърнете внимание на реда на кратките местоимения в повелително наклонение и с „се".',
+    instruction: 'Обърнете внимание на реда на кратките местоимения в повелително наклонение и със „се".',
     order: 28,
     variant: 'example-cards',
     rows: [
@@ -922,7 +923,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-23',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 23',
-    instruction: 'Изберете формите с двойни кратки местоимения.',
+    instruction: 'Изберете формите с двойни кратки местоимения от падащото меню като следвате модела.',
     order: 29,
     points: 5,
     layout: 'single',
@@ -943,7 +944,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-24',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 24',
-    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 30,
     examples: [
       {
@@ -1014,7 +1015,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-25',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 25',
-    instruction: 'Изберете неопределителната и отрицателната форма за всяка въпросителна дума.',
+    instruction: 'Изберете неопределителната и отрицателната форма за всяка въпросителна дума от падащото меню.',
     order: 32,
     points: 16,
     paragraphs: [],
@@ -1067,7 +1068,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
-    instruction: 'Изберете подходящото местоимение от таблицата в упр. 25.',
+    instruction: 'Изберете подходящото местоимение от падащото меню като следвате модела.',
     order: 33,
     points: 7,
     layout: 'single',
@@ -1090,7 +1091,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-27',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 27',
-    instruction: 'Разгледайте картинката и прочетете диалозите. Обобщителните местоимения са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалозите. Обобщителните местоимения са в зелено.',
     order: 34,
     examples: [
       {
@@ -1171,7 +1172,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-28',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 28',
-    instruction: 'Изберете обобщителното местоимение.',
+    instruction: 'Изберете обобщителното местоимение от падащото меню като следвате модела.',
     order: 36,
     points: 7,
     layout: 'single',
@@ -1292,7 +1293,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-30',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 30',
-    instruction: 'Изберете подходящия съюз.',
+    instruction: 'Изберете подходящия съюз като следвате модела.',
     order: 40,
     points: 7,
     layout: 'single',
@@ -1304,7 +1305,7 @@ export const exercises: Exercise[] = [
       { text: 'Не харесвам хора, _______ се държат грубо.', blanks: [0], correctAnswers: ['които'], options: ['които', 'който', 'която', 'както'] },
       { text: 'Готвя така, _______ ме е учила майка ми.', blanks: [0], correctAnswers: ['както'], options: ['както', 'когато', 'където', 'които'] },
       { text: '_______ не работи, не трябва да яде. (българска поговорка)', blanks: [0], correctAnswers: ['Кой'], options: ['Кой', 'Който', 'Кога', 'Както'] },
-      { text: '_______ търси, намира. (поговорка)', blanks: [0], correctAnswers: ['Кой'], options: ['Кой', 'Който', 'Когато', 'Както'] },
+      { text: '_______ търси, намира. (поговорка)', blanks: [0], correctAnswers: ['Който'], options: ['Който', 'Кой', 'Когато', 'Както'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -1381,7 +1382,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-32',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 32',
-    instruction: 'Изберете **ако** или **дали**.',
+    instruction: 'Изберете **ако** или **дали** от падащото меню като следвате модела.',
     order: 43,
     points: 6,
     layout: 'single',
@@ -1403,7 +1404,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-33',
     type: 'b1-grammar-examples',
     title: 'УПРАЖНЕНИЕ 33',
-    instruction: 'Разгледайте картинката и прочетете диалозите. Съюзите са в получер шрифт.',
+    instruction: 'Разгледайте картинката и прочетете диалозите. Съюзите са в зелено.',
     order: 44,
     examples: [
       {
@@ -1492,7 +1493,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-34',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 34',
-    instruction: 'Изберете подходящия съюз от таблицата.',
+    instruction: 'Изберете подходящия съюз от падащото меню като следвате модела.',
     order: 46,
     points: 13,
     layout: 'single',
@@ -1580,10 +1581,10 @@ export const exercises: Exercise[] = [
       'Там ли ще ходиш това лято на почивка?',
       'Не, ще отида някъде на планина, но само за една седмица. Аз съм скиор, затова предпочитам да взема по-дълъг отпуск през декември. Ще отидем с приятели на ски в Банско. Ако искаш, можеш да дойдеш с нас.',
       'Благодаря за поканата. Никога не съм бил там. Хубаво ли е?',
-      // ме-ХАА-ни = stress marker only (А short, not dragged); display stays „механи"
-      'Според мен Банско е най-доброто място за ски в България. Намира се в Пирин планина и напоследък там ходят много скиори – не само българи, но и чужденци. Пистите са чудесни, а в града има страхотни ме-ХАА-ни. В Банско е роден един от най-големите поети на България, Никола Вапцаров.',
+      // Capitals = stress only (no hyphens). Display paragraphs stay normal.
+      'Според мен Банско е най-доброто мЯсто за ски в БългаРия. Намира се в Пирин планинА и напоследък там ходЯт много скиори – не само българи, но и чужденцИ. Пистите са чуДесни, а в града има страхотни механИ. В Банско е роден един от най-големите поети на БългаРия, Никола ВапцАров.',
       'Чувал съм, че в България има и други добри места за ски.',
-      'Да, едно от тях е Боровец. Той е най-старият зимен курорт в страната. Намира се в планината Рила, близо до София. Предлага отлични условия за каране на ски и планински туризъм. Зимата там е мека и с много сняг. Друг голям ски курорт е Пампорово. Той е в Родопите, на юг от Пловдив. Там също е прекрасно за ски и обикновено е слънчево.',
+      'Да, едно от тях е БОровец. Той е най-старият зимен курорт в страната. Намира се в планината Рила, близо до София. Предлага отлични условия за каране на ски и планински туризъм. Зимата там е мека и с много сняг. Друг голям ски курорт е ПампОровО. Той е в Родопите, на юг от Пловдив. Там също е прекрасно за ски и обикновено е слънчево.',
       'Много искам да дойда с вас, но за съжаление не мога да карам ски.',
       'Няма проблем. Ние почти всеки уикенд ходим на Витоша. Там също има писти, дават и ски под наем. Ела някой уикенд с нас и ще ти дадем първите уроци. Ако ти хареса, ще се запишеш на курс при ски инструктор.',
     ],
@@ -1598,7 +1599,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l07-ex-36',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 36',
-    instruction: 'Прочетете текста „Къде да отида на почивка?" отново. Изберете правилния отговор за всяко твърдение.',
+    instruction: 'Прочетете текста „Къде да отида на почивка?" отново. Изберете правилния отговор за всяко твърдение от падащото меню.',
     order: 49,
     points: 7,
     questions: [

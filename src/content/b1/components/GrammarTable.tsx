@@ -24,11 +24,12 @@ type TableRow = {
   noAudio?: boolean;
 };
 
-function renderBoldText(text: string, highlightClass = 'font-extrabold text-[#2d5a1b]'): React.ReactNode {
+function renderBoldText(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <span key={i} className={highlightClass}>{part.slice(2, -2)}</span>;
+      // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
+      return <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part.slice(2, -2)}</span>;
     }
     return part;
   });

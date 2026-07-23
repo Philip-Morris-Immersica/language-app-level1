@@ -53,7 +53,8 @@ function BoldLine({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         i % 2 === 1
-          ? <span key={i} className="font-extrabold text-[#2d5a1b]">{part}</span>
+          // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
+          ? <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part}</span>
           : <span key={i}>{part}</span>
       )}
     </>
