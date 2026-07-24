@@ -11,7 +11,7 @@ export const content: LessonContent = {
     {
       id: 'b1-l01-dialog-magazin',
       speakers: [
-        { name: 'Мая', text: 'Тази вечер съм на имения ден и се чудя какво да облека.' },
+        { name: 'Мая', text: 'Тази вечер съм на имен ден и се чудя какво да облека.' },
         { name: 'Лора', text: 'Облечи черния панталон и новата светлосива блуза. Много са хубави.' },
         { name: 'Мая', text: 'Добре. Благодаря. Ще взема и тъмносивото сако, защото вечер става студено.' },
       ],
@@ -49,7 +49,7 @@ export const content: LessonContent = {
     { id: 'svyrzvam', bulgarian: 'свързвам, -аш / свържа, -еш', ttsText: 'свързвам, свързваш. свържа, свържеш', ttsModel: 'flash', translations: { en: 'to connect', fr: 'connecter', ar: 'يربط', fa: 'متصل کردن', ru: 'соединять', uk: 'з\'єднувати' } },
     { id: 'skacham', bulgarian: 'скачам, -аш / скоча, -иш', ttsText: 'скачам, скачаш. скоча, скочиш', ttsModel: 'flash', translations: { en: 'to jump', fr: 'sauter', ar: 'يقفز', fa: 'پریدن', ru: 'прыгать', uk: 'стрибати' } },
     { id: 'slon', bulgarian: 'слон, -ове', ttsText: 'слон, слонове', ttsModel: 'flash', translations: { en: 'elephant, -s', fr: 'éléphant, éléphants', ar: 'فيل', fa: 'فیل', ru: 'слон, слоны', uk: 'слон, слони' } },
-    { id: 'stenopis', bulgarian: 'стенопис, -и', ttsText: 'стенопис, стенописи', ttsModel: 'flash', translations: { en: 'fresco, -s', fr: 'fresque, fresques', ar: 'لوحة جدارية', fa: 'نقاشی دیواری', ru: 'фреска, фрески', uk: 'фреска, фрески' } },
+    { id: 'stenopis', bulgarian: 'стенопис, -и', ttsText: 'стенопИс. стенопИси.', ttsModel: 'pro', ttsPrompt: 'Declarative Bulgarian word list. Read once only — never repeat. Capitals mark stress only. First: стенопИс = ste-no-PÍS. Second: стенопИси = ste-no-PÍ-si (stress on И, same syllable as singular). Never final-И stress. Falling tone. Stop after second word.', translations: { en: 'fresco, -s', fr: 'fresque, fresques', ar: 'لوحة جدارية', fa: 'نقاشی دیواری', ru: 'фреска, фрески', uk: 'фреска, фрески' } },
     { id: 'tigyr', bulgarian: 'тигър, тигри', ttsModel: 'flash', translations: { en: 'tiger, -s', fr: 'tigre, tigres', ar: 'نمر', fa: 'ببر', ru: 'тигр, тигры', uk: 'тигр, тигри' } },
     { id: 'ferma', bulgarian: 'ферма, -и', ttsText: 'ферма, ферми', ttsModel: 'flash', translations: { en: 'farm, -s', fr: 'ferme, fermes', ar: 'مزرعة', fa: 'مزرعه', ru: 'ферма, фермы', uk: 'ферма, ферми' } },
     { id: 'yunesko', bulgarian: 'ЮНЕСКО', ttsModel: 'flash', translations: { en: 'UNESCO', fr: 'UNESCO', ar: 'اليونسكو', fa: 'یونسکو', ru: 'ЮНЕСКО', uk: 'ЮНЕСКО' } },
@@ -281,7 +281,7 @@ For quantity: повече от / най-много.`,
         uk: 'Іменини в Болгарії',
       },
       content: {
-        bg: 'В България освен рождения си ден празнуваме и т.нар. „имен ден“ — денят на светеца, на чието име сме кръстени. Имен ден има за повечето християнски имена: Иван, Мария, Георги, Никола, Елена и др. На имения ден гостите идват вкъщи без специална покана и носят малки подаръци или цветя. За домакините е важно да приготвят почерпка — кафе, сладко, баница или нещо приготвено за случая.',
+        bg: 'В България освен рождения си ден празнуваме и т.нар. „имен ден“ — денят на светеца, на чието име сме кръстени. Имен ден има за повечето християнски имена: Иван, Мария, Георги, Никола, Елена и др. На имен ден гостите идват вкъщи без специална покана и носят малки подаръци или цветя. За домакините е важно да приготвят почерпка — кафе, сладко, баница или нещо приготвено за случая.',
         en: 'In Bulgaria, besides their birthday, people also celebrate their name day — the feast day of the saint they are named after. Most Christian names have a name day: Ivan, Maria, Georgi, Nikola, Elena, etc. On a name day guests come to the house without a special invitation and bring small presents or flowers. The hosts are expected to offer a treat — coffee, jam, banitsa or something prepared for the occasion.',
         fr: 'En Bulgarie, en plus de l’anniversaire, on fête aussi la « fête du prénom » — le jour du saint dont on porte le nom. La plupart des prénoms chrétiens ont leur fête : Ivan, Maria, Georgi, Nikola, Elena, etc. Ce jour-là, les invités passent à la maison sans invitation particulière et apportent un petit cadeau ou des fleurs. Les hôtes préparent toujours quelque chose : café, confiture, banitsa ou un plat fait spécialement pour l’occasion.',
         ar: 'في بلغاريا، إلى جانب عيد الميلاد، يحتفل الناس بـ «عيد الاسم» — يوم القدّيس الذي يحملون اسمه. لمعظم الأسماء المسيحية أعياد أسماء: إيفان، ماريا، غيورغي، نيكولا، إيلينا… في هذا اليوم يأتي الضيوف إلى البيت من دون دعوة خاصة، ويحضرون هدية صغيرة أو زهوراً. ومن المتوقع أن يقدّم أصحاب البيت قهوة ومربى وفطائر («بانيتسا») أو طبقاً معدّاً للمناسبة.',

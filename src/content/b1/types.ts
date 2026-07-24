@@ -104,6 +104,8 @@ export interface B1GrammarTableExercise extends BaseExercise {
   title: string;
   tableTitle?: string;
   columns?: string[];
+  /** Text for the pronoun-column header cell (e.g. „един" / „една" / „едно"). */
+  pronounHeader?: string;
   rows?: {
     pronoun: string;
     cells: string[];
@@ -122,6 +124,7 @@ export interface B1GrammarTableExercise extends BaseExercise {
   panels?: {
     tableTitle?: string;
     columns?: string[];
+    pronounHeader?: string;
     rows: {
       pronoun: string;
       cells: string[];
@@ -203,13 +206,23 @@ export interface B1SortToColumnsExercise extends BaseExercise {
   }[];
 }
 
+/**
+ * b1-info-highlight — empty body; only the green `grammarHighlight` box from
+ * ExerciseRenderer is shown. Used for textbook „Внимание!" callouts that sit
+ * between exercises without their own interactive content.
+ */
+export interface B1InfoHighlightExercise extends BaseExercise {
+  type: 'b1-info-highlight';
+}
+
 // Union of all B1-specific exercise interfaces.
 export type B1Exercise =
   | B1IllustratedCardsGroupedExercise
   | B1MatchPairsDragDropExercise
   | B1GrammarTableExercise
   | B1GrammarExamplesExercise
-  | B1SortToColumnsExercise;
+  | B1SortToColumnsExercise
+  | B1InfoHighlightExercise;
 
 // Re-export BaseExercise so B1 component files can import everything from one place.
 export type { BaseExercise };

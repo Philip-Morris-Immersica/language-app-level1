@@ -63,6 +63,7 @@ function speakableRowText(row: TableRow): string {
 function SingleTable({
   tableTitle,
   columns,
+  pronounHeader,
   rows,
   boldColumns,
   widePronouns,
@@ -73,6 +74,7 @@ function SingleTable({
 }: {
   tableTitle?: string;
   columns: string[];
+  pronounHeader?: string;
   rows: TableRow[];
   boldColumns: number[];
   widePronouns: boolean;
@@ -117,7 +119,14 @@ function SingleTable({
             {columns.length > 0 && (
               <tr className="bg-[#7ab356] text-white">
                 {showPronounCol && (
-                  <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
+                  pronounHeader ? (
+                    <ClickTranslateTh
+                      text={pronounHeader}
+                      className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
+                    />
+                  ) : (
+                    <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
+                  )
                 )}
                 {columns.map((col, i) => (
                   <ClickTranslateTh
@@ -327,9 +336,11 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   const {
     tableTitle,
     columns = [],
+    pronounHeader,
     rows = [],
     panels,
     notes = [],
+    ttsNotes,
     boldColumns = [],
     widePronouns = false,
     alignLeft = false,
@@ -342,12 +353,12 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
       : '';
-    playTtsAudio(audioPath, note);
+    playTtsAudio(audioPath, ttsNotes?.[idx] ?? note);
   };
 
   const resolvedPanels = panels?.length
     ? panels
-    : [{ tableTitle, columns, rows, fullWidth: true as boolean | undefined }];
+    : [{ tableTitle, columns, pronounHeader, rows, fullWidth: true as boolean | undefined }];
 
   // Keep side-by-side panels first, then full-width — same order as flattened
   // `rows` used by generate-tts.ts (global row-0, row-1, …).
@@ -447,6 +458,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                 key={i}
                 tableTitle={panel.tableTitle}
                 columns={panel.columns ?? []}
+                pronounHeader={panel.pronounHeader}
                 rows={panel.rows}
                 boldColumns={boldColumns}
                 widePronouns={widePronouns}
@@ -468,6 +480,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
             key={`fw-${i}`}
             tableTitle={panel.tableTitle}
             columns={panel.columns ?? []}
+            pronounHeader={panel.pronounHeader}
             rows={panel.rows}
             boldColumns={boldColumns}
             widePronouns={widePronouns}

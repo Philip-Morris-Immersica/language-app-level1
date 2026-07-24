@@ -81,7 +81,7 @@ export const B1_TEST_FOLDER_MAP: Record<string, string> = {};
 export const B1_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
 
 export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
-  'b1-lesson-01': 20,
+  'b1-lesson-01': 19,
   'b1-lesson-02': 14,
   'b1-lesson-03': 18,
   'b1-lesson-04': 10,

@@ -1,6 +1,8 @@
 'use client';
 
 import { TableFill as SharedTableFill } from '@/components/exercises/TableFill';
+import { GrammarHighlight } from '@/components/exercises/GrammarHighlight';
+import type { GrammarHighlight as GrammarHighlightData } from '@/content/types';
 
 interface Props {
   exercise: {
@@ -15,6 +17,8 @@ interface Props {
       }[];
     }[];
     paragraphs?: { speaker?: string; text: string }[];
+    /** Optional second green info box, rendered after ExerciseRenderer's grammarHighlight and before the tables. */
+    preTableHighlight?: GrammarHighlightData;
   };
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
@@ -22,21 +26,29 @@ interface Props {
 
 /**
  * B1 TableFill — hides the column-header row when all `columns` entries are empty.
- * Keeps shared TableFill behavior otherwise (no edits to shared/).
+ * Also supports `preTableHighlight` for a second info box right under the main
+ * grammarHighlight (e.g. пазар/хотел after the -ЯТ note).
  */
 export function TableFill({ exercise, onComplete, exerciseId }: Props) {
   const tables = exercise.tables ?? [];
   const hideColHeaders = tables.every((t) =>
     (t.columns ?? []).every((c) => !(c ?? '').trim()),
   );
+  const id = exerciseId ?? exercise.id;
+  const pre = exercise.preTableHighlight;
 
   return (
     <div className={hideColHeaders ? '[&_thead]:hidden' : undefined}>
+      {pre && (
+        <div className="mb-5">
+          <GrammarHighlight highlight={pre} exerciseId={id} />
+        </div>
+      )}
       <SharedTableFill
         tables={tables}
         paragraphs={exercise.paragraphs}
         onComplete={onComplete}
-        exerciseId={exerciseId ?? exercise.id}
+        exerciseId={id}
       />
     </div>
   );
