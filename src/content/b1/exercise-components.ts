@@ -30,6 +30,7 @@ import { GrammarTable } from './components/GrammarTable';
 import { GrammarExamples } from './components/GrammarExamples';
 import { SortToColumns } from './components/SortToColumns';
 import { TableFill } from './components/TableFill';
+import { ReadingText } from './components/ReadingText';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -55,4 +56,6 @@ export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'b1-sort-to-columns': SortToColumns as unknown as CustomExerciseRenderer,
   // Override shared table_fill: hide empty column-header rows (B1-only).
   table_fill: TableFill as unknown as CustomExerciseRenderer,
+  // Override shared reading_text: numbered task lists → green tables (B1-only).
+  reading_text: ReadingText as unknown as CustomExerciseRenderer,
 };
