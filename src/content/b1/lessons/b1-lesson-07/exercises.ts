@@ -29,7 +29,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-01',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 1',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 1,
     examples: [
@@ -144,7 +144,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-04',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 4',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 5,
     examples: [
@@ -311,7 +311,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-09',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 9',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 11,
     examples: [
@@ -387,7 +387,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-11',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 11',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 14,
     examples: [
@@ -473,7 +473,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-13',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 13',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 16,
     examples: [
@@ -581,7 +581,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-16',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 16',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 20,
     examples: [
@@ -689,7 +689,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-19',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 19',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 23,
     examples: [
@@ -834,7 +834,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-22',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 22',
+    title: 'ДИАЛОГ',
     instruction: 'Разгледайте картинката и прочетете диалога. Местоименията са в зелено.',
     order: 27,
     examples: [
@@ -943,7 +943,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-24',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 24',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Местоименията са в зелено.',
     order: 30,
     examples: [
@@ -1090,7 +1090,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-27',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 27',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Обобщителните местоимения са в зелено.',
     order: 34,
     examples: [
@@ -1194,7 +1194,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-29',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 29',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Обърнете внимание на съюзите.',
     order: 37,
     examples: [
@@ -1315,7 +1315,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-31',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 31',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Обърнете внимание на разликата между **ако** и **дали**.',
     order: 41,
     examples: [
@@ -1403,7 +1403,7 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-ex-33',
     type: 'b1-grammar-examples',
-    title: 'УПРАЖНЕНИЕ 33',
+    title: 'ДИАЛОЗИ',
     instruction: 'Разгледайте картинката и прочетете диалозите. Съюзите са в зелено.',
     order: 44,
     examples: [
@@ -1555,7 +1555,8 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l07-tekst-pochivka',
     type: 'reading_text',
-    title: 'КЪДЕ ДА ОТИДА НА ПОЧИВКА?',
+    title: 'ТЕКСТ',
+    textTitle: 'Къде да отида на почивка?',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 48,
     images: [
