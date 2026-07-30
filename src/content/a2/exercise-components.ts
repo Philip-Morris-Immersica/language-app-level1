@@ -43,6 +43,7 @@ export type CustomExerciseRenderer = ComponentType<CustomExerciseRendererProps>;
  *   };
  */
 import { GroupedDropdownMatch } from './components/GroupedDropdownMatch';
+import { PictureDropdownMatch } from './components/PictureDropdownMatch';
 import { ImageLabelingWide } from './components/ImageLabelingWide';
 import { WideCards } from './components/WideCards';
 import { FreeFill } from './components/FreeFill';
@@ -51,9 +52,14 @@ import { A2Dialogues } from './components/A2Dialogues';
 import { A2GrammarExamples } from './components/A2GrammarExamples';
 import { A2GrammarTable } from './components/A2GrammarTable';
 import { A2MatchPairs } from './components/A2MatchPairs';
+import { A2DragToColumns } from './components/A2DragToColumns';
+import { A2DialogueBuilder } from './components/A2DialogueBuilder';
+import { A2WordOrder } from './components/A2WordOrder';
 
 export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'a2-grouped-dropdown-match': GroupedDropdownMatch as unknown as CustomExerciseRenderer,
+  // Picture + dropdown, single column, larger images (дневен режим).
+  'a2-picture-dropdown': PictureDropdownMatch as unknown as CustomExerciseRenderer,
   'a2-image-labeling': ImageLabelingWide as unknown as CustomExerciseRenderer,
   'a2-wide-cards': WideCards as unknown as CustomExerciseRenderer,
   'a2-free-fill': FreeFill as unknown as CustomExerciseRenderer,
@@ -68,4 +74,16 @@ export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   // A2 variant of grammar_table: uses ttsNotes as browser-TTS fallback (instead
   // of the raw display notes which may contain markdown symbols like ⚠️, ~~, →).
   'grammar_table': A2GrammarTable as unknown as CustomExerciseRenderer,
+  // A2-only opt-in variant of drag_to_columns: neutral (grey) hover color
+  // instead of red when tapping a placed item to remove it, since red reads
+  // as "wrong answer" before the student even checks. Opt-in per exercise
+  // (type: 'a2-drag-to-columns') so other A2/A1 lessons using the shared
+  // 'drag_to_columns' type are unaffected.
+  'a2-drag-to-columns': A2DragToColumns as unknown as CustomExerciseRenderer,
+  // A2 variant of dialogue_builder: per-section `lockFirst: false` unlocks the
+  // first line so ALL sentences shuffle (needed for short 3-phrase dialogues).
+  'a2-dialogue-builder': A2DialogueBuilder as unknown as CustomExerciseRenderer,
+  // A2 variant of word_order: robust init/check so stale persisted state can't
+  // make „Провери" silently no-op (the shared component's known failure mode).
+  'a2-word-order': A2WordOrder as unknown as CustomExerciseRenderer,
 };
