@@ -1,5 +1,5 @@
 /**
- * Completion celebrations (Duolingo-style) — PILOT.
+ * Completion celebrations (Duolingo-style).
  *
  * Pure, server-usable logic that turns a lesson's content into a "celebration
  * plan": which exercise closes each section, and what the learner should do
@@ -7,14 +7,30 @@
  * state and fires a small toast per section + a final modal at the end of the
  * "Преговор" (workbook) section.
  *
- * PILOT gate: only lessons listed in `CELEBRATION_ENABLED_LESSONS` produce a
- * plan; every other lesson gets `null` (no-op). Data-driven, but scoped.
+ * Gate: only lessons listed in `CELEBRATION_ENABLED_LESSONS` produce a plan;
+ * every other lesson gets `null` (no-op). Data-driven, but scoped.
  */
 import type { ExerciseType, LessonData } from '@/content/types';
 import { getLessonLevel, getNavItemsForLevel } from '@/content';
 
-/** Lessons where completion celebrations are active. PILOT = lesson-01 only. */
-export const CELEBRATION_ENABLED_LESSONS = new Set<string>(['lesson-01']);
+/**
+ * Lessons where completion celebrations are active. All A1 lessons after the
+ * lesson-01 pilot. `lesson-00` (Азбука) is excluded: it has no `sectionStart`
+ * markers and no workbook, so it can never produce a celebration.
+ */
+export const CELEBRATION_ENABLED_LESSONS = new Set<string>([
+  'lesson-01',
+  'lesson-02',
+  'lesson-03',
+  'lesson-04',
+  'lesson-05',
+  'lesson-06',
+  'lesson-07',
+  'lesson-08',
+  'lesson-09',
+  'lesson-10',
+  'lesson-11',
+]);
 
 /**
  * Exercise types that are informational / reference — they have no "Провери"
