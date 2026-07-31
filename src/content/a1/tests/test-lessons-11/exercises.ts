@@ -298,7 +298,7 @@ export const grammarExercises: Exercise[] = [
     id: 't06-gr-3',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 3',
-    instruction: 'Попълнете с ВСЕКИ / ВСЯКА / ВСЯКО / ВСИЧКИ.',
+    instruction: 'Попълнете с **всеки** / **всяка** / **всяко** / **всички**.',
     order: 7,
     points: 10,
     layout: 'two-column',

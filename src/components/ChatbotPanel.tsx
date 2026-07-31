@@ -8,6 +8,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { ChatbotVoiceInput, type VoiceStatus } from './ChatbotVoiceInput';
+import { getCurrentExercise } from '@/lib/chat/currentExercise';
 
 interface Message {
   role: 'user' | 'assistant' | 'info';
@@ -198,6 +199,12 @@ export function ChatbotPanel({ onNewConversation }: Props) {
     setMessages((prev) => [...prev, { role: 'assistant', content: '', id: assistantId }]);
 
     try {
+      // Which exercise is scrolled into view — so the bot can resolve
+      // "this exercise" and match the user's on-screen position.
+      const currentExercise = (ctxKind === 'lesson' || ctxKind === 'test')
+        ? getCurrentExercise()
+        : null;
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -209,6 +216,7 @@ export function ChatbotPanel({ onNewConversation }: Props) {
           lessonContext: ctxKind === 'lesson' ? ctxId : null,
           testContext: ctxKind === 'test' ? ctxId : null,
           currentPage,
+          currentExercise,
           conversationId,
         }),
       });

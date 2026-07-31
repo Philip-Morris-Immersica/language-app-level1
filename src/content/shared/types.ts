@@ -28,6 +28,7 @@ export type ExerciseType =
   | 'personal_choice'      // Interactive personal preference (no right/wrong)
   | 'connect_dots'         // Connect dots in order (snake-style alphabet sequence)
   | 'alphabet_maze'        // Interactive letter grid — tap letters in alphabetical order
+  | 'audio_choice'         // Listen to a sound/word, choose the correct letter (multiple choice with audio)
   | 'table_fill';          // Dialogue paragraphs + fillable table cells (dropdowns)
 
 // Grammar highlight info box — shown above exercise body as a green info panel (or below when grammarHighlightAfterBody)
@@ -77,6 +78,19 @@ export interface BaseExercise {
   hideHeader?: boolean;
   /** When true, renders the exercise subtitle with larger, bolder styling for visual prominence. */
   prominentSubtitle?: boolean;
+  /** When set, renders a prominent section divider BEFORE this exercise. */
+  sectionStart?: {
+    title: string;        // plain Bulgarian, NO markdown — shown as the bold anchor line
+    subtitle?: string;    // optional short Bulgarian description, NO markdown
+    /** Hand-written translations of `title`, keyed by lang code (en, fr, ar, fa, uk, ru).
+     *  Shown as a secondary line under the Bulgarian anchor. When a language is missing,
+     *  the display falls back to automatic (Google) translation of `title`. */
+    titleI18n?: Record<string, string>;
+    /** Hand-written translations of `subtitle`, keyed by lang code. Falls back to
+     *  automatic translation of `subtitle` when a language is missing. */
+    subtitleI18n?: Record<string, string>;
+    theme?: 'vocabulary' | 'grammar' | 'dialogue' | 'reading' | 'review';
+  };
 }
 
 // Specific exercise interfaces
@@ -335,6 +349,8 @@ export interface GrammarTableExercise extends BaseExercise {
   boldColumns?: number[];
   /** When true, makes the pronoun column equal width to the data columns. */
   widePronouns?: boolean;
+  /** Header label for the pronoun column (light-green header row). Defaults to blank. */
+  pronounColumnLabel?: string;
   illustrations?: {
     imageUrl: string;
     singularLabel: string;
@@ -403,6 +419,8 @@ export interface DropdownMatchExercise extends BaseExercise {
   type: 'dropdown_match';
   /** Опционална референтна снимка (напр. карта от учебника). */
   imageUrl?: string;
+  /** Когато е true, снимката се показва без zoom/lightbox — за референтни таблици, при които уголемяването няма смисъл. */
+  noZoom?: boolean;
   /** Опционален текст за слушане — рендира зелен бутон „Слушай" над въпросите. */
   listeningText?: string;
   /** Масив от снимки с подписи, показвани над въпросите. */
@@ -449,6 +467,8 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
   columnLabels?: { left?: string; right?: string };
   /** Опционална снимка (напр. карта за упр. 19). */
   imageUrl?: string;
+  /** When true, the image is shown without zoom/lightbox. Useful for simple reference photos. */
+  noZoom?: boolean;
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
   images?: { imageUrl: string; label?: string }[];
   /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */
@@ -573,6 +593,21 @@ export interface AlphabetMazeExercise extends BaseExercise {
   endImageUrl?: string;
 }
 
+// Audio choice — plays a sound (letter or word), user picks the matching letter.
+// Two authoring variants driven by `word`:
+//  - no `word` → pure sound recognition ("hear the letter, pick it").
+//  - `word` set → word shown on screen, user picks its FIRST letter.
+export interface AudioChoiceExercise extends BaseExercise {
+  type: 'audio_choice';
+  questions: {
+    id: string;          // MP3 stem — used as `words/{id}.mp3` (ASCII-safe, e.g. 'l00-ex-08-m')
+    word?: string;       // Displayed word (variant 2); omitted for pure-sound variant 1
+    ttsText: string;     // Text passed to TTS/generation (letter name or the word itself)
+    options: string[];   // Letter choices (Bulgarian), shuffled by the author
+    correctIndex: number;
+  }[];
+}
+
 export interface TableFillExercise extends BaseExercise {
   type: 'table_fill';
   paragraphs: {
@@ -625,6 +660,7 @@ export type Exercise =
   | PersonalChoiceExercise
   | ConnectDotsExercise
   | AlphabetMazeExercise
+  | AudioChoiceExercise
   | TableFillExercise;
 
 // Dialogue structure

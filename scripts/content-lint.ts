@@ -700,6 +700,61 @@ defineRule({
 // ─── R16: dialogue-consistency (content.ts vs exercises.ts) ───────────────────
 // NOTE: Skipped in v1 — would need content.ts loaded too. Add later if needed.
 
+// ─── R17: no-free-writing ────────────────────────────────────────────────────
+// Learners don't have a Bulgarian keyboard — every answer must be selectable
+// (dropdown / click / drag), never typed freely. Flags:
+//   - fill_in_blank with freeText:true or a freeTextBlocks array
+//   - workbook_fill_blank sentences with blanks but no options (not isExample)
+defineRule({
+  id: 'no-free-writing',
+  description: 'Exercises must not require free-form typing — use dropdowns/options instead.',
+  run: (ctx) => {
+    const out: Finding[] = [];
+    for (const ex of allExercises(ctx)) {
+      if (ex?.type === 'fill_in_blank') {
+        if (ex?.freeText === true) {
+          const f = finding(
+            ctx,
+            'no-free-writing',
+            'error',
+            `fill_in_blank has freeText:true — learners have no Bulgarian keyboard; convert to a selectable exercise type.`,
+            ex.id,
+          );
+          if (f) out.push(f);
+        }
+        if (Array.isArray(ex?.freeTextBlocks) && ex.freeTextBlocks.length > 0) {
+          const f = finding(
+            ctx,
+            'no-free-writing',
+            'error',
+            `fill_in_blank has freeTextBlocks — free-form textarea writing is not allowed; convert to a selectable exercise type.`,
+            ex.id,
+          );
+          if (f) out.push(f);
+        }
+      }
+      if (ex?.type === 'workbook_fill_blank') {
+        for (const s of ex.sentences ?? []) {
+          if (s?.isExample) continue;
+          const hasBlanks = Array.isArray(s?.blanks) && s.blanks.length > 0;
+          const hasOptions = Array.isArray(s?.options) && s.options.length > 0;
+          if (hasBlanks && !hasOptions) {
+            const f = finding(
+              ctx,
+              'no-free-writing',
+              'error',
+              `workbook_fill_blank sentence "${s.text}" has blanks but no options — add an options array so it renders as a dropdown.`,
+              ex.id,
+            );
+            if (f) out.push(f);
+          }
+        }
+      }
+    }
+    return out;
+  },
+});
+
 // ═════════════════════════════════════════════════════════════════════════════
 // MAIN
 // ═════════════════════════════════════════════════════════════════════════════

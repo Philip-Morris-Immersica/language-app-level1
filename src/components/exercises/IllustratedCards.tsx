@@ -9,6 +9,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { AudioIcon } from '@/components/AudioIcon';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -29,6 +30,7 @@ function getIllustratedCardSpokenText(card: CardItem): string {
 export function IllustratedCards({ exercise, onComplete, exerciseId }: IllustratedCardsProps) {
   const [revealedCards, setRevealedCards] = useState<Set<string>>(new Set());
   const [visitedCards, setVisitedCards] = useState<Set<string>>(new Set());
+  const [captionRevealed, setCaptionRevealed] = useState(false);
   const t = useT();
   const { lang } = useLanguage();
 
@@ -94,8 +96,8 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         }`}
       >
         {!exercise.disableAudio && (
-          <div className="absolute top-1 right-1 text-gray-400">
-            <Volume2 className="w-3 h-3" />
+          <div className="absolute top-1 right-1">
+            <AudioIcon className="w-3 h-3" />
           </div>
         )}
         <div className="relative w-full h-[50px] sm:h-[64px] mb-1">
@@ -271,6 +273,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                   ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
                   : '';
                 playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                setCaptionRevealed((v) => !v);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -278,6 +281,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                     ? getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-caption`)
                     : '';
                   playTtsAudio(audioPath, exercise.ttsCaptionText ?? exercise.headerCaption!);
+                  setCaptionRevealed((v) => !v);
                 }
               }}
               className="mt-4 relative bg-[#DAF6EB] rounded-xl px-5 py-4 cursor-pointer hover:brightness-95 active:scale-[0.99] transition-all select-none"
@@ -288,6 +292,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
               <p className="text-base md:text-lg text-[#1F5741] font-medium leading-relaxed pr-8">
                 {exercise.headerCaption}
               </p>
+              <InlineTranslation text={exercise.headerCaption} visible={captionRevealed} />
             </div>
           )}
         </div>
@@ -314,7 +319,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                   : 'bg-white border-gray-200 hover:border-[#32C189]/40'
               }`}
             >
-              <Volume2 className="absolute top-2 right-2 w-3.5 h-3.5 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-3.5 h-3.5" />
               <p className="text-base md:text-lg font-semibold text-[#262626] text-center leading-tight">
                 {card.label}
               </p>
@@ -345,8 +350,8 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
               }`}
             >
               {/* Speaker icon */}
-              <div className="absolute top-2 right-2 text-gray-400">
-                <Volume2 className="w-4 h-4" />
+              <div className="absolute top-2 right-2">
+                <AudioIcon className="w-4 h-4" />
               </div>
 
               {/* Image */}

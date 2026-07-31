@@ -7,6 +7,7 @@ import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { renderBoldText } from '@/lib/renderBoldText';
 
 interface WorkbookSentence {
   text: string;
@@ -26,16 +27,6 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   return options as string[];
 }
 
-function renderBoldText(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
-
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
@@ -46,6 +37,8 @@ export interface WorkbookFillBlankProps {
   /** Optional captions rendered above the two columns when layout='two-column'. */
   columnLabels?: { left?: string; right?: string };
   imageUrl?: string;
+  /** When true, the image is shown without zoom/lightbox. Useful for simple reference photos. */
+  noZoom?: boolean;
   /** Multiple images shown side-by-side at top (e.g. two houses to compare). */
   images?: { imageUrl: string; label?: string }[];
   /** Header images shown centered above sentences (e.g. two character portraits for image-bubbles layout). */
@@ -71,6 +64,7 @@ export function WorkbookFillBlank({
   hideSentenceNumbers = false,
   columnLabels,
   imageUrl,
+  noZoom,
   images,
   headerImages,
   listeningText,
@@ -605,13 +599,21 @@ export function WorkbookFillBlank({
           {imageUrl && (
             <div className="mb-6 flex justify-center">
               <div className="w-full max-w-lg md:max-w-2xl">
-                <ImageLightbox src={imageUrl} alt="">
+                {noZoom ? (
                   <img
                     src={imageUrl}
                     alt=""
                     className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
                   />
-                </ImageLightbox>
+                ) : (
+                  <ImageLightbox src={imageUrl} alt="">
+                    <img
+                      src={imageUrl}
+                      alt=""
+                      className="w-full h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                    />
+                  </ImageLightbox>
+                )}
               </div>
             </div>
           )}

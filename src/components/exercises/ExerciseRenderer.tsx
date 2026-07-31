@@ -3,6 +3,7 @@
 import type { Exercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
+import { renderBoldText } from '@/lib/renderBoldText';
 import { FillInBlank } from './FillInBlank';
 import { MultipleChoice } from './MultipleChoice';
 import { MatchPairs } from './MatchPairs';
@@ -28,19 +29,23 @@ import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
+import { AudioChoice } from './AudioChoice';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
+import { B1_CUSTOM_RENDERERS } from '@/content/b1/exercise-components';
 
 /**
  * Custom exercise renderers contributed by per-level domains.
- * Looked up BEFORE the built-in switch so levels can add new types (or A2-specific
- * variants of existing types) without editing this file. See
- * `src/content/a2/exercise-components.ts` for the A2 entries.
+ * Looked up BEFORE the built-in switch so levels can add new types (or
+ * level-specific variants of existing types) without editing this file. See
+ * `src/content/a2/exercise-components.ts` and `src/content/b1/exercise-components.ts`
+ * for the per-level entries.
  */
 const CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   ...A2_CUSTOM_RENDERERS,
-  // Future levels (B1, B2) can spread their maps here.
+  ...B1_CUSTOM_RENDERERS,
+  // Future levels (B2) can spread their maps here.
 };
 
 interface ExerciseRendererProps {
@@ -50,7 +55,9 @@ interface ExerciseRendererProps {
 }
 
 interface ExerciseHeaderProps {
-  title: string;
+  /** Bulgarian section label without the leading number (e.g. "ГРАМАТИКА"), or null for the generic "УПРАЖНЕНИЕ" prefix. */
+  titleBase: string | null;
+  number: number | null;
   instruction: string;
   instructionKey?: string;
   subtitle?: string;
@@ -58,33 +65,31 @@ interface ExerciseHeaderProps {
 }
 
 /** Converts **bold** markers in instruction strings to <strong> elements. */
-function renderInstructionText(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
+const renderInstructionText = renderBoldText;
 
-function ExerciseHeader({ title, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
+function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
-  const translatedTitle = useTranslate(title);
+  // Custom Bulgarian labels (e.g. "ГРАМАТИКА", "НОВИ ДУМИ") go through translation.
+  // The generic "УПРАЖНЕНИЕ" prefix is already localized via t() — translating it
+  // again (as Bulgarian source text) is what caused titles like "19. EXERCISE" to
+  // break or vanish for some numbers, since the API was fed already-English text.
+  const translatedBase = useTranslate(titleBase ?? '');
+  const baseDisplay = titleBase ? translatedBase : t('exercise.prefix');
+  const displayTitle = number != null ? `${number}. ${baseDisplay}` : baseDisplay;
   const translatedInstruction = useTranslate(instruction);
   const translatedSubtitle = useTranslate(subtitle ?? '');
   const displayInstruction = instructionKey ? t(instructionKey) : translatedInstruction;
   return (
     <div className="mb-5 pb-4 border-b border-gray-100">
       <h3 className="text-[#0072BC] font-bold text-xl md:text-2xl leading-tight">
-        {translatedTitle}
+        {displayTitle}
       </h3>
       {subtitle && (
         <p className={prominentSubtitle
           ? 'text-gray-500 text-sm md:text-base mt-1.5 leading-snug'
           : 'text-gray-400 text-xs mt-1'
         }>
-          {translatedSubtitle}
+          {renderInstructionText(translatedSubtitle)}
         </p>
       )}
       {instruction && (
@@ -101,10 +106,10 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
   const t = useT();
   const translatedInstruction = useTranslate(exercise.instruction);
 
-  // Base title: use custom title or generic "УПРАЖНЕНИЕ", strip any trailing sub-number
-  const baseTitle = (exercise.title ?? t('exercise.prefix')).replace(/\s+\d+$/, '');
-  // Sequential prefix: "1. НОВИ ДУМИ", "8. ГРАМАТИКА", "3. УПРАЖНЕНИЕ"
-  const resolvedTitle = number != null ? `${number}. ${baseTitle}` : baseTitle;
+  // Custom Bulgarian label (НОВИ ДУМИ / ГРАМАТИКА / ДИАЛОЗИ / ПРЕГОВОР...) without its
+  // trailing sub-number, or null to fall back to the generic "УПРАЖНЕНИЕ" prefix.
+  // Translation + the "N. " prefix are both resolved inside ExerciseHeader.
+  const titleBase = exercise.title ? exercise.title.replace(/\s+\d+$/, '') : null;
 
   /** Some child components only call onComplete(isCorrect); normalize to (correct, score). */
   function wrapOneArgOnComplete(scoreIfCorrect: number) {
@@ -122,9 +127,14 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const hideHeader = 'hideHeader' in exercise && exercise.hideHeader === true;
     // title === '' means "continuation section" — hide header + number entirely
     const showHeader = exercise.title !== '' && !hideHeader;
+    // Non-visual hooks: let the chatbot know which exercise is on screen. Only
+    // on numbered (header-showing) exercises so it matches the bot's numbering.
+    const trackingProps = showHeader && number != null
+      ? { 'data-exercise-id': exercise.id, 'data-exercise-number': number }
+      : {};
     return (
-      <div>
-        {showHeader && <ExerciseHeader title={resolvedTitle} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
+      <div {...trackingProps}>
+        {showHeader && <ExerciseHeader titleBase={titleBase} number={number ?? null} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
         {hideHeader && exercise.instruction && (
           <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
             {renderInstructionText(
@@ -181,6 +191,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           hideSentenceNumbers={exercise.hideSentenceNumbers}
           columnLabels={exercise.columnLabels}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}
@@ -200,6 +211,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <DropdownMatch
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
@@ -305,6 +317,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
           boldColumns={exercise.boldColumns}
           widePronouns={exercise.widePronouns}
+          pronounColumnLabel={exercise.pronounColumnLabel}
         />
       );
 
@@ -417,6 +430,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
         />
       );
+
+    case 'audio_choice':
+      return wrap(<AudioChoice exercise={exercise} onComplete={onComplete} />);
 
     case 'verb_conjugation':
     case 'number_writing':

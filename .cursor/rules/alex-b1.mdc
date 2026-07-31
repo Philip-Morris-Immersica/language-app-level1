@@ -1,92 +1,157 @@
 ---
-description: Правила за Алекс — работа само в B1 ниво (src/content/b1/** и public/assets/b1-lesson-*/**)
-globs: src/content/b1/**, public/assets/b1-lesson-*/**
+description: B1 author guide за Алекс — автономия в B1 домейна, насочваща (не блокираща) консултация при споделени промени
+globs: src/content/b1/**, public/assets/b1-lesson-*/**, src/i18n/b1.ts
 alwaysApply: false
 ---
 
-# B1 Lesson Author Guide — Алекс
+# B1 Author Guide — Алекс
 
-Аз съм **Алекс**. Работя на branch **`alex`**. Моят домейн е **B1** ниво.
+Аз съм **Алекс**. Работя на branch **`alex`**. Моят домейн е **B1 ниво**.
 
-## Твоят домейн (САМО тук имаш право да пишеш)
+## Принцип: автономия-първо
 
-- `src/content/b1/lessons/b1-lesson-XX/` — папките на твоите уроци
-- `src/content/b1/tests/` — папки на тестове (B1 тестове засега не са дефинирани — питай Philip)
-- `public/assets/b1-lesson-XX/` — изображения, аудио
+Цял работещ урок се прави **изцяло в моя домейн**, без да чакам Philip за нищо.
+Агентът ме **води и аргументира** (калъп, консистентност с A1/A2, TTS политика),
+но **не ме блокира** — ако настоявам, прави го в моите файлове, не в чуждите.
 
-Всичко друго — четеш само, не променяш. Виж [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc) за пълния списък.
+## Моят домейн (СВОБОДНО — без питане)
 
-## Преди да започнеш нов урок
+| Папка / файл | За какво |
+|---|---|
+| `src/content/b1/lessons/b1-lesson-XX/**` | Урочни файлове (metadata, content, exercises, workbook, index) |
+| `src/content/b1/tests/test-b1-*/**` | Тестове (B1 тестове засега не са дефинирани — виж бележката долу) |
+| `src/content/b1/types.ts` | B1-специфични `Exercise` interface-и (разширяват `BaseExercise`) |
+| `src/content/b1/components/**` | B1-специфични React компоненти (нови типове и варианти на съществуващи) |
+| `src/content/b1/exercise-components.ts` | Регистрация `type -> Component` за B1 |
+| `src/i18n/b1.ts` | B1 `instructionKey` преводи (на 7 езика) |
+| `public/assets/b1-lesson-XX/**` | Изображения и аудио |
+| `src/content/b1/index.ts` — **само** `B1_LESSON_LOADERS` (uncomment) и `B1_LESSON_EXERCISE_COUNTS` | Регистрация на нови уроци |
 
-1. Виж [src/content/b1/index.ts](mdc:src/content/b1/index.ts) — там вече има metadata за всичките 11 урока (1–11). **Имената на уроците са фиксирани** там — не ги променяй.
+Тези файлове са моя самодостатъчен домейн. Всичко, което урокът ми изисква, се
+прави тук — `ExerciseRenderer` чете B1 компонентите автоматично, `ui.ts` чете
+`b1.ts` преводите автоматично, `generate-tts.ts` чете content TTS override-ите
+(`ttsModel`, `ttsPrompt`, `ttsText`) с приоритет пред hardcode A1 Set-овете.
 
-   B1 уроците по UNHCR syllabus:
-   - 01 — Животът в града и на село
-   - 02 — Моят любим актьор
-   - 03 — Ежедневието ни
-   - 04 — Преди години
-   - 05 — Къде си бил?
-   - 06 — Ние се обичаме
-   - 07 — Трябва ми почивка
-   - 08 — Щях да пътувам
-   - 09 — Всичко ще бъде наред
-   - 10 — Ти какво каза?
-   - 11 — Познавам и обичам България
+## Поведение на агента — насочваща консултация (НЕ блокираща)
 
-2. Прочети задължителните правила:
-   - [content-lessons.mdc](mdc:.cursor/rules/content-lessons.mdc) — пълен guide за структурата
-   - [content-quality-checklist.mdc](mdc:.cursor/rules/content-quality-checklist.mdc) — задължителни проверки за качество
-   - [content-tests.mdc](mdc:.cursor/rules/content-tests.mdc) — за тестове
-   - [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc) — преди генериране на аудио
+### 1. Преди да започне нов урок — сканира какво вече имаме
 
-3. **КОПИРАЙ структурата на готов A1 урок** (например [src/content/a1/lessons/lesson-03/](mdc:src/content/a1/lessons/lesson-03/)) или A2 урок (когато Нина-овите се мърджнат: `src/content/a2/lessons/a2-lesson-01/`) — не пиши от нулата.
+- Чете [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — пълен списък шаблони
+- Чете 1–2 готови A1 урока + съществуващите B1 уроци — за стил, конвенции, ID формати
+- Знае наличните типове упражнения и стандартните инструкции (виж `content-quality-checklist.mdc` §A3)
+
+### 2. Калъп преди всичко — копирай и попълни
+
+Когато създавам нов урок:
+- **Структурата идва от готов A1 урок** (5-те файла, ID конвенциите, `order` секвенцията) — копирай и попълни.
+- **Дизайнът и инструкциите следват A1 конвенциите** — еднакъв UX за ученика, по-лесна поддръжка.
+- За всяко упражнение — копирай шаблона от `EXERCISE_TEMPLATES.ts`, не пиши от нулата.
+
+### 3. Когато искам нещо да изглежда различно — обяснява и предлага
+
+Не ми отказва. Прави следното:
+1. **Обяснява как е направено в A1** (визия, поведение, защо така).
+2. **Аргументира защо консистентността помага** (еднакъв UX, поддръжка, чист мърдж).
+3. **Препоръчва същия начин** като в A1.
+4. **Ако настоявам** — прави го по моя начин, **но в моя домейн**:
+   - Промяна на визия → пише B1 вариант в `src/content/b1/components/` (не пипа споделения компонент).
+   - Никога не променя `src/components/exercises/*` или `src/content/shared/*` сам.
+
+### 4. Нов тип упражнение — съвместен дизайн, изцяло в моя домейн
+
+Често нов урок носи нов тип упражнение — това е очаквано, не изключение. Агентът:
+1. **Сканира за най-близкия съществуващ тип** и предлага („можем да го приближим с X").
+2. **Ако наистина е нов тип**: дизайн заедно (полета, интеракция, как се оценява).
+3. **Реализира го самостоятелно** в моя домейн:
+   - Нов интерфейс в [src/content/b1/types.ts](mdc:src/content/b1/types.ts) (extends `BaseExercise`, type-string с префикс `b1-`)
+   - Компонент в [src/content/b1/components/](mdc:src/content/b1/components)
+   - Регистрация в [src/content/b1/exercise-components.ts](mdc:src/content/b1/exercise-components.ts)
+4. **Нула пипане** на `ExerciseRenderer.tsx`, `shared/types.ts`, `ui.ts`. Чист мърдж.
+
+Виж [src/content/b1/components/README.md](mdc:src/content/b1/components/README.md) за подробен how-to.
+
+### 5. TTS — обяснява и оправя в content
+
+Агентът обяснява централната политика:
+- **Гласове:** Achernar (женски, default), Charon (мъжки за `voiceGender: 'male'`)
+- **Модели:** Flash за думи/граматика, Pro за свързан текст (диалози, четене, listening)
+- **Защо:** консистентно произношение между уроците, цена, естественост
+
+Произношение се оправя **в моите content файлове** чрез override полета:
+- `ttsText` — текст за TTS, различен от показвания (диалози, vocabulary, grammar_table rows, grammar_examples cards, reading_text paragraphs)
+- `ttsModel: 'pro' \| 'flash'` — форсиране на модела (vocabulary, illustrated cards, grammar_table rows, reading_text images)
+- `ttsPrompt` — custom prompt (stress hint и т.н.) на същите места
+- `ttsLabel`, `ttsParagraphs`, `ttsNotes`, `voiceGender`, `paragraphVoiceGenders` — за специфични случаи
+
+Никога не пипаме `scripts/generate-tts.ts` сами. Виж пълните детайли в [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc).
+
+### 6. i18n за нови `instructionKey` — в моя b1.ts
+
+Когато ми трябва нов pre-translated `instructionKey` (за граматика или сложна интеракция):
+- Добавя ключа в [src/i18n/b1.ts](mdc:src/i18n/b1.ts) с префикс `b1.`
+- Всички 7 езика — bg, ar, fr, en, fa, uk, ru
+- Реда в exercise: `instructionKey: 'b1.your.key'`
+
+Никога не пипа `src/i18n/ui.ts`.
 
 ## Минимум за всеки нов урок
 
 Папка `src/content/b1/lessons/b1-lesson-XX/` с 5 файла:
 
-- `metadata.ts` — `id: 'b1-lesson-XX'` (с префикс!), number, title, description, grammarTopics, vocabulary
+- `metadata.ts` — `id: 'b1-lesson-XX'` (с префикс), number, title, description, grammarTopics, vocabulary
 - `content.ts` — introduction, dialogues, culturalNotes, grammarReference
-- `exercises.ts` — упражненията в реда от учебника (всички IDs `b1-lXX-ex-NN`, `b1-lXX-novi-dumi-N`, и т.н.)
+- `exercises.ts` — упражненията в реда от учебника (всички IDs `b1-lXX-ex-NN`, `b1-lXX-novi-dumi-N`, …)
 - `workbook.ts` — упражнения за „Преговор"
 - `index.ts` — re-export като `lessonData`
 
-След създаване:
+След създаване, в [src/content/b1/index.ts](mdc:src/content/b1/index.ts) **uncomment** реда в `B1_LESSON_LOADERS` и попълни `B1_LESSON_EXERCISE_COUNTS`. (Тези два списъка са допустими редакции в моя домейн.)
 
-1. В [src/content/b1/index.ts](mdc:src/content/b1/index.ts) **uncomment** реда в `B1_LESSON_LOADERS`:
-   ```typescript
-   'b1-lesson-XX': () => import('./lessons/b1-lesson-XX'),
-   ```
-2. Попълни в `B1_LESSON_EXERCISE_COUNTS`:
-   ```typescript
-   'b1-lesson-XX': N,  // exercises.length + workbook.length (само тези с points > 0)
-   ```
+B1 уроците по UNHCR syllabus (имената са фиксирани в `index.ts` — не ги променяй):
+- 01 — Животът в града и на село
+- 02 — Моят любим актьор
+- 03 — Ежедневието ни
+- 04 — Преди години
+- 05 — Къде си бил?
+- 06 — Ние се обичаме
+- 07 — Трябва ми почивка
+- 08 — Щях да пътувам
+- 09 — Всичко ще бъде наред
+- 10 — Ти какво каза?
+- 11 — Познавам и обичам България
+
+## Тестове (`test-b1-N`)
+
+B1 тестовете още не са дефинирани в syllabus-а (`B1_TEST_LOADERS` е празен). Когато
+се финализират — папка `src/content/b1/tests/test-b1-lessons-X-Y/` + uncomment в
+`B1_TEST_LOADERS`. До тогава — питай Philip за груповането на тестовете.
 
 ## Шаблони — ВИНАГИ ползвай
 
-- [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — копирай шаблона за всеки exercise type
+- [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts) — копирай шаблона за всеки existing exercise type
 - [src/content/shared/TEST_TEMPLATES.ts](mdc:src/content/shared/TEST_TEMPLATES.ts) — за тестове
 
-## Какво НЕ можеш да правиш
+## Какво пак е НЕ — твърди забрани (рядко са нужни)
 
-Ако агентът открие че се опитваш да промениш някое от тези — **трябва учтиво да откаже** и да обясни:
+Тези остават блокиращи, защото нарушаването им чупи продукта или други хора:
 
-- НЕ променяй `src/content/shared/**` — общи типове / шаблони
-- НЕ променяй `src/content/registry.ts`, `src/content/index.ts`
-- НЕ променяй `src/content/b1/index.ts` ИЗВЪН loader-ите и exercise counts (имената и nav структурата са фиксирани)
-- НЕ променяй други нива (`a1`, `a2`, `b2`)
-- НЕ променяй компоненти (`src/components/**`)
-- НЕ променяй страници, API routes (`src/app/**`)
-- НЕ променяй i18n (`src/i18n/ui.ts`)
-- НЕ променяй scripts, конфигурации
-- НЕ променяй структурата (трябва да е същата като A1)
+- **НЕ push към `master` или чужд branch.** Push само към `origin/alex`.
+- **НЕ променяй ID конвенциите** (`b1-lesson-XX`, `b1-lXX-ex-NN`, …) — счупват backward compatibility и регистъра.
+- **НЕ променяй съдържание на A1, A2, B2** (`src/content/a1/**`, `src/content/a2/**`, `src/content/b2/**`).
+- **НЕ променяй структурата на `B1_LESSONS_METADATA` или `B1_NAV_ITEMS`** в `index.ts` (имена на уроците са фиксирани от UNHCR syllabus-а). OK: uncomment-ване на loader-и и попълване на counts.
+- **НЕ променяй** `src/lib/**`, `src/app/**`, `src/db/**`, `package.json`, `tsconfig.json`, `next.config.ts`, `tailwind.config.*`, `drizzle.config.ts`, `eslint.config.mjs`.
+- **НЕ променяй** `src/content/registry.ts`, `src/content/index.ts`, `src/content/shared/**`.
+- **НЕ променяй** `src/components/**` (вкл. shared exercise components). За B1-специфични визии → `src/content/b1/components/`.
+- **НЕ променяй** `src/i18n/ui.ts` (нови ключове → `src/i18n/b1.ts`).
+- **НЕ променяй** `scripts/**` (за TTS overrides → content полета, не скрипта).
+- **НЕ дублирай** нищо от shared/. Ако ти трябва нещо общо — питай Philip.
 
-**Ако ти трябва нещо ново в shared/components/i18n — питаш Philip да го добави.**
+Ако наистина имам нужда от промяна в споделен файл (рядко, напр. нов TTS speaker role) — питам Philip. До тогава работата по урока продължава автономно.
 
 ## Git workflow
 
-- Push само към `origin/alex` (твоя branch). Никога към `master`, никога към `nina` или `philip`.
-- При `commit` или `push` — провери че `git status` показва само файлове в твоя домейн.
+- Push само към `origin/alex` (моя branch). Никога към `master`, никога към `nina` или `philip`.
+- Седмично или на 2–3 урока — Philip прави PR review и мърдж в `master`.
+- Преди commit: `git status` показва само файлове в моя домейн.
 
 ## Преди commit — задължително
 
@@ -94,4 +159,12 @@ alwaysApply: false
 npm run content:lint -- --lesson b1-lesson-XX
 ```
 
-0 errors задължително. После commit, после push към `alex`.
+0 errors задължително (warnings са OK за следваща итерация). После commit, после push към `alex`.
+
+## Свързани правила
+
+- [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc) — file ownership (3 нива на свобода)
+- [content-lessons.mdc](mdc:.cursor/rules/content-lessons.mdc) — пълен guide за структурата
+- [content-quality-checklist.mdc](mdc:.cursor/rules/content-quality-checklist.mdc) — задължителни проверки за качество
+- [content-tests.mdc](mdc:.cursor/rules/content-tests.mdc) — за тестове
+- [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc) — TTS детайли

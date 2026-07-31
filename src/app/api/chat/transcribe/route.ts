@@ -5,7 +5,8 @@ import { verifyToken } from '@/lib/auth/jwt';
 import { getActiveConfig } from '@/lib/chat/getActiveConfig';
 
 /**
- * Speech-to-text endpoint backed by OpenAI Whisper / gpt-4o-transcribe.
+ * Speech-to-text endpoint backed by OpenAI gpt-4o-transcribe, with an
+ * automatic Whisper fallback.
  *
  * Why this exists at all: browsers' built-in Web Speech API depends on
  * vendor cloud services (Microsoft for Edge, Google for Chrome) whose
@@ -15,16 +16,25 @@ import { getActiveConfig } from '@/lib/chat/getActiveConfig';
  * and send it here, then forward the blob to OpenAI which we already use for
  * the chat itself (same API key, same SDK).
  *
- * Cost ballpark (Nov 2025 pricing):
- *   - gpt-4o-mini-transcribe: $0.003/min  ← default
- *   - whisper-1:              $0.006/min  ← fallback if mini is unavailable
+ * Model strategy (A1 feedback, Фаза 3): `gpt-4o-transcribe` is the primary
+ * model — better multilingual accuracy than Whisper for our short, accented
+ * utterances (BG/AR/FA/UK/RU/FR/EN). If the primary request throws (model
+ * hiccup, transient 5xx, unsupported audio edge case, etc.) we automatically
+ * retry once with `whisper-1`, which is battle-tested and has been running
+ * in production so far. The learner never sees the retry — only a slightly
+ * longer wait on the rare occasion it kicks in.
+ *
+ * Cost ballpark (2026 pricing):
+ *   - gpt-4o-transcribe: $0.006/min  ← primary
+ *   - whisper-1:         $0.006/min  ← automatic fallback on primary error
  *
  * Auth: same JWT cookie as `/api/chat`.
  * Rate limit: 60 transcriptions per hour per user (separate from chat limit
  * because each chat turn typically takes 1-2 transcriptions).
  */
 
-const STT_MODEL = process.env.OPENAI_STT_MODEL ?? 'gpt-4o-mini-transcribe';
+const STT_MODEL = process.env.OPENAI_STT_MODEL ?? 'gpt-4o-transcribe';
+const STT_FALLBACK_MODEL = process.env.OPENAI_STT_FALLBACK_MODEL ?? 'whisper-1';
 const RATE_LIMIT_PER_HOUR = parseInt(process.env.STT_RATE_LIMIT_PER_HOUR ?? '60', 10);
 // 25 MB is OpenAI's hard limit; we reject anything bigger here so a runaway
 // recording doesn't try to upload 100 MB before getting a 4xx back.
@@ -33,6 +43,31 @@ const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
 // when it's one of the languages we explicitly support, otherwise we let the
 // model auto-detect.
 const SUPPORTED_LANG_HINTS = new Set(['bg', 'ar', 'en', 'fr', 'fa', 'uk', 'ru']);
+
+// Empirically (tested against real BG TTS audio while wiring this up),
+// gpt-4o-transcribe occasionally hallucinates the WRONG SCRIPT on short,
+// context-poor clips even with a correct `language` hint — e.g. Cyrillic
+// "автобус" comes back as Greek "Αυτόμπους", or "Да, моля" comes back
+// transliterated as Latin "Da, mola." It doesn't throw in these cases, so
+// the try/catch fallback below never fires. We add this cheap script sanity
+// check to catch that class of silent failure too and retry with Whisper,
+// which did not reproduce the issue in the same tests.
+const EXPECTED_SCRIPT: Partial<Record<string, RegExp>> = {
+  bg: /[\u0400-\u04FF]/,
+  ru: /[\u0400-\u04FF]/,
+  uk: /[\u0400-\u04FF]/,
+  ar: /[\u0600-\u06FF]/,
+  fa: /[\u0600-\u06FF]/,
+};
+const ANY_LETTERS = /[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u0400-\u04FF\u0600-\u06FF]/;
+
+function looksWrongScript(text: string, languageHint: string | undefined): boolean {
+  if (!languageHint) return false;
+  const expected = EXPECTED_SCRIPT[languageHint];
+  if (!expected) return false; // en/fr expect Latin — no reliable check needed
+  if (!ANY_LETTERS.test(text)) return false; // empty/numeric — not a script issue
+  return !expected.test(text);
+}
 
 const rateLimitMap = new Map<number, { count: number; resetAt: number }>();
 
@@ -107,26 +142,55 @@ export async function POST(req: NextRequest) {
 
   const client = new OpenAI({ apiKey: config.apiKey });
 
-  try {
-    const mime = audio.type || 'audio/webm';
-    const file = await toFile(audio, filenameForMime(mime), { type: mime });
+  const mime = audio.type || 'audio/webm';
 
+  // Small helper so we can call the same request twice (primary model, then
+  // fallback) without duplicating the toFile/transcribe/logging plumbing.
+  // `toFile` is called fresh each attempt because the SDK reads the Blob's
+  // stream — reusing a consumed file object would upload an empty body.
+  const attemptTranscription = async (model: string) => {
+    const file = await toFile(audio, filenameForMime(mime), { type: mime });
     const startedAt = Date.now();
     const result = await client.audio.transcriptions.create({
       file,
-      model: STT_MODEL,
-      // Hint helps accuracy & latency. Omitting it makes Whisper auto-detect
-      // — fine, but slightly slower and occasionally guesses wrong for short
-      // utterances.
+      model,
+      // Hint helps accuracy & latency. Omitting it makes the model
+      // auto-detect — fine, but slightly slower and occasionally guesses
+      // wrong for short utterances.
       language: languageHint,
       response_format: 'json',
     });
     const elapsedMs = Date.now() - startedAt;
+    return { text: (result.text ?? '').trim(), elapsedMs };
+  };
 
-    const text = (result.text ?? '').trim();
+  try {
+    let usedModel = STT_MODEL;
+    let outcome;
+    try {
+      outcome = await attemptTranscription(STT_MODEL);
+      if (looksWrongScript(outcome.text, languageHint)) {
+        console.warn(
+          `[transcribe] primary model "${STT_MODEL}" returned unexpected script for language "${languageHint}" ("${outcome.text}"), retrying with fallback "${STT_FALLBACK_MODEL}"`,
+        );
+        usedModel = STT_FALLBACK_MODEL;
+        outcome = await attemptTranscription(STT_FALLBACK_MODEL);
+      }
+    } catch (primaryErr) {
+      const message = primaryErr instanceof Error ? primaryErr.message : String(primaryErr);
+      console.warn(
+        `[transcribe] primary model "${STT_MODEL}" failed, retrying with fallback "${STT_FALLBACK_MODEL}":`,
+        message,
+      );
+      usedModel = STT_FALLBACK_MODEL;
+      outcome = await attemptTranscription(STT_FALLBACK_MODEL);
+    }
+
+    const { text, elapsedMs } = outcome;
     console.log('[transcribe]', {
       userId: payload.userId,
-      model: STT_MODEL,
+      model: usedModel,
+      fellBack: usedModel !== STT_MODEL,
       languageHint: languageHint ?? '(auto)',
       bytes: audio.size,
       mime,
@@ -137,11 +201,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       text,
       language: languageHint ?? null,
-      model: STT_MODEL,
+      model: usedModel,
     });
   } catch (err) {
+    // Both the primary model and the fallback failed — genuinely give up.
     const message = err instanceof Error ? err.message : String(err);
-    console.error('[transcribe] OpenAI error:', message, err);
+    console.error('[transcribe] OpenAI error (primary + fallback both failed):', message, err);
     return NextResponse.json(
       { error: 'Transcription failed. Please try again.' },
       { status: 502 },

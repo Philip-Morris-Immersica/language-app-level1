@@ -2,16 +2,19 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useLanguage } from '@/i18n/LanguageContext';
-import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { AudioIcon } from '@/components/AudioIcon';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
-function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
+function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   const [error, setError] = useState(false);
+  // Next.js 15 throws (crashing the whole page) if `alt` is undefined. Grammar
+  // examples don't always have text/lines, so always fall back to an empty
+  // string (valid, treated as decorative).
+  const safeAlt = alt ?? '';
 
   if (error) {
     return (
@@ -20,7 +23,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
           <svg className="w-12 h-12 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-xs">{alt}</p>
+          <p className="text-xs">{safeAlt}</p>
         </div>
       </div>
     );
@@ -29,7 +32,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   return (
     <Image
       src={src}
-      alt={alt}
+      alt={safeAlt}
       fill
       className="object-contain"
       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -92,8 +95,6 @@ function BoldLine({ text }: { text: string }) {
 
 export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const { lang } = useLanguage();
-  const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
@@ -139,8 +140,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             <div
               key={index}
               onClick={() => handleClick(index, example)}
-              className="rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
+              className="relative rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
             >
+              {!disableTts && (
+                <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
+              )}
               {example.text && (
                 <p className="text-xs font-bold uppercase tracking-widest text-[#0072BC] mb-4 pb-2 border-b border-[#CDE3F1]">
                   {example.text}
@@ -183,14 +187,17 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
           {hasText && (
             <div
               onClick={() => handleClick(0, example)}
-              className="mt-4 text-center cursor-pointer space-y-1"
+              className="mt-4 flex items-start justify-center gap-2 cursor-pointer"
             >
-              {example.lines
-                ? example.lines.filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
-                  ))
-                : <p className="text-base font-semibold text-gray-700">{example.text}</p>
-              }
+              {!disableTts && <AudioIcon className="w-4 h-4 mt-1" />}
+              <div className="text-center space-y-1">
+                {example.lines
+                  ? example.lines.filter(Boolean).map((line, i) => (
+                      <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
+                    ))
+                  : <p className="text-base font-semibold text-gray-700">{example.text}</p>
+                }
+              </div>
             </div>
           )}
           <p className="mt-3 text-center text-xs text-gray-400 select-none">
@@ -204,11 +211,6 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
       {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-      {lang !== 'bg' && disableTts && (
-        <p className="text-xs text-gray-400 text-center mb-4 italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
 
       {/* Examples grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -219,7 +221,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {!disableTts && (
-              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
             )}
             {/* Image */}
             {example.imageUrl && (

@@ -51,12 +51,25 @@ await sql`SELECT * FROM users`;
 await sql`INSERT INTO users (name, email) VALUES ('John', 'john@example.com')`;
 ```
 
+## ⚠️ CRITICAL — Production Database Safety
+
+**NEVER run `db:push` or `db:generate`/`db:migrate` from any project OTHER than this one (`language-app-level1`) against the production DATABASE_URL.**
+
+This happened once and destroyed all user data: a new Cursor project with a different Drizzle schema (containing an `age` column) was connected to the same Neon database and `db:push` was run. Drizzle dropped the `password_hash` column and all users were lost.
+
+### Rules:
+- **ONLY run `npm run db:push` from THIS project** — never from a tutorial/test/other project pointing at the same Neon DB
+- **NEVER connect a new/tutorial project to the production Neon database** — create a SEPARATE Neon project for experiments
+- **If you create a new Neon project for testing**, use a completely different DATABASE_URL — never `ep-delicate-cell-ag6cy2kz-pooler.c-2.eu-central-1.aws.neon.tech`
+- Before running `db:push`, always verify `drizzle.config.ts` points to the correct DATABASE_URL
+- If in doubt — ask Philip before running any db:push or db:migrate command
+
 ## Schema Updates
 
 When updating the database schema:
 
 1. Modify [src/db/schema.ts](mdc:src/db/schema.ts)
-2. Run `npm run db:push` for development (quick push without migrations)
+2. Run `npm run db:push` **only from this project** for development (quick push without migrations)
 3. OR run `npm run db:generate` followed by `npm run db:migrate` for production (creates migration files)
 4. Verify with `npm run db:studio` to view changes in Drizzle Studio
 

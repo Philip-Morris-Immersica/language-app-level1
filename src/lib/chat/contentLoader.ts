@@ -8,8 +8,18 @@ export interface ExerciseSummary {
   title: string;
   /** The Bulgarian instruction shown to the user. */
   instruction: string;
-  /** Compact JSON-string representation of items with their correct answers. */
+  /** Compact JSON-string representation of items with their correct answers.
+   *  Empty string for presentation-only exercises (vocabulary, dialogues, …). */
   answers: string;
+  /** Whether this exercise has checkable answers (drives whether we show them). */
+  checkable: boolean;
+  /** The number the USER sees on screen for this exercise (mirrors `page.tsx` /
+   *  `TestPageClient.tsx`). This is what the user refers to when they say
+   *  "exercise 5", so the bot MUST use the same number. */
+  screenNumber: number;
+  /** For lessons: which on-screen block this exercise lives in. Lesson and
+   *  review ("Преговор") each restart numbering from 1, exactly like the page. */
+  section?: 'lesson' | 'review';
   points?: number;
 }
 
@@ -226,26 +236,67 @@ function summarizeAnswers(ex: Exercise): string | null {
   }
 }
 
-function summarizeExercises(all: Exercise[]): ExerciseSummary[] {
+/**
+ * Turn a list of exercises into summaries whose `screenNumber` matches EXACTLY
+ * what the learner sees on the page. This is the whole point of the fix: the
+ * bot used to renumber with `#i+1` after dropping presentation-only exercises,
+ * so its "exercise 5" pointed at a different exercise than the user's screen.
+ *
+ * Two numbering modes mirror the two page renderers:
+ * - `'lesson'` → like `src/app/lessons/[lessonId]/page.tsx`: the counter only
+ *   advances for exercises that show a header (`title !== '' && !hideHeader`);
+ *   "continuation" parts are folded into the previous exercise and get no
+ *   number of their own (so we skip them as separate entries).
+ * - `'test'` → like `TestPageClient.tsx`: every exercise in the section is
+ *   numbered by its raw position (`index + 1`), nothing is skipped.
+ *
+ * Presentation-only exercises (vocabulary, dialogues, grammar tables) are KEPT
+ * in the list — with `answers: ''` — so the bot has a complete map and can
+ * resolve any number the user mentions, even a non-checkable one.
+ */
+function summarizeExercises(
+  all: Exercise[],
+  numbering: 'lesson' | 'test',
+  section?: 'lesson' | 'review',
+): ExerciseSummary[] {
   const out: ExerciseSummary[] = [];
-  let counter = 1;
-  for (const ex of all) {
+  let displayNumber = 0;
+  for (let index = 0; index < all.length; index++) {
     if (out.length >= MAX_EXERCISES) break;
-    const answers = summarizeAnswers(ex);
-    if (!answers) {
-      counter++;
-      continue;
+    const ex = all[index];
+
+    let screenNumber: number;
+    if (numbering === 'test') {
+      screenNumber = index + 1;
+    } else {
+      const title = (ex as { title?: string }).title;
+      const hideHeader = (ex as { hideHeader?: boolean }).hideHeader === true;
+      const showsHeader = title !== '' && !hideHeader;
+      // Continuation part — shares the previous exercise's number on screen, so
+      // it must NOT appear as its own numbered entry.
+      if (!showsHeader) continue;
+      displayNumber += 1;
+      screenNumber = displayNumber;
     }
-    const title = (ex as { title?: string }).title || `Exercise ${counter}`;
+
+    const answers = summarizeAnswers(ex);
+    // Strip the trailing textbook number from the title (e.g. "УПРАЖНЕНИЕ 19" →
+    // "УПРАЖНЕНИЕ") so the bot sees the SAME base label as the screen, where the
+    // screen number is shown separately. Avoids the "double numbering" confusion.
+    const rawTitle = (ex as { title?: string }).title;
+    const title = (rawTitle && rawTitle.trim() !== '' ? rawTitle : 'УПРАЖНЕНИЕ').replace(/\s+\d+$/, '');
+
     out.push({
       id: ex.id,
       type: ex.type,
       title,
       instruction: truncate(ex.instruction ?? '', 200),
-      answers,
+      answers: answers ?? '',
+      checkable: answers != null,
+      screenNumber,
+      section,
       points: ex.points,
     });
-    counter++;
   }
   return out;
 }
@@ -261,10 +312,11 @@ export async function getLessonChatContext(lessonId: string): Promise<LessonChat
   const grammarTopics = lessonData.grammarTopics ?? [];
   const vocabularyWords = lessonData.vocabulary ?? [];
 
-  const allExercises: Exercise[] = [
-    ...(lessonData.exercises ?? []),
-    ...(lessonData.workbookExercises ?? []),
-  ];
+  // Number the two on-screen blocks independently, exactly like the page:
+  // in-lesson exercises restart at 1, and the "Преговор" (workbook) block
+  // restarts at 1 again below the divider.
+  const lessonExercises = summarizeExercises(lessonData.exercises ?? [], 'lesson', 'lesson');
+  const reviewExercises = summarizeExercises(lessonData.workbookExercises ?? [], 'lesson', 'review');
 
   return {
     kind: 'lesson',
@@ -273,7 +325,7 @@ export async function getLessonChatContext(lessonId: string): Promise<LessonChat
     level,
     grammarTopics,
     vocabularyWords: vocabularyWords.slice(0, 30),
-    exercises: summarizeExercises(allExercises),
+    exercises: [...lessonExercises, ...reviewExercises],
   };
 }
 
@@ -297,7 +349,7 @@ export async function getTestChatContext(testId: string): Promise<TestChatContex
     id: s.id,
     name: s.name,
     maxPoints: s.maxPoints,
-    exercises: summarizeExercises(s.exercises ?? []),
+    exercises: summarizeExercises(s.exercises ?? [], 'test'),
   }));
 
   // Flat list across all sections (for quick lookups in the prompt)

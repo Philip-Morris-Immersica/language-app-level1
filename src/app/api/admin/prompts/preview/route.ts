@@ -65,11 +65,12 @@ export async function POST(req: NextRequest) {
         eq(exerciseStatesTable.userId, auth.userId),
         eq(exerciseStatesTable.lessonId, rawContextId),
       ));
+    const checkable = pageContext.exercises.filter((e) => e.checkable);
     pageProgress = summarizeLessonProgress(
       rawContextId,
       rows,
-      pageContext.exercises.length,
-      new Set(pageContext.exercises.map((e) => e.id)),
+      checkable.length,
+      new Set(checkable.map((e) => e.id)),
     );
   }
 

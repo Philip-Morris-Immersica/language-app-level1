@@ -141,8 +141,8 @@ export const grammarExercises: Exercise[] = [
     order: 7,
     noTranslation: true,
     images: [
-      { imageUrl: '/assets/test-a1-2/gramatika/momche-yade.jpg', label: 'ям' },
-      { imageUrl: '/assets/test-a1-2/gramatika/momche-pie.jpg', label: 'пия' },
+      { imageUrl: '/assets/test-a1-2/gramatika/momche-yade.jpg', label: 'ям', ttsWordId: 'yam' },
+      { imageUrl: '/assets/test-a1-2/gramatika/momche-pie.jpg', label: 'пия', ttsWordId: 'piya' },
     ],
     paragraphs: [],
   } as ReadingTextExercise,
@@ -151,7 +151,7 @@ export const grammarExercises: Exercise[] = [
   {
     id: 't02-gr-1',
     type: 'workbook_fill_blank',
-    instruction: 'Поставете глаголите ЯМ и ПИЯ в правилната форма.',
+    instruction: 'Поставете глаголите **ям** и **пия** в правилната форма.',
     order: 8,
     points: 10,
     layout: 'single',

@@ -36,7 +36,9 @@ export async function POST(req: NextRequest) {
       path: '/',
     });
     return response;
-  } catch {
-    return NextResponse.json({ error: 'Грешка при регистрация.' }, { status: 500 });
+  } catch (err) {
+    console.error('[register] unexpected error:', err);
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: 'Грешка при регистрация.', debug: message }, { status: 500 });
   }
 }

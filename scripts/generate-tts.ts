@@ -73,6 +73,7 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l00-gramatika-01-row-12', // М — Мохамед
   'l00-gramatika-01-row-19', // У — Уляна
   'l00-gramatika-01-row-22', // Ц — Цветелина
+  'l00-gramatika-01-row-24', // Ш — Шадия
   'l03-gramatika-04-row-0', // сандвич, сок — Flash mispronounces loanwords
   'l04-gramatika-02-row-9', // хиляда
   'l05-gramatika-07-row-0', // хиляда (l05)
@@ -80,8 +81,8 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-2', // един милион (l05)
   'l05-gramatika-07-row-3', // два милиона (l05)
   'l05-gramatika-07-row-4', // един милиард (l05)
-  'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
+  'l10-gramatika-03-row-3', // такси — известна проблемна дума (виж tts-audio.mdc), Flash сгрешава ударението
   'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
   'a2-l02-gramatika-03-row-3', // тя → й: Flash mispronounces clitic "й"
   'a2-l02-gramatika-05-row-0', // аз → Трябва ми един лев: Flash mispronounces "лев" as "лъев"
@@ -124,10 +125,28 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
 const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
+  // Фаза 6 — TTS корекции (числа/часове с думи; „й“ в контекст)
+  'l06-gramatika-04-row-3': 'тя. Семейството й.', // „й“ се пропуска изолирано → в контекст
+  'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнайсет минути. Първи коловоз. Пет минути закъснение.',
+  'l10-gramatika-01b-row-1': 'Плевен. Дванайсет часът. Трети коловоз. Няма закъснение.', // "часа" в точен час без минути → "часът" (виж tts-audio.mdc)
+  'l10-gramatika-01b-row-2': 'Русе. Петнайсет часа и трийсет минути. Четвърти коловоз. Петнайсет минути закъснение.',
+  'l10-gramatika-01c-row-1': 'Варна. Единайсет часа и двайсет минути. Пети коловоз. Двайсет и пет минути закъснение.',
+  'l10-gramatika-03-row-3': 'такси. с такси.', // моделът е Pro (виж GRAMMAR_TABLE_PRO_ROWS) — Flash сгрешаваше ударението
+  'l11-gramatika-07-row-3': 'връщам се. идвам обратно от някъде. Връщам се от работа вкъщи в осемнайсет часа.',
+
   'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // Азбука — буквите да се четат чисто, без прикачено „ъ" на съгласните (клиентска бележка):
+  // четем малката буква в контекста на примерното име, без изолираната главна буква.
+  'l00-gramatika-01-row-0':  'а, Ана',       // А
+  'l00-gramatika-01-row-4':  'д, Дилма',     // Д
+  'l00-gramatika-01-row-12': 'м, Мохамед',   // М
+  'l00-gramatika-01-row-19': 'у, Уляна',     // У
+  'l00-gramatika-01-row-22': 'ц, Цветелина', // Ц
+  'l00-gramatika-01-row-24': 'ш, Шадия',     // Ш
 
   // a2-lesson-02 — ГРАМАТИКА 3: дателни местоимения — „їй" (U+045D) → „й"
   'a2-l02-gramatika-03-row-3': 'тя. й. Пиша й.',
@@ -198,6 +217,7 @@ const VOCAB_CUSTOM_PROMPTS: Record<string, string> = {
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene',     // lesson 3 — Пушенето забранено!
   'bob',         // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  'pulover',     // lesson 8 — пуловер (стар клип беше счупен — четеше промпта; Pro + word prompt)
   // a2-lesson-01 verbs — warm tone causes consonant distortion or trailing sounds on single verbs
   'tarsya',      // търся — needs custom stress prompt (see ILLUSTRATED_CARD_CUSTOM_PROMPTS)
   'vklyuchvam',  // включвам — лю cluster mispronounced as ру
@@ -318,6 +338,12 @@ interface Exercise {
     ttsPrompt?: string;
   }[];
   pronouns?: { pronoun: string; description?: string }[];
+  /** audio_choice — one MP3 per question (letter name or word). */
+  questions?: {
+    id: string;
+    word?: string;
+    ttsText: string;
+  }[];
 }
 
 interface TtsJob {
@@ -615,6 +641,32 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/**
+ * audio_choice — one MP3 per WORD question: `words/{question.id}.mp3`.
+ * Pure-letter questions (no `word`) are intentionally SKIPPED here — they reuse
+ * the already-validated per-letter clips from the alphabet maze
+ * (public/assets/lesson-00/audio/tts/maze/l00-maze-letter-{0..29}.mp3, see
+ * src/lib/letterTTS.ts) so letter pronunciation stays consistent across the
+ * lesson instead of a second, separately-generated recording.
+ */
+function collectAudioChoiceJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'audio_choice' && e.questions)) {
+    for (const q of ex.questions!) {
+      if (!q.word) continue;
+      jobs.push({
+        category: 'words',
+        filename: `${q.id}.mp3`,
+        text: clean(q.ttsText),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 /** grammar_visual — one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
 function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
@@ -716,6 +768,34 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
           model: useProForNote ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
           prompt: useProForNote ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
         });
+      });
+    }
+  }
+  return jobs;
+}
+
+/**
+ * grammar_examples with an interactive `grammarHighlight` block — one MP3 per
+ * example line: `grammar/{exerciseId}-highlight-{i}.mp3` (Flash + word prompt,
+ * matching the rest of the grammar audio). Uses `exampleTtsTexts[i]` when set.
+ */
+function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises) {
+    const gh = (ex as Exercise & {
+      grammarHighlight?: { interactiveExamples?: boolean; examples?: string[]; exampleTtsTexts?: string[] };
+    }).grammarHighlight;
+    if (!gh || gh.interactiveExamples !== true || !gh.examples) continue;
+    for (let i = 0; i < gh.examples.length; i++) {
+      const src = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
+      if (!src?.trim()) continue;
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-highlight-${i}.mp3`,
+        text: clean(src),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
       });
     }
   }
@@ -884,9 +964,11 @@ async function main() {
     ...collectWideCardJobs(exercises),
     ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
+    ...collectAudioChoiceJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
+    ...collectGrammarHighlightJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectTableFillParagraphJobs(exercises),

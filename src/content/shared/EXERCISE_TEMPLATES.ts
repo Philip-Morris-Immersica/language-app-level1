@@ -109,7 +109,7 @@
  *   Section 3 — ДИАЛОЗИ / ТЕКСТ  (dialogues, reading_text) ⭐ FREQUENT
  *   Section 4 — УПРАЖНЕНИЯ ЧЕСТИ (fill_in_blank, workbook_fill_blank, workbook_fill_blank_listening, multiple_choice, dropdown_match, word_order, drag_to_columns) ⭐ FREQUENT
  *   Section 5 — УПРАЖНЕНИЯ РЕДКИ (match_pairs, letter_choice, image_labeling, syllable_blocks, word_search, true_false, dialogue_builder, fill_with_images, personal_choice)
- *   Section 6 — ИНТЕРАКТИВНИ / АЗБУКА (connect_dots, alphabet_maze)
+ *   Section 6 — ИНТЕРАКТИВНИ / АЗБУКА (connect_dots, alphabet_maze, audio_choice)
  *
  * ID CONVENTIONS:
  *   Lesson exercises:  l0X-ex-NN        (e.g. l02-ex-01)
@@ -143,6 +143,7 @@ import type {
   PersonalChoiceExercise,
   ConnectDotsExercise,
   AlphabetMazeExercise,
+  AudioChoiceExercise,
 } from '@/content/types';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -589,7 +590,7 @@ export const TEMPLATE_word_order = {
   points: 4,                  // REPLACE
   questions: [
     {
-      words: ['Откъде', 'е', 'Хасан', '?'],     // REPLACE — shuffled words shown to user
+      words: ['Хасан', '?', 'е', 'Откъде'],     // REPLACE — shuffled words shown to user (NOT in correct order!)
       correctSentence: 'Откъде е Хасан ?',       // REPLACE — correct order (spaces around ?)
       alternateCorrectSentences: ['Хасан откъде е ?'],  // REPLACE or remove — other valid orderings
       hint: 'Хасан е от Сирия.',                 // REPLACE or remove
@@ -1020,3 +1021,54 @@ export const TEMPLATE_alphabet_maze = {
     { row: 5, col: 4 }, { row: 5, col: 3 }, { row: 5, col: 2 },
   ],
 } as AlphabetMazeExercise;
+
+/**
+ * audio_choice — Чуй → избери буква (multiple choice с аудио).
+ * Две авторски разновидности, управлявани от полето `word`:
+ *   1) Без `word` → чист разпознаване на звук: пуска се звукът на буквата,
+ *      ученикът избира коя буква чул от няколко опции.
+ *   2) С `word`   → показва се дума (с бутон за слушане), ученикът избира
+ *      с коя буква започва думата.
+ *
+ * КОГА ДА ПОЛЗВАШ:
+ *   - Урок 0: упражнения за запаметяване на азбуката (след лабиринта)
+ *   - Всяко „чуй → избери" упражнение с аудио
+ *
+ * БЕЛЕЖКИ:
+ *   - id на всеки въпрос е MP3 стъбло — файлът е `words/{id}.mp3` в
+ *     аудио папката на урока (латиница/ASCII, напр. 'l00-ex-08-m').
+ *   - ttsText е текстът, който се синтезира: за варианта „звук" е ИМЕТО
+ *     на буквата (не самата буква — 'Й' → 'и кратко', 'Ь' → 'ер малък',
+ *     виж таблицата АЗБУКА за всички имена); за варианта „дума" е самата дума.
+ *   - options се разбъркват РЪЧНО в масива (компонентът не разбърква).
+ *   - Не забравяй distractors, близки по звучене до правилната буква.
+ */
+export const TEMPLATE_audio_choice_letter = {
+  id: 'l0X-ex-NN',            // REPLACE
+  type: 'audio_choice' as const,
+  title: 'УПРАЖНЕНИЕ NN',      // REPLACE
+  instructionKey: 'exercise.audioChooseLetter',
+  instruction: 'Чуйте звука и изберете буквата.', // fallback / translation source
+  order: 1,                    // REPLACE
+  points: 10,
+  questions: [
+    { id: 'l0X-ex-NN-a', ttsText: 'А', options: ['О', 'А', 'Ъ'], correctIndex: 1 },
+    { id: 'l0X-ex-NN-m', ttsText: 'М', options: ['М', 'Н', 'П'], correctIndex: 0 },
+    // ... 10 questions per exercise, shuffled (NOT alphabetical order)
+  ],
+} as AudioChoiceExercise;
+
+export const TEMPLATE_audio_choice_word = {
+  id: 'l0X-ex-NN',            // REPLACE
+  type: 'audio_choice' as const,
+  title: 'УПРАЖНЕНИЕ NN',      // REPLACE
+  instructionKey: 'exercise.audioWordFirstLetter',
+  instruction: 'Натиснете за звук и изберете с коя буква започва думата.', // fallback / translation source
+  order: 1,                    // REPLACE
+  points: 12,
+  questions: [
+    { id: 'l0X-ex-NN-baba', word: 'баба', ttsText: 'баба', options: ['Б', 'В', 'П', 'Д'], correctIndex: 0 },
+    { id: 'l0X-ex-NN-kafe', word: 'кафе', ttsText: 'кафе', options: ['Г', 'К', 'Х', 'Ф'], correctIndex: 1 },
+    // ... up to 12 questions per exercise
+  ],
+} as AudioChoiceExercise;

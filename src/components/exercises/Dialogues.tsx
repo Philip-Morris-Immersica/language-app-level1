@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Volume2, Play, Pause } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { AudioIcon } from '@/components/AudioIcon';
 import {
   getTtsAudioPath,
   playTtsAudio,
@@ -257,9 +258,10 @@ export function Dialogues({
                     : 'hover:bg-gray-50 border border-transparent'
               }`}
             >
-              <Volume2 className={`${compact ? 'w-3.5 h-3.5 mt-0.5' : 'w-4 h-4 mt-1.5'} shrink-0 transition-colors ${
-                isLinePlaying ? 'text-[#32C189]' : 'text-gray-300'
-              }`} />
+              <AudioIcon
+                active={isLinePlaying}
+                className={compact ? 'w-3.5 h-3.5 mt-0.5' : 'w-4 h-4 mt-1.5'}
+              />
               <div className="flex-1 min-w-0">
                 <p className={`${compact ? 'text-sm md:text-base leading-snug' : 'text-base md:text-lg leading-relaxed'} text-gray-800`}>
                   {line.speaker && (

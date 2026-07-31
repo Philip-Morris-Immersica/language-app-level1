@@ -12,19 +12,48 @@ globs: src/i18n/**
 
 **Never translate** exercise content (words, sentences, correct answers) — always stays Bulgarian.
 
-### When to pre-translate vs auto-translate
+### Core policy — hand-translate everything learner-facing (ALL levels)
 
-| Content | Method | Why |
-|---|---|---|
-| Grammar instructions | `instructionKey` + `ui.ts` | Contains linguistic terms that auto-translate mangles |
-| Complex interaction instructions | `instructionKey` + `ui.ts` | Describes app-specific actions (drag, swipe, column) |
-| Grammar notes with terminology | `instructionKey` + `ui.ts` | Bulgarian grammar terms need expert translation |
-| Simple exercise instructions | `useTranslate()` (auto) | Short, standard phrases translate well |
-| Exercise titles (НОВИ ДУМИ, etc.) | `useTranslate()` (auto) | Simple labels |
-| Lesson titles & descriptions | `useTranslate()` (auto) | General text |
-| Culture section text | `useTranslate()` (auto) | Long narrative text |
+> This policy is **global**: it applies identically to **A1, A2, B1, B2**. There is
+> one translation standard for the whole platform — no per-level exceptions.
 
-**Rule of thumb:** If the instruction contains Bulgarian linguistic terminology (род, член, спрежение, множествено число) or describes a non-obvious interaction, pre-translate it.
+**Default = hand-translate.** Every learner-facing string is hand-translated on all
+7 languages by a human. `useTranslate()` (Google) is now only a **temporary
+fallback** shown while content is still being authored — it is **never** the
+intended final state for shipped content. Treat any string still relying on
+auto-translation as *unfinished*.
+
+**Only exception — stays Bulgarian (never translated):** the exercise content
+itself — the Bulgarian words, sentences, and correct answers the learner is
+practising. (The dictionary *gloss* — the meaning of a Bulgarian word — IS
+hand-translated; the Bulgarian headword stays Bulgarian.)
+
+**What must be hand-translated (non-exhaustive):**
+
+| Content | Where translations live |
+|---|---|
+| Exercise instructions | `instructionKey` → `ui.ts` (Philip) / `a2.ts` / `b1.ts` (level authors) |
+| Exercise titles & subtitles | inline translation slot in the exercise object |
+| Section titles & subtitles (`sectionStart`) | `titleI18n` / `subtitleI18n` (`Record<lang>`) |
+| Grammar table titles, notes, column headers | inline translation slot / `Record<lang>` |
+| Grammar reference | `Record<lang>` on all 7 languages (already required) |
+| Culture / narrative sections | `Record<lang>` on all 7 languages |
+| Lesson title & description, grammar topic tags | inline translation slot |
+| Dictionary word glosses (meanings) | per-word translation slot |
+| Test section names & exercise titles | same rules as lessons |
+
+**Mechanism (plain version):** put the translations right next to the Bulgarian,
+using whatever translation slot the field gives you — an `instructionKey` for
+instructions, or a `Record<lang>` field (e.g. `titleI18n`) for inline content.
+Always all 7 languages, always in order. **If a field has no translation slot
+yet, Philip adds one to `src/content/shared/types.ts`** — never hack around a
+missing slot or leave it on auto. When a slot is genuinely empty, the app falls
+back to auto-translation so nothing breaks, but that content counts as not done.
+
+**Rollout (no double work):** the *rule* is global and lives here; the *actual
+translations* are per-level content and are done by that level's author in their
+own folder. A1 lesson sections are done. A2 folds hand-translation into its
+pending feedback pass. B1/B2 apply this from the start, as content is written.
 
 ## Adding a new UI string
 
@@ -35,6 +64,20 @@ Edit [src/i18n/ui.ts](mdc:src/i18n/ui.ts). Add one line in the correct section:
 ```
 
 Language order: **bg, ar, fr, en, fa, uk, ru** — always this order, always all 7.
+
+### Per-level translation files (A2 / B1 / B2 authors)
+
+`ui.ts` is shared infrastructure — only Philip edits it directly. Level authors
+add their `instructionKey` strings to a level-scoped file instead, which is
+merged into `ui.ts` automatically:
+
+| Level | File | Merged via |
+|---|---|---|
+| A2 (Nina) | `src/i18n/a2.ts` (`A2_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, A2_TRANSLATIONS)` in `ui.ts` |
+| B1 (Alex) | `src/i18n/b1.ts` (`B1_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, B1_TRANSLATIONS)` in `ui.ts` |
+
+Same shape and same 7-language rule as above. Prefix keys with the level
+(`'a2.…'`, `'b1.…'`) to avoid collisions. Never duplicate an existing `ui.ts` key.
 
 RTL languages: `ar` (Arabic) and `fa` (Farsi/Persian).
 
