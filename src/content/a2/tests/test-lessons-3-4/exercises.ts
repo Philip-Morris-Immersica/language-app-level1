@@ -586,7 +586,7 @@ export const writingExercises: Exercise[] = [
     order: 8,
     points: 10,
     layout: 'single',
-    imageUrl: '/assets/test-a2-2/pisane/01-blok-prozortsi.jpg',
+    imageUrl: '/assets/test-a2-2/pisane/01-blok-prozortsi.png',
     sentences: [
       {
         // Долу-средата: жена чете книга (ясно от снимката)
@@ -596,13 +596,13 @@ export const writingExercises: Exercise[] = [
         isExample: true,
       },
       {
-        // Горе-ляво: мъж държи чаша + цигарен дим
-        text: 'Иван ще _______ кафе и ще _______.',
+        // Горе-ляво: мъж държи чаша с горещо кафе до отворения прозорец
+        text: 'Иван ще _______ кафе и ще _______ през прозореца.',
         blanks: [2, 6],
-        correctAnswers: ['пие', 'пуши'],
+        correctAnswers: ['пие', 'гледа'],
         options: [
           ['пие', 'готви', 'яде'],
-          ['пуши', 'чете', 'спи'],
+          ['гледа', 'чете', 'спи'],
         ],
       },
       {

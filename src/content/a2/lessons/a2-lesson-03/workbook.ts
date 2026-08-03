@@ -126,7 +126,7 @@ export const workbookExercises: Exercise[] = [
     sentences: [
       { text: 'Стефан ще чете книга, но Мария няма да чете книга.', blanks: [], correctAnswers: [], isExample: true },
       {
-        text: 'Мария _______ плувам, но Стефан _______.',
+        text: 'Мария _______, но Стефан _______.',
         blanks: [1, 2],
         correctAnswers: ['ще плува', 'няма да плува'],
         options: [
