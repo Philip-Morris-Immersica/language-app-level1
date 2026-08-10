@@ -31,6 +31,7 @@ import { GrammarExamples } from './components/GrammarExamples';
 import { SortToColumns } from './components/SortToColumns';
 import { TableFill } from './components/TableFill';
 import { ReadingText } from './components/ReadingText';
+import { Dialogues } from './components/Dialogues';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -58,4 +59,6 @@ export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   table_fill: TableFill as unknown as CustomExerciseRenderer,
   // Override shared reading_text: numbered task lists → green tables (B1-only).
   reading_text: ReadingText as unknown as CustomExerciseRenderer,
+  // Override shared dialogues: support **bold** markdown in lines (B1-only).
+  dialogues: Dialogues as unknown as CustomExerciseRenderer,
 };
