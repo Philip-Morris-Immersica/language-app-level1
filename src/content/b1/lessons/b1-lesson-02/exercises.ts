@@ -77,10 +77,10 @@ export const exercises: Exercise[] = [
       {
         pronoun: 'ти',
         cells: ['твой', 'твоя', 'твое', 'твои'],
-        ttsText: 'ти. твой. твоя. тво-е. твои.',
+        ttsText: 'ти. твой. твоя. твое. твои.',
         ttsModel: 'pro',
         ttsPrompt:
-          'Read each word once, clearly in Bulgarian. "твое" is two hard syllables тво-Е — NO й sound, never say твойе. Final Е is firm and open.',
+          'Calm natural Bulgarian female voice. Soft word list, once each. Fourth word твое like мое — no й (not твойе). No shouting, no strain.',
       },
       { pronoun: 'му', cells: ['негов', 'негова', 'негово', 'негови'], ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
       { pronoun: 'ѝ', cells: ['неин', 'нейна', 'нейно', 'нейни'], ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
@@ -93,7 +93,14 @@ export const exercises: Exercise[] = [
         ttsPrompt:
           'Read each word once, clearly in Bulgarian. "ваше" ends with Е (ва-ШЕ), NOT А — never say ваша for this form. Distinguish ваша (А) from ваше (Е).',
       },
-      { pronoun: 'им', cells: ['техен', 'тяхна', 'тяхно', 'техни'], ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
+      {
+        pronoun: 'им',
+        cells: ['техен', 'тяхна', 'тяхно', 'техни'],
+        ttsText: 'им. техен. тяхна. тяхно. техни.',
+        ttsModel: 'pro',
+        ttsPrompt:
+          'Calm soft Bulgarian female voice. Gentle word list, once each, relaxed tempo — no emphasis, no strain, no shouting. Start quietly with им, then техен, тяхна, тяхно, техни.',
+      },
     ],
     notes: [
       'Пълните притежателни местоимения се съгласуват по род и число със съществителното: Това е моят брат. Тази къща е нейна.',
@@ -113,7 +120,14 @@ export const exercises: Exercise[] = [
     columns: ['м.р.', 'ж.р.', 'ср.р.', 'мн.ч.'],
     rows: [
       { pronoun: 'ми', cells: ['моят', 'моята', 'моето', 'моите'], ttsModel: 'pro', ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
-      { pronoun: 'ти', cells: ['твоят', 'твоята', 'твоето', 'твоите'], ttsText: 'ти. твоят. твоята. твоето. твоите.', ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
+      {
+        pronoun: 'ти',
+        cells: ['твоят', 'твоята', 'твоето', 'твоите'],
+        ttsText: 'ти. твоят. твоята. твоето. твоите.',
+        ttsModel: 'pro',
+        ttsPrompt:
+          'Calm natural Bulgarian female voice. Soft word list, once each. твоето like моето — no й (not твойето). No shouting, no strain.',
+      },
       { pronoun: 'му', cells: ['неговият', 'неговата', 'неговото', 'неговите'], ttsText: 'му. неговият. неговата. неговото. неговите.', ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
       { pronoun: 'ѝ', cells: ['нейният', 'нейната', 'нейното', 'нейните'], ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
       { pronoun: 'ни', cells: ['нашият', 'нашата', 'нашето', 'нашите'], ttsPrompt: 'Read aloud clearly in Bulgarian with a natural female voice. Each word is a separate item.' },
@@ -121,10 +135,10 @@ export const exercises: Exercise[] = [
       {
         pronoun: 'им',
         cells: ['техният', 'тяхната', 'тяхното', 'техните'],
-        ttsText: 'им. тех-ни-ят. тях-на-та. тях-но-то. тех-ни-те.',
+        ttsText: 'им. техният. тяхната. тяхното. техните.',
         ttsModel: 'pro',
         ttsPrompt:
-          'Read each form once only. "техният" starts with ТЕХ (Е), never ТЯХ — do NOT say тяхната for техният. Then say тяхната once. Clear distinction: техният ≠ тяхната.',
+          'Calm soft Bulgarian female voice. Gentle word list, once each, relaxed tempo — no emphasis, no strain. им, then техният (with Е), тяхната, тяхното, техните.',
       },
     ],
     notes: [
@@ -197,7 +211,7 @@ export const exercises: Exercise[] = [
     points: 23,
     layout: 'single',
     grammarHighlight: {
-      text: 'Модел: столът ми → моят стол',
+      text: 'Модел: списанието ти → твоето списание',
     },
     sentences: [
       { text: 'столът ми → _______', blanks: [0], correctAnswers: ['моят стол'], options: ['моят стол', 'моята стая', 'моето кафе', 'моите книги'] },
@@ -273,6 +287,9 @@ export const exercises: Exercise[] = [
     order: 9,
     points: 12,
     layout: 'single',
+    grammarHighlight: {
+      text: 'Модел: – Този учебник твой ли е? – Не, не е мой. Моят е тук.',
+    },
     sentences: [
       { text: '– Този лаптоп техен ли е? – Не, не е _______. _______ е тук.', blanks: [0, 1], correctAnswers: ['техен', 'Техният'], options: [['техен', 'техни', 'тяхна', 'техният'], ['Техният', 'Техните', 'Тяхната', 'Неговият']] },
       { text: '– Тези салати ваши ли са? – Не, не са _______. _______ са тук.', blanks: [0, 1], correctAnswers: ['ваши', 'Вашите'], options: [['ваши', 'ваша', 'наши', 'твои'], ['Вашите', 'Вашата', 'Нашите', 'Твоите']] },
@@ -379,7 +396,7 @@ export const exercises: Exercise[] = [
     ],
     ttsParagraphs: [
       'Казвам се Матилда и съм германка. Живея в Берлин. С приятеля ми КАмен решихме да прекараме лятната ваканция в България. Това е родината му и той често се връща там. Купихме подаръци за семейството му, приготвихме всичко за пътуването ни. Полетът ни беше приятен, пристигнахме бързо.',
-      'На летището се срещнахме със сестра му и заедно отидохме при родителите им. Те живеят в малка къща. Къщата им е в хубав град близо до морето. Останахме там две седмици. КАмен има много приятели. Запознах се с тях. Беше интересно.',
+      'На летището се срещнахме със сестра му и заедно оти-дохме при родителите им. Те живеят в малка къща. Къщата им е в хубав град близо до морето. Останахме там две седмици. КАмен има много приятели. Запознах се с тях. Беше интересНО.',
       'Много харесах съседите им – младо симпатично семейство с две деца. Момчето се казва Иво и ходи на училище. Училището му е в съседния град. Той трябва да пътува всеки ден. Момичето е Ася, на две години. Баба ѝ се грижи за нея вкъщи, докато родителите ѝ са на работа. Ася имаше рожден ден и го празнувахме в градината им. Беше чудесно.',
       'Ваканцията ни беше страхотна. Чакам с нетърпение следващото лято.',
       'Аз съм КАмен. Работя като компютърен специалист в Германия. С приятелката ми Матилда бяхме в България за лятната ни ваканция.',
@@ -425,37 +442,51 @@ export const exercises: Exercise[] = [
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l02-gramatika-03',
-    type: 'grammar_examples',
+    type: 'b1-grammar-examples',
     title: 'ГРАМАТИКА',
     instruction: 'Разгледайте снимките и прочетете изреченията под тях.',
     order: 15,
     examples: [
       { imageUrl: '/assets/b1-lesson-02/04-upr-11-pritezhatelno-si/01-dve-zheni-razgovor.jpg', zoomable: false,
+        text: '',
         lines: ['Това е майка **ми**.', '**Аз** говоря с майка **си**.'],
         ttsText: 'Това е майка ми. Аз говоря с майка си.', voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/04-upr-11-pritezhatelno-si/02-zhena-po-telefon.jpg', zoomable: false,
+        text: '',
         lines: ['Това е сестра **ти**.', '**Ти** се обаждаш на сестра **си**.'],
         ttsText: 'Това е сестра ти. Ти се обаждаш на сестра си.', voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/04-upr-11-pritezhatelno-si/03-grupa-priyateli.jpg', zoomable: false,
+        text: '',
         lines: ['Това са приятелите **му**.', '**Той** чака приятелите **си**.'],
         ttsText: 'Това са приятелите му. Той чака приятелите си.', voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/04-upr-11-pritezhatelno-si/04-mayka-i-bebe.jpg', zoomable: false,
+        text: '',
         lines: ['Това е бебето **ѝ**.', '**Тя** играе с бебето **си**.'],
         ttsText: 'Това е бебето ѝ. Тя играе с бебето си.', voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/05-gramatika-vazvratno-pritezhatelno-si/01-roditeli-bebe.jpg', zoomable: false,
+        text: '',
         lines: ['Това са родителите **му**.', '**Той** обича родителите **си**.'],
         ttsText: 'Това са родителите му. Той обича родителите си.', voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/05-gramatika-vazvratno-pritezhatelno-si/02-svatba-gosti.jpg', zoomable: false,
+        text: '',
         lines: ['Това са гостите **ни**.', '**Ние** се снимаме с гостите **си**.'],
-        ttsText: 'Това са гостите ни. Ние се снимаме с гостите си.', voiceGender: 'female' },
+        // Trailing „сии." steers TTS to finish the short pronoun си fully (not cut off).
+        ttsText: 'Това са гостите ни. Ние се снимаме с гостите сии.',
+        ttsPrompt:
+          'Warm natural Bulgarian female voice, Achernar. Read both sentences smoothly. The last word is the short pronoun „си" — pronounce it fully with a clear и vowel; do not cut it short or fade out.',
+        voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/05-gramatika-vazvratno-pritezhatelno-si/03-kolegi-ofis.jpg', zoomable: false,
+        text: '',
         lines: ['Това са колегите **ви**.', '**Вие** работите с колегите **си**.'],
-        ttsText: 'Това са колегите ви. Вие работите с колегите си.', voiceGender: 'female' },
+        ttsText: 'Това са колегите ви. Вие работите с колегите си.',
+        ttsPrompt: 'Warm natural Bulgarian female voice (Achernar). Clear, friendly, not robotic.',
+        voiceGender: 'female' },
       { imageUrl: '/assets/b1-lesson-02/05-gramatika-vazvratno-pritezhatelno-si/04-semeystvo-laptop.jpg', zoomable: false,
+        text: '',
         lines: ['Това са децата **им**.', '**Те** помагат на децата **си**.'],
         ttsText: 'Това са децата им. Те помагат на децата си.', voiceGender: 'female' },
     ],
-  } as GrammarExamplesExercise,
+  } as unknown as GrammarExamplesExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // Упр. 12 — „си" срещу му/ѝ/им/ти

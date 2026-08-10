@@ -47,14 +47,14 @@ function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   );
 }
 
-function BoldLine({ text }: { text: string }) {
+function BoldLine({ text, color = '#2d5a1b' }: { text: string; color?: string }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
     <>
       {parts.map((part, i) =>
         i % 2 === 1
           // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-          ? <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part}</span>
+          ? <span key={i} className="font-extrabold" style={{ color }}>{part}</span>
           : <span key={i}>{part}</span>
       )}
     </>
@@ -89,6 +89,10 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
   const id = exerciseId ?? exercise.id;
   const imageExample = examples.find(e => e.imageUrl);
   const zoomable = imageExample?.zoomable !== false;
+  // Multi-card photo grid (each example has its own image) — like shared GrammarWithExamples,
+  // but body text stays black (shared paints Аз/Ти/Това… lines blue).
+  const withImages = examples.filter(e => !!e.imageUrl);
+  const isCardGrid = withImages.length >= 2 && withImages.length === examples.length;
 
   const speakableIndexes = examples
     .map((ex, i) => ({ i, text: speakableText(ex) }))
@@ -279,6 +283,80 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
       </div>
     );
   };
+
+  if (isCardGrid) {
+    return (
+      <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+        {!disableTts && (
+          <div className="flex justify-end mb-4">
+            <Button
+              onClick={handlePlayAll}
+              className={`flex items-center gap-2 px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all ${
+                playingAll
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+              }`}
+            >
+              {playingAll ? (
+                <><Pause className="w-5 h-5" />{t('exercise.pause')}</>
+              ) : pausedAll ? (
+                <><Play className="w-5 h-5" />{t('exercise.continue')}</>
+              ) : (
+                <><Play className="w-5 h-5" />{t('exercise.listen')}</>
+              )}
+            </Button>
+          </div>
+        )}
+        {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {examples.map((example, index) => {
+            const cardZoomable = example.zoomable !== false;
+            const img = (
+              <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
+                <ImageWithFallback
+                  src={example.imageUrl}
+                  alt={example.lines?.[0] ?? example.text}
+                />
+              </div>
+            );
+            return (
+              <div
+                key={index}
+                onClick={() => play(index)}
+                className={`relative bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center ${
+                  playingIndex === index ? 'border-[#32C189]' : 'border-gray-200'
+                }`}
+              >
+                {!disableTts && (
+                  <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+                )}
+                {example.imageUrl && (
+                  cardZoomable ? (
+                    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                      <ImageLightbox src={example.imageUrl} alt={example.lines?.[0] ?? example.text}>
+                        {img}
+                      </ImageLightbox>
+                    </div>
+                  ) : img
+                )}
+                <div className="mt-4 text-center space-y-2 w-full">
+                  {(example.lines ?? []).filter(Boolean).map((line, i) => (
+                    <p key={i} className="text-base md:text-lg font-bold text-gray-900 leading-relaxed">
+                      <BoldLine text={line} color="#2d5a1b" />
+                    </p>
+                  ))}
+                  <InlineTranslation
+                    text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
+                    visible={revealed.has(index)}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative bg-white rounded-xl p-4 md:p-6 shadow-md">

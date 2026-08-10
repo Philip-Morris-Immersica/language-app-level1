@@ -65,6 +65,23 @@ type ReadingExercise = {
   [key: string]: unknown;
 };
 
+function BoldLine({ text }: { text: string }) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1
+          ? <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part}</span>
+          : <span key={i}>{part}</span>
+      )}
+    </>
+  );
+}
+
+function stripBold(text: string) {
+  return text.replace(/\*\*(.+?)\*\*/g, '$1');
+}
+
 function CompactImageStrip({ images, columns = 3 }: { images: ReadingImage[]; columns?: number }) {
   const cols = Math.min(Math.max(columns, 2), 4);
   return (
@@ -91,9 +108,9 @@ function CompactImageStrip({ images, columns = 3 }: { images: ReadingImage[]; co
 function speakTextFor(ex: ReadingExercise, index: number): string {
   const tts = ex.ttsParagraphs;
   if (tts && tts.length === ex.paragraphs.length && tts[index]?.trim()) {
-    return tts[index];
+    return stripBold(tts[index]);
   }
-  return ex.paragraphs[index] ?? '';
+  return stripBold(ex.paragraphs[index] ?? '');
 }
 
 function parseTaskList(text: string): TaskListParsed | null {
@@ -118,10 +135,6 @@ function parseTaskList(text: string): TaskListParsed | null {
   }
 
   return rows.length >= 3 ? { title, rows, footer } : null;
-}
-
-function hasTaskListParagraphs(paragraphs: string[]): boolean {
-  return paragraphs.some((p) => parseTaskList(p) !== null);
 }
 
 function TaskListTable({ list }: { list: TaskListParsed }) {
@@ -411,12 +424,12 @@ function ReadingTextWithTaskTables({
                     <TaskListTable list={taskList} />
                   ) : (
                     <p className="text-base md:text-lg text-gray-800 leading-relaxed">
-                      {paragraph}
+                      <BoldLine text={paragraph} />
                     </p>
                   )}
                   {!noTranslation && (
                     <InlineTranslation
-                      text={paragraph}
+                      text={stripBold(paragraph)}
                       visible={revealedParas.has(index)}
                       translations={paragraphTranslations?.[index]}
                     />
@@ -460,7 +473,10 @@ export function ReadingText({
   const ex = exercise as ReadingExercise;
   const paragraphs = ex.paragraphs ?? [];
 
-  if (!isB1 || !hasTaskListParagraphs(paragraphs) || ex.hideText) {
+  // Non-B1 / hideText → shared renderer. All other B1 reading_text uses the
+  // local path so `**bold**` markers render as bold (not literal asterisks)
+  // and `ttsParagraphs` are used for playback.
+  if (!isB1 || ex.hideText || paragraphs.length === 0) {
     return (
       <SharedAdapter
         exercise={ex}
