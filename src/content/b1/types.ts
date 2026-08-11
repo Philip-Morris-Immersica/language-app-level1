@@ -165,6 +165,8 @@ export interface B1GrammarExamplesExercise extends BaseExercise {
   subtitle?: string;
   instruction?: string;
   disableTts?: boolean;
+  /** Static intro under the hero image — not spoken by TTS. */
+  introText?: string;
   examples: {
     imageUrl: string;
     text: string;

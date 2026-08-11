@@ -68,7 +68,8 @@ interface Props {
 }
 
 function speakableText(example: B1GrammarExamplesExercise['examples'][number]): string {
-  if (example.ttsText?.trim()) return example.ttsText.trim();
+  // Explicit ttsText (even empty) wins — lets authors silence a card while showing lines/subtext.
+  if (example.ttsText !== undefined) return example.ttsText.trim();
   if (example.lines?.length) {
     return example.lines
       .map(l => l.replace(/\*\*(.+?)\*\*/g, '$1').replace(/^–\s*/, '').trim())
@@ -232,49 +233,77 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
     }
   }
 
-  const renderFlatLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => (
-    <div
-      key={index}
-      onClick={() => play(index)}
-      className={`text-center cursor-pointer rounded-lg border px-3 py-2.5 transition-colors ${
-        playingIndex === index
-          ? 'border-[#32C189]/60 bg-[#DAF6EB]/50'
-          : 'border-transparent hover:border-[#32C189]/40 hover:bg-[#DAF6EB]/40'
-      }`}
-    >
-      {(example.lines ?? []).filter(Boolean).map((line, i) => (
-        <p key={i} className="text-base md:text-lg font-semibold text-gray-800 leading-relaxed">
-          <BoldLine text={line} />
-        </p>
-      ))}
-      <InlineTranslation
-        text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
-        visible={revealed.has(index)}
-      />
-    </div>
-  );
-
-  const renderBubbleLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => {
-    const isPlaying = playingIndex === index;
+  const renderFlatLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => {
+    const canPlay = !!speakableText(example);
     return (
       <div
         key={index}
-        onClick={() => play(index)}
-        className={`flex items-start gap-2 rounded-lg px-2 py-1.5 cursor-pointer transition-colors active:scale-[0.99] ${
-          isPlaying ? 'bg-[#DAF6EB]/50' : 'hover:bg-gray-50'
+        onClick={() => canPlay && play(index)}
+        className={`text-center rounded-lg border px-3 py-2.5 transition-colors space-y-2 ${
+          canPlay ? 'cursor-pointer' : ''
+        } ${
+          playingIndex === index
+            ? 'border-[#32C189]/60 bg-[#DAF6EB]/50'
+            : canPlay
+              ? 'border-transparent hover:border-[#32C189]/40 hover:bg-[#DAF6EB]/40'
+              : 'border-transparent'
         }`}
       >
-        <Volume2
-          className={`w-3.5 h-3.5 mt-0.5 shrink-0 transition-colors ${
-            isPlaying ? 'text-[#32C189]' : 'text-gray-300'
-          }`}
+        {(example.lines ?? []).filter(Boolean).map((line, i) => (
+          <p key={i} className="text-base md:text-lg font-semibold text-gray-800 leading-relaxed">
+            <BoldLine text={line} />
+          </p>
+        ))}
+        {example.subtext?.trim() ? (
+          <div className="rounded-lg border border-[#32C189]/40 bg-[#DAF6EB]/50 px-3 py-2 text-left">
+            <p className="text-sm md:text-base text-gray-800 leading-snug">
+              <BoldLine text={example.subtext} />
+            </p>
+          </div>
+        ) : null}
+        <InlineTranslation
+          text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
+          visible={revealed.has(index)}
         />
-        <div className="flex-1 min-w-0 text-left">
+      </div>
+    );
+  };
+
+  const renderBubbleLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => {
+    const isPlaying = playingIndex === index;
+    const canPlay = !!speakableText(example);
+    return (
+      <div
+        key={index}
+        onClick={() => canPlay && play(index)}
+        className={`flex items-start gap-2 rounded-lg px-2 py-1.5 transition-colors active:scale-[0.99] ${
+          canPlay ? 'cursor-pointer' : ''
+        } ${
+          isPlaying ? 'bg-[#DAF6EB]/50' : canPlay ? 'hover:bg-gray-50' : ''
+        }`}
+      >
+        {canPlay ? (
+          <Volume2
+            className={`w-3.5 h-3.5 mt-0.5 shrink-0 transition-colors ${
+              isPlaying ? 'text-[#32C189]' : 'text-gray-300'
+            }`}
+          />
+        ) : (
+          <span className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+        )}
+        <div className="flex-1 min-w-0 text-left space-y-2">
           {(example.lines ?? []).filter(Boolean).map((line, i) => (
             <p key={i} className="text-sm md:text-base text-gray-800 leading-snug">
               <BoldLine text={line} />
             </p>
           ))}
+          {example.subtext?.trim() ? (
+            <div className="rounded-lg border border-[#32C189]/40 bg-[#DAF6EB]/50 px-3 py-2">
+              <p className="text-sm md:text-base text-gray-800 leading-snug">
+                <BoldLine text={example.subtext} />
+              </p>
+            </div>
+          ) : null}
           <InlineTranslation
             text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
             visible={revealed.has(index)}
@@ -340,8 +369,11 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
                   ) : img
                 )}
                 <div className="mt-4 text-center space-y-2 w-full">
+                  {example.text?.trim() ? (
+                    <p className="text-base md:text-lg font-semibold text-gray-900">{example.text}</p>
+                  ) : null}
                   {(example.lines ?? []).filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base md:text-lg font-bold text-gray-900 leading-relaxed">
+                    <p key={i} className="text-base md:text-lg font-normal text-gray-900 leading-relaxed">
                       <BoldLine text={line} color="#2d5a1b" />
                     </p>
                   ))}
@@ -389,6 +421,12 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
             </ImageLightbox>
           ) : heroImage
         )}
+
+        {exercise.introText?.trim() ? (
+          <p className="text-base md:text-lg text-gray-800 leading-relaxed">
+            {exercise.introText}
+          </p>
+        ) : null}
 
         {hasNumberedDialogues ? (
           <div className="flex flex-col gap-5 md:gap-6">

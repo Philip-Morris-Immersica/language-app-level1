@@ -289,7 +289,13 @@ export function Dialogues({
               <div className="flex-1 min-w-0">
                 <p className={`${compact ? 'text-sm md:text-base leading-snug' : 'text-base md:text-lg leading-relaxed'} text-gray-800`}>
                   {line.speaker && (
-                    <span className="font-bold text-[#0072BC] mr-1">{line.speaker}:</span>
+                    <span
+                      className={`font-bold mr-1 ${
+                        exercise.speakerColor === 'black' ? 'text-gray-900' : 'text-[#0072BC]'
+                      }`}
+                    >
+                      {line.speaker}:
+                    </span>
                   )}
                   <BoldLine text={line.text} />
                 </p>

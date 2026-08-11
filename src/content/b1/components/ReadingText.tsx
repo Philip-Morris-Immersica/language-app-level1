@@ -50,6 +50,8 @@ type ReadingExercise = {
   imageEqualHeight?: boolean;
   /** Smaller side-by-side photos without captions / image audio (decorative only). */
   compactImages?: boolean;
+  /** Center the textTitle above the shared reading body. */
+  centerTitle?: boolean;
   paragraphs: string[];
   /** TTS-only text per paragraph (e.g. without list numbers). Used as browser-TTS fallback. */
   ttsParagraphs?: string[];
@@ -186,6 +188,7 @@ function SharedAdapter({
 }) {
   const scoreIfCorrect = exercise.checklist?.items.length ?? exercise.points ?? 1;
   const compact = !!exercise.compactImages && (exercise.images?.length ?? 0) > 0;
+  const centerTitle = !!exercise.centerTitle;
   return (
     <div className="space-y-3">
       {compact && (
@@ -194,11 +197,16 @@ function SharedAdapter({
           columns={exercise.imageColumns ?? exercise.images!.length}
         />
       )}
+      {centerTitle && exercise.textTitle ? (
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-1 text-center">
+          {exercise.textTitle}
+        </h2>
+      ) : null}
       <SharedReadingText
         audioUrl={exercise.audioUrl}
         songUrl={exercise.songUrl}
         disableParagraphAudio={exercise.disableParagraphAudio}
-        textTitle={exercise.textTitle}
+        textTitle={centerTitle ? undefined : exercise.textTitle}
         images={compact ? undefined : exercise.images}
         imageFlashcards={compact ? false : exercise.imageFlashcards}
         imageColumns={exercise.imageColumns}

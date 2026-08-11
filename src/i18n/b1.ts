@@ -61,4 +61,13 @@ export const B1_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     uk: 'Натисніть слово зі списку, потім натисніть групу, до якої воно належить.',
     ru: 'Нажмите на слово из списка, затем нажмите на группу, к которой оно относится.',
   },
+  'b1.grammar.directIndirectSpeech': {
+    bg: 'Обърнете внимание на трите основни типа преобразуване: изявления, въпроси и заповеди.',
+    ar: 'انتبه إلى الأنواع الثلاثة الرئيسية للتحويل: الجمل الخبرية والأسئلة والأوامر.',
+    fr: 'Observez les trois types principaux de transformation : déclarations, questions et ordres.',
+    en: 'Pay attention to the three main types of transformation: statements, questions and commands.',
+    fa: 'به سه نوع اصلی تبدیل توجه کنید: جملات خبری، سؤالات و دستورات.',
+    uk: 'Зверніть увагу на три основні типи перетворення: висловлювання, запитання та накази.',
+    ru: 'Обратите внимание на три основных типа преобразования: изъявления, вопросы и приказания.',
+  },
 };
