@@ -85,7 +85,7 @@ export const content: LessonContent = {
         uk: 'Пасивний стан — що зроблено',
       },
       content: {
-        bg: `Страдателният залог (пасив) казва какво е направено, а не кой го е направил. Важно е резултатът, а не деятелят.
+        bg: `Страдателният залог (пасив) казва какво е направено, а не кой го е направил. Важен е резултатът, а не деятелят.
 
 Активно (важно е кой): Румен затвори прозореца.
 Страдателно (важно е какво): Прозорецът е затворен от Румен.
@@ -96,7 +96,7 @@ export const content: LessonContent = {
 Ако искаме да кажем кой е извършил действието, добавяме „от" + лице:
 Договорът е подписан от директора.
 Сметката е платена от клиента.`,
-        en: `The passive voice says what has been done, not who did it. The result matters more than the agent.
+        en: `The passive voice says what has been done, not who did it. The result matters, not the agent.
 
 Active (who matters): Румен затвори прозореца. (Rumen closed the window.)
 Passive (what matters): Прозорецът е затворен от Румен. (The window is closed by Rumen.)
@@ -107,7 +107,7 @@ Formation: the verb „съм" (to be) + past passive participle.
 To name the agent, add „от" + person:
 Договорът е подписан от директора. (The contract is signed by the director.)
 Сметката е платена от клиента. (The bill is paid by the customer.)`,
-        fr: `La voix passive dit ce qui a été fait, pas qui l'a fait. Le résultat compte plus que l'agent.
+        fr: `La voix passive dit ce qui a été fait, pas qui l'a fait. Le résultat compte, pas l'agent.
 
 Actif (qui compte) : Румен затвори прозореца. (Roumen a fermé la fenêtre.)
 Passif (ce qui compte) : Прозорецът е затворен от Румен. (La fenêtre est fermée par Roumen.)
