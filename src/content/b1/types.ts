@@ -205,6 +205,8 @@ export interface B1SortToColumnsExercise extends BaseExercise {
     title: string;
     icon?: string;
     correctItems: string[];
+    /** Pre-placed model word (not in the pool; shown as „пример"). */
+    exampleItem?: string;
   }[];
 }
 

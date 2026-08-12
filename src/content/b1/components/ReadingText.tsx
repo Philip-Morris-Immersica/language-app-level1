@@ -284,7 +284,7 @@ function ReadingTextWithTaskTables({
           if (tok.cancelled) return;
           window.setTimeout(() => {
             if (!tok.cancelled) step(i + 1);
-          }, 400);
+          }, 80);
         });
       };
       return step;
@@ -305,7 +305,7 @@ function ReadingTextWithTaskTables({
         if (token.cancelled) return;
         window.setTimeout(() => {
           if (!token.cancelled) step(pausedIdx + 1);
-        }, 400);
+        }, 80);
       });
       if (resumed) {
         setSequentialPlaying(true);

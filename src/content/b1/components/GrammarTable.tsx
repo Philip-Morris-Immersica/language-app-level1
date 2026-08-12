@@ -29,20 +29,39 @@ function renderBoldText(text: string): React.ReactNode {
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-      return <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part.slice(2, -2)}</span>;
+      return <span key={i} className="font-extrabold" style={{ color: '#32C189' }}>{part.slice(2, -2)}</span>;
     }
     return part;
   });
 }
 
-function ClickTranslateTh({ text, className, colSpan }: { text: string; className: string; colSpan?: number }) {
+function ClickTranslateTh({
+  text,
+  className,
+  colSpan,
+  onClick,
+  showSpeaker,
+}: {
+  text: string;
+  className: string;
+  colSpan?: number;
+  onClick?: () => void;
+  showSpeaker?: boolean;
+}) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
   const isNonBg = lang !== 'bg';
 
   return (
-    <th className={className} colSpan={colSpan}>
-      <span>{text}</span>
+    <th
+      className={`${className} ${onClick ? 'cursor-pointer select-none' : ''}`}
+      colSpan={colSpan}
+      onClick={onClick ? (e) => { e.stopPropagation(); onClick(); } : undefined}
+    >
+      <span className="inline-flex items-center justify-center gap-2">
+        <span>{text}</span>
+        {showSpeaker ? <Volume2 className="w-3.5 h-3.5 text-white/80 shrink-0" /> : null}
+      </span>
       {isNonBg && translated !== text && (
         <span className="block text-xs font-normal text-white/75 mt-0.5 italic">
           {translated}
@@ -150,7 +169,7 @@ function SingleTable({
                 className={`${rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'} transition-colors ${row.noAudio ? 'bg-[#edf5e4]' : rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
               >
                 {showPronounCol && (
-                  <td className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}>
+                  <td className={`py-2.5 px-3 md:px-5 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}>
                     <div className="flex items-center justify-between gap-1">
                       <span>{row.pronoun}</span>
                       {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
@@ -160,7 +179,7 @@ function SingleTable({
                 {row.cells.map((cell, cIdx) => (
                   <td
                     key={cIdx}
-                    className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${row.noAudio ? 'italic text-[#2d5a1b] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#2d5a1b]' : 'font-medium'}`}
+                    className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#32C189]' : 'font-medium'}`}
                   >
                     <div className={`flex items-center ${cellJustify} gap-1`}>
                       <span>{renderBoldText(cell)}</span>
@@ -443,7 +462,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
       {!disableAudio && (
         <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
           <Volume2 className="w-3 h-3" />
-          {t('exercise.tapRowToHear')}
+          {t('exercise.tapCardToHear')}
         </p>
       )}
 

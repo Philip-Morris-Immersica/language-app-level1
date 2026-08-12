@@ -37,7 +37,7 @@ function BoldLine({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         i % 2 === 1
-          ? <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part}</span>
+          ? <span key={i} className="font-extrabold" style={{ color: '#32C189' }}>{part}</span>
           : <span key={i}>{part}</span>
       )}
     </>
@@ -47,6 +47,9 @@ function BoldLine({ text }: { text: string }) {
 function stripBold(text: string) {
   return text.replace(/\*\*(.+?)\*\*/g, '$1');
 }
+
+/** Gap between consecutive dialogue lines when chaining — keep near-zero so playback feels continuous. */
+const LINE_GAP_MS = 80;
 
 interface DialoguesExerciseShape {
   id: string;
@@ -110,13 +113,17 @@ export function Dialogues({
   const [playingLine, setPlayingLine] = useState<string | null>(null);
   const [playingSection, setPlayingSection] = useState<string | null>(null);
   const [pausedSection, setPausedSection] = useState<string | null>(null);
+  const [playingAll, setPlayingAll] = useState(false);
+  const [pausedAll, setPausedAll] = useState(false);
   const [revealedSections, setRevealedSections] = useState<Set<string>>(new Set());
   const [revealedLines, setRevealedLines] = useState<Set<string>>(new Set());
   const sectionPlaybackRef = useRef<{ cancelled: boolean } | null>(null);
+  const allPlaybackRef = useRef<{ cancelled: boolean } | null>(null);
 
   useEffect(() => {
     return () => {
       if (sectionPlaybackRef.current) sectionPlaybackRef.current.cancelled = true;
+      if (allPlaybackRef.current) allPlaybackRef.current.cancelled = true;
       stopTtsAudio();
     };
   }, []);
@@ -130,6 +137,15 @@ export function Dialogues({
     setPlayingLine(null);
   };
 
+  const stopAllPlayback = () => {
+    if (allPlaybackRef.current) allPlaybackRef.current.cancelled = true;
+    allPlaybackRef.current = null;
+    stopTtsAudio();
+    setPlayingAll(false);
+    setPausedAll(false);
+    setPlayingLine(null);
+  };
+
   const toggleSection = (sectionId: string) => {
     setRevealedSections(prev => {
       const next = new Set(prev);
@@ -139,9 +155,29 @@ export function Dialogues({
     });
   };
 
+  type FlatLine = { sectionId: string; lineIndex: number; spoken: string; audioPath: string };
+
+  const flattenLines = (secs: DialogueSection[]): FlatLine[] => {
+    const out: FlatLine[] = [];
+    for (const section of secs) {
+      section.lines.forEach((line, lineIndex) => {
+        out.push({
+          sectionId: section.id,
+          lineIndex,
+          spoken: stripBold(line.ttsText ?? line.text).replace(/^—\s*/, ''),
+          audioPath: id
+            ? getTtsAudioPath(id, 'dialogues', `${id}-${section.id}-line-${lineIndex}`)
+            : '',
+        });
+      });
+    }
+    return out;
+  };
+
   const handleLineClick = (e: React.MouseEvent, section: DialogueSection, lineIndex: number) => {
     e.stopPropagation();
     if (playingSection || pausedSection) stopSectionPlayback();
+    if (playingAll || pausedAll) stopAllPlayback();
     const line = section.lines[lineIndex];
     const lineKey = `${section.id}-line-${lineIndex}`;
 
@@ -169,6 +205,7 @@ export function Dialogues({
 
   const handlePlaySection = (e: React.MouseEvent, section: DialogueSection) => {
     e.stopPropagation();
+    if (playingAll || pausedAll) stopAllPlayback();
 
     const makeChain = (tok: { cancelled: boolean }) => {
       const step = (i: number) => {
@@ -188,7 +225,7 @@ export function Dialogues({
         const spoken = stripBold(section.lines[i].ttsText ?? section.lines[i].text).replace(/^—\s*/, '');
         playTtsAudio(audioPath, spoken, undefined, () => {
           if (tok.cancelled) return;
-          window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, 350);
+          window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, LINE_GAP_MS);
         });
       };
       return step;
@@ -213,7 +250,7 @@ export function Dialogues({
       const step = makeChain(token);
       const resumed = resumeTtsAudio(() => {
         if (token.cancelled) return;
-        window.setTimeout(() => { if (!token.cancelled) step(pausedIdx + 1); }, 350);
+        window.setTimeout(() => { if (!token.cancelled) step(pausedIdx + 1); }, LINE_GAP_MS);
       });
       if (resumed) {
         setPlayingSection(section.id);
@@ -235,6 +272,71 @@ export function Dialogues({
     const token = { cancelled: false };
     sectionPlaybackRef.current = token;
     setPlayingSection(section.id);
+    makeChain(token)(0);
+  };
+
+  const handlePlayAll = () => {
+    if (!id || sections.length === 0) return;
+    if (playingSection || pausedSection) stopSectionPlayback();
+
+    const flat = flattenLines(sections);
+
+    const makeChain = (tok: { cancelled: boolean }) => {
+      const step = (i: number) => {
+        if (tok.cancelled) return;
+        if (i >= flat.length) {
+          if (allPlaybackRef.current === tok) allPlaybackRef.current = null;
+          setPlayingAll(false);
+          setPlayingLine(null);
+          return;
+        }
+        const entry = flat[i];
+        setPlayingLine(`${entry.sectionId}-line-${entry.lineIndex}`);
+        playTtsAudio(entry.audioPath, entry.spoken, undefined, () => {
+          if (tok.cancelled) return;
+          window.setTimeout(() => { if (!tok.cancelled) step(i + 1); }, LINE_GAP_MS);
+        });
+      };
+      return step;
+    };
+
+    if (playingAll) {
+      pauseTtsAudio();
+      setPlayingAll(false);
+      setPausedAll(true);
+      return;
+    }
+
+    if (pausedAll && allPlaybackRef.current && !allPlaybackRef.current.cancelled) {
+      const token = allPlaybackRef.current;
+      const pausedIdx = (() => {
+        if (!playingLine) return 0;
+        const match = playingLine.match(/^(.*)-line-(\d+)$/);
+        if (!match) return 0;
+        const idx = flat.findIndex(
+          f => f.sectionId === match[1] && f.lineIndex === parseInt(match[2], 10),
+        );
+        return Math.max(0, idx);
+      })();
+      const step = makeChain(token);
+      const resumed = resumeTtsAudio(() => {
+        if (token.cancelled) return;
+        window.setTimeout(() => { if (!token.cancelled) step(pausedIdx + 1); }, LINE_GAP_MS);
+      });
+      if (resumed) {
+        setPlayingAll(true);
+        setPausedAll(false);
+        return;
+      }
+      token.cancelled = true;
+      allPlaybackRef.current = null;
+    }
+
+    stopAllPlayback();
+    const token = { cancelled: false };
+    allPlaybackRef.current = token;
+    setPlayingAll(true);
+    setPausedAll(false);
     makeChain(token)(0);
   };
 
@@ -353,6 +455,27 @@ export function Dialogues({
         <p className="text-xs text-gray-400 text-center mb-4 italic">
           {t('exercise.tapToTranslate')}
         </p>
+      )}
+
+      {sections.length > 0 && (
+        <div className="flex justify-end mb-4">
+          <Button
+            onClick={handlePlayAll}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
+              playingAll
+                ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+            }`}
+          >
+            {playingAll ? (
+              <><Pause className="w-4 h-4" /> {t('exercise.pause')}</>
+            ) : pausedAll ? (
+              <><Play className="w-4 h-4" /> {t('exercise.continue')}</>
+            ) : (
+              <><Play className="w-4 h-4" /> {t('exercise.listen')}</>
+            )}
+          </Button>
+        </div>
       )}
 
       {isScene ? (

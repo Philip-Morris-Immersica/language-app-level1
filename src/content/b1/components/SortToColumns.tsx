@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CheckCircle2, XCircle, RotateCcw, Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -22,6 +22,11 @@ export function SortToColumns({ exercise, onComplete }: Props) {
   const { items, columns: columnConfig } = exercise;
   const t = useT();
 
+  const exampleItems = useMemo(
+    () => new Set(columnConfig.map(c => c.exampleItem).filter((x): x is string => !!x)),
+    [columnConfig],
+  );
+
   const [pool, setPool] = useState<string[]>([]);
   const [placed, setPlaced] = useState<Record<string, string[]>>({});
   const [selected, setSelected] = useState<string | null>(null);
@@ -30,14 +35,19 @@ export function SortToColumns({ exercise, onComplete }: Props) {
   const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
-    setPool([...items].sort(() => Math.random() - 0.5));
-    setPlaced(Object.fromEntries(columnConfig.map(c => [c.id, []])));
+    const initialPlaced = Object.fromEntries(
+      columnConfig.map(c => [c.id, c.exampleItem ? [c.exampleItem] : []]),
+    );
+    const remaining = items.filter(i => !exampleItems.has(i));
+    setPool([...remaining].sort(() => Math.random() - 0.5));
+    setPlaced(initialPlaced);
     setSelected(null);
     setSubmitted(false);
     setIsCorrect(false);
-  }, [items, columnConfig, resetKey]);
+  }, [items, columnConfig, exampleItems, resetKey]);
 
   const allPlaced = pool.length === 0;
+  const placedCount = items.length - pool.length;
 
   const selectItem = (item: string) => {
     if (submitted) return;
@@ -52,7 +62,7 @@ export function SortToColumns({ exercise, onComplete }: Props) {
   };
 
   const returnToPool = (columnId: string, item: string) => {
-    if (submitted) return;
+    if (submitted || exampleItems.has(item)) return;
     setPlaced(prev => ({ ...prev, [columnId]: prev[columnId].filter(i => i !== item) }));
     setPool(prev => [...prev, item]);
     setSelected(null);
@@ -89,12 +99,12 @@ export function SortToColumns({ exercise, onComplete }: Props) {
       <div className="mb-4">
         <div className="flex items-center justify-between text-sm text-gray-600 mb-1.5">
           <span>{t('exercise.progress')}</span>
-          <span className="font-bold">{items.length - pool.length} / {items.length}</span>
+          <span className="font-bold">{placedCount} / {items.length}</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-[#8B9D5F] h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((items.length - pool.length) / items.length) * 100}%` }}
+            style={{ width: `${(placedCount / items.length) * 100}%` }}
           />
         </div>
       </div>
@@ -147,20 +157,30 @@ export function SortToColumns({ exercise, onComplete }: Props) {
               </div>
               <div className="flex flex-col gap-1.5">
                 {colItems.map((item, idx) => {
+                  const isExample = exampleItems.has(item);
                   const correct = submitted ? col.correctItems.includes(item) : null;
                   return (
                     <div key={`${item}-${idx}`} className="relative">
                       <button
                         onClick={(e) => { e.stopPropagation(); returnToPool(col.id, item); }}
-                        disabled={submitted}
-                        className={`w-full bg-white border rounded-lg px-2 py-1.5 text-xs md:text-sm text-center font-medium text-gray-700 ${
-                          !submitted ? 'cursor-pointer hover:bg-[#FCE2DE]/40 hover:border-[#D25A45]/50 active:scale-95 transition-all' : ''
-                        } border-gray-300`}
+                        disabled={submitted || isExample}
+                        className={`w-full border rounded-lg px-2 py-1.5 text-xs md:text-sm text-center font-medium ${
+                          isExample
+                            ? 'bg-[#DAF6EB] border-[#32C189]/50 text-[#1F5741] cursor-default'
+                            : `bg-white text-gray-700 border-gray-300 ${
+                                !submitted ? 'cursor-pointer hover:bg-[#FCE2DE]/40 hover:border-[#D25A45]/50 active:scale-95 transition-all' : ''
+                              }`
+                        }`}
                       >
                         {item}
-                        {!submitted && <Undo2 className="inline-block ml-1 w-3 h-3 text-gray-400" />}
+                        {isExample && (
+                          <span className="ml-1 text-[10px] tracking-wide text-[#32C189] font-bold">
+                            ({t('b1.exercise.example')})
+                          </span>
+                        )}
+                        {!submitted && !isExample && <Undo2 className="inline-block ml-1 w-3 h-3 text-gray-400" />}
                       </button>
-                      {submitted && (
+                      {submitted && !isExample && (
                         <div className="absolute -right-1.5 -top-1.5">
                           {correct ? (
                             <CheckCircle2 className="w-4 h-4 text-green-500 bg-white rounded-full" />

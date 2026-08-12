@@ -47,7 +47,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   );
 }
 
-function BoldLine({ text, color = '#2d5a1b' }: { text: string; color?: string }) {
+function BoldLine({ text, color = '#32C189' }: { text: string; color?: string }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
     <>
@@ -89,7 +89,8 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
   const playbackRef = useRef<{ cancelled: boolean } | null>(null);
   const id = exerciseId ?? exercise.id;
   const imageExample = examples.find(e => e.imageUrl);
-  const zoomable = imageExample?.zoomable !== false;
+  // Opt-in only — lightbox zoom is off unless zoomable: true on the example.
+  const zoomable = imageExample?.zoomable === true;
   // Multi-card photo grid (each example has its own image) — like shared GrammarWithExamples,
   // but body text stays black (shared paints Аз/Ти/Това… lines blue).
   const withImages = examples.filter(e => !!e.imageUrl);
@@ -163,7 +164,7 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
         if (tok.cancelled) return;
         window.setTimeout(() => {
           if (!tok.cancelled) step(pos + 1);
-        }, 350);
+        }, 80);
       });
     };
     return step;
@@ -189,7 +190,7 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
         if (token.cancelled) return;
         window.setTimeout(() => {
           if (!token.cancelled) step(pausedPos + 1);
-        }, 350);
+        }, 80);
       });
       if (resumed) {
         setPlayingAll(true);
@@ -233,13 +234,47 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
     }
   }
 
+  /** Direct speech above; reported-speech explanation in a separate green box below. */
+  const renderSpeechBlock = (
+    example: B1GrammarExamplesExercise['examples'][number],
+    opts: { lineClass: string; align?: 'left' | 'center' },
+  ) => {
+    const hasSub = !!example.subtext?.trim();
+    const lines = (example.lines ?? []).filter(Boolean);
+    const alignCls = opts.align === 'left' ? 'text-left' : 'text-center';
+    return (
+      <div className={`space-y-2 ${alignCls}`}>
+        {lines.length > 0 ? (
+          <div
+            className={`rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 space-y-1 ${alignCls}`}
+          >
+            {lines.map((line, i) => (
+              <p key={i} className={`${opts.lineClass} text-slate-800`}>
+                <BoldLine text={line} color="#1e3a5f" />
+              </p>
+            ))}
+          </div>
+        ) : null}
+        {hasSub ? (
+          <div
+            className={`rounded-lg border border-[#32C189]/50 bg-[#DAF6EB]/40 px-3 py-2.5 ${alignCls}`}
+          >
+            <p className={`${opts.lineClass} text-[#1F5741]`}>
+              <BoldLine text={example.subtext!} color="#32C189" />
+            </p>
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
   const renderFlatLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => {
     const canPlay = !!speakableText(example);
     return (
       <div
         key={index}
         onClick={() => canPlay && play(index)}
-        className={`text-center rounded-lg border px-3 py-2.5 transition-colors space-y-2 ${
+        className={`rounded-lg border px-3 py-2.5 transition-colors ${
           canPlay ? 'cursor-pointer' : ''
         } ${
           playingIndex === index
@@ -249,18 +284,10 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
               : 'border-transparent'
         }`}
       >
-        {(example.lines ?? []).filter(Boolean).map((line, i) => (
-          <p key={i} className="text-base md:text-lg font-semibold text-gray-800 leading-relaxed">
-            <BoldLine text={line} />
-          </p>
-        ))}
-        {example.subtext?.trim() ? (
-          <div className="rounded-lg border border-[#32C189]/40 bg-[#DAF6EB]/50 px-3 py-2 text-left">
-            <p className="text-sm md:text-base text-gray-800 leading-snug">
-              <BoldLine text={example.subtext} />
-            </p>
-          </div>
-        ) : null}
+        {renderSpeechBlock(example, {
+          lineClass: 'text-base md:text-lg font-semibold text-gray-800 leading-relaxed',
+          align: 'center',
+        })}
         <InlineTranslation
           text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
           visible={revealed.has(index)}
@@ -269,9 +296,14 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
     );
   };
 
-  const renderBubbleLine = (index: number, example: B1GrammarExamplesExercise['examples'][number]) => {
+  const renderBubbleLine = (
+    index: number,
+    example: B1GrammarExamplesExercise['examples'][number],
+    opts?: { linesOnly?: boolean },
+  ) => {
     const isPlaying = playingIndex === index;
     const canPlay = !!speakableText(example);
+    const lines = (example.lines ?? []).filter(Boolean);
     return (
       <div
         key={index}
@@ -291,21 +323,23 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
         ) : (
           <span className="w-3.5 h-3.5 mt-0.5 shrink-0" />
         )}
-        <div className="flex-1 min-w-0 text-left space-y-2">
-          {(example.lines ?? []).filter(Boolean).map((line, i) => (
-            <p key={i} className="text-sm md:text-base text-gray-800 leading-snug">
-              <BoldLine text={line} />
-            </p>
-          ))}
-          {example.subtext?.trim() ? (
-            <div className="rounded-lg border border-[#32C189]/40 bg-[#DAF6EB]/50 px-3 py-2">
-              <p className="text-sm md:text-base text-gray-800 leading-snug">
-                <BoldLine text={example.subtext} />
-              </p>
+        <div className="flex-1 min-w-0">
+          {opts?.linesOnly ? (
+            <div className="text-left space-y-1">
+              {lines.map((line, i) => (
+                <p key={i} className="text-sm md:text-base text-gray-800 leading-snug">
+                  <BoldLine text={line} />
+                </p>
+              ))}
             </div>
-          ) : null}
+          ) : (
+            renderSpeechBlock(example, {
+              lineClass: 'text-sm md:text-base text-gray-800 leading-snug',
+              align: 'left',
+            })
+          )}
           <InlineTranslation
-            text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
+            text={lines.map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
             visible={revealed.has(index)}
           />
         </div>
@@ -337,9 +371,15 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
           </div>
         )}
         {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className={`grid gap-6 md:gap-8 ${
+          examples.length === 1
+            ? 'grid-cols-1 max-w-md mx-auto'
+            : examples.length === 2
+              ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
+              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+        }`}>
           {examples.map((example, index) => {
-            const cardZoomable = example.zoomable !== false;
+            const cardZoomable = example.zoomable === true;
             const img = (
               <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-white">
                 <ImageWithFallback
@@ -352,7 +392,7 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
               <div
                 key={index}
                 onClick={() => play(index)}
-                className={`relative bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center ${
+                className={`relative bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col items-center ${
                   playingIndex === index ? 'border-[#32C189]' : 'border-gray-200'
                 }`}
               >
@@ -372,11 +412,18 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
                   {example.text?.trim() ? (
                     <p className="text-base md:text-lg font-semibold text-gray-900">{example.text}</p>
                   ) : null}
-                  {(example.lines ?? []).filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base md:text-lg font-normal text-gray-900 leading-relaxed">
-                      <BoldLine text={line} color="#2d5a1b" />
-                    </p>
-                  ))}
+                  {example.subtext?.trim() ? (
+                    renderSpeechBlock(example, {
+                      lineClass: 'text-base md:text-lg font-normal text-gray-900 leading-relaxed',
+                      align: 'center',
+                    })
+                  ) : (
+                    (example.lines ?? []).filter(Boolean).map((line, i) => (
+                      <p key={i} className="text-base md:text-lg font-normal text-gray-900 leading-relaxed">
+                        <BoldLine text={line} color="#32C189" />
+                      </p>
+                    ))
+                  )}
                   <InlineTranslation
                     text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ')}
                     visible={revealed.has(index)}
@@ -432,13 +479,19 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
           <div className="flex flex-col gap-5 md:gap-6">
             {dialogueGroups.map((group, gIdx) => {
               const groupPlaying = group.items.some(({ index }) => playingIndex === index);
+              const dialogueItems = group.items.filter(({ example }) =>
+                (example.lines ?? []).some(l => !!l?.trim()),
+              );
+              const subtexts = group.items
+                .map(({ example }) => example.subtext?.trim())
+                .filter((s): s is string => !!s);
               return (
                 <div
                   key={gIdx}
                   className={`relative rounded-2xl border-2 px-4 pt-5 pb-3 shadow-sm transition-all ${
                     groupPlaying
-                      ? 'border-[#32C189] bg-[#DAF6EB]/40'
-                      : 'border-[#32C189]/50 bg-[#f4fbf8]'
+                      ? 'border-[#32C189] bg-[#f4fbf8]'
+                      : 'border-[#32C189]/40 bg-white'
                   }`}
                 >
                   {group.label ? (
@@ -446,9 +499,20 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
                       {group.label}
                     </span>
                   ) : null}
-                  <div className="space-y-1">
-                    {group.items.map(({ index, example }) => renderBubbleLine(index, example))}
+                  {/* Dialogue lines share one green box; explanation sits below. */}
+                  <div className="rounded-lg border border-[#32C189]/50 bg-[#DAF6EB]/40 px-2 py-1.5 space-y-0.5">
+                    {dialogueItems.map(({ index, example }) =>
+                      renderBubbleLine(index, example, { linesOnly: true }),
+                    )}
                   </div>
+                  {subtexts.map((sub, sIdx) => (
+                    <div
+                      key={`sub-${sIdx}`}
+                      className="mt-2 rounded-lg border border-[#32C189]/40 bg-[#DAF6EB]/25 px-3 py-2.5 text-sm md:text-base text-gray-800 leading-snug"
+                    >
+                      <BoldLine text={sub} />
+                    </div>
+                  ))}
                 </div>
               );
             })}
