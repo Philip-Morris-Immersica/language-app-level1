@@ -37,7 +37,9 @@ function BoldLine({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         i % 2 === 1
-          ? <span key={i} className="font-extrabold" style={{ color: '#32C189' }}>{part}</span>
+          // AAA-contrast green text (#1F5741) on the light green bg (#DAF6EB) — brighter
+          // greens (#2BB673 / #32C189) read as nearly invisible on this background.
+          ? <span key={i} className="font-extrabold rounded-sm px-0.5" style={{ color: '#1F5741', backgroundColor: '#DAF6EB' }}>{part}</span>
           : <span key={i}>{part}</span>
       )}
     </>
@@ -375,7 +377,7 @@ export function Dialogues({
             <div
               key={index}
               onClick={(e) => handleLineClick(e, section, index)}
-              className={`flex items-start ${compact ? 'gap-2 rounded-lg px-2 py-1.5' : 'gap-3 rounded-lg px-3 py-2 -mx-3'} cursor-pointer transition-colors active:scale-[0.99] ${
+              className={`flex items-start ${compact ? 'gap-2 rounded-lg px-2 py-1.5' : 'gap-3 rounded-lg px-3 py-2 -mx-3'} cursor-pointer transition-colors active:scale-[0.99] select-none ${
                 isLinePlaying
                   ? compact
                     ? 'bg-[#DAF6EB]/50'
@@ -385,9 +387,6 @@ export function Dialogues({
                     : 'hover:bg-gray-50 border border-transparent'
               }`}
             >
-              <Volume2 className={`${compact ? 'w-3.5 h-3.5 mt-0.5' : 'w-4 h-4 mt-1.5'} shrink-0 transition-colors ${
-                isLinePlaying ? 'text-[#32C189]' : 'text-gray-300'
-              }`} />
               <div className="flex-1 min-w-0">
                 <p className={`${compact ? 'text-sm md:text-base leading-snug' : 'text-base md:text-lg leading-relaxed'} text-gray-800`}>
                   {line.speaker && (
@@ -416,9 +415,6 @@ export function Dialogues({
 
   const renderSectionLines = (section: DialogueSection) => (
     <div className="space-y-2">
-      <div className="flex items-center justify-end gap-2 mb-1">
-        {renderSectionButton(section, true)}
-      </div>
       {renderLineList(section, true)}
     </div>
   );
@@ -536,7 +532,6 @@ export function Dialogues({
                     <span className="text-sm font-semibold text-gray-600">{sectionTitle}</span>
                   )}
                 </div>
-                {renderSectionButton(section)}
               </div>
               {renderLineList(section)}
             </div>

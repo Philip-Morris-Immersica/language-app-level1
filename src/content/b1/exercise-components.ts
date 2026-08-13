@@ -32,6 +32,7 @@ import { SortToColumns } from './components/SortToColumns';
 import { TableFill } from './components/TableFill';
 import { ReadingText } from './components/ReadingText';
 import { Dialogues } from './components/Dialogues';
+import { WorkbookFillBlank } from './components/WorkbookFillBlank';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -61,4 +62,9 @@ export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   reading_text: ReadingText as unknown as CustomExerciseRenderer,
   // Override shared dialogues: support **bold** markdown in lines (B1-only).
   dialogues: Dialogues as unknown as CustomExerciseRenderer,
+  // Optional compact layout for long single-column dropdown exercises.
+  workbook_fill_blank: WorkbookFillBlank as unknown as CustomExerciseRenderer,
+  // Override shared grammar UI: lighter bold highlights, 2×2 card grids, compact tables.
+  grammar_examples: GrammarExamples as unknown as CustomExerciseRenderer,
+  grammar_table: GrammarTable as unknown as CustomExerciseRenderer,
 };

@@ -47,14 +47,17 @@ function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   );
 }
 
-function BoldLine({ text, color = '#32C189' }: { text: string; color?: string }) {
+function BoldLine({ text, color = '#1F5741' }: { text: string; color?: string }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
     <>
       {parts.map((part, i) =>
         i % 2 === 1
           // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-          ? <span key={i} className="font-extrabold" style={{ color }}>{part}</span>
+          // Light green bg (#DAF6EB) paired with the AAA-contrast green text (#1F5741) from the
+          // design system's green "trio" — brighter greens (#2BB673 / #32C189) read as nearly
+          // invisible on this light background (too little contrast).
+          ? <span key={i} className="font-extrabold rounded-sm px-0.5" style={{ color, backgroundColor: '#DAF6EB' }}>{part}</span>
           : <span key={i}>{part}</span>
       )}
     </>
@@ -260,7 +263,7 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
             className={`rounded-lg border border-[#32C189]/50 bg-[#DAF6EB]/40 px-3 py-2.5 ${alignCls}`}
           >
             <p className={`${opts.lineClass} text-[#1F5741]`}>
-              <BoldLine text={example.subtext!} color="#32C189" />
+              <BoldLine text={example.subtext!} />
             </p>
           </div>
         ) : null}
@@ -374,9 +377,11 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
         <div className={`grid gap-6 md:gap-8 ${
           examples.length === 1
             ? 'grid-cols-1 max-w-md mx-auto'
-            : examples.length === 2
-              ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
-              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            : examples.length === 4
+              ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto'
+              : examples.length === 2
+                ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
         }`}>
           {examples.map((example, index) => {
             const cardZoomable = example.zoomable === true;
@@ -420,7 +425,7 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
                   ) : (
                     (example.lines ?? []).filter(Boolean).map((line, i) => (
                       <p key={i} className="text-base md:text-lg font-normal text-gray-900 leading-relaxed">
-                        <BoldLine text={line} color="#32C189" />
+                        <BoldLine text={line} />
                       </p>
                     ))
                   )}
@@ -432,6 +437,74 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
               </div>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // Text-only example cards (no images): 2×2 for 4 cards (avoid 3+1 on large screens).
+  // Keep 1–2 card sections on the stacked/centered path below.
+  const isTextCardGrid =
+    !hasNumberedDialogues &&
+    examples.length >= 3 &&
+    examples.every(e => (e.lines?.length ?? 0) > 0 || !!e.text?.trim());
+
+  if (isTextCardGrid) {
+    return (
+      <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+        {!disableTts && (
+          <div className="flex justify-end mb-4">
+            <Button
+              onClick={handlePlayAll}
+              className={`flex items-center gap-2 px-6 py-3 md:px-7 md:py-3.5 rounded-lg font-semibold text-base shadow-md active:scale-95 transition-all ${
+                playingAll
+                  ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+                  : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+              }`}
+            >
+              {playingAll ? (
+                <><Pause className="w-5 h-5" />{t('exercise.pause')}</>
+              ) : pausedAll ? (
+                <><Play className="w-5 h-5" />{t('exercise.continue')}</>
+              ) : (
+                <><Play className="w-5 h-5" />{t('exercise.listen')}</>
+              )}
+            </Button>
+          </div>
+        )}
+        {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
+        <div className={`grid gap-4 md:gap-6 ${
+          examples.length === 4 || examples.length % 2 === 0
+            ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto'
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+        }`}>
+          {examples.map((example, index) => (
+            <div
+              key={index}
+              onClick={() => play(index)}
+              className={`relative bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col items-center text-center ${
+                playingIndex === index ? 'border-[#32C189]' : 'border-gray-200'
+              }`}
+            >
+              {!disableTts && (
+                <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+              )}
+              <div className="space-y-2 w-full">
+                {(example.lines ?? []).filter(Boolean).map((line, i) => (
+                  <p key={i} className="text-base md:text-lg font-normal text-gray-900 leading-relaxed">
+                    <BoldLine text={line} />
+                  </p>
+                ))}
+                {!example.lines?.length && example.text ? (
+                  <p className="text-base md:text-lg font-semibold text-gray-900">{example.text}</p>
+                ) : null}
+              </div>
+              <InlineTranslation
+                text={(example.lines ?? []).map(l => l.replace(/\*\*(.+?)\*\*/g, '$1')).join(' ') || example.text}
+                visible={revealed.has(index)}
+              />
+            </div>
+          ))}
         </div>
       </div>
     );

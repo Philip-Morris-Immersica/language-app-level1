@@ -29,7 +29,17 @@ function renderBoldText(text: string): React.ReactNode {
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-      return <span key={i} className="font-extrabold" style={{ color: '#32C189' }}>{part.slice(2, -2)}</span>;
+      // AAA-contrast green text (#1F5741) on the light green bg (#DAF6EB) — brighter greens
+      // (#2BB673 / #32C189) read as nearly invisible on this background.
+      return (
+        <span
+          key={i}
+          className="font-extrabold rounded-sm px-0.5"
+          style={{ color: '#1F5741', backgroundColor: '#DAF6EB' }}
+        >
+          {part.slice(2, -2)}
+        </span>
+      );
     }
     return part;
   });
@@ -124,8 +134,8 @@ function SingleTable({
   const cellJustify = alignLeft ? 'justify-start' : 'justify-center';
 
   return (
-    <div className="overflow-x-auto">
-      <table className={`w-full border-collapse rounded-xl overflow-hidden shadow-sm ${cellAlign} border-2 border-[#7ab356]`}>
+    <div className="overflow-x-auto flex justify-center">
+      <table className={`border-collapse rounded-xl overflow-hidden shadow-sm ${cellAlign} border-2 border-[#7ab356] ${columns.length === 0 ? 'w-full max-w-2xl min-w-[20rem]' : 'w-full'}`}>
         {tableTitle && (
           <thead>
             <tr>
@@ -169,8 +179,8 @@ function SingleTable({
                 className={`${rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'} transition-colors ${row.noAudio ? 'bg-[#edf5e4]' : rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
               >
                 {showPronounCol && (
-                  <td className={`py-2.5 px-3 md:px-5 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}>
-                    <div className="flex items-center justify-between gap-1">
+                  <td className={`py-2.5 px-2 md:px-3 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 whitespace-nowrap ${widePronouns ? 'w-1/2' : ''}`}>
+                    <div className={`flex items-center gap-1 ${widePronouns ? cellJustify : 'justify-between gap-2'}`}>
                       <span>{row.pronoun}</span>
                       {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
                     </div>
@@ -179,7 +189,7 @@ function SingleTable({
                 {row.cells.map((cell, cIdx) => (
                   <td
                     key={cIdx}
-                    className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#32C189]' : 'font-medium'}`}
+                    className={`py-2.5 px-2 md:px-3 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#1F5741]' : 'font-medium'}`}
                   >
                     <div className={`flex items-center ${cellJustify} gap-1`}>
                       <span>{renderBoldText(cell)}</span>
