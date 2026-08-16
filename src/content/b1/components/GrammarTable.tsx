@@ -1,13 +1,21 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Volume2 } from 'lucide-react';
+import { Pause, Play, Volume2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { TtsHint } from '@/components/TtsHint';
-import { getTtsAudioPath, playTtsAudio, stopTtsAudio } from '@/lib/tts';
+import {
+  getTtsAudioPath,
+  playTtsAudio,
+  stopTtsAudio,
+  pauseTtsAudio,
+  resumeTtsAudio,
+} from '@/lib/tts';
+import { HIGHLIGHT_CLASS, HIGHLIGHT_STYLE } from './highlight';
 import type { B1GrammarTableExercise } from '../types';
 
 interface Props {
@@ -28,15 +36,8 @@ function renderBoldText(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-      // AAA-contrast green text (#1F5741) on the light green bg (#DAF6EB) — brighter greens
-      // (#2BB673 / #32C189) read as nearly invisible on this background.
       return (
-        <span
-          key={i}
-          className="font-extrabold rounded-sm px-0.5"
-          style={{ color: '#1F5741', backgroundColor: '#DAF6EB' }}
-        >
+        <span key={i} className={HIGHLIGHT_CLASS} style={HIGHLIGHT_STYLE}>
           {part.slice(2, -2)}
         </span>
       );
@@ -100,6 +101,8 @@ function SingleTable({
   disableAudio,
   exerciseId,
   rowIndexOffset = 0,
+  activeGlobalRow = null,
+  onManualPlay,
 }: {
   tableTitle?: string;
   columns: string[];
@@ -112,6 +115,9 @@ function SingleTable({
   exerciseId?: string;
   /** Global row index offset so panel rows map to flat TTS files (`{id}-row-N`). */
   rowIndexOffset?: number;
+  /** Row currently played by the section-wide „Слушай“ chain, as a global index. */
+  activeGlobalRow?: number | null;
+  onManualPlay?: () => void;
 }) {
   const { lang } = useLanguage();
 
@@ -119,6 +125,7 @@ function SingleTable({
     if (disableAudio) return;
     const row = rows[idx];
     if (row.noAudio) return;
+    onManualPlay?.();
     const text = speakableRowText(row);
     const globalIdx = rowIndexOffset + idx;
     const audioPath = exerciseId
@@ -172,15 +179,16 @@ function SingleTable({
         <tbody>
           {rows.map((row, rIdx) => {
             const rowSilent = disableAudio || !!row.noAudio;
+            const rowActive = activeGlobalRow === rowIndexOffset + rIdx;
             return (
             <React.Fragment key={rIdx}>
               <tr
                 onClick={() => playRow(rIdx)}
-                className={`${rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'} transition-colors ${row.noAudio ? 'bg-[#edf5e4]' : rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
+                className={`${rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'} transition-colors ${rowActive ? 'bg-[#DAF6EB]' : row.noAudio ? 'bg-[#edf5e4]' : rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
               >
                 {showPronounCol && (
-                  <td className={`py-2.5 px-2 md:px-3 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 whitespace-nowrap ${widePronouns ? 'w-1/2' : ''}`}>
-                    <div className={`flex items-center gap-1 ${widePronouns ? cellJustify : 'justify-between gap-2'}`}>
+                  <td className={`py-2.5 pl-4 pr-3 md:pl-5 md:pr-4 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 whitespace-nowrap ${widePronouns ? 'w-1/2' : 'w-[7.5rem] md:w-[9rem]'}`}>
+                    <div className={`flex items-center gap-1.5 ${widePronouns ? cellJustify : 'justify-start'}`}>
                       <span>{row.pronoun}</span>
                       {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
                     </div>
@@ -193,7 +201,9 @@ function SingleTable({
                   >
                     <div className={`flex items-center ${cellJustify} gap-1`}>
                       <span>{renderBoldText(cell)}</span>
-                      {!showPronounCol && !rowSilent && cIdx === row.cells.length - 1 && (
+                      {/* Speaker sits in the first column so the play affordance is next to
+                          the row's opening word instead of trailing the last column. */}
+                      {!showPronounCol && !rowSilent && cIdx === 0 && (
                         <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />
                       )}
                     </div>
@@ -249,14 +259,23 @@ function ExampleCard({
   disableAudio,
   exerciseId,
   rowIndexOffset = 0,
+  activeGlobalRow = null,
+  resetSignal = 0,
+  onManualPlay,
 }: {
   title?: string;
   rows: TableRow[];
   disableAudio: boolean;
   exerciseId?: string;
   rowIndexOffset?: number;
+  /** Row currently played by the section-wide „Слушай“ chain, as a global index. */
+  activeGlobalRow?: number | null;
+  /** Bumped by the parent to drop stale local playback state when it takes over. */
+  resetSignal?: number;
+  onManualPlay?: () => void;
 }) {
   const [playing, setPlaying] = useState(false);
+  const [playingLine, setPlayingLine] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   const cancelRef = useRef(false);
 
@@ -267,22 +286,59 @@ function ExampleCard({
     };
   }, []);
 
+  useEffect(() => {
+    if (resetSignal === 0) return;
+    cancelRef.current = true;
+    setPlaying(false);
+    setPlayingLine(null);
+  }, [resetSignal]);
+
+  const externalLine =
+    activeGlobalRow !== null &&
+    activeGlobalRow >= rowIndexOffset &&
+    activeGlobalRow < rowIndexOffset + rows.length
+      ? activeGlobalRow - rowIndexOffset
+      : null;
+  const highlightedLine = playingLine ?? externalLine;
+
   const speakable = rows
     .map((row, i) => ({ i, text: speakableRowText(row), silent: !!row.noAudio }))
     .filter(x => !x.silent && x.text.length > 0);
 
-  const playAll = () => {
+  const playOne = (e: React.MouseEvent, idx: number) => {
+    e.stopPropagation();
+    if (disableAudio) return;
+    const row = rows[idx];
+    if (row.noAudio) return;
+    onManualPlay?.();
+    cancelRef.current = true;
+    stopTtsAudio();
+    setPlaying(false);
+    const text = speakableRowText(row);
+    const globalIdx = rowIndexOffset + idx;
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${globalIdx}`)
+      : '';
+    setPlayingLine(idx);
+    playTtsAudio(audioPath, text, undefined, () => setPlayingLine(null));
+  };
+
+  const playAll = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (disableAudio || !speakable.length) return;
+    onManualPlay?.();
 
     if (playing) {
       cancelRef.current = true;
       stopTtsAudio();
       setPlaying(false);
+      setPlayingLine(null);
       return;
     }
 
     cancelRef.current = false;
     setPlaying(true);
+    setPlayingLine(null);
     setRevealed(prev => !prev);
 
     const step = (pos: number) => {
@@ -292,9 +348,11 @@ function ExampleCard({
       }
       if (pos >= speakable.length) {
         setPlaying(false);
+        setPlayingLine(null);
         return;
       }
       const { i, text } = speakable[pos];
+      setPlayingLine(i);
       const globalIdx = rowIndexOffset + i;
       const audioPath = exerciseId
         ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${globalIdx}`)
@@ -304,7 +362,7 @@ function ExampleCard({
           setPlaying(false);
           return;
         }
-        window.setTimeout(() => step(pos + 1), 300);
+        window.setTimeout(() => step(pos + 1), 80);
       });
     };
     step(0);
@@ -313,7 +371,10 @@ function ExampleCard({
   const cardBody = (
     <>
       {title && (
-        <p className="text-sm md:text-base font-bold uppercase tracking-wide text-[#0072BC] mb-3 pb-2 border-b border-[#CDE3F1]">
+        <p
+          onClick={playAll}
+          className="text-sm md:text-base font-bold uppercase tracking-wide text-[#0072BC] mb-3 pb-2 border-b border-[#CDE3F1] cursor-pointer"
+        >
           {title}
         </p>
       )}
@@ -322,7 +383,13 @@ function ExampleCard({
           const line = row.cells.join(' ').trim() || row.pronoun;
           if (!line) return null;
           return (
-            <div key={i}>
+            <div
+              key={i}
+              onClick={(e) => playOne(e, i)}
+              className={`rounded-md px-2 py-1 -mx-2 cursor-pointer transition-colors ${
+                highlightedLine === i ? 'bg-[#DAF6EB]/70' : 'hover:bg-[#DAF6EB]/40'
+              }`}
+            >
               <p className="text-sm md:text-base text-gray-800 leading-relaxed">
                 {renderBoldText(line)}
               </p>
@@ -348,11 +415,10 @@ function ExampleCard({
 
   return (
     <div
-      onClick={playAll}
-      className={`w-full rounded-xl border-2 p-5 md:p-6 shadow-sm cursor-pointer transition-all active:scale-[0.99] text-center ${
-        playing
+      className={`w-full rounded-xl border-2 p-5 md:p-6 shadow-sm text-center ${
+        playing || externalLine !== null
           ? 'border-[#32C189]/60 bg-[#DAF6EB]/50'
-          : 'border-[#CDE3F1] bg-[#f8fbfd] hover:border-[#32C189]/60'
+          : 'border-[#CDE3F1] bg-[#f8fbfd]'
       }`}
     >
       {cardBody}
@@ -360,8 +426,24 @@ function ExampleCard({
   );
 }
 
+/** Gap between chained rows — small enough that the block reads as one take. */
+const ROW_GAP_MS = 80;
+
 export function GrammarTable({ exercise, exerciseId }: Props) {
   const t = useT();
+  const [activeGlobalRow, setActiveGlobalRow] = useState<number | null>(null);
+  const [playingAll, setPlayingAll] = useState(false);
+  const [pausedAll, setPausedAll] = useState(false);
+  const [resetSignal, setResetSignal] = useState(0);
+  const chainRef = useRef<{ cancelled: boolean } | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (chainRef.current) chainRef.current.cancelled = true;
+      stopTtsAudio();
+    };
+  }, []);
+
   const {
     tableTitle,
     columns = [],
@@ -399,9 +481,124 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   const fullWidth = orderedPanels.filter(p => p.fullWidth);
   const sideBySideRowCount = sideBySide.reduce((n, p) => n + p.rows.length, 0);
 
+  // Every audible row of the block, in the same order as the `{id}-row-N` files,
+  // so one press reads the whole grammar box instead of one card at a time.
+  const speakableRows: { globalIdx: number; text: string }[] = [];
+  {
+    let offset = 0;
+    for (const panel of orderedPanels) {
+      panel.rows.forEach((row, i) => {
+        const text = speakableRowText(row);
+        if (!row.noAudio && text) speakableRows.push({ globalIdx: offset + i, text });
+      });
+      offset += panel.rows.length;
+    }
+  }
+
+  const makeChain = (tok: { cancelled: boolean }) => {
+    const step = (pos: number) => {
+      if (tok.cancelled) return;
+      if (pos >= speakableRows.length) {
+        if (chainRef.current === tok) chainRef.current = null;
+        setPlayingAll(false);
+        setActiveGlobalRow(null);
+        return;
+      }
+      const { globalIdx, text } = speakableRows[pos];
+      setActiveGlobalRow(globalIdx);
+      const audioPath = exerciseId
+        ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${globalIdx}`)
+        : '';
+      playTtsAudio(audioPath, text, undefined, () => {
+        if (tok.cancelled) return;
+        window.setTimeout(() => {
+          if (!tok.cancelled) step(pos + 1);
+        }, ROW_GAP_MS);
+      });
+    };
+    return step;
+  };
+
+  const cancelChain = () => {
+    if (chainRef.current) chainRef.current.cancelled = true;
+    chainRef.current = null;
+    setPlayingAll(false);
+    setPausedAll(false);
+    setActiveGlobalRow(null);
+  };
+
+  /** A row or card was played by hand — give up the running section chain. */
+  const handleManualPlay = () => {
+    if (chainRef.current || playingAll || pausedAll) cancelChain();
+  };
+
+  const handlePlayAll = () => {
+    if (disableAudio || speakableRows.length === 0) return;
+
+    if (playingAll) {
+      pauseTtsAudio();
+      setPlayingAll(false);
+      setPausedAll(true);
+      return;
+    }
+
+    if (pausedAll && chainRef.current && !chainRef.current.cancelled) {
+      const token = chainRef.current;
+      const pausedPos =
+        activeGlobalRow !== null
+          ? Math.max(0, speakableRows.findIndex(r => r.globalIdx === activeGlobalRow))
+          : 0;
+      const step = makeChain(token);
+      const resumed = resumeTtsAudio(() => {
+        if (token.cancelled) return;
+        window.setTimeout(() => {
+          if (!token.cancelled) step(pausedPos + 1);
+        }, ROW_GAP_MS);
+      });
+      if (resumed) {
+        setPlayingAll(true);
+        setPausedAll(false);
+        return;
+      }
+      token.cancelled = true;
+      chainRef.current = null;
+    }
+
+    cancelChain();
+    stopTtsAudio();
+    setResetSignal(s => s + 1);
+    const token = { cancelled: false };
+    chainRef.current = token;
+    setPlayingAll(true);
+    setPausedAll(false);
+    makeChain(token)(0);
+  };
+
+  const listenAllButton = disableAudio || speakableRows.length < 2 ? null : (
+    <div className="flex justify-end">
+      <Button
+        onClick={handlePlayAll}
+        className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm shadow-md active:scale-95 transition-all ${
+          playingAll
+            ? 'bg-[#D25A45] hover:bg-[#9C4637] text-white'
+            : 'bg-white border-2 border-[#32C189] text-[#1F5741] hover:bg-[#DAF6EB]'
+        }`}
+      >
+        {playingAll ? (
+          <><Pause className="w-4 h-4" />{t('exercise.pause')}</>
+        ) : pausedAll ? (
+          <><Play className="w-4 h-4" />{t('exercise.continue')}</>
+        ) : (
+          <><Play className="w-4 h-4" />{t('exercise.listen')}</>
+        )}
+      </Button>
+    </div>
+  );
+
   if (variant === 'example-cards') {
     return (
       <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
+        {listenAllButton}
         {!disableAudio && <TtsHint messageKey="exercise.tapCardToHear" />}
 
         {sideBySide.length > 0 && (
@@ -421,6 +618,9 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                     disableAudio={disableAudio}
                     exerciseId={exerciseId}
                     rowIndexOffset={rowIndexOffset}
+                    activeGlobalRow={activeGlobalRow}
+                    resetSignal={resetSignal}
+                    onManualPlay={handleManualPlay}
                   />
                 </div>
               );
@@ -440,6 +640,9 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                   disableAudio={disableAudio}
                   exerciseId={exerciseId}
                   rowIndexOffset={rowIndexOffset}
+                  activeGlobalRow={activeGlobalRow}
+                  resetSignal={resetSignal}
+                  onManualPlay={handleManualPlay}
                 />
               </div>
             </div>
@@ -469,6 +672,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
 
   return (
     <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
+      {listenAllButton}
       {!disableAudio && (
         <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
           <Volume2 className="w-3 h-3" />
@@ -495,6 +699,8 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                 disableAudio={disableAudio}
                 exerciseId={exerciseId}
                 rowIndexOffset={rowIndexOffset}
+                activeGlobalRow={activeGlobalRow}
+                onManualPlay={handleManualPlay}
               />
             );
           })}
@@ -504,6 +710,43 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
       {fullWidth.map((panel, i) => {
         const rowIndexOffset = sideBySideRowCount
           + fullWidth.slice(0, i).reduce((n, p) => n + p.rows.length, 0);
+        const sentenceBoxes = (panel.columns?.length ?? 0) === 0
+          && panel.rows.every(r => !(r.pronoun ?? '').trim());
+        if (sentenceBoxes) {
+          return (
+            <div key={`fw-${i}`} className="flex flex-col gap-3">
+              {panel.rows.map((row, rIdx) => {
+                const line = row.cells.join(' ').trim() || row.pronoun;
+                if (!line) return null;
+                const globalIdx = rowIndexOffset + rIdx;
+                const rowSilent = disableAudio || !!row.noAudio;
+                const rowActive = activeGlobalRow === globalIdx;
+                return (
+                  <div
+                    key={rIdx}
+                    onClick={() => {
+                      if (rowSilent) return;
+                      handleManualPlay();
+                      const audioPath = exerciseId
+                        ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${globalIdx}`)
+                        : '';
+                      playTtsAudio(audioPath, speakableRowText(row));
+                    }}
+                    className={`border-2 border-[#7ab356] rounded-lg px-5 py-3 bg-[#f4faee] text-center transition-colors ${
+                      rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'
+                    } ${rowActive ? 'bg-[#DAF6EB] border-[#32C189]/60' : ''}`}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(line)}</p>
+                      {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
+                    </div>
+                    <InlineTranslation text={line} visible={true} />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
         return (
           <SingleTable
             key={`fw-${i}`}
@@ -517,6 +760,8 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
             disableAudio={disableAudio}
             exerciseId={exerciseId}
             rowIndexOffset={rowIndexOffset}
+            activeGlobalRow={activeGlobalRow}
+            onManualPlay={handleManualPlay}
           />
         );
       })}

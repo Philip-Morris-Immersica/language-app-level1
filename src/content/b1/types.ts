@@ -113,6 +113,7 @@ export interface B1GrammarTableExercise extends BaseExercise {
     ttsModel?: 'flash' | 'pro';
     ttsPrompt?: string;
     ttsText?: string;
+    voiceGender?: 'male' | 'female';
     /** Caption / label row — no click-to-play, no 🔊 icon */
     noAudio?: boolean;
   }[];
@@ -132,6 +133,7 @@ export interface B1GrammarTableExercise extends BaseExercise {
       ttsModel?: 'flash' | 'pro';
       ttsPrompt?: string;
       ttsText?: string;
+      voiceGender?: 'male' | 'female';
       noAudio?: boolean;
     }[];
     /** Full-width panel (e.g. „Внимание!") instead of side-by-side */

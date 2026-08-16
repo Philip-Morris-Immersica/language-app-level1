@@ -82,34 +82,12 @@ export const exercises: Exercise[] = [
   } as unknown as Exercise,
 
   {
-    id: 'b1-l05-gramatika-neg-q',
-    type: 'grammar_examples',
-    title: 'ГРАМАТИКА',
-    instruction: '',
-    order: 4,
-    layout: 'centered',
-    examples: [
-      {
-        imageUrl: '',
-        text: '',
-        lines: [
-          'Аз не пътувах.',
-          'Ти пътува ли? / Ти не пътува ли?',
-        ],
-        ttsText: 'Аз не пътувах. Ти пътува ли? Ти не пътува ли?',
-        ttsPrompt:
-          'Прочетете плавно и естествено на книжовен български, топъл разговорен тон. Лека пауза между изреченията. Без чужд акцент.',
-      },
-    ],
-  } as GrammarExamplesExercise,
-
-  {
     id: 'b1-l05-ex-02',
     type: 'table_fill',
     title: 'УПРАЖНЕНИЕ 2',
     instruction: 'Изберете правилната форма на глаголите в минало свършено време.',
-    order: 5,
-    points: 18,
+    order: 4,
+    points: 36,
     paragraphs: [],
     tables: [
       {
@@ -148,8 +126,66 @@ export const exercises: Exercise[] = [
           { label: 'те',        cells: [{ correctAnswers: ['взеха'],  options: ['взе', 'взехме', 'взеха'] }] },
         ],
       },
+      {
+        name: 'спра (-ЯХ)',
+        columns: ['минало свършено'],
+        rows: [
+          { label: 'аз',        cells: [{ correctAnswers: ['спрях'],   options: ['спрях', 'спря', 'спряхме'] }] },
+          { label: 'ти',        cells: [{ correctAnswers: ['спря'],    options: ['спрях', 'спря', 'спряхме'] }] },
+          { label: 'той/тя/то', cells: [{ correctAnswers: ['спря'],    options: ['спрях', 'спря', 'спряха'] }] },
+          { label: 'ние',       cells: [{ correctAnswers: ['спряхме'], options: ['спрях', 'спряхме', 'спряха'] }] },
+          { label: 'вие',       cells: [{ correctAnswers: ['спряхте'], options: ['спряхме', 'спряхте', 'спряха'] }] },
+          { label: 'те',        cells: [{ correctAnswers: ['спряха'],  options: ['спря', 'спряхме', 'спряха'] }] },
+        ],
+      },
+      {
+        name: 'отида (-ОХ)',
+        columns: ['минало свършено'],
+        rows: [
+          { label: 'аз',        cells: [{ correctAnswers: ['отидох'],   options: ['отидох', 'отиде', 'отидохме'] }] },
+          { label: 'ти',        cells: [{ correctAnswers: ['отиде'],    options: ['отидох', 'отиде', 'отидохме'] }] },
+          { label: 'той/тя/то', cells: [{ correctAnswers: ['отиде'],    options: ['отидох', 'отиде', 'отидоха'] }] },
+          { label: 'ние',       cells: [{ correctAnswers: ['отидохме'], options: ['отидох', 'отидохме', 'отидоха'] }] },
+          { label: 'вие',       cells: [{ correctAnswers: ['отидохте'], options: ['отидохме', 'отидохте', 'отидоха'] }] },
+          { label: 'те',        cells: [{ correctAnswers: ['отидоха'],  options: ['отиде', 'отидохме', 'отидоха'] }] },
+        ],
+      },
+      {
+        name: 'чуя (-УХ)',
+        columns: ['минало свършено'],
+        rows: [
+          { label: 'аз',        cells: [{ correctAnswers: ['чух'],   options: ['чух', 'чу', 'чухме'] }] },
+          { label: 'ти',        cells: [{ correctAnswers: ['чу'],    options: ['чух', 'чу', 'чухме'] }] },
+          { label: 'той/тя/то', cells: [{ correctAnswers: ['чу'],    options: ['чух', 'чу', 'чуха'] }] },
+          { label: 'ние',       cells: [{ correctAnswers: ['чухме'], options: ['чух', 'чухме', 'чуха'] }] },
+          { label: 'вие',       cells: [{ correctAnswers: ['чухте'], options: ['чухме', 'чухте', 'чуха'] }] },
+          { label: 'те',        cells: [{ correctAnswers: ['чуха'],  options: ['чу', 'чухме', 'чуха'] }] },
+        ],
+      },
     ],
   } as TableFillExercise,
+
+  {
+    id: 'b1-l05-gramatika-neg-q',
+    type: 'grammar_examples',
+    title: 'ГРАМАТИКА',
+    instruction: '',
+    order: 5,
+    layout: 'centered',
+    examples: [
+      {
+        imageUrl: '',
+        text: '',
+        lines: [
+          'Аз не пътувах.',
+          'Ти пътува ли? / Ти не пътува ли?',
+        ],
+        ttsText: 'Аз не пътувах. Ти пътува ли? Ти не пътува ли?',
+        ttsPrompt:
+          'Прочетете плавно и естествено на книжовен български, топъл разговорен тон. Лека пауза между изреченията. Без чужд акцент.',
+      },
+    ],
+  } as GrammarExamplesExercise,
 
   {
     id: 'b1-l05-ex-03',
@@ -161,25 +197,23 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       { text: 'Миналата седмица пътувах до Лондон.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Онзи ден _______ кафе с приятели. (пия)', blanks: [0], correctAnswers: ['пих'],
+      { text: 'Онзи ден аз _______ (пия) кафе с приятели.', blanks: [0], correctAnswers: ['пих'],
         options: ['пих', 'пи', 'пихме'] },
-      { text: 'Вчера _______ билети за концерт. (взема)', blanks: [0], correctAnswers: ['взех'],
+      { text: 'Вчера аз _______ (взема) билети за концерт.', blanks: [0], correctAnswers: ['взех'],
         options: ['взех', 'взе', 'взехме'] },
-      { text: 'Преди малко той _______ вода. (пия)', blanks: [0], correctAnswers: ['пи'],
+      { text: 'Преди малко той _______ (пия) вода.', blanks: [0], correctAnswers: ['пи'],
         options: ['пи', 'пих', 'пихме'] },
-      { text: 'Миналата година те _______ до морето. (пътувам)', blanks: [0], correctAnswers: ['пътуваха'],
+      { text: 'Миналата година те _______ (пътувам) до морето.', blanks: [0], correctAnswers: ['пътуваха'],
         options: ['пътуваха', 'пътува', 'пътувахме'] },
     ],
   } as WorkbookFillBlankExercise,
 
   {
     id: 'b1-l05-gramatika-03',
-    type: 'grammar_table',
+    type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 3',
-    tableTitle: 'Глаголът „съм" в минало време',
-    instruction: 'Разгледайте формите на глагола **съм** в минало време.',
+    instruction: 'Разгледайте формите на глагола **съм** в минало време и описателните форми с **-ше**.',
     order: 7,
-    columns: ['минало време'],
     rows: [
       { pronoun: 'аз',  cells: ['бях'],   ttsText: 'аз бях',   ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
       { pronoun: 'ти',  cells: ['беше'],  ttsText: 'ти беше',  ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
@@ -195,23 +229,40 @@ export const exercises: Exercise[] = [
         ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Past form: BYAH-hte (бяхте) — clear хт cluster.` },
       { pronoun: 'те',  cells: ['бяха'],  ttsText: 'те бяха', ttsModel: 'pro',
         ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Past form: BYA-ha (бяха), two clear syllables.` },
-    ],
-  } as GrammarTableExercise,
-
-  {
-    id: 'b1-l05-gramatika-04',
-    type: 'b1-grammar-table', // renders **bold** endings — see note on gramatika-05 below
-    title: 'ГРАМАТИКА 4',
-    tableTitle: 'Описателна форма за „ти/той/тя/то" (-ше)',
-    instruction: 'Разгледайте описателните форми за съответните местоимения.',
-    order: 8,
-    columns: ['форма (ти/той/тя/то)'],
-    rows: [
       { pronoun: 'обичам',  cells: ['обич**аше**'], ttsText: 'обичам, обичаше' },
       { pronoun: 'искам',   cells: ['иск**аше**'],  ttsText: 'искам, искаше' },
       { pronoun: 'зная',    cells: ['зна**еше**'],  ttsText: 'зная, знаеше' },
-      { pronoun: 'имам',    cells: ['им**аше**'],   ttsText: 'имам, имаше' },
+      { pronoun: 'имам',    cells: ['им**аше**'],   ttsText: 'имам, имаше',
+        ttsModel: 'pro',
+        ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Second word: i-MA-she (имаше). Final consonant is soft Ш as in беше and шапка — NEVER s, NEVER имасе / i-MA-se.` },
       { pronoun: 'нямам',   cells: ['ням**аше**'],  ttsText: 'нямам, нямаше' },
+    ],
+    panels: [
+      {
+        tableTitle: 'Глаголът „съм"',
+        columns: [],
+        rows: [
+          { pronoun: 'аз',  cells: ['бях'] },
+          { pronoun: 'ти',  cells: ['беше'] },
+          { pronoun: 'той', cells: ['беше'] },
+          { pronoun: 'тя',  cells: ['беше'] },
+          { pronoun: 'то',  cells: ['беше'] },
+          { pronoun: 'ние', cells: ['бяхме'] },
+          { pronoun: 'вие', cells: ['бяхте'] },
+          { pronoun: 'те',  cells: ['бяха'] },
+        ],
+      },
+      {
+        tableTitle: 'ти / той / тя / то',
+        columns: [],
+        rows: [
+          { pronoun: 'обичам',  cells: ['обич**аше**'] },
+          { pronoun: 'искам',   cells: ['иск**аше**'] },
+          { pronoun: 'зная',    cells: ['зна**еше**'] },
+          { pronoun: 'имам',    cells: ['им**аше**'] },
+          { pronoun: 'нямам',   cells: ['ням**аше**'] },
+        ],
+      },
     ],
   } as unknown as Exercise,
 
@@ -249,12 +300,12 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       { text: 'Снощи ние бяхме на театър. (съм)', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Вчера ние _______ Националния исторически музей.', blanks: [0], correctAnswers: ['посетихме'], options: ['посетихме', 'посети', 'посетих', 'посетиха'] },
-      { text: 'През 2015 година Вера и Свилен _______ университет.', blanks: [0], correctAnswers: ['завършиха'], options: ['завършиха', 'завърши', 'завърших', 'завършихме'] },
-      { text: 'Миналата година те _______ в един колеж, но не ги _______.', blanks: [0, 1], correctAnswers: ['кандидатстваха', 'приеха'],
+      { text: 'Вчера ние _______ (посетя) Националния исторически музей.', blanks: [0], correctAnswers: ['посетихме'], options: ['посетихме', 'посети', 'посетих', 'посетиха'] },
+      { text: 'През 2015 година Вера и Свилен _______ (завърша) университет.', blanks: [0], correctAnswers: ['завършиха'], options: ['завършиха', 'завърши', 'завърших', 'завършихме'] },
+      { text: 'Миналата година те _______ (кандидатствам) в един колеж, но не ги _______ (приема).', blanks: [0, 1], correctAnswers: ['кандидатстваха', 'приеха'],
         options: [['кандидатстваха', 'кандидатства', 'кандидатствах', 'кандидатствахме'], ['приеха', 'прие', 'приех', 'приехме']] },
-      { text: 'Преди малко Ана _______ на Маги.', blanks: [0], correctAnswers: ['се обади'], options: ['се обади', 'се обадих', 'се обадиха', 'се обадихме'] },
-      { text: 'Вчера аз _______ с новите колеги.', blanks: [0], correctAnswers: ['се запознах'], options: ['се запознах', 'се запозна', 'се запознаха', 'се запознахме'] },
+      { text: 'Преди малко Ана _______ (обадя се) на Маги.', blanks: [0], correctAnswers: ['се обади'], options: ['се обади', 'се обадих', 'се обадиха', 'се обадихме'] },
+      { text: 'Вчера аз _______ (запозная се) с новите колеги.', blanks: [0], correctAnswers: ['се запознах'], options: ['се запознах', 'се запозна', 'се запознаха', 'се запознахме'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -319,6 +370,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l05-gramatika-iskah',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА',
+    subtitle: 'трябваше да / не можах да / исках да',
     instruction: '',
     order: 14,
     layout: 'centered',
@@ -410,9 +462,9 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       { text: 'Той не иска да яде грах. Вчера той не искаше да яде грах.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Миналия петък тя _______ да види изложбата на известния български художник Златю Бояджиев.', blanks: [0], correctAnswers: ['искаше'], options: ['искаше', 'исках', 'искаха', 'искахме'] },
-      { text: 'Вчера ние _______ да тръгнем навреме за автогарата.', blanks: [0], correctAnswers: ['трябваше'], options: ['трябваше', 'трябва', 'трябвах', 'трябваха'] },
-      { text: 'Снощи не _______ ли да намериш ключовете за колата?', blanks: [0], correctAnswers: ['можа'], options: ['можа', 'можах', 'можаха', 'можеш'] },
+      { text: 'Тя иска да види изложбата на известния български художник Златю Бояджиев. Миналия петък тя _______ да види изложбата на известния български художник Златю Бояджиев.', blanks: [0], correctAnswers: ['искаше'], options: ['искаше', 'исках', 'искаха', 'искахме'] },
+      { text: 'Ние трябва да тръгнем навреме за автогарата. Вчера ние _______ да тръгнем навреме за автогарата.', blanks: [0], correctAnswers: ['трябваше'], options: ['трябваше', 'трябва', 'трябвах', 'трябваха'] },
+      { text: 'Не можеш ли да намериш ключовете за колата? Снощи ти не _______ да намериш ключовете за колата?', blanks: [0], correctAnswers: ['можа'], options: ['можа', 'можах', 'можаха', 'можеш'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -426,11 +478,11 @@ export const exercises: Exercise[] = [
     layout: 'single',
     compact: true,
     sentences: [
-      { text: 'Миналата година ние трябваше да пътуваме с кораб.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Вчера той _______ да купи подарък за Мила.', blanks: [0], correctAnswers: ['искаше'], options: ['искаше', 'исках', 'искаха', 'искахме'] },
-      { text: 'Преди една седмица те _______ да заминат за Италия.', blanks: [0], correctAnswers: ['трябваше'], options: ['трябваше', 'трябва', 'трябваха', 'трябвах'] },
-      { text: 'През 2005 г. те не _______ да дойдат в София.', blanks: [0], correctAnswers: ['можаха'], options: ['можаха', 'можах', 'можа', 'можахме'] },
-      { text: 'Миналото лято вие _______ ли да отворите нов офис?', blanks: [0], correctAnswers: ['искахте'], options: ['искахте', 'искаше', 'исках', 'искаха'] },
+      { text: 'Миналата година ние трябваше да пътуваме с кораб. (трябва да пътувам)', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Вчера той _______ (искам да купя) подарък за Мила.', blanks: [0], correctAnswers: ['искаше да купи'], options: ['искаше да купи', 'исках да купя', 'искаха да купят', 'искахме да купим'] },
+      { text: 'Преди една седмица те _______ (трябва да замина) за Италия.', blanks: [0], correctAnswers: ['трябваше да заминат'], options: ['трябваше да заминат', 'трябва да заминат', 'трябваха да заминат', 'трябвах да замина'] },
+      { text: 'През 2005 г. тя _______ (не мога да дойда) в София.', blanks: [0], correctAnswers: ['не можа да дойде'], options: ['не можа да дойде', 'не можах да дойда', 'не можаха да дойдат', 'не можахме да дойдем'] },
+      { text: 'Миналото лято вие _______ (искам да отворя) нов офис?', blanks: [0], correctAnswers: ['искахте да отворите'], options: ['искахте да отворите', 'искаше да отвори', 'исках да отворя', 'искаха да отворят'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -536,18 +588,19 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 15',
     instruction: 'Изберете миналото свършено причастие във всеки род по модела („ходих → ходил, ходила, ходило, ходили").',
     order: 22,
-    points: 40,
+    points: 44,
     paragraphs: [],
     tables: [
       {
         name: 'Минало свършено причастие',
+        labelHeader: 'Минало свършено време',
         columns: ['мъжки (той)', 'женски (тя)', 'среден (то)', 'мн.ч. (те)'],
         rows: [
           { label: 'ходих',   cells: [
-            { correctAnswers: ['ходил'],   options: ['ходил', 'ходила', 'ходило', 'ходили'] },
-            { correctAnswers: ['ходила'],  options: ['ходил', 'ходила', 'ходило', 'ходили'] },
-            { correctAnswers: ['ходило'],  options: ['ходил', 'ходила', 'ходило', 'ходили'] },
-            { correctAnswers: ['ходили'],  options: ['ходил', 'ходила', 'ходило', 'ходили'] },
+            { correctAnswers: ['ходил'],   options: ['ходил'] },
+            { correctAnswers: ['ходила'],  options: ['ходила'] },
+            { correctAnswers: ['ходило'],  options: ['ходило'] },
+            { correctAnswers: ['ходили'],  options: ['ходили'] },
           ] },
           { label: 'учих',    cells: [
             { correctAnswers: ['учил'],   options: ['учил', 'учила', 'учило', 'учили'] },
@@ -566,6 +619,18 @@ export const exercises: Exercise[] = [
             { correctAnswers: ['работила'], options: ['работил', 'работила', 'работило', 'работили'] },
             { correctAnswers: ['работило'], options: ['работил', 'работила', 'работило', 'работили'] },
             { correctAnswers: ['работили'], options: ['работил', 'работила', 'работило', 'работили'] },
+          ] },
+          { label: 'готвих',  cells: [
+            { correctAnswers: ['готвил'],  options: ['готвил', 'готвила', 'готвило', 'готвили'] },
+            { correctAnswers: ['готвила'], options: ['готвил', 'готвила', 'готвило', 'готвили'] },
+            { correctAnswers: ['готвило'], options: ['готвил', 'готвила', 'готвило', 'готвили'] },
+            { correctAnswers: ['готвили'], options: ['готвил', 'готвила', 'готвило', 'готвили'] },
+          ] },
+          { label: 'правих',  cells: [
+            { correctAnswers: ['правил'],  options: ['правил', 'правила', 'правило', 'правили'] },
+            { correctAnswers: ['правила'], options: ['правил', 'правила', 'правило', 'правили'] },
+            { correctAnswers: ['правило'], options: ['правил', 'правила', 'правило', 'правили'] },
+            { correctAnswers: ['правили'], options: ['правил', 'правила', 'правило', 'правили'] },
           ] },
           { label: 'писах',   cells: [
             { correctAnswers: ['писал'],  options: ['писал', 'писала', 'писало', 'писали'] },
@@ -597,11 +662,17 @@ export const exercises: Exercise[] = [
             { correctAnswers: ['взело'], options: ['взел', 'взела', 'взело', 'взели'] },
             { correctAnswers: ['взели'], options: ['взел', 'взела', 'взело', 'взели'] },
           ] },
+          { label: 'чух',     cells: [
+            { correctAnswers: ['чул'],  options: ['чул', 'чула', 'чуло', 'чули'] },
+            { correctAnswers: ['чула'], options: ['чул', 'чула', 'чуло', 'чули'] },
+            { correctAnswers: ['чуло'], options: ['чул', 'чула', 'чуло', 'чули'] },
+            { correctAnswers: ['чули'], options: ['чул', 'чула', 'чуло', 'чули'] },
+          ] },
           { label: 'живях',   cells: [
-            { correctAnswers: ['живял'],  options: ['живял', 'живяла', 'живяло', 'живели'] },
-            { correctAnswers: ['живяла'], options: ['живял', 'живяла', 'живяло', 'живели'] },
-            { correctAnswers: ['живяло'], options: ['живял', 'живяла', 'живяло', 'живели'] },
-            { correctAnswers: ['живели'], options: ['живял', 'живяла', 'живяло', 'живели'] },
+            { correctAnswers: ['живял'],  options: ['живял'] },
+            { correctAnswers: ['живяла'], options: ['живяла'] },
+            { correctAnswers: ['живяло'], options: ['живяло'] },
+            { correctAnswers: ['живели'], options: ['живели'] },
           ] },
         ],
       },
@@ -632,24 +703,25 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 17',
     instruction: 'Изберете миналото свършено причастие във всеки род на неправилните глаголи.',
     order: 24,
-    points: 52,
+    points: 48,
     paragraphs: [],
     tables: [
       {
         name: 'Неправилни причастия',
+        labelHeader: 'Минало свършено време',
         columns: ['мъжки (той)', 'женски (тя)', 'среден (то)', 'мн.ч. (те)'],
         rows: [
           { label: 'бях',    cells: [
-            { correctAnswers: ['бил'],   options: ['бил', 'била', 'било', 'били'] },
-            { correctAnswers: ['била'],  options: ['бил', 'била', 'било', 'били'] },
-            { correctAnswers: ['било'],  options: ['бил', 'била', 'било', 'били'] },
-            { correctAnswers: ['били'],  options: ['бил', 'била', 'било', 'били'] },
+            { correctAnswers: ['бил'],   options: ['бил'] },
+            { correctAnswers: ['била'],  options: ['била'] },
+            { correctAnswers: ['било'],  options: ['било'] },
+            { correctAnswers: ['били'],  options: ['били'] },
           ] },
           { label: 'ядох',   cells: [
-            { correctAnswers: ['ял'],   options: ['ял', 'яла', 'яло', 'ели'] },
-            { correctAnswers: ['яла'],  options: ['ял', 'яла', 'яло', 'ели'] },
-            { correctAnswers: ['яло'],  options: ['ял', 'яла', 'яло', 'ели'] },
-            { correctAnswers: ['ели'],  options: ['ял', 'яла', 'яло', 'ели'] },
+            { correctAnswers: ['ял'],   options: ['ял', 'яла', 'яло', 'яли'] },
+            { correctAnswers: ['яла'],  options: ['ял', 'яла', 'яло', 'яли'] },
+            { correctAnswers: ['яло'],  options: ['ял', 'яла', 'яло', 'яли'] },
+            { correctAnswers: ['яли'],  options: ['ял', 'яла', 'яло', 'яли'] },
           ] },
           { label: 'четох',  cells: [
             { correctAnswers: ['чел'],   options: ['чел', 'чела', 'чело', 'чели'] },
@@ -723,36 +795,6 @@ export const exercises: Exercise[] = [
   } as TableFillExercise,
 
   {
-    id: 'b1-l05-gramatika-06',
-    type: 'grammar_table',
-    title: 'ГРАМАТИКА 6',
-    tableTitle: 'Минало свършено причастие',
-    instruction: 'Разгледайте примерите за минало свършено причастие.',
-    order: 25,
-    columns: [],
-    rows: [
-      { pronoun: 'доведох', cells: ['довел, довела, довело, довели'],
-        ttsText: 'доведох, довел, довела, довело, довели', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
-      { pronoun: 'заведох', cells: ['завел, завела, завело, завели'],
-        ttsText: 'заведох, завел, завела, завело, завели', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
-      { pronoun: 'влязох', cells: ['влязъл, влязла, влязло, влезли'],
-        ttsText: 'влязох, влязъл, влязла, влязло, влезли', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
-      { pronoun: 'излязох', cells: ['излязъл, излязла, излязло, излезли'],
-        ttsText: 'излязох, излязъл, излязла, излЯзло, излезли',
-        ttsModel: 'pro',
-        ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Neuter participle излЯзло = izl-YAZ-lo, stress on Я.` },
-      { pronoun: 'облякох', cells: ['облякъл, облякла, облякло, облекли'],
-        ttsText: 'облякох, облякъл, облякла, облякло, облЕкли',
-        ttsModel: 'pro',
-        ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Plural participle облЕкли = ob-LEK-li (stress on E), never first-syllable stress.` },
-      { pronoun: 'съблякох', cells: ['съблякъл, съблякла, съблякло, съблекли'],
-        ttsText: 'съблякох, съблякъл, съблякла, съблякло, съблЕкли',
-        ttsModel: 'pro',
-        ttsPrompt: `${B1_GRAMMAR_TTS_PROMPT} Plural participle съблЕкли = sub-LEK-li (stress on E).` },
-    ],
-  } as GrammarTableExercise,
-
-  {
     id: 'b1-l05-ex-18',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 18',
@@ -762,11 +804,11 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       { text: 'Те са яли пилешки шишчета. (ям)', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Баща ми _______ в Румъния. (съм)', blanks: [0], correctAnswers: ['е бил'], options: ['е бил', 'е била', 'са били', 'съм бил'] },
-      { text: 'Полина _______ много книги. (чета)', blanks: [0], correctAnswers: ['е чела'], options: ['е чела', 'е чел', 'е чело', 'са чели'] },
-      { text: 'Някой _______ преди мен. (дойда)', blanks: [0], correctAnswers: ['е дошъл'], options: ['е дошъл', 'е дошла', 'са дошли', 'е дошло'] },
-      { text: 'Петър _______ цветя на Нина. (подаря)', blanks: [0], correctAnswers: ['е подарил'], options: ['е подарил', 'е подарила', 'са подарили', 'съм подарил'] },
-      { text: 'Те _______ на кино. (отида)', blanks: [0], correctAnswers: ['са отишли'], options: ['са отишли', 'е отишъл', 'е отишла', 'сме отишли'] },
+      { text: 'Баща ми _______ (съм) в Румъния.', blanks: [0], correctAnswers: ['е бил'], options: ['е бил', 'е била', 'са били', 'съм бил'] },
+      { text: 'Полина _______ (чета) много книги.', blanks: [0], correctAnswers: ['е чела'], options: ['е чела', 'е чел', 'е чело', 'са чели'] },
+      { text: 'Някой _______ (дойда) преди мен.', blanks: [0], correctAnswers: ['е дошъл'], options: ['е дошъл', 'е дошла', 'са дошли', 'е дошло'] },
+      { text: 'Петър _______ (подаря) цветя на Нина.', blanks: [0], correctAnswers: ['е подарил'], options: ['е подарил', 'е подарила', 'са подарили', 'съм подарил'] },
+      { text: 'Те _______ (отида) на кино.', blanks: [0], correctAnswers: ['са отишли'], options: ['са отишли', 'е отишъл', 'е отишла', 'сме отишли'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -790,7 +832,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'b1-l05-gramatika-07',
-    type: 'grammar_table',
+    type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 7',
     tableTitle: '„водя" — завеждам / довеждам',
     instruction: 'Вижте как се спрягат формите на глагола **водя**.',
@@ -801,17 +843,50 @@ export const exercises: Exercise[] = [
         ttsText: 'завеждам, заведа, завел', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
       { pronoun: 'довеждам', cells: ['довеждам', 'доведа', 'довел'],
         ttsText: 'довеждам, доведа, довел', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
+      {
+        pronoun: 'Заведе ли децата на детска градина? Още не съм ги завел.',
+        cells: [],
+        voiceGender: 'male',
+        ttsModel: 'pro',
+        ttsText: 'Заведе ли децата на детска градина? Още не съм ги завел.',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Лека пауза между въпроса и отговора. Без роботски ритъм и без чужд акцент.',
+      },
+      {
+        pronoun: 'Доведе ли децата от училище? Още не съм ги довел.',
+        cells: [],
+        voiceGender: 'male',
+        ttsModel: 'pro',
+        ttsText: 'Доведе ли децата от училище? Още не съм ги довел.',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Лека пауза между въпроса и отговора. Без роботски ритъм и без чужд акцент.',
+      },
     ],
-    notes: [
-      'Заведе ли децата на детска градина? Още не съм ги завел.',
-      'Доведе ли децата от училище? Още не съм ги довел.',
+    panels: [
+      {
+        tableTitle: '„водя" — завеждам / довеждам',
+        columns: ['несвършено (сег.)', 'свършено (аорист)', 'причастие'],
+        rows: [
+          { pronoun: 'завеждам', cells: ['завеждам', 'заведа', 'завел'] },
+          { pronoun: 'довеждам', cells: ['довеждам', 'доведа', 'довел'] },
+        ],
+      },
+      {
+        fullWidth: true,
+        columns: [],
+        rows: [
+          {
+            pronoun: '',
+            cells: ['Заведе ли децата на детска градина? Още не съм ги завел.'],
+            voiceGender: 'male',
+          },
+          {
+            pronoun: '',
+            cells: ['Доведе ли децата от училище? Още не съм ги довел.'],
+            voiceGender: 'male',
+          },
+        ],
+      },
     ],
-    ttsNotes: [
-      'Заведе ли децата на детска градина? Още не съм ги завел.',
-      'Доведе ли децата от училище? Още не съм ги довел.',
-    ],
-    ttsNoteModels: ['pro', 'pro'],
-  } as GrammarTableExercise,
+  } as unknown as Exercise,
 
   {
     id: 'b1-l05-ex-20',
@@ -857,13 +932,17 @@ export const exercises: Exercise[] = [
     order: 31,
     examples: [
       { imageUrl: '', text: '', lines: ['**Може би** е превел статията.'],
-        ttsText: 'Може би е превел статията.', ttsModel: 'pro', ttsPrompt: 'Прочетете на книжовен български с правилни ударения.' },
+        ttsText: 'Може би е превел статията.', voiceGender: 'male', ttsModel: 'pro',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Съобщително изречение с падаща интонация. Без роботски ритъм и без чужд акцент.' },
       { imageUrl: '', text: '', lines: ['**Сигурно** е превел статията.'],
-        ttsText: 'Сигурно е превел статията.', ttsModel: 'pro', ttsPrompt: 'Прочетете на книжовен български с правилни ударения.' },
+        ttsText: 'Сигурно е превел статията.', voiceGender: 'male', ttsModel: 'pro',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Съобщително изречение с падаща интонация. Без роботски ритъм и без чужд акцент.' },
       { imageUrl: '', text: '', lines: ['**Вероятно** е превел статията.'],
-        ttsText: 'Вероятно е превел статията.', ttsModel: 'pro', ttsPrompt: 'Прочетете на книжовен български с правилни ударения.' },
+        ttsText: 'Вероятно е превел статията.', voiceGender: 'male', ttsModel: 'pro',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Съобщително изречение с падаща интонация. Без роботски ритъм и без чужд акцент.' },
       { imageUrl: '', text: '', lines: ['**Навярно** е превел статията.'],
-        ttsText: 'Навярно е превел статията.', ttsModel: 'pro', ttsPrompt: 'Прочетете на книжовен български с правилни ударения.' },
+        ttsText: 'Навярно е превел статията.', voiceGender: 'male', ttsModel: 'pro',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. Съобщително изречение с падаща интонация. Без роботски ритъм и без чужд акцент.' },
     ],
   } as unknown as Exercise,
 
@@ -905,7 +984,7 @@ export const exercises: Exercise[] = [
 
   {
     id: 'b1-l05-gramatika-09',
-    type: 'grammar_table',
+    type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 9',
     tableTitle: 'Несвършено причастие',
     instruction: 'Разгледайте формите на глаголите в несвършено причастие.',
@@ -919,11 +998,41 @@ export const exercises: Exercise[] = [
       { pronoun: 'давам',    cells: ['давал'],    ttsText: 'давам, давал' },
       { pronoun: 'ставам',   cells: ['ставал'],   ttsText: 'ставам, ставал' },
       { pronoun: 'помагам',  cells: ['помагал'],  ttsText: 'помагам, помагал' },
+      {
+        pronoun: 'Още не съм попълнил документа. Много пъти съм попълвал документи.',
+        cells: [],
+        voiceGender: 'male',
+        ttsModel: 'pro',
+        ttsText: 'Още не съм попълнил документа. Много пъти съм попълвал документи.',
+        ttsPrompt: 'Прочетете плавно и естествено на книжовен български, топъл мъжки разговорен тон. И ДВЕТЕ изречения са съобщителни, НЕ въпроси. „Още не съм попълнил документа." завършва с ясно ПАДАЩА интонация, без никакво покачване, сякаш казвате факт. Лека пауза, после „Много пъти съм попълвал документи." също с падаща интонация. Без въпросителен тон, без роботски ритъм и без чужд акцент.',
+      },
     ],
-    notes: [
-      'Още не съм попълнил документа. (свършено — един път) / Много пъти съм попълвал документи. (несвършено — много пъти)',
+    panels: [
+      {
+        tableTitle: 'Несвършено причастие',
+        columns: [],
+        rows: [
+          { pronoun: 'пресичам', cells: ['пресичал'] },
+          { pronoun: 'попълвам', cells: ['попълвал'] },
+          { pronoun: 'идвам',    cells: ['идвал'] },
+          { pronoun: 'давам',    cells: ['давал'] },
+          { pronoun: 'ставам',   cells: ['ставал'] },
+          { pronoun: 'помагам',  cells: ['помагал'] },
+        ],
+      },
+      {
+        fullWidth: true,
+        columns: [],
+        rows: [
+          {
+            pronoun: '',
+            cells: ['Още не **съм попълнил** документа. (свършено — един път) / Много пъти **съм попълвал** документи. (несвършено — много пъти)'],
+            voiceGender: 'male',
+          },
+        ],
+      },
     ],
-  } as GrammarTableExercise,
+  } as unknown as Exercise,
 
   {
     id: 'b1-l05-gramatika-10',
@@ -953,12 +1062,29 @@ export const exercises: Exercise[] = [
     layout: 'single',
     sentences: [
       { text: 'Вие колко пъти сте се качвали на връх Мусала? (качвам се)', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Няколко пъти той _______ писма до директора. (пиша)', blanks: [0], correctAnswers: ['е писал'], options: ['е писал', 'е писала', 'са писали', 'съм писал'] },
-      { text: 'Четири пъти ние _______ Лондон. (посещавам)', blanks: [0], correctAnswers: ['сме посещавали'], options: ['сме посещавали', 'съм посещавал', 'сте посещавали', 'са посещавали'] },
-      { text: 'Вие колко пъти _______ книга на приятел? (подарявам)', blanks: [0], correctAnswers: ['сте подарявали'], options: ['сте подарявали', 'сме подарявали', 'са подарявали', 'съм подарявал'] },
-      { text: 'Те много пъти _______ баница със спанак. (купувам)', blanks: [0], correctAnswers: ['са купували'], options: ['са купували', 'е купувал', 'сме купували', 'сте купували'] },
-      { text: 'Колко пъти ти _______ в новия ни офис? (идвам)', blanks: [0], correctAnswers: ['си идвал'], acceptableAnswers: [['си идвала']], options: ['си идвал', 'си идвала', 'сте идвали', 'е идвал'] },
-      { text: 'Поне четири пъти _______ тази комедия. (гледам)', blanks: [0], correctAnswers: ['съм гледал'], acceptableAnswers: [['съм гледала']], options: ['съм гледал', 'съм гледала', 'сме гледали', 'е гледал'] },
+      { text: 'Няколко пъти той _______ (пиша) писма до директора.', blanks: [0], correctAnswers: ['е писал'], options: ['е писал', 'е писала', 'са писали', 'съм писал'] },
+      { text: 'Четири пъти ние _______ (посещавам) Лондон.', blanks: [0], correctAnswers: ['сме посещавали'], options: ['сме посещавали', 'съм посещавал', 'сте посещавали', 'са посещавали'] },
+      { text: 'Вие колко пъти _______ (подарявам) книга на приятел?', blanks: [0], correctAnswers: ['сте подарявали'], options: ['сте подарявали', 'сме подарявали', 'са подарявали', 'съм подарявал'] },
+      { text: 'Те много пъти _______ (купувам) баница със спанак.', blanks: [0], correctAnswers: ['са купували'], options: ['са купували', 'е купувал', 'сме купували', 'сте купували'] },
+      { text: 'Колко пъти ти _______ (идвам) в новия ни офис?', blanks: [0], correctAnswers: ['си идвал'], acceptableAnswers: [['си идвала']], options: ['си идвал', 'си идвала', 'сте идвали', 'е идвал'] },
+      { text: 'Поне четири пъти _______ (гледам) тази комедия.', blanks: [0], correctAnswers: ['съм гледал'], acceptableAnswers: [['съм гледала']], options: ['съм гледал', 'съм гледала', 'сме гледали', 'е гледал'] },
+    ],
+  } as WorkbookFillBlankExercise,
+
+  {
+    id: 'b1-l05-ex-25',
+    type: 'workbook_fill_blank',
+    title: 'УПРАЖНЕНИЕ 25',
+    instruction: 'Изберете вярната форма (свършено или несвършено причастие).',
+    order: 37,
+    points: 4,
+    layout: 'single',
+    sentences: [
+      { text: 'Жоро е идвал няколко пъти у нас.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Може би те _______ за срещата в 17:00 часа.', blanks: [0], correctAnswers: ['са закъснели'], options: ['са закъснели', 'са закъснявали'] },
+      { text: 'Много пъти _______ шопска салата.', blanks: [0], correctAnswers: ['сме правили'], options: ['сме правили', 'сме направили'] },
+      { text: 'Тя още не _______ на курса по български. Закъснява с 15 минути.', blanks: [0], correctAnswers: ['е дошла'], options: ['е дошла', 'е идвала'] },
+      { text: 'Колко пъти _______ Лейла на летището?', blanks: [0], correctAnswers: ['сте посрещали'], options: ['сте посрещали', 'сте посрещнали'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -967,7 +1093,7 @@ export const exercises: Exercise[] = [
     type: 'dialogues',
     title: 'УПРАЖНЕНИЕ 26',
     instruction: 'Изслушайте диалозите и се опитайте да ги прочетете. Обърнете внимание на глаголите в минало неопределено време.',
-    order: 37,
+    order: 38,
     images: ['/assets/b1-lesson-05/07-upr-26-pishi/01-momiche-pishi-staklo.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -994,7 +1120,7 @@ export const exercises: Exercise[] = [
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 11',
     instruction: 'Наречията „досега не", „скоро не", „отдавна не", „откога не" и „никога не" се използват с минало неопределено време.',
-    order: 38,
+    order: 39,
     examples: [
       { imageUrl: '', text: '', lines: ['**Досега не** съм плащал онлайн.'],
         ttsText: 'Досега не съм плащал онлайн.', voiceGender: 'male', ttsModel: 'pro', ttsPrompt: 'Read naturally in warm, clear standard Bulgarian with correct stress.' },
@@ -1012,23 +1138,6 @@ export const exercises: Exercise[] = [
         voiceGender: 'male', ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
     ],
   } as unknown as Exercise,
-
-  {
-    id: 'b1-l05-ex-25',
-    type: 'workbook_fill_blank',
-    title: 'УПРАЖНЕНИЕ 25',
-    instruction: 'Изберете вярната форма (свършено или несвършено причастие).',
-    order: 39,
-    points: 4,
-    layout: 'single',
-    sentences: [
-      { text: 'Жоро е идвал няколко пъти у нас.', blanks: [], correctAnswers: [], isExample: true },
-      { text: 'Може би те _______ за срещата в 17:00 часа.', blanks: [0], correctAnswers: ['са закъснели'], options: ['са закъснели', 'са закъснявали'] },
-      { text: 'Много пъти _______ шопска салата.', blanks: [0], correctAnswers: ['сме правили'], options: ['сме правили', 'сме направили'] },
-      { text: 'Тя още не _______ на курса по български. Закъснява с 15 минути.', blanks: [0], correctAnswers: ['е дошла'], options: ['е дошла', 'е идвала'] },
-      { text: 'Колко пъти _______ Лейла на летището?', blanks: [0], correctAnswers: ['сте посрещали'], options: ['сте посрещали', 'сте посрещнали'] },
-    ],
-  } as WorkbookFillBlankExercise,
 
   {
     id: 'b1-l05-ex-27',
@@ -1058,14 +1167,14 @@ export const exercises: Exercise[] = [
     points: 7,
     layout: 'single',
     sentences: [
-      { text: 'Михаил може би още не е отишъл на работа.', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Михаил може би още не е отишъл на работа. (не отиде)', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Той още не _______ зеленчуци от пазара.', blanks: [0], correctAnswers: ['е купил'], options: ['е купил', 'купи'] },
       { text: 'Те никога не _______ в САЩ.', blanks: [0], correctAnswers: ['са били'], options: ['са били', 'бяха'] },
       { text: 'Отдавна не _______ баба и дядо.', blanks: [0], correctAnswers: ['сме виждали'], options: ['сме виждали', 'видяхме'] },
       { text: 'Сигурно майка ми _______ парите вкъщи.', blanks: [0], correctAnswers: ['е забравила'], options: ['е забравила', 'забрави'] },
-      { text: 'В събота вечерта _______ вкусни сармички.', blanks: [0], correctAnswers: ['направих'], options: ['направих', 'съм направила'] },
+      { text: 'В събота вечерта _______ вкусни сармички.', blanks: [0], correctAnswers: ['направих/а'], acceptableAnswers: [['направих', 'направила']], options: ['направих/а', 'съм направила'] },
       { text: 'Децата ти някога _______ със самолет?', blanks: [0], correctAnswers: ['пътували ли са'], options: ['пътували ли са', 'пътуваха ли'] },
-      { text: 'Скоро не _______ на опера.', blanks: [0], correctAnswers: ['съм ходил'], options: ['съм ходил', 'ходих'] },
+      { text: 'Скоро не _______ на опера.', blanks: [0], correctAnswers: ['съм ходил/а'], acceptableAnswers: [['съм ходил', 'съм ходила']], options: ['съм ходил/а', 'ходих'] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -1076,6 +1185,7 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 42,
     textTitle: 'АЛА ОТ ИРАК',
+    centerTitle: true,
     images: [
       { imageUrl: '/assets/b1-lesson-05/08-upr-30-ala/01-hlyab-v-furnata.jpg', label: 'Хляб във фурната' },
     ],

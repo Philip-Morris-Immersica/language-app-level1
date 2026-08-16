@@ -23,6 +23,7 @@ import {
 } from '@/lib/tts';
 import { ReadingText as SharedReadingText } from '@/components/exercises/ReadingText';
 import { A2_CUSTOM_RENDERERS } from '@/content/a2/exercise-components';
+import { HighlightedText } from './highlight';
 
 interface TaskListParsed {
   title?: string;
@@ -68,16 +69,7 @@ type ReadingExercise = {
 };
 
 function BoldLine({ text }: { text: string }) {
-  const parts = text.split(/\*\*(.+?)\*\*/g);
-  return (
-    <>
-      {parts.map((part, i) =>
-        i % 2 === 1
-          ? <span key={i} className="font-extrabold" style={{ color: '#2d5a1b' }}>{part}</span>
-          : <span key={i}>{part}</span>
-      )}
-    </>
-  );
+  return <HighlightedText text={text} />;
 }
 
 function stripBold(text: string) {
@@ -364,7 +356,9 @@ function ReadingTextWithTaskTables({
       </div>
 
       {textTitle && (
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">{textTitle}</h2>
+        <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-4 ${exercise.centerTitle ? 'text-center' : ''}`}>
+          {textTitle}
+        </h2>
       )}
 
       {images && images.length > 0 && (

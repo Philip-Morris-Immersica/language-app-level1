@@ -1,5 +1,6 @@
 'use client';
 
+import { useLayoutEffect, useRef } from 'react';
 import { TableFill as SharedTableFill } from '@/components/exercises/TableFill';
 import { GrammarHighlight } from '@/components/exercises/GrammarHighlight';
 import type { GrammarHighlight as GrammarHighlightData } from '@/content/types';
@@ -10,6 +11,8 @@ interface Props {
     type: string;
     tables?: {
       name: string;
+      /** Header for the leftmost label column (shared TableFill leaves it empty). */
+      labelHeader?: string;
       columns: string[];
       rows: {
         label: string;
@@ -36,9 +39,23 @@ export function TableFill({ exercise, onComplete, exerciseId }: Props) {
   );
   const id = exerciseId ?? exercise.id;
   const pre = exercise.preTableHighlight;
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const headerRows = root.querySelectorAll('thead tr');
+    tables.forEach((table, i) => {
+      if (!table.labelHeader) return;
+      const firstTh = headerRows[i]?.querySelector('th');
+      if (firstTh && !firstTh.textContent?.trim()) {
+        firstTh.textContent = table.labelHeader;
+      }
+    });
+  }, [tables]);
 
   return (
-    <div className={hideColHeaders ? '[&_thead]:hidden' : undefined}>
+    <div ref={rootRef} className={hideColHeaders ? '[&_thead]:hidden' : undefined}>
       {pre && (
         <div className="mb-5">
           <GrammarHighlight highlight={pre} exerciseId={id} />
