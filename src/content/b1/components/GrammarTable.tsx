@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Pause, Play, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -17,6 +17,39 @@ import {
 } from '@/lib/tts';
 import { HIGHLIGHT_CLASS, HIGHLIGHT_STYLE } from './highlight';
 import type { B1GrammarTableExercise } from '../types';
+
+/** Tailwind `content[]` does not scan `src/content/` — border utilities are purged. */
+const TABLE_FRAME: CSSProperties = {
+  border: '2px solid #7ab356',
+  borderRadius: '0.75rem',
+  overflow: 'hidden',
+  boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  width: '100%',
+  maxWidth: '42rem',
+  minWidth: '20rem',
+};
+const TABLE_FRAME_WIDE: CSSProperties = {
+  ...TABLE_FRAME,
+  maxWidth: '100%',
+};
+const TABLE_INNER: CSSProperties = { borderCollapse: 'collapse', width: '100%' };
+const CELL_BORDER: CSSProperties = {
+  borderRight: '1px solid #e5e7eb',
+  borderBottom: '1px solid #f3f4f6',
+};
+const HEADER_CELL_BORDER: CSSProperties = {
+  borderRight: '1px solid rgba(90, 138, 60, 0.3)',
+};
+const TITLE_HEADER_BG: CSSProperties = { backgroundColor: '#5a8a3c', color: '#fff' };
+const COL_HEADER_BG: CSSProperties = { backgroundColor: '#7ab356', color: '#fff' };
+const ROW_BG_EVEN: CSSProperties = { backgroundColor: '#ffffff' };
+const ROW_BG_ODD: CSSProperties = { backgroundColor: '#f4faee' };
+const ROW_BG_ACTIVE: CSSProperties = { backgroundColor: '#DAF6EB' };
+const ROW_BG_NO_AUDIO: CSSProperties = { backgroundColor: '#edf5e4' };
+const GREEN_BOX_BORDER: CSSProperties = {
+  border: '2px solid #7ab356',
+  borderRadius: '0.5rem',
+};
 
 interface Props {
   exercise: B1GrammarTableExercise;
@@ -52,12 +85,14 @@ function ClickTranslateTh({
   colSpan,
   onClick,
   showSpeaker,
+  style,
 }: {
   text: string;
   className: string;
   colSpan?: number;
   onClick?: () => void;
   showSpeaker?: boolean;
+  style?: CSSProperties;
 }) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
@@ -67,6 +102,7 @@ function ClickTranslateTh({
     <th
       className={`${className} ${onClick ? 'cursor-pointer select-none' : ''}`}
       colSpan={colSpan}
+      style={style}
       onClick={onClick ? (e) => { e.stopPropagation(); onClick(); } : undefined}
     >
       <span className="inline-flex items-center justify-center gap-2">
@@ -97,6 +133,7 @@ function SingleTable({
   rows,
   boldColumns,
   widePronouns,
+  compactPronouns,
   alignLeft,
   disableAudio,
   exerciseId,
@@ -110,6 +147,8 @@ function SingleTable({
   rows: TableRow[];
   boldColumns: number[];
   widePronouns: boolean;
+  /** Lesson 8 conjugation tables only — hug the pronoun + speaker, don't stretch the first column. */
+  compactPronouns: boolean;
   alignLeft: boolean;
   disableAudio: boolean;
   exerciseId?: string;
@@ -140,35 +179,48 @@ function SingleTable({
   const cellAlign = alignLeft ? 'text-left' : 'text-center';
   const cellJustify = alignLeft ? 'justify-start' : 'justify-center';
 
+  // Used only by B1 lesson 8 ГРАМАТИКА 2. Inline styles because Tailwind
+  // content[] does not scan `src/content/` — width/padding classes here are purged.
+  const compactPronounStyle: CSSProperties | undefined = compactPronouns
+    ? { width: 1, paddingLeft: '1.25rem', paddingRight: '1.5rem' }
+    : undefined;
+  const compactValueStyle: CSSProperties | undefined = compactPronouns
+    ? { width: '100%' }
+    : undefined;
+
   return (
     <div className="overflow-x-auto flex justify-center">
-      <table className={`border-collapse rounded-xl overflow-hidden shadow-sm ${cellAlign} border-2 border-[#7ab356] ${columns.length === 0 ? 'w-full max-w-2xl min-w-[20rem]' : 'w-full'}`}>
+      <div style={columns.length === 0 ? TABLE_FRAME : TABLE_FRAME_WIDE}>
+      <table style={TABLE_INNER} className={`${cellAlign}`}>
         {tableTitle && (
           <thead>
-            <tr>
+            <tr style={TITLE_HEADER_BG}>
               <ClickTranslateTh
                 text={tableTitle}
-                className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4 text-center"
+                style={TITLE_HEADER_BG}
+                className="text-base md:text-lg font-bold py-3 px-4 text-center"
                 colSpan={showPronounCol ? colSpan : Math.max(columns.length, rows[0]?.cells.length ?? 1)}
               />
             </tr>
             {columns.length > 0 && (
-              <tr className="bg-[#7ab356] text-white">
+              <tr style={COL_HEADER_BG}>
                 {showPronounCol && (
                   pronounHeader ? (
                     <ClickTranslateTh
                       text={pronounHeader}
-                      className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
+                      style={HEADER_CELL_BORDER}
+                      className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
                     />
                   ) : (
-                    <th className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base border-r border-[#5a8a3c]/30 ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
+                    <th style={HEADER_CELL_BORDER} className={`py-2 px-3 md:px-5 font-semibold text-sm md:text-base ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}>{'\u00A0'}</th>
                   )
                 )}
                 {columns.map((col, i) => (
                   <ClickTranslateTh
                     key={i}
                     text={col}
-                    className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap text-center"
+                    style={i < columns.length - 1 ? HEADER_CELL_BORDER : undefined}
+                    className="py-2 px-3 md:px-5 font-bold text-sm md:text-base whitespace-nowrap text-center"
                   />
                 ))}
               </tr>
@@ -180,14 +232,25 @@ function SingleTable({
           {rows.map((row, rIdx) => {
             const rowSilent = disableAudio || !!row.noAudio;
             const rowActive = activeGlobalRow === rowIndexOffset + rIdx;
+            const rowBg = rowActive
+              ? ROW_BG_ACTIVE
+              : row.noAudio
+                ? ROW_BG_NO_AUDIO
+                : rIdx % 2 === 0
+                  ? ROW_BG_EVEN
+                  : ROW_BG_ODD;
             return (
             <React.Fragment key={rIdx}>
               <tr
                 onClick={() => playRow(rIdx)}
-                className={`${rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'} transition-colors ${rowActive ? 'bg-[#DAF6EB]' : row.noAudio ? 'bg-[#edf5e4]' : rIdx % 2 === 0 ? 'bg-white' : 'bg-[#f4faee]'}`}
+                style={rowBg}
+                className={`${rowSilent ? '' : 'cursor-pointer'} transition-colors`}
               >
                 {showPronounCol && (
-                  <td className={`py-2.5 pl-4 pr-3 md:pl-5 md:pr-4 font-bold text-[#1F5741] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 whitespace-nowrap ${widePronouns ? 'w-1/2' : 'w-[7.5rem] md:w-[9rem]'}`}>
+                  <td
+                    className={`py-2.5 pl-4 pr-3 md:pl-5 md:pr-4 font-bold text-[#1F5741] text-sm md:text-base whitespace-nowrap ${widePronouns ? 'w-1/2' : 'w-[7.5rem] md:w-[9rem]'}`}
+                    style={{ ...CELL_BORDER, ...compactPronounStyle }}
+                  >
                     <div className={`flex items-center gap-1.5 ${widePronouns ? cellJustify : 'justify-start'}`}>
                       <span>{row.pronoun}</span>
                       {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
@@ -197,7 +260,11 @@ function SingleTable({
                 {row.cells.map((cell, cIdx) => (
                   <td
                     key={cIdx}
-                    className={`py-2.5 px-2 md:px-3 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#1F5741]' : 'font-medium'}`}
+                    style={{
+                      ...(cIdx < row.cells.length - 1 ? CELL_BORDER : { borderBottom: CELL_BORDER.borderBottom }),
+                      ...compactValueStyle,
+                    }}
+                    className={`py-2.5 px-2 md:px-3 text-sm md:text-base text-gray-800 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#1F5741]' : 'font-medium'}`}
                   >
                     <div className={`flex items-center ${cellJustify} gap-1`}>
                       <span>{renderBoldText(cell)}</span>
@@ -248,6 +315,7 @@ function SingleTable({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
@@ -454,6 +522,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
     ttsNotes,
     boldColumns = [],
     widePronouns = false,
+    compactPronouns = false,
     alignLeft = false,
     disableAudio = false,
     variant = 'table',
@@ -695,6 +764,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                 rows={panel.rows}
                 boldColumns={boldColumns}
                 widePronouns={widePronouns}
+                compactPronouns={compactPronouns}
                 alignLeft={alignLeft}
                 disableAudio={disableAudio}
                 exerciseId={exerciseId}
@@ -710,43 +780,6 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
       {fullWidth.map((panel, i) => {
         const rowIndexOffset = sideBySideRowCount
           + fullWidth.slice(0, i).reduce((n, p) => n + p.rows.length, 0);
-        const sentenceBoxes = (panel.columns?.length ?? 0) === 0
-          && panel.rows.every(r => !(r.pronoun ?? '').trim());
-        if (sentenceBoxes) {
-          return (
-            <div key={`fw-${i}`} className="flex flex-col gap-3">
-              {panel.rows.map((row, rIdx) => {
-                const line = row.cells.join(' ').trim() || row.pronoun;
-                if (!line) return null;
-                const globalIdx = rowIndexOffset + rIdx;
-                const rowSilent = disableAudio || !!row.noAudio;
-                const rowActive = activeGlobalRow === globalIdx;
-                return (
-                  <div
-                    key={rIdx}
-                    onClick={() => {
-                      if (rowSilent) return;
-                      handleManualPlay();
-                      const audioPath = exerciseId
-                        ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${globalIdx}`)
-                        : '';
-                      playTtsAudio(audioPath, speakableRowText(row));
-                    }}
-                    className={`border-2 border-[#7ab356] rounded-lg px-5 py-3 bg-[#f4faee] text-center transition-colors ${
-                      rowSilent ? '' : 'cursor-pointer hover:bg-[#edf5e4]'
-                    } ${rowActive ? 'bg-[#DAF6EB] border-[#32C189]/60' : ''}`}
-                  >
-                    <div className="flex items-center justify-center gap-2">
-                      <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(line)}</p>
-                      {!rowSilent && <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 flex-shrink-0" />}
-                    </div>
-                    <InlineTranslation text={line} visible={true} />
-                  </div>
-                );
-              })}
-            </div>
-          );
-        }
         return (
           <SingleTable
             key={`fw-${i}`}
@@ -756,6 +789,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
             rows={panel.rows}
             boldColumns={boldColumns}
             widePronouns={widePronouns}
+            compactPronouns={compactPronouns}
             alignLeft={alignLeft}
             disableAudio={disableAudio}
             exerciseId={exerciseId}
@@ -773,6 +807,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
               key={i}
               onClick={() => playNote(i, note)}
               className={`border-2 border-[#7ab356] rounded-lg px-5 py-3 bg-[#f4faee] text-center transition-colors ${disableAudio ? '' : 'cursor-pointer hover:bg-[#edf5e4]'}`}
+              style={GREEN_BOX_BORDER}
             >
               <div className="flex items-center justify-center gap-2">
                 <p className="text-sm md:text-base font-semibold text-gray-800">{renderBoldText(note)}</p>
