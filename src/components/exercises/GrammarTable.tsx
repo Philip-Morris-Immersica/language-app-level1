@@ -14,6 +14,12 @@ interface GrammarTableProps {
   columns?: string[];
   rows?: { pronoun: string; cells: string[]; pronunciations?: Record<string, string> }[];
   notes?: string[];
+  /**
+   * Browser-TTS fallback text per note, used when no pre-generated MP3 exists.
+   * `notes[]` may contain markdown and symbols (`**`, `~~`, `→`, ⚠️) that a
+   * speech synthesiser reads literally; these are the clean spoken versions.
+   */
+  ttsNotes?: string[];
   subtitle?: string;
   exerciseId?: string;
   boldColumns?: number[];
@@ -50,6 +56,7 @@ export function GrammarTable({
   columns = [],
   rows = [],
   notes = [],
+  ttsNotes = [],
   subtitle,
   exerciseId,
   boldColumns = [],
@@ -88,7 +95,7 @@ export function GrammarTable({
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
       : '';
-    playTtsAudio(audioPath, note);
+    playTtsAudio(audioPath, ttsNotes[idx] ?? note);
     toggle(setRevealedNotes, idx);
   };
 

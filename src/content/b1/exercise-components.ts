@@ -24,6 +24,15 @@
  */
 
 import type { ComponentType } from 'react';
+import { IllustratedCardsGrouped } from './components/IllustratedCardsGrouped';
+import { MatchPairsDragDrop } from './components/MatchPairsDragDrop';
+import { GrammarTable } from './components/GrammarTable';
+import { GrammarExamples } from './components/GrammarExamples';
+import { SortToColumns } from './components/SortToColumns';
+import { TableFill } from './components/TableFill';
+import { ReadingText } from './components/ReadingText';
+import { Dialogues } from './components/Dialogues';
+import { WorkbookFillBlank } from './components/WorkbookFillBlank';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -42,5 +51,20 @@ export type CustomExerciseRenderer = ComponentType<CustomExerciseRendererProps>;
  *   };
  */
 export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
-  // (empty for now — populated as B1 lessons add custom components)
+  'b1-illustrated-cards-grouped': IllustratedCardsGrouped as unknown as CustomExerciseRenderer,
+  'b1-match-pairs-dragdrop': MatchPairsDragDrop as unknown as CustomExerciseRenderer,
+  'b1-grammar-table': GrammarTable as unknown as CustomExerciseRenderer,
+  'b1-grammar-examples': GrammarExamples as unknown as CustomExerciseRenderer,
+  'b1-sort-to-columns': SortToColumns as unknown as CustomExerciseRenderer,
+  // Override shared table_fill: hide empty column-header rows (B1-only).
+  table_fill: TableFill as unknown as CustomExerciseRenderer,
+  // Override shared reading_text: numbered task lists → green tables (B1-only).
+  reading_text: ReadingText as unknown as CustomExerciseRenderer,
+  // Override shared dialogues: support **bold** markdown in lines (B1-only).
+  dialogues: Dialogues as unknown as CustomExerciseRenderer,
+  // Optional compact layout for long single-column dropdown exercises.
+  workbook_fill_blank: WorkbookFillBlank as unknown as CustomExerciseRenderer,
+  // Override shared grammar UI: lighter bold highlights, 2×2 card grids, compact tables.
+  grammar_examples: GrammarExamples as unknown as CustomExerciseRenderer,
+  grammar_table: GrammarTable as unknown as CustomExerciseRenderer,
 };

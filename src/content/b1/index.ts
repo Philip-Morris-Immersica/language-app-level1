@@ -29,6 +29,17 @@ export const B1_LESSON_LOADERS: Record<
 > = {
   'b1-lesson-01': () => import('./lessons/b1-lesson-01'),
   'b1-lesson-02': () => import('./lessons/b1-lesson-02'),
+  'b1-lesson-03': () => import('./lessons/b1-lesson-03'),
+  'b1-lesson-04': () => import('./lessons/b1-lesson-04'),
+  'b1-lesson-05': () => import('./lessons/b1-lesson-05'),
+  'b1-lesson-06': () => import('./lessons/b1-lesson-06'),
+  // 07–10 are digitalised and reachable, but have not had a content QA pass yet.
+  'b1-lesson-07': () => import('./lessons/b1-lesson-07'),
+  'b1-lesson-08': () => import('./lessons/b1-lesson-08'),
+  'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
+  'b1-lesson-10': () => import('./lessons/b1-lesson-10'),
+  // Lesson 11 has no content folder yet — its page shows the "in preparation"
+  // placeholder until the five standard files land under `lessons/b1-lesson-11/`.
 };
 
 export const B1_TEST_LOADERS: Record<
@@ -75,6 +86,14 @@ export const B1_TEST_FOLDER_MAP: Record<string, string> = {};
 export const B1_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
 
 export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
-  'b1-lesson-01': 20,
+  'b1-lesson-01': 19,
   'b1-lesson-02': 14,
+  'b1-lesson-03': 18,
+  'b1-lesson-04': 10,
+  'b1-lesson-05': 21,
+  'b1-lesson-06': 7,
+  'b1-lesson-07': 24,
+  'b1-lesson-08': 12,
+  'b1-lesson-09': 31,
+  'b1-lesson-10': 8,
 };
