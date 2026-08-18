@@ -1,7 +1,6 @@
 import type {
   Exercise,
   DragToColumnsExercise,
-  FillInBlankExercise,
   IllustratedCardsExercise,
   WordSearchExercise,
   SyllableBlocksExercise,
@@ -36,6 +35,27 @@ export const exercises: Exercise[] = [
     imageUrl: '/assets/lesson-06/01-upr-01-imena/01-oblak-imena.jpg',
     order: 1,
     points: 39,
+    sectionStart: {
+      title: 'Семейството',
+      subtitle: 'Имена и нови думи за членовете на семейството',
+      titleI18n: {
+        en: 'The family',
+        fr: 'La famille',
+        ar: 'العائلة',
+        fa: 'خانواده',
+        uk: 'Родина',
+        ru: 'Семья',
+      },
+      subtitleI18n: {
+        en: 'Names and new words for family members',
+        fr: 'Prénoms et nouveaux mots pour les membres de la famille',
+        ar: 'الأسماء وكلمات جديدة عن أفراد العائلة',
+        fa: 'نام‌ها و کلمات جدید برای اعضای خانواده',
+        uk: 'Імена та нові слова для членів родини',
+        ru: 'Имена и новые слова для членов семьи',
+      },
+      theme: 'vocabulary',
+    },
     items: [
       'Жана', 'Красимир', 'Вероника', 'Борис', 'Джоана', 'Анастасия',
       'Ивана', 'Мария', 'Иван', 'Георги', 'Милена', 'Мохамед', 'Ахмед',
@@ -207,9 +227,29 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-01',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Сегашно време',
-    instruction: 'Запознайте се с глаголите ИМАМ и НЯМАМ.',
+    instruction: 'Запознайте се с глаголите **имам** и **нямам**.',
     order: 7,
+    sectionStart: {
+      title: 'Глаголите „имам" и „нямам"',
+      subtitle: 'Притежателни местоимения, числителни за хора и възраст',
+      titleI18n: {
+        en: 'The verbs „имам" (to have) and „нямам" (not to have)',
+        fr: 'Les verbes « имам » (avoir) et « нямам » (ne pas avoir)',
+        ar: 'الفعلان «имам» (يملك) و«нямам» (لا يملك)',
+        fa: 'فعل‌های «имам» (داشتن) و «нямам» (نداشتن)',
+        uk: 'Дієслова „имам" (мати) і „нямам" (не мати)',
+        ru: 'Глаголы „имам" (иметь) и „нямам" (не иметь)',
+      },
+      subtitleI18n: {
+        en: 'Possessive pronouns, numerals for people and age',
+        fr: 'Les pronoms possessifs, les numéraux pour les personnes et l\'âge',
+        ar: 'ضمائر الملكية، وأعداد الأشخاص، والعمر',
+        fa: 'ضمایر ملکی، اعداد برای افراد و سن',
+        uk: 'Присвійні займенники, числівники для людей та вік',
+        ru: 'Притяжательные местоимения, числительные для людей и возраст',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'ИМАМ / НЯМАМ',
     columns: ['(+)', '(–)'],
     rows: [
@@ -219,7 +259,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['има',   'няма']   },
       { pronoun: 'то',  cells: ['има',   'няма']   },
       { pronoun: 'ние', cells: ['имаме', 'нямаме'] },
-      { pronoun: 'Вие', cells: ['имате', 'нямате'] },
+      { pronoun: 'вие/Вие', cells: ['имате', 'нямате'] },
       { pronoun: 'те',  cells: ['имат',  'нямат']  },
     ],
   } as GrammarTableExercise,
@@ -251,7 +291,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-02',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Граматика – Бройни числителни (1)',
     instruction: 'Запознайте се с бройните числителни за хора.',
     order: 9,
     examples: [
@@ -334,7 +373,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-03',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Граматика – Число на съществителните (3)',
     instruction: 'Запознайте се с множественото число на семейните думи.',
     order: 11,
     examples: [
@@ -418,7 +456,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['й']  },
       { pronoun: 'то',  cells: ['му'] },
       { pronoun: 'ние', cells: ['ни'] },
-      { pronoun: 'Вие', cells: ['ви'] },
+      { pronoun: 'вие/Вие', cells: ['ви'] },
       { pronoun: 'те',  cells: ['им'] },
     ],
     notes: [
@@ -431,7 +469,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-04b',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Граматика – Кратки притежателни местоимения',
     instruction: 'Употреба на кратките притежателни местоимения.',
     order: 14,
     examples: [
@@ -662,6 +699,27 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 2',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 19,
+    sectionStart: {
+      title: 'Родословното дърво',
+      subtitle: 'Диалози, нови думи и упражнения за роднински връзки',
+      titleI18n: {
+        en: 'The family tree',
+        fr: 'L\'arbre généalogique',
+        ar: 'شجرة العائلة',
+        fa: 'شجره‌نامه',
+        uk: 'Родинне дерево',
+        ru: 'Семейное древо',
+      },
+      subtitleI18n: {
+        en: 'Dialogues, new words and exercises about family relationships',
+        fr: 'Dialogues, nouveaux mots et exercices sur les liens de parenté',
+        ar: 'حوارات وكلمات جديدة وتمارين عن صلات القرابة',
+        fa: 'گفتگوها، کلمات جدید و تمرین‌هایی درباره‌ی نسبت‌های خویشاوندی',
+        uk: 'Діалоги, нові слова та вправи про родинні зв\'язки',
+        ru: 'Диалоги, новые слова и упражнения о родственных связях',
+      },
+      theme: 'dialogue',
+    },
     sections: [
       {
         id: 'а.',
@@ -925,7 +983,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-07',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 7',
-    subtitle: 'Граматика – Род и число на прилагателните (5)',
     instruction: 'Запознайте се с рода на прилагателните.',
     order: 27,
     ttsFlash: true,
@@ -1153,7 +1210,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-25',
     type: 'dropdown_match',
     title: 'УПРАЖНЕНИЕ 25',
-    instruction: 'Изберете правилните прилагателни. Модел: Георги е стар, висок и слаб.',
+    instruction: 'Изберете правилните прилагателни.',
     order: 31,
     points: 3,
     images: [
@@ -1161,6 +1218,7 @@ export const exercises: Exercise[] = [
       { imageUrl: '/assets/lesson-06/08-upr-25-chetiri-personazha/02-vasil-i-nikolay.jpg', label: 'Васил и Николай' },
     ],
     questions: [
+      { id: 'model', left: 'Георги е', options: [], correctAnswer: 'стар, висок и слаб.', isExample: true },
       { id: 'q1', left: 'Иво е',    options: ['млад', 'стар', 'висок', 'нисък', 'слаб', 'пълен'],   correctAnswer: 'млад'   },
       { id: 'q2', left: 'Васил е',  options: ['висок', 'нисък', 'млад', 'стар', 'слаб', 'пълен'],   correctAnswer: 'висок'  },
       { id: 'q3', left: 'Николай е', options: ['пълен', 'слаб', 'млад', 'стар', 'висок', 'нисък'],  correctAnswer: 'пълен'  },
@@ -1176,8 +1234,7 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-08',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 8',
-    subtitle: 'Граматика – Сегашно време',
-    instruction: 'Запознайте се с глагола РАБОТЯ — И-група.',
+    instruction: 'Запознайте се с глагола **работя** — И-група.',
     order: 32,
     tableTitle: 'Сегашно време — И група',
     columns: ['(+)', '(–)'],
@@ -1188,11 +1245,11 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['работи',    'не работи']    },
       { pronoun: 'то',  cells: ['работи',    'не работи']    },
       { pronoun: 'ние', cells: ['работим',   'не работим']   },
-      { pronoun: 'Вие', cells: ['работите',  'не работите']  },
+      { pronoun: 'вие/Вие', cells: ['работите',  'не работите']  },
       { pronoun: 'те',  cells: ['работят',   'не работят']   },
     ],
     grammarHighlight: {
-      text: '⚠️ Внимание! Глаголът УЧА е с особена форма за 1-во лице:',
+      text: '⚠️ Внимание! Глаголът **уча** е с особена форма за 1-во лице:',
       examples: [
         'аз уча',
         'ти учиш',
@@ -1209,7 +1266,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-26',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 26',
-    instruction: 'Сложете глагола РАБОТЯ в правилната форма.',
+    instruction: 'Сложете глагола **работя** в правилната форма.',
     order: 33,
     points: 6,
     layout: 'single',
@@ -1264,7 +1321,7 @@ export const exercises: Exercise[] = [
     id: 'l06-ex-27',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 27',
-    instruction: 'Сложете глагола УЧА в правилната форма.',
+    instruction: 'Сложете глагола **уча** в правилната форма.',
     order: 34,
     points: 6,
     layout: 'single',
@@ -1340,7 +1397,6 @@ export const exercises: Exercise[] = [
     id: 'l06-gramatika-09',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 9',
-    subtitle: 'Граматика – Показателни местоимения (10)',
     instruction: 'Запознайте се с показателните местоимения.',
     order: 36,
     examples: [
@@ -1377,6 +1433,27 @@ export const exercises: Exercise[] = [
     title: 'ДОПЪЛНИТЕЛНИ УПРАЖНЕНИЯ',
     instruction: 'Изслушайте текстовете и след това ги прочетете сами.',
     order: 37,
+    sectionStart: {
+      title: 'Разкази от първо лице',
+      subtitle: 'Текстове и въпроси за бежанци и техните семейства в България',
+      titleI18n: {
+        en: 'First-person stories',
+        fr: 'Récits à la première personne',
+        ar: 'قصص بضمير المتكلم',
+        fa: 'روایت‌های اول‌شخص',
+        uk: 'Розповіді від першої особи',
+        ru: 'Рассказы от первого лица',
+      },
+      subtitleI18n: {
+        en: 'Texts and questions about refugees and their families in Bulgaria',
+        fr: 'Textes et questions sur les réfugiés et leurs familles en Bulgarie',
+        ar: 'نصوص وأسئلة عن اللاجئين وعائلاتهم في بلغاريا',
+        fa: 'متن‌ها و پرسش‌هایی درباره‌ی پناهندگان و خانواده‌هایشان در بلغارستان',
+        uk: 'Тексти та запитання про біженців та їхні родини в Болгарії',
+        ru: 'Тексты и вопросы о беженцах и их семьях в Болгарии',
+      },
+      theme: 'reading',
+    },
     images: [
       { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/01-semeystvo-tekst-mohamed.jpg', label: 'Мохамед' },
       { imageUrl: '/assets/lesson-06/09-dopalnitelni-upr-31-34/02-bana-i-detsa.jpg', label: 'Бана' },
@@ -1501,28 +1578,8 @@ export const exercises: Exercise[] = [
     ],
   } as ReadingTextExercise,
 
-  // ORDER 42: Упр. 38 – Опишете се по модела (Page 63)
-  // Free-writing exercise — student describes themselves following the Boris text model.
-  // Uses freeText fill_in_blank so the platform saves the input without grading it.
-  {
-    id: 'l06-ex-38',
-    type: 'fill_in_blank',
-    title: 'УПРАЖНЕНИЕ 38',
-    instruction: 'Опишете се по модела. Напишете текст за себе си (3–5 изречения).',
-    order: 42,
-    points: 0,
-    freeText: true,
-    grammarHighlight: {
-      text: '📝 Модел: „Казвам се Борис. Аз съм от София, женен съм и имам две малки деца – едно момче и едно момиче. На 30 години съм. Жена ми е учителка по български език в голямо училище. Работя в „Каритас". Обичам работата с бежанци."',
-    },
-    sentences: [
-      {
-        text: 'Казвам се ___. Аз съм от ___. На ___ години съм. ___.',
-        blanks: [0, 1, 2, 3],
-        correctAnswers: [],
-      },
-    ],
-  } as FillInBlankExercise,
+  // SKIP Упр. 38 — Опишете се по модела (free-writing removed; l06-ex-37 already
+  // shows the Boris model text as a proper reading exercise)
 
   // ──────────────────────────────────────────────────────────
   // СТРАНИЦА 64 — ОТ ПЪРВО ЛИЦЕ

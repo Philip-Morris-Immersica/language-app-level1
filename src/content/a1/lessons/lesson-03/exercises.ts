@@ -27,6 +27,27 @@ export const exercises: Exercise[] = [
     type: 'word_search',
     instruction: 'Намерете скритите думи в таблицата.',
     order: 1,
+    sectionStart: {
+      title: 'Напитки в кафенето',
+      subtitle: 'Кръстословица, нови думи и упражнения за напитки',
+      titleI18n: {
+        en: 'Drinks at the café',
+        fr: 'Boissons au café',
+        ar: 'المشروبات في المقهى',
+        fa: 'نوشیدنی‌ها در کافه',
+        uk: 'Напої в кафе',
+        ru: 'Напитки в кафе',
+      },
+      subtitleI18n: {
+        en: 'Crossword, new words and exercises about drinks',
+        fr: 'Mots croisés, nouveaux mots et exercices sur les boissons',
+        ar: 'كلمات متقاطعة وكلمات جديدة وتمارين عن المشروبات',
+        fa: 'جدول کلمات، کلمات جدید و تمرین‌هایی درباره‌ی نوشیدنی‌ها',
+        uk: 'Кросворд, нові слова та вправи про напої',
+        ru: 'Кроссворд, новые слова и упражнения о напитках',
+      },
+      theme: 'vocabulary',
+    },
     points: 8,
     letterString: 'КРОАСАНБВВОДАШОКХЛЯБОСОКЧАЙМЕДЯЙЦЕБАНИЦАЗ',
     correctWords: ['КРОАСАН', 'ВОДА', 'СОК', 'ЧАЙ', 'МЕД', 'ЯЙЦЕ', 'БАНИЦА', 'ХЛЯБ'],
@@ -98,9 +119,29 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l03.g1.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Бройни числителни (1)',
     instruction: 'Запознайте се с числата от 10 до 100.',
     order: 5,
+    sectionStart: {
+      title: 'Числа и пари',
+      subtitle: 'Числителни от десет до сто и разплащане в евро',
+      titleI18n: {
+        en: 'Numbers and money',
+        fr: 'Les nombres et l\'argent',
+        ar: 'الأعداد والنقود',
+        fa: 'اعداد و پول',
+        uk: 'Числа та гроші',
+        ru: 'Числа и деньги',
+      },
+      subtitleI18n: {
+        en: 'Numbers from ten to a hundred and paying in euros',
+        fr: 'Les nombres de dix à cent et le paiement en euros',
+        ar: 'الأعداد من عشرة إلى مئة والدفع باليورو',
+        fa: 'اعداد از ده تا صد و پرداخت با یورو',
+        uk: 'Числа від десяти до ста та оплата в євро',
+        ru: 'Числа от десяти до ста и оплата в евро',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Бройни числителни 10–100',
     columns: [],
     rows: [
@@ -300,6 +341,27 @@ export const exercises: Exercise[] = [
     title: 'НОВИ ДУМИ 3',
     instruction: '',
     order: 11,
+    sectionStart: {
+      title: 'Поръчка в ресторанта',
+      subtitle: 'Храни, диалози за маса, меню и сметка в ресторант',
+      titleI18n: {
+        en: 'Ordering at the restaurant',
+        fr: 'Commander au restaurant',
+        ar: 'الطلب في المطعم',
+        fa: 'سفارش در رستوران',
+        uk: 'Замовлення в ресторані',
+        ru: 'Заказ в ресторане',
+      },
+      subtitleI18n: {
+        en: 'Foods, dialogues at the table, menu and the bill at a restaurant',
+        fr: 'Aliments, dialogues à table, menu et addition au restaurant',
+        ar: 'الأطعمة وحوارات على الطاولة والقائمة والحساب في المطعم',
+        fa: 'غذاها، گفتگوها سر میز، منو و صورت‌حساب در رستوران',
+        uk: 'Страви, діалоги за столом, меню та рахунок у ресторані',
+        ru: 'Блюда, диалоги за столом, меню и счёт в ресторане',
+      },
+      theme: 'dialogue',
+    },
     cards: [
       { id: 'supa',      imageUrl: '/assets/lesson-03/novi-dumi-3-food/supa.jpg',      label: 'супа' },
       { id: 'salata',    imageUrl: '/assets/lesson-03/novi-dumi-3-food/salata.jpg',    label: 'салата' },
@@ -326,7 +388,7 @@ export const exercises: Exercise[] = [
     order: 12,
     sections: [
       {
-        id: 'a',
+        id: 'а',
         lines: [
           { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Добър ден. Какво обичате?', translations: { en: 'Good day. What would you like?', ar: 'مرحبًا. ماذا تحب أن تطلب؟', fr: 'Bonjour. Que désirez-vous ?', fa: 'روز بخیر. چه میل دارید؟', uk: 'Добрий день. Що бажаєте?', ru: 'Добрый день. Что желаете?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Едно кафе, моля.', translations: { en: 'A coffee, please.', ar: 'قهوة، من فضلك.', fr: 'Un café, s\'il vous plaît.', fa: 'یک قهوه، لطفاً.', uk: 'Каву, будь ласка.', ru: 'Кофе, пожалуйста.' } },
@@ -337,7 +399,7 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: 'b',
+        id: 'б',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Извинете, колко струва един билков чай с мед?', translations: { en: 'Excuse me, how much is a herbal tea with honey?', ar: 'عفوًا، كم يكلف شاي الأعشاب بالعسل؟', fr: 'Excusez-moi, combien coûte une tisane au miel ?', fa: 'ببخشید، یک چای گیاهی با عسل چقدر است؟', uk: 'Вибачте, скільки коштує трав\'яний чай з медом?', ru: 'Извините, сколько стоит травяной чай с мёдом?' } },
           { speaker: 'Сервитьор', voiceGender: 'male',   text: '2,50 евро.', ttsText: 'Две евро и петдесет цента.', translations: { en: '2.50 euros.', ar: '٢٫٥٠ يورو.', fr: '2,50 euros.', fa: '۲٫۵۰ یورو.', uk: '2,50 євро.', ru: '2,50 евро.' } },
@@ -374,21 +436,21 @@ export const exercises: Exercise[] = [
     order: 14,
     sections: [
       {
-        id: 'a',
+        id: 'а',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Добър ден, господине. Свободно ли е?', translations: { en: 'Good day, sir. Is this seat free?', ar: 'مرحبًا يا سيدي. هل المكان فارغ؟', fr: 'Bonjour, monsieur. C\'est libre ?', fa: 'روز بخیر، آقا. اینجا آزاد است؟', uk: 'Добрий день, пане. Вільно?', ru: 'Добрый день, господин. Свободно?' } },
           { speaker: 'Господин',  voiceGender: 'male',   text: 'Да, заповядайте.', translations: { en: 'Yes, please sit down.', ar: 'نعم، تفضل.', fr: 'Oui, je vous en prie.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
         ],
       },
       {
-        id: 'b',
+        id: 'б',
         lines: [
           { speaker: 'Клиент',   voiceGender: 'male',   text: 'Извинете, свободно ли е?', translations: { en: 'Excuse me, is this seat free?', ar: 'عفوًا، هل المكان فارغ؟', fr: 'Excusez-moi, c\'est libre ?', fa: 'ببخشید، اینجا آزاد است؟', uk: 'Вибачте, вільно?', ru: 'Извините, свободно?' } },
           { speaker: 'Госпожа',  voiceGender: 'female', text: 'Не, съжалявам, заето е.', translations: { en: 'No, sorry, it\'s taken.', ar: 'لا، آسفة، المكان مشغول.', fr: 'Non, désolée, c\'est occupé.', fa: 'نه، متأسفم، اشغال است.', uk: 'Ні, вибачте, зайнято.', ru: 'Нет, извините, занято.' } },
         ],
       },
       {
-        id: 'c',
+        id: 'в',
         imageUrl: '/assets/lesson-03/dialogues-2/menu.jpg',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Едно меню, ако обичате.', translations: { en: 'A menu, please.', ar: 'قائمة الطعام، من فضلك.', fr: 'Un menu, s\'il vous plaît.', fa: 'یک منو، لطفاً.', uk: 'Меню, будь ласка.', ru: 'Меню, пожалуйста.' } },
@@ -396,7 +458,7 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: 'd',
+        id: 'г',
         imageUrl: '/assets/lesson-03/dialogues-2/restorant-finikiya.jpg',
         lines: [
           { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Какво обичате?', translations: { en: 'What would you like?', ar: 'ماذا تحب أن تطلب؟', fr: 'Que désirez-vous ?', fa: 'چه میل دارید؟', uk: 'Що бажаєте?', ru: 'Что желаете?' } },
@@ -410,7 +472,7 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: 'e',
+        id: 'д',
         imageUrl: '/assets/lesson-03/dialogues-2/smetka.jpg',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Може ли сметката?', translations: { en: 'Can I have the bill?', ar: 'هل يمكنني الحصول على الفاتورة؟', fr: 'L\'addition, s\'il vous plaît.', fa: 'می‌توانم صورتحساب را داشته باشم؟', uk: 'Можна рахунок?', ru: 'Можно счёт?' } },
@@ -472,9 +534,29 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l03.g2a.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Граматика – Сегашно време',
-    instruction: 'Запознайте се с глагола ПИЯ в сегашно време.',
+    instruction: 'Запознайте се с глагола **пия** в сегашно време.',
     order: 16,
+    sectionStart: {
+      title: 'Глаголите „пия" и „ям"',
+      subtitle: 'Спрежение на глаголите пия и ям и хранения през деня',
+      titleI18n: {
+        en: 'The verbs „пия" (to drink) and „ям" (to eat)',
+        fr: 'Les verbes « пия » (boire) et « ям » (manger)',
+        ar: 'الفعلان «пия» (يشرب) و«ям» (يأكل)',
+        fa: 'فعل‌های «пия» (نوشیدن) و «ям» (خوردن)',
+        uk: 'Дієслова „пия" (пити) і „ям" (їсти)',
+        ru: 'Глаголы „пия" (пить) и „ям" (есть)',
+      },
+      subtitleI18n: {
+        en: 'Conjugation of the verbs „пия" and „ям" and meals during the day',
+        fr: 'La conjugaison des verbes « пия » et « ям » et les repas de la journée',
+        ar: 'تصريف الفعلين «пия» و«ям» ووجبات اليوم',
+        fa: 'صرف فعل‌های «пия» و «ям» و وعده‌های غذایی در طول روز',
+        uk: 'Дієвідмінювання дієслів „пия" і „ям" та прийоми їжі протягом дня',
+        ru: 'Спряжение глаголов „пия" и „ям" и приёмы пищи в течение дня',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Сегашно време – Е група: пия',
     columns: ['(+)', '(–)', '(?)'],
     rows: [
@@ -482,7 +564,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'ти',           cells: ['пиеш',  'не пиеш',  'пиеш ли']  },
       { pronoun: 'той, тя, то',  cells: ['пие',   'не пие',   'пие ли']   },
       { pronoun: 'ние',          cells: ['пием',  'не пием',  'пием ли']  },
-      { pronoun: 'Вие',          cells: ['пиете', 'не пиете', 'пиете ли'] },
+      { pronoun: 'вие/Вие',      cells: ['пиете', 'не пиете', 'пиете ли'] },
       { pronoun: 'те',           cells: ['пият',  'не пият',  'пият ли']  },
     ],
   } as GrammarTableExercise,
@@ -502,7 +584,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'ти',           cells: ['ядеш',  'не ядеш',  'ядеш ли']  },
       { pronoun: 'той, тя, то',  cells: ['яде',   'не яде',   'яде ли']   },
       { pronoun: 'ние',          cells: ['ядем',  'не ядем',  'ядем ли']  },
-      { pronoun: 'Вие',          cells: ['ядете', 'не ядете', 'ядете ли'] },
+      { pronoun: 'вие/Вие',      cells: ['ядете', 'не ядете', 'ядете ли'] },
       { pronoun: 'те',           cells: ['ядат',  'не ядат',  'ядат ли']  },
     ],
   } as GrammarTableExercise,
@@ -515,7 +597,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-15',
     type: 'workbook_fill_blank',
-    instruction: 'Напишете глаголите пия и ям в правилната форма.',
+    instruction: 'Напишете глаголите **пия** и **ям** в правилната форма.',
     order: 18,
     points: 12,
     layout: 'single',
@@ -585,7 +667,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-16',
     type: 'workbook_fill_blank',
-    instruction: 'Попълнете глагола пия в правилната му форма.',
+    instruction: 'Попълнете глагола **пия** в правилната му форма.',
     order: 19,
     points: 8,
     layout: 'single',
@@ -637,7 +719,7 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-17',
     type: 'workbook_fill_blank',
-    instruction: 'Попълнете глагола ям в правилната му форма.',
+    instruction: 'Попълнете глагола **ям** в правилната му форма.',
     order: 20,
     points: 8,
     layout: 'single',
@@ -708,7 +790,7 @@ export const exercises: Exercise[] = [
     order: 22,
     sections: [
       {
-        id: 'a',
+        id: 'а',
         lines: [
           { speaker: 'A', voiceGender: 'female', text: 'Какво закусваш?', translations: { en: 'What do you have for breakfast?', ar: 'ماذا تتناول على الفطور؟', fr: 'Qu\'est-ce que tu prends au petit-déjeuner ?', fa: 'صبحانه چه می‌خوری؟', uk: 'Що ти снідаєш?', ru: 'Что ты ешь на завтрак?' } },
           { speaker: 'Б', voiceGender: 'male',   text: 'Сутрин ям сандвич и пия кафе.', translations: { en: 'In the morning I eat a sandwich and drink coffee.', ar: 'في الصباح آكل ساندويتش وأشرب قهوة.', fr: 'Le matin, je mange un sandwich et je bois du café.', fa: 'صبح ساندویچ می‌خورم و قهوه می‌نوشم.', uk: 'Вранці я їм сандвіч і п\'ю каву.', ru: 'Утром я ем сэндвич и пью кофе.' } },
@@ -781,6 +863,27 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 3',
     instruction: '',
     order: 24,
+    sectionStart: {
+      title: 'Множествено число и текстове за храна',
+      subtitle: 'Форми за множествено число и истории от различни ресторанти',
+      titleI18n: {
+        en: 'The plural and texts about food',
+        fr: 'Le pluriel et textes sur la nourriture',
+        ar: 'صيغة الجمع ونصوص عن الطعام',
+        fa: 'جمع و متن‌هایی درباره‌ی غذا',
+        uk: 'Множина та тексти про їжу',
+        ru: 'Множественное число и тексты о еде',
+      },
+      subtitleI18n: {
+        en: 'Plural forms and stories from different restaurants',
+        fr: 'Les formes du pluriel et des histoires de différents restaurants',
+        ar: 'صيغ الجمع وقصص من مطاعم مختلفة',
+        fa: 'صورت‌های جمع و داستان‌هایی از رستوران‌های مختلف',
+        uk: 'Форми множини та історії з різних ресторанів',
+        ru: 'Формы множественного числа и истории из разных ресторанов',
+      },
+      theme: 'reading',
+    },
     tableTitle: 'Глагол → Съществително',
     columns: [],
     rows: [
@@ -797,10 +900,11 @@ export const exercises: Exercise[] = [
   {
     id: 'l03-ex-23',
     type: 'dropdown_match',
-    instruction: 'Отговорете на въпросите по модела. Модел: Какво искате за закуска? – За закуска искам филия с масло.',
+    instruction: 'Отговорете на въпросите по модела.',
     order: 25,
     points: 5,
     questions: [
+      { id: 'model', left: 'Какво искате за закуска?', options: [], correctAnswer: 'За закуска искам филия с масло.', isExample: true },
       { id: 'q1', left: 'Какво искате за обяд?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам супа.', alternateCorrectAnswers: ['Искам мусака.', 'Искам шишче.'] },
       { id: 'q2', left: 'Какво искате за вечеря?',   options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам мусака.', alternateCorrectAnswers: ['Искам супа.', 'Искам шишче.'] },
       { id: 'q3', left: 'Какво искате за пиене?',    options: ['Искам супа.', 'Искам мусака.', 'Искам шишче.', 'Искам сладолед.', 'Искам вода.'], correctAnswer: 'Искам вода.' },
@@ -815,7 +919,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l03.g4.instruction',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Граматика – Число на съществителните (3)',
     instruction: 'Запознайте се с множественото число на съществителните.',
     order: 26,
     illustrations: [

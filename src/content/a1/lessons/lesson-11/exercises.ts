@@ -23,6 +23,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-ex-01',
+    sectionStart: {
+      title: 'Месеци и ежедневие',
+      subtitle: 'Нови думи за месеците и ежедневния режим',
+      titleI18n: {
+        en: 'Months and daily routine',
+        fr: 'Les mois et la vie quotidienne',
+        ar: 'الأشهر والحياة اليومية',
+        fa: 'ماه‌ها و برنامه‌ی روزانه',
+        uk: 'Місяці та щоденний розпорядок',
+        ru: 'Месяцы и повседневная жизнь',
+      },
+      subtitleI18n: {
+        en: 'New words for the months and the daily routine',
+        fr: 'Nouveaux mots pour les mois et le rythme quotidien',
+        ar: 'كلمات جديدة عن الأشهر والروتين اليومي',
+        fa: 'کلمات جدید برای ماه‌ها و برنامه‌ی روزانه',
+        uk: 'Нові слова для місяців та щоденного розпорядку',
+        ru: 'Новые слова для месяцев и повседневного распорядка',
+      },
+      theme: 'vocabulary',
+    },
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилното название на месеца или деня според поредността му в годината/седмицата.',
@@ -129,6 +150,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-gramatika-01',
+    sectionStart: {
+      title: 'Спрежение на глаголите',
+      subtitle: 'Спрежение на глаголите в сегашно време',
+      titleI18n: {
+        en: 'Conjugation of verbs',
+        fr: 'La conjugaison des verbes',
+        ar: 'تصريف الأفعال',
+        fa: 'صرف فعل‌ها',
+        uk: 'Дієвідмінювання дієслів',
+        ru: 'Спряжение глаголов',
+      },
+      subtitleI18n: {
+        en: 'Conjugation of verbs in the present tense',
+        fr: 'La conjugaison des verbes au présent',
+        ar: 'تصريف الأفعال في المضارع',
+        fa: 'صرف فعل‌ها در زمان حال',
+        uk: 'Дієвідмінювання дієслів у теперішньому часі',
+        ru: 'Спряжение глаголов в настоящем времени',
+      },
+      theme: 'grammar',
+    },
     type: 'grammar_table',
     title: 'ГРАМАТИКА — Спрежение',
     tableTitle: 'Лично местоимение / Група А (ставам) / Група И (спя) / Група Е (пиша)',
@@ -222,6 +264,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-dialozi-01',
+    sectionStart: {
+      title: 'Диалози за ежедневието',
+      subtitle: 'Диалози за всекидневния режим',
+      titleI18n: {
+        en: 'Dialogues about daily life',
+        fr: 'Dialogues sur la vie quotidienne',
+        ar: 'حوارات عن الحياة اليومية',
+        fa: 'گفتگوهایی درباره‌ی زندگی روزمره',
+        uk: 'Діалоги про повсякдення',
+        ru: 'Диалоги о повседневной жизни',
+      },
+      subtitleI18n: {
+        en: 'Dialogues about the daily routine',
+        fr: 'Dialogues sur le rythme quotidien',
+        ar: 'حوارات عن الروتين اليومي',
+        fa: 'گفتگوهایی درباره‌ی برنامه‌ی روزانه',
+        uk: 'Діалоги про щоденний розпорядок',
+        ru: 'Диалоги о распорядке дня',
+      },
+      theme: 'dialogue',
+    },
     type: 'dialogues',
     title: 'ДИАЛОЗИ 1',
     instruction: 'Изслушайте диалозите и след това ги прочетете сами.',
@@ -276,6 +339,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-gramatika-02',
+    sectionStart: {
+      title: 'Местоимения, наречия и предлози',
+      subtitle: 'Местоимения, наречия за време и предлози',
+      titleI18n: {
+        en: 'Pronouns, adverbs and prepositions',
+        fr: 'Pronoms, adverbes et prépositions',
+        ar: 'الضمائر والظروف وحروف الجر',
+        fa: 'ضمایر، قیدها و حروف اضافه',
+        uk: 'Займенники, прислівники та прийменники',
+        ru: 'Местоимения, наречия и предлоги',
+      },
+      subtitleI18n: {
+        en: 'Pronouns, adverbs of time and prepositions',
+        fr: 'Pronoms, adverbes de temps et prépositions',
+        ar: 'الضمائر وظروف الزمان وحروف الجر',
+        fa: 'ضمایر، قیدهای زمان و حروف اضافه',
+        uk: 'Займенники, прислівники часу та прийменники',
+        ru: 'Местоимения, наречия времени и предлоги',
+      },
+      theme: 'grammar',
+    },
     type: 'grammar_table',
     title: 'ГРАМАТИКА 1',
     tableTitle: 'всеки / всяка / всяко / всички',
@@ -357,13 +441,12 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-13',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 13',
-    subtitle: 'Модел: Всеки ден ставам в 7:00 ч. → Аз ВИНАГИ ставам в 7:00 ч.',
     instruction: 'Изберете правилното наречие за честота.',
     order: 12,
     points: 8,
     layout: 'single',
     sentences: [
-      { text: 'Всеки ден ставам в 7:00 ч. Аз ___ ставам в 7:00 ч.',                                blanks: [0], correctAnswers: ['винаги'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
+      { text: 'Всеки ден ставам в 7:00 ч. Аз ___ ставам.',                                         blanks: [0], correctAnswers: ['винаги'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
       { text: 'Тя закусва в кафенето само в събота. Тя ___ закусва в кафенето.',                    blanks: [0], correctAnswers: ['рядко'],     acceptableAnswers: [['рядко','понякога']], options: ['винаги','обикновено','често','понякога','рядко','никога'] },
       { text: 'Ние ходим на кино всяка събота. Ние ___ ходим на кино в събота.',                    blanks: [0], correctAnswers: ['винаги'],                                       options: ['винаги','обикновено','често','понякога','рядко','никога'] },
       { text: 'Той пие кафе само когато много му се спи. Той ___ пие кафе.',                        blanks: [0], correctAnswers: ['рядко'],                                        options: ['винаги','обикновено','често','понякога','рядко','никога'] },
@@ -410,11 +493,10 @@ export const exercises: Exercise[] = [
     id: 'l11-gramatika-04',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Глаголи за движение: ОТИВАМ и ХОДЯ',
     prominentSubtitle: true,
     tableTitle: 'ХОДЯ / ОТИВАМ',
     instructionKey: 'grammar.l11.g4.instruction',
-    instruction: 'След глаголите ОТИВАМ и ХОДЯ използваме предлог НА или В. Вижте таблиците по-долу.',
+    instruction: 'След глаголите **отивам** и **ходя** използваме предлог **на** или **в**. Вижте таблиците по-долу.',
     order: 14,
     columns: ['НА', 'В'],
     rows: [
@@ -426,8 +508,8 @@ export const exercises: Exercise[] = [
       { pronoun: '', cells: ['на море',        'в офиса']       },
     ],
     notes: [
-      'ОТИВАМ — за движение В МОМЕНТА (сега). Пример: „Сега отивам на работа."',
-      'ХОДЯ — за движение ПО НАВИК (всеки ден, обикновено). Пример: „Всеки ден ходя в офиса."',
+      '**Отивам** — за движение **в момента** (сега). Пример: „Сега отивам на работа."',
+      '**Ходя** — за движение **по навик** (всеки ден, обикновено). Пример: „Всеки ден ходя в офиса."',
     ],
   } as GrammarTableExercise,
 
@@ -438,7 +520,7 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-16',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 16',
-    instruction: 'Изберете правилния предлог: в или на. (Спомнете си: ХОДЯ = навик; ОТИВАМ = движение сега.)',
+    instruction: 'Изберете правилния предлог: в или на. (Спомнете си: **ходя** = навик; **отивам** = движение сега.)',
     order: 15,
     points: 6,
     layout: 'two-column',
@@ -460,7 +542,7 @@ export const exercises: Exercise[] = [
     id: 'l11-ex-17',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 17',
-    instruction: 'Изберете ХОДЯ или ОТИВАМ. (ХОДЯ = навик: всеки ден, обикновено; ОТИВАМ = движение сега: в момента, сега.)',
+    instruction: 'Изберете **ходя** или **отивам**. (**ходя** = навик: всеки ден, обикновено; **отивам** = движение сега: в момента, сега.)',
     order: 16,
     points: 6,
     layout: 'single',
@@ -481,6 +563,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-dialozi-02',
+    sectionStart: {
+      title: 'Диалог в супермаркета',
+      subtitle: 'Диалог и лексика за пазаруване',
+      titleI18n: {
+        en: 'A dialogue at the supermarket',
+        fr: 'Un dialogue au supermarché',
+        ar: 'حوار في السوبر ماركت',
+        fa: 'گفتگویی در سوپرمارکت',
+        uk: 'Діалог у супермаркеті',
+        ru: 'Диалог в супермаркете',
+      },
+      subtitleI18n: {
+        en: 'A dialogue and vocabulary for shopping',
+        fr: 'Un dialogue et du vocabulaire pour faire les courses',
+        ar: 'حوار ومفردات للتسوق',
+        fa: 'گفتگو و واژگان برای خرید',
+        uk: 'Діалог та лексика для покупок',
+        ru: 'Диалог и лексика для покупок',
+      },
+      theme: 'dialogue',
+    },
     type: 'dialogues',
     title: 'ДИАЛОГ 2',
     instruction: 'Изслушайте диалога и след това го прочетете сами.',
@@ -527,6 +630,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-gramatika-05',
+    sectionStart: {
+      title: 'Степенуване и възвратни глаголи',
+      subtitle: 'Степенуване на прилагателните и възвратни глаголи',
+      titleI18n: {
+        en: 'Comparison and reflexive verbs',
+        fr: 'Les degrés de comparaison et les verbes pronominaux',
+        ar: 'درجات المقارنة والأفعال الانعكاسية',
+        fa: 'درجات مقایسه و افعال انعکاسی',
+        uk: 'Ступені порівняння та зворотні дієслова',
+        ru: 'Степени сравнения и возвратные глаголы',
+      },
+      subtitleI18n: {
+        en: 'Comparison of adjectives and reflexive verbs',
+        fr: 'Les degrés de comparaison des adjectifs et les verbes pronominaux',
+        ar: 'درجات مقارنة الصفات والأفعال الانعكاسية',
+        fa: 'درجات مقایسه‌ی صفت‌ها و افعال انعکاسی',
+        uk: 'Ступені порівняння прикметників та зворотні дієслова',
+        ru: 'Степени сравнения прилагательных и возвратные глаголы',
+      },
+      theme: 'grammar',
+    },
     type: 'grammar_table',
     title: 'ГРАМАТИКА 4',
     tableTitle: 'Основна / Сравнителна / Превъзходна степен',
@@ -638,11 +762,12 @@ export const exercises: Exercise[] = [
     instruction: 'Възвратни глаголи.',
     order: 22,
     widePronouns: true,
-    columns: [''],
+    pronounColumnLabel: 'Дълга форма',
+    columns: ['Кратка форма'],
     rows: [
       { pronoun: 'Аз се мия.',              cells: ['Мия се.']   },
       { pronoun: 'Ти се миеш.',             cells: ['Миеш се.']  },
-      { pronoun: 'Той, тя, то мие се.',     cells: ['Мие се.']   },
+      { pronoun: 'Той, тя, то се мие.',     cells: ['Мие се.']   },
       { pronoun: 'Ние се миeм.',            cells: ['Миeм се.']  },
       { pronoun: 'Вие се миeте.',           cells: ['Миeте се.'] },
       { pronoun: 'Те се мият.',             cells: ['Мият се.']  },
@@ -720,6 +845,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l11-ex-25',
+    sectionStart: {
+      title: 'Текстове за четене',
+      subtitle: 'Текстове и приказка с въпроси',
+      titleI18n: {
+        en: 'Reading texts',
+        fr: 'Textes de lecture',
+        ar: 'نصوص للقراءة',
+        fa: 'متن‌های خواندنی',
+        uk: 'Тексти для читання',
+        ru: 'Тексты для чтения',
+      },
+      subtitleI18n: {
+        en: 'Texts and a fairy tale with questions',
+        fr: 'Textes et un conte avec des questions',
+        ar: 'نصوص وحكاية مع أسئلة',
+        fa: 'متن‌ها و یک قصه همراه با پرسش',
+        uk: 'Тексти та казка із запитаннями',
+        ru: 'Тексты и сказка с вопросами',
+      },
+      theme: 'reading',
+    },
     type: 'reading_text',
     title: 'ТЕКСТ 26',
     instruction: 'Изслушайте текста и след това го прочетете сами.',

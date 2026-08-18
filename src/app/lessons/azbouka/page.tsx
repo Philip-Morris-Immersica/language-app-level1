@@ -13,6 +13,7 @@ import { lessonData } from '@/content/a1/lessons/lesson-00';
 
 export default function AzboukaPage() {
   const vocabulary = lessonData.content?.vocabulary || [];
+  const hasGrammarReference = !!(lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0);
 
   return (
     <LessonLayout>
@@ -33,6 +34,12 @@ export default function AzboukaPage() {
           <CultureSection notes={lessonData.content.culturalNotes} />
         )}
 
+        {/* Grammar reference (TOP) — same accordion as the bottom one, shown BEFORE
+            exercises, matching every other lesson (client feedback #2). */}
+        {hasGrammarReference && (
+          <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
+        )}
+
         <LessonExercisesProvider lessonId="lesson-00">
           {lessonData.exercises && lessonData.exercises.length > 0 && (
             <div className="space-y-8">
@@ -45,8 +52,10 @@ export default function AzboukaPage() {
             </div>
           )}
 
-          {lessonData.content?.grammarReference && lessonData.content.grammarReference.length > 0 && (
-            <GrammarReferenceSection notes={lessonData.content.grammarReference} />
+          {/* Grammar reference (BOTTOM) — same accordion as the top one, shown AFTER
+              exercises for end-of-lesson review. */}
+          {hasGrammarReference && (
+            <GrammarReferenceSection notes={lessonData.content!.grammarReference!} />
           )}
         </LessonExercisesProvider>
 

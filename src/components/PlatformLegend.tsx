@@ -1,7 +1,8 @@
 'use client';
 
-import { Volume2, Play, BookOpen, ChevronDown } from 'lucide-react';
+import { Play, BookOpen, ChevronDown } from 'lucide-react';
 import { useT } from '@/i18n/useT';
+import { AudioIcon } from '@/components/AudioIcon';
 
 /**
  * Platform Legend — quick guide to the platform's interactive elements.
@@ -25,11 +26,14 @@ function stripLeadingEmoji(s: string): string {
  * Mini visual previews of the real UI components
  * ────────────────────────────────────────────────────────────────── */
 
-/** Small grey speaker icon as shown next to words on cards / grammar tables. */
+/** Small grey speaker icon as shown next to words on cards / grammar tables.
+    Renders the same `AudioIcon` used by the real audio triggers (Dialogues,
+    ReadingText, IllustratedCards, GrammarTable, GrammarWithExamples) so the
+    preview always stays visually in sync with the live UI. */
 function AudioPreview() {
   return (
     <div className="flex items-center justify-center w-14 h-14 bg-gray-50 rounded-lg border border-gray-200 shrink-0">
-      <Volume2 className="w-6 h-6 text-gray-400" />
+      <AudioIcon className="w-6 h-6" />
     </div>
   );
 }

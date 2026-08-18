@@ -122,8 +122,8 @@ export const A2_TEST_NEXT_LESSON_MAP: Record<string, string> = {
  * digitalised (used by admin analytics / sidebar % computation).
  */
 export const A2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
-  'a2-lesson-00': 31,
-  'a2-lesson-01': 26,
+  'a2-lesson-00': 32,
+  'a2-lesson-01': 25,
   'a2-lesson-02': 45,
   'a2-lesson-03': 31,
   'a2-lesson-04': 26,

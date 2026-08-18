@@ -40,7 +40,8 @@ interface A2GrammarExamplesShape {
   type: string;
   subtitle?: string;
   disableTts?: boolean;
-  layout?: 'default' | 'centered';
+  /** 'image-rows' → картинъчни примери в решетка от 2 колони (3 реда × 2). */
+  layout?: 'default' | 'centered' | 'image-rows';
   examples: GrammarExample[];
 }
 
@@ -145,6 +146,92 @@ function CenteredGrammar({
   );
 }
 
+/**
+ * Картинъчни примери в решетка от 2 колони (за да се получат 3 реда × 2
+ * картинки). Всяка карта: картинка + текст + TTS на клик. Пътят за MP3 е
+ * `${exerciseId}-card-{index}` — съвпада с generate-tts.ts.
+ */
+function ImageRowsGrammar({
+  examples,
+  disableTts,
+  exerciseId,
+}: {
+  examples: GrammarExample[];
+  disableTts?: boolean;
+  exerciseId?: string;
+}) {
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+
+  const handleClick = (index: number, example: GrammarExample) => {
+    if (!disableTts) {
+      const textToSpeak =
+        example.ttsText?.trim() ||
+        (example.lines
+          ? example.lines.filter(l => l.trim() !== '').join(' ')
+          : [example.text, example.subtext].filter(Boolean).join(' '));
+      const audioPath = exerciseId
+        ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-card-${index}`)
+        : '';
+      playTtsAudio(audioPath, textToSpeak);
+    }
+
+    setRevealed(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
+
+  return (
+    <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
+      {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto">
+        {examples.map((example, index) => (
+          <div
+            key={index}
+            onClick={() => handleClick(index, example)}
+            className="rounded-xl border-2 border-gray-200 bg-white p-4 md:p-5 shadow-sm cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all active:scale-95 flex flex-col items-center text-center"
+          >
+            {example.imageUrl && (
+              <div className="relative w-full h-52 md:h-60 rounded-lg overflow-hidden bg-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={example.imageUrl}
+                  alt={example.text ?? ''}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div className="mt-4 w-full">
+              <p className="text-base md:text-lg font-bold text-gray-800 leading-relaxed">
+                <BoldLine text={example.text ?? ''} />
+              </p>
+              <InlineTranslation
+                text={(example.text ?? '').replace(/\*\*(.+?)\*\*/g, '$1')}
+                visible={revealed.has(index)}
+                translations={example.translations}
+              />
+              {example.lines?.filter(Boolean).map((line, lineIndex) => (
+                <div key={lineIndex} className="mt-1">
+                  <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+                    <BoldLine text={line} />
+                  </p>
+                  <InlineTranslation
+                    text={line.replace(/\*\*(.+?)\*\*/g, '$1')}
+                    visible={revealed.has(index)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function A2GrammarExamples({
   exercise,
   exerciseId,
@@ -154,6 +241,15 @@ export function A2GrammarExamples({
   exerciseId?: string;
 }) {
   const ex = exercise as unknown as A2GrammarExamplesShape;
+  if (ex.layout === 'image-rows') {
+    return (
+      <ImageRowsGrammar
+        examples={ex.examples}
+        disableTts={ex.disableTts}
+        exerciseId={exerciseId ?? exercise.id}
+      />
+    );
+  }
   if (ex.layout === 'centered') {
     return (
       <CenteredGrammar
