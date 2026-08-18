@@ -607,8 +607,16 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
         </div>
       ) : !hideText && images && images.length > 0 ? (
         <div
-          className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-xl md:max-w-2xl mx-auto' : 'grid-cols-2'}`}
-          style={images.length > 1 && imageColumns && imageColumns > 2
+          className={`grid mb-6 ${
+            images.length === 1
+              ? 'gap-3 grid-cols-1 max-w-xl md:max-w-2xl mx-auto'
+              : images.length === 2
+                // Two images are centered rather than stretched across the full
+                // width, which would leave them oversized next to the text.
+                ? 'gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+                : 'gap-3 grid-cols-2'
+          }`}
+          style={images.length > 2 && imageColumns && imageColumns > 2
             ? { gridTemplateColumns: `repeat(${imageColumns}, minmax(0, 1fr))` }
             : undefined}
         >
