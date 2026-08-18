@@ -1,3 +1,7 @@
+// content-lint-disable no-free-writing — pre-existing free-text sentences (b1-l03-ex-23,
+// affirmative→negative imperative transform: each answer is a unique verb form, not a
+// finite option set), exempted from the new A1-driven guard so this already-shipped B1
+// lesson isn't retroactively flagged. Convert to dropdowns in a dedicated B1 pass if desired.
 import type {
   Exercise,
   GrammarTableExercise,
