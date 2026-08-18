@@ -268,6 +268,50 @@ gh pr create --base master --head alex-merge
 Push alex-merge и отвори PR към master. Не мърджвай. Не push-вай към alex.
 ```
 
+### Фаза 5 — изпълнено (2026-08-18)
+
+`alex-merge` push-нат, [PR #12](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/12)
+отворен и мърджнат в `master` с **merge commit** (`9f4e18b`), не squash — така
+историята на Алекс остава в master и нейният ре-синк е fast-forward, без
+конфликти. Vercel preview: success. Vercel production на master: success.
+1213 файла, +17312 / −1240.
+
+`philip` е ре-синкнат (fast-forward, вече идентичен с master).
+
+Състояние на клоновете след мърджа — **всички са пълни ancestor-и на master**,
+никъде няма уникална работа: `alex` 38 назад / 0 напред, `nina-merge` 56 / 0,
+`nina` 179 / 0, `philip` 0 / 0.
+
+### Ре-синк за Алекс (на нейната машина)
+
+`origin/alex` е ancestor на master, затова мърджът е **fast-forward** — няма как
+да гръмне конфликт. Стъпките:
+
+```
+git status                 # трябва да е clean; ако не — commit + push първо
+git checkout alex
+git fetch origin
+git merge origin/master    # fast-forward, без конфликти
+git push origin alex
+```
+
+След това: изтрий `.next` и рестартирай dev сървъра (влизат 1213 файла, старият
+chunk граф остава счупен — виж „Операционен капан").
+
+Какво ще види променено и е **нарочно**:
+- `scripts/generate-tts.ts` — версията на master печели (D2). Нейните промени
+  сменяха глобалния Gemini промпт и hardcode-ваха B1 override-и в скрипта. B1
+  MP3-тата вече са генерирани, така че нищо не се губи. Бъдещи корекции на
+  произношението минават през content полетата (`ttsPrompt`, `ttsText`,
+  `ttsModel`), не през скрипта.
+- `ExerciseRenderer.tsx` — custom renderer-ите вече се търсят по ниво. Нейните
+  override-и на непрефиксирани shared типове (`reading_text`, `dialogues`,
+  `grammar_table`, …) вече важат **само за B1**, което е желаното поведение.
+  Нищо в B1 не се променя визуално.
+- `b1/index.ts` — уроци 07–10 са регистрирани и достъпни (без съдържателен QA).
+
+**НЕ** прави force-push и **НЕ** push-ва към `master` или чужд клон.
+
 ### Фаза 6 — follow-up (НЕ сега)
 Отделни чатове, след като PR е в master:
 - Ре-синк `philip` към новия master (виж „Клонове“)
