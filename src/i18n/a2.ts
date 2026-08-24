@@ -295,7 +295,7 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   // ── a2-lesson-05 „Услуги" ────────────────────────────────────────────────
 
   'a2.gr.l05.iskamDa': {
-    bg: 'Запознайте се со спрежението на „искам да" в положителна, отрицателна и въпросителна форма.',
+    bg: 'Запознайте се със спрежението на „искам да" в положителна, отрицателна и въпросителна форма.',
     ar: 'تعرّف على تصريف «искам да» في الصيغة الإيجابية والسلبية والاستفهامية.',
     fr: 'Découvrez la conjugaison de «искам да» en forme affirmative, négative et interrogative.',
     en: 'Learn the conjugation of «искам да» (I want to) in positive, negative, and question forms.',
@@ -305,7 +305,7 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   },
 
   'a2.gr.l05.mogaTryabva': {
-    bg: 'Запознайте се се спрежението на глаголите „мога да" и „трябва да".',
+    bg: 'Запознайте се със спрежението на глаголите „мога да" и „трябва да".',
     ar: 'تعرّف على تصريف الفعلين «мога да» (أستطيع أن) و«трябва да» (يجب أن).',
     fr: 'Découvrez la conjugaison des verbes «мога да» (pouvoir) et «трябва да» (devoir).',
     en: 'Learn the conjugation of «мога да» (can / to be able to) and «трябва да» (must / have to).',
