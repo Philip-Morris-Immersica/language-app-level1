@@ -90,7 +90,7 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-05': 21,
   'b1-lesson-06': 7,
   'b1-lesson-07': 24,
-  'b1-lesson-08': 12,
+  'b1-lesson-08': 13,
   'b1-lesson-09': 31,
   'b1-lesson-10': 8,
 };

@@ -138,12 +138,16 @@ export interface B1GrammarTableExercise extends BaseExercise {
     }[];
     /** Full-width panel (e.g. „Внимание!") instead of side-by-side */
     fullWidth?: boolean;
+    /** Optional hint below the card title (e.g. tap each line to listen). */
+    lineHint?: string;
   }[];
   notes?: string[];
   ttsNotes?: string[];
   ttsNoteModels?: ('flash' | 'pro')[];
   boldColumns?: number[];
   widePronouns?: boolean;
+  /** Lesson 8 ГРАМАТИКА 2 only — keep the pronoun column at content width. */
+  compactPronouns?: boolean;
   /** Left-align example sentences (default is centered). Useful for long example rows. */
   alignLeft?: boolean;
   /** When true, disables all audio — hides the 🔊 icons, the "tap to hear" hint, and click-to-play. */
@@ -166,6 +170,8 @@ export interface B1GrammarExamplesExercise extends BaseExercise {
   title: string;
   subtitle?: string;
   instruction?: string;
+  /** `centered` — example lines without the inner grey frame (L8 reflexive box). */
+  layout?: 'default' | 'centered';
   disableTts?: boolean;
   /** Static intro under the hero image — not spoken by TTS. */
   introText?: string;

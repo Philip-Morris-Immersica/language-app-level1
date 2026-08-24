@@ -11,10 +11,10 @@
  */
 import type { CSSProperties } from 'react';
 
-/** Light highlighter: bright green on a pale mint chip — readable, not near-black. */
+/** Light highlighter: bright green on a pale mint chip — readable on white and tinted rows. */
 export const HIGHLIGHT_STYLE: CSSProperties = {
-  color: '#16A34A',
-  backgroundColor: '#DCFCE7',
+  color: '#22C55E',
+  backgroundColor: '#ECFDF5',
 };
 
 export const HIGHLIGHT_CLASS = 'font-extrabold rounded px-1 py-[0.05em]';

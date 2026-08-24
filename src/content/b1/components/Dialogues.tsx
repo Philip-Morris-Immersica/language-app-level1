@@ -15,6 +15,7 @@ import {
   resumeTtsAudio,
 } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { HighlightedText } from './highlight';
 
 interface DialogueLine {
   speaker?: string;
@@ -32,26 +33,15 @@ interface DialogueSection {
 }
 
 function BoldLine({ text }: { text: string }) {
-  const parts = text.split(/\*\*(.+?)\*\*/g);
-  return (
-    <>
-      {parts.map((part, i) =>
-        i % 2 === 1
-          // AAA-contrast green text (#1F5741) on the light green bg (#DAF6EB) — brighter
-          // greens (#2BB673 / #32C189) read as nearly invisible on this background.
-          ? <span key={i} className="font-extrabold rounded-sm px-0.5" style={{ color: '#1F5741', backgroundColor: '#DAF6EB' }}>{part}</span>
-          : <span key={i}>{part}</span>
-      )}
-    </>
-  );
+  return <HighlightedText text={text} />;
 }
 
 function stripBold(text: string) {
   return text.replace(/\*\*(.+?)\*\*/g, '$1');
 }
 
-/** Gap between consecutive dialogue lines when chaining — keep near-zero so playback feels continuous. */
-const LINE_GAP_MS = 80;
+/** Gap between consecutive dialogue lines when chaining — near-zero for continuous playback. */
+const LINE_GAP_MS = 0;
 
 interface DialoguesExerciseShape {
   id: string;
@@ -61,6 +51,8 @@ interface DialoguesExerciseShape {
   imageUrl?: string;
   images?: string[];
   displayLayout?: 'list' | 'scene';
+  /** When true, hides the per-section compact „Слушай“ button (lines + top „Слушай“ remain). */
+  hideSectionListen?: boolean;
   sections: DialogueSection[];
   [key: string]: unknown;
 }
@@ -108,6 +100,7 @@ export function Dialogues({
     imageUrl,
     images,
     displayLayout = 'list',
+    hideSectionListen = false,
   } = exercise;
   const id = exerciseId ?? exercise.id;
   const t = useT();
@@ -519,19 +512,24 @@ export function Dialogues({
               className="bg-white rounded-xl border-2 border-gray-200 p-6 shadow-sm transition-all hover:border-[#32C189]/50"
             >
               <div className="flex items-center justify-between gap-2 mb-4">
-                <div
-                  onClick={() => toggleSection(section.id)}
-                  className="flex items-center gap-2 cursor-pointer flex-1"
-                >
-                  {sections.length > 1 && (
-                    <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white shrink-0">
-                      {circleLabel}
-                    </span>
-                  )}
-                  {sectionTitle && (
-                    <span className="text-sm font-semibold text-gray-600">{sectionTitle}</span>
-                  )}
-                </div>
+                {(sections.length > 1 || sectionTitle) ? (
+                  <div
+                    onClick={() => toggleSection(section.id)}
+                    className="flex items-center gap-2 cursor-pointer flex-1"
+                  >
+                    {sections.length > 1 && (
+                      <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-[#32C189] text-white shrink-0">
+                        {circleLabel}
+                      </span>
+                    )}
+                    {sectionTitle && (
+                      <span className="text-sm font-semibold text-gray-600">{sectionTitle}</span>
+                    )}
+                  </div>
+                ) : (
+                  <span className="flex-1" />
+                )}
+                {!hideSectionListen && renderSectionButton(section, true)}
               </div>
               {renderLineList(section)}
             </div>

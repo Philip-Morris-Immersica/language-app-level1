@@ -182,10 +182,10 @@ function SingleTable({
   // Used only by B1 lesson 8 ГРАМАТИКА 2. Inline styles because Tailwind
   // content[] does not scan `src/content/` — width/padding classes here are purged.
   const compactPronounStyle: CSSProperties | undefined = compactPronouns
-    ? { width: 1, paddingLeft: '1.25rem', paddingRight: '1.5rem' }
+    ? { width: '1%', paddingLeft: '1rem', paddingRight: '0.375rem', whiteSpace: 'nowrap' }
     : undefined;
   const compactValueStyle: CSSProperties | undefined = compactPronouns
-    ? { width: '100%' }
+    ? { width: '100%', paddingLeft: '0.5rem' }
     : undefined;
 
   return (
@@ -248,7 +248,7 @@ function SingleTable({
               >
                 {showPronounCol && (
                   <td
-                    className={`py-2.5 pl-4 pr-3 md:pl-5 md:pr-4 font-bold text-[#1F5741] text-sm md:text-base whitespace-nowrap ${widePronouns ? 'w-1/2' : 'w-[7.5rem] md:w-[9rem]'}`}
+                    className={`py-2.5 pl-4 pr-3 md:pl-5 md:pr-4 font-bold text-[#1F5741] text-sm md:text-base whitespace-nowrap ${compactPronouns ? 'w-auto max-w-[6rem] md:max-w-[6.5rem]' : widePronouns ? 'w-1/2' : 'w-[7.5rem] md:w-[9rem]'}`}
                     style={{ ...CELL_BORDER, ...compactPronounStyle }}
                   >
                     <div className={`flex items-center gap-1.5 ${widePronouns ? cellJustify : 'justify-start'}`}>
@@ -323,6 +323,7 @@ function SingleTable({
 /** A2-style blue example card: title + divider + centered lines. Click plays all rows in order. */
 function ExampleCard({
   title,
+  lineHint,
   rows,
   disableAudio,
   exerciseId,
@@ -332,6 +333,7 @@ function ExampleCard({
   onManualPlay,
 }: {
   title?: string;
+  lineHint?: string;
   rows: TableRow[];
   disableAudio: boolean;
   exerciseId?: string;
@@ -446,6 +448,12 @@ function ExampleCard({
           {title}
         </p>
       )}
+      {lineHint && !disableAudio && (
+        <p className="text-xs text-gray-500 mb-3 flex items-center justify-center gap-1.5">
+          <Volume2 className="w-3.5 h-3.5 text-[#32C189] shrink-0" />
+          <span>{lineHint}</span>
+        </p>
+      )}
       <div className="space-y-2.5">
         {rows.map((row, i) => {
           const line = row.cells.join(' ').trim() || row.pronoun;
@@ -458,8 +466,11 @@ function ExampleCard({
                 highlightedLine === i ? 'bg-[#DAF6EB]/70' : 'hover:bg-[#DAF6EB]/40'
               }`}
             >
-              <p className="text-sm md:text-base text-gray-800 leading-relaxed">
-                {renderBoldText(line)}
+              <p className="text-sm md:text-base text-gray-800 leading-relaxed inline-flex items-center justify-center gap-2 flex-wrap">
+                <span>{renderBoldText(line)}</span>
+                {!disableAudio && !row.noAudio && (
+                  <Volume2 className="w-3.5 h-3.5 text-[#32C189] opacity-60 shrink-0" />
+                )}
               </p>
               <InlineTranslation
                 text={line.replace(/\*\*(.+?)\*\*/g, '$1')}
@@ -494,8 +505,8 @@ function ExampleCard({
   );
 }
 
-/** Gap between chained rows — small enough that the block reads as one take. */
-const ROW_GAP_MS = 80;
+/** Gap between chained rows — minimal so the block reads as one continuous take. */
+const ROW_GAP_MS = 0;
 
 export function GrammarTable({ exercise, exerciseId }: Props) {
   const t = useT();
@@ -683,6 +694,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                 >
                   <ExampleCard
                     title={panel.tableTitle}
+                    lineHint={panel.lineHint}
                     rows={panel.rows}
                     disableAudio={disableAudio}
                     exerciseId={exerciseId}
@@ -705,6 +717,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
               <div className="w-full max-w-xl">
                 <ExampleCard
                   title={panel.tableTitle}
+                  lineHint={panel.lineHint}
                   rows={panel.rows}
                   disableAudio={disableAudio}
                   exerciseId={exerciseId}
