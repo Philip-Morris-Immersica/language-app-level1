@@ -37,12 +37,19 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-08': () => import('./lessons/b1-lesson-08'),
   'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
   'b1-lesson-10': () => import('./lessons/b1-lesson-10'),
+  // 'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
+  // 'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
+  // 'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
+  // 'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
+  // 'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
 };
 
 export const B1_TEST_LOADERS: Record<
   string,
   () => Promise<{ testData?: TestData; default?: TestData }>
-> = {};
+> = {
+  // 'test-b1-1': () => import('./tests/test-b1-1'),
+};
 
 export const B1_LESSONS_METADATA: Array<{
   id: string;
@@ -60,8 +67,12 @@ export const B1_LESSONS_METADATA: Array<{
   { id: 'b1-lesson-07', number: 7,  title: 'Трябва ми почивка',         hasTest: false },
   { id: 'b1-lesson-08', number: 8,  title: 'Щях да пътувам',            hasTest: false },
   { id: 'b1-lesson-09', number: 9,  title: 'Всичко ще бъде наред',      hasTest: false },
-  { id: 'b1-lesson-10', number: 10, title: 'Ти какво каза?',            hasTest: false },
-  { id: 'b1-lesson-11', number: 11, title: 'Познавам и обичам България', hasTest: false },
+  { id: 'b1-lesson-10', number: 10, title: 'Ти какво каза?',                                    hasTest: false },
+  { id: 'b1-lesson-11', number: 11, title: 'Природата и географията на България',               hasTest: false },
+  { id: 'b1-lesson-12', number: 12, title: 'Древните корени: траки, славяни и прабългари',      hasTest: false },
+  { id: 'b1-lesson-13', number: 13, title: 'Първата българска държава и Златният век',          hasTest: false },
+  { id: 'b1-lesson-14', number: 14, title: 'Втората българска държава и Възраждането',          hasTest: false },
+  { id: 'b1-lesson-15', number: 15, title: 'Големите българи',                                  hasTest: true, testId: 'test-b1-1' },
 ];
 
 export const B1_NAV_ITEMS: A1NavItem[] = [
@@ -75,10 +86,17 @@ export const B1_NAV_ITEMS: A1NavItem[] = [
   { type: 'lesson', id: 'b1-lesson-08', number: 8,  title: 'Щях да пътувам' },
   { type: 'lesson', id: 'b1-lesson-09', number: 9,  title: 'Всичко ще бъде наред' },
   { type: 'lesson', id: 'b1-lesson-10', number: 10, title: 'Ти какво каза?' },
-  { type: 'lesson', id: 'b1-lesson-11', number: 11, title: 'Познавам и обичам България' },
+  { type: 'lesson', id: 'b1-lesson-11', number: 11, title: 'Природата и географията на България' },
+  { type: 'lesson', id: 'b1-lesson-12', number: 12, title: 'Древните корени: траки, славяни и прабългари' },
+  { type: 'lesson', id: 'b1-lesson-13', number: 13, title: 'Първата българска държава и Златният век' },
+  { type: 'lesson', id: 'b1-lesson-14', number: 14, title: 'Втората българска държава и Възраждането' },
+  { type: 'lesson', id: 'b1-lesson-15', number: 15, title: 'Големите българи' },
+  { type: 'test', id: 'test-b1-1', label: 'уроци 11–15' },
 ];
 
-export const B1_TEST_FOLDER_MAP: Record<string, string> = {};
+export const B1_TEST_FOLDER_MAP: Record<string, string> = {
+  'test-b1-1': 'test-lessons-11-15',
+};
 
 export const B1_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
 
