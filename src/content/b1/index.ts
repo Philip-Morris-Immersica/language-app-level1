@@ -37,7 +37,7 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-08': () => import('./lessons/b1-lesson-08'),
   'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
   'b1-lesson-10': () => import('./lessons/b1-lesson-10'),
-  // 'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
+  'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
   // 'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
   // 'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
   // 'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
@@ -111,4 +111,5 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-08': 13,
   'b1-lesson-09': 31,
   'b1-lesson-10': 8,
+  'b1-lesson-11': 3,
 };
