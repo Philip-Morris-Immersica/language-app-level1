@@ -55,6 +55,7 @@ import { A2MatchPairs } from './components/A2MatchPairs';
 import { A2DragToColumns } from './components/A2DragToColumns';
 import { A2DialogueBuilder } from './components/A2DialogueBuilder';
 import { A2WordOrder } from './components/A2WordOrder';
+import { A2WorkbookFillBlank } from './components/A2WorkbookFillBlank';
 
 export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'a2-grouped-dropdown-match': GroupedDropdownMatch as unknown as CustomExerciseRenderer,
@@ -86,4 +87,6 @@ export const A2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   // A2 variant of word_order: robust init/check so stale persisted state can't
   // make „Провери" silently no-op (the shared component's known failure mode).
   'a2-word-order': A2WordOrder as unknown as CustomExerciseRenderer,
+  // Listening fill-in: same turtle 0.85× toggle as dictation reading_text.
+  'workbook_fill_blank': A2WorkbookFillBlank as unknown as CustomExerciseRenderer,
 };
