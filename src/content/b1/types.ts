@@ -227,6 +227,45 @@ export interface B1InfoHighlightExercise extends BaseExercise {
   type: 'b1-info-highlight';
 }
 
+/**
+ * b1-select-words — „Подчертайте правилните думи" (l12, textbook p. 84):
+ * a sentence ends in a list of candidate words and the learner marks **every**
+ * word that fits according to the text. Six sentences, 2–3 correct words each.
+ *
+ * Why a new type rather than an existing one: no shared type does multi-select.
+ * `multiple_choice` has exactly one correct option, and `workbook_fill_blank`
+ * is a dropdown — also one pick per blank. Approximating it with six
+ * `b1-sort-to-columns` exercises („Според текста" / „Не според текста") works
+ * without new code, but turns one textbook exercise into six and no longer
+ * reads like the page.
+ *
+ * `Omit<BaseExercise, 'type'>` instead of `extends BaseExercise`: `type` on the
+ * base is the shared `ExerciseType` union, which (correctly) knows nothing about
+ * `b1-` types. Narrowing it is a TS2430 error — the six interfaces above all
+ * carry one. Omitting the field first gives every base field with no error and
+ * needs no change to `shared/types.ts`.
+ *
+ * Scoring is per sentence: a sentence counts only when the selection matches the
+ * correct set exactly, so `points` should equal `sentences.length`.
+ */
+export interface B1SelectWordsExercise extends Omit<BaseExercise, 'type'> {
+  type: 'b1-select-words';
+  sentences: {
+    id: string;
+    /** Sentence text before the word chips, e.g. „По българските земи са живели". */
+    before: string;
+    /** Sentence text after the chips — usually just the closing punctuation. */
+    after?: string;
+    /**
+     * Candidate words in display order. The component does NOT shuffle (project
+     * convention) — keep the textbook order, which is already mixed.
+     */
+    words: { text: string; correct?: boolean }[];
+  }[];
+  /** Hides the „Избрани: n/m" counter, which otherwise reveals how many to pick. */
+  hideExpectedCount?: boolean;
+}
+
 // Union of all B1-specific exercise interfaces.
 export type B1Exercise =
   | B1IllustratedCardsGroupedExercise
@@ -234,7 +273,8 @@ export type B1Exercise =
   | B1GrammarTableExercise
   | B1GrammarExamplesExercise
   | B1SortToColumnsExercise
-  | B1InfoHighlightExercise;
+  | B1InfoHighlightExercise
+  | B1SelectWordsExercise;
 
 // Re-export BaseExercise so B1 component files can import everything from one place.
 export type { BaseExercise };

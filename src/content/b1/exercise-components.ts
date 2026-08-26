@@ -29,6 +29,7 @@ import { MatchPairsDragDrop } from './components/MatchPairsDragDrop';
 import { GrammarTable } from './components/GrammarTable';
 import { GrammarExamples } from './components/GrammarExamples';
 import { SortToColumns } from './components/SortToColumns';
+import { SelectWords } from './components/SelectWords';
 import { TableFill } from './components/TableFill';
 import { ReadingText } from './components/ReadingText';
 import { Dialogues } from './components/Dialogues';
@@ -56,6 +57,8 @@ export const B1_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'b1-grammar-table': GrammarTable as unknown as CustomExerciseRenderer,
   'b1-grammar-examples': GrammarExamples as unknown as CustomExerciseRenderer,
   'b1-sort-to-columns': SortToColumns as unknown as CustomExerciseRenderer,
+  // Multi-select „подчертайте правилните думи" — no shared type does multi-pick.
+  'b1-select-words': SelectWords as unknown as CustomExerciseRenderer,
   // Override shared table_fill: hide empty column-header rows (B1-only).
   table_fill: TableFill as unknown as CustomExerciseRenderer,
   // Override shared reading_text: numbered task lists → green tables (B1-only).
