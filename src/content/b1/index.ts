@@ -37,7 +37,7 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-08': () => import('./lessons/b1-lesson-08'),
   'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
   'b1-lesson-10': () => import('./lessons/b1-lesson-10'),
-  'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
+  // 'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
   // 'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
   // 'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
   // 'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
@@ -48,7 +48,7 @@ export const B1_TEST_LOADERS: Record<
   string,
   () => Promise<{ testData?: TestData; default?: TestData }>
 > = {
-  // 'test-b1-1': () => import('./tests/test-b1-1'),
+  // 'test-b1-1': () => import('./tests/test-lessons-b1-11-15'),
 };
 
 export const B1_LESSONS_METADATA: Array<{
@@ -94,8 +94,13 @@ export const B1_NAV_ITEMS: A1NavItem[] = [
   { type: 'test', id: 'test-b1-1', label: 'уроци 11–15' },
 ];
 
+// testId → folder name under `src/content/b1/tests/`. The `test-lessons-`
+// prefix is required by `scripts/generate-tts.ts`, which builds the folder name
+// as `test-lessons-${--test argument}`; the `b1-` segment keeps it unique
+// against the A1/A2 folders of the same lesson range.
+// TTS: npm run tts:generate -- --test b1-11-15 --model gemini
 export const B1_TEST_FOLDER_MAP: Record<string, string> = {
-  'test-b1-1': 'test-lessons-11-15',
+  'test-b1-1': 'test-lessons-b1-11-15',
 };
 
 export const B1_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
@@ -111,5 +116,6 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-08': 13,
   'b1-lesson-09': 31,
   'b1-lesson-10': 8,
-  'b1-lesson-11': 3,
+  // 11–15 are being rewritten from the textbook block on pp. 76–97; each
+  // count is filled in together with the matching loader above.
 };
