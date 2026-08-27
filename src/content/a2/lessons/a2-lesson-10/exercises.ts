@@ -25,6 +25,8 @@ const GEMINI_BG_STRESS_CHAKAM =
   'Read each Bulgarian word exactly once, clearly, in a single calm female voice with the stress on the first syllable: "ча́ках, ча́кам, ча́кал, ча́кала, ча́кало, ча́кали". Do not repeat any word. Do not use any foreign accent.';
 const GEMINI_BG_STRESS_TANTSUVAM =
   'Read these Bulgarian verb forms clearly in a single calm female voice with the stress on the syllable "цу" in every word, never on the final vowel: "танцу́вах, танцу́вам, танцу́вал, танцу́вала, танцу́вало, танцу́вали". Read each word exactly once. Do not use any foreign accent.';
+const GEMINI_BG_STRESS_CHUVAM =
+  'Read these Bulgarian words clearly in a single calm female voice. The participle „чувал" is stressed on the first syllable „чу": чУвал (CHU-val), never чувАл. Read exactly: „чувам, чУвал". Read each word exactly once. Do not use any foreign accent.';
 
 export const exercises: Exercise[] = [
 
@@ -297,10 +299,10 @@ export const exercises: Exercise[] = [
       { id: 'p1', left: 'търся работа',         correctRight: 'имам работа' },
       { id: 'p2', left: 'безработен съм',        correctRight: 'намирам работа' },
       { id: 'p3', left: 'добър шеф',             correctRight: 'лош шеф' },
-      { id: 'p4', left: 'работя почасово',        correctRight: 'работя на пълно работно' },
+      { id: 'p4', left: 'работя почасово',        correctRight: 'работя на пълно работно време' },
       { id: 'p5', left: 'ниска заплата',          correctRight: 'висока заплата' },
     ],
-    shuffledRights: ['имам работа', 'висока заплата', 'лош шеф', 'работя на пълно работно', 'намирам работа'],
+    shuffledRights: ['имам работа', 'висока заплата', 'лош шеф', 'работя на пълно работно време', 'намирам работа'],
   } as unknown as Exercise,
 
   // ─── ORDER 9 — Упр. 8 (стр. 100): Слушайте и отбележете ─────────────────────
@@ -317,9 +319,9 @@ export const exercises: Exercise[] = [
       { id: 'p1', left: 'Парите, които получаваме всеки месец, когато работим',     correctRight: 'заплата' },
       { id: 'p2', left: 'Работа по няколко часа на ден',                            correctRight: 'почасово' },
       { id: 'p3', left: 'Парите, които получаваме от Бюрото по труда, когато сме без работа', correctRight: 'помощи за безработни' },
-      { id: 'p4', left: 'Работа по осем часа на ден',                               correctRight: 'пълно работно' },
+      { id: 'p4', left: 'Работа по осем часа на ден',                               correctRight: 'пълно работно време' },
     ],
-    shuffledRights: ['заплата', 'помощи за безработни', 'почасово', 'пълно работно'],
+    shuffledRights: ['заплата', 'помощи за безработни', 'почасово', 'пълно работно време'],
   } as MatchPairsExercise,
 
   // Упр. 9 — ⏭ SKIP по клиент (прочетете диалозите по двойки)
@@ -338,7 +340,12 @@ export const exercises: Exercise[] = [
         imageUrl: `${ASSET}/04-dialozi-3/01-parizh-dvama-mazhe.jpg`,
         lines: [
           { text: '– Аз съм ходил в Париж. Ти ходил ли си?', voiceGender: 'male' },
-          { text: '– Не, не съм ходил.', voiceGender: 'male' },
+          {
+            text: '– Не, не съм ходил.',
+            voiceGender: 'male',
+            ttsPrompt:
+              'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. The last word is the masculine past participle „ходил" — it ends with Л. Say „ходил", never „ходила". Do not add a final а. Do not use any Russian, Arabic, English or other foreign accent.',
+          },
         ],
       },
       {
@@ -555,7 +562,7 @@ export const exercises: Exercise[] = [
     columns: ['причастие (м.р./ж.р./ср.р./мн.ч.)'],
     rows: [
       { pronoun: 'виждам',     cells: ['виждал, -а, -о, -и'],    ttsText: 'виждам: виждал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'чувам',      cells: ['чувал, -а, -о, -и'],     ttsText: 'чувам: чувал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'чувам',      cells: ['чувал, -а, -о, -и'],     ttsText: 'чувам: чУвал', ttsModel: 'pro', ttsPrompt: GEMINI_BG_STRESS_CHUVAM },
       { pronoun: 'казвам',     cells: ['казвал, -а, -о, -и'],    ttsText: 'казвам: казвал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'купувам',    cells: ['купувал, -а, -о, -и'],   ttsText: 'купувам: купувал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'идвам',      cells: ['идвал, -а, -о, -и'],     ttsText: 'идвам: идвал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
