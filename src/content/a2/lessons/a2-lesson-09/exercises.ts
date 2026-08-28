@@ -337,9 +337,10 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'Внимание! Забраната се образува от несвършения вид: Не влизай! НЕ: Не влез!',
-      'Специална форма: идвам, дойда. Ела! Елате! Много неправилна.',
+      // Pro draws out „о" in „много" after the exclamations; Flash reads it evenly.
+      'Специална форма: идвам, дойда. Ела. Елате. Много неправилна.',
     ],
-    ttsNoteModels: ['pro', 'pro'],
+    ttsNoteModels: ['pro', 'flash'],
   } as GrammarTableExercise,
 
   // ─── ORDER 13 — Упр. 11 (стр. 94): Работете по модела от упр. 8 ──────────────

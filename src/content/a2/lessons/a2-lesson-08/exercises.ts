@@ -97,7 +97,9 @@ export const exercises: Exercise[] = [
           { text: '– Здравей, Симо! Как беше почивката? Къде беше?', voiceGender: 'female' },
           { text: '– Бях в Созопол. Беше страхотно! Морето, хората, храната — всичко беше прекрасно. Разходих се, плувах, танцувах, спортувах. Как я прекара?', voiceGender: 'male' },
           { text: '– Останах вкъщи. Не отидох никъде. Четох за изпити.', voiceGender: 'female' },
-          { text: '– Къде са Пламен и Ели?', voiceGender: 'male' },
+          { text: '– Къде са Пламен и Ели?', voiceGender: 'male',
+            // Gemini Pro drops л in „Ели" (reads „Еи"); hyphen keeps both syllables.
+            ttsText: '– Къде са Пламен и Е-ли?' },
           { text: '– На екскурзия в Испания. Заминаха вчера. Ще се върнат след две седмици.', voiceGender: 'female' },
         ],
       },
@@ -599,7 +601,8 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'АХ група. Пример: вечерях, вечеря, вечеря, вечеряхме, вечеряхте, вечеряха.',
-      'ОХ група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
+      // Gemini reads uppercase „ОХ" as English OH (silent H → only „О").
+      'о-х група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
     ],
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
@@ -620,7 +623,8 @@ export const exercises: Exercise[] = [
       'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
     ],
     ttsParagraphs: [
-      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
+      // Past tense я́де (stress on Я), not present яде́.
+      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Я́де пица. Пи червено вино.',
     ],
     paragraphVoiceGenders: ['female'],
   } as ReadingTextExercise,

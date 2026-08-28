@@ -643,7 +643,7 @@ export const exercises: Exercise[] = [
       { pronoun: '',  cells: ['колко', 'няколко', 'николко'],  ttsText: 'колко, няколко, николко',    ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: '',  cells: ['къде',  'някъде',  'никъде'],   ttsText: 'къде, някъде, никъде',       ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: '',  cells: ['кога',  'някога',  'никога'],   ttsText: 'кога, някога, никога',       ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: '',  cells: ['нещо',  'нещо',    'нищо'],     ttsText: 'нещо, нищо',                 ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: '',  cells: ['нещо',  'нещо',    'нищо'],     ttsText: 'нещо, нещо, нищо',           ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
     ],
     notes: [
       '⚠️ **Никой не** иска кафе. / **Никъде не** мога да намеря…',

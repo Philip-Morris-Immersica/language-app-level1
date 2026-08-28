@@ -97,7 +97,9 @@ export const exercises: Exercise[] = [
           { text: '– Не много добре. Нямам работа.', voiceGender: 'male' },
           { text: '– А търсиш ли?', voiceGender: 'male' },
           { text: '– Да, разбира се. Всяка седмица идвам в Бюрото по труда. След два дни ще имам интервю за работа.', voiceGender: 'male' },
-          { text: '– Желая ти успех.', voiceGender: 'male' },
+          { text: '– Желая ти успех.', voiceGender: 'male',
+            // Gemini reads „успех" as past-tense „успах"; accent keeps the е.
+            ttsText: '– Желая ти успéх.' },
           { text: '– Благодаря!', voiceGender: 'male' },
         ],
       },
@@ -526,7 +528,9 @@ export const exercises: Exercise[] = [
         id: 'а. Видял ли си Георги',
         imageUrl: `${ASSET}/05-dialozi-4/01-georgi-tarsi.jpg`,
         lines: [
-          { text: '– Ти виждал ли си Георги този месец?', voiceGender: 'male' },
+          { text: '– Ти виждал ли си Георги този месец?', voiceGender: 'male',
+            // Gemini palatalizes „Георги" to „Гярги"; hyphen keeps Ге-орги.
+            ttsText: '– Ти виждал ли си Ге-орги този месец?' },
           { text: '– Не, не съм го виждал.', voiceGender: 'male' },
         ],
       },
@@ -1204,6 +1208,8 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 30,
     showDictionary: true,
+    imageColumns: 3,
+    imageEqualHeight: true,
     images: [
       { imageUrl: `${ASSET}/09-tekst-elena/01-zhena-shapka-cherno.jpg`,        label: 'Имигрантка в България',     ttsWordId: 'elena-img-01' },
       { imageUrl: `${ASSET}/09-tekst-elena/02-zhena-skal-pamuk.jpg`,           label: 'Имигрантка в България',     ttsWordId: 'elena-img-02' },
