@@ -1,6 +1,7 @@
 import type { LessonContent } from '@/content/types';
 
 export const content: LessonContent = {
+  vocabulary: [],
   introduction:
     'България е красива и разнообразна страна. Има планини, реки, езера, морски бряг и много природни богатства. В този урок четем за географията на страната, нейните планини и легендите, свързани с тях.',
 
