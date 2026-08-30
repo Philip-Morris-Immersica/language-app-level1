@@ -344,7 +344,7 @@ export const exercises: Exercise[] = [
     order: 4,
     textTitle: 'БЪЛГАРИЯ – ГРАНИЦИ И ВОДНО БОГАТСТВО',
     showDictionary: false,
-    ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "Северна Македония" — pronounce clearly Ма-ке-ДО-ни-я, NOT Македания; (2) "а на изток е Черно море" — the copula "е" before "Черно" must flow continuously without a break: "е Черно море" as one phrase; (3) "три страни" — final syllable ends clearly in И: стра-НИ, not "странйе"; (4) the conjunction "и" between list items (e.g. "животни и растения") should be brief, not elongated; (5) "пиене" ends clearly in Е: пие-НЕ, NOT "пиенйе"; (6) "Много от тях" — pronounce "тях" distinctly and clearly; (7) "курорти" — pronounce clearly ку-рор-ТИ, NOT "курофти"; (8) "Сапарева" — stress on second е: са-па-РЕ-ва; (9) "Девин" — stress on Е in first syllable: ДЕ-вин, NOT "де-ВИН"; (10) "Вършец" — stress on last syllable: вър-ШЕЦ, the Е must be clearly audible; (11) "умереноконтинентален" — pronounce the ending clearly: -кон-ти-нен-та-ЛЕН, NOT "континентаен"; (12) the mineral water paragraph (starting "България е много богата…") — read at a moderate pace, do NOT rush; (13) preposition before vowels — say "в" (NOT "във") before "Югоизточна" AND before "езерото": "в езерото", NOT "във езерото"; (14) "дъждове" — stress on Е in the final syllable: дъждо-ВЕ, NOT "ДЪЖ-дове". Do not use any Russian, Arabic, English or other foreign accent.',
+    ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "Северна Македония" — pronounce clearly Ма-ке-ДО-ни-я, NOT Македания; (2) "а на изток е Черно море" — the copula "е" before "Черно" must flow continuously without a break: "е Черно море" as one phrase; (3) "три страни" — final syllable ends clearly in И: стра-НИ, not "странйе"; (4) the conjunction "и" between list items (e.g. "животни и растения") should be brief, not elongated; (5) "пиене" — two syllables ПИЕ-НЕ; the final syllable НЕ ends on the vowel Е with absolutely NO Y-glide or J-sound after it: say пие-НЕ, NOT "пиенйе" or "пиенье"; the word ends cleanly on the Е sound; (6) "Много от тях" — pronounce "тях" distinctly and clearly; (7) "курорти" — pronounce clearly ку-рор-ТИ, NOT "курофти"; (8) "Сапарева" — stress on Е in the third syllable: са-па-РЕ-ва, NOT "са-ПА-ре-ва"; "Велинград" — stress on Е in the first syllable: ВЕ-лин-град; (9) "Девин" — stress on Е in first syllable: ДЕ-вин, NOT "де-ВИН"; (10) "Вършец" — вър-ШЕЦ; the final sound is Ц (a sharp ts-sound as in "bits"), clearly and fully articulated at the very end: say вър-шеЦ, NOT "Вършет", NOT "Вършеш", NOT "Вършес" — the Ц must be audible; (11) "умереноконтинентален" — the ending is -та-ЛЕН (т-а-л-е-н), NOT "умереноконтинентарен" — there is NO Р before the Е in the ending; (12) the mineral water paragraph (starting "България е много богата…") — read at a moderate pace, do NOT rush; (13) preposition "в" — say "в" (NOT "във") before "Югоизточна": "в Югоизточна Европа", NOT "Във Югоизточна"; also "в езерото", NOT "във езерото"; (14) "дъждове" — stress on Е in the final syllable: дъждо-ВЕ, NOT "ДЪЖ-дове"; (15) "лятото" — starts with Л clearly: ЛЯ-то-то, NOT "нятото" or "ятото"; (16) "прави" — stress on И: пра-ВИ, NOT "ПРА-ви"; (17) the Черно море paragraph — after "с хубав пясък" allow a natural 1-second trailing pause before continuing. Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'България се намира в Югоизточна Европа, на Балканския полуостров. Територията на страната е 111 000 квадратни километра. На запад от България са Сърбия и Северна Македония, на юг са Турция и Гърция, на север е Румъния, а на изток е Черно море.',
       'Столицата е София, град с богата история, който се намира в западната част на България, до планината Витоша. Най-големите български градове след София са Пловдив, Варна, Бургас и Русе.',
@@ -364,10 +364,15 @@ export const exercises: Exercise[] = [
       'Черно море е източната граница на България. През лятото водата е топла и това прави морето желано място за почивка не само за българите, но и за много чужди туристи. Крайбрежието е с дължина повече от триста седемдесет и осем километра и има много плажове с хубав пясък.',
       'На територията на страната има много реки. Най-голямата река, която минава през България, е Дунав. Това е втората по дължина река в Европа, минава през десет държави и разделя България и Румъния. Най-дългата река на Балканския полуостров е Марица. Тя минава през три страни – България, Гърция и Турция. Най-дългата река, която минава само през България, е Искър. Марица и Искър извират от планината Рила в Югозападна България.',
       'Езерото Сребърна е природен резерват от списъка на ЮНЕСКО. Намира се в Североизточна България, близо до град Силистра. В езерото има много видове животни и растения. Сребърна е най-важната спирка на птиците, които мигрират между Централна Африка и Северна Европа.',
-      'България е много богата на минерални извори – тя е на второ място в Европа след Исландия. В страната има над петстотин находища на минерална вода, като повечето се използват за пиене и за лечение. Много от тях са познати още от древността и около тях е имало селища още шест хиляди години преди новата ера. Днес те са популярни СПА курорти и се използват през цялата година. Най-известните са Кюстендил, Сандански, Сапарева баня, Велинград, Хисаря, Девин, Банкя и Вършец.',
+      'България е много богата на минерални извори. ... Тя е на второ място в Европа след Исландия. В страната има над петстотин находища на минерАлна водА, като повечето се използват за пиене и за лечение. Много от тях са познати още от древността и около тях е имало селища още шест хиляди години преди новата ера. Днес те са популярни СПА курорти и се използват през цялата година. Най-известните са КюстеНдил, Сандански, СапарЕва баня, ВЕлинград, Хисаря, ДЕвин, Банкя и Вършец.',
       'Климатът на България е умереноконтинентален, с четири сезона. Всеки сезон продължава три месеца – лятото е от юни до август, есента – от септември до ноември, зимата – от декември до февруари, а пролетта – от март до май.',
       'Лятото е горещо, с температури около двадесет и пет – тридесет градуса, а зимата е студена с температури около и под нулата. През пролетта и есента времето е променливо – с температури от пет до двадесет и пет градуса.',
       'Най-много дъждове има през май, юни и ноември, а през януари и февруари обикновено вали сняг.',
+    ],
+    ttsParagraphPrompts: [
+      undefined, undefined, undefined, undefined, undefined, undefined,
+      'Warm natural Bulgarian, moderate unhurried pace, no foreign accent. Capital letters inside words mark stress only — do not spell them out. After "минерални извори" make a clear pause. "минерална вода" is two full words — never "минералма". CRITICAL: "курорти" is ку-РОР-ти — both vowels are О, never А; say курорти, NEVER "курарти". CRITICAL: "СапарЕва" — four syllables са-па-РЕ-ва; the stressed vowel is Е and must be clearly audible: сапарЕва, never "сапарыва" and never "саПАРева". CRITICAL: "ВЕлинград" — three syllables ВЕ-лин-град; the first syllable ВЕ must be clearly heard and stressed: ВЕлинград, never "вилинград" and never "велинГРАД". CRITICAL: "Кюстендил" is Кю-стен-дил — middle syllable СТЕН with Н, never Л: NEVER "Кюстелдил". Read once, fluently.',
+      undefined, undefined, undefined,
     ],
   } as unknown as ReadingTextExercise,
 
@@ -524,10 +529,10 @@ export const exercises: Exercise[] = [
       'Степенуването се образува с представки: **по-** + прилагателно (сравнителна) и **най-** + прилагателно (превъзходна).',
     ],
     ttsNotes: [
-      'Рила е по-висока от Пирин. Мусала е най-високият връх на Балканите.',
-      'Степенуването се образува с представки: по- плюс прилагАтелно, и най- плюс прилагАтелно. Ударението е на второто А: при-ла-ГА-тел-но.',
+      'Рила е по-висока от Пирин — ударение на ПИ: ПИ-рин. МусалА е най-високият връх на Балканите — ударение пада на последната сричка ЛА: му-са-ЛА.',
+      'Степенуването се образува с представки: по- плюс прилагателно, сравнителна степен, и най- плюс прилагателно, превъзходна степен.',
     ],
-    ttsNoteModels: ['flash', 'pro'],
+    ttsNoteModels: ['pro', 'pro'],
   } as unknown as Exercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -541,16 +546,21 @@ export const exercises: Exercise[] = [
     order: 7,
     textTitle: 'ЛЕГЕНДА ЗА ТЪМНОТО ЕЗЕРО',
     showDictionary: false,
-    ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian. Pronunciation notes: (1) "най-хубавото" — stress НАЙ strongly: НАЙ-хубавото, NOT "май-хубавото"; (2) "слънцето" — pronounce all syllables clearly: СЛЪН-це-то, with clear initial СЛ cluster; (3) "небето" — НЕ-бе-то, clear initial Н; (4) "нея" — three distinct sounds Н-Е-Я, NO palatalization (iotation): say НЕ-Я, NOT "нйея" or "нjея"; (5) "да стане" — stress on А: да СТА-не, the final vowel is Е (not А): СТА-НЕ, NOT "да стана". Do not use any Russian, Arabic, English or other foreign accent.',
+    ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian. Pronunciation notes: (1) "най-хубавото" — stress НАЙ strongly: НАЙ-хубавото, NOT "май-хубавото"; (2) "слънцето" — pronounce all syllables clearly: СЛЪН-це-то, with clear initial СЛ cluster; (3) "небето" — НЕ-бе-то, clear initial Н; (4) "нея" — three distinct sounds Н-Е-Я, NO palatalization (iotation): say НЕ-Я, NOT "нйея" or "нjея"; (5) "да стане" — stress on А: да СТА-не, the final vowel is Е (not А): СТА-НЕ, NOT "да стана"; (6) "попитала" — по-ПИ-та-ла, stress on the second syllable ПИ; the И is a clear И vowel: по-ПИ-та-ла, NOT "попутала" or "попатала" — the vowel in the second syllable is И, not У. Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'Преди много години най-малкото езеро в Пирин сутрин било синьо като небето, а на обед – златно като слънцето.',
-      'Едно момиче от съседно село на име Яна идвало всяка сутрин на брега на езерото да се оглежда в него и да му разказва за мечтите си. Яна била влюбена в най-хубавото момче на селото, но момчето не я забелязвало. Един ден Яна попитала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обяд, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злато.',
+      'Едно момиче от съседно село на име Яна идвало всяка сутрин на брега на езерото да се оглежда в него и да му разказва за мечтите си. Яна била влюбена в най-хубавото момче на селото, но момчето не я забелязвало. Един ден Яна попитала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обед, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злато.',
       'Когато Яна се върнала в селото, младият мъж я видял и се влюбил в нея. Тя обаче вече не го харесвала, защото бил беден. Мислела, че е толкова красива, че може да се омъжи само за принц и да стане принцеса. Яна отишла пак при езерото и поискала съвет как да спечели сърцето на принца. Като чуло това, езерото потъмняло от гняв и мъка. Затова сега го наричат „Тъмното езеро".',
     ],
     ttsParagraphs: [
       'Преди много години най-малкото езеро в Пирин сутрин било синьо като небето, а на обед – златно като слънцето.',
-      'Едно момиче от съседно село на ime Яна идвало всяка сутрин на брега на езерото да се оглежда в него и да му разказва за мечтите си. Яна била влюбена в най-хубавото момче на селото, но момчето не я забелязвало. Един ден Яна попитала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обяд, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злато.',
+      'Едно момиче от съседно село на ime Яна идвало всяка сутрин на брега на езерото да се оглежда в него и да му разказва за мечтите си. Яна била влюбена в най-хубавото момче на селото, но момчето не я забелязвало. Един ден Яна попИтала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обед, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злато.',
       'Когато Яна се върнала в селото, младият мъж я видял и се влюбил в нея. Тя обаче вече не го харесвала, защото бил беден. Мислела, че е толкова красива, че може да се омъжи само за принц и да стане принцеса. Яна отишла пак при езерото и поискала съвет как да спечели сърцето на принца. Като чуло това, езерото потъмняло от гняв и мъка. Затова сега го наричат Тъмното езеро.',
+    ],
+    ttsParagraphPrompts: [
+      undefined,
+      'Warm natural storytelling Bulgarian. PACE: normal, flowing storytelling tempo — calm but not slow, with only a light pause between sentences. Capital letters inside words mark stress only — do not spell them out. "влюбена" starts with В, never Ф. Read once, fluently.',
+      undefined,
     ],
   } as ReadingTextExercise,
 
@@ -566,14 +576,14 @@ export const exercises: Exercise[] = [
     alignLeft: true,
     // Top-level rows are used by the TTS script (panels are for display only).
     rows: [
-      { pronoun: 'м.р. (той)', cells: ['живее', 'живял'], ttsText: 'мъжки род: живее — живял', ttsModel: 'flash' },
-      { pronoun: 'ж.р. (тя)', cells: ['идва', 'идвала'], ttsText: 'женски род: идва — идвала', ttsModel: 'flash' },
-      { pronoun: 'ср.р. (то)', cells: ['казва', 'казвало'], ttsText: 'среден род: казва — казвало', ttsModel: 'flash' },
-      { pronoun: 'мн.ч. (те)', cells: ['бият', 'биели'], ttsText: 'множествено число: бият — биели', ttsModel: 'flash' },
-      { pronoun: 'м.р. (той)', cells: ['реши', 'решил'], ttsText: 'мъжки род: реши — решил', ttsModel: 'flash' },
-      { pronoun: 'ж.р. (тя)', cells: ['избяга', 'избягала'], ttsText: 'женски род: избяга — избягала', ttsModel: 'flash' },
-      { pronoun: 'ср.р. (то)', cells: ['потъмня', 'потъмняло'], ttsText: 'среден род: потъмня — потъмняло', ttsModel: 'flash' },
-      { pronoun: 'мн.ч. (те)', cells: ['нарекоха', 'нарекли'], ttsText: 'множествено число: нарекоха — нарекли', ttsModel: 'flash' },
+      { pronoun: 'м.р. (той)', cells: ['живееше', 'живеел'], ttsText: 'мъжки род: жиВЕеше — жиВЕел', ttsModel: 'pro', ttsPrompt: 'Read in clear standard Bulgarian. Say ALL words including the prefix: "мъжки род" then pause, then "жиВЕеше" then dash, then "жиВЕел". "живееше" = жи-ВЕ-е-ше: stress on ВЕ, no Р sound, NEVER "живереше". "живеел" = жи-ВЕ-ел: say each syllable clearly, the final Л must be audible.' },
+      { pronoun: 'ж.р. (тя)', cells: ['живееше', 'живеела'], ttsText: 'женски род: жиВЕеше — жиВЕела', ttsModel: 'pro', ttsPrompt: 'Read in clear standard Bulgarian. Say ALL words: "женски род" then pause, then "жиВЕеше" then dash, then "жиВЕела". "живееше" = жи-ВЕ-е-ше, stress on ВЕ, no Р. "живеела" = жи-ВЕ-е-ла, final А audible.' },
+      { pronoun: 'ср.р. (то)', cells: ['живееше', 'живеело'], ttsText: 'среден род: жиВЕеше — жиВЕело', ttsModel: 'pro', ttsPrompt: 'Read in clear standard Bulgarian. Say ALL words: "среден род" then pause, then "жиВЕеше" then dash, then "жиВЕело". "живееше" = жи-ВЕ-е-ше, stress on ВЕ, no Р. "живеело" = жи-ВЕ-е-ло, final О audible.' },
+      { pronoun: 'мн.ч. (те)', cells: ['живееха', 'живеели'], ttsText: 'множествено число: живееха — живеели', ttsModel: 'flash' },
+      { pronoun: 'м.р. (той)', cells: ['живя', 'живял'], ttsText: 'мъжки род: живя — живял', ttsModel: 'flash' },
+      { pronoun: 'ж.р. (тя)', cells: ['живя', 'живяла'], ttsText: 'женски род: живя — живяла', ttsModel: 'flash' },
+      { pronoun: 'ср.р. (то)', cells: ['живя', 'живяло'], ttsText: 'среден род: живя — живяло', ttsModel: 'flash' },
+      { pronoun: 'мн.ч. (те)', cells: ['живяха', 'живели'], ttsText: 'множествено число: живяха — живели', ttsModel: 'flash' },
     ],
     panels: [
       {
@@ -582,26 +592,29 @@ export const exercises: Exercise[] = [
         rows: [
           {
             pronoun: 'м. р. (той)',
-            cells: ['живее', 'живял'],
-            ttsText: 'мъжки род: живее — живял',
-            ttsModel: 'flash',
+            cells: ['живееше', 'живеел'],
+            ttsText: 'мъжки род: жиВЕеше — жиВЕел',
+            ttsModel: 'pro',
+            ttsPrompt: 'Clear Bulgarian. Say "мъжки род", pause, "жиВЕеше", dash, "жиВЕел". No Р in живееше. NEVER "живереше".',
           },
           {
             pronoun: 'ж. р. (тя)',
-            cells: ['идва', 'идвала'],
-            ttsText: 'женски род: идва — идвала',
-            ttsModel: 'flash',
+            cells: ['живееше', 'живеела'],
+            ttsText: 'женски род: жиВЕеше — жиВЕела',
+            ttsModel: 'pro',
+            ttsPrompt: 'Clear Bulgarian. Say "женски род", pause, "жиВЕеше", dash, "жиВЕела". No Р in живееше. NEVER "живереше".',
           },
           {
             pronoun: 'ср. р. (то)',
-            cells: ['казва', 'казвало'],
-            ttsText: 'среден род: казва — казвало',
-            ttsModel: 'flash',
+            cells: ['живееше', 'живеело'],
+            ttsText: 'среден род: жиВЕеше — жиВЕело',
+            ttsModel: 'pro',
+            ttsPrompt: 'Clear Bulgarian. Say "среден род", pause, "жиВЕеше", dash, "жиВЕело". No Р in живееше. NEVER "живереше".',
           },
           {
             pronoun: 'мн. ч. (те)',
-            cells: ['бият', 'биели'],
-            ttsText: 'множествено число: бият — биели',
+            cells: ['живееха', 'живеели'],
+            ttsText: 'множествено число: живееха — живеели',
             ttsModel: 'flash',
           },
         ],
@@ -612,26 +625,26 @@ export const exercises: Exercise[] = [
         rows: [
           {
             pronoun: 'м. р. (той)',
-            cells: ['реши', 'решил'],
-            ttsText: 'мъжки род: реши — решил',
+            cells: ['живя', 'живял'],
+            ttsText: 'мъжки род: живя — живял',
             ttsModel: 'flash',
           },
           {
             pronoun: 'ж. р. (тя)',
-            cells: ['избяга', 'избягала'],
-            ttsText: 'женски род: избяга — избягала',
+            cells: ['живя', 'живяла'],
+            ttsText: 'женски род: живя — живяла',
             ttsModel: 'flash',
           },
           {
             pronoun: 'ср. р. (то)',
-            cells: ['потъмня', 'потъмняло'],
-            ttsText: 'среден род: потъмня — потъмняло',
+            cells: ['живя', 'живяло'],
+            ttsText: 'среден род: живя — живяло',
             ttsModel: 'flash',
           },
           {
             pronoun: 'мн. ч. (те)',
-            cells: ['нарекоха', 'нарекли'],
-            ttsText: 'множествено число: нарекоха — нарекли',
+            cells: ['живяха', 'живели'],
+            ttsText: 'множествено число: живяха — живели',
             ttsModel: 'flash',
           },
         ],
@@ -643,9 +656,9 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'Изявително: Яна живееше в селото. Преизказно: Яна живяла в селото.',
-      'В легендите почти всички глаголи са в преизказно наклонение, защото разказваме стара история, не лично преживяване.',
+      'В — легендите почти всички глаголи са в преизказно наклонение, защото разказваме стара история, не лично преживяване.',
     ],
-    ttsNoteModels: ['flash', 'flash'],
+    ttsNoteModels: ['flash', 'pro'],
   } as unknown as Exercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -810,7 +823,7 @@ export const exercises: Exercise[] = [
     order: 12,
     textTitle: 'ПЛАНИНИТЕ НА БЪЛГАРИЯ',
     showDictionary: false,
-    ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "езера" in ALL contexts — stress on last syllable: е-зе-РА; say "Рилски езерА" with strong stress on the final А; (2) "Рилски" — РИЛ-ски; (3) "Боровец" — БО-ро-вец (NOT БО-ру-вец), stress on first syllable; (4) "курорт Банско" — pronounce "курорт" clearly: ку-РОРТ, NOT "курост"; (5) "Розовата долина" — РО-зо-ва-та, NOT "ровованата"; (6) "познато в цял свят" — поз-на-ТО, all syllables clear, NOT "позното"; (7) "Родопите" — Ро-ДО-пи-те, stress on ДО; "планина" — stress on final syllable: пла-ни-НА (the second А is stressed), NOT "план-ина" or "пла-НИ-на"; (8) "Пампорово" — Пам-ПО-ро-во, stress on first О (second syllable); (9) "природна забележителност" — при-РОД-на за-бе-ле-ЖИ-тел-ност; (10) "Балкан" — БАЛ-кан; (11) speak the initial "В" in "В планините" and "В последните" clearly and distinctly; (12) "построени" — stress on Е: по-стро-Е-ни, NOT "ПОСТ-роени". Do not use any Russian, Arabic, English or other foreign accent.',
+    ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. PACING: Read at a SLOW, MEASURED pace throughout — do NOT rush. In particular: the first paragraph (about 39 mountains) must be read slowly and clearly; the Витоша paragraph (starting "Витоша е четвъртата по височина…") must also be read at a relaxed, unhurried pace. Pronunciation notes: (1) "езера" in ALL contexts — stress on last syllable: е-зе-РА; say "Рилски езерА" with strong stress on the final А; (2) "Рилски" — РИЛ-ски; (3) "Боровец" — БО-ро-вец (NOT БО-ру-вец), stress on first syllable; (4) "курорт Банско" — pronounce "курорт" clearly: ку-РОРТ, NOT "курост"; (5) "Розовата долина" — РО-зо-ва-та, NOT "ровованата"; (6) "цял свят" — ЦЯЛ СВЯТ (whole world): "свят" is С-В-Я-Т, the final sound is Т: say "свят", NOT "свяк" or "свяс"; (7) "Родопите" — Ро-ДО-пи-те, stress on ДО; "планина" — stress on final syllable: пла-ни-НА (the second А is stressed), NOT "план-ина" or "пла-НИ-на"; (8) "Пампорово" — Пам-ПО-ро-во, stress on first О (second syllable); (9) "природна забележителност" — при-РОД-на за-бе-ле-ЖИ-тел-ност; (10) "Балкан" — БАЛ-кан; (11) speak the initial "В" in "В планините" and "В последните" clearly and distinctly; (12) "построени" — stress on Е: по-стро-Е-ни, NOT "ПОСТ-роени"; (13) "известни" and "известната" — pronounce clearly: из-ВЕС-тни, starting with ИЗ-, NOT "изместни" or "изместната"; (14) "успоредно на Стара планинА" — stress the second А in "планинА": Ста-ра пла-ни-НА; (15) "отглежда" — от-ГЛЕЖ-да with final А, NOT "отглежду". Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'България е планинска страна – има 39 планини, които покриват почти половината от територията на страната. Осем от тях са високи над 2000 метра.',
       'Рила е най-високата планина не само в България, но и на Балканския полуостров. Тя е шестата по височина в Европа. Най-високият връх се казва Мусала (2925 м). Името означава „място, близо до Бога". В Рила има повече от 200 езера, но най-известни са Седемте Рилски езера. Те се намират на височина от 2100 до 2500 метра и туристите обичат да ходят там. В Рила е и Боровец – най-старият планински курорт в България.',
@@ -828,8 +841,15 @@ export const exercises: Exercise[] = [
       'Най-дългата планина в България и третата по височина е Стара планина. Тя минава през средата на България и я разделя на две части – Северна и Южна България. Дълга е петстотин и тридесет километра. Нарича се още Балкан и дава името на Балканския полуостров.',
       'В централната част на България, успоредно на Стара планина, е разположена Средна гора. Тя е средно висока планина. Между нея и Стара планина е Розовата долина. Там се отглежда известната българска роза. От нея се прави българското розово масло, което е познато в цял свят. Един килограм розово масло се получава от две и половина до три тона розов цвят и струва около десет хиляди евро. Розата е един от символите на България.',
       'Витоша е четвъртата по височина планина в страната. Най-високият ѝ връх е Черни връх, две хиляди двеста и деветдесет метра. В планината се намира и най-дългата пещера в България – Духлата. Тя е дълга седемнадесет хиляди и шестотин метра и е дълбока петдесет и три метра. Витоша е най-посещаваната планина в България, защото е близо до столицата.',
-      'Родопите са може би най-гостоприемната планина в страната, достъпна през всички сезони. Там има и повече от шестотин пещери. Най-интересните са Ягодинската пещера и Дяволското гърло. В Родопите се намира най-големият планински курорт в страната – Пампорово – на височина хиляда шестотин и петдесет метра.',
+      'РоДОпите са може би най-гостоприемната планина в страната, достъпна през всички сезони. Там има и повече от шестотин пещери. Най-интересните са Ягодинската пещера и ДЯволското гърло. В РоДОпите се намира най-големият планински курОрт в страната – ПампОрово – на височина хиляда шестотин и петдесет метра.',
       'В планините на България има много резервати и национални паркове. В последните години са построени и много екопътеки, които привличат туристите и любителите на природата от България и чужбина.',
+    ],
+    ttsParagraphPrompts: [
+      undefined, undefined,
+      'Warm natural Bulgarian. CRITICAL: preposition "в" — say SHORT "в" (one consonant), NEVER "Във" before vowels: "в старата" NOT "Във старата"; "в новата" NOT "Във новата". "Мелник" — МЕЛ-ник. "красиви" — кра-СИ-ви. Read once at relaxed pace.',
+      undefined, undefined, undefined,
+      'Warm natural Bulgarian, moderate pace, no foreign accent. Capital letters inside words mark stress only — do not spell them out. Read once, fluently.',
+      undefined,
     ],
   } as unknown as ReadingTextExercise,
 
@@ -921,27 +941,31 @@ export const exercises: Exercise[] = [
     order: 15,
     textTitle: 'ЛЕГЕНДА ЗА РИЛА И ПИРИН',
     showDictionary: false,
-    ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "разделени" — раз-де-ЛЕ-ни, each syllable distinct; (2) "в небето" — use preposition "в" (NOT "във") before "небето": "в небето"; (3) "светла" is a feminine adjective — pronounce clearly "свет-ла" (NOT "свет-ло"); (4) the exclamation paragraph "Дано се разделите…" — read with strong emotional intensity, mother\'s outburst; (5) the phrase "Един ден те пак се сбили, тя не издържала и извикала" — read the full phrase including "и извикала" without cutting off; (6) "Места" (river name) — stress on Е: МЕ-ста, NOT "мес-ТА"; (7) "Места — и Искър" — the conjunction "и" MUST be clearly audible: say "Места — И — Искър" with "и" as a distinct word, not swallowed. Do not use any Russian, Arabic, English or other foreign accent.',
+    ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "разделени" — раз-де-ЛЕ-ни, each syllable distinct; (2) "в небето" — use preposition "в" (NOT "във") before "небето": "в небето"; (3) "светла" is a feminine adjective — pronounce clearly "свет-ла" (NOT "свет-ло"); (4) the exclamation paragraph "Дано се разделите…" — read with strong emotional intensity, mother\'s outburst; (5) the phrase "Един ден те пак се сбили, тя не издържала и извикала" — read the full phrase including "и извикала" without cutting off; (6) CRITICAL: "МЕ-ста" (river name) — stress is ALWAYS on the FIRST syllable МЕ: say МЕ-ста; NEVER "мес-ТА" — the stress is on МЕ every single time this river name appears; (7) "Места — и Искър" — the conjunction "и" MUST be clearly audible: say "МЕ-ста — И — Искър" with "и" as a distinct word; (8) "мъж" — МЪЖ (м-ъ-ж), NOT "нъж"; (9) "семейство" — се-МЕЙ-ство, NOT "семерство"; (10) "ожени" — о-ЖЕ-ни: say о-ЖЕ-ни, NOT "ожеуи" or "ожеви"; (11) "гледа" — ГЛЕДА (г-л-е-д-а), starts with ГЛ cluster, NOT "бледа". Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'Преди много години в едно село живяло хубаво и работливо момиче на име Рила. То се влюбило в млад мъж от далечно село на име Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
-      'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и Места. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкъщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала:',
-      '– Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
+      'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и Места. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкъщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала: – Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
       'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и Места – в буйни реки. Места била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо минал през Рила планина, после през Софийското поле и Балкана и накрая стигнал до Дунава.',
       'Оттогава Места и Искър са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към Места, е светла, защото той се радва на дъщеря си.',
     ],
     ttsParagraphs: [
       'Преди много години в едно село живяло хубаво и работливо момиче на иme Рила. То се влюбило в млад мъж от далечно село на иme Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
-      'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и Места. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкъщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала.',
-      'Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
-      'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и Места – в буйни реки. Места била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо минал през Рила планина, после през Софийското поле и Балкана и накрая стигнал до Дунава.',
-      'Оттогава Места — и Искър — са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към МЕста, е светла, защото той се радва на дъщеря си.',
+      'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и МЕста. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкЪщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала. Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
+      'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и МЕста – в буйни реки. МЕста била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо минал през Рила планина, после през СофИЙското поле и Балкана и накрая стигнал до ДунаВа.',
+      'Оттогава МЕста — и Искър — са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към МЕста, е светла, защото той се радва на дъщеря си.',
+    ],
+    ttsParagraphPrompts: [
+      undefined,
+      'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". The final word of the paragraph is "чуваме" — say чу-ва-МЕ, the last syllable МЕ must be fully audible — never swallow the final Е. Read once, fluently.',
+      'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". Every time you see МЕста, stress the МЕ. "ДунаВа" — the river name ending in -В-А: the consonant В must be clearly audible: say Ду-НА-ва with a distinct В between the two А sounds — NEVER drop the В. Read once, fluently.',
+      'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". PACE: Read at a brisk, natural storytelling pace — do NOT slow down or drag. Keep a steady conversational tempo throughout. Read once, fluently.',
     ],
   } as unknown as ReadingTextExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // СТР. 80 — (order 16): КАРТА — Рила, Пирин, Искър, Места
-  // Статична географска карта с отбелязани обекти от легендата.
-  // ⚠️ Файлът /public/assets/b1-lesson-11/bulgaria-map.jpg трябва да се добави!
+  // Физическа (релефна) карта без имена на планините и реките — ученикът сам ги
+  // разпознава по релефа и по сините линии.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l11-ex-13',
@@ -954,15 +978,11 @@ export const exercises: Exercise[] = [
     disableAudio: true,
     images: [
       {
-        id: 'b1-l11-map-01',
-        imageUrl: '/assets/b1-lesson-11/bulgaria-map.jpg',
-        label: 'Карта на България',
+        imageUrl: '/assets/b1-lesson-11/bulgaria-map-relief.svg',
+        label: '',
       },
     ],
-    paragraphs: [
-      'На картата има много планини — Рила, Пирин, Стара планина, Витоша, Родопите, Средна гора, Странджа, Беласица. Намерете ги.',
-      'Намерете реките Искър и Места. Искър извира от Рила и тече на север — минава през Софийското поле и Стара планина и се влива в Дунав. Места извира от Пирин и тече на юг — влива се в Егейско море. Двете реки извират от различни планини и текат в различни посоки — не се срещат никога.',
-    ],
+    paragraphs: [],
   } as unknown as ReadingTextExercise,
 
 ];
