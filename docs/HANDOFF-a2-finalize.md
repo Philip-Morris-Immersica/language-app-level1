@@ -24,7 +24,7 @@
 - [x] Фаза 1 — локален мърдж + гейтове → [PR #15](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/15) отворен
 - [x] Фаза 1 — Philip: локална браузър проверка + **мърдж на PR #15 (2026-09-03, комит `f31c252`)**
 - [x] Ре-синк на `philip` след PR #15 — `git merge origin/master`, 68 файла, без конфликти
-- [ ] Фаза 2 — pretranslate (2а кръпка, 2б пускане) · Чат 1
+- [x] Фаза 2 — pretranslate (2а кръпка, 2б пускане) · Чат 1 (2026-09-03)
 - [x] Фаза 3 — раздели, пилот `a2-lesson-01` · Чат 2
 - [ ] Фаза 3.5 — Philip гледа пилота на localhost:3010
 - [ ] Фаза 4 — раздели, уроци 00, 02–10 · Чат 3
@@ -113,10 +113,75 @@ gh pr create --base master --head a2-merge # PR #15
 „Операционни капани“ в плана. Правилото е: преди да гледаш localhost, провери
 `git branch --show-current`.
 
-### Фаза 2 — предварителни преводи
+### Фаза 2 — предварителни преводи · 2026-09-03, Чат 1
 
-_(агентът от Чат 1 попълва тук: какво промени в pretranslate.ts, гейтът с
---dry-run, колко записа влязоха в translations.json, кой комит)_
+**2а — кръпка на `scripts/pretranslate.ts` (generic `--level`):**
+- Нов флаг `--level a1|a2|b1|b2`, по подразбиране `a1` (backward-compatible).
+  Невалидна стойност → грешка + `process.exit(1)`.
+- Импортира и `<LEVEL>_LESSONS_METADATA` + `<LEVEL>_TEST_LOADERS` за всичките
+  4 нива (`@/content/a1`, `a2`, `b1`, `b2`) и ги маппва в
+  `LEVEL_LESSONS_METADATA` / `LEVEL_TEST_LOADERS` — избор по `level` вместо
+  твърдия внос на `A1_LESSONS_METADATA`.
+- Glossary pass (`buildGlossary`) и `--all` цикъла по уроци сега четат
+  `LEVEL_LESSONS_METADATA[level]` вместо `A1_LESSONS_METADATA`.
+- Test id вече е `test-${level}-${n}`, а броят тестове се взима динамично от
+  `Object.keys(LEVEL_TEST_LOADERS[level]).length` (не твърдо `<= 6`).
+- Нормализация на lesson id: ако аргументът вече съдържа `lesson-`
+  (напр. `a2-lesson-03`, или пълно A1 id `lesson-05`) — ползва се както е,
+  без втори префикс. Иначе: `lesson-${padStart}` за `a1`,
+  `${level}-lesson-${padStart}` за останалите.
+- Нормализация на test id аналогично: `test-` префикс се разпознава общо,
+  не само `test-a1-`.
+- `TranslationEntry`/останалата логика (глосар, кеш, batch превод, cost
+  tracking) е непроменена — само точките на избор на ниво.
+
+**Гейт 2а (минал):**
+```
+npm run pretranslate -- --level a2 --all --dry-run
+```
+→ изведе точно **11 урока** (`a2-lesson-00`…`a2-lesson-10`) + **6 теста**
+(`test-a2-1`…`test-a2-6`), с правилните brой низове/лесон.
+```
+npm run pretranslate -- --all --dry-run
+```
+(без `--level`) → изведе **A1** непроменено (`lesson-00`…, `test-a1-*`
+логиката на A1 остава same, glossary „all 12 A1 lessons").
+
+**2б — пускане:**
+```
+npm run pretranslate -- --level a2 --all
+```
+exit code 0, elapsed ~121 минути (7 250 187 ms). Модел `gpt-5.5`,
+1 017 861 input + 503 720 output токена, реален разход **$20.20**.
+Обхванати: Step 0 глосар (1125 уникални граматични термина за A2, 951 нови),
+всичките 11 A2 урока (`a2-lesson-00`…`10`) и всичките 6 A2 теста
+(`test-a2-1`…`6`).
+
+**Резултат в `translations.json`:** baseline при `HEAD` (преди тази фаза,
+включва по-ранни dry-run resave-и без съдържателна промяна) = **2649**
+записа. След пускането = **5583** записа. **Нови записи: 2934.**
+
+**Гейт от плана (минал):**
+```
+git diff --stat
+```
+→ показва **само**:
+```
+scripts/pretranslate.ts              | 75 +-
+src/i18n/generated/translations.json | 23472 +++++++++++++++++++++++++++++++++
+2 files changed, 23532 insertions(+), 15 deletions(-)
+```
+**Нула** промени в `src/content`, нищо в `scripts/generate-tts.ts`.
+
+**Забележка (не отклонение от плана, но си струва да се знае):** преди тази
+фаза `translations.json` вече показваше „M" в `git status` спрямо `HEAD`
+заради CRLF/LF нормализация (`git diff`/`--numstat` показваха 0 реални
+промени) — не съдържателна промяна, преживяло от преди тази фаза. Пускането
+на скрипта презаписва файла коректно; гейтът по-горе го покрива.
+
+**Комит:** `179fdc5` — "feat(i18n): generic --level flag for pretranslate.ts +
+full A2 pre-translation pass" на branch `philip`. `git status` чист след
+комита.
 
 ### Фаза 3 — раздели, пилот `a2-lesson-01` · 2026-09-03, Чат 2
 
