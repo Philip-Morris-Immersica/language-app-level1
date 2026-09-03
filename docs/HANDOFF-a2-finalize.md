@@ -22,8 +22,8 @@
 - [x] Фаза 0 — inventory + план (2026-09-03)
 - [x] D1–D10 потвърдени от Philip
 - [x] Фаза 1 — локален мърдж + гейтове → [PR #15](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/15) отворен
-- [ ] Фаза 1 — Philip: локална браузър проверка + мърдж на PR #15
-- [ ] Ре-синк на `philip` след PR #15 (`git merge origin/master`)
+- [x] Фаза 1 — Philip: локална браузър проверка + **мърдж на PR #15 (2026-09-03, комит `f31c252`)**
+- [x] Ре-синк на `philip` след PR #15 — `git merge origin/master`, 68 файла, без конфликти
 - [ ] Фаза 2 — pretranslate (2а кръпка, 2б пускане) · Чат 1
 - [ ] Фаза 3 — раздели, пилот `a2-lesson-01` · Чат 2
 - [ ] Фаза 3.5 — Philip гледа пилота на localhost:3010
