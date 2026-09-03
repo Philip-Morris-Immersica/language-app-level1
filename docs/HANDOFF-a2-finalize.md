@@ -428,8 +428,11 @@ pass върху цялото ниво, не докато Алекс пише у�
 
 ### Фаза 7 — Philip тества и мърджва
 
-Vercel preview на PR #16: https://language-app-level1-puf7qvnaw-filip-ivanovs-projects.vercel.app
-(`mergeable: CLEAN`, Vercel check ✅ SUCCESS). Обновява се автоматично след
-комитите от Фаза 8.
+Preview линкът се сменя с всеки комит — вземай го от Vercel check-а на
+[PR #16](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/16),
+не от записан тук URL. Проверка на състоянието:
+```
+gh pr view 16 --json mergeable,mergeStateStatus,statusCheckRollup
+```
 
 _(Philip попълва тук: какво провери в preview-то, има ли находки)_
