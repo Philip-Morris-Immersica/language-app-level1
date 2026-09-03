@@ -755,6 +755,115 @@ defineRule({
   },
 });
 
+// ─── R18: section-translations ────────────────────────────────────────────────
+// `sectionStart` renders the most visible text in a lesson (the collapsible
+// part header). Bulgarian lives in `title`/`subtitle`; the other six languages
+// live inline in `titleI18n`/`subtitleI18n`. A missing slot silently degrades
+// to machine translation, which is invisible unless someone switches language.
+const SECTION_I18N_LANGS = ['en', 'fr', 'ar', 'fa', 'uk', 'ru'] as const;
+const SECTION_THEMES = ['vocabulary', 'grammar', 'dialogue', 'reading', 'review'];
+
+/** Languages missing (or blank) in an inline i18n record. */
+function missingSectionLangs(rec: any): string[] {
+  if (!rec || typeof rec !== 'object') return [...SECTION_I18N_LANGS];
+  return SECTION_I18N_LANGS.filter((l) => typeof rec[l] !== 'string' || !rec[l].trim());
+}
+
+defineRule({
+  id: 'section-translations',
+  description: 'sectionStart needs a Bulgarian title plus titleI18n/subtitleI18n in all 6 other languages.',
+  run: (ctx) => {
+    const out: Finding[] = [];
+    for (const ex of allExercises(ctx)) {
+      const section = ex?.sectionStart;
+      if (!section) continue;
+      const add = (message: string) => {
+        const f = finding(ctx, 'section-translations', 'warn', message, ex.id);
+        if (f) out.push(f);
+      };
+
+      const title = typeof section.title === 'string' ? section.title.trim() : '';
+      if (!title) add('sectionStart has no Bulgarian `title`.');
+
+      const missingTitle = missingSectionLangs(section.titleI18n);
+      if (missingTitle.length > 0) {
+        add(`sectionStart.titleI18n missing ${missingTitle.join(', ')} — "${title || '(no title)'}".`);
+      }
+      if (section.titleI18n?.bg) {
+        add('sectionStart.titleI18n must not contain `bg` — Bulgarian belongs in `title`.');
+      }
+
+      const subtitle = typeof section.subtitle === 'string' ? section.subtitle.trim() : '';
+      if (subtitle) {
+        const missingSubtitle = missingSectionLangs(section.subtitleI18n);
+        if (missingSubtitle.length > 0) {
+          add(`sectionStart.subtitleI18n missing ${missingSubtitle.join(', ')} — "${subtitle}".`);
+        }
+        if (section.subtitleI18n?.bg) {
+          add('sectionStart.subtitleI18n must not contain `bg` — Bulgarian belongs in `subtitle`.');
+        }
+      } else if (section.subtitleI18n) {
+        add('sectionStart has subtitleI18n but no Bulgarian `subtitle` to go with it.');
+      }
+
+      if (section.theme !== undefined && !SECTION_THEMES.includes(section.theme)) {
+        add(`sectionStart.theme "${section.theme}" is not one of: ${SECTION_THEMES.join(', ')}.`);
+      }
+
+      if (/\*\*|__/.test(`${title} ${subtitle}`)) {
+        add('sectionStart title/subtitle must be plain text — markdown is not rendered in part headers.');
+      }
+    }
+    return out;
+  },
+});
+
+// ─── R19: instruction-key-exists ──────────────────────────────────────────────
+// `instructionKey` replaces a Bulgarian instruction with a pre-translated key.
+// A typo'd or undefined key is invisible in Bulgarian (the fallback often looks
+// plausible) but breaks every other language.
+const UI_LANGS = ['bg', 'ar', 'fr', 'en', 'fa', 'uk', 'ru'] as const;
+let uiTranslations: Record<string, Record<string, string>> | null = null;
+
+/** Loads UI_TRANSLATIONS once; leaves it null (rule skips) if it can't be read. */
+async function loadUiTranslations() {
+  try {
+    const file = path.join(PROJECT_ROOT, 'src', 'i18n', 'ui.ts');
+    const mod = await import('file:///' + file.replace(/\\/g, '/'));
+    uiTranslations = mod.UI_TRANSLATIONS ?? null;
+  } catch {
+    uiTranslations = null;
+  }
+}
+
+defineRule({
+  id: 'instruction-key-exists',
+  description: 'Every instructionKey must resolve to a UI translation defined in all 7 languages.',
+  run: (ctx) => {
+    if (!uiTranslations) return [];
+    const out: Finding[] = [];
+    for (const ex of allExercises(ctx)) {
+      const add = (message: string) => {
+        const f = finding(ctx, 'instruction-key-exists', 'warn', message, ex.id);
+        if (f) out.push(f);
+      };
+      walkStrings(ex, (value, keyPath) => {
+        if (keyPath !== 'instructionKey' && !keyPath.endsWith('.instructionKey')) return;
+        const entry = uiTranslations![value];
+        if (!entry) {
+          add(`instructionKey "${value}" is not defined in src/i18n (ui.ts / <level>.ts).`);
+          return;
+        }
+        const missing = UI_LANGS.filter((l) => typeof entry[l] !== 'string' || !entry[l].trim());
+        if (missing.length > 0) {
+          add(`instructionKey "${value}" missing translations: ${missing.join(', ')}.`);
+        }
+      });
+    }
+    return out;
+  },
+});
+
 // ═════════════════════════════════════════════════════════════════════════════
 // MAIN
 // ═════════════════════════════════════════════════════════════════════════════
@@ -878,6 +987,8 @@ async function main() {
     console.error(`No lessons matched (arg: ${lessonArg ?? 'all'}).`);
     process.exit(1);
   }
+
+  await loadUiTranslations();
 
   const all: Finding[] = [];
   for (const id of target) {
