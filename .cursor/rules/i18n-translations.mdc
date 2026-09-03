@@ -51,9 +51,52 @@ missing slot or leave it on auto. When a slot is genuinely empty, the app falls
 back to auto-translation so nothing breaks, but that content counts as not done.
 
 **Rollout (no double work):** the *rule* is global and lives here; the *actual
-translations* are per-level content and are done by that level's author in their
-own folder. A1 lesson sections are done. A2 folds hand-translation into its
-pending feedback pass. B1/B2 apply this from the start, as content is written.
+translations* are per-level content. `instructionKey` strings are written by the
+level's author in their own `src/i18n/<level>.ts`. Section titles
+(`sectionStart.titleI18n`) arrive with the level-finalize pass, which is
+Philip's — see [level-finalize.mdc](mdc:.cursor/rules/level-finalize.mdc).
+
+**Status:** A1 ✅ and A2 ✅ (56 + 49 sections, all 6 languages, verified by the
+`section-translations` lint rule). B1 has no sections yet — they come when the
+level is content-complete. B2 not started.
+
+## Third layer — the pre-translation cache
+
+Everything without a translation slot (lesson descriptions, exercise titles,
+dictionary glosses, test section names) is covered by a build-time pass that
+writes `src/i18n/generated/translations.json`:
+
+```
+npm run pretranslate -- --level a2 --all
+```
+
+Runtime lookup order in `useTranslate()`: `translationOverrides.ts` →
+`generated/translations.json` → `localStorage` cache → live Google Translate. An
+empty slot therefore **never breaks the UI** — it just degrades in quality.
+
+**The cache key is the raw Bulgarian string.** Two consequences worth knowing:
+
+- Editing a Bulgarian sentence orphans its old entry and leaves the new one
+  missing → that string falls back to live auto-translation.
+- Re-running **without `--force`** only translates strings that aren't cached
+  yet, so a delta pass after a round of corrections costs minutes, not hours.
+  Run the full pass as soon as a level is content-complete; don't hold it back.
+
+`VocabularyItem.translation` is intentionally left empty on every level — the
+gloss comes from this cache at runtime. Don't fill it by hand.
+
+## Checking translation completeness
+
+Two deterministic lint rules cover what is impossible to eyeball across 7
+languages:
+
+```bash
+npm run content:lint -- --rule section-translations     # sectionStart missing a language, bg in titleI18n, invalid theme
+npm run content:lint -- --rule instruction-key-exists   # instructionKey undefined or missing a language
+```
+
+Both emit warnings, never errors, so they can't block a commit. Run them on any
+change that touches section headers or instructions.
 
 ## Adding a new UI string
 

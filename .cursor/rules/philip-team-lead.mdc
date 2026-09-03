@@ -37,9 +37,16 @@ per-level i18n, TTS content overrides) прави нормалните PR-и о�
 
 4. **`content:lint` минава** на новите уроци:
    ```bash
-   npm run content:lint -- --lesson <lesson-id>
+   npm run content:lint -- --lesson NN      # само НОМЕРА, не пълното id
    ```
    → 0 errors задължително.
+
+   За PR, който пипа раздели или инструкции, пусни и двете правила за преводи —
+   те са единственият автоматичен начин да се хване липсващ език:
+   ```bash
+   npm run content:lint -- --rule section-translations
+   npm run content:lint -- --rule instruction-key-exists
+   ```
 
 5. **`npm run build` минава локално.**
 
@@ -60,6 +67,41 @@ gh pr create --base master --head <name>-merge
 ```
 
 **Никога не push-вай към `origin/<чужд-branch>`.** Те ще rebase-ват сами върху новия master.
+
+## Оперативни капани при преглед (губят часове)
+
+Тези два се появяват точно в стъпки 5–6 по-горе, защото там се прави build и
+браузър проверка:
+
+- **Не пускай `npm run build` докато `next dev` работи.** Споделената `.next`
+  папка се чупи → `ChunkLoadError` / страница без CSS. Лек: спри dev,
+  `Remove-Item -Recurse -Force .next`, рестарт. Не е симптом за проблем в кода.
+- **`next dev` оставя осиротяло дете, което държи порт 3010** и преживява
+  `Stop-Process` на родителя. Симптом: `EADDRINUSE`, или по-подло — localhost
+  сервира стара версия **от друг клон** и PR-ът изглежда счупен. `Get-Process node`
+  може да не го покаже:
+  ```
+  Get-NetTCPConnection -LocalPort 3010 | Select-Object State, OwningProcess
+  Stop-Process -Id <PID> -Force
+  ```
+  **Винаги проверявай `git branch --show-current`, преди да гледаш localhost.**
+
+Пълният списък е в [level-finalize.mdc](mdc:.cursor/rules/level-finalize.mdc).
+
+## Финализиране на ниво — моя работа, не тяхна
+
+Когато ниво е съдържателно готово, то получава довършителна обработка, която
+авторите не правят: предварителни преводи, раздели (`sectionStart`),
+празненства при завършване. Целият workflow, командите и гейтовете са в
+[level-finalize.mdc](mdc:.cursor/rules/level-finalize.mdc). Референтното
+изпълнение е A2 (`docs/PLAN-a2-finalize.md`).
+
+Редът спрямо автора има значение: **първо мърджвам съдържанието му**, после
+финализирам на `philip` в отделен PR, и накрая му казвам да се ре-синкне —
+иначе следващите му корекции ще гърмят в конфликт във всеки `exercises.ts`.
+
+**Състояние по нива:** A1 ✅, A2 ✅, B1 — чака Алекс да завърши уроците,
+B2 — не е започнато.
 
 ## Споделени промени — рядко, защото архитектурата ги избягва
 
