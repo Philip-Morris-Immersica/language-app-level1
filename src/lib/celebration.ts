@@ -30,6 +30,18 @@ export const CELEBRATION_ENABLED_LESSONS = new Set<string>([
   'lesson-09',
   'lesson-10',
   'lesson-11',
+  // A2 — all 11 lessons now have sectionStart (Фаза 3 pilot + Фаза 4 parallel subagents).
+  'a2-lesson-00',
+  'a2-lesson-01',
+  'a2-lesson-02',
+  'a2-lesson-03',
+  'a2-lesson-04',
+  'a2-lesson-05',
+  'a2-lesson-06',
+  'a2-lesson-07',
+  'a2-lesson-08',
+  'a2-lesson-09',
+  'a2-lesson-10',
 ]);
 
 /**
