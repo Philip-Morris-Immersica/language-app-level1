@@ -71,7 +71,8 @@ export const exercises: Exercise[] = [
           { text: '– Ти винаги мислиш за работа! Нямаш свободно време. Не се забавляваш, а си на 25 години!', voiceGender: 'male' },
           { text: '– Не е вярно, имам хоби — много обичам да рисувам и да чета.', voiceGender: 'female' },
           { text: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс. Курсът е безплатен. Искаш ли да дойдеш с мен?', voiceGender: 'male',
-            ttsText: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс. Курсът е безпла́тен. Искаш ли да дойдеш с мен?' },
+            // No combining accent: it made Gemini skip безплатен and read курсът as "cursor".
+            ttsText: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс, курсът е безплатен. Искаш ли да дойдеш с мен?' },
           { text: '– Да, разбира се. Миналата година ходих на курс. Беше много скъп. Дадох много пари. Много ти благодаря за поканата.', voiceGender: 'female' },
           { text: '– Няма защо, до скоро.', voiceGender: 'male' },
         ],
@@ -96,7 +97,9 @@ export const exercises: Exercise[] = [
           { text: '– Здравей, Симо! Как беше почивката? Къде беше?', voiceGender: 'female' },
           { text: '– Бях в Созопол. Беше страхотно! Морето, хората, храната — всичко беше прекрасно. Разходих се, плувах, танцувах, спортувах. Как я прекара?', voiceGender: 'male' },
           { text: '– Останах вкъщи. Не отидох никъде. Четох за изпити.', voiceGender: 'female' },
-          { text: '– Къде са Пламен и Ели?', voiceGender: 'male' },
+          { text: '– Къде са Пламен и Ели?', voiceGender: 'male',
+            // Gemini Pro drops л in „Ели" (reads „Еи"); hyphen keeps both syllables.
+            ttsText: '– Къде са Пламен и Е-ли?' },
           { text: '– На екскурзия в Испания. Заминаха вчера. Ще се върнат след две седмици.', voiceGender: 'female' },
         ],
       },
@@ -274,12 +277,12 @@ export const exercises: Exercise[] = [
     order: 8,
     points: 7,
     questions: [
-      { words: ['плуваха', 'Тази', 'в', 'морето', 'сутрин', 'те', '/'],           correctSentence: 'Тази сутрин те плуваха в морето.', alternateCorrectSentences: ['Те плуваха в морето тази сутрин.'] },
-      { words: ['баскетбол', 'Миналата', 'играхме', 'неделя', '/'],                correctSentence: 'Миналата неделя играхме баскетбол.', alternateCorrectSentences: ['Играхме баскетбол миналата неделя.'] },
-      { words: ['зимата', 'ски', 'Те', 'през', 'караха', '/'],                     correctSentence: 'Те караха ски през зимата.', alternateCorrectSentences: ['През зимата те караха ски.'] },
-      { words: ['интересен', 'сряда', 'В', 'гледах', 'филм', 'приятели', 'с', '/'], correctSentence: 'В сряда гледах интересен филм с приятели.', alternateCorrectSentences: ['Гледах интересен филм с приятели в сряда.'] },
-      { words: ['на', 'китара', 'свириха', 'Снощи', 'те', '/'],                    correctSentence: 'Снощи те свириха на китара.', alternateCorrectSentences: ['Те свириха на китара снощи.'] },
-      { words: ['снимки', 'Те', 'правиха', 'много', '/'],                          correctSentence: 'Те правиха много снимки.', alternateCorrectSentences: ['Много снимки те правиха.'] },
+      { words: ['плуваха', 'Тази', 'в', 'морето', 'сутрин', 'те', '.'],           correctSentence: 'Тази сутрин те плуваха в морето .', alternateCorrectSentences: ['Те плуваха в морето тази сутрин .'] },
+      { words: ['баскетбол', 'Миналата', 'играхме', 'неделя', '.'],                correctSentence: 'Миналата неделя играхме баскетбол .', alternateCorrectSentences: ['Играхме баскетбол миналата неделя .'] },
+      { words: ['зимата', 'ски', 'Те', 'през', 'караха', '.'],                     correctSentence: 'Те караха ски през зимата .', alternateCorrectSentences: ['През зимата те караха ски .'] },
+      { words: ['интересен', 'сряда', 'В', 'гледах', 'филм', 'приятели', 'с', '.'], correctSentence: 'В сряда гледах интересен филм с приятели .', alternateCorrectSentences: ['Гледах интересен филм с приятели в сряда .'] },
+      { words: ['на', 'китара', 'свириха', 'Снощи', 'те', '.'],                    correctSentence: 'Снощи те свириха на китара .', alternateCorrectSentences: ['Те свириха на китара снощи .'] },
+      { words: ['снимки', 'Те', 'правиха', 'много', '.'],                          correctSentence: 'Те правиха много снимки .', alternateCorrectSentences: ['Много снимки те правиха .'] },
       { words: ['ли', 'колело', 'Кара', 'през', 'уикенда', '?'],                  correctSentence: 'Кара ли колело през уикенда ?', alternateCorrectSentences: ['Кара ли колело през уикенда?'] },
     ],
   } as WordOrderExercise,
@@ -476,7 +479,7 @@ export const exercises: Exercise[] = [
       { text: 'Тя не _____ за купона в събота. (зная)',   blanks: [1], correctAnswers: ['знаеше'], options: ['знаех', 'знаеше', 'знаеха'],    acceptableAnswers: [['знаеше']] },
       { text: 'Те _____ цветя и картичка за учителката. (взема)', blanks: [1], correctAnswers: ['взеха'], options: ['взех', 'взе', 'взеха'], acceptableAnswers: [['взеха']] },
       { text: 'Детето _____ новите маратонки. (обуя)',     blanks: [1], correctAnswers: ['обу'],    options: ['обух', 'обу', 'обуха'],           acceptableAnswers: [['обу']] },
-      { text: 'Ти _____, преди да влезеш в стаята. (събуя се)', blanks: [1], correctAnswers: ['събу се'], options: ['събух се', 'събу се', 'събуха се'], acceptableAnswers: [['събу се', 'се събу']] },
+      { text: 'Ти _____ ли се, преди да влезеш в стаята? (събуя се)', blanks: [1], correctAnswers: ['събу'], options: ['събух', 'събу', 'събуха'], acceptableAnswers: [['събу']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -588,7 +591,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'аз',        cells: ['-ах',    '-ях',    '-их',   '-ох',   '-ех',   '-ух'],   ttsText: 'аз. ах. ях. их. ох. ех. ух.',         ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'ти',        cells: ['-а',     '-я',     '-и',    '-е',    '-е',    '-у'],    ttsText: 'ти. а. я. и. е. е. у.',               ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'той/тя/то', cells: ['-а',     '-я',     '-и',    '-е',    '-е',    '-у'],    ttsText: 'той, тя, то. а. я. и. е. е. у.',      ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'ние',       cells: ['-ахме',  '-яхме',  '-ихме', '-охме', '-ехме', '-ухме'], ttsText: 'ние. ахме. яхме. ихме. охме. ехме. ухме.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'ние',       cells: ['-ахме',  '-яхме',  '-ихме', '-охме', '-ехме', '-ухме'], ttsText: 'ние. ахме. яхме. ихме. охме. ехме. ухме.', ttsPrompt: 'Read aloud clearly and smoothly in standard Bulgarian with correct Bulgarian stress. Say each ending exactly once, with a short pause between them. Pronounce „яхме" starting with я (ya), as in стояхме. Pronounce „ихме" starting with и. Do not add extra words and do not repeat any ending.' },
       { pronoun: 'Вие',       cells: ['-ахте',  '-яхте',  '-ихте', '-охте', '-ехте', '-ухте'], ttsText: 'Вие. ахте. яхте. ихте. охте. ехте. ухте.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'те',        cells: ['-аха',   '-яха',   '-иха',  '-оха',  '-еха',  '-уха'],  ttsText: 'те. аха. яха. иха. оха. еха. уха.',   ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
     ],
@@ -598,7 +601,8 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'АХ група. Пример: вечерях, вечеря, вечеря, вечеряхме, вечеряхте, вечеряха.',
-      'ОХ група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
+      // Gemini reads uppercase „ОХ" as English OH (silent H → only „О").
+      'о-х група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
     ],
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
@@ -619,7 +623,8 @@ export const exercises: Exercise[] = [
       'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
     ],
     ttsParagraphs: [
-      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
+      // Past tense я́де (stress on Я), not present яде́.
+      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Я́де пица. Пи червено вино.',
     ],
     paragraphVoiceGenders: ['female'],
   } as ReadingTextExercise,
