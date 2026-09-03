@@ -29,7 +29,7 @@
 - [x] Фаза 3.5 — Philip гледа пилота → поиска по-малко и по-големи раздели, 6 → 4 (комит `33f8da2`)
 - [x] Фаза 4 — раздели, уроци 00, 02–10 · **работата е в комит `0010c46`, чието съобщение я скрива** (виж бележката по-долу)
 - [x] Фаза 5 — празненства · комит `e7f2d68`, 11 A2 id-та в `CELEBRATION_ENABLED_LESSONS`
-- [ ] Фаза 6 — гейтове + финален PR · **остава**; 7 комита са неpush-нати
+- [x] Фаза 6 — гейтове + финален PR · 2026-09-03 → [PR #16](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/16) отворен (base `master`, head `philip`)
 - [ ] Фаза 7 — Philip тества Vercel preview и мърджва
 - [ ] Нина се ре-синква **втори път** (преди нови корекции по A2)
 
@@ -303,10 +303,59 @@ npm run content:lint -- --lesson 01
 по D9. Понеже всичките 11 урока вече имат `sectionStart`, планът на
 `buildCelebrationPlan()` няма да е празен за нито един от тях.
 
-### Фаза 6 — гейтове + финален PR
+### Фаза 6 — гейтове + финален PR · 2026-09-03, Чат 3
 
-_(агентът от Чат 3 попълва тук: lint, build, двете проверки от Гаранцията,
-линк на PR-а)_
+**Капан, хванат преди build:** `Get-NetTCPConnection -LocalPort 3010` показа
+активен `Listen` на PID `77764` — точно осиротелият `next dev` от
+„Операционни капани" в плана, въпреки че `Get-Process node` не показваше нищо
+и планираният dev процес отдавна е бил рестартиран/затворен в чужд чат.
+`Stop-Process -Id 77764 -Force` + `Remove-Item -Recurse -Force .next` преди
+`npm run build`, за да не се чупи споделената `.next` папка.
+
+**Гейт 1 — `npm run content:lint`:**
+```
+Total: 0 errors, 32 warnings
+```
+Разбивка на 32-те (проверена **и на база `e55ea6a`, преди всяка Фаза-4
+промяна** — идентични, значит Фаза 4 не е добавила нито едно ново warning):
+22 в A1 (`lesson-01` ×2, `lesson-02` ×8, `lesson-03` ×2, `lesson-05` ×7,
+`lesson-06` ×1, `lesson-11` ×2) + 10 в A2 (`a2-lesson-04` ×2, `a2-lesson-06` ×1,
+`a2-lesson-07` ×6, `a2-lesson-10` ×1). **Отклонение от плана:** планът твърдеше
+„32 заварени A1 warnings" (всичките в A1) — на практика 10 от 32-те са
+пре-съществуващи A2 warnings (`true-false-mix`, `example-points-mismatch`,
+`instruction-period`), несвързани със `sectionStart` (потвърдено чрез
+`git stash` + повторен lint на база `e55ea6a`: същите 10 A2 warnings, същите
+ID-та, преди Фаза 4 да пипне файловете). Планът е леко неточен по състав, не по
+брой — коригирано тук вместо в самия план, за да не се губи историята му.
+
+**Гейт 2 — `npm run build`** (dev сървър спрян, `.next` изчистен преди старт):
+```
+✓ Compiled successfully in 53s
+✓ Generating static pages (53/53)
+exit_code: 0, elapsed ~561s
+```
+
+**Гаранция №1** — `git diff --numstat e55ea6a -- <lesson>/exercises.ts` за
+всичките 10 Фаза-4 урока: **0 изтрити** навсякъде (таблицата е в записа за
+Фаза 4 по-горе, потвърдена повторно на база `e55ea6a`).
+
+**Гаранция №2** — `git diff --stat origin/master -- . ":!src/content/a2/lessons/*/exercises.ts" ":!src/lib/celebration.ts" ":!src/i18n/generated/translations.json" ":!scripts/pretranslate.ts" ":!docs/PLAN-a2-finalize.md" ":!docs/HANDOFF-a2-finalize.md"`
+→ показва **само** `docs/CHECK-a2-merge-pr15.md` (131 вмъкнати реда). Проверих
+историята: `git log -- docs/CHECK-a2-merge-pr15.md` → комит `018193e`, направен
+в **Фаза 0/1**, преди тази сесия, извън обхвата на изключенията в плана просто
+защото файлът не съществуваше, когато е писан изключващият списък. Само
+документация (browser QA checklist), нула код/съдържание — безобидно
+разминаване с буквата на гейта, не съдържателен пропуск.
+
+**PR:** [#16](https://github.com/Philip-Morris-Immersica/language-app-level1/pull/16)
+— „A2 finalize: sectionStart on all 11 lessons + completion celebrations",
+base `master` ← head `philip`. Описанието съдържа: списък раздели по урок,
+numstat таблица за всичките 11 урока (10 от Фаза 4 + `a2-lesson-01` копирано от
+Фаза 3 без прекалкулация), и гейт-таблицата по-горе. **PR-ът НЕ е мърднат** —
+само отворен, съгласно твърдите ограничения.
+
+**Push:** `git push origin philip` → `d637abe..8c4c781`. Нищо към
+`origin/nina`, нищо към `master` директно.
 
 ### Фаза 7 — Philip тества и мърджва
 
