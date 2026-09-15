@@ -98,6 +98,42 @@ function CompactImageStrip({ images, columns = 3 }: { images: ReadingImage[]; co
   );
 }
 
+/** Two photos as a centered pair — same layout as A2 (avoids a stretched full-width row). */
+function CenteredTwoImages({
+  images,
+  equalHeight,
+}: {
+  images: ReadingImage[];
+  equalHeight?: boolean;
+}) {
+  return (
+    <div className="grid gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto mb-6">
+      {images.map((img, i) => (
+        <div key={i} className="flex flex-col items-center">
+          {equalHeight ? (
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-sm">
+              <Image
+                src={img.imageUrl}
+                alt={img.label || ''}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 45vw, 320px"
+              />
+            </div>
+          ) : (
+            <img
+              src={img.imageUrl}
+              alt={img.label || ''}
+              className="w-full rounded-lg shadow-sm object-contain max-h-72"
+              loading="lazy"
+            />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /** Prefer ttsParagraphs for spoken audio; keep display paragraphs for the UI. */
 function speakTextFor(ex: ReadingExercise, index: number): string {
   const tts = ex.ttsParagraphs;
@@ -181,12 +217,22 @@ function SharedAdapter({
   const scoreIfCorrect = exercise.checklist?.items.length ?? exercise.points ?? 1;
   const compact = !!exercise.compactImages && (exercise.images?.length ?? 0) > 0;
   const centerTitle = !!exercise.centerTitle;
+  const centeredPair =
+    !compact &&
+    !exercise.imageFlashcards &&
+    (exercise.images?.length ?? 0) === 2;
   return (
     <div className="space-y-3">
       {compact && (
         <CompactImageStrip
           images={exercise.images!}
           columns={exercise.imageColumns ?? exercise.images!.length}
+        />
+      )}
+      {centeredPair && (
+        <CenteredTwoImages
+          images={exercise.images!}
+          equalHeight={exercise.imageEqualHeight}
         />
       )}
       {centerTitle && exercise.textTitle ? (
@@ -199,8 +245,8 @@ function SharedAdapter({
         songUrl={exercise.songUrl}
         disableParagraphAudio={exercise.disableParagraphAudio}
         textTitle={centerTitle ? undefined : exercise.textTitle}
-        images={compact ? undefined : exercise.images}
-        imageFlashcards={compact ? false : exercise.imageFlashcards}
+        images={compact || centeredPair ? undefined : exercise.images}
+        imageFlashcards={compact || centeredPair ? false : exercise.imageFlashcards}
         imageColumns={exercise.imageColumns}
         imageEqualHeight={exercise.imageEqualHeight}
         paragraphs={exercise.paragraphs}
@@ -362,7 +408,13 @@ function ReadingTextWithTaskTables({
       )}
 
       {images && images.length > 0 && (
-        <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid gap-4 md:gap-6 mb-6 ${
+          images.length === 1
+            ? 'grid-cols-1 max-w-md mx-auto'
+            : images.length === 2
+              ? 'grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+              : 'grid-cols-2 md:grid-cols-3'
+        }`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
               <div className="relative w-full aspect-[4/3] max-h-72">

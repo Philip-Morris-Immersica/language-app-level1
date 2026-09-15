@@ -94,7 +94,7 @@ export const exercises: Exercise[] = [
         options: [
           'Искър, Вит, Лом',
           'Дунав, Марица, Струма, Тунджа',
-          'Камчия, Янтра, Осъм',
+          'Места, Вит, Лом',
           'Арда, Камчия, Велека',
         ],
         correctIndex: 1,
@@ -130,7 +130,7 @@ export const exercises: Exercise[] = [
           '125 вида – основно сребро и уран',
           '200 вида – въглища, мед, олово и др.',
           '125 вида – въглища, мед, олово и др.',
-          '125 вида – злато и желязо',
+          '125 вида – нефт, газ и диаманти',
         ],
         correctIndex: 2,
       },
@@ -183,7 +183,7 @@ export const exercises: Exercise[] = [
         question: 'Какво е управлението на страната?',
         options: [
           'Монархия',
-          'Република с президентска власт',
+          'Федерална република',
           'Парламентарна република',
           'Диктатура',
         ],
@@ -344,6 +344,11 @@ export const exercises: Exercise[] = [
     order: 4,
     textTitle: 'БЪЛГАРИЯ – ГРАНИЦИ И ВОДНО БОГАТСТВО',
     showDictionary: false,
+    imageEqualHeight: true,
+    images: [
+      { imageUrl: '/assets/b1-lesson-11/03-upr-03-granici-voda/01-cherno-more-plazh.jpg', label: '' },
+      { imageUrl: '/assets/b1-lesson-11/03-upr-03-granici-voda/02-reka-dunav.jpg', label: '' },
+    ],
     ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "Северна Македония" — pronounce clearly Ма-ке-ДО-ни-я, NOT Македания; (2) "а на изток е Черно море" — the copula "е" before "Черно" must flow continuously without a break: "е Черно море" as one phrase; (3) "три страни" — final syllable ends clearly in И: стра-НИ, not "странйе"; (4) the conjunction "и" between list items (e.g. "животни и растения") should be brief, not elongated; (5) "пиене" — two syllables ПИЕ-НЕ; the final syllable НЕ ends on the vowel Е with absolutely NO Y-glide or J-sound after it: say пие-НЕ, NOT "пиенйе" or "пиенье"; the word ends cleanly on the Е sound; (6) "Много от тях" — pronounce "тях" distinctly and clearly; (7) "курорти" — pronounce clearly ку-рор-ТИ, NOT "курофти"; (8) "Сапарева" — stress on Е in the third syllable: са-па-РЕ-ва, NOT "са-ПА-ре-ва"; "Велинград" — stress on Е in the first syllable: ВЕ-лин-град; (9) "Девин" — stress on Е in first syllable: ДЕ-вин, NOT "де-ВИН"; (10) "Вършец" — вър-ШЕЦ; the final sound is Ц (a sharp ts-sound as in "bits"), clearly and fully articulated at the very end: say вър-шеЦ, NOT "Вършет", NOT "Вършеш", NOT "Вършес" — the Ц must be audible; (11) "умереноконтинентален" — the ending is -та-ЛЕН (т-а-л-е-н), NOT "умереноконтинентарен" — there is NO Р before the Е in the ending; (12) the mineral water paragraph (starting "България е много богата…") — read at a moderate pace, do NOT rush; (13) preposition "в" — say "в" (NOT "във") before "Югоизточна": "в Югоизточна Европа", NOT "Във Югоизточна"; also "в езерото", NOT "във езерото"; (14) "дъждове" — stress on Е in the final syllable: дъждо-ВЕ, NOT "ДЪЖ-дове"; (15) "лятото" — starts with Л clearly: ЛЯ-то-то, NOT "нятото" or "ятото"; (16) "прави" — stress on И: пра-ВИ, NOT "ПРА-ви"; (17) the Черно море paragraph — after "с хубав пясък" allow a natural 1-second trailing pause before continuing. Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'България се намира в Югоизточна Европа, на Балканския полуостров. Територията на страната е 111 000 квадратни километра. На запад от България са Сърбия и Северна Македония, на юг са Турция и Гърция, на север е Румъния, а на изток е Черно море.',
@@ -546,6 +551,9 @@ export const exercises: Exercise[] = [
     order: 7,
     textTitle: 'ЛЕГЕНДА ЗА ТЪМНОТО ЕЗЕРО',
     showDictionary: false,
+    images: [
+      { imageUrl: '/assets/b1-lesson-11/05-upr-05-tamno-ezero/01-tamno-ezero.jpg', label: '' },
+    ],
     ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian. Pronunciation notes: (1) "най-хубавото" — stress НАЙ strongly: НАЙ-хубавото, NOT "май-хубавото"; (2) "слънцето" — pronounce all syllables clearly: СЛЪН-це-то, with clear initial СЛ cluster; (3) "небето" — НЕ-бе-то, clear initial Н; (4) "нея" — three distinct sounds Н-Е-Я, NO palatalization (iotation): say НЕ-Я, NOT "нйея" or "нjея"; (5) "да стане" — stress on А: да СТА-не, the final vowel is Е (not А): СТА-НЕ, NOT "да стана"; (6) "попитала" — по-ПИ-та-ла, stress on the second syllable ПИ; the И is a clear И vowel: по-ПИ-та-ла, NOT "попутала" or "попатала" — the vowel in the second syllable is И, not У. Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'Преди много години най-малкото езеро в Пирин сутрин било синьо като небето, а на обед – златно като слънцето.',
@@ -823,6 +831,13 @@ export const exercises: Exercise[] = [
     order: 12,
     textTitle: 'ПЛАНИНИТЕ НА БЪЛГАРИЯ',
     showDictionary: false,
+    compactImages: true,
+    imageColumns: 3,
+    images: [
+      { imageUrl: '/assets/b1-lesson-11/08-upr-08-planini/01-rilski-ezera.jpg', label: '' },
+      { imageUrl: '/assets/b1-lesson-11/08-upr-08-planini/02-rozova-dolina.jpg', label: '' },
+      { imageUrl: '/assets/b1-lesson-11/08-upr-08-planini/03-vitosha.jpg', label: '' },
+    ],
     ttsPrompt: 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. PACING: Read at a SLOW, MEASURED pace throughout — do NOT rush. In particular: the first paragraph (about 39 mountains) must be read slowly and clearly; the Витоша paragraph (starting "Витоша е четвъртата по височина…") must also be read at a relaxed, unhurried pace. Pronunciation notes: (1) "езера" in ALL contexts — stress on last syllable: е-зе-РА; say "Рилски езерА" with strong stress on the final А; (2) "Рилски" — РИЛ-ски; (3) "Боровец" — БО-ро-вец (NOT БО-ру-вец), stress on first syllable; (4) "курорт Банско" — pronounce "курорт" clearly: ку-РОРТ, NOT "курост"; (5) "Розовата долина" — РО-зо-ва-та, NOT "ровованата"; (6) "цял свят" — ЦЯЛ СВЯТ (whole world): "свят" is С-В-Я-Т, the final sound is Т: say "свят", NOT "свяк" or "свяс"; (7) "Родопите" — Ро-ДО-пи-те, stress on ДО; "планина" — stress on final syllable: пла-ни-НА (the second А is stressed), NOT "план-ина" or "пла-НИ-на"; (8) "Пампорово" — Пам-ПО-ро-во, stress on first О (second syllable); (9) "природна забележителност" — при-РОД-на за-бе-ле-ЖИ-тел-ност; (10) "Балкан" — БАЛ-кан; (11) speak the initial "В" in "В планините" and "В последните" clearly and distinctly; (12) "построени" — stress on Е: по-стро-Е-ни, NOT "ПОСТ-роени"; (13) "известни" and "известната" — pronounce clearly: из-ВЕС-тни, starting with ИЗ-, NOT "изместни" or "изместната"; (14) "успоредно на Стара планинА" — stress the second А in "планинА": Ста-ра пла-ни-НА; (15) "отглежда" — от-ГЛЕЖ-да with final А, NOT "отглежду". Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'България е планинска страна – има 39 планини, които покриват почти половината от територията на страната. Осем от тях са високи над 2000 метра.',
@@ -941,6 +956,9 @@ export const exercises: Exercise[] = [
     order: 15,
     textTitle: 'ЛЕГЕНДА ЗА РИЛА И ПИРИН',
     showDictionary: false,
+    images: [
+      { imageUrl: '/assets/b1-lesson-11/11-upr-11-rila-pirin/01-rila-pirin-reka.jpg', label: '' },
+    ],
     ttsPrompt: 'Read aloud in a warm storytelling tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Pronunciation notes: (1) "разделени" — раз-де-ЛЕ-ни, each syllable distinct; (2) "в небето" — use preposition "в" (NOT "във") before "небето": "в небето"; (3) "светла" is a feminine adjective — pronounce clearly "свет-ла" (NOT "свет-ло"); (4) the exclamation paragraph "Дано се разделите…" — read with strong emotional intensity, mother\'s outburst; (5) the phrase "Един ден те пак се сбили, тя не издържала и извикала" — read the full phrase including "и извикала" without cutting off; (6) CRITICAL: "МЕ-ста" (river name) — stress is ALWAYS on the FIRST syllable МЕ: say МЕ-ста; NEVER "мес-ТА" — the stress is on МЕ every single time this river name appears; (7) "Места — и Искър" — the conjunction "и" MUST be clearly audible: say "МЕ-ста — И — Искър" with "и" as a distinct word; (8) "мъж" — МЪЖ (м-ъ-ж), NOT "нъж"; (9) "семейство" — се-МЕЙ-ство, NOT "семерство"; (10) "ожени" — о-ЖЕ-ни: say о-ЖЕ-ни, NOT "ожеуи" or "ожеви"; (11) "гледа" — ГЛЕДА (г-л-е-д-а), starts with ГЛ cluster, NOT "бледа". Do not use any Russian, Arabic, English or other foreign accent.',
     paragraphs: [
       'Преди много години в едно село живяло хубаво и работливо момиче на име Рила. То се влюбило в млад мъж от далечно село на име Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
@@ -951,13 +969,13 @@ export const exercises: Exercise[] = [
     ttsParagraphs: [
       'Преди много години в едно село живяло хубаво и работливо момиче на иme Рила. То се влюбило в млад мъж от далечно село на иme Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
       'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и МЕста. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкЪщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала. Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
-      'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и МЕста – в буйни реки. МЕста била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо минал през Рила планина, после през СофИЙското поле и Балкана и накрая стигнал до ДунаВа.',
+      'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и МЕста – в буйни реки. МЕста била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо МИнал през Рила планина, после през СофИЙското поле и Балкана и накрая стигнал до ДунаВа.',
       'Оттогава МЕста — и Искър — са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към МЕста, е светла, защото той се радва на дъщеря си.',
     ],
     ttsParagraphPrompts: [
       undefined,
       'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". The final word of the paragraph is "чуваме" — say чу-ва-МЕ, the last syllable МЕ must be fully audible — never swallow the final Е. Read once, fluently.',
-      'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". Every time you see МЕста, stress the МЕ. "ДунаВа" — the river name ending in -В-А: the consonant В must be clearly audible: say Ду-НА-ва with a distinct В between the two А sounds — NEVER drop the В. Read once, fluently.',
+      'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". Every time you see МЕста, stress the МЕ. CRITICAL: "МИнал" is the verb минал (passed) — two syllables МИ-нал; stress on the FIRST syllable И: say МИ-нал, NEVER "ми-НАЛ". The consonant in the middle is Н (n), never Л: NEVER "милал". "ДунаВа" — the river name ending in -В-А: the consonant В must be clearly audible: say Ду-НА-ва with a distinct В between the two А sounds — NEVER drop the В. Read once, fluently.',
       'Warm natural Bulgarian storytelling voice, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "МЕста" is a river name — stress on the FIRST syllable МЕ: say МЕ-ста, NEVER "мес-ТА". PACE: Read at a brisk, natural storytelling pace — do NOT slow down or drag. Keep a steady conversational tempo throughout. Read once, fluently.',
     ],
   } as unknown as ReadingTextExercise,
@@ -978,7 +996,7 @@ export const exercises: Exercise[] = [
     disableAudio: true,
     images: [
       {
-        imageUrl: '/assets/b1-lesson-11/bulgaria-map-relief.svg',
+        imageUrl: '/assets/b1-lesson-11/bulgaria-map-relief.jpg',
         label: '',
       },
     ],
