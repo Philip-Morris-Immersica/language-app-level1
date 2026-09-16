@@ -38,7 +38,7 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
   'b1-lesson-10': () => import('./lessons/b1-lesson-10'),
   'b1-lesson-11': () => import('./lessons/b1-lesson-11'),
-  // 'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
+  'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
   // 'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
   // 'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
   // 'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
@@ -117,6 +117,7 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-09': 31,
   'b1-lesson-10': 8,
   'b1-lesson-11': 5,
-  // 12–15 are being rewritten from the textbook block on pp. 81–97; each
+  'b1-lesson-12': 11,
+  // 13–15 are being rewritten from the textbook block on pp. 85–97; each
   // count is filled in together with the matching loader above.
 };
