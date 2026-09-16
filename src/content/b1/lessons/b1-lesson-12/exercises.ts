@@ -198,10 +198,10 @@ export const exercises: Exercise[] = [
     id: 'b1-l12-ex-02',
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 2',
-    subtitle: 'Въпроси 1–15 към таблицата „История в дати"',
+    subtitle: 'Въпроси към таблицата „История в дати"',
     instruction: 'Прочетете въпросите и изберете верния отговор.',
     order: 2,
-    points: 15,
+    points: 29,
     questions: [
       {
         question: 'Къде е открито най-старото обработено злато в света и къде се намира сега?',
@@ -353,21 +353,7 @@ export const exercises: Exercise[] = [
         ],
         correctIndex: 1,
       },
-    ],
-  } as MultipleChoiceExercise,
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 82 — Упр. 3 (order 3): MULTIPLE CHOICE — въпроси 16–29 към таблицата
-  // ═══════════════════════════════════════════════════════════════════════════
-  {
-    id: 'b1-l12-ex-03',
-    type: 'multiple_choice',
-    title: 'УПРАЖНЕНИЕ 3',
-    subtitle: 'Въпроси 16–29 към таблицата „История в дати"',
-    instruction: 'Прочетете въпросите и изберете верния отговор.',
-    order: 3,
-    points: 14,
-    questions: [
+      // ── въпроси 16 – 29 ──────────────────────────────────────────────────
       {
         question: 'Коя е столицата на България по време на Втората българска държава?',
         options: [
@@ -608,7 +594,7 @@ export const exercises: Exercise[] = [
         label: 'животновъдство',
         ttsLabel: 'животновъдство',
         ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. Say this word once clearly, with stress on the syllable ВЪД: животновъдство. Do not use any foreign accent.',
+        ttsPrompt: 'Read aloud in clear standard Bulgarian. Say this word once only, stress on ВЪД. Do not use any foreign accent.',
         translations: {
           en: 'animal husbandry, livestock farming',
           fr: 'élevage',
@@ -1395,17 +1381,11 @@ export const exercises: Exercise[] = [
   {
     id: 'b1-l12-ex-16',
     type: 'reading_text',
-    title: '19. ТЕКСТ',
+    title: 'ТЕКСТ',
     instruction: 'Прочетете текстовете.',
     order: 19,
     showDictionary: false,
     ttsPrompt: B1_TTS_PROMPT,
-    images: [
-      {
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/51/51-manasses-chronicle.jpg',
-        label: 'Хан Крум на пир след победата над Никифор (Манасиева летопис, XIV в.)',
-      },
-    ],
     paragraphs: [
       '## ХАН АСПАРУХ',
       'Аспарух е третият от петимата синове на хан Кубрат от прабългарския род Дуло. Тотем на рода Дуло е вълкът. Аспарух е роден около 640 г. и умира през 701 г. в битка с хазарите. Хан Аспарух основава Първата българска държава през 681 г., след като сключва договор със славяните и заедно побеждават византийската армия. България по времето на хан Аспарух заема територии на север и на юг от река Дунав, но прабългарите и славяните все още живеят отделно.',
