@@ -267,7 +267,7 @@ function SingleTable({
                     className={`py-2.5 px-2 md:px-3 text-sm md:text-base text-gray-800 ${row.noAudio ? 'italic text-[#1F5741] font-semibold' : boldColumns.includes(cIdx) ? 'font-bold text-[#1F5741]' : 'font-medium'}`}
                   >
                     <div className={`flex items-center ${cellJustify} gap-1`}>
-                      <span>{renderBoldText(cell)}</span>
+                      <span style={{ whiteSpace: 'pre-wrap' }}>{renderBoldText(cell)}</span>
                       {/* Speaker sits in the first column so the play affordance is next to
                           the row's opening word instead of trailing the last column. */}
                       {!showPronounCol && !rowSilent && cIdx === 0 && (

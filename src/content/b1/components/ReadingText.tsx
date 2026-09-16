@@ -54,6 +54,8 @@ type ReadingExercise = {
   /** Center the textTitle above the shared reading body. */
   centerTitle?: boolean;
   paragraphs: string[];
+  /** Subtitle shown below textTitle (inside the reading area, no audio). */
+  textSubtitle?: string;
   /** TTS-only text per paragraph (e.g. without list numbers). Used as browser-TTS fallback. */
   ttsParagraphs?: string[];
   paragraphTranslations?: Record<string, string>[];
@@ -402,9 +404,14 @@ function ReadingTextWithTaskTables({
       </div>
 
       {textTitle && (
-        <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-4 ${exercise.centerTitle ? 'text-center' : ''}`}>
+        <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-1 ${exercise.centerTitle ? 'text-center' : ''}`}>
           {textTitle}
         </h2>
+      )}
+      {exercise.textSubtitle && (
+        <p className="text-sm md:text-base text-gray-500 italic mb-4">
+          {exercise.textSubtitle}
+        </p>
       )}
 
       {images && images.length > 0 && (
