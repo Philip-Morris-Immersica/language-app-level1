@@ -417,13 +417,14 @@ function ReadingTextWithTaskTables({
         }`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
-              <div className="relative w-full aspect-[4/3] max-h-72">
-                <Image
+              <div className="w-full aspect-[4/3] max-h-72 overflow-hidden">
+                {/* Use plain <img> so external URLs (e.g. Wikimedia) are not
+                    blocked by next/image's remotePatterns restriction. */}
+                <img
                   src={img.imageUrl}
                   alt={img.label}
-                  fill
-                  className="object-contain rounded-lg"
-                  sizes="(max-width: 768px) 90vw, 400px"
+                  className="w-full h-full object-contain rounded-lg"
+                  loading="lazy"
                 />
               </div>
               {img.label && (
@@ -440,6 +441,17 @@ function ReadingTextWithTaskTables({
 
       <div className="space-y-4">
         {paragraphs.map((paragraph, index) => {
+          // Paragraphs starting with "## " are section headings — no audio button, no click
+          if (paragraph.startsWith('## ')) {
+            return (
+              <h3
+                key={index}
+                className="text-base md:text-lg font-bold text-[#1F5741] uppercase tracking-wide mt-6 mb-0 border-b border-[#DAF6EB] pb-1"
+              >
+                {paragraph.slice(3)}
+              </h3>
+            );
+          }
           const taskList = parseTaskList(paragraph);
           return (
             <div
