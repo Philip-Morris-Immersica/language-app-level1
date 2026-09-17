@@ -9,6 +9,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
+import { AudioIcon } from '@/components/AudioIcon';
 
 interface IllustratedCardsProps {
   exercise: IllustratedCardsExercise;
@@ -95,8 +96,8 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
         }`}
       >
         {!exercise.disableAudio && (
-          <div className="absolute top-1 right-1 text-gray-400">
-            <Volume2 className="w-3 h-3" />
+          <div className="absolute top-1 right-1">
+            <AudioIcon className="w-3 h-3" />
           </div>
         )}
         <div className="relative w-full h-[50px] sm:h-[64px] mb-1">
@@ -318,7 +319,7 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
                   : 'bg-white border-gray-200 hover:border-[#32C189]/40'
               }`}
             >
-              <Volume2 className="absolute top-2 right-2 w-3.5 h-3.5 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-3.5 h-3.5" />
               <p className="text-base md:text-lg font-semibold text-[#262626] text-center leading-tight">
                 {card.label}
               </p>
@@ -349,8 +350,8 @@ export function IllustratedCards({ exercise, onComplete, exerciseId }: Illustrat
               }`}
             >
               {/* Speaker icon */}
-              <div className="absolute top-2 right-2 text-gray-400">
-                <Volume2 className="w-4 h-4" />
+              <div className="absolute top-2 right-2">
+                <AudioIcon className="w-4 h-4" />
               </div>
 
               {/* Image */}

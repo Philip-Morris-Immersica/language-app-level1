@@ -1,4 +1,4 @@
-import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, FillInBlankExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise, ReadingTextExercise, TrueFalseExercise } from '@/content/types';
+import type { Exercise, IllustratedCardsExercise, MatchPairsExercise, ImageLabelingExercise, SyllableBlocksExercise, GrammarVisualExercise, WordSearchExercise, GrammarExamplesExercise, GrammarTableExercise, DialoguesExercise, DialogueBuilderExercise, DropdownMatchExercise, LetterChoiceExercise, FillWithImagesExercise, WorkbookFillBlankExercise, ReadingTextExercise, TrueFalseExercise } from '@/content/types';
 
 // ⚠️ IMPORTANT: Follow the exact order from Main-Book-Lesson-1.pdf (see LESSON_STRUCTURE.md)
 // The 'order' property must match the sequence in the textbook
@@ -10,6 +10,27 @@ export const exercises: Exercise[] = [
     type: 'image_labeling',
     instruction: 'Кликнете върху знамето, за да видите думата и чуете произношението.',
     order: 1,
+    sectionStart: {
+      title: 'Поздрави и националности',
+      subtitle: 'Знамена, поздрави и нови думи за запознанство',
+      titleI18n: {
+        en: 'Greetings and nationalities',
+        fr: 'Salutations et nationalités',
+        ar: 'التحيات والجنسيات',
+        fa: 'سلام‌ها و ملیت‌ها',
+        uk: 'Вітання та національності',
+        ru: 'Приветствия и национальности',
+      },
+      subtitleI18n: {
+        en: 'Flags, greetings and new words for getting acquainted',
+        fr: 'Drapeaux, salutations et nouveaux mots pour faire connaissance',
+        ar: 'الأعلام والتحيات وكلمات جديدة للتعارف',
+        fa: 'پرچم‌ها، سلام‌ها و کلمات جدید برای آشنایی',
+        uk: 'Прапори, вітання та нові слова для знайомства',
+        ru: 'Флаги, приветствия и новые слова для знакомства',
+      },
+      theme: 'vocabulary',
+    },
     points: 9,
     displayType: 'flags',
     images: [
@@ -122,68 +143,35 @@ export const exercises: Exercise[] = [
     ]
   } as SyllableBlocksExercise,
 
-  // ORDER 4: Exercise 5 - Write country name (Page 10, bottom) - Simple text input
-  {
-    id: 'l01-ex-05',
-    type: 'fill_in_blank',
-    instruction: 'Напишете името на Вашата страна.',
-    order: 4,
-    points: 1,
-    freeText: true,
-    sentences: [
-      { text: '_', blanks: [0], correctAnswers: [
-        'Афганистан', 'Албания', 'Алжир', 'Андора', 'Ангола', 'Антигуа и Барбуда',
-        'Аржентина', 'Армения', 'Австралия', 'Австрия', 'Азербайджан',
-        'Бахамите', 'Бахамски острови', 'Бахрейн', 'Бангладеш', 'Барбадос',
-        'Беларус', 'Белгия', 'Белиз', 'Бенин', 'Бутан', 'Боливия',
-        'Босна и Херцеговина', 'Ботсвана', 'Бразилия', 'Бруней', 'България',
-        'Буркина Фасо', 'Бурунди', 'Кабо Верде', 'Камбоджа', 'Камерун', 'Канада',
-        'Централноафриканска република', 'Чад', 'Чили', 'Китай', 'Колумбия',
-        'Коморски острови', 'Коморите', 'Конго', 'Коста Рика', 'Котдивоар',
-        'Кот д\'Ивоар', 'Хърватия', 'Куба', 'Кипър', 'Чехия', 'Чешка република',
-        'Дания', 'Джибути', 'Доминика', 'Доминиканска република', 'Еквадор',
-        'Египет', 'Ел Салвадор', 'Екваториална Гвинея', 'Еритрея', 'Естония',
-        'Есватини', 'Свазиленд', 'Етиопия', 'Фиджи', 'Финландия', 'Франция',
-        'Габон', 'Гамбия', 'Грузия', 'Германия', 'Гана', 'Гърция', 'Гренада',
-        'Гватемала', 'Гвинея', 'Гвинея-Бисау', 'Гайана', 'Хаити', 'Хондурас',
-        'Унгария', 'Исландия', 'Индия', 'Индонезия', 'Иран', 'Ирак', 'Ирландия',
-        'Израел', 'Италия', 'Ямайка', 'Япония', 'Йордания', 'Казахстан', 'Кения',
-        'Кирибати', 'Косово', 'Кувейт', 'Киргизстан', 'Лаос', 'Латвия', 'Ливан',
-        'Лесото', 'Либерия', 'Либия', 'Лихтенщайн', 'Литва', 'Люксембург',
-        'Мадагаскар', 'Малави', 'Малайзия', 'Малдивите', 'Малдивски острови',
-        'Мали', 'Малта', 'Маршалови острови', 'Мавритания', 'Мавриций', 'Мексико',
-        'Микронезия', 'Молдова', 'Монако', 'Монголия', 'Черна гора', 'Черногория',
-        'Мароко', 'Мозамбик', 'Мианмар', 'Бирма', 'Намибия', 'Науру', 'Непал',
-        'Нидерландия', 'Холандия', 'Нова Зеландия', 'Никарагуа', 'Нигер',
-        'Нигерия', 'Северна Македония', 'Македония', 'Норвегия', 'Оман',
-        'Пакистан', 'Палау', 'Палестина', 'Панама', 'Папуа Нова Гвинея',
-        'Парагвай', 'Перу', 'Филипини', 'Полша', 'Португалия', 'Катар',
-        'Румъния', 'Русия', 'Руанда', 'Сейнт Китс и Невис', 'Сейнт Лусия',
-        'Света Лусия', 'Сейнт Винсент и Гренадини', 'Самоа', 'Сан Марино',
-        'Сао Томе и Принсипи', 'Саудитска Арабия', 'Сенегал', 'Сърбия',
-        'Сейшели', 'Сейшелски острови', 'Сиера Леоне', 'Сингапур', 'Словакия',
-        'Словения', 'Соломонови острови', 'Сомалия', 'Южна Африка', 'Южна Корея',
-        'Корея', 'Южен Судан', 'Испания', 'Шри Ланка', 'Судан', 'Суринам',
-        'Швеция', 'Швейцария', 'Сирия', 'Таджикистан', 'Танзания', 'Тайланд',
-        'Тимор-Лещи', 'Източен Тимор', 'Того', 'Тонга', 'Тринидад и Тобаго',
-        'Тунис', 'Турция', 'Туркменистан', 'Тувалу', 'Уганда', 'Украйна',
-        'Обединени арабски емирства', 'ОАЕ', 'Великобритания', 'Обединено кралство',
-        'САЩ', 'Съединени американски щати', 'Съединените щати', 'Америка',
-        'Уругвай', 'Узбекистан', 'Вануату', 'Ватикан', 'Венецуела', 'Виетнам',
-        'Йемен', 'Замбия', 'Зимбабве', 'Тайван', 'Северна Корея',
-      ] },
-    ],
-  } as FillInBlankExercise,
-
   // ORDER 8: ГРАМАТИКА 1 - Personal pronouns (Page 11, top) - NOT AN EXERCISE!
   {
     id: 'l01-gramatika-01',
     instructionKey: 'grammar.l01.g1.instruction',
     type: 'grammar_visual',
     title: 'ГРАМАТИКА 1',
-    subtitle: 'Граматика – Лични местоимения',
     instruction: 'Запознайте се с личните местоимения',
     order: 8,
+    sectionStart: {
+      title: 'Местоимения и глаголът „съм"',
+      subtitle: 'Лични местоимения и сегашно време на глагола съм',
+      titleI18n: {
+        en: 'Pronouns and the verb „съм" (to be)',
+        fr: 'Les pronoms et le verbe « съм » (être)',
+        ar: 'الضمائر والفعل «съм» (يكون)',
+        fa: 'ضمایر و فعل «съм» (بودن)',
+        uk: 'Займенники і дієслово „съм" (бути)',
+        ru: 'Местоимения и глагол „съм" (быть)',
+      },
+      subtitleI18n: {
+        en: 'Personal pronouns and the present tense of the verb „съм"',
+        fr: 'Les pronoms personnels et le présent du verbe « съм »',
+        ar: 'الضمائر الشخصية وصيغة المضارع للفعل «съм»',
+        fa: 'ضمایر شخصی و زمان حال فعل «съм»',
+        uk: 'Особові займенники і теперішній час дієслова „съм"',
+        ru: 'Личные местоимения и настоящее время глагола „съм"',
+      },
+      theme: 'grammar',
+    },
     pronouns: [
       { pronoun: 'аз', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/1.az.jpg' },
       { pronoun: 'ти', imageUrl: '/assets/lesson-01/gramatika-1-pronouns/2.ti.jpg' },
@@ -215,7 +203,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g2.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
-    subtitle: 'Глагол СЪМ',
     instruction: 'Запознайте се с формите на глагола „съм".',
     order: 10,
     examples: [
@@ -306,6 +293,27 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 1',
     instruction: 'Натиснете всяка реплика, за да чуете произношението. После повторете на глас.',
     order: 13,
+    sectionStart: {
+      title: 'Запознанства и диалози',
+      subtitle: 'Диалози за запознанство, отрицание и въпросителни думи',
+      titleI18n: {
+        en: 'Introductions and dialogues',
+        fr: 'Présentations et dialogues',
+        ar: 'التعارف والحوارات',
+        fa: 'معرفی و گفتگوها',
+        uk: 'Знайомства та діалоги',
+        ru: 'Знакомства и диалоги',
+      },
+      subtitleI18n: {
+        en: 'Dialogues for getting acquainted, negation and question words',
+        fr: 'Dialogues pour faire connaissance, la négation et les mots interrogatifs',
+        ar: 'حوارات للتعارف، والنفي، وأدوات الاستفهام',
+        fa: 'گفتگوهای آشنایی، نفی و کلمات پرسشی',
+        uk: 'Діалоги для знайомства, заперечення та питальні слова',
+        ru: 'Диалоги для знакомства, отрицание и вопросительные слова',
+      },
+      theme: 'dialogue',
+    },
     sections: [
       {
         id: 'а.',
@@ -333,7 +341,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g3.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'Аз съм / Аз не съм',
     instruction: 'Запознайте се с конструкциите „аз съм" и „аз не съм".',
     order: 15,
     examples: [
@@ -421,7 +428,6 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l01.g4.instruction',
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 4',
-    subtitle: 'Въпроси и отговори',
     instruction: 'Запознайте се с въпросителните изречения. Кликнете върху картинката, за да ги чуете.',
     order: 14,
     examples: [
@@ -611,7 +617,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'тя',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'то',  cells: ['е',   'не е',   'ли е']   },
       { pronoun: 'ние', cells: ['сме', 'не сме', 'ли сме'] },
-      { pronoun: 'Вие', cells: ['сте', 'не сте', 'ли сте'] },
+      { pronoun: 'вие/Вие', cells: ['сте', 'не сте', 'ли сте'] },
       { pronoun: 'те',  cells: ['са',  'не са',  'ли са']  },
     ],
     notes: [
@@ -778,6 +784,27 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТОВЕ',
     instruction: 'Изслушайте текста и се опитайте да го прочетете.',
     order: 22,
+    sectionStart: {
+      title: 'Текстове за четене',
+      subtitle: 'Кратки текстове за бежанци и техните истории',
+      titleI18n: {
+        en: 'Reading texts',
+        fr: 'Textes de lecture',
+        ar: 'نصوص للقراءة',
+        fa: 'متن‌های خواندنی',
+        uk: 'Тексти для читання',
+        ru: 'Тексты для чтения',
+      },
+      subtitleI18n: {
+        en: 'Short texts about refugees and their stories',
+        fr: 'Courts textes sur les réfugiés et leurs histoires',
+        ar: 'نصوص قصيرة عن اللاجئين وقصصهم',
+        fa: 'متن‌های کوتاه درباره‌ی پناهندگان و داستان‌هایشان',
+        uk: 'Короткі тексти про біженців та їхні історії',
+        ru: 'Короткие тексты о беженцах и их историях',
+      },
+      theme: 'reading',
+    },
     paragraphs: [
       'Аз съм Мохамед от Сирия. Аз съм сириец. Той е Кадир. Той е сириец също. Ние сме сирийци.',
       'Ние сме Лейла и Исам. Ние сме бежанци от Ливан и сега сме в България.',

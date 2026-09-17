@@ -26,6 +26,18 @@ import type { SupportedLang } from './languages';
 
 export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
 
+  // ── a2-lesson-01 „Ало, ало!" ────────────────────────────────────────────
+
+  'a2.grammar.l01.zamestvane.instruction': {
+    bg: 'Запознайте се с правилото за заместване на прякото допълнение.',
+    ar: 'تعرَّف على قاعدة استبدال المفعول به المباشر.',
+    fr: "Familiarisez-vous avec la règle de remplacement du complément d'objet direct.",
+    en: 'Learn the rule for replacing the direct object.',
+    fa: 'با قاعده جایگزینی مفعول مستقیم آشنا شوید.',
+    uk: 'Ознайомтеся з правилом заміни прямого додатка.',
+    ru: 'Ознакомьтесь с правилом замены прямого дополнения.',
+  },
+
   // ── a2-lesson-00 „Преговор A1" ──────────────────────────────────────────
 
   'a2.ex.nationalnosti': {
@@ -94,6 +106,16 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     fr: 'Choisissez la forme correcte du pluriel.',
     en: 'Choose the correct plural form.',
     fa: 'شکل صحیح جمع را انتخاب کنید.',
+    uk: 'Оберіть правильну форму множини.',
+    ru: 'Выберите правильную форму множественного числа.',
+  },
+
+  'a2.ex.mnozhestvenoHora': {
+    bg: 'Изберете правилната форма за множествено число.',
+    ar: 'اختر صيغة الجمع الصحيحة.',
+    fr: 'Choisissez la bonne forme du pluriel.',
+    en: 'Choose the correct plural form.',
+    fa: 'شکل جمع صحیح را انتخاب کنید.',
     uk: 'Оберіть правильну форму множини.',
     ru: 'Выберите правильную форму множественного числа.',
   },
@@ -178,6 +200,26 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
     ru: 'Выберите правильную форму глагола.',
   },
 
+  'a2.ex.glagolFormaFill': {
+    bg: 'Попълнете изреченията с правилната форма на глагола.',
+    ar: 'أكمل الجمل بالصيغة الصحيحة للفعل.',
+    fr: 'Complétez les phrases avec la forme correcte du verbe.',
+    en: 'Complete the sentences with the correct verb form.',
+    fa: 'جملات را با شکل صحیح فعل کامل کنید.',
+    uk: 'Доповніть речення правильною формою дієслова.',
+    ru: 'Дополните предложения правильной формой глагола.',
+  },
+
+  'a2.ex.predloziDvizhenie': {
+    bg: 'Изберете правилния предлог за движение.',
+    ar: 'اختر حرف الجر الصحيح للحركة.',
+    fr: 'Choisissez la préposition de mouvement correcte.',
+    en: 'Choose the correct preposition of movement.',
+    fa: 'حرف اضافه حرکت صحیح را انتخاب کنید.',
+    uk: 'Оберіть правильний прийменник руху.',
+    ru: 'Выберите правильный предлог движения.',
+  },
+
   'a2.ex.pritezhatelnaMest': {
     bg: 'Изберете правилната кратка притежателна форма.',
     ar: 'اختر صيغة الملكية القصيرة الصحيحة.',
@@ -253,7 +295,7 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   // ── a2-lesson-05 „Услуги" ────────────────────────────────────────────────
 
   'a2.gr.l05.iskamDa': {
-    bg: 'Запознайте се со спрежението на „искам да" в положителна, отрицателна и въпросителна форма.',
+    bg: 'Запознайте се със спрежението на „искам да" в положителна, отрицателна и въпросителна форма.',
     ar: 'تعرّف على تصريف «искам да» في الصيغة الإيجابية والسلبية والاستفهامية.',
     fr: 'Découvrez la conjugaison de «искам да» en forme affirmative, négative et interrogative.',
     en: 'Learn the conjugation of «искам да» (I want to) in positive, negative, and question forms.',
@@ -263,7 +305,7 @@ export const A2_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   },
 
   'a2.gr.l05.mogaTryabva': {
-    bg: 'Запознайте се се спрежението на глаголите „мога да" и „трябва да".',
+    bg: 'Запознайте се със спрежението на глаголите „мога да" и „трябва да".',
     ar: 'تعرّف على تصريف الفعلين «мога да» (أستطيع أن) و«трябва да» (يجب أن).',
     fr: 'Découvrez la conjugaison des verbes «мога да» (pouvoir) et «трябва да» (devoir).',
     en: 'Learn the conjugation of «мога да» (can / to be able to) and «трябва да» (must / have to).',

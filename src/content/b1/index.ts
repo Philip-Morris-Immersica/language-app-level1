@@ -33,6 +33,7 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-04': () => import('./lessons/b1-lesson-04'),
   'b1-lesson-05': () => import('./lessons/b1-lesson-05'),
   'b1-lesson-06': () => import('./lessons/b1-lesson-06'),
+  // 07–10 are digitalised and reachable, but have not had a content QA pass yet.
   'b1-lesson-07': () => import('./lessons/b1-lesson-07'),
   'b1-lesson-08': () => import('./lessons/b1-lesson-08'),
   'b1-lesson-09': () => import('./lessons/b1-lesson-09'),
@@ -41,7 +42,9 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
   'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
   'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
-  'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
+  // Lesson 15 has no content folder yet — its page shows the "in preparation"
+  // placeholder until the five standard files land under `lessons/b1-lesson-15/`.
+  // 'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
 };
 
 export const B1_TEST_LOADERS: Record<

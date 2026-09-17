@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { Check, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useTranslate } from '@/i18n/useTranslate';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import {
   generateHorizontalWordGrid,
@@ -32,6 +33,8 @@ export function WordSearchGrid({
   exerciseId,
 }: WordSearchGridProps) {
   const t = useT();
+  const clickHintText = useTranslate('Кликнете на която и да е буква от думата.');
+  const foundWordsLabel = useTranslate('Намерени думи:');
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as SavedState | undefined;
 
@@ -175,7 +178,7 @@ export function WordSearchGrid({
           </div>
           {!isSubmitted && (
             <p className="mt-2 text-xs text-gray-500 text-center sm:text-left">
-              Кликнете на която и да е буква от думата.
+              {clickHintText}
             </p>
           )}
         </div>
@@ -183,7 +186,7 @@ export function WordSearchGrid({
         {/* Word list */}
         <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
           <p className="text-sm font-semibold text-gray-600 mb-2">
-            Намерени думи: {progress}
+            {foundWordsLabel} {progress}
           </p>
           <ul className="grid grid-cols-2 sm:grid-cols-1 gap-1.5">
             {hiddenWordsUpper.map((word) => {

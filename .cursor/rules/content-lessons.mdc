@@ -160,7 +160,7 @@ The component renders it as a green info box with an „ℹ" icon above the exer
 
 **УПРАЖНЕНИЯ — Редки (RARE):** `match_pairs`, `letter_choice`, `image_labeling`, `syllable_blocks`, `word_search`, `true_false`, `dialogue_builder`, `fill_with_images`
 
-**ИНТЕРАКТИВНИ / АЗБУКА:** `connect_dots` (змия — проследи буквите по ред), `alphabet_maze` (лабиринт — намери пътя по азбучен ред)
+**ИНТЕРАКТИВНИ / АЗБУКА:** `connect_dots` (змия — проследи буквите по ред), `alphabet_maze` (лабиринт — намери пътя по азбучен ред), `audio_choice` (чуй звук/дума → избери буквата — multiple choice с аудио)
 
 **Not yet implemented (show placeholder):** `verb_conjugation`, `number_writing`, `dialogue_reading`, `text_comprehension`, `listening`
 
@@ -204,14 +204,25 @@ See `content-quality-checklist` rule for the FULL checklist. Key rules to rememb
 - **НОВИ ДУМИ before exercises:** Vocabulary sections must come BEFORE exercises that use those words. If a reading text uses new vocabulary, place the text AFTER the НОВИ ДУМИ section.
 - **Grammar rule before practice:** If an exercise applies a grammar rule (e.g. articles), the rule must be shown BEFORE the exercise.
 
-### Pre-translation (`instructionKey`) rules
+### Translation policy — hand-translate everything learner-facing (ALL levels)
 
-Grammar instructions and complex exercise instructions MUST be pre-translated via `instructionKey` in `ui.ts`. Auto-translation (`useTranslate`) is NOT reliable for:
-- Linguistic terminology (род, член, спрежение, множествено число...)
-- Instructions describing new interaction patterns (drag, swipe, column sorting...)
-- Grammar notes with Bulgarian-specific examples
+**Default = hand-translate on 7 languages.** Every learner-facing string (exercise
+titles/subtitles, instructions, section titles/subtitles, grammar tables, grammar
+reference, culture, lesson description, dictionary glosses, test section names) is
+hand-translated by a human. `useTranslate()` (Google) is only a **temporary
+fallback** while content is being written — never the final state. A string still
+on auto-translation is considered **unfinished**. This applies identically to A1,
+A2, B1, B2.
 
-Simple, repetitive instructions (e.g. „Попълнете празните места.") can use auto-translation.
+**Only exception — stays Bulgarian:** the exercise content itself (words,
+sentences, correct answers). The dictionary *gloss* (a word's meaning) IS
+hand-translated; the Bulgarian headword stays Bulgarian.
+
+**Mechanism:** instructions → `instructionKey` in `ui.ts` (Philip) / `a2.ts`,
+`b1.ts` (level authors). Inline content strings → their `Record<lang>` slot (e.g.
+`titleI18n` / `subtitleI18n` on `sectionStart`). If a field has no translation
+slot yet, Philip adds one to `shared/types.ts` — do not leave it on auto. See
+`i18n-translations` and `content-quality-checklist` §A4 for the full policy.
 
 ## Automatic UI Behaviors (no action needed in content files)
 

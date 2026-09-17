@@ -36,7 +36,8 @@ export const TRANSLATION_OVERRIDES: Record<string, Partial<Record<SupportedLang,
   'Форма': { en: 'Form', ar: 'الصيغة', fr: 'Forme', fa: 'شکل', uk: 'Форма', ru: 'Форма' },
   'Дума': { en: 'Word', ar: 'كلمة', fr: 'Mot', fa: 'کلمه', uk: 'Слово', ru: 'Слово' },
   'Изречения': { en: 'Sentences', ar: 'جمل', fr: 'Phrases', fa: 'جملات', uk: 'Речення', ru: 'Предложения' },
-  'Член': { en: 'Article', ar: 'أداة التعريف', fr: 'Article', fa: 'حرف تعریف', uk: 'Артикль', ru: 'Артикль' },
+  // Client-requested wording for the membership/definite-article ("членуване") tables (lesson 5/8/9) — plural "articles", not "ending/forms".
+  'Член': { en: 'Articles', ar: 'أداة التعريف', fr: 'Article', fa: 'حرف تعریف', uk: 'Артикль', ru: 'Артикль' },
   'С член': { en: 'With the article', ar: 'مع أداة التعريف', fr: "Avec l'article", fa: 'با حرف تعریف', uk: 'З артиклем', ru: 'С артиклем' },
   // Capitalised / abbreviated variants used as grammar-table column headers in other lessons.
   'Мъжки род': { en: 'Masculine', ar: 'مذكر', fr: 'Masculin', fa: 'مذکر', uk: 'Чоловічий рід', ru: 'Мужской род' },
@@ -66,6 +67,90 @@ export const TRANSLATION_OVERRIDES: Record<string, Partial<Record<SupportedLang,
   'ХОДЯ / ОТИВАМ': { en: 'ХОДЯ (to go/walk, habitual) / ОТИВАМ (to go, one direction)', ar: 'ХОДЯ (يمشي، متكرر) / ОТИВАМ (يذهب، اتجاه واحد)', fr: 'ХОДЯ (aller/marcher, habituel) / ОТИВАМ (aller, une direction)', fa: 'ХОДЯ (رفتن/راه رفتن، عادتی) / ОТИВАМ (رفتن، یک‌طرفه)', uk: 'ХОДЯ (ходити, звично) / ОТИВАМ (іти, в одному напрямку)', ru: 'ХОДЯ (ходить, привычно) / ОТИВАМ (идти, в одном направлении)' },
   'мия се': { en: 'мия се — to wash oneself', ar: 'мия се — يغتسل', fr: 'мия се — se laver', fa: 'мия се — خود را شستن', uk: 'мия се — митися', ru: 'мия се — мыться' },
   'казвам / казвам се / връщам / връщам се': { en: 'казвам (to say) / казвам се (to be named) / връщам (to return sth.) / връщам се (to come back)', ar: 'казвам (يقول) / казвам се (يُدعى) / връщам (يُرجع) / връщам се (يعود)', fr: 'казвам (dire) / казвам се (se nommer) / връщам (rendre) / връщам се (revenir)', fa: 'казвам (گفتن) / казвам се (نامیده شدن) / връщам (برگرداندن) / връщам се (برگشتن)', uk: 'казвам (казати) / казвам се (зватися) / връщам (повертати) / връщам се (повертатися)', ru: 'казвам (говорить) / казвам се (зваться) / връщам (возвращать) / връщам се (возвращаться)' },
+  // Client wants the BG gender words KEPT (not translated to "one") with an English gloss —
+  // used as grammar-table cells (l02-gramatika-06, lesson-04 TableFill column headers, etc.).
+  // Number-context uses of "едно" (illustrated-cards digit 1, ConnectDots, DropdownMatch) are
+  // either shielded with a per-card override or don't run through translation at all.
+  'един': { en: 'един (masculine)', ar: 'един (مذكر)', fr: 'един (masculin)', fa: 'един (مذکر)', uk: 'един (чоловічий рід)', ru: 'един (мужской род)' },
+  'една': { en: 'една (feminine)', ar: 'една (مؤنث)', fr: 'една (féminin)', fa: 'една (مؤنث)', uk: 'една (жіночий рід)', ru: 'една (женский род)' },
+  'едно': { en: 'едно (neuter)', ar: 'едно (محايد)', fr: 'едно (neutre)', fa: 'едно (خنثی)', uk: 'едно (середній рід)', ru: 'едно (средний род)' },
+
+  // ── Short standalone "Аз съм/Той е/Тя е <Name>." records — transliterate the name ───
+  'Аз съм Георги.': { en: 'I am Georgi.', ar: 'أنا Georgi.', fr: 'Je suis Georgi.', fa: 'من Georgi هستم.', uk: 'Я Georgi.', ru: 'Я Georgi.' },
+  'Аз съм Мохамед.': { en: 'I am Mohamed.', ar: 'أنا Mohamed.', fr: 'Je suis Mohamed.', fa: 'من Mohamed هستم.', uk: 'Я Mohamed.', ru: 'Я Mohamed.' },
+  'Аз съм Петя.': { en: 'I am Petya.', ar: 'أنا Petya.', fr: 'Je suis Petya.', fa: 'من Petya هستم.', uk: 'Я Petya.', ru: 'Я Petya.' },
+  'Аз съм Тала.': { en: 'I am Tala.', ar: 'أنا Tala.', fr: 'Je suis Tala.', fa: 'من Tala هستم.', uk: 'Я Tala.', ru: 'Я Tala.' },
+  'Аз съм Хасан.': { en: 'I am Hasan.', ar: 'أنا Hasan.', fr: 'Je suis Hasan.', fa: 'من Hasan هستم.', uk: 'Я Hasan.', ru: 'Я Hasan.' },
+  'Ти си Халед.': { en: 'You are Haled.', ar: 'أنت Haled.', fr: 'Tu es Haled.', fa: 'تو Haled هستی.', uk: 'Ти Haled.', ru: 'Ты Haled.' },
+  'Той е Иван.': { en: 'He is Ivan.', ar: 'هو Ivan.', fr: 'Il est Ivan.', fa: 'او Ivan است.', uk: 'Він Ivan.', ru: 'Он Ivan.' },
+  'Тя е Ана.': { en: 'She is Ana.', ar: 'هي Ana.', fr: 'Elle est Ana.', fa: 'او Ana است.', uk: 'Вона Ana.', ru: 'Она Ana.' },
+
+  // ── MISMATCH fixes — client wants exact wording (see A1-feedback-coverage-audit.md §6) ──
+  'кашкавал': { en: 'yellow cheese', ar: 'جبن أصفر', fr: 'fromage jaune', fa: 'پنیر زرد', uk: 'жовтий сир', ru: 'жёлтый сыр' },
+  'слаб – пълен': { en: 'thin – fat', ar: 'نحيف – سمين', fr: 'mince – gros', fa: 'لاغر – چاق', uk: 'худий – товстий', ru: 'худой – толстый' },
+  'Сравнение с „от"': { en: "Comparison with 'than'", ar: "المقارنة بـ «от» (than)", fr: "Comparaison avec « от » (than)", fa: "مقایسه با «от» (than)", uk: "Порівняння з «от» (than)", ru: "Сравнение с «от» (than)" },
+  '– О, чудесно! Приятен урок!': { en: '– Oh, great! Have a nice course!', ar: '– أوه، رائع! دورة ممتعة!', fr: '– Oh, très bien ! Bon cours !', fa: '– اوه، عالی! دوره خوبی داشته باشی!', uk: '– О, чудово! Гарного курсу!', ru: '– О, отлично! Хорошего курса!' },
+  '0% — Никога не закусвам в кафенето.': { en: '0% — I never have breakfast at the café.', ar: '0% — لا أتناول الإفطار في المقهى أبداً.', fr: '0% — Je ne prends jamais le petit-déjeuner au café.', fa: '۰٪ — هرگز در کافه صبحانه نمی‌خورم.', uk: '0% — Я ніколи не снідаю в кав\'ярні.', ru: '0% — Я никогда не завтракаю в кафе.' },
+  'много': { en: 'much / many', ar: 'كثير', fr: 'beaucoup', fa: 'زیاد', uk: 'багато', ru: 'много' },
+  // у10 упр.13 — same giving-something context as у8 упр.20; the compound phrase is unambiguous enough to override globally.
+  '– Заповядайте. Приятно пътуване!': { en: '– There you go. Have a good trip!', ar: '– تفضل. رحلة سعيدة!', fr: '– Voilà. Bon voyage !', fa: '– بفرمایید. سفر خوبی داشته باشید!', uk: '– Ось, будь ласка. Гарної подорожі!', ru: '– Пожалуйста. Хорошей поездки!' },
+
+  // ── Lesson 6 — flagged untranslated strings (self-mapped bugs; file owned by another agent) ──
+  'ИМАМ / НЯМАМ': { en: 'I HAVE / I DO NOT HAVE', ar: 'أملك / لا أملك', fr: "J'AI / JE N'AI PAS", fa: 'دارم / ندارم', uk: 'Я МАЮ / Я НЕ МАЮ', ru: 'Я ИМЕЮ / Я НЕ ИМЕЮ' },
+  'хубави хора': { en: 'nice people', ar: 'أشخاص طيبون', fr: 'des gens sympathiques', fa: 'افراد خوب', uk: 'гарні люди', ru: 'хорошие люди' },
+
+  // у6 упр.35 (l06-ex-35) — first paragraph (2nd paragraph already covered above under "Живеем в София...").
+  'Аз съм Виталий, а жена ми е Ирина. Ние сме украинци. Имаме три деца. Сега сме в България, в Украйна има война. Родителите ми не са тук. Те са в Украйна. Сестра ми и семейството й са в Полша. Много ми липсват.': {
+    en: 'I am Vitaliy, and my wife is Irina. We are Ukrainian. We have three children. We are in Bulgaria now — there is a war in Ukraine. My parents are not here. They are in Ukraine. My sister and her family are in Poland. I miss them a lot.',
+    ar: 'أنا فيتالي، وزوجتي إيرينا. نحن أوكرانيون. لدينا ثلاثة أطفال. نحن الآن في بلغاريا؛ في أوكرانيا توجد حرب. والداي ليسا هنا. هما في أوكرانيا. أختي وعائلتها في بولندا. أشتاق إليهم كثيراً.',
+    fr: "Je suis Vitaliy, et ma femme est Irina. Nous sommes ukrainiens. Nous avons trois enfants. Nous sommes maintenant en Bulgarie ; il y a la guerre en Ukraine. Mes parents ne sont pas ici. Ils sont en Ukraine. Ma sœur et sa famille sont en Pologne. Ils me manquent beaucoup.",
+    fa: 'من ویتالی هستم و همسرم ایرینا است. ما اوکراینی هستیم. سه فرزند داریم. اکنون در بلغارستان هستیم؛ در اوکراین جنگ است. پدر و مادرم اینجا نیستند. آن‌ها در اوکراین هستند. خواهرم و خانواده‌اش در لهستان هستند. خیلی دلم برایشان تنگ شده است.',
+    uk: 'Я Віталій, а моя дружина — Ірина. Ми українці. У нас трое дітей. Зараз ми в Болгарії, в Україні війна. Моїх батьків тут немає. Вони в Україні. Моя сестра з сім\'єю в Польщі. Я дуже за ними сумую.',
+    ru: 'Я Виталий, а моя жена — Ирина. Мы украинцы. У нас трое детей. Сейчас мы в Болгарии, в Украине война. Моих родителей здесь нет. Они в Украине. Моя сестра с семьёй в Польше. Я очень по ним скучаю.',
+  },
+  // у6 упр.37 (l06-ex-37) — "Аз работя в „Каритас"" reading text (2 paragraphs).
+  'Казвам се Борис. Аз съм от София, женен съм и имам две малки деца – едно момче и едно момиче. На 30 години съм. Жена ми е учителка по български език в голямо училище.': {
+    en: 'My name is Boris. I am from Sofia, I am married, and I have two small children — a boy and a girl. I am 30 years old. My wife is a Bulgarian language teacher at a large school.',
+    ar: 'اسمي بوريس. أنا من صوفيا، متزوج ولدي طفلان صغيران – صبي وبنت. عمري ثلاثون عاماً. زوجتي معلمة لغة بلغارية في مدرسة كبيرة.',
+    fr: "Je m'appelle Boris. Je viens de Sofia, je suis marié et j'ai deux jeunes enfants — un garçon et une fille. J'ai 30 ans. Ma femme est professeure de bulgare dans une grande école.",
+    fa: 'اسم من بوریس است. من از صوفیه هستم، متأهلم و دو فرزند کوچک دارم – یک پسر و یک دختر. سی ساله هستم. همسرم معلم زبان بلغاری در یک مدرسه بزرگ است.',
+    uk: 'Мене звуть Борис. Я з Софії, одружений і маю двох маленьких дітей — хлопчика і дівчинку. Мені 30 років. Моя дружина — вчителька болгарської мови у великій школі.',
+    ru: 'Меня зовут Борис. Я из Софии, женат и у меня двое маленьких детей — мальчик и девочка. Мне 30 лет. Моя жена — учительница болгарского языка в большой школе.',
+  },
+  'Работя в „Каритас". Обичам работата с бежанци. Вече имам много приятели от различни страни: Сирия, Иран, Ирак, Палестина, Афганистан, Украйна.': {
+    en: 'I work at "Caritas". I love working with refugees. I already have many friends from different countries: Syria, Iran, Iraq, Palestine, Afghanistan, Ukraine.',
+    ar: 'أعمل في "كاريتاس". أحب العمل مع اللاجئين. لديّ الآن أصدقاء كثيرون من بلدان مختلفة: سوريا، إيران، العراق، فلسطين، أفغانستان، أوكرانيا.',
+    fr: "Je travaille à « Caritas ». J'aime travailler avec les réfugiés. J'ai déjà beaucoup d'amis de différents pays : Syrie, Iran, Irak, Palestine, Afghanistan, Ukraine.",
+    fa: 'در «کاریتاس» کار می‌کنم. کار با پناهندگان را دوست دارم. من اکنون دوستان زیادی از کشورهای مختلف دارم: سوریه، ایران، عراق، فلسطین، افغانستان، اوکراین.',
+    uk: 'Я працюю в «Карітас». Мені подобається працювати з біженцями. У мене вже багато друзів з різних країн: Сирії, Ірану, Іраку, Палестини, Афганістану, України.',
+    ru: 'Я работаю в «Каритас». Мне нравится работать с беженцами. У меня уже много друзей из разных стран: Сирии, Ирана, Ирака, Палестины, Афганистана, Украины.',
+  },
+  // у6 упр.42 (l06-ex-42) — "Илаф Хабаба" reading text (3 paragraphs). Likely the text meant by audit's "упр.43"
+  // (the PDF's упр.43 "Разкажете за Илаф" is a SKIP per client — no digitized content exists at that number).
+  'Аз съм едно сирийско момиче. Казвам се Илаф Хабаба. В България съм от две години и вече знам каква е разликата между сирийското и българското семейство.': {
+    en: 'I am a Syrian girl. My name is Ilaf Hababa. I have been in Bulgaria for two years, and I already know the difference between a Syrian and a Bulgarian family.',
+    ar: 'أنا فتاة سورية. اسمي إيلاف حبابة. أنا في بلغاريا منذ سنتين، وأعرف الآن الفرق بين العائلة السورية والعائلة البلغارية.',
+    fr: "Je suis une fille syrienne. Je m'appelle Ilaf Hababa. Je suis en Bulgarie depuis deux ans, et je connais déjà la différence entre une famille syrienne et une famille bulgare.",
+    fa: 'من یک دختر سوری هستم. نامم ایلاف حبابه است. دو سال است که در بلغارستان هستم و اکنون تفاوت میان خانواده سوری و خانواده بلغاری را می‌دانم.',
+    uk: 'Я сирійська дівчина. Мене звуть Ілаф Хабаба. Я в Болгарії вже два роки і вже знаю, яка різниця між сирійською та болгарською сім\'єю.',
+    ru: 'Я сирийская девочка. Меня зовут Илаф Хабаба. Я в Болгарии уже два года и уже знаю, в чём разница между сирийской и болгарской семьёй.',
+  },
+  'Сирийското семейство има много деца – от три до осем, а българското семейство обикновено има едно или две. Българските родители дават голяма свобода на децата си.': {
+    en: 'A Syrian family has many children — from three to eight, while a Bulgarian family usually has one or two. Bulgarian parents give their children a lot of freedom.',
+    ar: 'العائلة السورية لديها أطفال كثيرون – من ثلاثة إلى ثمانية، أما العائلة البلغارية فلديها عادة طفل أو طفلان. الآباء البلغاريون يعطون أطفالهم حرية كبيرة.',
+    fr: "La famille syrienne a beaucoup d'enfants — de trois à huit, tandis que la famille bulgare a généralement un ou deux enfants. Les parents bulgares donnent beaucoup de liberté à leurs enfants.",
+    fa: 'خانواده سوری فرزندان زیادی دارد – از سه تا هشت، در حالی که خانواده بلغاری معمولاً یک یا دو فرزند دارد. والدین بلغاری آزادی زیادی به فرزندان خود می‌دهند.',
+    uk: 'У сирійській сім\'ї багато дітей — від трьох до восьми, а в болгарській сім\'ї зазвичай одна або дві дитини. Болгарські батьки дають своїм дітям велику свободу.',
+    ru: 'В сирийской семье много детей — от трёх до восьми, а в болгарской семье обычно один или два. Болгарские родители дают своим детям большую свободу.',
+  },
+  'Всички деца обичат родителите си.': {
+    en: 'All children love their parents.',
+    ar: 'كل الأطفال يحبون والديهم.',
+    fr: 'Tous les enfants aiment leurs parents.',
+    fa: 'همه بچه‌ها والدین خود را دوست دارند.',
+    uk: 'Усі діти люблять своїх батьків.',
+    ru: 'Все дети любят своих родителей.',
+  },
 
   // ── Reading-text paragraphs flagged as mistranslated in client feedback ──
   // English wording below follows the client's own corrected text where given.

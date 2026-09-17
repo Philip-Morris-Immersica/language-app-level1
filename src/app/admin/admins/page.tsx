@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ShieldCheck, Plus, Trash2 } from 'lucide-react';
 
 interface Admin {
@@ -12,16 +12,30 @@ interface Admin {
   email: string;
 }
 
-const ROLES = ['it', 'admin', 'viewer'];
+interface UserSuggestion {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const ALL_ROLES = ['it', 'admin', 'viewer'];
 
 export default function AdminAdminsPage() {
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [loading, setLoading] = useState(true);
   const [newEmail, setNewEmail] = useState('');
   const [newRole, setNewRole] = useState('admin');
-  const [users, setUsers] = useState<Array<{ id: number; email: string; name: string }>>([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [myRole, setMyRole] = useState<string | null>(null);
+  const isIt = myRole === 'it';
+  // Non-IT admins can grant 'admin'/'viewer' but never 'it' — that stays IT-only.
+  const assignableRoles = isIt ? ALL_ROLES : ALL_ROLES.filter((r) => r !== 'it');
+
+  const [suggestions, setSuggestions] = useState<UserSuggestion[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadAdmins = () => {
     setLoading(true);
@@ -30,17 +44,45 @@ export default function AdminAdminsPage() {
 
   useEffect(() => {
     loadAdmins();
-    fetch('/api/admin/users?limit=100').then((r) => r.json()).then(({ users }) => setUsers(users ?? []));
+    fetch('/api/admin/me').then((r) => r.json()).then(({ admin }) => setMyRole(admin?.role ?? null));
   }, []);
 
+  // Live "starts with" search on name + email as the IT admin types, so
+  // matches show up immediately regardless of total registered user count.
+  useEffect(() => {
+    const q = newEmail.trim();
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    if (q.length < 2) { setSuggestions([]); setSearching(false); return; }
+
+    setSearching(true);
+    searchTimer.current = setTimeout(() => {
+      fetch(`/api/admin/users/search?q=${encodeURIComponent(q)}`)
+        .then((r) => r.json())
+        .then(({ users }) => setSuggestions(users ?? []))
+        .finally(() => setSearching(false));
+    }, 250);
+
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [newEmail]);
+
+  const pickSuggestion = (u: UserSuggestion) => {
+    setNewEmail(u.email);
+    setShowSuggestions(false);
+    setSuggestions([]);
+  };
+
   const addAdmin = async () => {
-    const user = users.find((u) => u.email === newEmail);
-    if (!user) { setError('User not found. They must be registered first.'); return; }
+    const email = newEmail.trim();
+    if (!email) { setError('Enter an email.'); return; }
     setError('');
+    setSuccess('');
+    setShowSuggestions(false);
+    // The server resolves the user by email itself (case-insensitive, no
+    // pagination cap) — no need to match against a locally cached list.
     const r = await fetch('/api/admin/admins', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: user.id, role: newRole }),
+      body: JSON.stringify({ email, role: newRole }),
     });
     if (r.ok) { setSuccess('Admin role granted.'); setNewEmail(''); loadAdmins(); }
     else { const d = await r.json(); setError(d.error ?? 'Error'); }
@@ -57,25 +99,56 @@ export default function AdminAdminsPage() {
       <div className="flex items-center gap-2 mb-6">
         <ShieldCheck className="w-5 h-5 text-[#0072BC]" />
         <h1 className="text-2xl font-bold text-gray-900">Admin Management</h1>
-        <span className="text-xs bg-[#FCE2DE] text-[#683229] px-2 py-0.5 rounded-full">IT only</span>
+        <span className="text-xs bg-[#FCE2DE] text-[#683229] px-2 py-0.5 rounded-full">
+          {isIt ? 'IT' : 'Admin'} access
+        </span>
       </div>
 
       <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-5">
         <h3 className="text-sm font-semibold text-gray-700 mb-3">Grant admin role</h3>
+        {!isIt && (
+          <p className="text-xs text-gray-400 mb-3">
+            You can grant &quot;admin&quot; or &quot;viewer&quot; access. Only IT can grant IT access or remove admins.
+          </p>
+        )}
         <div className="flex gap-2">
-          <input
-            list="users-list"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="User email..."
-            className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0072BC]/30"
-          />
-          <datalist id="users-list">
-            {users.map((u) => <option key={u.id} value={u.email} label={u.name} />)}
-          </datalist>
+          <div className="relative flex-1">
+            <input
+              value={newEmail}
+              onChange={(e) => { setNewEmail(e.target.value); setShowSuggestions(true); }}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+              onKeyDown={(e) => { if (e.key === 'Enter') addAdmin(); }}
+              placeholder="Search by name or email..."
+              autoComplete="off"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0072BC]/30"
+            />
+            {showSuggestions && newEmail.trim().length >= 2 && (
+              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto">
+                {searching ? (
+                  <p className="px-3 py-2 text-xs text-gray-400">Searching...</p>
+                ) : suggestions.length > 0 ? (
+                  suggestions.map((u) => (
+                    <button
+                      key={u.id}
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => pickSuggestion(u)}
+                      className="w-full text-left px-3 py-2 hover:bg-[#CDE3F1]/40 border-b border-gray-50 last:border-b-0"
+                    >
+                      <p className="text-sm font-medium text-gray-800">{u.name}</p>
+                      <p className="text-xs text-gray-400">{u.email}</p>
+                    </button>
+                  ))
+                ) : (
+                  <p className="px-3 py-2 text-xs text-gray-400">No matches.</p>
+                )}
+              </div>
+            )}
+          </div>
           <select value={newRole} onChange={(e) => setNewRole(e.target.value)}
             className="text-sm border border-gray-200 rounded-lg px-2 py-2 focus:outline-none">
-            {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+            {assignableRoles.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
           <button onClick={addAdmin}
             className="flex items-center gap-1.5 bg-[#0072BC] text-white text-sm px-4 py-2 rounded-lg hover:bg-[#005A8E] transition-colors">
@@ -115,10 +188,12 @@ export default function AdminAdminsPage() {
                   </td>
                   <td className="px-4 py-3 text-gray-500 text-xs">{new Date(admin.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-3">
-                    <button onClick={() => removeAdmin(admin.userId)}
-                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {isIt && (
+                      <button onClick={() => removeAdmin(admin.userId)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

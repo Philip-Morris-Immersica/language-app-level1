@@ -25,6 +25,8 @@ const GEMINI_BG_STRESS_CHAKAM =
   'Read each Bulgarian word exactly once, clearly, in a single calm female voice with the stress on the first syllable: "ча́ках, ча́кам, ча́кал, ча́кала, ча́кало, ча́кали". Do not repeat any word. Do not use any foreign accent.';
 const GEMINI_BG_STRESS_TANTSUVAM =
   'Read these Bulgarian verb forms clearly in a single calm female voice with the stress on the syllable "цу" in every word, never on the final vowel: "танцу́вах, танцу́вам, танцу́вал, танцу́вала, танцу́вало, танцу́вали". Read each word exactly once. Do not use any foreign accent.';
+const GEMINI_BG_STRESS_CHUVAM =
+  'Read these Bulgarian words clearly in a single calm female voice. The participle „чувал" is stressed on the first syllable „чу": чУвал (CHU-val), never чувАл. Read exactly: „чувам, чУвал". Read each word exactly once. Do not use any foreign accent.';
 
 export const exercises: Exercise[] = [
 
@@ -35,6 +37,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилната дума под всяка картинка.',
     order: 1,
+    sectionStart: {
+      title: 'Професии и търсене на работа',
+      subtitle: 'Професии, бюро по труда и думи за заплата и работно време',
+      titleI18n: {
+        en: 'Professions and looking for work',
+        fr: "Professions et recherche d'emploi",
+        ar: 'المهن والبحث عن عمل',
+        fa: 'شغل‌ها و جستجوی کار',
+        uk: 'Професії та пошук роботи',
+        ru: 'Профессии и поиск работы',
+      },
+      subtitleI18n: {
+        en: 'Professions, the employment office and words for salary and working hours',
+        fr: "Professions, le bureau du travail et des mots pour le salaire et le temps de travail",
+        ar: 'المهن، مكتب العمل وكلمات عن الراتب وساعات العمل',
+        fa: 'شغل‌ها، اداره کار و واژه‌هایی برای حقوق و ساعات کاری',
+        uk: 'Професії, бюро праці та слова для зарплати й робочого часу',
+        ru: 'Профессии, бюро труда и слова для зарплаты и рабочего времени',
+      },
+      theme: 'vocabulary',
+    },
     points: 6,
     displayType: 'default',
     columns: 3,
@@ -95,7 +118,9 @@ export const exercises: Exercise[] = [
           { text: '– Не много добре. Нямам работа.', voiceGender: 'male' },
           { text: '– А търсиш ли?', voiceGender: 'male' },
           { text: '– Да, разбира се. Всяка седмица идвам в Бюрото по труда. След два дни ще имам интервю за работа.', voiceGender: 'male' },
-          { text: '– Желая ти успех.', voiceGender: 'male' },
+          { text: '– Желая ти успех.', voiceGender: 'male',
+            // Gemini reads „успех" as past-tense „успах"; accent keeps the е.
+            ttsText: '– Желая ти успéх.' },
           { text: '– Благодаря!', voiceGender: 'male' },
         ],
       },
@@ -297,10 +322,10 @@ export const exercises: Exercise[] = [
       { id: 'p1', left: 'търся работа',         correctRight: 'имам работа' },
       { id: 'p2', left: 'безработен съм',        correctRight: 'намирам работа' },
       { id: 'p3', left: 'добър шеф',             correctRight: 'лош шеф' },
-      { id: 'p4', left: 'работя почасово',        correctRight: 'работя на пълно работно' },
+      { id: 'p4', left: 'работя почасово',        correctRight: 'работя на пълно работно време' },
       { id: 'p5', left: 'ниска заплата',          correctRight: 'висока заплата' },
     ],
-    shuffledRights: ['имам работа', 'висока заплата', 'лош шеф', 'работя на пълно работно', 'намирам работа'],
+    shuffledRights: ['имам работа', 'висока заплата', 'лош шеф', 'работя на пълно работно време', 'намирам работа'],
   } as unknown as Exercise,
 
   // ─── ORDER 9 — Упр. 8 (стр. 100): Слушайте и отбележете ─────────────────────
@@ -317,9 +342,9 @@ export const exercises: Exercise[] = [
       { id: 'p1', left: 'Парите, които получаваме всеки месец, когато работим',     correctRight: 'заплата' },
       { id: 'p2', left: 'Работа по няколко часа на ден',                            correctRight: 'почасово' },
       { id: 'p3', left: 'Парите, които получаваме от Бюрото по труда, когато сме без работа', correctRight: 'помощи за безработни' },
-      { id: 'p4', left: 'Работа по осем часа на ден',                               correctRight: 'пълно работно' },
+      { id: 'p4', left: 'Работа по осем часа на ден',                               correctRight: 'пълно работно време' },
     ],
-    shuffledRights: ['заплата', 'помощи за безработни', 'почасово', 'пълно работно'],
+    shuffledRights: ['заплата', 'помощи за безработни', 'почасово', 'пълно работно време'],
   } as MatchPairsExercise,
 
   // Упр. 9 — ⏭ SKIP по клиент (прочетете диалозите по двойки)
@@ -332,13 +357,39 @@ export const exercises: Exercise[] = [
     title: 'ДИАЛОЗИ 3',
     instruction: 'Натиснете всяка реплика, за да чуете произношението.',
     order: 10,
+    sectionStart: {
+      title: 'Минало неопределено време',
+      subtitle: 'Причастия, форми и диалози за пътувания и срещи',
+      titleI18n: {
+        en: 'The past indefinite tense',
+        fr: 'Le passé indéfini',
+        ar: 'الزمن الماضي غير المحدد',
+        fa: 'زمان گذشته نامعین',
+        uk: 'Минулий неозначений час',
+        ru: 'Прошедшее неопределённое время',
+      },
+      subtitleI18n: {
+        en: 'Participles, forms and dialogues about travel and meetings',
+        fr: 'Participes, formes et dialogues sur les voyages et les rencontres',
+        ar: 'أسماء الفاعل والصيغ وحوارات عن السفر واللقاءات',
+        fa: 'صفت‌های فعلی، شکل‌ها و گفتگوهایی درباره سفر و دیدار',
+        uk: 'Дієприкметники, форми та діалоги про подорожі й зустрічі',
+        ru: 'Причастия, формы и диалоги о путешествиях и встречах',
+      },
+      theme: 'grammar',
+    },
     sections: [
       {
         id: 'а. Париж',
         imageUrl: `${ASSET}/04-dialozi-3/01-parizh-dvama-mazhe.jpg`,
         lines: [
           { text: '– Аз съм ходил в Париж. Ти ходил ли си?', voiceGender: 'male' },
-          { text: '– Не, не съм ходил.', voiceGender: 'male' },
+          {
+            text: '– Не, не съм ходил.',
+            voiceGender: 'male',
+            ttsPrompt:
+              'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. The last word is the masculine past participle „ходил" — it ends with Л. Say „ходил", never „ходила". Do not add a final а. Do not use any Russian, Arabic, English or other foreign accent.',
+          },
         ],
       },
       {
@@ -519,7 +570,9 @@ export const exercises: Exercise[] = [
         id: 'а. Видял ли си Георги',
         imageUrl: `${ASSET}/05-dialozi-4/01-georgi-tarsi.jpg`,
         lines: [
-          { text: '– Ти виждал ли си Георги този месец?', voiceGender: 'male' },
+          { text: '– Ти виждал ли си Георги този месец?', voiceGender: 'male',
+            // Gemini palatalizes „Георги" to „Гярги"; hyphen keeps Ге-орги.
+            ttsText: '– Ти виждал ли си Ге-орги този месец?' },
           { text: '– Не, не съм го виждал.', voiceGender: 'male' },
         ],
       },
@@ -555,7 +608,7 @@ export const exercises: Exercise[] = [
     columns: ['причастие (м.р./ж.р./ср.р./мн.ч.)'],
     rows: [
       { pronoun: 'виждам',     cells: ['виждал, -а, -о, -и'],    ttsText: 'виждам: виждал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'чувам',      cells: ['чувал, -а, -о, -и'],     ttsText: 'чувам: чувал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'чувам',      cells: ['чувал, -а, -о, -и'],     ttsText: 'чувам: чУвал', ttsModel: 'pro', ttsPrompt: GEMINI_BG_STRESS_CHUVAM },
       { pronoun: 'казвам',     cells: ['казвал, -а, -о, -и'],    ttsText: 'казвам: казвал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'купувам',    cells: ['купувал, -а, -о, -и'],   ttsText: 'купувам: купувал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'идвам',      cells: ['идвал, -а, -о, -и'],     ttsText: 'идвам: идвал', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
@@ -580,6 +633,27 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с миналото неопределено на възвратните глаголи.',
     instructionKey: 'a2.gr.l10.minaloBezpVuzvraten',
     order: 16,
+    sectionStart: {
+      title: 'Възвратни глаголи в минало неопределено',
+      subtitle: 'Форми със „се" и разговори от ежедневието',
+      titleI18n: {
+        en: 'Reflexive verbs in the past indefinite',
+        fr: 'Verbes pronominaux au passé indéfini',
+        ar: 'الأفعال الانعكاسية في الماضي غير المحدد',
+        fa: 'فعل‌های انعکاسی در گذشته نامعین',
+        uk: 'Зворотні дієслова в минулому неозначеному',
+        ru: 'Возвратные глаголы в прошедшем неопределённом',
+      },
+      subtitleI18n: {
+        en: 'Forms with "се" (oneself) and everyday conversations',
+        fr: 'Formes avec « се » (se) et conversations du quotidien',
+        ar: 'صيغ مع «се» (نفسه) ومحادثات يومية',
+        fa: 'شکل‌ها با «се» (خود) و گفتگوهای روزمره',
+        uk: 'Форми з „се" (себе) та розмови з повсякдення',
+        ru: 'Формы с „се" (себя) и разговоры из повседневности',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Минало неопределено — възвратни глаголи (+)',
     columns: ['(+)'],
     rows: [
@@ -848,6 +922,27 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с маркерите за минало свършено и неопределено.',
     instructionKey: 'a2.gr.l10.markeriVreme',
     order: 22,
+    sectionStart: {
+      title: 'Маркери за минало време',
+      subtitle: 'Минало свършено и минало неопределено',
+      titleI18n: {
+        en: 'Markers for the past tense',
+        fr: 'Marqueurs du passé',
+        ar: 'علامات الزمن الماضي',
+        fa: 'نشانه‌های زمان گذشته',
+        uk: 'Маркери минулого часу',
+        ru: 'Маркеры прошедшего времени',
+      },
+      subtitleI18n: {
+        en: 'The simple past and the past indefinite',
+        fr: 'Le passé simple et le passé indéfini',
+        ar: 'الماضي البسيط والماضي غير المحدد',
+        fa: 'گذشته ساده و گذشته نامعین',
+        uk: 'Минулий доконаний і минулий неозначений',
+        ru: 'Прошедшее совершенное и прошедшее неопределённое',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Маркери за минало свършено / неопределено',
     columns: ['Минало свършено', 'Минало неопределено'],
     rows: [
@@ -1104,6 +1199,27 @@ export const exercises: Exercise[] = [
     textTitle: 'Интервю за работа',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 27,
+    sectionStart: {
+      title: 'Интервю за работа и лични истории',
+      subtitle: 'Интервюто на Али и историите на Елена, Пулус и Рамин',
+      titleI18n: {
+        en: 'A job interview and personal stories',
+        fr: "Un entretien d'embauche et des histoires personnelles",
+        ar: 'مقابلة عمل وقصص شخصية',
+        fa: 'مصاحبه شغلی و داستان‌های شخصی',
+        uk: 'Співбесіда на роботу та особисті історії',
+        ru: 'Собеседование на работу и личные истории',
+      },
+      subtitleI18n: {
+        en: "Ali's interview and the stories of Elena, Pulus and Ramin",
+        fr: "L'entretien d'Ali et les histoires d'Elena, de Pulus et de Ramin",
+        ar: 'مقابلة علي وقصص إيلينا وبولوس ورامين',
+        fa: 'مصاحبهٔ علی و داستان‌های النا، پولوس و رامین',
+        uk: 'Співбесіда Алі та історії Олени, Пулуса і Раміна',
+        ru: 'Собеседование Али и истории Елены, Пулуса и Рамина',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     paragraphs: [
       '– Добър ден. Заповядайте, седнете. Как се казвате?',
@@ -1197,6 +1313,8 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 30,
     showDictionary: true,
+    imageColumns: 3,
+    imageEqualHeight: true,
     images: [
       { imageUrl: `${ASSET}/09-tekst-elena/01-zhena-shapka-cherno.jpg`,        label: 'Имигрантка в България',     ttsWordId: 'elena-img-01' },
       { imageUrl: `${ASSET}/09-tekst-elena/02-zhena-skal-pamuk.jpg`,           label: 'Имигрантка в България',     ttsWordId: 'elena-img-02' },

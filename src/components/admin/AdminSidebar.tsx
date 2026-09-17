@@ -16,26 +16,27 @@ interface NavItem {
   href: string;
   label: string;
   icon: React.ReactNode;
-  itOnly?: boolean;
+  minRole?: AdminRole; // defaults to 'viewer' (everyone with any admin role)
 }
+
+const ROLE_RANK: Record<AdminRole, number> = { viewer: 0, admin: 1, it: 2 };
 
 const NAV_ITEMS: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
   { href: '/admin/chats', label: 'Conversations', icon: <MessageSquare className="w-4 h-4" /> },
   { href: '/admin/users', label: 'Users', icon: <Users className="w-4 h-4" /> },
   { href: '/admin/reports', label: 'Reports', icon: <FileText className="w-4 h-4" /> },
-  { href: '/admin/prompts', label: 'Prompts (IT)', icon: <BookOpen className="w-4 h-4" />, itOnly: true },
-  { href: '/admin/welcome-message', label: 'Welcome Msg (IT)', icon: <MessageCircle className="w-4 h-4" />, itOnly: true },
-  { href: '/admin/api-keys', label: 'API Keys (IT)', icon: <Key className="w-4 h-4" />, itOnly: true },
-  { href: '/admin/admins', label: 'Admins (IT)', icon: <ShieldCheck className="w-4 h-4" />, itOnly: true },
-  { href: '/admin/audit', label: 'Audit Log (IT)', icon: <ClipboardList className="w-4 h-4" />, itOnly: true },
+  { href: '/admin/prompts', label: 'Prompts (IT)', icon: <BookOpen className="w-4 h-4" />, minRole: 'it' },
+  { href: '/admin/welcome-message', label: 'Welcome Msg (IT)', icon: <MessageCircle className="w-4 h-4" />, minRole: 'it' },
+  { href: '/admin/api-keys', label: 'API Keys (IT)', icon: <Key className="w-4 h-4" />, minRole: 'it' },
+  { href: '/admin/admins', label: 'Admins', icon: <ShieldCheck className="w-4 h-4" />, minRole: 'admin' },
+  { href: '/admin/audit', label: 'Audit Log (IT)', icon: <ClipboardList className="w-4 h-4" />, minRole: 'it' },
 ];
 
 export function AdminSidebar({ role }: Props) {
   const pathname = usePathname();
-  const isIt = role === 'it';
 
-  const visibleItems = NAV_ITEMS.filter((item) => !item.itOnly || isIt);
+  const visibleItems = NAV_ITEMS.filter((item) => ROLE_RANK[role] >= ROLE_RANK[item.minRole ?? 'viewer']);
 
   return (
     <aside className="w-56 min-h-screen bg-white border-r border-gray-200 flex flex-col">

@@ -10,7 +10,6 @@
 // to the browser speech synthesiser via `playTtsAudio`.
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Volume2 } from 'lucide-react';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
@@ -66,7 +65,7 @@ export function WideCards({ exercise, exerciseId }: Props) {
           <div
             key={card.id}
             onClick={() => handleCardClick(card)}
-            className={`relative rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
+            className={`relative flex flex-col rounded-xl border-2 p-4 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 ${
               visitedCards.has(card.id)
                 ? 'bg-green-50 border-[#32C189]/40'
                 : 'bg-white border-gray-200'
@@ -79,20 +78,18 @@ export function WideCards({ exercise, exerciseId }: Props) {
             )}
 
             {card.imageUrl && (
-              <div className="flex items-center justify-center mb-3 min-h-[110px] md:min-h-[130px]">
-                <div className="relative w-full h-[110px] md:h-[130px] bg-white">
-                  <Image
-                    src={card.imageUrl}
-                    alt={card.label}
-                    fill
-                    className="object-contain rounded-lg"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                  />
-                </div>
+              <div className="flex items-center justify-center mb-3 h-[120px] md:h-[140px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={card.imageUrl}
+                  alt={card.label}
+                  className="max-h-full max-w-full w-auto object-contain rounded-lg"
+                  loading="lazy"
+                />
               </div>
             )}
 
-            <div className="text-center">
+            <div className="text-center mt-auto">
               <p className="text-base md:text-lg font-semibold text-gray-800">
                 {card.label}
               </p>

@@ -1,5 +1,10 @@
+import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { LevelMapClient } from '@/components/level/LevelMapClient';
+import { isLevelEnabledForHost } from '@/lib/enabledLevels';
 
-export default function LevelB2Page() {
+export default async function LevelB2Page() {
+  const host = (await headers()).get('host');
+  if (!isLevelEnabledForHost('b2', host)) notFound();
   return <LevelMapClient level="b2" />;
 }

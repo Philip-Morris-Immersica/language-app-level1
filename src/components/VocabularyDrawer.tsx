@@ -113,7 +113,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
           <button
             onClick={close}
             className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Close dictionary"
+            aria-label={t('exercise.closeDictionary')}
           >
             <X className="w-4 h-4" />
           </button>
@@ -135,7 +135,7 @@ export function VocabularyDrawer({ vocabulary, lessonTitle, lessonId }: Vocabula
 
         {/* Footer with count */}
         <div className="px-6 py-3 border-t border-gray-100 text-center text-xs text-gray-400">
-          {vocabulary.length} {vocabulary.length === 1 ? 'дума' : 'думи'}
+          {vocabulary.length} {t('exercise.words')}
         </div>
       </div>
     </>

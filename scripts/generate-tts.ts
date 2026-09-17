@@ -1,6 +1,6 @@
-import fs from 'fs';
+﻿import fs from 'fs';
 import path from 'path';
-import { cleanForTTS, expandVocabAbbreviations } from '@/lib/tts';
+import { cleanForTTS } from '@/lib/tts';
 
 // ---------------------------------------------------------------------------
 // Config
@@ -38,8 +38,7 @@ const MALE_VOICE = USE_GEMINI ? 'Charon' : 'bg-BG-Chirp3-HD-Charon';
 /** Second male voice for dialogues with two men (Gemini only; Chirp reuses Charon). */
 const MALE_VOICE_ALT = USE_GEMINI ? 'Achird' : 'bg-BG-Chirp3-HD-Charon';
 const GEMINI_MODEL = 'gemini-2.5-pro-tts';
-const GEMINI_PROMPT =
-  'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Утвърдителните с падаща интонация, въпросите с леко покачване. Не монотонно, не роботски, без чужд акцент.';
+const GEMINI_PROMPT = 'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Do not use any Russian, Arabic, English or other foreign accent.';
 /** Calmer Pro prompt for reading texts that should have minimal intonation (per-id opt-in below). */
 const GEMINI_BG_CALM_PROMPT =
   'Read calmly and neutrally in clear standard Bulgarian with correct native stress, with minimal intonation and without any foreign accent.';
@@ -53,102 +52,11 @@ const READING_TEXT_CALM_PROMPT_IDS = new Set<string>(['a2-l08-ex-19']);
  * Keyed by `${exerciseId}-p-${index}`.
  */
 const READING_TEXT_PARA_OVERRIDE: Record<string, { flash?: boolean; prompt?: string }> = {
-  // B1 L04 — печАхме (А after Ч), NEVER печехме
-  'b1-l04-ex-03-p-7': {
-    prompt:
-      'Warm natural female Bulgarian, standard Bulgarian only. Capitals mark stress only — do not spell them out. CRITICAL: печАхме = pe-CHAH-hme with clear А after Ч (like чаша) — NEVER печехме / pe-CHEH-hme, NEVER e-vowel after ч. Also: живеЕха clear Е; сладОлед stress О; любоВТа clear В; книГИте clear Г. Read once, fluently.',
-  },
   'a2-l08-tekst-vakantsia-p-6':  { flash: true },
   'a2-l08-tekst-vakantsia-p-9':  { flash: true },
   'a2-l08-tekst-vakantsia-p-10': { flash: true },
   'a2-l08-tekst-vakantsia-p-12': { flash: true },
   'a2-l08-tekst-vakantsia-p-15': { flash: true },
-  // B1 L07 — capitals mark stress only (no hyphens). чужденцИ / мехАни
-  'b1-l07-tekst-pochivka-p-6': {
-    prompt:
-      'Warm natural standard Bulgarian. Read the text normally as whole words. Capital letters mark stress only — do not spell them out. мЯсто: stress Я (MYA-sto), never ME-sto. БългаРия = България with clear Р — NEVER Бългания. чужденцИ: stress FINAL syllable. CRITICAL: short preposition в only — в Пирин NEVER във Пирин; also в България, в града, В Банско — NEVER във. ходЯт: stress Я (ho-DYAT), never ходат. чуДесни = чудесни with clear Д (chu-DE-sni) — NEVER чубесни / chu-BE-sni. механИ = механи: stress FINAL И (meha-NÍ). Surname ВапцАров: stress Á, full name with ПЦ — NEVER Въцаров. планинА: stress FINAL А (plani-NÁ). Finish the whole line.',
-  },
-  // B1 L07 — БОровец / ПампОрово
-  'b1-l07-tekst-pochivka-p-8': {
-    prompt:
-      'Warm natural standard Bulgarian. Capitals mark stress only. БОровец: stress FIRST syllable БО. ПампОровО: stress on О vowels (Pam-PO-ro-VO). Finish the whole paragraph.',
-  },
-  // B1 L01 — Mitko text: short в before пети (NEVER във); клас not плас; храни stress
-  'b1-l01-ex-02-p-0': {
-    prompt:
-      'Warm natural male Bulgarian. Capitals mark stress; hyphens = syllable breaks. Say пи-ле-ТА as three clear syllables with stress on ТÁ (pi-le-TÁ) — NEVER pí-le-ta. Same final stress for телеТА and агнеТА. Short в before пети (NEVER във). клаС clear K. хранИ final И. Read once.',
-  },
-  // B1 L10 — Радо/Мария: verbatim; short с/в; офис; продажби (ДЖ not Г)
-  'b1-l10-ex-07-p-0': {
-    prompt:
-      'Warm natural standard Bulgarian. Read verbatim. Short с before офис (NEVER със); short в before голяма / София / отдел (NEVER във). офис = Bulgarian O-fis NEVER English office. София = SO-fi-ya. CRITICAL: продажби = pro-DAZH-bi with Д+Ж (d+zh) — NEVER прогажби / pro-GAZH-bi, NEVER skip the Д. Once only.',
-  },
-  'b1-l10-ex-07-p-2': {
-    prompt:
-      'Warm natural standard Bulgarian. Read verbatim. Short в before парка (NEVER във). сутрин = SU-trin clear. CRITICAL: случайно = slu-CHAY-no ending with НО (n+o) — NEVER случаймо / M sound. Once only.',
-  },
-  // B1 L10 — dialogue „В час по български език"
-  'b1-l10-ex-14-p-0': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian, no vowel reduction. Capitals mark stress. МилЕн stress Е. CRITICAL: български = clear Л + clear Г — NEVER бъгански (missing Л), NEVER бълдарски. БългАрия stress А. Once, fluently.',
-  },
-  'b1-l10-ex-14-p-1': {
-    prompt:
-      'Warm natural male Bulgarian question, STANDARD BULGARIAN — NOT Russian. CRITICAL: clear FULL vowels — no завалване / vowel reduction / mumbled endings. намИра with clear Р — NEVER намиза. БългАрия stress А, every syllable clear: bul-GA-ri-ya. Rising tone. Once only.',
-  },
-  'b1-l10-ex-14-p-5': {
-    prompt:
-      'Warm natural male Bulgarian question, STANDARD BULGARIAN — NOT Russian. CRITICAL: български = clear Л + clear Г — NEVER бъгански (missing Л), NEVER бълдарски. Say: Кои са най-големите български градове? Rising tone. Once only.',
-  },
-  'b1-l10-ex-14-p-6': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. Say „Ахмед казва" then Со́фия, Пло́вдив, Ва́рна, Бурга́с, Ру́се. Once only.',
-  },
-  'b1-l10-ex-14-p-7': {
-    prompt:
-      'Warm natural male Bulgarian question. CRITICAL ACCENT: pure standard Bulgarian ONLY — ban Russian accent, Russian melody, Russian vowels. Speak like a Bulgarian teacher from Sofia. БългАрия stress А. Rising Bulgarian question tone. Once only.',
-  },
-  'b1-l10-ex-14-p-8': {
-    prompt:
-      'Warm natural female Bulgarian, STANDARD BULGARIAN — NOT Russian. със Сърбия (ъ — NEVER Сербия). Short с before Гърция/Турция/Румъния. Once, fluently.',
-  },
-  'b1-l10-ex-14-p-9': {
-    prompt:
-      'Warm natural male Bulgarian question, STANDARD BULGARIAN — NOT Russian. БългАрия stress А, clear Р. Rising tone. Once only.',
-  },
-  'b1-l10-ex-14-p-10': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. АлИ stress final И. Then Река Дунав… Once only.',
-  },
-  'b1-l10-ex-14-p-11': {
-    prompt:
-      'Warm natural male Bulgarian question, STANDARD BULGARIAN — NOT Russian. БългАрия stress А. Short в NEVER във. Rising tone. Once only.',
-  },
-  'b1-l10-ex-14-p-12': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. РИла first. МусалА final А. Finish планина. Short в before Рила. Once only.',
-  },
-  'b1-l10-ex-14-p-14': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. ПирИн, РодОпите, Стара планинА, ВитОша. Finish планинА fully. Once only.',
-  },
-  'b1-l10-ex-14-p-15': {
-    prompt:
-      'Warm natural male Bulgarian question, STANDARD BULGARIAN — NOT Russian. КАкви = KA-kvi clear А — NEVER кикви. Rising tone. Once only.',
-  },
-  // Closing speech parts (concat into p-17): p-17 has Милен once; p-18/p-19 continue without name
-  'b1-l10-ex-14-p-17': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. Say: МилЕн: Радвам се, че знаете отговорите на въпросите. Complete every word. Once only.',
-  },
-  'b1-l10-ex-14-p-18': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. Continuation of the same speech — do NOT say Милен. Say every word including град Со́фия (SO-fi-ya): Сега ще говорим за историята на град Со́фия. Complete. Once only.',
-  },
-  'b1-l10-ex-14-p-19': {
-    prompt:
-      'Warm natural male Bulgarian, STANDARD BULGARIAN — NOT Russian. Continuation — do NOT say Милен. Say every word: Ще научите нови интересни неща. Отворете учебниците си! Complete. Once only.',
-  },
 };
 const GEMINI_FLASH_MODEL = 'gemini-2.5-flash-tts';
 const GEMINI_WORD_PROMPT = 'make sure the word is clearly in Bulgarian with the right pronunciation';
@@ -165,6 +73,7 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l00-gramatika-01-row-12', // М — Мохамед
   'l00-gramatika-01-row-19', // У — Уляна
   'l00-gramatika-01-row-22', // Ц — Цветелина
+  'l00-gramatika-01-row-24', // Ш — Шадия
   'l03-gramatika-04-row-0', // сандвич, сок — Flash mispronounces loanwords
   'l04-gramatika-02-row-9', // хиляда
   'l05-gramatika-07-row-0', // хиляда (l05)
@@ -172,8 +81,8 @@ const GRAMMAR_TABLE_PRO_ROWS = new Set([
   'l05-gramatika-07-row-2', // един милион (l05)
   'l05-gramatika-07-row-3', // два милиона (l05)
   'l05-gramatika-07-row-4', // един милиард (l05)
-  'l06-gramatika-04-row-3', // тя / й (KPM table – "й" needs Pro for correct pronunciation)
   'l06-gramatika-08-row-6', // Вие работите / не работите
+  'l10-gramatika-03-row-3', // такси — известна проблемна дума (виж tts-audio.mdc), Flash сгрешава ударението
   'a2-l01-gramatika-01-row-5', // ние → ни: Flash expands clitic "ни" as "ние"; Pro handles it correctly
   'a2-l02-gramatika-03-row-3', // тя → й: Flash mispronounces clitic "й"
   'a2-l02-gramatika-05-row-0', // аз → Трябва ми един лев: Flash mispronounces "лев" as "лъев"
@@ -216,10 +125,28 @@ const GRAMMAR_TABLE_PRO_NOTES = new Set([
 
 /** Grammar row: exact TTS string when `clean()` would keep the книжовна форма but разговорна is preferred (като другите -найсет). */
 const GRAMMAR_TABLE_ROW_TTS_TEXT: Record<string, string> = {
+  // Фаза 6 — TTS корекции (числа/часове с думи; „й“ в контекст)
+  'l06-gramatika-04-row-3': 'тя. Семейството й.', // „й“ се пропуска изолирано → в контекст
+  'l10-gramatika-01b-row-0': 'Пловдив. Осем часа и петнайсет минути. Първи коловоз. Пет минути закъснение.',
+  'l10-gramatika-01b-row-1': 'Плевен. Дванайсет часът. Трети коловоз. Няма закъснение.', // "часа" в точен час без минути → "часът" (виж tts-audio.mdc)
+  'l10-gramatika-01b-row-2': 'Русе. Петнайсет часа и трийсет минути. Четвърти коловоз. Петнайсет минути закъснение.',
+  'l10-gramatika-01c-row-1': 'Варна. Единайсет часа и двайсет минути. Пети коловоз. Двайсет и пет минути закъснение.',
+  'l10-gramatika-03-row-3': 'такси. с такси.', // моделът е Pro (виж GRAMMAR_TABLE_PRO_ROWS) — Flash сгрешаваше ударението
+  'l11-gramatika-07-row-3': 'връщам се. идвам обратно от някъде. Връщам се от работа вкъщи в осемнайсет часа.',
+
   'l03-gramatika-01-row-6': 'шестнайсет', // 16 — иначе след махане на скобите остава „шестнадесет“
 
   'l00-gramatika-01-row-9':  'и кратко',   // Й — буквата се произнася „и кратко"
   'l00-gramatika-01-row-27': 'ер малък',   // Ь — буквата се произнася „ер малък"
+
+  // Азбука — буквите да се четат чисто, без прикачено „ъ" на съгласните (клиентска бележка):
+  // четем малката буква в контекста на примерното име, без изолираната главна буква.
+  'l00-gramatika-01-row-0':  'а, Ана',       // А
+  'l00-gramatika-01-row-4':  'д, Дилма',     // Д
+  'l00-gramatika-01-row-12': 'м, Мохамед',   // М
+  'l00-gramatika-01-row-19': 'у, Уляна',     // У
+  'l00-gramatika-01-row-22': 'ц, Цветелина', // Ц
+  'l00-gramatika-01-row-24': 'ш, Шадия',     // Ш
 
   // a2-lesson-02 — ГРАМАТИКА 3: дателни местоимения — „їй" (U+045D) → „й"
   'a2-l02-gramatika-03-row-3': 'тя. й. Пиша й.',
@@ -265,8 +192,7 @@ const READING_TEXT_EXCLUDE = new Set(
   lessonNum === '05' ? ['l05-ex-10', 'l05-wb-00', 'l05-wb-04'] : [],
 );
 const SKIP_FULL_TEXT = new Set(
-  lessonNum === '05' ? ['l05-ex-25'] :
-  lessonNum === '03' ? ['l03-ex-31'] : [],
+  lessonNum === '05' ? ['l05-ex-25'] : [],
 );
 
 const GRAMMAR_LABELS = new Set([
@@ -291,6 +217,7 @@ const VOCAB_CUSTOM_PROMPTS: Record<string, string> = {
 const ILLUSTRATED_CARD_PRO_WORD_PROMPT_IDS = new Set([
   'pushene',     // lesson 3 — Пушенето забранено!
   'bob',         // lesson 4 — боб (single short word, word prompt gives clearer stress)
+  'pulover',     // lesson 8 — пуловер (стар клип беше счупен — четеше промпта; Pro + word prompt)
   // a2-lesson-01 verbs — warm tone causes consonant distortion or trailing sounds on single verbs
   'tarsya',      // търся — needs custom stress prompt (see ILLUSTRATED_CARD_CUSTOM_PROMPTS)
   'vklyuchvam',  // включвам — лю cluster mispronounced as ру
@@ -345,25 +272,6 @@ function cleanForGeminiTTS(raw: string): string {
 const clean = USE_GEMINI ? cleanForGeminiTTS : cleanForTTS;
 
 // ---------------------------------------------------------------------------
-// Vocabulary abbreviated-form expander
-// ---------------------------------------------------------------------------
-/**
- * Expands abbreviated vocabulary forms so TTS pronounces complete words, not endings.
- *
- * Examples:
- *   "вечерям, -яш"         → "вечерям, вечеряш"
- *   "закусвам, -аш"        → "закусвам, закусваш"
- *   "казвам се, -аш"       → "казвам се, казваш се"
- *   "пия, -еш"             → "пия, пиеш"
- *   "цигара, -и"           → "цигара, цигари"
- *   "зает, -а, -о, -и"     → "зает, заета, заето, заети"
- *   "прекрасен, -на, -но"  → "прекрасен, прекрасна, прекрасно"
- *   "мия (се), -еш"        → "мия (се), миеш"
- *   "студент, -ка"         → "студент, студентка"
- *   "ям, ядеш"             → unchanged (both forms already written in full)
- *   "шиш, шишче"           → unchanged (both forms already written in full)
- */
-// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 interface VocabularyItem {
@@ -375,8 +283,6 @@ interface VocabularyItem {
   ttsModel?: 'flash' | 'pro';
   /** TTS-only override: custom prompt passed to Gemini. */
   ttsPrompt?: string;
-  /** TTS voice: Charon (male) or Achernar (female). Default: female. */
-  voiceGender?: 'male' | 'female';
 }
 interface DialogueSpeaker { name: string; text: string; }
 interface Dialogue { id: string; speakers: DialogueSpeaker[]; }
@@ -393,8 +299,6 @@ interface Exercise {
   paragraphs?: string[] | { text: string; speaker?: string }[];
   /** TTS-friendly text per paragraph (overrides `paragraphs` for audio only). */
   ttsParagraphs?: string[];
-  /** Per-paragraph Gemini prompt (parallel to `ttsParagraphs` / `paragraphs`). Set in lesson content, e.g. B1 reading texts. */
-  ttsParagraphPrompts?: (string | undefined)[];
   paragraphVoiceGenders?: ('male' | 'female')[];
   rows?: {
     pronoun: string;
@@ -405,12 +309,10 @@ interface Exercise {
     ttsPrompt?: string;
     /** TTS-only override: exact text spoken instead of joining pronoun + cells. */
     ttsText?: string;
-    /** TTS voice: Charon (male) or Achernar (female). Default: female. */
-    voiceGender?: 'male' | 'female';
   }[];
   ttsFlash?: boolean;
-  examples?: { text: string; ttsText?: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female'; ttsPrompt?: string }[];
-  sections?: { id: string; lines: { text: string; ttsText?: string; ttsPrompt?: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
+  examples?: { text: string; ttsText?: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female' }[];
+  sections?: { id: string; lines: { text: string; ttsText?: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
   notes?: string[];
   ttsNotes?: string[];
   /** TTS-only override per note index: force Gemini Pro or Flash. */
@@ -436,6 +338,12 @@ interface Exercise {
     ttsPrompt?: string;
   }[];
   pronouns?: { pronoun: string; description?: string }[];
+  /** audio_choice — one MP3 per question (letter name or word). */
+  questions?: {
+    id: string;
+    word?: string;
+    ttsText: string;
+  }[];
 }
 
 interface TtsJob {
@@ -615,8 +523,8 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
     return {
       category: 'words',
       filename: `${item.id}.mp3`,
-      text: clean(item.ttsText ?? expandVocabAbbreviations(item.bulgarian)),
-      voice: item.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE,
+      text: clean(item.ttsText ?? item.bulgarian),
+      voice: FEMALE_VOICE,
       model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
       prompt: customPrompt ?? (usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
     };
@@ -733,6 +641,32 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/**
+ * audio_choice — one MP3 per WORD question: `words/{question.id}.mp3`.
+ * Pure-letter questions (no `word`) are intentionally SKIPPED here — they reuse
+ * the already-validated per-letter clips from the alphabet maze
+ * (public/assets/lesson-00/audio/tts/maze/l00-maze-letter-{0..29}.mp3, see
+ * src/lib/letterTTS.ts) so letter pronunciation stays consistent across the
+ * lesson instead of a second, separately-generated recording.
+ */
+function collectAudioChoiceJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises.filter(e => e.type === 'audio_choice' && e.questions)) {
+    for (const q of ex.questions!) {
+      if (!q.word) continue;
+      jobs.push({
+        category: 'words',
+        filename: `${q.id}.mp3`,
+        text: clean(q.ttsText),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 /** grammar_visual — one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
 function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
@@ -791,7 +725,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           text: clean(rawText),
           voice: dialogueLineVoice(line, i, maleTurn, femaleTurn, prevGender),
           model: GEMINI_MODEL,
-          prompt: line.ttsPrompt ?? GEMINI_PROMPT,
+          prompt: GEMINI_PROMPT,
         });
       }
     }
@@ -801,7 +735,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'grammar_table' || e.type === 'b1-grammar-table') && e.rows)) {
+  for (const ex of exercises.filter(e => e.type === 'grammar_table' && e.rows)) {
     for (let i = 0; i < ex.rows!.length; i++) {
       const row = ex.rows![i];
       const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
@@ -815,7 +749,7 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
         category: 'grammar',
         filename: `${rowKey}.mp3`,
         text: clean(rowSource),
-        voice: row.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE,
+        voice: FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
         prompt: row.ttsPrompt ?? (useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
       });
@@ -840,9 +774,37 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+/**
+ * grammar_examples with an interactive `grammarHighlight` block — one MP3 per
+ * example line: `grammar/{exerciseId}-highlight-{i}.mp3` (Flash + word prompt,
+ * matching the rest of the grammar audio). Uses `exampleTtsTexts[i]` when set.
+ */
+function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
+  const jobs: TtsJob[] = [];
+  for (const ex of exercises) {
+    const gh = (ex as Exercise & {
+      grammarHighlight?: { interactiveExamples?: boolean; examples?: string[]; exampleTtsTexts?: string[] };
+    }).grammarHighlight;
+    if (!gh || gh.interactiveExamples !== true || !gh.examples) continue;
+    for (let i = 0; i < gh.examples.length; i++) {
+      const src = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
+      if (!src?.trim()) continue;
+      jobs.push({
+        category: 'grammar',
+        filename: `${ex.id}-highlight-${i}.mp3`,
+        text: clean(src),
+        voice: FEMALE_VOICE,
+        model: GEMINI_FLASH_MODEL,
+        prompt: GEMINI_WORD_PROMPT,
+      });
+    }
+  }
+  return jobs;
+}
+
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples' || e.type === 'b1-grammar-examples') && !e.disableTts && e.examples)) {
+  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples') && !e.disableTts && e.examples)) {
     const useFlash = !!ex.ttsFlash;
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
@@ -917,10 +879,7 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
       const paraOverride = READING_TEXT_PARA_OVERRIDE[`${ex.id}-p-${i}`];
       const useParaFlash = paraOverride?.flash ?? false;
       const paraModel = useParaFlash ? GEMINI_FLASH_MODEL : GEMINI_MODEL;
-      const contentParaPrompt = ex.ttsParagraphPrompts?.[i];
-      const paraPrompt = paraOverride?.prompt
-        ?? (contentParaPrompt?.trim() ? contentParaPrompt : undefined)
-        ?? (useParaFlash ? GEMINI_WORD_PROMPT : readingPrompt);
+      const paraPrompt = paraOverride?.prompt ?? (useParaFlash ? GEMINI_WORD_PROMPT : readingPrompt);
       jobs.push({ category: 'texts', filename: `${ex.id}-p-${i}.mp3`, text: clean(ttsParagraphs[i]), voice, model: paraModel, prompt: paraPrompt });
     }
     // No `-full.mp3` when per-paragraph voices are set (mixed or explicit) or ttsParagraphs is used; UI uses sequential listen instead
@@ -940,14 +899,7 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
 function collectListeningJobs(exercises: Exercise[]): TtsJob[] {
   return exercises
     .filter(e => e.listeningText)
-    .map(e => ({
-      category: 'listening',
-      filename: `${e.id}.mp3`,
-      text: clean(e.listeningText!),
-      voice: e.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE,
-      model: GEMINI_MODEL,
-      prompt: GEMINI_PROMPT,
-    }));
+    .map(e => ({ category: 'listening', filename: `${e.id}.mp3`, text: clean(e.listeningText!), voice: FEMALE_VOICE, model: GEMINI_MODEL, prompt: GEMINI_PROMPT }));
 }
 
 function collectPersonalChoiceJobs(exercises: Exercise[]): TtsJob[] {
@@ -1012,9 +964,11 @@ async function main() {
     ...collectWideCardJobs(exercises),
     ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
+    ...collectAudioChoiceJobs(exercises),
     ...collectDialogueJobs(exercises),
     ...collectGrammarVisualJobs(exercises),
     ...collectGrammarTableJobs(exercises),
+    ...collectGrammarHighlightJobs(exercises),
     ...collectGrammarExampleJobs(exercises),
     ...collectReadingTextJobs(exercises),
     ...collectTableFillParagraphJobs(exercises),

@@ -118,7 +118,7 @@ export const A1_TEST_NEXT_LESSON_MAP: Record<string, string> = {
  */
 export const A1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'lesson-00': 3,
-  'lesson-01': 21,
+  'lesson-01': 20,
   'lesson-02': 22,
   'lesson-03': 25,
   'lesson-04': 31,

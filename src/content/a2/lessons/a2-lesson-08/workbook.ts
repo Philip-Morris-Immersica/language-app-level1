@@ -18,8 +18,8 @@ export const workbookExercises: Exercise[] = [
       { text: 'Мъжът ми **взе** децата от училище. (взема) (Модел)', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Те не _____, че ще дойда. (зная)',       blanks: [1], correctAnswers: ['знаеха'],  options: ['знаеха', 'знаех', 'знаеше'],      acceptableAnswers: [['знаеха']] },
       { text: 'Майката _____ ботушите на детето. (обуя)', blanks: [1], correctAnswers: ['обу'],     options: ['обух', 'обу', 'обуха'],           acceptableAnswers: [['обу']] },
-      { text: 'Вие къде _____? (събуя се)',               blanks: [1], correctAnswers: ['събухте се'], options: ['събухте се', 'събух се', 'събуха се'], acceptableAnswers: [['събухте се', 'се събухте']] },
-      { text: 'Вие _____, че Иван има бебе? (чуя)',      blanks: [1], correctAnswers: ['чухте'],   options: ['чух', 'чухте', 'чуха'],           acceptableAnswers: [['чухте']] },
+      { text: 'Вие къде се _____? (събуя се)',            blanks: [1], correctAnswers: ['събухте'], options: ['събухте', 'събух', 'събуха'],     acceptableAnswers: [['събухте']] },
+      { text: 'Вие _____ ли, че Иван има бебе? (чуя)',   blanks: [1], correctAnswers: ['чухте'],   options: ['чух', 'чухте', 'чуха'],           acceptableAnswers: [['чухте']] },
     ],
   } as WorkbookFillBlankExercise,
 

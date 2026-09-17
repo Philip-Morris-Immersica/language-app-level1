@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import type { WordOrderExercise } from '@/content/types';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { isWordOrderAnswerCorrect } from '@/lib/wordOrder';
 
 interface WordOrderProps {
   exercise: WordOrderExercise;
@@ -45,7 +46,9 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
     setQuestionStates(initialStates);
   }, [exercise]);
 
-  const handleWordClick = (questionIndex: number, word: string, fromBuilt: boolean) => {
+  // `wordIndex` (not the word itself) identifies the token, so a sentence that
+  // repeats a word („ще … ще") keeps both copies when one is clicked.
+  const handleWordClick = (questionIndex: number, wordIndex: number, fromBuilt: boolean) => {
     if (isSubmitted) {
       setIsSubmitted(false);
       setQuestionStates(prev => {
@@ -59,13 +62,19 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
 
     setQuestionStates(prev => {
       const state = prev[questionIndex];
+      if (!state) return prev;
+      const source = fromBuilt ? state.built : state.available;
+      const word = source[wordIndex];
+      if (word === undefined) return prev;
+      const remaining = source.filter((_, i) => i !== wordIndex);
+
       if (fromBuilt) {
         // Move from built to available
         return {
           ...prev,
           [questionIndex]: {
             ...state,
-            built: state.built.filter(w => w !== word),
+            built: remaining,
             available: [...state.available, word],
           },
         };
@@ -75,7 +84,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
           ...prev,
           [questionIndex]: {
             ...state,
-            available: state.available.filter(w => w !== word),
+            available: remaining,
             built: [...state.built, word],
           },
         };
@@ -99,11 +108,10 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
     let correctCount = 0;
 
     exercise.questions.forEach((question, index) => {
-      const builtSentence = questionStates[index].built.join(' ').toLowerCase().trim();
-      const allValid = [question.correctSentence, ...(question.alternateCorrectSentences ?? [])];
-      const isCorrect = allValid.some(s => builtSentence === s.toLowerCase().trim());
+      const state = newStates[index] ?? { available: [], built: [], validation: null };
+      const isCorrect = isWordOrderAnswerCorrect(state.built, question);
       newStates[index] = {
-        ...newStates[index],
+        ...state,
         validation: isCorrect,
       };
       if (isCorrect) correctCount++;
@@ -166,7 +174,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                     {state.built.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, true)}
+                        onClick={() => handleWordClick(qIndex, wIndex, true)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-[#32C189] bg-[#DAF6EB] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
@@ -196,7 +204,7 @@ export function WordOrder({ exercise, onComplete }: WordOrderProps) {
                     {state.available.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, false)}
+                        onClick={() => handleWordClick(qIndex, wIndex, false)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-gray-300 bg-white shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95

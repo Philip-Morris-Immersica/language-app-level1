@@ -100,6 +100,37 @@ export function GroupedDropdownMatch({ exercise, onComplete, exerciseId }: Props
 
   function renderCell(q: A2GroupedDropdownQuestion) {
     const state = validation[q.id];
+    // If `left` contains an ellipsis marker (…), the dropdown must sit right
+    // after the word it belongs to — not at the end of the sentence. Split on
+    // it like the shared DropdownMatch does. Without a marker, fall back to
+    // label + trailing dropdown (verb-drill style questions).
+    const parts = q.left.split('…');
+    const hasSplit = parts.length === 2;
+    const before = hasSplit ? parts[0] : q.left;
+    const after = hasSplit ? parts[1] : '';
+    const selectEl = (
+      <Select
+        value={answers[q.id] || ''}
+        onValueChange={value => handleSelect(q.id, value)}
+      >
+        <SelectTrigger
+          className={`
+            w-28 h-8 text-sm font-semibold
+            ${state === true ? 'border-green-500 bg-green-50' : ''}
+            ${state === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
+          `}
+        >
+          <SelectValue placeholder={t('exercise.selectOption')} />
+        </SelectTrigger>
+        <SelectContent>
+          {(shuffledOptionsMap[q.id] ?? q.options).map(option => (
+            <SelectItem key={option} value={option} className="text-sm">
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
     return (
       <div
         key={q.id}
@@ -111,34 +142,21 @@ export function GroupedDropdownMatch({ exercise, onComplete, exerciseId }: Props
         `}
       >
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-bold text-gray-800 leading-snug">
-            {q.left}
-          </span>
+          {before && (
+            <span className="text-sm font-bold text-gray-800 leading-snug">
+              {before.trim()}
+            </span>
+          )}
           <div className="flex items-center gap-1">
-            <Select
-              value={answers[q.id] || ''}
-              onValueChange={value => handleSelect(q.id, value)}
-            >
-              <SelectTrigger
-                className={`
-                  w-28 h-8 text-sm font-semibold
-                  ${state === true ? 'border-green-500 bg-green-50' : ''}
-                  ${state === false ? 'border-[#D25A45] bg-[#FCE2DE]/40' : ''}
-                `}
-              >
-                <SelectValue placeholder={t('exercise.selectOption')} />
-              </SelectTrigger>
-              <SelectContent>
-                {(shuffledOptionsMap[q.id] ?? q.options).map(option => (
-                  <SelectItem key={option} value={option} className="text-sm">
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {selectEl}
             {state === true && <Check className="w-5 h-5 text-green-600 flex-shrink-0" />}
             {state === false && <X className="w-5 h-5 text-[#D25A45] flex-shrink-0" />}
           </div>
+          {after && (
+            <span className="text-sm font-bold text-gray-800 leading-snug">
+              {after.trim()}
+            </span>
+          )}
         </div>
         {isSubmitted && state === false && (
           <div className="p-2 rounded bg-yellow-50 border border-yellow-200">

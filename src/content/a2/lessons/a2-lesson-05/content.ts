@@ -48,7 +48,7 @@ export const content: LessonContent = {
     { id: 'l05-pismo',            bulgarian: 'писмо' },
     { id: 'l05-plashtane',        bulgarian: 'плащане' },
     { id: 'l05-plik',             bulgarian: 'плик' },
-    { id: 'l05-podstrigvam',      bulgarian: 'подстригване', ttsModel: 'pro' },
+    { id: 'l05-podstrigvam',      bulgarian: 'подстригване', ttsModel: 'pro', ttsText: 'подстриг-ване', ttsPrompt: 'Bulgarian noun meaning a haircut. Say one fluent word: подстригване. After Г comes a clear В (the letter ve / English V) — под-стриг-ВА-не. It is NOT подстригнане: there is no Н. Neutral standard Bulgarian, no extra sounds.' },
     { id: 'l05-porychka',         bulgarian: 'поръчка' },
     { id: 'l05-prevod',           bulgarian: 'превод', ttsModel: 'pro' },
     { id: 'l05-predplata',        bulgarian: 'предплата' },

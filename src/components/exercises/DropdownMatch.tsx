@@ -30,6 +30,8 @@ interface DropdownMatchProps {
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
   imageUrl?: string;
+  /** When true, the top image is shown without zoom/lightbox. Useful for reference screenshots (tables etc.) where enlarging adds no value. */
+  noZoom?: boolean;
   images?: { imageUrl: string; label: string }[];
   listeningText?: string;
 }
@@ -43,7 +45,7 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
-export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, images, listeningText }: DropdownMatchProps) {
+export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, noZoom, images, listeningText }: DropdownMatchProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -132,7 +134,7 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
       )}
       {imageUrl ? (
         <div className="mb-6 max-w-md md:max-w-lg mx-auto">
-          <ImageLightbox src={imageUrl} alt="">
+          {noZoom ? (
             <div className="relative flex justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -141,10 +143,23 @@ export function DropdownMatch({ questions, onComplete, exerciseId, imageUrl, ima
                 className="max-w-full max-h-[min(440px,60vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
               />
             </div>
-          </ImageLightbox>
-          <p className="mt-2 text-center text-xs text-gray-400 select-none">
-            Кликнете върху картинката, за да я увеличите.
-          </p>
+          ) : (
+            <>
+              <ImageLightbox src={imageUrl} alt="">
+                <div className="relative flex justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageUrl}
+                    alt=""
+                    className="max-w-full max-h-[min(440px,60vh)] w-auto rounded-xl shadow-md object-contain border border-gray-100"
+                  />
+                </div>
+              </ImageLightbox>
+              <p className="mt-2 text-center text-xs text-gray-400 select-none">
+                Кликнете върху картинката, за да я увеличите.
+              </p>
+            </>
+          )}
         </div>
       ) : null}
 

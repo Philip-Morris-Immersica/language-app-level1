@@ -72,17 +72,26 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
   const t = useT();
 
   useEffect(() => {
-    const measure = () => {
-      if (!containerRef.current) return;
-      const w = containerRef.current.offsetWidth;
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = (w: number) => {
+      if (w <= 0) return; // parent still display:none (e.g. collapsed lesson part) — wait for a real size
       const isDesktop = w >= 640;
       const c = isDesktop ? DESKTOP_COLS : MOBILE_COLS;
       setCols(c);
       setCellW(Math.floor(w / c));
     };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
+    // ResizeObserver (not just a window 'resize' listener) so we also catch the
+    // moment this exercise's collapsed lesson "Part" is opened — that transition
+    // changes this element's own box size from 0x0 (display:none) to its real
+    // width without ever firing a window resize event.
+    const observer = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width ?? 0;
+      measure(w);
+    });
+    observer.observe(el);
+    measure(el.offsetWidth);
+    return () => observer.disconnect();
   }, []);
 
   const nextExpected = connected.length;
@@ -141,10 +150,11 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
         )
       : '';
 
-  // Head direction (facing toward the 2nd dot)
+  // Head direction (facing AWAY from the 2nd dot, out into open space so the
+  // head/eyes/tongue aren't drawn on top of the first body segment)
   const headAngle =
     allPts.length >= 2
-      ? Math.atan2(allPts[1].y - allPts[0].y, allPts[1].x - allPts[0].x) *
+      ? Math.atan2(allPts[0].y - allPts[1].y, allPts[0].x - allPts[1].x) *
         (180 / Math.PI)
       : 0;
 

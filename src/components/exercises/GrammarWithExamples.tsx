@@ -2,13 +2,12 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useLanguage } from '@/i18n/LanguageContext';
-import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { AudioIcon } from '@/components/AudioIcon';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   const [error, setError] = useState(false);
@@ -96,8 +95,6 @@ function BoldLine({ text }: { text: string }) {
 
 export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const { lang } = useLanguage();
-  const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
@@ -143,8 +140,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             <div
               key={index}
               onClick={() => handleClick(index, example)}
-              className="rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
+              className="relative rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
             >
+              {!disableTts && (
+                <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
+              )}
               {example.text && (
                 <p className="text-xs font-bold uppercase tracking-widest text-[#0072BC] mb-4 pb-2 border-b border-[#CDE3F1]">
                   {example.text}
@@ -187,14 +187,17 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
           {hasText && (
             <div
               onClick={() => handleClick(0, example)}
-              className="mt-4 text-center cursor-pointer space-y-1"
+              className="mt-4 flex items-start justify-center gap-2 cursor-pointer"
             >
-              {example.lines
-                ? example.lines.filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
-                  ))
-                : <p className="text-base font-semibold text-gray-700">{example.text}</p>
-              }
+              {!disableTts && <AudioIcon className="w-4 h-4 mt-1" />}
+              <div className="text-center space-y-1">
+                {example.lines
+                  ? example.lines.filter(Boolean).map((line, i) => (
+                      <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
+                    ))
+                  : <p className="text-base font-semibold text-gray-700">{example.text}</p>
+                }
+              </div>
             </div>
           )}
           <p className="mt-3 text-center text-xs text-gray-400 select-none">
@@ -208,11 +211,6 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
       {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-      {lang !== 'bg' && disableTts && (
-        <p className="text-xs text-gray-400 text-center mb-4 italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
 
       {/* Examples grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -223,7 +221,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {!disableTts && (
-              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
             )}
             {/* Image */}
             {example.imageUrl && (

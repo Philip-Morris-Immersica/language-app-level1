@@ -26,6 +26,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-01',
+    sectionStart: {
+      title: 'Видове градски транспорт',
+      subtitle: 'Сгради, транспорт и диалози в града',
+      titleI18n: {
+        en: 'Types of city transport',
+        fr: 'Types de transports urbains',
+        ar: 'أنواع النقل الحضري',
+        fa: 'انواع حمل‌ونقل شهری',
+        uk: 'Види міського транспорту',
+        ru: 'Виды городского транспорта',
+      },
+      subtitleI18n: {
+        en: 'Buildings, transport and dialogues in the city',
+        fr: 'Bâtiments, transports et dialogues en ville',
+        ar: 'المباني والنقل والحوارات في المدينة',
+        fa: 'ساختمان‌ها، حمل‌ونقل و گفتگوها در شهر',
+        uk: 'Будівлі, транспорт та діалоги в місті',
+        ru: 'Здания, транспорт и диалоги в городе',
+      },
+      theme: 'vocabulary',
+    },
     type: 'image_labeling',
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилното название за всяка сграда.',
@@ -342,6 +363,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-03',
+    sectionStart: {
+      title: 'Пътуване с влак',
+      subtitle: 'Железопътна лексика, разписания и гарата',
+      titleI18n: {
+        en: 'Travelling by train',
+        fr: 'Voyager en train',
+        ar: 'السفر بالقطار',
+        fa: 'سفر با قطار',
+        uk: 'Подорож потягом',
+        ru: 'Путешествие на поезде',
+      },
+      subtitleI18n: {
+        en: 'Railway vocabulary, timetables and the station',
+        fr: 'Vocabulaire ferroviaire, horaires et la gare',
+        ar: 'مفردات السكك الحديدية، والجداول الزمنية، والمحطة',
+        fa: 'واژگان راه‌آهن، جدول زمانی و ایستگاه',
+        uk: 'Залізнична лексика, розклади та вокзал',
+        ru: 'Железнодорожная лексика, расписания и вокзал',
+      },
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3 — Железопътен транспорт',
     instruction: '',
@@ -620,6 +662,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-gramatika-02a',
+    sectionStart: {
+      title: 'Въпросителни думи за транспорт',
+      subtitle: 'Въпросителни думи и въпроси за пътуване',
+      titleI18n: {
+        en: 'Question words for transport',
+        fr: 'Les mots interrogatifs pour les transports',
+        ar: 'أدوات الاستفهام للنقل',
+        fa: 'کلمات پرسشی برای حمل‌ونقل',
+        uk: 'Питальні слова для транспорту',
+        ru: 'Вопросительные слова для транспорта',
+      },
+      subtitleI18n: {
+        en: 'Question words and questions about travelling',
+        fr: 'Les mots interrogatifs et des questions sur le voyage',
+        ar: 'أدوات الاستفهام وأسئلة عن السفر',
+        fa: 'کلمات پرسشی و پرسش‌هایی درباره‌ی سفر',
+        uk: 'Питальні слова та запитання про подорож',
+        ru: 'Вопросительные слова и вопросы о путешествии',
+      },
+      theme: 'grammar',
+    },
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с въпросителните думи за транспорт.',
@@ -791,6 +854,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-21',
+    sectionStart: {
+      title: 'Текстове за пътуване',
+      subtitle: 'Текстове за четене с въпроси',
+      titleI18n: {
+        en: 'Texts about travel',
+        fr: 'Textes sur les voyages',
+        ar: 'نصوص عن السفر',
+        fa: 'متن‌هایی درباره‌ی سفر',
+        uk: 'Тексти про подорожі',
+        ru: 'Тексты о путешествиях',
+      },
+      subtitleI18n: {
+        en: 'Reading texts with questions',
+        fr: 'Textes de lecture avec des questions',
+        ar: 'نصوص للقراءة مع أسئلة',
+        fa: 'متن‌های خواندنی همراه با پرسش',
+        uk: 'Тексти для читання із запитаннями',
+        ru: 'Тексты для чтения с вопросами',
+      },
+      theme: 'reading',
+    },
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
@@ -941,6 +1025,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-04',
+    sectionStart: {
+      title: 'Метро и разходка в София',
+      subtitle: 'Метро, такси, самолет и разходка в столицата',
+      titleI18n: {
+        en: 'The metro and a walk in Sofia',
+        fr: 'Le métro et une promenade à Sofia',
+        ar: 'المترو ونزهة في صوفيا',
+        fa: 'مترو و گشتی در صوفیه',
+        uk: 'Метро та прогулянка Софією',
+        ru: 'Метро и прогулка по Софии',
+      },
+      subtitleI18n: {
+        en: 'The metro, taxi, plane and a walk in the capital',
+        fr: 'Le métro, le taxi, l\'avion et une promenade dans la capitale',
+        ar: 'المترو والتاكسي والطائرة ونزهة في العاصمة',
+        fa: 'مترو، تاکسی، هواپیما و گشتی در پایتخت',
+        uk: 'Метро, таксі, літак та прогулянка столицею',
+        ru: 'Метро, такси, самолёт и прогулка по столице',
+      },
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     instruction: '',
@@ -1054,7 +1159,6 @@ export const exercises: Exercise[] = [
     id: 'l10-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'С / СЪС',
     prominentSubtitle: true,
     instruction: '',
     order: 31.5,

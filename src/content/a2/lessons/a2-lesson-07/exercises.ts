@@ -30,16 +30,37 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилната дума под всяка картинка.',
     order: 1,
+    sectionStart: {
+      title: 'Професии и работни места',
+      subtitle: 'Нови думи за професии, род и множествено число, диалог в офиса',
+      titleI18n: {
+        en: 'Professions and workplaces',
+        fr: 'Professions et lieux de travail',
+        ar: 'المهن وأماكن العمل',
+        fa: 'شغل‌ها و محل‌های کار',
+        uk: 'Професії та робочі місця',
+        ru: 'Профессии и рабочие места',
+      },
+      subtitleI18n: {
+        en: 'New words for professions, gender and plural, and a dialogue in the office',
+        fr: 'Nouveaux mots pour les professions, genre et pluriel, et un dialogue au bureau',
+        ar: 'كلمات جديدة عن المهن، والجنس والجمع، وحوار في المكتب',
+        fa: 'کلمات جدید برای شغل‌ها، جنس و جمع، و گفتگویی در دفتر',
+        uk: 'Нові слова для професій, рід і множина, і діалог в офісі',
+        ru: 'Новые слова для профессий, род и множественное число, и диалог в офисе',
+      },
+      theme: 'vocabulary',
+    },
     points: 6,
     displayType: 'default',
     columns: 3,
     images: [
-      { id: 'lekar',      imageUrl: `${ASSET}/01-upr-01-profesii/01-lekar.jpg`,      correctLabel: 'лекар',      imageOptions: ['лекар', 'полицай', 'фризьор', 'бизнесмен', 'учител', 'бизнесдама'] },
-      { id: 'policay',    imageUrl: `${ASSET}/01-upr-01-profesii/02-policay.jpg`,    correctLabel: 'полицай',    imageOptions: ['полицай', 'лекар', 'учител', 'шофьор'] },
-      { id: 'frizyor',    imageUrl: `${ASSET}/01-upr-01-profesii/03-frizyor.jpg`,    correctLabel: 'фризьор',    imageOptions: ['фризьор', 'шивач', 'работник', 'готвач'] },
-      { id: 'biznesmen',  imageUrl: `${ASSET}/01-upr-01-profesii/04-biznesmen.jpg`,  correctLabel: 'бизнесмен',  imageOptions: ['бизнесмен', 'директор', 'адвокат', 'инженер'] },
-      { id: 'uchitel',    imageUrl: `${ASSET}/01-upr-01-profesii/05-uchitel.jpg`,    correctLabel: 'учител',     imageOptions: ['учител', 'лекар', 'директор', 'бизнесмен'] },
-      { id: 'biznesdama', imageUrl: `${ASSET}/01-upr-01-profesii/06-biznesdama.jpg`, correctLabel: 'бизнесдама', imageOptions: ['бизнесдама', 'секретарка', 'учителка', 'лекарка'] },
+      { id: 'lekar',      imageUrl: `${ASSET}/01-upr-01-profesii/01-lekar.jpg`,      correctLabel: 'лекар',      imageOptions: ['лекар', 'полицай', 'фризьор'] },
+      { id: 'policay',    imageUrl: `${ASSET}/01-upr-01-profesii/02-policay.jpg`,    correctLabel: 'полицай',    imageOptions: ['полицай', 'лекар', 'шофьор'] },
+      { id: 'frizyor',    imageUrl: `${ASSET}/01-upr-01-profesii/03-frizyor.jpg`,    correctLabel: 'фризьор',    imageOptions: ['фризьор', 'шивач', 'готвач'] },
+      { id: 'biznesmen',  imageUrl: `${ASSET}/01-upr-01-profesii/04-biznesmen.jpg`,  correctLabel: 'бизнесмен',  imageOptions: ['бизнесмен', 'полицай', 'готвач'] },
+      { id: 'uchitel',    imageUrl: `${ASSET}/01-upr-01-profesii/05-uchitel.jpg`,    correctLabel: 'учител',     imageOptions: ['учител', 'лекар', 'фризьор'] },
+      { id: 'biznesdama', imageUrl: `${ASSET}/01-upr-01-profesii/06-biznesdama.jpg`, correctLabel: 'бизнесдама', imageOptions: ['бизнесдама', 'полицайка', 'лекарка'] },
     ],
     options: ['бизнесмен', 'бизнесдама', 'лекар', 'полицай', 'учител', 'фризьор'],
   } as ImageLabelingExercise,
@@ -200,6 +221,27 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с минало свършено на глаголите от ИХ група.',
     instructionKey: 'a2.gr.l07.minaloIh',
     order: 8,
+    sectionStart: {
+      title: 'Минало свършено време',
+      subtitle: 'Глаголи от ИХ група — „работя" и „купувам", упражнения и диалози',
+      titleI18n: {
+        en: 'The perfective past tense',
+        fr: 'Le passé perfectif',
+        ar: 'الماضي المكتمل',
+        fa: 'زمان گذشته کامل‌شده',
+        uk: 'Минулий доконаний час',
+        ru: 'Прошедшее совершенное время',
+      },
+      subtitleI18n: {
+        en: 'Verbs of the "ИХ" group — "работя" (to work) and "купувам" (to buy), exercises and dialogues',
+        fr: 'Verbes du groupe «ИХ» — «работя» (travailler) et «купувам» (acheter), exercices et dialogues',
+        ar: 'أفعال مجموعة «ИХ» — «работя» (يعمل) و«купувам» (يشتري)، تمارين وحوارات',
+        fa: 'فعل‌های گروه «ИХ» — «работя» (کار کردن) و «купувам» (خریدن)، تمرین‌ها و گفتگوها',
+        uk: 'Дієслова групи «ИХ» — «работя» (працювати) і «купувам» (купувати), вправи та діалоги',
+        ru: 'Глаголы группы «ИХ» — «работя» (работать) и «купувам» (покупать), упражнения и диалоги',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Минало свършено — ИХ група (работя → работих)',
     columns: ['(+)'],
     rows: [
@@ -477,6 +519,27 @@ export const exercises: Exercise[] = [
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 2',
     order: 20,
+    sectionStart: {
+      title: 'Образование и специалности',
+      subtitle: 'Нива на образование, видове училища и диалози за специалност',
+      titleI18n: {
+        en: 'Education and fields of study',
+        fr: 'Éducation et spécialités',
+        ar: 'التعليم والتخصصات',
+        fa: 'تحصیلات و رشته‌ها',
+        uk: 'Освіта і спеціальності',
+        ru: 'Образование и специальности',
+      },
+      subtitleI18n: {
+        en: 'Levels of education, types of schools and dialogues about one\'s field of study',
+        fr: 'Niveaux d\'éducation, types d\'écoles et dialogues sur la spécialité',
+        ar: 'مستويات التعليم وأنواع المدارس وحوارات عن التخصص',
+        fa: 'سطوح تحصیلات، انواع مدرسه و گفتگوها درباره رشته',
+        uk: 'Рівні освіти, типи шкіл і діалоги про спеціальність',
+        ru: 'Уровни образования, виды школ и диалоги о специальности',
+      },
+      theme: 'vocabulary',
+    },
     cards: [
       { id: 'nachalno',     imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/01-nachalno-obrazovanie.jpg`, label: 'Начално образование (1 – 4 клас)',                              ttsLabel: 'начално образование, от първи до четвърти клас' },
       { id: 'progimnaziya', imageUrl: `${ASSET}/06-novi-dumi-2-obrazovanie/04-progimnaziya.jpg`,         label: 'Прогимназия (5 – 7 клас)',                                      ttsLabel: 'прогимназия, от пети до седми клас' },
@@ -636,6 +699,27 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с въпросителните, неопределителните и отрицателните местоимения.',
     instructionKey: 'a2.gr.l07.mestoimeniya',
     order: 26,
+    sectionStart: {
+      title: 'Местоимения и думи от глаголи',
+      subtitle: 'Неопределителни и отрицателни местоимения и съществителни от глаголи',
+      titleI18n: {
+        en: 'Pronouns and words from verbs',
+        fr: 'Pronoms et mots formés de verbes',
+        ar: 'الضمائر والكلمات المشتقة من الأفعال',
+        fa: 'ضمیرها و واژه‌های برگرفته از فعل',
+        uk: 'Займенники і слова від дієслів',
+        ru: 'Местоимения и слова от глаголов',
+      },
+      subtitleI18n: {
+        en: 'Indefinite and negative pronouns and nouns formed from verbs',
+        fr: 'Pronoms indéfinis et négatifs et noms formés de verbes',
+        ar: 'الضمائر النكرة والنفي والأسماء المشتقة من الأفعال',
+        fa: 'ضمیرهای نامعین و منفی و اسم‌های ساخته‌شده از فعل',
+        uk: 'Неозначені й заперечні займенники та іменники від дієслів',
+        ru: 'Неопределённые и отрицательные местоимения и существительные от глаголов',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Местоимения',
     columns: ['Въпросителни', 'Неопределителни', 'Отрицателни'],
     rows: [
@@ -643,7 +727,7 @@ export const exercises: Exercise[] = [
       { pronoun: '',  cells: ['колко', 'няколко', 'николко'],  ttsText: 'колко, няколко, николко',    ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: '',  cells: ['къде',  'някъде',  'никъде'],   ttsText: 'къде, някъде, никъде',       ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: '',  cells: ['кога',  'някога',  'никога'],   ttsText: 'кога, някога, никога',       ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: '',  cells: ['нещо',  'нещо',    'нищо'],     ttsText: 'нещо, нищо',                 ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: '',  cells: ['нещо',  'нещо',    'нищо'],     ttsText: 'нещо, нещо, нищо',           ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
     ],
     notes: [
       '⚠️ **Никой не** иска кафе. / **Никъде не** мога да намеря…',
@@ -805,7 +889,10 @@ export const exercises: Exercise[] = [
     points: 11,
     layout: 'single',
     audioUrl: '',  // TODO 🎧 Фаза 2
-    listeningText: 'Обичам да ходя на разходка с приятели в парка през пролетта. Старите хора често имат нужда от помощ. Малките деца много обичат играчки, по-големите обичат видеоигри. Пътуването от България до Китай е много трудно. В хладилника няма нищо за ядене и пиене. Трябва да отида в супера. В момента търсят работници за сезонна работа във Франция през лятото. Автобусите от Бургас често пристигат на автогарата със закъснение. Тази вечер имам среща с приятели от училище. В Държавната агенция за бежанците търсят преводачи с добър арабски език. Утре имам разговор с учителката на сина ми. Имам две покани за концерт за утре вечер. Искаш ли да дойдеш с мен?',
+    // Combining accent (U+0300) on „Фра̀нция" makes Gemini skip the whole phrase
+    // „във Франция". Hyphen „Фран-ция" keeps the Bulgarian 3-syllable reading
+    // (not French „France") without the skip.
+    listeningText: 'Обичам да ходя на разходка с приятели в парка през пролетта. Старите хора често имат нужда от помощ. Малките деца много обичат играчки, по-големите обичат видеоигри. Пътуването от България до Китай е много трудно. В хладилника няма нищо за ядене и пиене. Трябва да отида в супера. В момента търсят работници за сезонна работа във Фран-ция през лятото. Автобусите от Бургас често пристигат на автогарата със закъснение. Тази вечер имам среща с приятели от училище. В Държавната агенция за бежанците търсят преводачи с добър арабски език. Утре имам разговор с учителката на сина ми. Имам две покани за концерт за утре вечер. Искаш ли да дойдеш с мен?',
     sentences: [
       { text: 'Обичам да ходя на _____ с приятели в парка през пролетта.', blanks: [1], correctAnswers: ['разходка'],   options: ['разходка', 'среща', 'работа', 'пътуване'],    acceptableAnswers: [['разходка']] },
       { text: 'Старите хора често имат нужда от _____.', blanks: [1], correctAnswers: ['помощ'],      options: ['помощ', 'работа', 'покана', 'разговор'],     acceptableAnswers: [['помощ']] },
@@ -829,6 +916,27 @@ export const exercises: Exercise[] = [
     textTitle: 'Автобиография (CV) — Васил Иванов Петров',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 34,
+    sectionStart: {
+      title: 'Автобиографии за четене',
+      subtitle: 'Автобиография на Васил и текст за Мустафа',
+      titleI18n: {
+        en: 'Autobiographies for reading',
+        fr: 'Autobiographies à lire',
+        ar: 'سير ذاتية للقراءة',
+        fa: 'خودزندگی‌نامه‌ها برای خواندن',
+        uk: 'Автобіографії для читання',
+        ru: 'Автобиографии для чтения',
+      },
+      subtitleI18n: {
+        en: 'Vasil\'s CV and a text about Mustafa',
+        fr: 'Le CV de Vasil et un texte sur Mustafa',
+        ar: 'السيرة الذاتية لفاسيل ونص عن مصطفى',
+        fa: 'رزومهٔ واسیل و متنی دربارهٔ مصطفی',
+        uk: 'Автобіографія Василя і текст про Мустафу',
+        ru: 'Автобиография Василя и текст о Мустафе',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/09-dopalnitelni-upr-cv-vasil/01-vasil-portret.jpg`, label: 'Васил Иванов Петров' },
@@ -839,13 +947,15 @@ export const exercises: Exercise[] = [
       '**ОБРАЗОВАНИЕ**\n2016: Специализация в Англия – Преподаване на английски като чужд език\n2010 – 2015: Софийски университет „Климент Охридски", специалност Английска филология (втора специалност Френски език)\n2004 – 2009: Втора английска езикова гимназия, София',
       '**ЛИЧНИ УМЕНИЯ И КОМПЕТЕНЦИИ**\n**Майчин език:** български\n**Други езици:** английски (ниво C2), френски (ниво C2)\n**Компютърни умения:** Microsoft Office',
     ],
+    // „ражда-не": without the hyphen Gemini reads a Russian/Ukrainian „рождение".
+    // Female voice throughout — Charon mangles the word even with the hyphen.
     ttsParagraphs: [
-      'Три имена: Васил Иванов Петров. Адрес: град София, же ка Младост три, блок триста и седем, вход А, етаж две, апартамент пет. Телефон: плюс триста петдесет и девет, осемстотин деветдесет и седем, деветстотин и деветдесет, двеста и пет. Имейл: василив маймунка а бе ве точка бе ге. Дата на раждане: осемнадесети юли хиляда деветстотин и деветдесета година. Националност: българин.',
+      'Три имена: Васил Иванов Петров. Адрес: град София, же ка Младост три, блок триста и седем, вход А, етаж две, апартамент пет. Телефон: плюс триста петдесет и девет, осемстотин деветдесет и седем, деветстотин и деветдесет, двеста и пет. Имейл: василив маймунка а бе ве точка бе ге. Дата на ражда-не. Осемнадесети юли хиляда деветстотин и деветдесета година. Националност: българин.',
       'Трудов стаж. От две хиляди и девета до сега: Преводач с английски и френски в агенция за преводи и легализация на документи, София. От две хиляди и пета до две хиляди и девета: Учител по английски език в Първа частна английска гимназия Уилям Шекспир, София.',
       'Образование. Две хиляди и шестнадесета: Специализация в Англия — преподаване на английски като чужд език. От две хиляди и десета до две хиляди и петнадесета: Софийски университет Климент Охридски, специалност Английска филология, втора специалност Френски език. От две хиляди и четвърта до две хиляди и девета: Втора английска езикова гимназия, София.',
       'Лични умения и компетенции. Майчин език: български. Други езици: английски, ниво це две; френски, ниво це две. Компютърни умения: Microsoft Office.',
     ],
-    paragraphVoiceGenders: ['male', 'male', 'male', 'male'],
+    paragraphVoiceGenders: ['female', 'female', 'female', 'female'],
   } as ReadingTextExercise,
 
   // ─── ORDER 35 — Упр. 32 (стр. 79): Попълнете по автобиографията на Васил ────

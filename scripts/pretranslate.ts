@@ -49,22 +49,52 @@
  * (e.g. "Максимум: N точки") — those stay on the live-GT emergency layer.
  *
  * Usage:
- *   npm run pretranslate -- --glossary-only          # Step 0 only, all lessons
- *   npm run pretranslate -- --lesson 05               # pilot: single lesson
- *   npm run pretranslate -- --test 3                  # pilot: single test (test-a1-3)
- *   npm run pretranslate -- --all                      # full A1 run
- *   npm run pretranslate -- --all --dry-run            # preview scope/cost, no API calls
- *   npm run pretranslate -- --lesson 05 --force        # re-translate even if cached
+ *   npm run pretranslate -- --glossary-only                # Step 0 only, all lessons
+ *   npm run pretranslate -- --lesson 05                     # pilot: single lesson (A1)
+ *   npm run pretranslate -- --level a2 --lesson 05          # pilot: single lesson (A2)
+ *   npm run pretranslate -- --test 3                        # pilot: single test (test-a1-3)
+ *   npm run pretranslate -- --level a2 --all                # full A2 run
+ *   npm run pretranslate -- --level a2 --all --dry-run      # preview scope/cost, no API calls
+ *   npm run pretranslate -- --lesson 05 --force             # re-translate even if cached
+ *
+ * `--level` defaults to `a1` (backward-compatible). Accepted values: a1, a2, b1, b2.
  */
 
 import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
 import { loadLesson, loadTest } from '@/content/registry';
-import { A1_LESSONS_METADATA } from '@/content/a1';
+import { A1_LESSONS_METADATA, A1_TEST_LOADERS } from '@/content/a1';
+import { A2_LESSONS_METADATA, A2_TEST_LOADERS } from '@/content/a2';
+import { B1_LESSONS_METADATA, B1_TEST_LOADERS } from '@/content/b1';
+import { B2_LESSONS_METADATA, B2_TEST_LOADERS } from '@/content/b2';
 import { TRANSLATION_OVERRIDES } from '@/i18n/translationOverrides';
 import { getModelCost } from '@/lib/chat/availableModels';
 import type { LessonData, TestData, Exercise } from '@/content/shared/types';
+
+// ---------------------------------------------------------------------------
+// Level selection — generic across A1/A2/B1/B2. All four level registries
+// (`src/content/<level>/index.ts`) share the same shape:
+// `<LEVEL>_LESSONS_METADATA` + `<LEVEL>_TEST_LOADERS`.
+// ---------------------------------------------------------------------------
+type Level = 'a1' | 'a2' | 'b1' | 'b2';
+const VALID_LEVELS: readonly Level[] = ['a1', 'a2', 'b1', 'b2'];
+
+type LessonMeta = { id: string; number: number; title: string; hasTest: boolean; testId?: string };
+
+const LEVEL_LESSONS_METADATA: Record<Level, LessonMeta[]> = {
+  a1: A1_LESSONS_METADATA,
+  a2: A2_LESSONS_METADATA,
+  b1: B1_LESSONS_METADATA,
+  b2: B2_LESSONS_METADATA,
+};
+
+const LEVEL_TEST_LOADERS: Record<Level, Record<string, unknown>> = {
+  a1: A1_TEST_LOADERS,
+  a2: A2_TEST_LOADERS,
+  b1: B1_TEST_LOADERS,
+  b2: B2_TEST_LOADERS,
+};
 
 // ---------------------------------------------------------------------------
 // Config
@@ -92,6 +122,13 @@ function parseArg(name: string): string | undefined {
   return next && !next.startsWith('--') ? next : 'true';
 }
 
+const levelArgRaw = parseArg('level');
+if (levelArgRaw && !VALID_LEVELS.includes(levelArgRaw as Level)) {
+  console.error(`Invalid --level "${levelArgRaw}". Accepted values: ${VALID_LEVELS.join(', ')}.`);
+  process.exit(1);
+}
+const level: Level = (levelArgRaw as Level | undefined) ?? 'a1'; // default a1 — backward-compatible
+
 const lessonArg = parseArg('lesson');
 const testArg = parseArg('test');
 const runAll = parseArg('all') === 'true';
@@ -100,7 +137,7 @@ const dryRun = parseArg('dry-run') === 'true';
 const force = parseArg('force') === 'true';
 
 if (!lessonArg && !testArg && !runAll && !glossaryOnly) {
-  console.error('Usage: npm run pretranslate -- --lesson 05 | --test 3 | --all | --glossary-only [--dry-run] [--force]');
+  console.error('Usage: npm run pretranslate -- [--level a1|a2|b1|b2] --lesson 05 | --test 3 | --all | --glossary-only [--dry-run] [--force]');
   process.exit(1);
 }
 
@@ -423,11 +460,12 @@ function chunk<T>(arr: T[], size: number): T[][] {
 // Step 0 — Glossary pass (grammar terminology, consistent across all lessons)
 // ---------------------------------------------------------------------------
 async function buildGlossary(output: TranslationMap): Promise<TranslationMap> {
-  console.log('\n── Step 0: Glossary extraction (grammar terminology, all 12 lessons) ──');
+  const levelMeta = LEVEL_LESSONS_METADATA[level];
+  console.log(`\n── Step 0: Glossary extraction (grammar terminology, all ${levelMeta.length} ${level.toUpperCase()} lessons) ──`);
 
   const glossarySeen = new Set<string>();
   const glossaryAll: string[] = [];
-  for (const meta of A1_LESSONS_METADATA) {
+  for (const meta of levelMeta) {
     const lesson = await loadLesson(meta.id);
     if (!lesson) continue;
     const unit = extractLesson(meta.id, lesson);
@@ -524,17 +562,24 @@ async function main() {
   const units: ExtractedUnit[] = [];
 
   if (runAll) {
-    for (const meta of A1_LESSONS_METADATA) {
+    for (const meta of LEVEL_LESSONS_METADATA[level]) {
       const lesson = await loadLesson(meta.id);
       if (lesson) units.push(extractLesson(meta.id, lesson));
     }
-    for (let n = 1; n <= 6; n++) {
-      const testId = `test-a1-${n}`;
+    const testCount = Object.keys(LEVEL_TEST_LOADERS[level]).length;
+    for (let n = 1; n <= testCount; n++) {
+      const testId = `test-${level}-${n}`;
       const test = await loadTest(testId);
       if (test) units.push(extractTest(testId, test));
     }
   } else if (lessonArg) {
-    const lessonId = lessonArg.startsWith('lesson-') ? lessonArg : `lesson-${lessonArg.padStart(2, '0')}`;
+    // If the arg already contains `lesson-` (e.g. `a2-lesson-03`, or a
+    // full A1 id like `lesson-05`), don't slap a second level prefix on it.
+    const lessonId = lessonArg.includes('lesson-')
+      ? lessonArg
+      : level === 'a1'
+        ? `lesson-${lessonArg.padStart(2, '0')}`
+        : `${level}-lesson-${lessonArg.padStart(2, '0')}`;
     const lesson = await loadLesson(lessonId);
     if (!lesson) {
       console.error(`Lesson not found: ${lessonId}`);
@@ -542,7 +587,7 @@ async function main() {
     }
     units.push(extractLesson(lessonId, lesson));
   } else if (testArg) {
-    const testId = testArg.startsWith('test-a1-') ? testArg : `test-a1-${testArg}`;
+    const testId = testArg.startsWith('test-') ? testArg : `test-${level}-${testArg}`;
     const test = await loadTest(testId);
     if (!test) {
       console.error(`Test not found: ${testId}`);

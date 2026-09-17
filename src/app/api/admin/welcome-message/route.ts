@@ -26,14 +26,31 @@ export async function PUT(req: NextRequest) {
   }
 
   for (const { lang, text, suggestionChips } of messages) {
+    const trimmedText = text.trim();
+    // suggestionChips is a JSON-stringified string[] — trim each chip so
+    // stray leading/trailing spaces from admin input never reach the UI.
+    let cleanedChips = suggestionChips ?? null;
+    if (suggestionChips) {
+      try {
+        const parsed = JSON.parse(suggestionChips) as unknown;
+        if (Array.isArray(parsed)) {
+          cleanedChips = JSON.stringify(
+            parsed.map((chip) => (typeof chip === 'string' ? chip.trim() : chip)).filter((chip) => chip !== ''),
+          );
+        }
+      } catch {
+        // Not valid JSON — leave as-is, GET route already guards against this.
+      }
+    }
+
     const existing = await db.select().from(adminWelcomeMessageTable).where(eq(adminWelcomeMessageTable.lang, lang)).limit(1);
     if (existing[0]) {
       await db.update(adminWelcomeMessageTable)
-        .set({ text, suggestionChips: suggestionChips ?? null, updatedBy: auth.userId, updatedAt: new Date() })
+        .set({ text: trimmedText, suggestionChips: cleanedChips, updatedBy: auth.userId, updatedAt: new Date() })
         .where(eq(adminWelcomeMessageTable.lang, lang));
     } else {
       await db.insert(adminWelcomeMessageTable).values({
-        lang, text, suggestionChips: suggestionChips ?? null, updatedBy: auth.userId,
+        lang, text: trimmedText, suggestionChips: cleanedChips, updatedBy: auth.userId,
       });
     }
   }

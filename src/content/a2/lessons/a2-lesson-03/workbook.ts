@@ -1,4 +1,4 @@
-﻿import type { Exercise, WorkbookFillBlankExercise, WordOrderExercise } from '@/content/types';
+﻿import type { Exercise, WorkbookFillBlankExercise } from '@/content/types';
 
 // ══════════════════════════════════════════════════════════════════════
 // ПРЕГОВОР — Упражнения за затвърждаване
@@ -14,7 +14,9 @@ export const workbookExercises: Exercise[] = [
   // е отделен токен (конвенция на word_order).
   {
     id: 'a2-l03-wb-01',
-    type: 'word_order',
+    // A2 variant: needed because sentence 1 repeats „ще" — the shared
+    // word_order component drops repeated tokens.
+    type: 'a2-word-order',
     title: 'ПРЕГОВОР',
     instruction: 'Поставете думите в правилния ред.',
     order: 29,
@@ -37,7 +39,7 @@ export const workbookExercises: Exercise[] = [
         correctSentence: 'Ще пътувате ли с Калоян през уикенда ?',
       },
     ],
-  } as WordOrderExercise,
+  } as unknown as Exercise,
 
   // ─── WB-2 — Попълнете правилните форми в бъдеще (текст за Димитър) ────────
   {
@@ -126,7 +128,7 @@ export const workbookExercises: Exercise[] = [
     sentences: [
       { text: 'Стефан ще чете книга, но Мария няма да чете книга.', blanks: [], correctAnswers: [], isExample: true },
       {
-        text: 'Мария _______ плувам, но Стефан _______.',
+        text: 'Мария _______, но Стефан _______.',
         blanks: [1, 2],
         correctAnswers: ['ще плува', 'няма да плува'],
         options: [

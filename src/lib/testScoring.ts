@@ -17,6 +17,7 @@
  */
 
 import type { TestSection, Exercise } from '@/content/types';
+import { isWordOrderAnswerCorrect } from '@/lib/wordOrder';
 
 /**
  * Compute the points earned on a single exercise. Returns null when the
@@ -69,7 +70,7 @@ export function getExerciseScore(exercise: Exercise, savedState: unknown): numbe
       if (!states) return null;
       for (let i = 0; i < ex.questions.length; i++) {
         const qs = states[i];
-        if (qs?.built?.join(' ') === ex.questions[i].correctSentence) correct++;
+        if (isWordOrderAnswerCorrect(qs?.built, ex.questions[i])) correct++;
       }
       return correct;
     }

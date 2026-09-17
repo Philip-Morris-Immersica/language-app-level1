@@ -5,7 +5,6 @@
   GrammarTableExercise,
   WorkbookFillBlankExercise,
   IllustratedCardsExercise,
-  WordOrderExercise,
   TrueFalseExercise,
   MultipleChoiceExercise,
   ReadingTextExercise,
@@ -28,6 +27,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилната фраза под всяка картинка.',
     order: 1,
+    sectionStart: {
+      title: 'Хоби и свободно време',
+      subtitle: 'Спорт, диалози и минало свършено — ОХ група',
+      titleI18n: {
+        en: 'Hobbies and free time',
+        fr: 'Loisirs et temps libre',
+        ar: 'الهوايات ووقت الفراغ',
+        fa: 'سرگرمی‌ها و وقت آزاد',
+        uk: 'Хобі та вільний час',
+        ru: 'Хобби и свободное время',
+      },
+      subtitleI18n: {
+        en: 'Sports, dialogues and "минало свършено" (past perfective) — the ОХ group',
+        fr: 'Sport, dialogues et «минало свършено» (passé perfectif) — groupe ОХ',
+        ar: 'الرياضة والحوارات و«минало свършено» (الماضي التام) — مجموعة ОХ',
+        fa: 'ورزش، گفت‌وگوها و «минало свършено» (گذشته کامل) — گروه ОХ',
+        uk: 'Спорт, діалоги та «минало свършено» (минулий доконаний час) — група ОХ',
+        ru: 'Спорт, диалоги и «минало свършено» (прошедшее совершенное) — группа ОХ',
+      },
+      theme: 'vocabulary',
+    },
     points: 4,
     displayType: 'default',
     columns: 2,
@@ -71,7 +91,8 @@ export const exercises: Exercise[] = [
           { text: '– Ти винаги мислиш за работа! Нямаш свободно време. Не се забавляваш, а си на 25 години!', voiceGender: 'male' },
           { text: '– Не е вярно, имам хоби — много обичам да рисувам и да чета.', voiceGender: 'female' },
           { text: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс. Курсът е безплатен. Искаш ли да дойдеш с мен?', voiceGender: 'male',
-            ttsText: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс. Курсът е безпла́тен. Искаш ли да дойдеш с мен?' },
+            // No combining accent: it made Gemini skip безплатен and read курсът as "cursor".
+            ttsText: '– Не знаех, че рисуваш. Аз също рисувам. Всяка събота ходя на курс, курсът е безплатен. Искаш ли да дойдеш с мен?' },
           { text: '– Да, разбира се. Миналата година ходих на курс. Беше много скъп. Дадох много пари. Много ти благодаря за поканата.', voiceGender: 'female' },
           { text: '– Няма защо, до скоро.', voiceGender: 'male' },
         ],
@@ -96,7 +117,9 @@ export const exercises: Exercise[] = [
           { text: '– Здравей, Симо! Как беше почивката? Къде беше?', voiceGender: 'female' },
           { text: '– Бях в Созопол. Беше страхотно! Морето, хората, храната — всичко беше прекрасно. Разходих се, плувах, танцувах, спортувах. Как я прекара?', voiceGender: 'male' },
           { text: '– Останах вкъщи. Не отидох никъде. Четох за изпити.', voiceGender: 'female' },
-          { text: '– Къде са Пламен и Ели?', voiceGender: 'male' },
+          { text: '– Къде са Пламен и Ели?', voiceGender: 'male',
+            // Gemini Pro drops л in „Ели" (reads „Еи"); hyphen keeps both syllables.
+            ttsText: '– Къде са Пламен и Е-ли?' },
           { text: '– На екскурзия в Испания. Заминаха вчера. Ще се върнат след две седмици.', voiceGender: 'female' },
         ],
       },
@@ -268,21 +291,25 @@ export const exercises: Exercise[] = [
   // ─── ORDER 8 — Упр. 10 (стр. 84): Подредете думите в изречения ──────────────
   {
     id: 'a2-l08-ex-10',
-    type: 'word_order',
+    // Тестерът подреждаше думите правилно, но получаваше грешка, защото
+    // квадратчето с точката/въпросителната беше задължително при буквалната
+    // проверка. Финалната пунктуация вече не се оценява никъде в платформата
+    // (квадратчето остава, за да се вижда къде е краят на изречението).
+    type: 'a2-word-order',
     title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Поставете думите в правилния ред.',
     order: 8,
     points: 7,
     questions: [
-      { words: ['плуваха', 'Тази', 'в', 'морето', 'сутрин', 'те', '/'],           correctSentence: 'Тази сутрин те плуваха в морето.', alternateCorrectSentences: ['Те плуваха в морето тази сутрин.'] },
-      { words: ['баскетбол', 'Миналата', 'играхме', 'неделя', '/'],                correctSentence: 'Миналата неделя играхме баскетбол.', alternateCorrectSentences: ['Играхме баскетбол миналата неделя.'] },
-      { words: ['зимата', 'ски', 'Те', 'през', 'караха', '/'],                     correctSentence: 'Те караха ски през зимата.', alternateCorrectSentences: ['През зимата те караха ски.'] },
-      { words: ['интересен', 'сряда', 'В', 'гледах', 'филм', 'приятели', 'с', '/'], correctSentence: 'В сряда гледах интересен филм с приятели.', alternateCorrectSentences: ['Гледах интересен филм с приятели в сряда.'] },
-      { words: ['на', 'китара', 'свириха', 'Снощи', 'те', '/'],                    correctSentence: 'Снощи те свириха на китара.', alternateCorrectSentences: ['Те свириха на китара снощи.'] },
-      { words: ['снимки', 'Те', 'правиха', 'много', '/'],                          correctSentence: 'Те правиха много снимки.', alternateCorrectSentences: ['Много снимки те правиха.'] },
-      { words: ['ли', 'колело', 'Кара', 'през', 'уикенда', '?'],                  correctSentence: 'Кара ли колело през уикенда ?', alternateCorrectSentences: ['Кара ли колело през уикенда?'] },
+      { words: ['плуваха', 'Тази', 'в', 'морето', 'сутрин', 'те', '.'],           correctSentence: 'Тази сутрин те плуваха в морето .', alternateCorrectSentences: ['Те плуваха в морето тази сутрин .'] },
+      { words: ['баскетбол', 'Миналата', 'играхме', 'неделя', '.'],                correctSentence: 'Миналата неделя играхме баскетбол .', alternateCorrectSentences: ['Играхме баскетбол миналата неделя .'] },
+      { words: ['зимата', 'ски', 'Те', 'през', 'караха', '.'],                     correctSentence: 'Те караха ски през зимата .', alternateCorrectSentences: ['През зимата те караха ски .'] },
+      { words: ['интересен', 'сряда', 'В', 'гледах', 'филм', 'приятели', 'с', '.'], correctSentence: 'В сряда гледах интересен филм с приятели .', alternateCorrectSentences: ['Гледах интересен филм с приятели в сряда .'] },
+      { words: ['на', 'китара', 'свириха', 'Снощи', 'те', '.'],                    correctSentence: 'Снощи те свириха на китара .', alternateCorrectSentences: ['Те свириха на китара снощи .'] },
+      { words: ['снимки', 'Те', 'правиха', 'много', '.'],                          correctSentence: 'Те правиха много снимки .', alternateCorrectSentences: ['Много снимки те правиха .'] },
+      { words: ['ли', 'колело', 'Кара', 'през', 'уикенда', '?'],                  correctSentence: 'Кара ли колело през уикенда ?' },
     ],
-  } as WordOrderExercise,
+  } as unknown as Exercise,
 
   // ─── ORDER 9а — Упр. 11 (стр. 84): Текстовете за слушане преди въпросите ────
   {
@@ -291,6 +318,18 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 9,
+    sectionStart: {
+      title: 'Уикендът и миналото лято',
+      titleI18n: {
+        en: 'The weekend and last summer',
+        fr: 'Le week-end et l\'été dernier',
+        ar: 'عطلة نهاية الأسبوع والصيف الماضي',
+        fa: 'آخر هفته و تابستان گذشته',
+        uk: 'Вихідні та минуле літо',
+        ru: 'Выходные и прошлое лето',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     paragraphs: [
       'Аз съм Стефан. Миналата събота отидох в парка с приятели. Времето беше много приятно. Тичахме, играхме футбол, правихме снимки. За обяд ядохме сандвичи. После отидохме на кино. Беше чудесен ден!',
@@ -375,6 +414,27 @@ export const exercises: Exercise[] = [
     instruction: 'Запознайте се с минало свършено на глаголите от ЕХ група.',
     instructionKey: 'a2.gr.l08.minaloEh',
     order: 13,
+    sectionStart: {
+      title: 'Минало свършено и съюзи',
+      subtitle: 'ЕХ и УХ група, съюзи и окончания',
+      titleI18n: {
+        en: 'Past perfective and conjunctions',
+        fr: 'Passé perfectif et conjonctions',
+        ar: 'الماضي التام وأدوات الربط',
+        fa: 'گذشته کامل و حروف ربط',
+        uk: 'Минулий доконаний час і сполучники',
+        ru: 'Прошедшее совершенное и союзы',
+      },
+      subtitleI18n: {
+        en: 'The ЕХ and УХ groups, conjunctions and endings',
+        fr: 'Les groupes ЕХ et УХ, les conjonctions et les désinences',
+        ar: 'مجموعتا ЕХ وУХ وأدوات الربط والنهايات',
+        fa: 'گروه‌های ЕХ وУХ، حروف ربط و پایانه‌ها',
+        uk: 'Групи ЕХ і УХ, сполучники та закінчення',
+        ru: 'Группы ЕХ и УХ, союзы и окончания',
+      },
+      theme: 'grammar',
+    },
     tableTitle: 'Минало свършено — ЕХ група (взема → взех)',
     columns: ['(+)'],
     rows: [
@@ -476,7 +536,7 @@ export const exercises: Exercise[] = [
       { text: 'Тя не _____ за купона в събота. (зная)',   blanks: [1], correctAnswers: ['знаеше'], options: ['знаех', 'знаеше', 'знаеха'],    acceptableAnswers: [['знаеше']] },
       { text: 'Те _____ цветя и картичка за учителката. (взема)', blanks: [1], correctAnswers: ['взеха'], options: ['взех', 'взе', 'взеха'], acceptableAnswers: [['взеха']] },
       { text: 'Детето _____ новите маратонки. (обуя)',     blanks: [1], correctAnswers: ['обу'],    options: ['обух', 'обу', 'обуха'],           acceptableAnswers: [['обу']] },
-      { text: 'Ти _____, преди да влезеш в стаята. (събуя се)', blanks: [1], correctAnswers: ['събу се'], options: ['събух се', 'събу се', 'събуха се'], acceptableAnswers: [['събу се', 'се събу']] },
+      { text: 'Ти _____ ли се, преди да влезеш в стаята? (събуя се)', blanks: [1], correctAnswers: ['събу'], options: ['събух', 'събу', 'събуха'], acceptableAnswers: [['събу']] },
     ],
   } as WorkbookFillBlankExercise,
 
@@ -588,7 +648,7 @@ export const exercises: Exercise[] = [
       { pronoun: 'аз',        cells: ['-ах',    '-ях',    '-их',   '-ох',   '-ех',   '-ух'],   ttsText: 'аз. ах. ях. их. ох. ех. ух.',         ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'ти',        cells: ['-а',     '-я',     '-и',    '-е',    '-е',    '-у'],    ttsText: 'ти. а. я. и. е. е. у.',               ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'той/тя/то', cells: ['-а',     '-я',     '-и',    '-е',    '-е',    '-у'],    ttsText: 'той, тя, то. а. я. и. е. е. у.',      ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
-      { pronoun: 'ние',       cells: ['-ахме',  '-яхме',  '-ихме', '-охме', '-ехме', '-ухме'], ttsText: 'ние. ахме. яхме. ихме. охме. ехме. ухме.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
+      { pronoun: 'ние',       cells: ['-ахме',  '-яхме',  '-ихме', '-охме', '-ехме', '-ухме'], ttsText: 'ние. ахме. яхме. ихме. охме. ехме. ухме.', ttsPrompt: 'Read aloud clearly and smoothly in standard Bulgarian with correct Bulgarian stress. Say each ending exactly once, with a short pause between them. Pronounce „яхме" starting with я (ya), as in стояхме. Pronounce „ихме" starting with и. Do not add extra words and do not repeat any ending.' },
       { pronoun: 'Вие',       cells: ['-ахте',  '-яхте',  '-ихте', '-охте', '-ехте', '-ухте'], ttsText: 'Вие. ахте. яхте. ихте. охте. ехте. ухте.', ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
       { pronoun: 'те',        cells: ['-аха',   '-яха',   '-иха',  '-оха',  '-еха',  '-уха'],  ttsText: 'те. аха. яха. иха. оха. еха. уха.',   ttsPrompt: GEMINI_BG_SMOOTH_PROMPT },
     ],
@@ -598,7 +658,8 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'АХ група. Пример: вечерях, вечеря, вечеря, вечеряхме, вечеряхте, вечеряха.',
-      'ОХ група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
+      // Gemini reads uppercase „ОХ" as English OH (silent H → only „О").
+      'о-х група. Пример: отидох, отиде, отиде, отидохме, отидохте, отидоха.',
     ],
     ttsNoteModels: ['pro', 'pro'],
   } as GrammarTableExercise,
@@ -611,6 +672,27 @@ export const exercises: Exercise[] = [
     textTitle: 'Явор беше в Италия',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 22,
+    sectionStart: {
+      title: 'Пътувания и свободно време',
+      subtitle: 'Италия, Париж, Истанбул, ваканция и Брюксел',
+      titleI18n: {
+        en: 'Travel and free time',
+        fr: 'Voyages et temps libre',
+        ar: 'السفر ووقت الفراغ',
+        fa: 'سفرها و وقت آزاد',
+        uk: 'Подорожі та вільний час',
+        ru: 'Путешествия и свободное время',
+      },
+      subtitleI18n: {
+        en: 'Italy, Paris, Istanbul, a holiday and Brussels',
+        fr: 'L\'Italie, Paris, Istanbul, les vacances et Bruxelles',
+        ar: 'إيطاليا وباريس وإسطنبول والعطلة وبروكسل',
+        fa: 'ایتالیا، پاریس، استانبول، تعطیلات و بروکسل',
+        uk: 'Італія, Париж, Стамбул, відпустка і Брюссель',
+        ru: 'Италия, Париж, Стамбул, отпуск и Брюссель',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     images: [
       { imageUrl: `${ASSET}/06-upr-19-patuvane/01-yavor-italiya.jpg`, label: 'Явор — Италия' },
@@ -619,7 +701,8 @@ export const exercises: Exercise[] = [
       'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
     ],
     ttsParagraphs: [
-      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Яде пица. Пи червено вино.',
+      // Past tense я́де (stress on Я), not present яде́.
+      'Явор беше в Италия. Пътува с кола. Времето беше хубаво. Видя много стари сгради. Я́де пица. Пи червено вино.',
     ],
     paragraphVoiceGenders: ['female'],
   } as ReadingTextExercise,

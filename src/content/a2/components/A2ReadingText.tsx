@@ -7,11 +7,11 @@
  * behavioural difference vs. the shared version is the non-flashcard image grid:
  * when a reading text has exactly TWO plain images, they are centered
  * (`grid-cols-2 max-w-2xl mx-auto`) instead of left-aligned in a 3-column grid.
- * See the `grid gap-3 mb-6` block below (marked A2-CHANGE).
+ * `imageColumns: 3` is a centered 3-col grid; `imageEqualHeight` uses square
+ * corners so a photo set stays uniform.
  *
  * Registered as `'reading_text'` in `../exercise-components.ts`, so it wins over
- * the built-in switch for ALL A2 reading_text exercises (only changes layout when
- * there are exactly 2 images; identical otherwise).
+ * the built-in switch for ALL A2 reading_text exercises.
  *
  * SYNC: if the shared ReadingText changes, mirror the change here.
  */
@@ -600,15 +600,15 @@ function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, 
               : imageColumns === 4
                 ? 'gap-3 grid-cols-2 md:grid-cols-4'
                 : imageColumns === 3
-                  ? 'gap-3 grid-cols-2 md:grid-cols-3'
+                  ? 'gap-3 grid-cols-3 max-w-3xl mx-auto'
                   : imageColumns === 2
                     ? 'gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
                     : 'gap-3 grid-cols-2 md:grid-cols-3'
         }`}>
           {images.map((img, i) => (
-            <div key={i} className="flex flex-col items-center">
+            <div key={i} className="flex w-full flex-col items-center">
               {imageEqualHeight ? (
-                <div className="w-full aspect-[4/3] overflow-hidden rounded-lg shadow-sm">
+                <div className="w-full aspect-[4/3] overflow-hidden">
                   <img
                     src={img.imageUrl}
                     alt={img.label}
@@ -625,7 +625,7 @@ function ReadingTextBase({ audioUrl, songUrl, disableParagraphAudio, textTitle, 
                 />
               )}
               {img.label && (
-                <span className="mt-1.5 text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
+                <span className="mt-1.5 text-center text-xs md:text-sm text-gray-500 font-medium">{img.label}</span>
               )}
             </div>
           ))}

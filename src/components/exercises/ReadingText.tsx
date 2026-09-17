@@ -2,12 +2,13 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Check, X, BookOpen, Volume2, Turtle } from 'lucide-react';
+import { Play, Pause, Check, X, BookOpen, Turtle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
+import { AudioIcon } from '@/components/AudioIcon';
 import { Music } from 'lucide-react';
 import { speakBulgarian, stopSpeaking, stopTtsAudio, pauseTtsAudio, resumeTtsAudio, setTtsAudioRate, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { TtsHint } from '@/components/TtsHint';
@@ -606,8 +607,16 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
         </div>
       ) : !hideText && images && images.length > 0 ? (
         <div
-          className={`grid gap-3 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-xl md:max-w-2xl mx-auto' : 'grid-cols-2'}`}
-          style={images.length > 1 && imageColumns && imageColumns > 2
+          className={`grid mb-6 ${
+            images.length === 1
+              ? 'gap-3 grid-cols-1 max-w-xl md:max-w-2xl mx-auto'
+              : images.length === 2
+                // Two images are centered rather than stretched across the full
+                // width, which would leave them oversized next to the text.
+                ? 'gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+                : 'gap-3 grid-cols-2'
+          }`}
+          style={images.length > 2 && imageColumns && imageColumns > 2
             ? { gridTemplateColumns: `repeat(${imageColumns}, minmax(0, 1fr))` }
             : undefined}
         >
@@ -636,7 +645,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
                   onClick={() => handleImageLabelPlay(img.label, img.ttsWordId)}
                   className="mt-1.5 flex items-center gap-1.5 text-xs md:text-sm text-gray-500 font-medium hover:text-[#1F5741] transition-colors"
                 >
-                  <Volume2 className="w-3.5 h-3.5 flex-shrink-0" />
+                  <AudioIcon className="w-3.5 h-3.5" />
                   {img.label}
                 </button>
               )}
@@ -723,11 +732,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
                 }`}
               >
                 <div className="flex items-start gap-2">
-                  <Volume2
-                    className={`w-4 h-4 mt-1.5 flex-shrink-0 transition-colors ${
-                      playingParaIndex === index ? 'text-[#32C189]' : 'text-gray-300'
-                    }`}
-                  />
+                  <AudioIcon active={playingParaIndex === index} className="w-4 h-4 mt-1.5" />
                   <div className="flex-1">
                     {paragraph.includes('\n') ? (
                       paragraph.split('\n').map((line, li) => (

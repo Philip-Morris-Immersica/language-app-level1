@@ -3,6 +3,7 @@
 import type { Exercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
+import { renderBoldText } from '@/lib/renderBoldText';
 import { FillInBlank } from './FillInBlank';
 import { MultipleChoice } from './MultipleChoice';
 import { MatchPairs } from './MatchPairs';
@@ -28,6 +29,7 @@ import { PersonalChoice } from './PersonalChoice';
 import { ConnectDots } from './ConnectDots';
 import { AlphabetMaze } from './AlphabetMaze';
 import { TableFill } from './TableFill';
+import { AudioChoice } from './AudioChoice';
 import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
@@ -39,12 +41,25 @@ import { B1_CUSTOM_RENDERERS } from '@/content/b1/exercise-components';
  * level-specific variants of existing types) without editing this file. See
  * `src/content/a2/exercise-components.ts` and `src/content/b1/exercise-components.ts`
  * for the per-level entries.
+ *
+ * Kept PER LEVEL (not flat-merged) so a level can override an unprefixed
+ * shared type (e.g. `reading_text`, `grammar_table`) for its own lessons
+ * without leaking that override onto other levels' exercises of the same
+ * shared type. The level is derived from the exercise id prefix below.
  */
-const CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
-  ...A2_CUSTOM_RENDERERS,
-  ...B1_CUSTOM_RENDERERS,
-  // Future levels (B2) can spread their maps here.
+const LEVEL_CUSTOM_RENDERERS: Record<string, Record<string, CustomExerciseRenderer>> = {
+  a2: A2_CUSTOM_RENDERERS,
+  b1: B1_CUSTOM_RENDERERS,
+  // Future levels (b2) can add their map here.
 };
+
+/** Derives the content level from an exercise id. A1 ids have no prefix. */
+function levelFromExerciseId(exerciseId: string): string {
+  if (exerciseId.startsWith('b1-')) return 'b1';
+  if (exerciseId.startsWith('a2-')) return 'a2';
+  if (exerciseId.startsWith('b2-')) return 'b2';
+  return 'a1';
+}
 
 interface ExerciseRendererProps {
   exercise: Exercise;
@@ -63,15 +78,7 @@ interface ExerciseHeaderProps {
 }
 
 /** Converts **bold** markers in instruction strings to <strong> elements. */
-function renderInstructionText(text: string): React.ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
+const renderInstructionText = renderBoldText;
 
 function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtitle, prominentSubtitle }: ExerciseHeaderProps) {
   const t = useT();
@@ -95,7 +102,7 @@ function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtit
           ? 'text-gray-500 text-sm md:text-base mt-1.5 leading-snug'
           : 'text-gray-400 text-xs mt-1'
         }>
-          {translatedSubtitle}
+          {renderInstructionText(translatedSubtitle)}
         </p>
       )}
       {instruction && (
@@ -171,9 +178,12 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     );
   }
 
-  // Custom (per-level) renderer takes priority. Levels register their renderers
-  // in their own `exercise-components.ts` so this file never needs editing.
-  const CustomRenderer = CUSTOM_RENDERERS[exercise.type];
+  // Custom (per-level) renderer takes priority, scoped to the exercise's own
+  // level so a B1/A2 override of a shared type never leaks onto other levels.
+  // Levels register their renderers in their own `exercise-components.ts` so
+  // this file never needs editing.
+  const level = levelFromExerciseId(exercise.id);
+  const CustomRenderer = LEVEL_CUSTOM_RENDERERS[level]?.[exercise.type];
   if (CustomRenderer) {
     return wrap(
       <CustomRenderer
@@ -217,6 +227,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <DropdownMatch
           questions={exercise.questions}
           imageUrl={exercise.imageUrl}
+          noZoom={exercise.noZoom}
           images={exercise.images}
           listeningText={exercise.listeningText}
           onComplete={onComplete}
@@ -322,6 +333,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
           boldColumns={exercise.boldColumns}
           widePronouns={exercise.widePronouns}
+          pronounColumnLabel={exercise.pronounColumnLabel}
         />
       );
 
@@ -434,6 +446,9 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           exerciseId={exercise.id}
         />
       );
+
+    case 'audio_choice':
+      return wrap(<AudioChoice exercise={exercise} onComplete={onComplete} />);
 
     case 'verb_conjugation':
     case 'number_writing':

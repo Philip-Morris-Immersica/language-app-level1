@@ -5,6 +5,7 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import type { GrammarHighlight as GrammarHighlightProps } from '@/content/types';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
+import { renderBoldText } from '@/lib/renderBoldText';
 
 interface Props {
   highlight: GrammarHighlightProps;
@@ -38,7 +39,7 @@ export function GrammarHighlight({ highlight, exerciseId }: Props) {
     <div className="flex gap-3 rounded-r-xl border-0 border-l-[4px] border-l-[#32C189] bg-white shadow-sm px-4 py-3 text-sm text-[#1F5741] ring-1 ring-gray-100">
       <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#32C189]" aria-hidden />
       <div className="min-w-0 flex-1 space-y-1.5">
-        {displayText && <p>{displayText}</p>}
+        {displayText && <p>{renderBoldText(displayText)}</p>}
         {examples && examples.length > 0 && (
           <>
             {canInteract && (
