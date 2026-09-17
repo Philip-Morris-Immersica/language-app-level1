@@ -258,6 +258,12 @@ export interface A2WordOrderQuestion {
 export interface A2WordOrderExercise extends BaseExercise {
   type: 'a2-word-order';
   points?: number;
+  /**
+   * When true, the trailing „." / „?" / „!" tile is still shown but is not
+   * required for a correct answer — arranging the words correctly is enough.
+   * Opt-in per exercise so older exercises keep grading punctuation.
+   */
+  punctuationOptional?: boolean;
   questions: A2WordOrderQuestion[];
 }
 

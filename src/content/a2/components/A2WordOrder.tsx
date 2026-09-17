@@ -20,6 +20,10 @@
  * (build/reset, per-question validation, scoring) is identical. No audio → no
  * TTS-pipeline impact.
  *
+ * Second difference: words move by index instead of by value, so a repeated
+ * token („ще работи и ще учи") keeps both copies available. The shared version
+ * filters by value and loses one copy on the first click.
+ *
  * Registered as the opt-in type `'a2-word-order'` in `../exercise-components.ts`
  * (A1 / other A2 lessons using `'word_order'` are NOT affected).
  *
@@ -43,6 +47,7 @@ interface WordOrderShape {
   id: string;
   type: string;
   points?: number;
+  punctuationOptional?: boolean;
   questions: WordOrderQuestion[];
 }
 
@@ -69,14 +74,22 @@ function matchesWordSet(saved: QuestionState | undefined, words: string[]): bool
   return true;
 }
 
+// Drops the sentence-final punctuation token (and the space the join left before
+// it) so „…в морето ." and „…в морето" compare equal.
+function stripFinalPunctuation(sentence: string): string {
+  return sentence.replace(/[\s.!?…]+$/u, '').trim();
+}
+
 function A2WordOrderBase({
   questions,
   points,
+  punctuationOptional,
   exerciseId,
   onComplete,
 }: {
   questions: WordOrderQuestion[];
   points?: number;
+  punctuationOptional?: boolean;
   exerciseId?: string;
   onComplete?: (correct: boolean, score: number) => void;
 }) {
@@ -126,18 +139,26 @@ function A2WordOrderBase({
     });
   };
 
-  const handleWordClick = (questionIndex: number, word: string, fromBuilt: boolean) => {
+  // Words move by POSITION, not by value — a sentence may legitimately repeat a
+  // token (e.g. „ще работи и ще учи"), and removing by value would delete every
+  // occurrence at once while adding only one back.
+  const handleWordClick = (questionIndex: number, wordIndex: number, fromBuilt: boolean) => {
     if (isSubmitted) clearValidation();
 
     setQuestionStates(prev => {
       const state = prev[questionIndex];
       if (!state) return prev;
+      const source = fromBuilt ? state.built : state.available;
+      const word = source[wordIndex];
+      if (word === undefined) return prev;
+      const remaining = source.filter((_, i) => i !== wordIndex);
+
       if (fromBuilt) {
         return {
           ...prev,
           [questionIndex]: {
             ...state,
-            built: state.built.filter(w => w !== word),
+            built: remaining,
             available: [...state.available, word],
           },
         };
@@ -146,7 +167,7 @@ function A2WordOrderBase({
         ...prev,
         [questionIndex]: {
           ...state,
-          available: state.available.filter(w => w !== word),
+          available: remaining,
           built: [...state.built, word],
         },
       };
@@ -174,9 +195,13 @@ function A2WordOrderBase({
 
     questions.forEach((question, index) => {
       const state = newStates[index] ?? { available: [], built: [], validation: null };
-      const builtSentence = state.built.join(' ').toLowerCase().trim();
+      const normalize = (s: string) => {
+        const lowered = s.toLowerCase().trim();
+        return punctuationOptional ? stripFinalPunctuation(lowered) : lowered;
+      };
+      const builtSentence = normalize(state.built.join(' '));
       const allValid = [question.correctSentence, ...(question.alternateCorrectSentences ?? [])];
-      const isCorrect = allValid.some(s => builtSentence === s.toLowerCase().trim());
+      const isCorrect = allValid.some(s => builtSentence === normalize(s));
       newStates[index] = { ...state, validation: isCorrect };
       if (isCorrect) correctCount++;
     });
@@ -238,7 +263,7 @@ function A2WordOrderBase({
                     {state.built.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, true)}
+                        onClick={() => handleWordClick(qIndex, wIndex, true)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-[#32C189] bg-[#DAF6EB] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
@@ -268,7 +293,7 @@ function A2WordOrderBase({
                     {state.available.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, false)}
+                        onClick={() => handleWordClick(qIndex, wIndex, false)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-gray-300 bg-white shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95
@@ -329,6 +354,7 @@ export function A2WordOrder({
     <A2WordOrderBase
       questions={ex.questions}
       points={ex.points}
+      punctuationOptional={ex.punctuationOptional}
       exerciseId={exerciseId ?? ex.id}
       onComplete={onComplete}
     />
