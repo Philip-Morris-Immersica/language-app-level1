@@ -31,6 +31,7 @@ import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { isWordOrderAnswerCorrect } from '@/lib/wordOrder';
 
 interface WordOrderQuestion {
   words: string[];
@@ -126,18 +127,25 @@ function A2WordOrderBase({
     });
   };
 
-  const handleWordClick = (questionIndex: number, word: string, fromBuilt: boolean) => {
+  // `wordIndex` (not the word itself) identifies the token, so a sentence that
+  // repeats a word („ще … ще") keeps both copies when one is clicked.
+  const handleWordClick = (questionIndex: number, wordIndex: number, fromBuilt: boolean) => {
     if (isSubmitted) clearValidation();
 
     setQuestionStates(prev => {
       const state = prev[questionIndex];
       if (!state) return prev;
+      const source = fromBuilt ? state.built : state.available;
+      const word = source[wordIndex];
+      if (word === undefined) return prev;
+      const remaining = source.filter((_, i) => i !== wordIndex);
+
       if (fromBuilt) {
         return {
           ...prev,
           [questionIndex]: {
             ...state,
-            built: state.built.filter(w => w !== word),
+            built: remaining,
             available: [...state.available, word],
           },
         };
@@ -146,7 +154,7 @@ function A2WordOrderBase({
         ...prev,
         [questionIndex]: {
           ...state,
-          available: state.available.filter(w => w !== word),
+          available: remaining,
           built: [...state.built, word],
         },
       };
@@ -174,9 +182,7 @@ function A2WordOrderBase({
 
     questions.forEach((question, index) => {
       const state = newStates[index] ?? { available: [], built: [], validation: null };
-      const builtSentence = state.built.join(' ').toLowerCase().trim();
-      const allValid = [question.correctSentence, ...(question.alternateCorrectSentences ?? [])];
-      const isCorrect = allValid.some(s => builtSentence === s.toLowerCase().trim());
+      const isCorrect = isWordOrderAnswerCorrect(state.built, question);
       newStates[index] = { ...state, validation: isCorrect };
       if (isCorrect) correctCount++;
     });
@@ -238,7 +244,7 @@ function A2WordOrderBase({
                     {state.built.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, true)}
+                        onClick={() => handleWordClick(qIndex, wIndex, true)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-[#32C189] bg-[#DAF6EB] shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95 transition-all
@@ -268,7 +274,7 @@ function A2WordOrderBase({
                     {state.available.map((word, wIndex) => (
                       <button
                         key={wIndex}
-                        onClick={() => handleWordClick(qIndex, word, false)}
+                        onClick={() => handleWordClick(qIndex, wIndex, false)}
                         className="
                           px-4 py-3 rounded-xl border-2 border-gray-300 bg-white shadow-sm
                           font-semibold text-base min-h-[52px] active:scale-95
