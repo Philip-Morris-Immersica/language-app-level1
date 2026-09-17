@@ -54,6 +54,8 @@ type ReadingExercise = {
   /** Center the textTitle above the shared reading body. */
   centerTitle?: boolean;
   paragraphs: string[];
+  /** Subtitle shown below textTitle (inside the reading area, no audio). */
+  textSubtitle?: string;
   /** TTS-only text per paragraph (e.g. without list numbers). Used as browser-TTS fallback. */
   ttsParagraphs?: string[];
   paragraphTranslations?: Record<string, string>[];
@@ -92,6 +94,42 @@ function CompactImageStrip({ images, columns = 3 }: { images: ReadingImage[]; co
             className="object-cover rounded-md"
             sizes="(max-width: 768px) 30vw, 180px"
           />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Two photos as a centered pair — same layout as A2 (avoids a stretched full-width row). */
+function CenteredTwoImages({
+  images,
+  equalHeight,
+}: {
+  images: ReadingImage[];
+  equalHeight?: boolean;
+}) {
+  return (
+    <div className="grid gap-2 grid-cols-2 max-w-xl md:max-w-2xl mx-auto mb-6">
+      {images.map((img, i) => (
+        <div key={i} className="flex flex-col items-center">
+          {equalHeight ? (
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-sm">
+              <Image
+                src={img.imageUrl}
+                alt={img.label || ''}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 45vw, 320px"
+              />
+            </div>
+          ) : (
+            <img
+              src={img.imageUrl}
+              alt={img.label || ''}
+              className="w-full rounded-lg shadow-sm object-contain max-h-72"
+              loading="lazy"
+            />
+          )}
         </div>
       ))}
     </div>
@@ -181,12 +219,22 @@ function SharedAdapter({
   const scoreIfCorrect = exercise.checklist?.items.length ?? exercise.points ?? 1;
   const compact = !!exercise.compactImages && (exercise.images?.length ?? 0) > 0;
   const centerTitle = !!exercise.centerTitle;
+  const centeredPair =
+    !compact &&
+    !exercise.imageFlashcards &&
+    (exercise.images?.length ?? 0) === 2;
   return (
     <div className="space-y-3">
       {compact && (
         <CompactImageStrip
           images={exercise.images!}
           columns={exercise.imageColumns ?? exercise.images!.length}
+        />
+      )}
+      {centeredPair && (
+        <CenteredTwoImages
+          images={exercise.images!}
+          equalHeight={exercise.imageEqualHeight}
         />
       )}
       {centerTitle && exercise.textTitle ? (
@@ -199,8 +247,8 @@ function SharedAdapter({
         songUrl={exercise.songUrl}
         disableParagraphAudio={exercise.disableParagraphAudio}
         textTitle={centerTitle ? undefined : exercise.textTitle}
-        images={compact ? undefined : exercise.images}
-        imageFlashcards={compact ? false : exercise.imageFlashcards}
+        images={compact || centeredPair ? undefined : exercise.images}
+        imageFlashcards={compact || centeredPair ? false : exercise.imageFlashcards}
         imageColumns={exercise.imageColumns}
         imageEqualHeight={exercise.imageEqualHeight}
         paragraphs={exercise.paragraphs}
@@ -356,22 +404,34 @@ function ReadingTextWithTaskTables({
       </div>
 
       {textTitle && (
-        <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-4 ${exercise.centerTitle ? 'text-center' : ''}`}>
+        <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-1 ${exercise.centerTitle ? 'text-center' : ''}`}>
           {textTitle}
         </h2>
       )}
+      {exercise.textSubtitle && (
+        <p className="text-sm md:text-base text-gray-500 italic mb-4">
+          {exercise.textSubtitle}
+        </p>
+      )}
 
       {images && images.length > 0 && (
-        <div className={`grid gap-4 md:gap-6 mb-6 ${images.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2 md:grid-cols-3'}`}>
+        <div className={`grid gap-4 md:gap-6 mb-6 ${
+          images.length === 1
+            ? 'grid-cols-1 max-w-md mx-auto'
+            : images.length === 2
+              ? 'grid-cols-2 max-w-xl md:max-w-2xl mx-auto'
+              : 'grid-cols-2 md:grid-cols-3'
+        }`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
-              <div className="relative w-full aspect-[4/3] max-h-72">
-                <Image
+              <div className="w-full aspect-[4/3] max-h-72 overflow-hidden">
+                {/* Use plain <img> so external URLs (e.g. Wikimedia) are not
+                    blocked by next/image's remotePatterns restriction. */}
+                <img
                   src={img.imageUrl}
                   alt={img.label}
-                  fill
-                  className="object-contain rounded-lg"
-                  sizes="(max-width: 768px) 90vw, 400px"
+                  className="w-full h-full object-contain rounded-lg"
+                  loading="lazy"
                 />
               </div>
               {img.label && (
@@ -388,6 +448,17 @@ function ReadingTextWithTaskTables({
 
       <div className="space-y-4">
         {paragraphs.map((paragraph, index) => {
+          // Paragraphs starting with "## " are section headings — no audio button, no click
+          if (paragraph.startsWith('## ')) {
+            return (
+              <h3
+                key={index}
+                className="text-base md:text-lg font-bold text-[#1F5741] uppercase tracking-wide mt-6 mb-0 border-b border-[#DAF6EB] pb-1"
+              >
+                {paragraph.slice(3)}
+              </h3>
+            );
+          }
           const taskList = parseTaskList(paragraph);
           return (
             <div

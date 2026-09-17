@@ -23,6 +23,7 @@ import {
 } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
+import { HighlightedText } from './highlight';
 import type { B1GrammarExamplesExercise } from '../types';
 
 function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
@@ -47,21 +48,8 @@ function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   );
 }
 
-function BoldLine({ text, color = '#1F5741' }: { text: string; color?: string }) {
-  const parts = text.split(/\*\*(.+?)\*\*/g);
-  return (
-    <>
-      {parts.map((part, i) =>
-        i % 2 === 1
-          // Inline color: Tailwind content[] does not scan src/content/, so text-[#…] classes here are dropped.
-          // Light green bg (#DAF6EB) paired with the AAA-contrast green text (#1F5741) from the
-          // design system's green "trio" — brighter greens (#2BB673 / #32C189) read as nearly
-          // invisible on this light background (too little contrast).
-          ? <span key={i} className="font-extrabold rounded-sm px-0.5" style={{ color, backgroundColor: '#DAF6EB' }}>{part}</span>
-          : <span key={i}>{part}</span>
-      )}
-    </>
-  );
+function BoldLine({ text }: { text: string }) {
+  return <HighlightedText text={text} />;
 }
 
 interface Props {
@@ -84,7 +72,8 @@ function speakableText(example: B1GrammarExamplesExercise['examples'][number]): 
 
 export function GrammarExamples({ exercise, exerciseId }: Props) {
   const t = useT();
-  const { examples, disableTts } = exercise;
+  const { examples, disableTts, layout } = exercise;
+  const isCentered = layout === 'centered';
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [playingAll, setPlayingAll] = useState(false);
@@ -248,15 +237,25 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
     return (
       <div className={`space-y-2 ${alignCls}`}>
         {lines.length > 0 ? (
-          <div
-            className={`rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 space-y-1 ${alignCls}`}
-          >
-            {lines.map((line, i) => (
-              <p key={i} className={`${opts.lineClass} text-slate-800`}>
-                <BoldLine text={line} color="#1e3a5f" />
-              </p>
-            ))}
-          </div>
+          isCentered ? (
+            <div className={`space-y-1 ${alignCls}`}>
+              {lines.map((line, i) => (
+                <p key={i} className={`${opts.lineClass} text-slate-800`}>
+                  <BoldLine text={line} />
+                </p>
+              ))}
+            </div>
+          ) : (
+            <div
+              className={`rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 space-y-1 ${alignCls}`}
+            >
+              {lines.map((line, i) => (
+                <p key={i} className={`${opts.lineClass} text-slate-800`}>
+                  <BoldLine text={line} />
+                </p>
+              ))}
+            </div>
+          )
         ) : null}
         {hasSub ? (
           <div
@@ -444,8 +443,11 @@ export function GrammarExamples({ exercise, exerciseId }: Props) {
 
   // Text-only example cards (no images): 2×2 for 4 cards (avoid 3+1 on large screens).
   // Keep 1–2 card sections on the stacked/centered path below.
+  // A shared hero image only renders on the stacked path, so sections that carry one
+  // must never take this branch — otherwise the picture disappears.
   const isTextCardGrid =
     !hasNumberedDialogues &&
+    withImages.length === 0 &&
     examples.length >= 3 &&
     examples.every(e => (e.lines?.length ?? 0) > 0 || !!e.text?.trim());
 
