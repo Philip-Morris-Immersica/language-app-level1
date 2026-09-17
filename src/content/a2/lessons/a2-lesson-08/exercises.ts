@@ -5,7 +5,6 @@
   GrammarTableExercise,
   WorkbookFillBlankExercise,
   IllustratedCardsExercise,
-  WordOrderExercise,
   TrueFalseExercise,
   MultipleChoiceExercise,
   ReadingTextExercise,
@@ -292,7 +291,11 @@ export const exercises: Exercise[] = [
   // ─── ORDER 8 — Упр. 10 (стр. 84): Подредете думите в изречения ──────────────
   {
     id: 'a2-l08-ex-10',
-    type: 'word_order',
+    // Тестерът подреждаше думите правилно, но получаваше грешка, защото
+    // квадратчето с точката/въпросителната беше задължително при буквалната
+    // проверка. Финалната пунктуация вече не се оценява никъде в платформата
+    // (квадратчето остава, за да се вижда къде е краят на изречението).
+    type: 'a2-word-order',
     title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Поставете думите в правилния ред.',
     order: 8,
@@ -304,9 +307,9 @@ export const exercises: Exercise[] = [
       { words: ['интересен', 'сряда', 'В', 'гледах', 'филм', 'приятели', 'с', '.'], correctSentence: 'В сряда гледах интересен филм с приятели .', alternateCorrectSentences: ['Гледах интересен филм с приятели в сряда .'] },
       { words: ['на', 'китара', 'свириха', 'Снощи', 'те', '.'],                    correctSentence: 'Снощи те свириха на китара .', alternateCorrectSentences: ['Те свириха на китара снощи .'] },
       { words: ['снимки', 'Те', 'правиха', 'много', '.'],                          correctSentence: 'Те правиха много снимки .', alternateCorrectSentences: ['Много снимки те правиха .'] },
-      { words: ['ли', 'колело', 'Кара', 'през', 'уикенда', '?'],                  correctSentence: 'Кара ли колело през уикенда ?', alternateCorrectSentences: ['Кара ли колело през уикенда?'] },
+      { words: ['ли', 'колело', 'Кара', 'през', 'уикенда', '?'],                  correctSentence: 'Кара ли колело през уикенда ?' },
     ],
-  } as WordOrderExercise,
+  } as unknown as Exercise,
 
   // ─── ORDER 9а — Упр. 11 (стр. 84): Текстовете за слушане преди въпросите ────
   {

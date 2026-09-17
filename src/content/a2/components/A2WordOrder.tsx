@@ -20,6 +20,15 @@
  * (build/reset, per-question validation, scoring) is identical. No audio → no
  * TTS-pipeline impact.
  *
+ * Words move by index rather than by value, so a repeated token („ще работи и
+ * ще учи") keeps both copies available. This was an A2-only fix at first; the
+ * shared component has since been corrected the same way, so it is no longer a
+ * difference between the two — just a property both now rely on.
+ *
+ * Answer checking is NOT implemented here: it comes from `@/lib/wordOrder`,
+ * shared with the shared component and with `testScoring`, so the same built
+ * sentence can never be accepted in a lesson and rejected in a test.
+ *
  * Registered as the opt-in type `'a2-word-order'` in `../exercise-components.ts`
  * (A1 / other A2 lessons using `'word_order'` are NOT affected).
  *
@@ -127,8 +136,9 @@ function A2WordOrderBase({
     });
   };
 
-  // `wordIndex` (not the word itself) identifies the token, so a sentence that
-  // repeats a word („ще … ще") keeps both copies when one is clicked.
+  // Words move by POSITION, not by value — a sentence may legitimately repeat a
+  // token (e.g. „ще работи и ще учи"), and removing by value would delete every
+  // occurrence at once while adding only one back.
   const handleWordClick = (questionIndex: number, wordIndex: number, fromBuilt: boolean) => {
     if (isSubmitted) clearValidation();
 

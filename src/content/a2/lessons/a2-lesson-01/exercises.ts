@@ -8,8 +8,9 @@
   IllustratedCardsExercise,
   GrammarExamplesExercise,
   ReadingTextExercise,
+  WordOrderExercise,
 } from '@/content/types';
-import type { A2DialogueBuilderExercise, A2WordOrderExercise } from '../../types';
+import type { A2DialogueBuilderExercise } from '../../types';
 
 // ⚠️ Order follows the A2 textbook „Ало, ало!" (стр. 16–23).
 // Пропуснати по желание на клиента: упр. 4, 5, 10, 18 (работа по двойки / свободно лично писане).
@@ -709,7 +710,7 @@ export const exercises: Exercise[] = [
       { words: ['ли', 'ги', 'Виждаш', '?'],     correctSentence: 'Виждаш ли ги ?' },
       { words: ['ме', 'ли', 'Обичаш', '?'],     correctSentence: 'Обичаш ли ме ?' },
     ],
-  } as A2WordOrderExercise,
+  } as unknown as Exercise,
 
   // ORDER 20 — Упр. 13 (стр. 21): преобразувайте по модела — dropdown
   {
