@@ -10,7 +10,6 @@
   ReadingTextExercise,
   WordOrderExercise,
 } from '@/content/types';
-import type { A2DialogueBuilderExercise } from '../../types';
 
 // ⚠️ Order follows the A2 textbook „Ало, ало!" (стр. 16–23).
 // Пропуснати по желание на клиента: упр. 4, 5, 10, 18 (работа по двойки / свободно лично писане).
@@ -309,7 +308,7 @@ export const exercises: Exercise[] = [
         ],
       },
     ],
-  } as A2DialogueBuilderExercise,
+  } as unknown as Exercise,
 
   // ORDER 7 — Упр. 7 (стр. 18): попълнете диалога с дадените изречения
   {
