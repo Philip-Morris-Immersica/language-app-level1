@@ -170,12 +170,12 @@ export function SelectWords({ exercise, onComplete, exerciseId }: Props) {
                         submitted ? '' : 'active:scale-95'
                       } ${chipClass}`}
                     >
-                      {word.text}
                       {submitted && !isPicked && isCorrectWord && (
-                        <span className="ms-1.5 text-[10px] font-bold uppercase tracking-wide">
+                        <span className="me-1.5 text-[10px] font-bold uppercase tracking-wide">
                           {t('b1.exercise.selectWordsMissed')}
                         </span>
                       )}
+                      {word.text}
                     </button>
                   );
                 })}
