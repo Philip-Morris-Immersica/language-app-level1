@@ -119,6 +119,6 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-11': 5,
   'b1-lesson-12': 8,
   'b1-lesson-13': 3,
-  'b1-lesson-14': 8,
-  // 15 count will be filled together with its loader.
+  'b1-lesson-14': 7,
+  'b1-lesson-15': 6,
 };
