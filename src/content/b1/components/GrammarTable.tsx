@@ -165,6 +165,7 @@ function SingleTable({
     const row = rows[idx];
     if (row.noAudio) return;
     onManualPlay?.();
+    stopTtsAudio();
     const text = speakableRowText(row);
     const globalIdx = rowIndexOffset + idx;
     const audioPath = exerciseId
@@ -539,14 +540,6 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
     variant = 'table',
   } = exercise;
 
-  const playNote = (idx: number, note: string) => {
-    if (disableAudio) return;
-    const audioPath = exerciseId
-      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
-      : '';
-    playTtsAudio(audioPath, ttsNotes?.[idx] ?? note);
-  };
-
   const resolvedPanels = panels?.length
     ? panels
     : [{ tableTitle, columns, pronounHeader, rows, fullWidth: true as boolean | undefined }];
@@ -610,6 +603,16 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   /** A row or card was played by hand — give up the running section chain. */
   const handleManualPlay = () => {
     if (chainRef.current || playingAll || pausedAll) cancelChain();
+  };
+
+  const playNote = (idx: number, note: string) => {
+    if (disableAudio) return;
+    handleManualPlay();
+    stopTtsAudio();
+    const audioPath = exerciseId
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
+      : '';
+    playTtsAudio(audioPath, ttsNotes?.[idx] ?? note);
   };
 
   const handlePlayAll = () => {
