@@ -43,8 +43,68 @@ if (typeof window !== 'undefined' && window.speechSynthesis) {
   getBulgarianVoice();
 }
 
+/**
+ * Expands abbreviated Bulgarian vocabulary forms for correct TTS pronunciation.
+ * e.g. "вечерям, -яш" → "вечерям, вечеряш"
+ *      "гладен, -дна, -дно, -дни" → "гладен, гладна, гладно, гладни"
+ */
+export function expandVocabAbbreviations(bulgarian: string): string {
+  const match = bulgarian.match(/^(.+?),\s*-([а-яА-Я]+)(.*)$/);
+  if (!match) return bulgarian;
+
+  const baseFormRaw = match[1].trim();
+  const firstSuffix = match[2];
+  const restRaw     = match[3];
+
+  const baseForStem = baseFormRaw.replace(/\s*\([^)]*\)\s*/g, ' ').trim();
+
+  const reflexiveMatch = baseForStem.match(/^(.+?)(\s+(?:се|си))$/);
+  const verb      = reflexiveMatch ? reflexiveMatch[1] : baseForStem;
+  const reflexive = reflexiveMatch ? reflexiveMatch[2] : '';
+
+  const VOWELS = 'аеиоуъяюйАЕИОУЪЯЮЙ';
+
+  function expandOneSuffix(base: string, suffix: string): string {
+    const lastChar = base[base.length - 1];
+
+    if (suffix.length === 1) {
+      return VOWELS.includes(lastChar) ? base.slice(0, -1) + suffix : base + suffix;
+    }
+
+    const firstChar = suffix[0];
+    const idx = base.lastIndexOf(firstChar);
+
+    if (idx === base.length - 1) {
+      const secondToLast = base[base.length - 2];
+      if (secondToLast === 'е' || secondToLast === 'Е') {
+        return base.slice(0, -2) + suffix;
+      }
+      const prevIdx = base.lastIndexOf(firstChar, idx - 1);
+      if (prevIdx > 0) {
+        return base.slice(0, prevIdx) + suffix;
+      }
+      return base.slice(0, -2) + suffix;
+    }
+
+    if (idx > 0) {
+      return base.slice(0, idx) + suffix;
+    }
+
+    return VOWELS.includes(lastChar) ? base.slice(0, -1) + suffix : base + suffix;
+  }
+
+  const expandedFirstVerb = expandOneSuffix(verb, firstSuffix);
+  const expandedFirst = expandedFirstVerb + reflexive;
+
+  const expandedRest = restRaw.replace(/,\s*-([а-яА-Я]+)/g, (_, suf) => {
+    return ', ' + expandOneSuffix(expandedFirstVerb, suf) + reflexive;
+  });
+
+  return `${baseFormRaw}, ${expandedFirst}${expandedRest}`;
+}
+
 export function cleanForTTS(raw: string): string {
-  return raw
+  return expandVocabAbbreviations(raw)
     .replace(/\*\*/g, '')
     .replace(/\s*\|\s*/g, '. ')
     .replace(/\s*\/\s*/g, ', ')
@@ -74,8 +134,11 @@ export function cleanForTTS(raw: string): string {
     .trim();
 }
 
-export function speakBulgarian(text: string, rate = 0.85): void {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
+export function speakBulgarian(text: string, rate = 0.85, onEnd?: () => void): void {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    onEnd?.();
+    return;
+  }
 
   window.speechSynthesis.cancel();
 
@@ -90,8 +153,8 @@ export function speakBulgarian(text: string, rate = 0.85): void {
   const resumeTimer = setInterval(() => {
     if (window.speechSynthesis.paused) window.speechSynthesis.resume();
   }, 300);
-  utterance.onend = () => clearInterval(resumeTimer);
-  utterance.onerror = () => clearInterval(resumeTimer);
+  utterance.onend = () => { clearInterval(resumeTimer); onEnd?.(); };
+  utterance.onerror = () => { clearInterval(resumeTimer); onEnd?.(); };
 
   window.speechSynthesis.speak(utterance);
 }
@@ -165,7 +228,8 @@ export function playTtsAudio(
   }
 
   if (!audioUrl) {
-    if (fallbackText) speakBulgarian(fallbackText, rate);
+    if (fallbackText) speakBulgarian(fallbackText, rate, onPlaybackEnd);
+    else onPlaybackEnd?.();
     return;
   }
 
@@ -183,6 +247,11 @@ export function playTtsAudio(
   // A 404/network error fires the element's `error` event, not necessarily a
   // rejection of play() — without this handler, a missing MP3 silently never
   // plays and never falls back to browser TTS (perceived as "audio doesn't start").
+  // IMPORTANT: onPlaybackEnd must wait for the fallback utterance's own onend —
+  // firing it immediately on the (near-instant) 404 breaks sequential/chained
+  // playback (e.g. ReadingText's paragraph-by-paragraph "Слушай"): every step
+  // would advance within milliseconds, and each new speakBulgarian() call
+  // cancels the previous one, so only the very last paragraph is ever heard.
   let failed = false;
   const handleFailure = () => {
     if (failed) return;
@@ -191,8 +260,8 @@ export function playTtsAudio(
       currentAudio = null;
       currentAudioUrl = null;
     }
-    if (fallbackText) speakBulgarian(fallbackText, rate);
-    onPlaybackEnd?.();
+    if (fallbackText) speakBulgarian(fallbackText, rate, onPlaybackEnd);
+    else onPlaybackEnd?.();
   };
   audio.onended = finish;
   audio.onerror = handleFailure;

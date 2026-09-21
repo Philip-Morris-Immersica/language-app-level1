@@ -120,6 +120,20 @@ export function WorkbookFillBlank({
     });
   }, []);
 
+  // Uniform input width for the qa-stacked layout: sized to the single longest
+  // valid answer across the whole exercise, so every field lines up visually
+  // instead of each one being sized to its own (shorter/longer) answer.
+  const qaStackedInputWidthCh = useMemo(() => {
+    if (layout !== 'qa-stacked') return 0;
+    let maxLen = 0;
+    for (const s of sentences) {
+      if (s.isExample) continue;
+      const candidates = [...s.correctAnswers, ...(s.acceptableAnswers?.flat() ?? [])];
+      for (const c of candidates) maxLen = Math.max(maxLen, c.length);
+    }
+    return Math.min(60, Math.max(12, maxLen + 4));
+  }, [layout, sentences]);
+
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
     if (isSubmitted) {
       setIsSubmitted(false);
@@ -183,13 +197,21 @@ export function WorkbookFillBlank({
 
     const imageEl = sentence.images && sentence.images.length > 0 ? (
       <div className="flex-none w-28 md:w-36 flex items-center justify-center pl-3">
-        <ImageLightbox src={sentence.images[0]} alt="">
+        {noZoom ? (
           <img
             src={sentence.images[0]}
             alt=""
-            className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-zoom-in"
+            className="w-24 h-24 md:w-32 md:h-32 object-contain"
           />
-        </ImageLightbox>
+        ) : (
+          <ImageLightbox src={sentence.images[0]} alt="">
+            <img
+              src={sentence.images[0]}
+              alt=""
+              className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-zoom-in"
+            />
+          </ImageLightbox>
+        )}
       </div>
     ) : null;
 
@@ -256,7 +278,7 @@ export function WorkbookFillBlank({
 
             return (
               <span key={segIdx} className="text-base">
-                {seg.value}
+                {renderBoldText(seg.value)}
               </span>
             );
           })}
@@ -283,7 +305,7 @@ export function WorkbookFillBlank({
     return (
       <div key={sIdx} className={`py-2 ${isExample ? 'text-gray-500 italic' : 'text-gray-800'}`}>
         <div className="flex items-center gap-3">
-          {!hideSentenceNumbers && (
+          {!hideSentenceNumbers && !isExample && (
             <span className="font-semibold text-gray-500 shrink-0 self-start pt-1">{(displayNum ?? sIdx) + 1}.</span>
           )}
           {inner}
@@ -358,7 +380,7 @@ export function WorkbookFillBlank({
             </select>
           );
         }
-        return <span key={segIdx} className="text-sm">{seg.value}</span>;
+        return <span key={segIdx} className="text-sm">{renderBoldText(seg.value)}</span>;
       });
     };
 
@@ -435,9 +457,10 @@ export function WorkbookFillBlank({
               type="text"
               value={userVal}
               onChange={e => setAnswer(sIdx, bIdx, e.target.value)}
+              style={{ width: `${qaStackedInputWidthCh}ch` }}
               className={`
                 inline-block border-b-2 bg-transparent text-base font-medium
-                min-w-[8rem] max-w-[14rem] px-1 focus:outline-none
+                max-w-full px-1 focus:outline-none
                 ${isSubmitted && blankOk !== null
                   ? blankOk
                     ? 'border-green-500 text-green-700'
@@ -448,7 +471,7 @@ export function WorkbookFillBlank({
             />
           );
         }
-        return <span key={segIdx} className="text-base">{seg.value}</span>;
+        return <span key={segIdx} className="text-base">{renderBoldText(seg.value)}</span>;
       });
     };
 
@@ -475,10 +498,10 @@ export function WorkbookFillBlank({
         `}
       >
         <div className="flex items-start gap-2">
-          <span className="font-bold text-[#0072BC] shrink-0 pt-0.5">{displayNum}.</span>
-          <div className="flex-1 space-y-1">
+          <span className="font-bold text-gray-900 shrink-0 pt-0.5">{displayNum}.</span>
+          <div className="flex-1 min-w-0 space-y-1">
             <p className="text-base font-semibold text-gray-800">{questionPart}</p>
-            <div className="flex flex-wrap items-baseline gap-x-1">
+            <div className="flex flex-wrap items-baseline gap-x-1 min-w-0">
               {renderAnswerPart(answerPart)}
               {isSubmitted && (
                 <span className="ml-1 shrink-0">
@@ -588,20 +611,27 @@ export function WorkbookFillBlank({
         <>
           {images && images.length > 0 && (
             <div className="mb-6 flex flex-wrap justify-center gap-6">
-              {images.map((img, i) => (
-                <div key={i} className="flex flex-col items-center gap-2">
-                  <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
-                    <img
-                      src={img.imageUrl}
-                      alt={img.label || ''}
-                      className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
-                    />
-                  </ImageLightbox>
-                  {img.label && (
-                    <p className="text-sm font-bold text-gray-700">{img.label}</p>
-                  )}
-                </div>
-              ))}
+              {images.map((img, i) => {
+                const imgEl = (
+                  <img
+                    src={img.imageUrl}
+                    alt={img.label || ''}
+                    className="max-w-[260px] md:max-w-[300px] h-auto rounded-lg shadow-md border border-gray-100 object-contain block"
+                  />
+                );
+                return (
+                  <div key={i} className="flex flex-col items-center gap-2">
+                    {noZoom ? imgEl : (
+                      <ImageLightbox src={img.imageUrl} alt={img.label || ''}>
+                        {imgEl}
+                      </ImageLightbox>
+                    )}
+                    {img.label && (
+                      <p className="text-sm font-bold text-gray-700">{img.label}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -695,7 +725,17 @@ export function WorkbookFillBlank({
         </div>
       ) : (
         <div className={`space-y-2 ${shuffledSentences.some(s => s.images?.length) ? 'max-w-2xl' : ''}`}>
-          {shuffledSentences.map((s, i) => renderSentence(s, i))}
+          {(() => {
+            // Example sentences (isExample) don't get a number, so the count
+            // of real fill-in sentences must skip them — otherwise numbering
+            // starts at "2." because the example silently claims "1.".
+            let numCounter = -1;
+            return shuffledSentences.map((s, i) => {
+              const isEx = s.isExample || s.blanks.length === 0;
+              if (!isEx) numCounter++;
+              return renderSentence(s, i, { displayNum: numCounter });
+            });
+          })()}
         </div>
       )}
 

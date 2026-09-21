@@ -44,3 +44,20 @@ next-env.d.ts
 /_l12_real/
 /_l12_redo/
 /_l12_rerecord/
+/_l12_sents/
+/_l12_words/
+/_l14_audio_compare/
+/_l14_fix/
+/_l15_audio_bak/
+/_l15_audio_pre_ex07_13/
+/_l15_audio_pre_restore_cutoff/
+/_l15_audio_pre_teatar_orn/
+/_l15_tmp/
+/_l9_tmp/
+/temp-b1-l08-pages/
+
+# local agent/debug leftovers
+/_agent_*.ps1
+/_agent_*.txt
+/.tmp-*
+/.merge_file_*

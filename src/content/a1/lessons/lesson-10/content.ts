@@ -91,7 +91,7 @@ export const content: LessonContent = {
     { id: 'chakalniya', bulgarian: 'чакалня', translations: { en: 'waiting room', fr: 'salle d\'attente', ar: 'غرفة انتظار', fa: 'اتاق انتظار', ru: 'зал ожидания', uk: 'зал очікування' } },
     { id: 'chakam', bulgarian: 'чакам, -аш', translations: { en: 'to wait', fr: 'attendre', ar: 'ينتظر', fa: 'صبر کردن / منتظر ماندن', ru: 'ждать / ожидать', uk: 'чекати' } },
     { id: 'shofyor', bulgarian: 'шофьор', translations: { en: 'driver', fr: 'chauffeur / conducteur', ar: 'سائق', fa: 'راننده', ru: 'водитель / шофёр', uk: 'водій' } },
-    { id: 'ndk', bulgarian: 'НДК', translations: { en: 'National Palace of Culture', fr: 'Palais national de la culture', ar: 'قصر الثقافة الوطني', fa: 'کاخ ملی فرهنگ', ru: 'Национальный дворец культуры', uk: 'Національний палац культури' } },
+    { id: 'ndk', bulgarian: 'НДК', ttsText: 'Ен-Де-Ка', translations: { en: 'National Palace of Culture', fr: 'Palais national de la culture', ar: 'قصر الثقافة الوطني', fa: 'کاخ ملی فرهنگ', ru: 'Национальный дворец культуры', uk: 'Національний палац культури' } },
     { id: 'pametnik', bulgarian: 'паметник', translations: { en: 'monument / memorial', fr: 'monument', ar: 'نصب تذكاري', fa: 'بنای یادبود', ru: 'памятник', uk: 'пам\'ятник' } },
     { id: 'ploshtad', bulgarian: 'площад', translations: { en: 'square / plaza', fr: 'place', ar: 'ميدان', fa: 'میدان', ru: 'площадь', uk: 'площа' } },
   ],

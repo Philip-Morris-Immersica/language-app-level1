@@ -133,11 +133,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
       <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
         {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
         <div
-          className="max-w-5xl mx-auto gap-6 md:gap-8"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${examples.length}, minmax(0, 1fr))`,
-          }}
+          className="max-w-xl mx-auto flex flex-col gap-6 md:gap-8"
         >
           {examples.map((example, index) => (
             <div
@@ -176,19 +172,29 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   if (isHero) {
     const example = examples[0];
     const hasText = Boolean(example.text || (example.lines && example.lines.length > 0));
+    // Content can opt out of the enlarge/lightbox behavior (e.g. reference photos
+    // that shouldn't invite zooming) via `zoomable: false`. Default stays `true`
+    // for backward compatibility with every existing hero-mode example.
+    const heroZoomable = example.zoomable !== false;
+    const heroImage = (
+      <div className="relative w-full h-64 md:h-[26rem] lg:h-[32rem] rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm">
+        <ImageWithFallback src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text} />
+      </div>
+    );
     return (
       <div className="relative bg-white rounded-xl p-4 md:p-6 shadow-md">
         <div className="max-w-4xl mx-auto">
-          <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
-            <div className="relative w-full h-64 md:h-[26rem] lg:h-[32rem] rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm">
-              <ImageWithFallback src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text} />
-            </div>
-          </ImageLightbox>
+          {heroZoomable ? (
+            <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
+              {heroImage}
+            </ImageLightbox>
+          ) : heroImage}
           {hasText && (
             <div
               onClick={() => handleClick(0, example)}
               className="mt-4 text-center cursor-pointer space-y-1"
             >
+              {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
               {example.lines
                 ? example.lines.filter(Boolean).map((line, i) => (
                     <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
@@ -197,9 +203,11 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
               }
             </div>
           )}
-          <p className="mt-3 text-center text-xs text-gray-400 select-none">
-            Кликнете върху картинката, за да я увеличите.
-          </p>
+          {heroZoomable && (
+            <p className="mt-3 text-center text-xs text-gray-400 select-none">
+              Кликнете върху картинката, за да я увеличите.
+            </p>
+          )}
         </div>
       </div>
     );
@@ -264,7 +272,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     const isPositive = plainLine.startsWith('✓');
                     const isNegative = plainLine.startsWith('✗');
                     const isWarning = plainLine.startsWith('⚠️');
-                    const isSentence = /^(Аз|Той|Тя|Ние|Вие|Те|Имам|Нямам|Това|–)\s/.test(plainLine);
+                    const isSentence = /^(Аз|Ти|Той|Тя|Ние|Вие|Те|Имам|Нямам|Това|–)\s/.test(plainLine);
                     const colorClass = isPositive
                       ? 'text-green-700'
                       : isNegative

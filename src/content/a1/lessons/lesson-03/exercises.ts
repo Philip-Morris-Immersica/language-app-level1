@@ -326,21 +326,21 @@ export const exercises: Exercise[] = [
     order: 12,
     sections: [
       {
-        id: 'a',
+        id: 'а.',
         lines: [
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Добър ден. Какво обичате?', translations: { en: 'Good day. What would you like?', ar: 'مرحبًا. ماذا تحب أن تطلب؟', fr: 'Bonjour. Que désirez-vous ?', fa: 'روز بخیر. چه میل دارید؟', uk: 'Добрий день. Що бажаєте?', ru: 'Добрый день. Что желаете?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Добър ден. Какво обичате?', translations: { en: 'Good day. What would you like?', ar: 'مرحبًا. ماذا تحب أن تطلب؟', fr: 'Bonjour. Que désirez-vous ?', fa: 'روز بخیر. چه میل دارید؟', uk: 'Добрий день. Що бажаєте?', ru: 'Добрый день. Что желаете?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Едно кафе, моля.', translations: { en: 'A coffee, please.', ar: 'قهوة، من فضلك.', fr: 'Un café, s\'il vous plaît.', fa: 'یک قهوه، لطفاً.', uk: 'Каву, будь ласка.', ru: 'Кофе, пожалуйста.' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Късо или дълго?', translations: { en: 'Short or long?', ar: 'قصير أم طويل؟', fr: 'Court ou long ?', fa: 'کوتاه یا بلند؟', uk: 'Коротке чи довге?', ru: 'Короткое или длинное?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Късо или дълго?', translations: { en: 'Short or long?', ar: 'قصير أم طويل؟', fr: 'Court ou long ?', fa: 'کوتاه یا بلند؟', uk: 'Коротке чи довге?', ru: 'Короткое или длинное?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Дълго със захар и сметана.', translations: { en: 'Long with sugar and cream.', ar: 'طويل بالسكر والقشدة.', fr: 'Long avec sucre et crème.', fa: 'بلند با شکر و خامه.', uk: 'Довге з цукром і вершками.', ru: 'Длинное с сахаром и сливками.' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Нещо за ядене?', translations: { en: 'Something to eat?', ar: 'هل تريد شيئًا للأكل؟', fr: 'Quelque chose à manger ?', fa: 'چیزی برای خوردن؟', uk: 'Щось поїсти?', ru: 'Что-нибудь поесть?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Нещо за ядене?', translations: { en: 'Something to eat?', ar: 'هل تريد شيئًا للأكل؟', fr: 'Quelque chose à manger ?', fa: 'چیزی برای خوردن؟', uk: 'Щось поїсти?', ru: 'Что-нибудь поесть?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Да, един кроасан.', translations: { en: 'Yes, a croissant.', ar: 'نعم، كرواسان.', fr: 'Oui, un croissant.', fa: 'بله، یک کروسان.', uk: 'Так, круасан.', ru: 'Да, круассан.' } },
         ],
       },
       {
-        id: 'b',
+        id: 'б.',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Извинете, колко струва един билков чай с мед?', translations: { en: 'Excuse me, how much is a herbal tea with honey?', ar: 'عفوًا، كم يكلف شاي الأعشاب بالعسل؟', fr: 'Excusez-moi, combien coûte une tisane au miel ?', fa: 'ببخشید، یک چای گیاهی با عسل چقدر است؟', uk: 'Вибачте, скільки коштує трав\'яний чай з медом?', ru: 'Извините, сколько стоит травяной чай с мёдом?' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: '2,50 евро.', ttsText: 'Две евро и петдесет цента.', translations: { en: '2.50 euros.', ar: '٢٫٥٠ يورو.', fr: '2,50 euros.', fa: '۲٫۵۰ یورو.', uk: '2,50 євро.', ru: '2,50 евро.' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: '2,50 евро.', ttsText: 'Две евро и петдесет цента.', translations: { en: '2.50 euros.', ar: '٢٫٥٠ يورو.', fr: '2,50 euros.', fa: '۲٫۵۰ یورو.', uk: '2,50 євро.', ru: '2,50 евро.' } },
         ],
       },
     ],
@@ -374,47 +374,47 @@ export const exercises: Exercise[] = [
     order: 14,
     sections: [
       {
-        id: 'a',
+        id: 'а.',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Добър ден, господине. Свободно ли е?', translations: { en: 'Good day, sir. Is this seat free?', ar: 'مرحبًا يا سيدي. هل المكان فارغ؟', fr: 'Bonjour, monsieur. C\'est libre ?', fa: 'روز بخیر، آقا. اینجا آزاد است؟', uk: 'Добрий день, пане. Вільно?', ru: 'Добрый день, господин. Свободно?' } },
-          { speaker: 'Господин',  voiceGender: 'male',   text: 'Да, заповядайте.', translations: { en: 'Yes, please sit down.', ar: 'نعم، تفضل.', fr: 'Oui, je vous en prie.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
+          { speaker: 'Господин',  voiceGender: 'female',   text: 'Да, заповядайте.', translations: { en: 'Yes, please sit down.', ar: 'نعم، تفضل.', fr: 'Oui, je vous en prie.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
         ],
       },
       {
-        id: 'b',
+        id: 'б.',
         lines: [
-          { speaker: 'Клиент',   voiceGender: 'male',   text: 'Извинете, свободно ли е?', translations: { en: 'Excuse me, is this seat free?', ar: 'عفوًا، هل المكان فارغ؟', fr: 'Excusez-moi, c\'est libre ?', fa: 'ببخشید، اینجا آزاد است؟', uk: 'Вибачте, вільно?', ru: 'Извините, свободно?' } },
+          { speaker: 'Клиент',   voiceGender: 'female',   text: 'Извинете, свободно ли е?', translations: { en: 'Excuse me, is this seat free?', ar: 'عفوًا، هل المكان فارغ؟', fr: 'Excusez-moi, c\'est libre ?', fa: 'ببخشید، اینجا آزاد است؟', uk: 'Вибачте, вільно?', ru: 'Извините, свободно?' } },
           { speaker: 'Госпожа',  voiceGender: 'female', text: 'Не, съжалявам, заето е.', translations: { en: 'No, sorry, it\'s taken.', ar: 'لا، آسفة، المكان مشغول.', fr: 'Non, désolée, c\'est occupé.', fa: 'نه، متأسفم، اشغال است.', uk: 'Ні, вибачте, зайнято.', ru: 'Нет, извините, занято.' } },
         ],
       },
       {
-        id: 'c',
+        id: 'в.',
         imageUrl: '/assets/lesson-03/dialogues-2/menu.jpg',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Едно меню, ако обичате.', translations: { en: 'A menu, please.', ar: 'قائمة الطعام، من فضلك.', fr: 'Un menu, s\'il vous plaît.', fa: 'یک منو، لطفاً.', uk: 'Меню, будь ласка.', ru: 'Меню, пожалуйста.' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Да, разбира се.', translations: { en: 'Yes, of course.', ar: 'نعم، بالطبع.', fr: 'Oui, bien sûr.', fa: 'بله، البته.', uk: 'Так, звісно.', ru: 'Да, конечно.' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Да, разбира се.', translations: { en: 'Yes, of course.', ar: 'نعم، بالطبع.', fr: 'Oui, bien sûr.', fa: 'بله، البته.', uk: 'Так, звісно.', ru: 'Да, конечно.' } },
         ],
       },
       {
-        id: 'd',
+        id: 'г.',
         imageUrl: '/assets/lesson-03/dialogues-2/restorant-finikiya.jpg',
         lines: [
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Какво обичате?', translations: { en: 'What would you like?', ar: 'ماذا تحب أن تطلب؟', fr: 'Que désirez-vous ?', fa: 'چه میل دارید؟', uk: 'Що бажаєте?', ru: 'Что желаете?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Какво обичате?', translations: { en: 'What would you like?', ar: 'ماذا تحب أن تطلب؟', fr: 'Que désirez-vous ?', fa: 'چه میل دارید؟', uk: 'Що бажаєте?', ru: 'Что желаете?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Може ли една супа и една мусака?', translations: { en: 'Can I have a soup and a moussaka?', ar: 'هل يمكنني طلب حساء وموساكا؟', fr: 'Puis-je avoir une soupe et une moussaka ?', fa: 'می‌توانم یک سوپ و یک موساکا داشته باشم؟', uk: 'Можна суп і мусаку?', ru: 'Можно суп и мусаку?' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Хляб искате ли?', translations: { en: 'Would you like bread?', ar: 'هل تريد خبزًا؟', fr: 'Voulez-vous du pain ?', fa: 'نان می‌خواهید؟', uk: 'Хліб бажаєте?', ru: 'Хлеб желаете?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Хляб искате ли?', translations: { en: 'Would you like bread?', ar: 'هل تريد خبزًا؟', fr: 'Voulez-vous du pain ?', fa: 'نان می‌خواهید؟', uk: 'Хліб бажаєте?', ru: 'Хлеб желаете?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Не, благодаря.', translations: { en: 'No, thank you.', ar: 'لا، شكرًا.', fr: 'Non, merci.', fa: 'نه، ممنون.', uk: 'Ні, дякую.', ru: 'Нет, спасибо.' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Нещо за пиене?', translations: { en: 'Something to drink?', ar: 'هل تريد شيئًا للشرب؟', fr: 'Quelque chose à boire ?', fa: 'چیزی برای نوشیدن؟', uk: 'Щось випити?', ru: 'Что-нибудь попить?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Нещо за пиене?', translations: { en: 'Something to drink?', ar: 'هل تريد شيئًا للشرب؟', fr: 'Quelque chose à boire ?', fa: 'چیزی برای نوشیدن؟', uk: 'Щось випити?', ru: 'Что-нибудь попить?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Един айрян, моля.', translations: { en: 'An ayran, please.', ar: 'عيران واحد، من فضلك.', fr: 'Un ayran, s\'il vous plaît.', fa: 'یک دوغ، لطفاً.', uk: 'Айран, будь ласка.', ru: 'Айран, пожалуйста.' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'А десерт?', translations: { en: 'And dessert?', ar: 'وحلويات؟', fr: 'Et un dessert ?', fa: 'و دسر؟', uk: 'А десерт?', ru: 'А десерт?' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'А десерт?', translations: { en: 'And dessert?', ar: 'وحلويات؟', fr: 'Et un dessert ?', fa: 'و دسر؟', uk: 'А десерт?', ru: 'А десерт?' } },
           { speaker: 'Клиент',    voiceGender: 'female', text: 'О, да, един сладолед.', translations: { en: 'Oh yes, an ice cream.', ar: 'أوه، نعم، آيس كريم.', fr: 'Oh oui, une glace.', fa: 'اوه، بله، یک بستنی.', uk: 'О, так, морозиво.', ru: 'О, да, мороженое.' } },
         ],
       },
       {
-        id: 'e',
+        id: 'д.',
         imageUrl: '/assets/lesson-03/dialogues-2/smetka.jpg',
         lines: [
           { speaker: 'Клиент',    voiceGender: 'female', text: 'Може ли сметката?', translations: { en: 'Can I have the bill?', ar: 'هل يمكنني الحصول على الفاتورة؟', fr: 'L\'addition, s\'il vous plaît.', fa: 'می‌توانم صورتحساب را داشته باشم؟', uk: 'Можна рахунок?', ru: 'Можно счёт?' } },
-          { speaker: 'Сервитьор', voiceGender: 'male',   text: 'Да, заповядайте.', translations: { en: 'Yes, here you are.', ar: 'نعم، تفضل.', fr: 'Oui, voilà.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
+          { speaker: 'Сервитьор', voiceGender: 'female',   text: 'Да, заповядайте.', translations: { en: 'Yes, here you are.', ar: 'نعم، تفضل.', fr: 'Oui, voilà.', fa: 'بله، بفرمایید.', uk: 'Так, будь ласка.', ru: 'Да, пожалуйста.' } },
         ],
       },
     ],
@@ -708,14 +708,14 @@ export const exercises: Exercise[] = [
     order: 22,
     sections: [
       {
-        id: 'a',
+        id: 'а.',
         lines: [
           { speaker: 'A', voiceGender: 'female', text: 'Какво закусваш?', translations: { en: 'What do you have for breakfast?', ar: 'ماذا تتناول على الفطور؟', fr: 'Qu\'est-ce que tu prends au petit-déjeuner ?', fa: 'صبحانه چه می‌خوری؟', uk: 'Що ти снідаєш?', ru: 'Что ты ешь на завтрак?' } },
-          { speaker: 'Б', voiceGender: 'male',   text: 'Сутрин ям сандвич и пия кафе.', translations: { en: 'In the morning I eat a sandwich and drink coffee.', ar: 'في الصباح آكل ساندويتش وأشرب قهوة.', fr: 'Le matin, je mange un sandwich et je bois du café.', fa: 'صبح ساندویچ می‌خورم و قهوه می‌نوشم.', uk: 'Вранці я їм сандвіч і п\'ю каву.', ru: 'Утром я ем сэндвич и пью кофе.' } },
+          { speaker: 'Б', voiceGender: 'female',   text: 'Сутрин ям сандвич и пия кафе.', translations: { en: 'In the morning I eat a sandwich and drink coffee.', ar: 'في الصباح آكل ساندويتش وأشرب قهوة.', fr: 'Le matin, je mange un sandwich et je bois du café.', fa: 'صبح ساندویچ می‌خورم و قهوه می‌نوشم.', uk: 'Вранці я їм сандвіч і п\'ю каву.', ru: 'Утром я ем сэндвич и пью кофе.' } },
           { speaker: 'A', voiceGender: 'female', text: 'Какво обядваш?', translations: { en: 'What do you have for lunch?', ar: 'ماذا تتناول على الغداء؟', fr: 'Qu\'est-ce que tu manges à midi ?', fa: 'ناهار چه می‌خوری؟', uk: 'Що ти обідаєш?', ru: 'Что ты ешь на обед?' } },
-          { speaker: 'Б', voiceGender: 'male',   text: 'На обяд ям риба и салата и пия сок.', translations: { en: 'For lunch I eat fish and salad and drink juice.', ar: 'على الغداء آكل سمكًا وسلطة وأشرب عصيرًا.', fr: 'À midi, je mange du poisson et de la salade et je bois du jus.', fa: 'ناهار ماهی و سالاد می‌خورم و آبمیوه می‌نوشم.', uk: 'На обід я їм рибу і салат і п\'ю сік.', ru: 'На обед я ем рыбу и салат и пью сок.' } },
+          { speaker: 'Б', voiceGender: 'female',   text: 'На обяд ям риба и салата и пия сок.', translations: { en: 'For lunch I eat fish and salad and drink juice.', ar: 'على الغداء آكل سمكًا وسلطة وأشرب عصيرًا.', fr: 'À midi, je mange du poisson et de la salade et je bois du jus.', fa: 'ناهار ماهی و سالاد می‌خورم و آبمیوه می‌نوشم.', uk: 'На обід я їм рибу і салат і п\'ю сік.', ru: 'На обед я ем рыбу и салат и пью сок.' } },
           { speaker: 'A', voiceGender: 'female', text: 'Какво вечеряш?', translations: { en: 'What do you have for dinner?', ar: 'ماذا تتناول على العشاء؟', fr: 'Qu\'est-ce que tu manges le soir ?', fa: 'شام چه می‌خوری؟', uk: 'Що ти вечеряєш?', ru: 'Что ты ешь на ужин?' } },
-          { speaker: 'Б', voiceGender: 'male',   text: 'Вечер ям макарони и пия айрян.', translations: { en: 'In the evening I eat pasta and drink ayran.', ar: 'في المساء آكل معكرونة وأشرب عيران.', fr: 'Le soir, je mange des pâtes et je bois de l\'ayran.', fa: 'عصر ماکارونی می‌خورم و دوغ می‌نوشم.', uk: 'Увечері я їм макарони і п\'ю айран.', ru: 'Вечером я ем макароны и пью айран.' } },
+          { speaker: 'Б', voiceGender: 'female',   text: 'Вечер ям макарони и пия айрян.', translations: { en: 'In the evening I eat pasta and drink ayran.', ar: 'في المساء آكل معكرونة وأشرب عيران.', fr: 'Le soir, je mange des pâtes et je bois de l\'ayran.', fa: 'عصر ماکارونی می‌خورم و دوغ می‌نوشم.', uk: 'Увечері я їм макарони і п\'ю айран.', ru: 'Вечером я ем макароны и пью айран.' } },
         ],
       },
     ],
