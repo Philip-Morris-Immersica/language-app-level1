@@ -72,7 +72,7 @@ export const readingExercises: Exercise[] = [
   {
     id: 't03-ch-fill',
     type: 'workbook_fill_blank',
-    instruction: 'Отговорете на въпросите с **вярно**, **грешно** или **няма информация** според текста по-горе.',
+    instruction: 'Отговорете на въпросите с ВЯРНО ИЛИ ГРЕШНО или НЯМА ИНФОРМАЦИЯ според текста от упр. 1.',
     order: 4,
     points: 10,
     layout: 'single',
@@ -105,7 +105,7 @@ export const grammarExercises: Exercise[] = [
     id: 't03-gr-1',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 5',
-    instruction: 'Изберете правилната форма: **две** или **два**.',
+    instruction: 'Изберете правилната форма: ДВЕ или ДВА.',
     order: 5,
     points: 12,
     layout: 'two-column',
