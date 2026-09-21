@@ -2,13 +2,12 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useLanguage } from '@/i18n/LanguageContext';
-import { useT } from '@/i18n/useT';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { ImageLightbox } from '@/components/ImageLightbox';
 import { TtsHint } from '@/components/TtsHint';
-import { ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { AudioIcon } from '@/components/AudioIcon';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 
 function ImageWithFallback({ src, alt }: { src: string; alt?: string }) {
   const [error, setError] = useState(false);
@@ -96,8 +95,6 @@ function BoldLine({ text }: { text: string }) {
 
 export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDislike, layout = 'default', exerciseId }: GrammarWithExamplesProps) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const { lang } = useLanguage();
-  const t = useT();
 
   const handleClick = (index: number, example: GrammarExample) => {
     if (!disableTts) {
@@ -133,14 +130,21 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
       <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
         {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
         <div
-          className="max-w-xl mx-auto flex flex-col gap-6 md:gap-8"
+          className="max-w-5xl mx-auto gap-6 md:gap-8"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${examples.length}, minmax(0, 1fr))`,
+          }}
         >
           {examples.map((example, index) => (
             <div
               key={index}
               onClick={() => handleClick(index, example)}
-              className="rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
+              className="relative rounded-xl border-2 border-[#CDE3F1] bg-[#f8fbfd] p-5 md:p-6 shadow-sm cursor-pointer hover:border-[#32C189]/60 transition-all active:scale-[0.99] text-center"
             >
+              {!disableTts && (
+                <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
+              )}
               {example.text && (
                 <p className="text-xs font-bold uppercase tracking-widest text-[#0072BC] mb-4 pb-2 border-b border-[#CDE3F1]">
                   {example.text}
@@ -172,42 +176,33 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   if (isHero) {
     const example = examples[0];
     const hasText = Boolean(example.text || (example.lines && example.lines.length > 0));
-    // Content can opt out of the enlarge/lightbox behavior (e.g. reference photos
-    // that shouldn't invite zooming) via `zoomable: false`. Default stays `true`
-    // for backward compatibility with every existing hero-mode example.
-    const heroZoomable = example.zoomable !== false;
-    const heroImage = (
-      <div className="relative w-full h-64 md:h-[26rem] lg:h-[32rem] rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm">
-        <ImageWithFallback src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text} />
-      </div>
-    );
     return (
       <div className="relative bg-white rounded-xl p-4 md:p-6 shadow-md">
         <div className="max-w-4xl mx-auto">
-          {heroZoomable ? (
-            <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
-              {heroImage}
-            </ImageLightbox>
-          ) : heroImage}
+          <ImageLightbox src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text}>
+            <div className="relative w-full h-64 md:h-[26rem] lg:h-[32rem] rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm">
+              <ImageWithFallback src={example.imageUrl} alt={example.lines ? example.lines[0] : example.text} />
+            </div>
+          </ImageLightbox>
           {hasText && (
             <div
               onClick={() => handleClick(0, example)}
-              className="mt-4 text-center cursor-pointer space-y-1"
+              className="mt-4 flex items-start justify-center gap-2 cursor-pointer"
             >
-              {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-              {example.lines
-                ? example.lines.filter(Boolean).map((line, i) => (
-                    <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
-                  ))
-                : <p className="text-base font-semibold text-gray-700">{example.text}</p>
-              }
+              {!disableTts && <AudioIcon className="w-4 h-4 mt-1" />}
+              <div className="text-center space-y-1">
+                {example.lines
+                  ? example.lines.filter(Boolean).map((line, i) => (
+                      <p key={i} className="text-base font-semibold text-gray-700">{line}</p>
+                    ))
+                  : <p className="text-base font-semibold text-gray-700">{example.text}</p>
+                }
+              </div>
             </div>
           )}
-          {heroZoomable && (
-            <p className="mt-3 text-center text-xs text-gray-400 select-none">
-              Кликнете върху картинката, за да я увеличите.
-            </p>
-          )}
+          <p className="mt-3 text-center text-xs text-gray-400 select-none">
+            Кликнете върху картинката, за да я увеличите.
+          </p>
         </div>
       </div>
     );
@@ -216,11 +211,6 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
   return (
     <div className="relative bg-white rounded-xl p-6 md:p-10 shadow-md">
       {!disableTts && <TtsHint messageKey="exercise.tapCardToHear" />}
-      {lang !== 'bg' && disableTts && (
-        <p className="text-xs text-gray-400 text-center mb-4 italic">
-          {t('exercise.tapToTranslate')}
-        </p>
-      )}
 
       {/* Examples grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -231,7 +221,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
             className="relative bg-white rounded-xl border-2 border-gray-200 p-5 shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer active:scale-95 flex flex-col items-center"
           >
             {!disableTts && (
-              <Volume2 className="absolute top-2 right-2 w-4 h-4 text-gray-300" />
+              <AudioIcon className="absolute top-2 right-2 w-4 h-4" />
             )}
             {/* Image */}
             {example.imageUrl && (
@@ -272,7 +262,7 @@ export function GrammarWithExamples({ subtitle, examples, disableTts, showLikeDi
                     const isPositive = plainLine.startsWith('✓');
                     const isNegative = plainLine.startsWith('✗');
                     const isWarning = plainLine.startsWith('⚠️');
-                    const isSentence = /^(Аз|Ти|Той|Тя|Ние|Вие|Те|Имам|Нямам|Това|–)\s/.test(plainLine);
+                    const isSentence = /^(Аз|Той|Тя|Ние|Вие|Те|Имам|Нямам|Това|–)\s/.test(plainLine);
                     const colorClass = isPositive
                       ? 'text-green-700'
                       : isNegative

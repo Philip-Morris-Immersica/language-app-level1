@@ -12,7 +12,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l11-wb-01',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 1',
-    instruction: 'Попълнете с ВСЕКИ, ВСЯКА, ВСЯКО или ВСИЧКИ.',
+    instruction: 'Попълнете с **всеки**, **всяка**, **всяко** или **всички**.',
     order: 1,
     points: 14,
     layout: 'two-column',

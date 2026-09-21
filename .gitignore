@@ -56,6 +56,10 @@ next-env.d.ts
 /_l9_tmp/
 /temp-b1-l08-pages/
 
+# local scratch: raw lesson scans and one-off helper scripts
+/public/assets/b1-lesson-10-temp/
+/scripts/b1-lesson9-cmyk-organize.mjs
+
 # local agent/debug leftovers
 /_agent_*.ps1
 /_agent_*.txt

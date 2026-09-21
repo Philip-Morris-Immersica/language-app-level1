@@ -81,7 +81,7 @@ export const workbookExercises: Exercise[] = [
     id: 'l08-wb-02',
     type: 'workbook_fill_blank',
     title: 'ПРЕГОВОР',
-    instruction: 'Попълнете изреченията с **ТОЗИ**, **ТАЗИ**, **ТОВА** или **ТЕЗИ**.',
+    instruction: 'Попълнете изреченията с **този**, **тази**, **това** или **тези**.',
     order: 2,
     points: 7,
     layout: 'two-column',

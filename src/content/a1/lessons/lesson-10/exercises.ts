@@ -18,10 +18,6 @@
 // SKIP по клиент: упр. 4, 5, 8, 9, 14, 15, 27, 28 (28 → имплементирано с TODO)
 // SKIP с причина: упр. 6а/6б — нужна е обединена Карта А+Б (pair-work activity)
 
-/** Pro TTS — по-естествена интонация за граматични редове/карти. */
-const L10_NATURAL_TTS_PROMPT =
-  'Говорете като жив човек на ясен книжовен български — топъл разговорен тон, естествено темпо, лека пауза между изреченията. Утвърдителните с падаща интонация, въпросите с леко покачване. Не монотонно, не роботски, без чужд акцент.';
-
 export const exercises: Exercise[] = [
 
   // ══════════════════════════════════════════════════════
@@ -30,6 +26,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-01',
+    sectionStart: {
+      title: 'Видове градски транспорт',
+      subtitle: 'Сгради, транспорт и диалози в града',
+      titleI18n: {
+        en: 'Types of city transport',
+        fr: 'Types de transports urbains',
+        ar: 'أنواع النقل الحضري',
+        fa: 'انواع حمل‌ونقل شهری',
+        uk: 'Види міського транспорту',
+        ru: 'Виды городского транспорта',
+      },
+      subtitleI18n: {
+        en: 'Buildings, transport and dialogues in the city',
+        fr: 'Bâtiments, transports et dialogues en ville',
+        ar: 'المباني والنقل والحوارات في المدينة',
+        fa: 'ساختمان‌ها، حمل‌ونقل و گفتگوها در شهر',
+        uk: 'Будівлі, транспорт та діалоги в місті',
+        ru: 'Здания, транспорт и диалоги в городе',
+      },
+      theme: 'vocabulary',
+    },
     type: 'image_labeling',
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изберете правилното название за всяка сграда.',
@@ -212,7 +229,7 @@ export const exercises: Exercise[] = [
           { voiceGender: 'female', text: '– Кога има автобус за Русе?' },
           { voiceGender: 'male',   text: '– В 7:00 часа сутринта.', ttsText: '– В седем часа сутринта.' },
           { voiceGender: 'female', text: '– Колко часа е пътят?' },
-          { voiceGender: 'male',   text: '– 5 часа.', ttsText: '– Пет часа.' },
+          { voiceGender: 'male',   text: '– Пет часа.', ttsText: '– 5 часа.' },
         ],
       },
       {
@@ -275,12 +292,12 @@ export const exercises: Exercise[] = [
     instructionKey: 'grammar.l10.g1.instruction',
     order: 10,
     examples: [
-      { imageUrl: '', text: 'Автобусът тръгва от автогарата.', subtext: 'Автобусът тръгва за Сливен.', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Автобусът заминава от София.', subtext: 'Автобусът заминава за Бургас.', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Автобусът спира в центъра.', subtext: 'Автобусът спира на автогарата.', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Автобусът пристига в Пловдив.', subtext: 'Автобусът пристига на автогарата.', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Аз пътувам за Германия.', subtext: 'Аз пътувам с автобус.', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Мустафа се връща от Враца.', subtext: 'Мустафа се връща в Сирия.', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'Автобусът тръгва от автогарата.', subtext: 'Автобусът тръгва за Сливен.' },
+      { imageUrl: '', text: 'Автобусът заминава от София.', subtext: 'Автобусът заминава за Бургас.' },
+      { imageUrl: '', text: 'Автобусът спира в центъра.', subtext: 'Автобусът спира на автогарата.' },
+      { imageUrl: '', text: 'Автобусът пристига в Пловдив.', subtext: 'Автобусът пристига на автогарата.' },
+      { imageUrl: '', text: 'Аз пътувам за Германия.', subtext: 'Аз пътувам с автобус.' },
+      { imageUrl: '', text: 'Мустафа се връща от Враца.', subtext: 'Мустафа се връща в Сирия.' },
     ],
   } as GrammarExamplesExercise,
 
@@ -346,6 +363,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-03',
+    sectionStart: {
+      title: 'Пътуване с влак',
+      subtitle: 'Железопътна лексика, разписания и гарата',
+      titleI18n: {
+        en: 'Travelling by train',
+        fr: 'Voyager en train',
+        ar: 'السفر بالقطار',
+        fa: 'سفر با قطار',
+        uk: 'Подорож потягом',
+        ru: 'Путешествие на поезде',
+      },
+      subtitleI18n: {
+        en: 'Railway vocabulary, timetables and the station',
+        fr: 'Vocabulaire ferroviaire, horaires et la gare',
+        ar: 'مفردات السكك الحديدية، والجداول الزمنية، والمحطة',
+        fa: 'واژگان راه‌آهن، جدول زمانی و ایستگاه',
+        uk: 'Залізнична лексика, розклади та вокзал',
+        ru: 'Железнодорожная лексика, расписания и вокзал',
+      },
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 3 — Железопътен транспорт',
     instruction: '',
@@ -371,15 +409,9 @@ export const exercises: Exercise[] = [
     tableTitle: 'Пристигащи',
     columns: ['Час', 'Коловоз', 'Закъснение'],
     rows: [
-      { pronoun: 'Пловдив', cells: ['08:15', '1', '5 мин.'],
-        ttsText: 'Пловдив. Осем часа и петнадесет минути. Първи коловоз. Пет минути закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
-      { pronoun: 'Плевен',  cells: ['12:00', '3', '–'],
-        ttsText: 'Плевен. Дванадесет часа. Трети коловоз. Няма закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'female' },
-      { pronoun: 'Русе',    cells: ['15:30', '4', '15 мин.'],
-        ttsText: 'Русе. Петнадесет часа и тридесет минути. Четвърти коловоз. Петнадесет минути закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
+      { pronoun: 'Пловдив', cells: ['08:15', '1', '5 мин.'] },
+      { pronoun: 'Плевен',  cells: ['12:00', '3', '–'] },
+      { pronoun: 'Русе',    cells: ['15:30', '4', '15 мин.'] },
     ],
     notes: [],
   } as GrammarTableExercise,
@@ -393,15 +425,9 @@ export const exercises: Exercise[] = [
     tableTitle: 'Заминаващи',
     columns: ['Час', 'Коловоз', 'Закъснение'],
     rows: [
-      { pronoun: 'Бургас', cells: ['07:00', '2', '–'],
-        ttsText: 'Бургас. Седем часа. Втори коловоз. Няма закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'female' },
-      { pronoun: 'Варна',  cells: ['11:20', '5', '25 мин.'],
-        ttsText: 'Варна. Единадесет часа и двадесет минути. Пети коловоз. Двадесет и пет минути закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
-      { pronoun: 'Видин',  cells: ['14:10', '6', '–'],
-        ttsText: 'Видин. Четиринадесет часа и десет минути. Шести коловоз. Няма закъснение.',
-        ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'female' },
+      { pronoun: 'Бургас', cells: ['07:00', '2', '–'] },
+      { pronoun: 'Варна',  cells: ['11:20', '5', '25 мин.'] },
+      { pronoun: 'Видин',  cells: ['14:10', '6', '–'] },
     ],
     notes: [],
   } as GrammarTableExercise,
@@ -578,7 +604,6 @@ export const exercises: Exercise[] = [
     order: 19,
     points: 12,
     layout: 'single',
-    voiceGender: 'male',
     listeningText: 'Пътувам с автобус от Казанлък за София. Тръгвам от автогарата в осем часа сутринта. В единадесет и тридесет пристигам в София. Имам малко работа в Агенцията за бежанци. Връщам се в Казанлък с влак в осем часа вечерта.',
     sentences: [
       {
@@ -637,16 +662,37 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-gramatika-02a',
+    sectionStart: {
+      title: 'Въпросителни думи за транспорт',
+      subtitle: 'Въпросителни думи и въпроси за пътуване',
+      titleI18n: {
+        en: 'Question words for transport',
+        fr: 'Les mots interrogatifs pour les transports',
+        ar: 'أدوات الاستفهام للنقل',
+        fa: 'کلمات پرسشی برای حمل‌ونقل',
+        uk: 'Питальні слова для транспорту',
+        ru: 'Вопросительные слова для транспорта',
+      },
+      subtitleI18n: {
+        en: 'Question words and questions about travelling',
+        fr: 'Les mots interrogatifs et des questions sur le voyage',
+        ar: 'أدوات الاستفهام وأسئلة عن السفر',
+        fa: 'کلمات پرسشی و پرسش‌هایی درباره‌ی سفر',
+        uk: 'Питальні слова та запитання про подорож',
+        ru: 'Вопросительные слова и вопросы о путешествии',
+      },
+      theme: 'grammar',
+    },
     type: 'grammar_examples',
     title: 'ГРАМАТИКА 2',
     instruction: 'Запознайте се с въпросителните думи за транспорт.',
     instructionKey: 'grammar.l10.g2.instruction',
     order: 20,
     examples: [
-      { imageUrl: '', text: 'Кога тръгва автобусът?', label: 'КОГА', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Кога заминава автобусът?', subtext: 'Кога пристига автобусът?', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Кога е първият автобус за Пловдив?', subtext: 'Кога е последният? Кога е следващият?', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Кога има влак за София?', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'Кога тръгва автобусът?', label: 'КОГА' },
+      { imageUrl: '', text: 'Кога заминава автобусът?', subtext: 'Кога пристига автобусът?' },
+      { imageUrl: '', text: 'Кога е първият автобус за Пловдив?', subtext: 'Кога е последният? Кога е следващият?' },
+      { imageUrl: '', text: 'Кога има влак за София?' },
     ],
   } as GrammarExamplesExercise,
 
@@ -657,9 +703,9 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 20.1,
     examples: [
-      { imageUrl: '', text: 'Къде спира автобусът?', label: 'КЪДЕ', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Откъде тръгва автобусът?', label: 'ОТКЪДЕ', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Откъде заминава автобусът?', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'Къде спира автобусът?', label: 'КЪДЕ' },
+      { imageUrl: '', text: 'Откъде тръгва автобусът?', label: 'ОТКЪДЕ' },
+      { imageUrl: '', text: 'Откъде заминава автобусът?' },
     ],
   } as GrammarExamplesExercise,
 
@@ -670,13 +716,11 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 20.2,
     examples: [
-      { imageUrl: '', text: 'Колко билета искате?', label: 'КОЛКО', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'Колко билета искате?', label: 'КОЛКО' },
       { imageUrl: '', text: 'Колко минути закъснява влакът?',
         subtext: 'Колко струва билетът?',
-        ttsText: 'Колко минути закъснява влакът? Колко струва билетът?',
-        voiceGender: 'female',
-        ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Как пътуваш до Централна гара?', label: 'КАК', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+        ttsText: 'Колко минути закъснява влакът? Колко струва билетът?' },
+      { imageUrl: '', text: 'Как пътуваш до Централна гара?', label: 'КАК' },
     ],
   } as GrammarExamplesExercise,
 
@@ -687,11 +731,11 @@ export const exercises: Exercise[] = [
     instruction: '',
     order: 20.3,
     examples: [
-      { imageUrl: '', text: 'На кой коловоз пристига влакът?', label: 'НА КОЙ / ОТ КОЙ', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'На кой коловоз пристига влакът?', label: 'НА КОЙ / ОТ КОЙ' },
 
-      { imageUrl: '', text: 'От кой коловоз тръгва влакът?', subtext: 'На кой сектор пристига автобусът?', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Влакът има ли закъснение?', label: 'ЛИ', voiceGender: 'female', ttsPrompt: L10_NATURAL_TTS_PROMPT },
-      { imageUrl: '', text: 'Автобусът спира ли в центъра?', subtext: 'Това ли е автобусът за София?', voiceGender: 'male', ttsPrompt: L10_NATURAL_TTS_PROMPT },
+      { imageUrl: '', text: 'От кой коловоз тръгва влакът?', subtext: 'На кой сектор пристига автобусът?' },
+      { imageUrl: '', text: 'Влакът има ли закъснение?', label: 'ЛИ' },
+      { imageUrl: '', text: 'Автобусът спира ли в центъра?', subtext: 'Това ли е автобусът за София?' },
     ],
   } as GrammarExamplesExercise,
 
@@ -810,12 +854,32 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-ex-21',
+    sectionStart: {
+      title: 'Текстове за пътуване',
+      subtitle: 'Текстове за четене с въпроси',
+      titleI18n: {
+        en: 'Texts about travel',
+        fr: 'Textes sur les voyages',
+        ar: 'نصوص عن السفر',
+        fa: 'متن‌هایی درباره‌ی سفر',
+        uk: 'Тексти про подорожі',
+        ru: 'Тексты о путешествиях',
+      },
+      subtitleI18n: {
+        en: 'Reading texts with questions',
+        fr: 'Textes de lecture avec des questions',
+        ar: 'نصوص للقراءة مع أسئلة',
+        fa: 'متن‌های خواندنی همراه با پرسش',
+        uk: 'Тексти для читання із запитаннями',
+        ru: 'Тексты для чтения с вопросами',
+      },
+      theme: 'reading',
+    },
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 20',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 23,
     showDictionary: true,
-    voiceGender: 'male',
     paragraphs: [
       'Автобусът тръгва за Плевен в 8:00 часа. След един час и половина има малка почивка за кафе и тоалетна. Пристига в Плевен в 11:00 часа.',
     ],
@@ -865,7 +929,6 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 25,
     showDictionary: true,
-    voiceGender: 'female',
     paragraphs: [
       'Пристигам на гара Карлово в 9:00 часà. По разписание влакът за София заминава в 10:00 часà, но има един час закъснение. Имам много време. Купувам билет. Пия кафе в чакалнята на гарата. Там има много хора. Те също чакат влак.',
     ],
@@ -915,7 +978,6 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 27,
     showDictionary: true,
-    voiceGender: 'female',
     paragraphs: [
       'Аз съм Нина. Живея и работя в София. Родителите ми живеят в село до Пловдив.',
       'В петък след работа заминавам за Пловдив с бърз влак. След това пътувам с пътнически влак до селото. Оставам там за уикенда.',
@@ -963,6 +1025,27 @@ export const exercises: Exercise[] = [
   // ══════════════════════════════════════════════════════
   {
     id: 'l10-novi-dumi-04',
+    sectionStart: {
+      title: 'Метро и разходка в София',
+      subtitle: 'Метро, такси, самолет и разходка в столицата',
+      titleI18n: {
+        en: 'The metro and a walk in Sofia',
+        fr: 'Le métro et une promenade à Sofia',
+        ar: 'المترو ونزهة في صوفيا',
+        fa: 'مترو و گشتی در صوفیه',
+        uk: 'Метро та прогулянка Софією',
+        ru: 'Метро и прогулка по Софии',
+      },
+      subtitleI18n: {
+        en: 'The metro, taxi, plane and a walk in the capital',
+        fr: 'Le métro, le taxi, l\'avion et une promenade dans la capitale',
+        ar: 'المترو والتاكسي والطائرة ونزهة في العاصمة',
+        fa: 'مترو، تاکسی، هواپیما و گشتی در پایتخت',
+        uk: 'Метро, таксі, літак та прогулянка столицею',
+        ru: 'Метро, такси, самолёт и прогулка по столице',
+      },
+      theme: 'vocabulary',
+    },
     type: 'illustrated_cards',
     title: 'НОВИ ДУМИ 4',
     instruction: '',
@@ -1076,18 +1159,17 @@ export const exercises: Exercise[] = [
     id: 'l10-gramatika-03',
     type: 'grammar_table',
     title: 'ГРАМАТИКА 3',
-    subtitle: 'С / СЪС',
     prominentSubtitle: true,
     instruction: '',
     order: 31.5,
     tableTitle: 'Пътувам с / със',
     columns: ['С', 'СЪС'],
     rows: [
-      { pronoun: 'автобус', cells: ['с автобус', '—'], ttsText: 'автобус. С автобус.', ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
-      { pronoun: 'влак',    cells: ['с влак', '—'],    ttsText: 'влак. С влак.', ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'female' },
-      { pronoun: 'метро',   cells: ['с метро', '—'],   ttsText: 'метро. С метро.', ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
-      { pronoun: 'такси',   cells: ['с такси', '—'],   ttsText: 'такси. С такси.', ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'female' },
-      { pronoun: 'самолет', cells: ['—', 'със самолет'], ttsText: 'самолет. Със самолет.', ttsModel: 'pro', ttsPrompt: L10_NATURAL_TTS_PROMPT, voiceGender: 'male' },
+      { pronoun: 'автобус', cells: ['с автобус', '—'] },
+      { pronoun: 'влак',    cells: ['с влак', '—'] },
+      { pronoun: 'метро',   cells: ['с метро', '—'] },
+      { pronoun: 'такси',   cells: ['с такси', '—'] },
+      { pronoun: 'самолет', cells: ['—', 'със самолет'] },
     ],
     notes: [],
   } as GrammarTableExercise,
@@ -1231,7 +1313,6 @@ export const exercises: Exercise[] = [
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 35,
     showDictionary: true,
-    paragraphVoiceGenders: ['male', 'female'],
     images: [
       { imageUrl: '/assets/lesson-10/14-tekst-upr-32-razhodka-sofia/01-katedrala-aleksandar-nevski.jpg', label: 'Катедралата „Св. Александър Невски"' },
       { imageUrl: '/assets/lesson-10/14-tekst-upr-32-razhodka-sofia/02-statuya-sveta-sofia.jpg',         label: 'Статуята „Света София"' },
@@ -1241,7 +1322,7 @@ export const exercises: Exercise[] = [
       'Сега сме близо до Софийския университет „Св. Климент Охридски". До университета има библиотека. Пред библиотеката е паметникът на св. св. Кирил и Методий. Около паметника има парк с пейки и дървета. Вдясно, на около 100 метра, е паметникът на Васил Левски. Срещу паметника е катедралата „Св. Александър Невски". Около катедралата има площад. Площадът също се казва „Св. Александър Невски". Харесвам това място.',
     ],
     ttsParagraphs: [
-      'Ние сме в центъра на града, до метростанция Сердика. В София има метро от хиляда деветстотин деветдесет и осма година. Има четири линии. Наблизо е площад Света Неделя. Оттам започва булевард Витоша. На булеварда има много магазини, аптеки, пицарии, кафета и сладкарници. Там е и Националният дворец на културата.',
+      'Ние сме в центъра на града, до метростанция Сердика. В София има метро от хиляда деветстотин деветдесет и осма година. Има 4 линии. Наблизо е площад Света Неделя. Оттам започва булевард Витоша. На булеварда има много магазини, аптеки, пицарии, кафета и сладкарници. Там е и Националният дворец на културата.',
       'Сега сме близо до Софийския университет Свети Климент Охридски. До университета има библиотека. Пред библиотеката е паметникът на свети свети Кирил и Методий. Около паметника има парк с пейки и дървета. Вдясно, на около сто метра, е паметникът на Васил Левски. Срещу паметника е катедралата Свети Александър Невски. Около катедралата има площад. Площадът също се казва Свети Александър Невски. Харесвам това място.',
     ],
   } as ReadingTextExercise,
