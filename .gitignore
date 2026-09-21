@@ -36,3 +36,11 @@ service-account*.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# alex/b1 — local audio-editing scratch dirs (not deliverables)
+/_b1-source/
+/_l12_fromtext/
+/_l12_hardn/
+/_l12_real/
+/_l12_redo/
+/_l12_rerecord/

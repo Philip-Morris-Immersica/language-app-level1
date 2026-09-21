@@ -83,6 +83,8 @@ alwaysApply: false
 - `ttsPrompt` — custom prompt (stress hint и т.н.) на същите места
 - `ttsLabel`, `ttsParagraphs`, `ttsNotes`, `voiceGender`, `paragraphVoiceGenders` — за специфични случаи
 
+**в/във и с/със (правопис + TTS):** **във** само пред дума на **в** или **ф**; иначе **в**. **със** само пред дума на **с** или **з**; иначе **с**. Пример: *в Плиска*, *във Велико Търново*, *със сребро*, *с надписи*.
+
 Никога не пипаме `scripts/generate-tts.ts` сами. Виж пълните детайли в [tts-audio.mdc](mdc:.cursor/rules/tts-audio.mdc).
 
 ### 6. i18n за нови `instructionKey` — в моя b1.ts
