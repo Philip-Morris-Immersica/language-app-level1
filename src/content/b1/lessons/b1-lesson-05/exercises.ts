@@ -33,6 +33,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изслушайте текста и след това го прочетете сами. Обърнете внимание на глаголите в минало свършено време.',
     order: 1,
+    sectionStart: {
+      title: 'Минало свършено време',
+      subtitle: 'Текстът за вилата, групите на аориста и изразите за време',
+      titleI18n: {
+        en: 'Past perfective tense (aorist)',
+        fr: 'Passé perfectif (aoriste)',
+        ar: 'الماضي التام (الأوريست)',
+        fa: 'گذشتهٔ کامل (آئوریست)',
+        uk: 'Минулий доконаний час (аорист)',
+        ru: 'Прошедшее совершенное время (аорист)',
+      },
+      subtitleI18n: {
+        en: 'The text about the villa, aorist verb groups and time expressions',
+        fr: 'Le texte sur la villa, les groupes de l\u2019aoriste et les expressions de temps',
+        ar: 'النص عن الفيلا، مجموعات أفعال الأوريست وتعبيرات الزمن',
+        fa: 'متن درباره‌ی ویلا، گروه‌های فعل آئوریست و عبارت‌های زمانی',
+        uk: 'Текст про віллу, групи аориста та вирази часу',
+        ru: 'Текст о вилле, группы аориста и выражения времени',
+      },
+      theme: 'grammar',
+    },
     images: [
       { imageUrl: '/assets/b1-lesson-05/01-upr-01-yabalki/01-zhena-bere-yabalki.jpg' },
     ],
@@ -214,6 +235,27 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 3',
     instruction: 'Разгледайте формите на глагола **съм** в минало време и описателните форми с **-ше**.',
     order: 7,
+    sectionStart: {
+      title: '„Бях", „исках да" и „трябваше да"',
+      subtitle: 'Формите на „съм" в минало, текстът за кръста и конструкциите с „исках/трябваше/не можах да"',
+      titleI18n: {
+        en: '"Бях" (I was), "исках да" (I wanted to) and "трябваше да" (I had to)',
+        fr: '« Бях » (j\u2019étais), « исках да » (je voulais) et « трябваше да » (je devais)',
+        ar: '„Бях" (كنتُ)، و„исках да" (أردتُ أن) و„трябваше да" (كان عليّ أن)',
+        fa: '«Бях» (بودم)، «исках да» (می‌خواستم که) و «трябваше да» (باید … می‌کردم)',
+        uk: '«Бях» (я був/була), «исках да» (я хотів/хотіла) і «трябваше да» (мені треба було)',
+        ru: '«Бях» (я был/была), «исках да» (я хотел/хотела) и «трябваше да» (мне нужно было)',
+      },
+      subtitleI18n: {
+        en: 'Past forms of "съм" (to be), the text about the back pain, and constructions with "исках/трябваше/не можах да"',
+        fr: 'Les formes passées de « съм » (être), le texte sur le mal de dos et les constructions avec « исках/трябваше/не можах да »',
+        ar: 'أشكال „съм" (كان) في الماضي، والنص عن ألم الظهر، والتراكيب مع „исках/трябваше/не можах да"',
+        fa: 'صورت‌های گذشتهٔ «съм» (بودن)، متن درباره‌ی کمردرد، و ساخت‌های «исках/трябваше/не можах да»',
+        uk: 'Форми «съм» (бути) в минулому, текст про біль у спині та конструкції з «исках/трябваше/не можах да»',
+        ru: 'Формы «съм» (быть) в прошедшем, текст о боли в спине и конструкции с «исках/трябваше/не можах да»',
+      },
+      theme: 'grammar',
+    },
     rows: [
       { pronoun: 'аз',  cells: ['бях'],   ttsText: 'аз бях',   ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
       { pronoun: 'ти',  cells: ['беше'],  ttsText: 'ти беше',  ttsModel: 'pro', ttsPrompt: B1_GRAMMAR_TTS_PROMPT },
@@ -492,6 +534,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 13',
     instruction: 'Изслушайте диалозите и се опитайте да ги прочетете. Обърнете внимание на глаголите в минало неопределено време.',
     order: 19,
+    sectionStart: {
+      title: 'Минало неопределено време',
+      subtitle: 'Кафе-диалозите, формите на перфекта и „завеждам/довеждам"',
+      titleI18n: {
+        en: 'Past indefinite tense (present perfect)',
+        fr: 'Passé indéfini (perfect)',
+        ar: 'الماضي غير المحدد (المضارع التام)',
+        fa: 'گذشتهٔ نامعین (حال کامل)',
+        uk: 'Минулий неозначений час (перфект)',
+        ru: 'Прошедшее неопределённое время (перфект)',
+      },
+      subtitleI18n: {
+        en: 'The café dialogues, perfect forms and "завеждам/довеждам" (take / bring someone somewhere)',
+        fr: 'Les dialogues au café, les formes du perfect et « завеждам/довеждам » (emmener / amener quelqu\u2019un)',
+        ar: 'حوارات المقهى، أشكال المضارع التام و„завеждам/довеждам" (أخذ / إحضار شخص إلى مكان)',
+        fa: 'گفتگوهای کافه، صورت‌های پرفکت و «завеждам/довеждам» (بردن / آوردن کسی به جایی)',
+        uk: 'Кав\u2019ярні діалоги, форми перфекта та «завеждам/довеждам» (відвести / привести когось)',
+        ru: 'Кафе-диалоги, формы перфекта и «завеждам/довеждам» (отвести / привести кого-то)',
+      },
+      theme: 'dialogue',
+    },
     images: ['/assets/b1-lesson-05/03-upr-13-kafe/01-dvama-mazhe-kafe.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -912,6 +975,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 21',
     instruction: 'Изслушайте диалога и се опитайте да го прочетете. Обърнете внимание на глаголите в минало неопределено време.',
     order: 30,
+    sectionStart: {
+      title: 'Вероятност и несвършено причастие',
+      subtitle: '„Сигурно/може би", несвършеното причастие и „Пресичала ли си…"',
+      titleI18n: {
+        en: 'Probability and the imperfect participle',
+        fr: 'Probabilité et participe imperfectif',
+        ar: 'الاحتمال واسم الفاعل غير التام',
+        fa: 'احتمال و صفت مفعولی ناکامل',
+        uk: 'Ймовірність і недоконаний дієприкметник',
+        ru: 'Вероятность и несовершенное причастие',
+      },
+      subtitleI18n: {
+        en: '"Сигурно/може би" (surely / maybe), the imperfect participle and "Пресичала ли си…" (Have you ever crossed…)',
+        fr: '« Сигурно/може би » (sûrement / peut-être), le participe imperfectif et « Пресичала ли си… » (As-tu déjà traversé…)',
+        ar: '„Сигурно/може би" (بالتأكيد / ربما)، واسم الفاعل غير التام و„Пресичала ли си…" (هل عبرتِ من قبل…)',
+        fa: '«Сигурно/може би» (حتماً / شاید)، صفت مفعولی ناکامل و «Пресичала ли си…» (آیا تا به حال از خیابان رد شده‌ای…)',
+        uk: '«Сигурно/може би» (напевно / можливо), недоконаний дієприкметник і «Пресичала ли си…» (Чи переходила ти…)',
+        ru: '«Сигурно/може би» (наверняка / может быть), несовершенное причастие и «Пресичала ли си…» (Переходила ли ты…)',
+      },
+      theme: 'grammar',
+    },
     images: ['/assets/b1-lesson-05/05-upr-21-knizhka/01-mazh-zhena-spor-kola.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -1094,6 +1178,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 26',
     instruction: 'Изслушайте диалозите и се опитайте да ги прочетете. Обърнете внимание на глаголите в минало неопределено време.',
     order: 38,
+    sectionStart: {
+      title: 'Опит и Ала от Ирак',
+      subtitle: '„Отдавна не/никога не" и четивото „Ала от Ирак"',
+      titleI18n: {
+        en: 'Experience and Ala from Iraq',
+        fr: 'Expérience et Ala d\u2019Irak',
+        ar: 'التجربة وآلا من العراق',
+        fa: 'تجربه و آلا از عراق',
+        uk: 'Досвід і Ала з Іраку',
+        ru: 'Опыт и Ала из Ирака',
+      },
+      subtitleI18n: {
+        en: '"Отдавна не/никога не" (not for a long time / never) and the reading "Ala from Iraq"',
+        fr: '« Отдавна не/никога не » (il y a longtemps que non / jamais) et le texte « Ala d\u2019Irak »',
+        ar: '„Отдавна не/никога не" (منذ زمن طويل لم / أبدًا لم) ونص القراءة „آلا من العراق"',
+        fa: '«Отдавна не/никога не» (مدت‌هاست که نه / هرگز نه) و متن خواندنی «آلا از عراق»',
+        uk: '«Отдавна не/никога не» (давно не / ніколи не) і текст «Ала з Іраку»',
+        ru: '«Отдавна не/никога не» (давно не / никогда не) и текст «Ала из Ирака»',
+      },
+      theme: 'reading',
+    },
     images: ['/assets/b1-lesson-05/07-upr-26-pishi/01-momiche-pishi-staklo.jpg'],
     sections: [
       { id: 'а.', lines: [

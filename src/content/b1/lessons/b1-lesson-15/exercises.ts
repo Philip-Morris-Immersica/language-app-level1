@@ -34,6 +34,18 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 1,
+    sectionStart: {
+      title: 'Васил Левски и Христо Ботев',
+      titleI18n: {
+        en: 'Vasil Levski and Hristo Botev',
+        fr: 'Vasil Levski et Hristo Botev',
+        ar: 'فاسيل ليفسكي وخريستو بوتيف',
+        fa: 'واسیل لِوسکی و خریستو بوتف',
+        uk: 'Васил Левський і Христо Ботев',
+        ru: 'Васил Левский и Христо Ботев',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     textTitle: 'ВАСИЛ ЛЕВСКИ (1837 – 1873)',
     images: [
@@ -296,6 +308,18 @@ export const exercises: Exercise[] = [
     type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 1',
     order: 6,
+    sectionStart: {
+      title: 'Иван Вазов и неговата поема „Аз съм българче"',
+      titleI18n: {
+        en: 'Ivan Vazov and his poem "Аз съм българче" (I Am a Little Bulgarian)',
+        fr: 'Ivan Vazov et son poème « Аз съм българче » (Je suis un petit Bulgare)',
+        ar: 'إيفان فازوف وقصيدته «Аз съм българче» (أنا طفل بلغاري)',
+        fa: 'ایوان وازوف و شعر او «Аз съм българче» (من یک بلغار کوچک هستم)',
+        uk: 'Іван Вазов і його поема «Аз съм българче» (Я — болгарче)',
+        ru: 'Иван Вазов и его поэма «Аз съм българче» (Я — болгарчёнок)',
+      },
+      theme: 'reading',
+    },
     tableTitle: 'ПРИЧАСТИЕТО КАТО ОПРЕДЕЛЕНИЕ',
     pronounHeader: 'Причастие',
     columns: ['Изречение от текста', 'Какво означава'],
@@ -678,6 +702,18 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 11,
+    sectionStart: {
+      title: 'Майстора и Иван Милев',
+      titleI18n: {
+        en: '"Майстора" (The Master) and Ivan Milev',
+        fr: '« Майстора » (Le Maître) et Ivan Milev',
+        ar: '«Майстора» (المعلم) وإيفان ميليف',
+        fa: '«Майстора» (استاد) و ایوان میلف',
+        uk: '«Майстора» (Майстер) та Іван Мілєв',
+        ru: '«Майстора» (Мастер) и Иван Милев',
+      },
+      theme: 'reading',
+    },
     showDictionary: true,
     textTitle: 'ВЛАДИМИР ДИМИТРОВ – МАЙСТОРА (1882 – 1960)',
     images: [

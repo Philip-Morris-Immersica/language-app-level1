@@ -25,6 +25,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
     order: 1,
+    sectionStart: {
+      title: 'Краят на Първата българска държава',
+      subtitle: 'Четивото за 927–1185, владетели по години и синоними от текстовете',
+      titleI18n: {
+        en: 'The end of the First Bulgarian State',
+        fr: 'La fin du Premier État bulgare',
+        ar: 'نهاية الدولة البلغارية الأولى',
+        fa: 'پایان دولت اول بلغارستان',
+        uk: 'Кінець Першої болгарської держави',
+        ru: 'Конец Первого болгарского государства',
+      },
+      subtitleI18n: {
+        en: 'The reading text for 927–1185, rulers by years, and synonyms from the texts',
+        fr: 'Le texte de lecture pour 927–1185, les souverains par années et les synonymes tirés des textes',
+        ar: 'نص القراءة عن الفترة 927–1185، والحكام حسب السنوات، والمرادفات من النصوص',
+        fa: 'متن خواندنی درباره‌ی ۹۲۷–۱۱۸۵، فرمانروایان بر اساس سال‌ها، و مترادف‌ها از متن‌ها',
+        uk: 'Текст для читання про 927–1185, правителі за роками та синоніми з текстів',
+        ru: 'Текст для чтения о 927–1185, правители по годам и синонимы из текстов',
+      },
+      theme: 'reading',
+    },
     textTitle: 'КРАЯТ НА ПЪРВАТА И НАЧАЛО НА ВТОРАТА БЪЛГАРСКА ДЪРЖАВА (927 – 1185)',
     showDictionary: true,
     images: [
