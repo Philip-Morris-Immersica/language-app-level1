@@ -42,6 +42,24 @@ export const CELEBRATION_ENABLED_LESSONS = new Set<string>([
   'a2-lesson-08',
   'a2-lesson-09',
   'a2-lesson-10',
+  // B1 — all 15 lessons now have sectionStart (pilot b1-lesson-01 + parallel
+  // subagent pass on 02-15). Lessons 11-15 are the reading-heavy "Познавам и
+  // обичам България" block; they still celebrate normally per-section.
+  'b1-lesson-01',
+  'b1-lesson-02',
+  'b1-lesson-03',
+  'b1-lesson-04',
+  'b1-lesson-05',
+  'b1-lesson-06',
+  'b1-lesson-07',
+  'b1-lesson-08',
+  'b1-lesson-09',
+  'b1-lesson-10',
+  'b1-lesson-11',
+  'b1-lesson-12',
+  'b1-lesson-13',
+  'b1-lesson-14',
+  'b1-lesson-15',
 ]);
 
 /**
@@ -128,7 +146,9 @@ type AnyExercise = {
 
 type NavEntry =
   | { type: 'lesson'; id: string; number: number; title: string }
-  | { type: 'test'; id: string; label?: string };
+  | { type: 'test'; id: string; label?: string }
+  | { type: 'section'; id: string }
+  | { type: 'special'; id: string };
 
 /** Picks the per-type "done" signal, derived from the exercise content. */
 function doneDescriptorFor(ex: AnyExercise): DoneDescriptor {
@@ -162,12 +182,17 @@ function getNextNavTarget(lessonId: string): { href: string; label: string } | n
   if (!level) return null;
   const nav = getNavItemsForLevel(level) as unknown as NavEntry[];
   const idx = nav.findIndex((n) => n.type === 'lesson' && n.id === lessonId);
-  if (idx === -1 || idx + 1 >= nav.length) return null;
-  const next = nav[idx + 1];
-  if (next.type === 'lesson') {
-    return { href: `/lessons/${next.id}`, label: `Урок ${next.number}: ${next.title}` };
+  if (idx === -1) return null;
+  for (let i = idx + 1; i < nav.length; i++) {
+    const next = nav[i];
+    if (next.type === 'lesson') {
+      return { href: `/lessons/${next.id}`, label: `Урок ${next.number}: ${next.title}` };
+    }
+    if (next.type === 'test') {
+      return { href: `/tests/${next.id}`, label: next.label ? `Тест — ${next.label}` : 'Тест' };
+    }
   }
-  return { href: `/tests/${next.id}`, label: next.label ? `Тест — ${next.label}` : 'Тест' };
+  return null;
 }
 
 /**
