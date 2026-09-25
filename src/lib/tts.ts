@@ -74,8 +74,11 @@ export function cleanForTTS(raw: string): string {
     .trim();
 }
 
-export function speakBulgarian(text: string, rate = 0.85): void {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
+export function speakBulgarian(text: string, rate = 0.85, onEnd?: () => void): void {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    onEnd?.();
+    return;
+  }
 
   window.speechSynthesis.cancel();
 
@@ -90,8 +93,8 @@ export function speakBulgarian(text: string, rate = 0.85): void {
   const resumeTimer = setInterval(() => {
     if (window.speechSynthesis.paused) window.speechSynthesis.resume();
   }, 300);
-  utterance.onend = () => clearInterval(resumeTimer);
-  utterance.onerror = () => clearInterval(resumeTimer);
+  utterance.onend = () => { clearInterval(resumeTimer); onEnd?.(); };
+  utterance.onerror = () => { clearInterval(resumeTimer); onEnd?.(); };
 
   window.speechSynthesis.speak(utterance);
 }
@@ -165,7 +168,8 @@ export function playTtsAudio(
   }
 
   if (!audioUrl) {
-    if (fallbackText) speakBulgarian(fallbackText, rate);
+    if (fallbackText) speakBulgarian(fallbackText, rate, onPlaybackEnd);
+    else onPlaybackEnd?.();
     return;
   }
 
@@ -183,6 +187,11 @@ export function playTtsAudio(
   // A 404/network error fires the element's `error` event, not necessarily a
   // rejection of play() — without this handler, a missing MP3 silently never
   // plays and never falls back to browser TTS (perceived as "audio doesn't start").
+  // IMPORTANT: onPlaybackEnd must wait for the fallback utterance's own onend —
+  // firing it immediately on the (near-instant) 404 breaks sequential/chained
+  // playback (e.g. ReadingText's paragraph-by-paragraph "Слушай"): every step
+  // would advance within milliseconds, and each new speakBulgarian() call
+  // cancels the previous one, so only the very last paragraph is ever heard.
   let failed = false;
   const handleFailure = () => {
     if (failed) return;
@@ -191,8 +200,8 @@ export function playTtsAudio(
       currentAudio = null;
       currentAudioUrl = null;
     }
-    if (fallbackText) speakBulgarian(fallbackText, rate);
-    onPlaybackEnd?.();
+    if (fallbackText) speakBulgarian(fallbackText, rate, onPlaybackEnd);
+    else onPlaybackEnd?.();
   };
   audio.onended = finish;
   audio.onerror = handleFailure;

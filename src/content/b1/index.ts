@@ -42,9 +42,7 @@ export const B1_LESSON_LOADERS: Record<
   'b1-lesson-12': () => import('./lessons/b1-lesson-12'),
   'b1-lesson-13': () => import('./lessons/b1-lesson-13'),
   'b1-lesson-14': () => import('./lessons/b1-lesson-14'),
-  // Lesson 15 has no content folder yet — its page shows the "in preparation"
-  // placeholder until the five standard files land under `lessons/b1-lesson-15/`.
-  // 'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
+  'b1-lesson-15': () => import('./lessons/b1-lesson-15'),
 };
 
 export const B1_TEST_LOADERS: Record<
@@ -120,8 +118,8 @@ export const B1_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b1-lesson-09': 31,
   'b1-lesson-10': 8,
   'b1-lesson-11': 5,
-  'b1-lesson-12': 11,
+  'b1-lesson-12': 8,
   'b1-lesson-13': 3,
-  'b1-lesson-14': 8,
-  // 15 count will be filled together with its loader.
+  'b1-lesson-14': 7,
+  'b1-lesson-15': 6,
 };

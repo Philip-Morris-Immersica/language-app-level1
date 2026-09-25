@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ChevronDown, BookText } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useT } from '@/i18n/useT';
@@ -39,6 +39,17 @@ function getText(translations: Record<string, string>, lang: string): string {
   return translations[lang] || translations['en'] || translations['bg'] || '';
 }
 
+/** Renders inline **bold** markers (same convention as exercise instructions / grammar tables). */
+function renderBoldText(text: string): ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 function NoteAccordion({ note, lang, defaultOpen = false }: { note: GrammarNote; lang: string; defaultOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const title = getText(note.title, lang);
@@ -58,7 +69,7 @@ function NoteAccordion({ note, lang, defaultOpen = false }: { note: GrammarNote;
         <div className="overflow-hidden">
           <div className="px-4 pb-4 pt-1 border-t border-indigo-50">
             <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
-              {content}
+              {renderBoldText(content)}
             </div>
           </div>
         </div>

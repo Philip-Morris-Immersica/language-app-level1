@@ -134,12 +134,33 @@ export function MatchPairsDragDrop({ exercise, onComplete }: MatchPairsDragDropP
   }, [poolOrder, placements, validation, isSubmitted]);
 
   useEffect(() => {
-    if (s?.poolOrder?.length) return;
+    const placed = Object.values(placements).filter((v): v is string => !!v);
+    // Mid-exercise or already seeded — never refill the pool from the full
+    // pair list (that was duplicating tiles already sitting in slots).
+    if (poolOrder.length > 0 || placed.length > 0) return;
+    if (s?.poolOrder?.length) {
+      setPoolOrder(s.poolOrder);
+      return;
+    }
     const rights = exercise.pairs.map(p => p.correctRight);
     const shuffled = exercise.shuffledRights || [...rights].sort(() => Math.random() - 0.5);
     setPoolOrder(shuffled);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exercise]);
+  }, [exercise.id]);
+
+  // Keep the pool exclusive of placed words and of its own duplicates.
+  useEffect(() => {
+    const placed = new Set(Object.values(placements).filter((v): v is string => !!v));
+    setPoolOrder(prev => {
+      const seen = new Set<string>();
+      const next = prev.filter(w => {
+        if (placed.has(w) || seen.has(w)) return false;
+        seen.add(w);
+        return true;
+      });
+      return next.length === prev.length ? prev : next;
+    });
+  }, [placements]);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
@@ -175,7 +196,8 @@ export function MatchPairsDragDrop({ exercise, onComplete }: MatchPairsDragDropP
     });
     setPoolOrder(prev => {
       const next = prev.filter(w => w !== text);
-      return displaced ? [...next, displaced] : next;
+      if (displaced && !next.includes(displaced)) next.push(displaced);
+      return next;
     });
   };
 
@@ -184,7 +206,7 @@ export function MatchPairsDragDrop({ exercise, onComplete }: MatchPairsDragDropP
     setPlacements(prev => {
       const word = prev[pairId];
       if (!word) return prev;
-      setPoolOrder(poolPrev => [...poolPrev, word]);
+      setPoolOrder(poolPrev => (poolPrev.includes(word) ? poolPrev : [...poolPrev, word]));
       return { ...prev, [pairId]: null };
     });
   };

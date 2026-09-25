@@ -4,14 +4,10 @@ import type {
   WorkbookFillBlankExercise,
   MultipleChoiceExercise,
   TrueFalseExercise,
-  IllustratedCardsExercise,
 } from '@/content/types';
 
 // ⚠️ Следваме реда от учебника (B1, Урок 11 — „Познавам и обичам България"), стр. 76–80.
 // Тема: природата и географията на България + преизказно наклонение + степенуване.
-
-const B1_TTS_PROMPT =
-  'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Do not use any Russian, Arabic, English or other foreign accent.';
 
 export const exercises: Exercise[] = [
 
@@ -193,155 +189,14 @@ export const exercises: Exercise[] = [
   } as MultipleChoiceExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // НОВИ ДУМИ 1 (order 3): ГЕОГРАФИЯ — 8 думи (с множествени числа в TTS)
-  // ═══════════════════════════════════════════════════════════════════════════
-  {
-    id: 'b1-l11-novi-dumi-01',
-    type: 'illustrated_cards',
-    title: 'НОВИ ДУМИ 1',
-    instruction: '',
-    order: 3,
-    cards: [
-      {
-        id: 'b1-l11-novi-dumi-01-01',
-        imageUrl: '',
-        label: 'полуостров, -и',
-        ttsLabel: 'полуостров, полуострови',
-        ttsModel: 'pro',
-        ttsPrompt: B1_TTS_PROMPT,
-        translations: {
-          en: 'peninsula',
-          fr: 'péninsule',
-          ar: 'شبه جزيرة',
-          fa: 'شبه‌جزیره',
-          ru: 'полуостров',
-          uk: 'півострів',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-02',
-        imageUrl: '',
-        label: 'връх, върхове',
-        ttsLabel: 'връх, върхове',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. Say the two words as a declarative statement, NOT as a question — use falling intonation. "Връх" (в-р-ъ-х), stress on the single syllable. "Върхове" — stress on second syllable: вър-ХО-ве. Do not use rising (interrogative) intonation. Do not use any foreign accent.',
-        translations: {
-          en: 'peak, summit',
-          fr: 'sommet',
-          ar: 'قمة',
-          fa: 'قله',
-          ru: 'вершина',
-          uk: 'вершина',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-03',
-        imageUrl: '',
-        label: 'равнина, -и',
-        ttsLabel: 'равнина, равнини',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. The word is "равнина" (р-а-в-н-и-н-а), meaning a plain or flatland. Stress on the second syllable: рав-НИ-на. Plural "равнини". Do not use any foreign accent.',
-        translations: {
-          en: 'plain',
-          fr: 'plaine',
-          ar: 'سهل',
-          fa: 'دشت',
-          ru: 'равнина',
-          uk: 'рівнина',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-04',
-        imageUrl: '',
-        label: 'долина, -и',
-        ttsLabel: 'долина, долини',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. "Долина" — до-ли-НА, stress on last syllable НА. "Долини" — до-ли-НИ, stress on the second И (ли-НИ), NOT on the first syllable. Say до-ли-НИ clearly with НИ stressed. Do not use any foreign accent.',
-        translations: {
-          en: 'valley',
-          fr: 'vallée',
-          ar: 'وادٍ',
-          fa: 'دره',
-          ru: 'долина',
-          uk: 'долина',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-05',
-        imageUrl: '',
-        label: 'бряг, брегове',
-        ttsLabel: 'бряг, брегове',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. The word is "бряг" (б-р-я-г), meaning shore or bank. Pronounce the "р" clearly: бряг. Plural "брегове". Do not use any foreign accent.',
-        translations: {
-          en: 'shore, bank',
-          fr: 'rive, rivage',
-          ar: 'ضفة، شاطئ',
-          fa: 'ساحل',
-          ru: 'берег',
-          uk: 'берег',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-06',
-        imageUrl: '',
-        label: 'водопад, -и',
-        ttsLabel: 'водопад, водопади',
-        ttsModel: 'pro',
-        ttsPrompt: B1_TTS_PROMPT,
-        translations: {
-          en: 'waterfall',
-          fr: 'cascade',
-          ar: 'شلال',
-          fa: 'آبشار',
-          ru: 'водопад',
-          uk: 'водоспад',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-07',
-        imageUrl: '',
-        label: 'климат',
-        ttsLabel: 'климат',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. The word is "климат" (к-л-и-м-а-т). Pronounce the "Л" clearly after the К: кли-мат. Stress on the first syllable: КЛИ-мат. Do not use any foreign accent.',
-        translations: {
-          en: 'climate',
-          fr: 'climat',
-          ar: 'مناخ',
-          fa: 'آب‌وهوا',
-          ru: 'климат',
-          uk: 'клімат',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-01-08',
-        imageUrl: '',
-        label: 'природен парк',
-        ttsLabel: 'природен парк',
-        ttsModel: 'pro',
-        ttsPrompt: B1_TTS_PROMPT,
-        translations: {
-          en: 'nature park',
-          fr: 'parc naturel',
-          ar: 'منتزه طبيعي',
-          fa: 'پارک طبیعی',
-          ru: 'природный парк',
-          uk: 'природний парк',
-        },
-      },
-    ],
-  } as IllustratedCardsExercise,
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 77 — (order 4): ТЕКСТ — БЪЛГАРИЯ: ГРАНИЦИ И ВОДНО БОГАТСТВО
+  // СТР. 77 — (order 3): ТЕКСТ — БЪЛГАРИЯ: ГРАНИЦИ И ВОДНО БОГАТСТВО
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l11-ex-03',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 3',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 4,
+    order: 3,
     textTitle: 'БЪЛГАРИЯ – ГРАНИЦИ И ВОДНО БОГАТСТВО',
     showDictionary: false,
     imageEqualHeight: true,
@@ -389,7 +244,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Попълнете празните места в изреченията с думи от текста.',
-    order: 5,
+    order: 4,
     layout: 'single',
     points: 17,
     sentences: [
@@ -415,6 +270,7 @@ export const exercises: Exercise[] = [
         text: 'Природата на България е много _______ и _______.',
         blanks: [0, 1],
         correctAnswers: ['разнообразна', 'красива'],
+        acceptableAnswers: [['красива'], ['разнообразна']],
         options: ['красива', 'разнообразна', 'еднообразна', 'скучна'],
       },
       {
@@ -451,6 +307,7 @@ export const exercises: Exercise[] = [
         text: 'Минералната вода се използва за _______ и за _______.',
         blanks: [0, 1],
         correctAnswers: ['пиене', 'лечение'],
+        acceptableAnswers: [['лечение'], ['пиене']],
         options: ['готвене', 'лечение', 'пиене', 'туризъм'],
       },
       {
@@ -488,7 +345,7 @@ export const exercises: Exercise[] = [
     type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 1',
     instruction: 'Степенуване на прилагателни.',
-    order: 6,
+    order: 5,
     alignLeft: true,
     // Top-level rows are used by the TTS script (panels are for display only).
     rows: [
@@ -548,7 +405,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 7,
+    order: 6,
     textTitle: 'ЛЕГЕНДА ЗА ТЪМНОТО ЕЗЕРО',
     showDictionary: false,
     images: [
@@ -562,12 +419,12 @@ export const exercises: Exercise[] = [
     ],
     ttsParagraphs: [
       'Преди много години най-малкото езеро в Пирин сутрин било синьо като небето, а на обед – златно като слънцето.',
-      'Едно момиче от съседно село на ime Яна идвало всяка сутрин на брега на езерото да се оглежда в него и да му разказва за мечтите си. Яна била влюбена в най-хубавото момче на селото, но момчето не я забелязвало. Един ден Яна попИтала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обед, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злато.',
+      'Едно момиче от съседно село на ime Яна идвало всяка сутрин на брега на езерото да се оглежда в нЕго и да му разказва за мечтите си. Яна бИла влюббена в най-хубавото момЧЕ на селото, но момЧето не я забелязвало. Един ден Яна попИтала езерото какво да направи, за да спечели сърцето на младия мъж. Езерото ѝ казало да си измие очите сутринта, когато водата му е синя като небето. Тя го направила и очите ѝ станали също толкова сини. После да си измие косата на обед, когато водата е златна като слънцето. Тя направила и това и косата ѝ станала като злаТО.',
       'Когато Яна се върнала в селото, младият мъж я видял и се влюбил в нея. Тя обаче вече не го харесвала, защото бил беден. Мислела, че е толкова красива, че може да се омъжи само за принц и да стане принцеса. Яна отишла пак при езерото и поискала съвет как да спечели сърцето на принца. Като чуло това, езерото потъмняло от гняв и мъка. Затова сега го наричат Тъмното езеро.',
     ],
     ttsParagraphPrompts: [
       undefined,
-      'Warm natural storytelling Bulgarian. PACE: normal, flowing storytelling tempo — calm but not slow, with only a light pause between sentences. Capital letters inside words mark stress only — do not spell them out. "влюбена" starts with В, never Ф. Read once, fluently.',
+      'Warm natural standard Bulgarian storytelling. Capital letters mark stress only — do not spell them out. нЕго is него: hard Н, then Е, then ГО. момЧЕ and момЧето use Ч as in "church". влюббена is влюбена with a clear B. Finish the last word злато with a full O, then stop cleanly — do not fade out. Read once.',
       undefined,
     ],
   } as ReadingTextExercise,
@@ -580,7 +437,7 @@ export const exercises: Exercise[] = [
     type: 'b1-grammar-table',
     title: 'ГРАМАТИКА 2',
     instruction: 'Преизказното наклонение се използва при преразказване на чужди думи или легенди.',
-    order: 8,
+    order: 7,
     alignLeft: true,
     // Top-level rows are used by the TTS script (panels are for display only).
     rows: [
@@ -664,7 +521,7 @@ export const exercises: Exercise[] = [
     ],
     ttsNotes: [
       'Изявително: Яна живееше в селото. Преизказно: Яна живяла в селото.',
-      'В — легендите почти всички глаголи са в преизказно наклонение, защото разказваме стара история, не лично преживяване.',
+      'В легендите почти всички глаголи са в преизказно наклонение, защото разказваме стара история, не лично преживяване.',
     ],
     ttsNoteModels: ['flash', 'pro'],
   } as unknown as Exercise,
@@ -677,7 +534,7 @@ export const exercises: Exercise[] = [
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 6',
     instruction: 'Изберете подходящата дума, за да завършите сравнението.',
-    order: 9,
+    order: 8,
     points: 12,
     sentences: [
       { text: 'Синьо като _______.', blanks: [0], correctAnswers: ['небето'], options: ['небето', 'слънцето', 'сняг'] },
@@ -696,139 +553,14 @@ export const exercises: Exercise[] = [
   } as WorkbookFillBlankExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // НОВИ ДУМИ 2 (order 11): ФЛОРА И ФАУНА — 7 думи (с множествени числа в TTS)
-  // ═══════════════════════════════════════════════════════════════════════════
-  {
-    id: 'b1-l11-novi-dumi-02',
-    type: 'illustrated_cards',
-    title: 'НОВИ ДУМИ 2',
-    instruction: '',
-    order: 11,
-    cards: [
-      {
-        id: 'b1-l11-novi-dumi-02-01',
-        imageUrl: '',
-        label: 'мечка, -и',
-        ttsLabel: 'мечка, мечки',
-        ttsModel: 'pro',
-        ttsPrompt: B1_TTS_PROMPT,
-        translations: {
-          en: 'bear',
-          fr: 'ours',
-          ar: 'دب',
-          fa: 'خرس',
-          ru: 'медведь',
-          uk: 'ведмідь',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-02',
-        imageUrl: '',
-        label: 'вълк, вълци',
-        ttsLabel: 'вълк, вълци',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. "Вълк" (в-ъ-л-к) — pronounce the Л clearly before К: въ-ЛК. "Вълци" — the plural ends in ЦИ (ts-sound): въл-ЦИ, NOT "въви", NOT "вълчи" (the sound is Ц not Ч). Make the Л audible in both forms. Do not use any foreign accent.',
-        translations: {
-          en: 'wolf',
-          fr: 'loup',
-          ar: 'ذئب',
-          fa: 'گرگ',
-          ru: 'волк',
-          uk: 'вовк',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-03',
-        imageUrl: '',
-        label: 'елен, -и',
-        ttsLabel: 'елен, елени',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. "Елен" — stress on second syllable: е-ЛЕН. Pronounce the Н clearly at the end: е-лен. Plural "елени" — stress on second syllable е-ЛЕ-ни, with clear Е in the stressed syllable. Do not use any foreign accent.',
-        translations: {
-          en: 'deer',
-          fr: 'cerf',
-          ar: 'أيّل',
-          fa: 'گوزن',
-          ru: 'олень',
-          uk: 'олень',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-04',
-        imageUrl: '',
-        label: 'сърна, -и',
-        ttsLabel: 'сърна, сърни',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. "Сърна" — each consonant must be distinct: С-Ъ-Р-Н-А, stress on last syllable сър-НА. Plural "сърни" — С-Ъ-Р-Н-И, stress сър-НИ. Pronounce the Р clearly, do NOT swallow or merge any consonants. Do not use any foreign accent.',
-        translations: {
-          en: 'roe deer',
-          fr: 'chevreuil',
-          ar: 'ظبية',
-          fa: 'آهو',
-          ru: 'косуля',
-          uk: 'козуля',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-05',
-        imageUrl: '',
-        label: 'лисица, -и',
-        ttsLabel: 'лисица, лисици',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. "Лисица" — ли-си-ЦА. Plural "лисици" — ли-си-ЦИ, ending clearly in И. NOT "лисичи". The final sound is Ц (ts), not Ч (ch). Do not use any foreign accent.',
-        translations: {
-          en: 'fox',
-          fr: 'renard',
-          ar: 'ثعلب',
-          fa: 'روباه',
-          ru: 'лиса',
-          uk: 'лисиця',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-06',
-        imageUrl: '',
-        label: 'роза, -и',
-        ttsLabel: 'роза, рози',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian. The word is "роза" (р-о-з-а), meaning rose. It starts with Р, not Л — "роза", not "лоза". Stress on first syllable: РО-за. Plural "рози". Do not use any foreign accent.',
-        translations: {
-          en: 'rose',
-          fr: 'rose',
-          ar: 'وردة',
-          fa: 'گل رز',
-          ru: 'роза',
-          uk: 'троянда',
-        },
-      },
-      {
-        id: 'b1-l11-novi-dumi-02-07',
-        imageUrl: '',
-        label: 'лавандула',
-        ttsLabel: 'лавандула',
-        ttsModel: 'pro',
-        ttsPrompt: 'Read aloud in clear standard Bulgarian accent. "Лавандула" — Bulgarian stress falls on the THIRD syllable: ла-ван-ДУ-ла. Say: ла-ван-ДУ-ла with stress on ДУ. Do NOT use American or English pronunciation of lavender. Use authentic Bulgarian accent throughout. Do not use any foreign accent.',
-        translations: {
-          en: 'lavender',
-          fr: 'lavande',
-          ar: 'خزامى',
-          fa: 'اسطوخودوس',
-          ru: 'лаванда',
-          uk: 'лаванда',
-        },
-      },
-    ],
-  } as IllustratedCardsExercise,
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 78–79 — (order 12): ТЕКСТ — ПЛАНИНИТЕ НА БЪЛГАРИЯ
+  // СТР. 78–79 — (order 9): ТЕКСТ — ПЛАНИНИТЕ НА БЪЛГАРИЯ
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l11-ex-08',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 8',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 12,
+    order: 9,
     textTitle: 'ПЛАНИНИТЕ НА БЪЛГАРИЯ',
     showDictionary: false,
     compactImages: true,
@@ -863,7 +595,7 @@ export const exercises: Exercise[] = [
       undefined, undefined,
       'Warm natural Bulgarian. CRITICAL: preposition "в" — say SHORT "в" (one consonant), NEVER "Във" before vowels: "в старата" NOT "Във старата"; "в новата" NOT "Във новата". "Мелник" — МЕЛ-ник. "красиви" — кра-СИ-ви. Read once at relaxed pace.',
       undefined, undefined, undefined,
-      'Warm natural Bulgarian, moderate pace, no foreign accent. Capital letters inside words mark stress only — do not spell them out. Read once, fluently.',
+      'Warm natural Bulgarian, moderate pace, no foreign accent. Capital letters inside words mark stress only — do not spell them out. CRITICAL: "Ягодинската" is Ya-go-DIN-ska-ta (with N, not L) — NEVER "Ягодилската". Read once, fluently.',
       undefined,
     ],
   } as unknown as ReadingTextExercise,
@@ -876,7 +608,7 @@ export const exercises: Exercise[] = [
     type: 'multiple_choice',
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Прочетете изреченията и изберете верния отговор.',
-    order: 13,
+    order: 10,
     points: 6,
     questions: [
       {
@@ -894,7 +626,7 @@ export const exercises: Exercise[] = [
         correctIndex: 1,
       },
       {
-        question: 'Балкан е другото имe на:',
+        question: 'Балкан е другото име на:',
         options: ['Стара планина', 'Рила', 'Пирин'],
         correctIndex: 0,
       },
@@ -928,7 +660,7 @@ export const exercises: Exercise[] = [
     type: 'true_false',
     title: 'УПРАЖНЕНИЕ 10',
     instruction: 'Прочетете текста и определете дали твърденията са верни (✓) или неверни (✗).',
-    order: 14,
+    order: 11,
     points: 11,
     sentences: [
       { id: 'tf-01', text: 'Мусала е най-високият връх в България.', isTrue: true },
@@ -953,7 +685,7 @@ export const exercises: Exercise[] = [
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 11',
     instruction: 'Изслушайте текста и след това го прочетете сами.',
-    order: 15,
+    order: 12,
     textTitle: 'ЛЕГЕНДА ЗА РИЛА И ПИРИН',
     showDictionary: false,
     images: [
@@ -967,7 +699,7 @@ export const exercises: Exercise[] = [
       'Оттогава Места и Искър са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към Места, е светла, защото той се радва на дъщеря си.',
     ],
     ttsParagraphs: [
-      'Преди много години в едно село живяло хубаво и работливо момиче на иme Рила. То се влюбило в млад мъж от далечно село на иme Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
+      'Преди много години в едно село живяло хубаво и работливо момиче на име Рила. То се влюбило в млад мъж от далечно село на име Пирин и искало да се ожени за него. Родителите му обаче не били съгласни, защото не знаели нищо за младия мъж – откъде е, какво е семейството му, какво работи.',
       'Младите решили да избягат и да се оженят тайно. Отишли високо в планината и заживели там сами. Пирин ходел на лов, а Рила се грижела за дома. Родили им се две деца – момче и момиче. Нарекли ги Искър и МЕста. Децата били буйни и палави, често се карали и биели. Баща им обикновено не бил вкЪщи, а майка им не можела да се справи с тях сама. Един ден те пак се сбили, тя не издържала и извикала. Дано се разделите и никога повече да не се видите! Аз и баща ви да се вкаменим, за да не ви чуваме!',
       'Изведнъж в небето се чул гръм и блеснала светкавица. Рила и Пирин се превърнали във високи планини, а Искър и МЕста – в буйни реки. МЕста била по-кротка, затова тръгнала надолу по планината и стигнала до спокойното Егейско море. Искър бил буен и бърз и първо МИнал през Рила планина, после през СофИЙското поле и Балкана и накрая стигнал до ДунаВа.',
       'Оттогава МЕста — и Искър — са разделени и не се срещат. Майка им Рила ги гледа, а сълзите ѝ отиват във водите им. Пирин не вижда сина си и затова тази страна, която е обърната към София, е тъмна. Другата страна, която гледа към МЕста, е светла, защото той се радва на дъщеря си.',
@@ -981,22 +713,23 @@ export const exercises: Exercise[] = [
   } as unknown as ReadingTextExercise,
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // СТР. 80 — (order 16): КАРТА — Рила, Пирин, Искър, Места
+  // СТР. 80 — (order 13): КАРТА — Рила, Пирин, Искър, Места
   // Физическа (релефна) карта без имена на планините и реките — ученикът сам ги
-  // разпознава по релефа и по сините линии.
+  // разпознава по хипсометричния релеф и по сините линии на реките. Без пътни
+  // връзки. Генерирана от geoBoundaries (CC BY 4.0) + собствен релеф.
   // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'b1-l11-ex-13',
     type: 'reading_text',
     title: 'УПРАЖНЕНИЕ 12',
     instruction: 'Отбележете Рила, Пирин, Искър и Места на картата на България.',
-    order: 16,
+    order: 13,
     points: 0,
     showDictionary: false,
-    disableAudio: true,
+    disableParagraphAudio: true,
     images: [
       {
-        imageUrl: '/assets/b1-lesson-11/bulgaria-map-relief.jpg',
+        imageUrl: '/assets/b1-lesson-11/bulgaria-map-relief.svg',
         label: '',
       },
     ],
