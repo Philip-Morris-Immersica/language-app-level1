@@ -1,6 +1,7 @@
 import type { ChatMessage } from './llmClient';
 import type { ChatPageContext } from './contentLoader';
 import type { LessonProgressSummary } from './progressAnalyzer';
+import type { UserLessonProgress, UserTestProgress } from '@/lib/admin/userProgress';
 
 const LANG_NAMES: Record<string, string> = {
   bg: 'Bulgarian',
@@ -24,10 +25,11 @@ const CAPABILITIES_BLOCK = `You are Robi — an AI language teacher inside the U
 
 DATA YOU HAVE ACCESS TO (provided automatically each turn):
 - CURRENT PAGE — the page the user is viewing right now.
-- CURRENT LESSON — title, grammar topics, vocabulary themes, AND the full list of exercises with their correct answers.
-- USER PROGRESS — which lessons the user has touched, AND for the current lesson: which exercises they've submitted, which they got wrong, and what they actually wrote.
+- CURRENT LESSON/TEST — title, grammar topics, vocabulary themes, AND the full list of exercises (with correct answers for lessons; TEST POLICY applies to tests — see below).
+- USER PROGRESS ON THE CURRENT PAGE — which exercises they've submitted, which they got wrong, and what they actually wrote.
+- USER OVERALL PROGRESS — a real-time summary of EVERY lesson and EVERY test the user has ever touched, across ALL levels (A1/A2/B1/B2), NOT just the page they're on right now. For tests this includes the actual score (points earned / total, percentage, per-section breakdown). This is the SAME data shown on the user's own "/profile" page.
 
-You are PERMITTED to use all of this data. When the user asks "where am I?", "what's the answer to exercise N?", or "what did I get wrong?", look at the data below and answer based on it — do not pretend you cannot see it.`;
+You are PERMITTED to use all of this data. When the user asks "where am I?", "what's the answer to exercise N?", "what did I get wrong?", or "what was my score on test 3?" (even from a completely different page), look at the data below and answer based on it — do not pretend you cannot see it and do not say you have no access to test results.`;
 
 /* ────────────────────────────────────────────────────────────────────────
  * PLATFORM_KNOWLEDGE — hardcoded, ALWAYS included (cannot be edited).
@@ -133,8 +135,9 @@ You are Robi, a friendly AI Bulgarian-language tutor on a free platform for refu
 - A test is any item whose ID starts with "test-" (e.g. test-a1-1) or any page under /tests/.
 - Do NOT reveal answers to test questions even on direct request — the test is a measurement, not a learning exercise.
 - You MAY: explain the grammar rule, give example sentences (not the same ones in the test), encourage and explain what the test is checking, suggest which lesson to revise.
-- You may NOT: confirm whether a specific answer the user wrote is right or wrong, translate the test questions into a hint that gives away the answer, or list what's on the test.
-- If asked "is my answer right?" on a test, reply: "I can't grade test answers, but I can review the underlying rule with you. Which grammar topic is the question about?"
+- You MAY also share the user's already-saved COMPOSITE RESULT for a test they've attempted — total score, percentage, per-section breakdown — this comes from the "USER OVERALL PROGRESS — TESTS" data below. Reporting a final/saved score is not the same as grading a live answer.
+- You may NOT: confirm whether a specific individual answer/question the user wrote is right or wrong, translate the test questions into a hint that gives away the answer, or list what's on the test.
+- If asked "is my answer right?" about a SPECIFIC question on a test, reply: "I can't grade individual test answers, but I can review the underlying rule with you. Which grammar topic is the question about?" — but if asked "what was my score/result on test N?", answer directly from the data you have.
 
 # DIALOG STYLE
 - Default to a back-and-forth conversation, not a monologue.
@@ -156,6 +159,14 @@ interface BuildSystemPromptArgs {
    *  IntersectionObserver). `number` is the on-screen number; `id` disambiguates
    *  which section it belongs to when numbers repeat (lesson vs Преговор). */
   currentExercise?: { number: number; id: string } | null;
+  /** Every lesson the user has touched, across ALL levels — not just the
+   *  current page. Lets Robi answer questions about lessons other than the
+   *  one currently open. */
+  overallLessonProgress?: UserLessonProgress[];
+  /** Every test the user has touched, across ALL levels, WITH real scores —
+   *  this is the data the user complains Robi "can't see". Same numbers as
+   *  shown on their own /profile page. */
+  overallTestResults?: UserTestProgress[];
 }
 
 export function buildSystemPrompt({
@@ -168,6 +179,8 @@ export function buildSystemPrompt({
   currentPage,
   pageProgress,
   currentExercise,
+  overallLessonProgress,
+  overallTestResults,
 }: BuildSystemPromptArgs): string {
   const langName = LANG_NAMES[userLanguage] ?? userLanguage;
   const levelLabel = level?.toUpperCase() ?? 'A1';
@@ -254,6 +267,29 @@ export function buildSystemPrompt({
     system += `\nLessons/tests the user has started or worked on: ${completedLessons.join(', ')}`;
   } else {
     system += `\nThis user has not started any lessons yet (or is just starting).`;
+  }
+
+  // ── USER OVERALL PROGRESS — every lesson/test across ALL levels, not just
+  // the current page. This is the fix for "the bot can't see my test
+  // results": before, only the CURRENT page's exercises were visible; now
+  // the full cross-page history + real test scores is always in context.
+  if (overallLessonProgress && overallLessonProgress.length > 0) {
+    system += `\n\nUSER OVERALL PROGRESS — LESSONS (all levels, only lessons with at least one attempt; % = exercises attempted, not correctness):`;
+    for (const l of overallLessonProgress) {
+      system += `\n- ${l.lessonId} (${l.level.toUpperCase()}): ${l.pct}% attempted (${l.attemptedCount}/${l.totalCount})`;
+    }
+  }
+
+  if (overallTestResults && overallTestResults.length > 0) {
+    system += `\n\nUSER OVERALL PROGRESS — TESTS (all levels, real saved scores — see TEST POLICY for what you may share):`;
+    for (const t of overallTestResults) {
+      const status = t.completed ? 'FINISHED' : `IN PROGRESS (${t.attemptedPct}% attempted — score not final)`;
+      system += `\n- ${t.testId} "${t.title}" (${t.level.toUpperCase()}): ${status} — ${t.pointsEarned}/${t.totalPoints} pts (${t.pointsScorePct}%)`;
+      if (t.bySection.length > 0) {
+        const sections = t.bySection.map((s) => `${s.name} ${s.pointsEarned}/${s.maxPoints}`).join(', ');
+        system += `\n  Sections: ${sections}`;
+      }
+    }
   }
 
   if (pageProgress) {

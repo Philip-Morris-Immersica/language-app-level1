@@ -123,6 +123,7 @@ interface AnalysisState {
   summary: AnalysisSummary;
   cached?: boolean;
   attemptedSnapshot?: number;
+  language?: string;
 }
 
 // ── Main profile page ─────────────────────────────────────────────────────────
@@ -189,6 +190,7 @@ export default function ProfilePage() {
         summary: json.summary as AnalysisSummary,
         cached: json.cached,
         attemptedSnapshot: totalAttempted,
+        language: lang,
       });
     } catch {
       setAnalysisError(t('profile.aiError'));
@@ -647,10 +649,16 @@ function RecommendationChip({
     alternative_practice: t('profile.rec.altPractice'),
   };
 
+  // Defensive guard: the AI-generated lessonId is expected to be copied
+  // verbatim from real content (see /api/me/analysis prompt), but if it ever
+  // hallucinates an id that doesn't match any known lesson/test ID shape,
+  // render plain text instead of a link that would 404.
+  const isValidLessonId = (id: string) => /^(a2-|b1-|b2-)?lesson-\d{2}$/.test(id);
+  const isValidTestId = (id: string) => /^test-(a1|a2|b1|b2)-\d+$/.test(id);
   const href = rec.lessonId
     ? rec.lessonId.startsWith('test-')
-      ? `/tests/${rec.lessonId}`
-      : `/lessons/${rec.lessonId}`
+      ? (isValidTestId(rec.lessonId) ? `/tests/${rec.lessonId}` : null)
+      : (isValidLessonId(rec.lessonId) ? `/lessons/${rec.lessonId}` : null)
     : null;
 
   const inner = (

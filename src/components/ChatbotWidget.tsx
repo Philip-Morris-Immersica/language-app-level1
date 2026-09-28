@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { ChatbotPanel } from './ChatbotPanel';
+import { ChatFeedbackButton } from './ChatFeedbackButton';
 
 export function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,24 +33,27 @@ export function ChatbotWidget() {
         `}
       >
         <div className="flex items-center justify-between px-4 py-3 bg-[#0072BC] text-white flex-shrink-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <img
               src="/robi.jpg"
               alt="Robi"
-              className="w-8 h-8 rounded-full object-cover border-2 border-white/40"
+              className="w-8 h-8 rounded-full object-cover border-2 border-white/40 shrink-0"
             />
-            <div>
-              <p className="font-semibold text-sm leading-tight">Robi</p>
-              <p className="text-xs text-white/80">AI Assistant</p>
+            <div className="min-w-0 truncate">
+              <p className="font-semibold text-sm leading-tight truncate">Robi</p>
+              <p className="text-xs text-white/80 truncate">AI Assistant</p>
             </div>
           </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Close chat"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-0.5 shrink-0">
+            <ChatFeedbackButton />
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Close chat"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 relative overflow-hidden">

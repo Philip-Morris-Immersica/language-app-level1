@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, MessageSquare, Users, FileText,
-  MessageCircle, Key, ShieldCheck, BookOpen, ClipboardList
+  MessageCircle, Key, ShieldCheck, BookOpen, ClipboardList, ThumbsUp
 } from 'lucide-react';
 import type { AdminRole } from '@/lib/admin/getCurrentAdmin';
 
@@ -24,6 +24,7 @@ const ROLE_RANK: Record<AdminRole, number> = { viewer: 0, admin: 1, it: 2 };
 const NAV_ITEMS: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
   { href: '/admin/chats', label: 'Conversations', icon: <MessageSquare className="w-4 h-4" /> },
+  { href: '/admin/feedback', label: 'Feedback', icon: <ThumbsUp className="w-4 h-4" /> },
   { href: '/admin/users', label: 'Users', icon: <Users className="w-4 h-4" /> },
   { href: '/admin/reports', label: 'Reports', icon: <FileText className="w-4 h-4" /> },
   { href: '/admin/prompts', label: 'Prompts (IT)', icon: <BookOpen className="w-4 h-4" />, minRole: 'it' },
