@@ -278,6 +278,24 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 );
               }
 
+              /* ── Заглавие на секция (само ако нивото го има в nav) ── */
+              if (item.type === 'section') {
+                return (
+                  <li key={item.id} className="pt-3 pb-1 px-3">
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-[13px] font-bold text-[#05568B] leading-snug">
+                        <LessonTitle title={item.title} />
+                      </p>
+                      {item.subtitle && (
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          <LessonTitle title={item.subtitle} />
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                );
+              }
+
               /* ── Тест ── */
               if (item.type === 'test') {
                 const active = isActive(item.id);

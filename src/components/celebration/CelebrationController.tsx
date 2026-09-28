@@ -107,6 +107,8 @@ export function CelebrationController({ plan, savedStates, ready }: CelebrationC
           lessonLabelBg={plan.lessonLabelBg}
           nextHref={plan.final.nextHref}
           nextLabelBg={plan.final.nextLabelBg}
+          isLevelComplete={plan.final.isLevelComplete}
+          levelLabel={plan.final.levelLabel}
           onClose={() => setFinalOpen(false)}
         />
       )}

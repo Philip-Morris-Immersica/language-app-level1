@@ -21,6 +21,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Прочетете текстовете и обърнете внимание на глаголите в непряка реч.',
     order: 1,
+    sectionStart: {
+      title: 'Непряка реч — твърдения и въпроси',
+      subtitle: 'Сегашно, бъдеще и минало в „казва, че…", плюс въпроси с кога и какво',
+      titleI18n: {
+        en: 'Reported speech — statements and questions',
+        fr: 'Discours rapporté — affirmations et questions',
+        ar: 'الكلام المنقول — الجُمل الخبرية والأسئلة',
+        fa: 'نقل قول غیرمستقیم — جمله‌های خبری و سؤال‌ها',
+        uk: 'Непряма мова — твердження та запитання',
+        ru: 'Косвенная речь — утверждения и вопросы',
+      },
+      subtitleI18n: {
+        en: 'Present, future and past in "says that…", plus questions with "when" and "what"',
+        fr: 'Présent, futur et passé dans « dit que… », plus les questions avec « quand » et « quoi »',
+        ar: 'الحاضر والمستقبل والماضي في «يقول إن…»، بالإضافة إلى أسئلة بـ «متى» و«ماذا»',
+        fa: 'حال، آینده و گذشته در «می‌گوید که…»، به‌علاوه‌ی سؤال‌هایی با «کی» و «چه»',
+        uk: 'Теперішній, майбутній і минулий час у «каже, що…», плюс запитання з «коли» та «що»',
+        ru: 'Настоящее, будущее и прошлое в «говорит, что…», плюс вопросы с «когда» и «что»',
+      },
+      theme: 'grammar',
+    },
     examples: [
       {
         imageUrl: '/assets/b1-lesson-10/01-upr-01-pryaka-rech/01-rumyana-kniga.jpg',
@@ -271,6 +292,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 4',
     instruction: 'Прочетете текста и диалога. След това ги преобразувайте в непряка реч.',
     order: 6,
+    sectionStart: {
+      title: 'Любо и Елена на Коледа',
+      subtitle: 'Коледният разговор в София и преобразуването му в непряка реч',
+      titleI18n: {
+        en: 'Lyubo and Elena at Christmas',
+        fr: 'Lyubo et Elena à Noël',
+        ar: 'ليوبو وإيلينا في عيد الميلاد',
+        fa: 'لیوبو و النا در کریسمس',
+        uk: 'Любо і Елена на Різдво',
+        ru: 'Любо и Елена на Рождество',
+      },
+      subtitleI18n: {
+        en: 'The Christmas conversation in Sofia and rewriting it in reported speech',
+        fr: 'La conversation de Noël à Sofia et sa transformation en discours rapporté',
+        ar: 'حوار عيد الميلاد في صوفيا وتحويله إلى كلام منقول',
+        fa: 'گفتگوی کریسمس در صوفیه و بازنویسی آن به نقل قول غیرمستقیم',
+        uk: 'Різдвяна розмова в Софії та її перетворення на непряму мову',
+        ru: 'Рождественский разговор в Софии и его преобразование в косвенную речь',
+      },
+      theme: 'reading',
+    },
     images: [
       { imageUrl: '/assets/b1-lesson-10/02-upr-04-koleda-lyubo-elena/01-selfi-sofia.jpg', label: 'Любо и Елена' },
     ],
@@ -457,6 +499,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Прочетете текста и обърнете внимание на глаголите.',
     order: 8,
+    sectionStart: {
+      title: 'Да/не въпроси в непряка реч',
+      subtitle: '„дали" и „ли" — Радо и Мария в парка',
+      titleI18n: {
+        en: 'Yes/no questions in reported speech',
+        fr: 'Questions oui/non en discours rapporté',
+        ar: 'أسئلة نعم/لا في الكلام المنقول',
+        fa: 'سؤال‌های بله/خیر در نقل قول غیرمستقیم',
+        uk: 'Запитання так/ні в непрямій мові',
+        ru: 'Вопросы да/нет в косвенной речи',
+      },
+      subtitleI18n: {
+        en: '"dali" and "li" — Rado and Maria in the park',
+        fr: '« dali » et « li » — Rado et Maria dans le parc',
+        ar: '«дали» و«ли» — رادو وماريا في الحديقة',
+        fa: '«дали» و «ли» — رادو و ماریا در پارک',
+        uk: '«дали» і «ли» — Радо і Марія в парку',
+        ru: '«дали» и «ли» — Радо и Мария в парке',
+      },
+      theme: 'grammar',
+    },
     images: [
       { imageUrl: '/assets/b1-lesson-10/03-upr-05-rado-maria/01-joging-park.jpg', label: 'Радо и Мария' },
     ],
@@ -483,6 +546,7 @@ export const exercises: Exercise[] = [
     title: 'ГРАМАТИКА 2',
     instruction: 'Обърнете внимание на двете форми на да/не въпросите в непряка реч.',
     order: 9,
+    disableAudio: true,
     columns: ['с дали', 'с ли'],
     alignLeft: true,
     rows: [
@@ -708,6 +772,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 7',
     instruction: 'Прочетете текста и обърнете внимание на глаголите в непряка реч.',
     order: 11,
+    sectionStart: {
+      title: 'Повелително в непряка реч',
+      subtitle: 'Заповеди като „каза да…" в офиса на европейския проект',
+      titleI18n: {
+        en: 'Imperatives in reported speech',
+        fr: 'L\u2019impératif en discours rapporté',
+        ar: 'صيغة الأمر في الكلام المنقول',
+        fa: 'امر در نقل قول غیرمستقیم',
+        uk: 'Наказовий спосіб у непрямій мові',
+        ru: 'Повелительное наклонение в косвенной речи',
+      },
+      subtitleI18n: {
+        en: 'Commands as "told (someone) to…" in the European project office',
+        fr: 'Les ordres comme « a dit de… » au bureau du projet européen',
+        ar: 'الأوامر بصيغة «قال لـ… أن…» في مكتب المشروع الأوروبي',
+        fa: 'دستورها به شکل «گفت که…» در دفتر پروژه‌ی اروپایی',
+        uk: 'Накази як «сказав, щоб…» в офісі європейського проєкту',
+        ru: 'Приказы как «сказал, чтобы…» в офисе европейского проекта',
+      },
+      theme: 'grammar',
+    },
     introText:
       'Димо, Дани и Иво работят по голям европейски проект за езиковото обучение на бежанците в България. Всеки понеделник те се виждат в офиса на Димо и обсъждат задачите за седмицата. Днес отново са заедно и разговарят за срещата с колегите си от Австрия, които ще дойдат след два дни.',
     examples: [
@@ -829,6 +914,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 9',
     instruction: 'Прочетете текста и диалога. След това ги преобразувайте в непряка реч.',
     order: 13,
+    sectionStart: {
+      title: 'Професии и час по български',
+      subtitle: 'Диалозите за професиите и урока по български, плюс въпросите за България',
+      titleI18n: {
+        en: 'Professions and a Bulgarian class',
+        fr: 'Métiers et un cours de bulgare',
+        ar: 'المهن وحصة اللغة البلغارية',
+        fa: 'حرفه‌ها و کلاس زبان بلغاری',
+        uk: 'Професії та урок болгарської',
+        ru: 'Профессии и урок болгарского',
+      },
+      subtitleI18n: {
+        en: 'The dialogues about professions and the Bulgarian lesson, plus the questions about Bulgaria',
+        fr: 'Les dialogues sur les métiers et le cours de bulgare, plus les questions sur la Bulgarie',
+        ar: 'الحوارات عن المهن وحصة البلغارية، بالإضافة إلى الأسئلة عن بلغاريا',
+        fa: 'گفتگوها درباره‌ی حرفه‌ها و درس بلغاری، به‌علاوه‌ی سؤال‌هایی درباره‌ی بلغارستان',
+        uk: 'Діалоги про професії та урок болгарської, плюс запитання про Болгарію',
+        ru: 'Диалоги о профессиях и уроке болгарского, плюс вопросы о Болгарии',
+      },
+      theme: 'reading',
+    },
     images: [
       { imageUrl: '/assets/b1-lesson-10/05-upr-09-profesii/01-deca-tablet.jpg', label: 'Диляна, Стела и Ясен' },
     ],

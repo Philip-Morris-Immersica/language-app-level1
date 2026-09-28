@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { PartyPopper, X } from 'lucide-react';
-import { useTranslate } from '@/i18n/useTranslate';
 import { useT } from '@/i18n/useT';
 import { Confetti } from './Confetti';
 
@@ -24,12 +23,12 @@ export function SectionCelebrationToast({ nextLabelBg, nextIsReview, onClose }: 
   const [show, setShow] = useState(false);
   const t = useT();
 
-  const heading = useTranslate('Браво! Завършихте този раздел.');
-  // Translate only the fixed lead-in; the section title stays in Bulgarian (it's
-  // content), and the review uses the localized `lesson.review` key so it never
-  // gets machine-mistranslated (Google renders „Преговор" as „negotiate").
-  const continuePrefix = useTranslate('Продължете с');
-  const continueOnward = useTranslate('Продължете напред.');
+  const heading = t('celebration.sectionDone');
+  // Fixed lead-in only; the section title stays in Bulgarian (it's content),
+  // and the review uses the localized `lesson.review` key so it never gets
+  // machine-mistranslated (Google renders „Преговор" as „negotiate").
+  const continuePrefix = t('celebration.continuePrefix');
+  const continueOnward = t('celebration.continueOnward');
   const nextLabel = nextIsReview ? t('lesson.review') : nextLabelBg;
 
   // Keep the latest onClose without making it a timer dependency — otherwise a

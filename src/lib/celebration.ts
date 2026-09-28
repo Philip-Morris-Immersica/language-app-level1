@@ -42,6 +42,24 @@ export const CELEBRATION_ENABLED_LESSONS = new Set<string>([
   'a2-lesson-08',
   'a2-lesson-09',
   'a2-lesson-10',
+  // B1 — all 15 lessons now have sectionStart (pilot b1-lesson-01 + parallel
+  // subagent pass on 02-15). Lessons 11-15 are the reading-heavy "Познавам и
+  // обичам България" block; they still celebrate normally per-section.
+  'b1-lesson-01',
+  'b1-lesson-02',
+  'b1-lesson-03',
+  'b1-lesson-04',
+  'b1-lesson-05',
+  'b1-lesson-06',
+  'b1-lesson-07',
+  'b1-lesson-08',
+  'b1-lesson-09',
+  'b1-lesson-10',
+  'b1-lesson-11',
+  'b1-lesson-12',
+  'b1-lesson-13',
+  'b1-lesson-14',
+  'b1-lesson-15',
 ]);
 
 /**
@@ -106,10 +124,23 @@ export interface SectionCelebration {
 export interface FinalCelebration {
   triggerExerciseId: string;
   done: DoneDescriptor;
-  /** Where the „Напред" button links (next lesson/test), or null if lesson is last. */
-  nextHref: string | null;
-  /** Bulgarian label for the next step, e.g. „Урок 2: Закуска" / „Тест — уроци 1, 2 и 3". */
+  /**
+   * Where the button links. Always set — falls back to `/level/<level>` when
+   * this is the last lesson/test of the level (see `isLevelComplete`).
+   */
+  nextHref: string;
+  /**
+   * Bulgarian label for the next step, e.g. „Урок 2: Закуска" / „Тест — уроци
+   * 1, 2 и 3". Null when `isLevelComplete` — there is no specific next item.
+   */
   nextLabelBg: string | null;
+  /**
+   * True when there is no next lesson/test in this level's nav — `nextHref`
+   * points back to the level's own roadmap page instead of a specific item.
+   */
+  isLevelComplete: boolean;
+  /** Uppercase Latin level label (e.g. „B1"), for the level-complete heading. */
+  levelLabel: string | null;
 }
 
 export interface CelebrationPlan {
@@ -128,7 +159,9 @@ type AnyExercise = {
 
 type NavEntry =
   | { type: 'lesson'; id: string; number: number; title: string }
-  | { type: 'test'; id: string; label?: string };
+  | { type: 'test'; id: string; label?: string }
+  | { type: 'section'; id: string }
+  | { type: 'special'; id: string };
 
 /** Picks the per-type "done" signal, derived from the exercise content. */
 function doneDescriptorFor(ex: AnyExercise): DoneDescriptor {
@@ -162,12 +195,44 @@ function getNextNavTarget(lessonId: string): { href: string; label: string } | n
   if (!level) return null;
   const nav = getNavItemsForLevel(level) as unknown as NavEntry[];
   const idx = nav.findIndex((n) => n.type === 'lesson' && n.id === lessonId);
-  if (idx === -1 || idx + 1 >= nav.length) return null;
-  const next = nav[idx + 1];
-  if (next.type === 'lesson') {
-    return { href: `/lessons/${next.id}`, label: `Урок ${next.number}: ${next.title}` };
+  if (idx === -1) return null;
+  for (let i = idx + 1; i < nav.length; i++) {
+    const next = nav[i];
+    if (next.type === 'lesson') {
+      return { href: `/lessons/${next.id}`, label: `Урок ${next.number}: ${next.title}` };
+    }
+    if (next.type === 'test') {
+      return { href: `/tests/${next.id}`, label: next.label ? `Тест — ${next.label}` : 'Тест' };
+    }
   }
-  return { href: `/tests/${next.id}`, label: next.label ? `Тест — ${next.label}` : 'Тест' };
+  return null;
+}
+
+/**
+ * Resolves the target for the FINAL celebration of a lesson: the next
+ * lesson/test if there is one, otherwise a fallback to the level's own
+ * roadmap page (`/level/<level>`) — this is what fires for the last lesson of
+ * a level (e.g. `b1-lesson-15`, since B1 has no tests yet). Generic across all
+ * four levels; `/` is a last-resort fallback if the level can't be resolved.
+ */
+function getFinalTarget(lessonId: string): {
+  href: string;
+  label: string | null;
+  isLevelComplete: boolean;
+  levelLabel: string | null;
+} {
+  const level = getLessonLevel(lessonId);
+  const levelLabel = level ? level.toUpperCase() : null;
+  const next = getNextNavTarget(lessonId);
+  if (next) {
+    return { href: next.href, label: next.label, isLevelComplete: false, levelLabel };
+  }
+  return {
+    href: level ? `/level/${level}` : '/',
+    label: null,
+    isLevelComplete: true,
+    levelLabel,
+  };
 }
 
 /**
@@ -207,12 +272,14 @@ export function buildCelebrationPlan(lessonData: LessonData, lessonId: string): 
 
     // Without a review section, the last section IS the lesson finale.
     if (isLastSection && !hasReview) {
-      const target = getNextNavTarget(lessonId);
+      const target = getFinalTarget(lessonId);
       final = {
         triggerExerciseId: trigger.id,
         done: doneDescriptorFor(trigger),
-        nextHref: target?.href ?? null,
-        nextLabelBg: target?.label ?? null,
+        nextHref: target.href,
+        nextLabelBg: target.label,
+        isLevelComplete: target.isLevelComplete,
+        levelLabel: target.levelLabel,
       };
       return;
     }
@@ -230,12 +297,14 @@ export function buildCelebrationPlan(lessonData: LessonData, lessonId: string): 
   });
 
   if (hasReview && workbookTrigger) {
-    const target = getNextNavTarget(lessonId);
+    const target = getFinalTarget(lessonId);
     final = {
       triggerExerciseId: workbookTrigger.id,
       done: doneDescriptorFor(workbookTrigger),
-      nextHref: target?.href ?? null,
-      nextLabelBg: target?.label ?? null,
+      nextHref: target.href,
+      nextLabelBg: target.label,
+      isLevelComplete: target.isLevelComplete,
+      levelLabel: target.levelLabel,
     };
   }
 

@@ -69,7 +69,9 @@ export const A1_LESSONS_METADATA = [
 export type A1NavItem =
   | { type: 'special'; id: string; titleKey: string; href: string }
   | { type: 'lesson'; id: string; number: number; title: string }
-  | { type: 'test'; id: string; label: string };
+  | { type: 'test'; id: string; label: string }
+  /** Non-link heading. Only levels that include one (B1) render it. */
+  | { type: 'section'; id: string; title: string; subtitle?: string };
 
 export const A1_NAV_ITEMS: A1NavItem[] = [
   { type: 'special', id: 'azbouka', titleKey: 'nav.alphabet', href: '/lessons/azbouka' },

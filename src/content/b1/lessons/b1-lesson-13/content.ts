@@ -1,11 +1,27 @@
 import type { LessonContent } from '@/content/types';
 
+const B1_TTS_PROMPT =
+  'Read aloud in a warm, welcoming tone, in clear standard Bulgarian with natural native pronunciation and correct stress. Do not use any Russian, Arabic, English or other foreign accent.';
+
 export const content: LessonContent = {
   introduction:
     'Между IX и X век три решения завинаги променят облика на България и на цяла Европа: покръстването при Борис I, разцветът на Преслав под Симеон I и появата на първата славянска азбука. В урок 13 четете оригиналните учебникови текстове за тези три повратни момента и после проверявате разбирането си с упражнения.',
 
   sections: [],
-  vocabulary: [],
+  vocabulary: [
+    { id: 'b1-l13-nd-01-vladetel', bulgarian: 'владетел, -и', ttsText: 'владетел, владетели', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'ruler', fr: 'souverain', ar: 'حاكم', fa: 'فرمانروا', ru: 'правитель', uk: 'володар' } },
+    { id: 'b1-l13-nd-02-prestol', bulgarian: 'престол, -и', ttsText: 'престол, престоли', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'throne', fr: 'trône', ar: 'عرش', fa: 'تخت پادشاهی', ru: 'престол, трон', uk: 'престол, трон' } },
+    { id: 'b1-l13-nd-03-nadpis', bulgarian: 'надпис, -и', ttsText: 'надпис, надписи', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'inscription', fr: 'inscription', ar: 'نقش', fa: 'کتیبه', ru: 'надпись', uk: 'напис' } },
+    { id: 'b1-l13-nd-04-pokrastvane', bulgarian: 'покръстване', ttsText: 'покръстване', ttsModel: 'pro', ttsPrompt: 'Warm natural Bulgarian, no foreign accent. The word is по-КРЪСТ-ва-не. Stress КРЪСТ. Pronounce Ъ clearly — NEVER "покрестване". Read once only.', translations: { en: 'baptism / conversion to Christianity', fr: 'baptême / conversion au christianisme', ar: 'تعميد / اعتناق المسيحية', fa: 'غسل تعمید / گرویدن به مسیحیت', ru: 'крещение', uk: 'хрещення' } },
+    { id: 'b1-l13-nd-05-podanik', bulgarian: 'поданик, поданици', ttsText: 'поданик, поданици', ttsModel: 'pro', ttsPrompt: 'Warm natural Bulgarian, no foreign accent. The words are по-ДА-ник, по-ДА-ни-ци. Stress ДА. All consonants are HARD and dental — never palatalized, never Russian-soft. The first vowel is a clear Bulgarian О (по-), NEVER reduced to А. The Н is a hard N, NEVER soft нь. NEVER the Russian "подданный". Read once only.', translations: { en: 'subject (of a ruler)', fr: 'sujet', ar: 'رعية / تابع', fa: 'رعیت', ru: 'подданный', uk: 'підданий' } },
+    { id: 'b1-l13-nd-06-zagovor', bulgarian: 'заговор, -и', ttsText: 'заговор, заговори', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'conspiracy, plot', fr: 'complot, conspiration', ar: 'مؤامرة', fa: 'توطئه', ru: 'заговор', uk: 'змова' } },
+    { id: 'b1-l13-nd-07-patriarh', bulgarian: 'патриарх, патриарси', ttsText: 'пат-риарх, пат-риарси', ttsModel: 'pro', ttsPrompt: 'Warm natural Bulgarian, no foreign accent. The words are пат-РИ-арх, пат-РИ-арси. Stress АРХ / АР. CRITICAL: the FIRST р (right after т) must be a fully audible tapped Bulgarian r in BOTH forms. Say пат-РИ-арх, NEVER патиарх. Say пат-РИ-арси, NEVER патиарси. Do not swallow or skip that first р. Read once only.', translations: { en: 'patriarch', fr: 'patriarche', ar: 'بطريرك', fa: 'پاتریارک', ru: 'патриарх', uk: 'патріарх' } },
+    { id: 'b1-l13-nd-08-ezichestvo', bulgarian: 'езичество', ttsText: 'езичество', ttsModel: 'pro', ttsPrompt: 'Warm natural Bulgarian, no foreign accent. The word starts with Е: е-ЗИ-че-ство. Stress ЗИ. NEVER "язичество" with Я. Read once only.', translations: { en: 'paganism', fr: 'paganisme', ar: 'وثنية', fa: 'بت‌پرستی', ru: 'язычество', uk: 'язичництво' } },
+    { id: 'b1-l13-nd-09-manastir', bulgarian: 'манастир, -и', ttsText: 'манастир, манастири', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'monastery', fr: 'monastère', ar: 'دير', fa: 'صومعه', ru: 'монастырь', uk: 'монастир' } },
+    { id: 'b1-l13-nd-10-knizhovnik', bulgarian: 'книжовник, книжовници', ttsText: 'книжовник, книжовници', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'man of letters, scholar', fr: 'lettré, savant', ar: 'أديب / كاتب', fa: 'ادیب / نویسنده', ru: 'книжник, литератор', uk: 'книжник, літератор' } },
+    { id: 'b1-l13-nd-11-pismenost', bulgarian: 'писменост', ttsText: 'писменост', ttsModel: 'pro', ttsPrompt: B1_TTS_PROMPT, translations: { en: 'writing system, written culture', fr: 'écriture, culture écrite', ar: 'كتابة / نظام كتابي', fa: 'نظام نوشتاری', ru: 'письменность', uk: 'писемність' } },
+    { id: 'b1-l13-nd-12-voenachalnik', bulgarian: 'военачалник, военачалници', ttsText: 'военачалник, военачалници', ttsModel: 'pro', ttsPrompt: 'Warm natural Bulgarian, no foreign accent. The word is во-е-на-ЧАЛ-ник. Stress ЧАЛ. Four syllables: во-е-на-ЧАЛ-ник. Read once only.', translations: { en: 'military commander', fr: 'commandant militaire', ar: 'قائد عسكري', fa: 'فرمانده نظامی', ru: 'военачальник', uk: 'воєначальник' } },
+  ],
 
   culturalNotes: [
     {

@@ -36,6 +36,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 1',
     instruction: 'Прочетете диалозите и намерете думите с еднакъв корен.',
     order: 1,
+    sectionStart: {
+      title: 'Страдателен залог — форми',
+      subtitle: 'Причастие с „съм", съгласуване по род и число, отрицание и въпрос',
+      titleI18n: {
+        en: 'Passive voice — forms',
+        fr: 'Voix passive — les formes',
+        ar: 'صيغة المبني للمجهول — الأشكال',
+        fa: 'مجهول — شکل‌ها',
+        uk: 'Пасивний стан — форми',
+        ru: 'Страдательный залог — формы',
+      },
+      subtitleI18n: {
+        en: 'Participle with "съм" (to be), agreement in gender and number, negation and questions',
+        fr: 'Participe avec « съм » (être), accord en genre et en nombre, négation et question',
+        ar: 'اسم المفعول مع «съм» (أكون)، والتوافق حسب الجنس والعدد، والنفي والسؤال',
+        fa: 'صفت مفعولی با «съм» (بودن)، تطابق در جنس و عدد، نفی و پرسش',
+        uk: 'Дієприкметник із «съм» (бути), узгодження за родом і числом, заперечення та питання',
+        ru: 'Причастие с «съм» (быть), согласование по роду и числу, отрицание и вопрос',
+      },
+      theme: 'grammar',
+    },
     images: ['/assets/b1-lesson-09/01-upr-01-muzh-kostyum/01-muzh-kostyum.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -268,6 +289,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ 5',
     instruction: 'Прочетете диалога и обърнете внимание на глагола „съм" с причастието към него.',
     order: 9,
+    sectionStart: {
+      title: 'Страдателен залог във времената',
+      subtitle: 'Сегашно, бъдеще и минало време, плюс упражнения за словоред',
+      titleI18n: {
+        en: 'Passive voice across tenses',
+        fr: 'Voix passive aux différents temps',
+        ar: 'صيغة المبني للمجهول في الأزمنة',
+        fa: 'مجهول در زمان‌ها',
+        uk: 'Пасивний стан у часах',
+        ru: 'Страдательный залог во временах',
+      },
+      subtitleI18n: {
+        en: 'Present, future and past tense, plus word-order practice',
+        fr: 'Présent, futur et passé, plus des exercices d\'ordre des mots',
+        ar: 'الحاضر والمستقبل والماضي، بالإضافة إلى تمارين ترتيب الكلمات',
+        fa: 'حال، آینده و گذشته، به‌همراه تمرین ترتیب واژه‌ها',
+        uk: 'Теперішній, майбутній і минулий час, плюс вправи на порядок слів',
+        ru: 'Настоящее, будущее и прошедшее время, плюс упражнения на порядок слов',
+      },
+      theme: 'grammar',
+    },
     images: ['/assets/b1-lesson-09/02-upr-05-dvama-muzhe/01-dvama-muzhe-grad.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -539,6 +581,27 @@ export const exercises: Exercise[] = [
     title: 'УПРАЖНЕНИЕ',
     instruction: 'Прочетете и изслушайте диалога.',
     order: 18,
+    sectionStart: {
+      title: 'Сродни думи — ресторант, библиотека и летище',
+      subtitle: 'Три сцени с думи от един корен — ям/пия/пуша, чета/пиша/слушам, летя/пътувам',
+      titleI18n: {
+        en: 'Related words — restaurant, library and airport',
+        fr: 'Mots de la même famille — restaurant, bibliothèque et aéroport',
+        ar: 'كلمات من جذر واحد — مطعم ومكتبة ومطار',
+        fa: 'واژه‌های هم‌ریشه — رستوران، کتابخانه و فرودگاه',
+        uk: 'Спільнокореневі слова — ресторан, бібліотека і аеропорт',
+        ru: 'Однокоренные слова — ресторан, библиотека и аэропорт',
+      },
+      subtitleI18n: {
+        en: 'Three scenes with words from one root — "ям/пия/пуша" (eat/drink/smoke), "чета/пиша/слушам" (read/write/listen), "летя/пътувам" (fly/travel)',
+        fr: 'Trois scènes avec des mots d\'une même racine — « ям/пия/пуша » (manger/boire/fumer), « чета/пиша/слушам » (lire/écrire/écouter), « летя/пътувам » (voler/voyager)',
+        ar: 'ثلاثة مشاهد بكلمات من جذر واحد — «ям/пия/пуша» (أكل/شرب/تدخين)، «чета/пиша/слушам» (قراءة/كتابة/استماع)، «летя/пътувам» (طيران/سفر)',
+        fa: 'سه صحنه با واژه‌هایی از یک ریشه — «ям/пия/пуша» (خوردن/نوشیدن/سیگار)، «чета/пиша/слушам» (خواندن/نوشتن/شنیدن)، «летя/пътувам» (پرواز/سفر)',
+        uk: 'Три сцени зі словами від одного кореня — «ям/пия/пуша» (їсти/пити/курити), «чета/пиша/слушам» (читати/писати/слухати), «летя/пътувам» (літати/подорожувати)',
+        ru: 'Три сцены со словами от одного корня — «ям/пия/пуша» (есть/пить/курить), «чета/пиша/слушам» (читать/писать/слушать), «летя/пътувам» (лететь/путешествовать)',
+      },
+      theme: 'vocabulary',
+    },
     images: ['/assets/b1-lesson-09/03-upr-12-restorant/01-zhena-restorant.jpg'],
     sections: [
       { id: 'а.', lines: [
@@ -778,6 +841,27 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТ',
     instruction: 'Прочетете и изслушайте текста.',
     order: 27,
+    sectionStart: {
+      title: 'Нова къща и сродни думи',
+      subtitle: 'Текстът за новата къща и двойки като „мечта – мечтая", „празник – празнувам"',
+      titleI18n: {
+        en: 'A new house and related words',
+        fr: 'Une nouvelle maison et des mots de la même famille',
+        ar: 'بيت جديد وكلمات من جذر واحد',
+        fa: 'خانهٔ نو و واژه‌های هم‌ریشه',
+        uk: 'Новий будинок і спільнокореневі слова',
+        ru: 'Новый дом и однокоренные слова',
+      },
+      subtitleI18n: {
+        en: 'The text about the new house and pairs like "мечта – мечтая" (dream – to dream), "празник – празнувам" (holiday – to celebrate)',
+        fr: 'Le texte sur la nouvelle maison et des paires comme « мечта – мечтая » (rêve – rêver), « празник – празнувам » (fête – fêter)',
+        ar: 'النص عن البيت الجديد وأزواج مثل «мечта – мечтая» (حلم – أحلم)، «празник – празнувам» (عيد – أحتفل)',
+        fa: 'متن دربارهٔ خانهٔ نو و جفت‌هایی مثل «мечта – мечтая» (رؤیا – رؤیا دیدن)، «празник – празнувам» (جشن – جشن گرفتن)',
+        uk: 'Текст про новий будинок і пари на кшталт «мечта – мечтая» (мрія – мріяти), «празник – празнувам» (свято – святкувати)',
+        ru: 'Текст о новом доме и пары вроде «мечта – мечтая» (мечта – мечтать), «празник – празнувам» (праздник – праздновать)',
+      },
+      theme: 'vocabulary',
+    },
     paragraphs: [
       'Колко се радвам, че имаме нова къща! Това беше моя стара мечта. Къщата вече е построена и напълно обзаведена. Сега подреждам хола, искам всичко да е на мястото си, защото обичам реда.',
       'В двора ще има люлка и играчки за радост на децата. Мечтая да имаме хубава градина с цветя и храсти.',
@@ -882,6 +966,27 @@ export const exercises: Exercise[] = [
     title: 'ТЕКСТ',
     instruction: 'Прочетете и изслушайте текста.',
     order: 30,
+    sectionStart: {
+      title: 'Аз също искам да работя',
+      subtitle: 'Фадуа и Кемал за НАП, здравни осигуровки и ДАБ',
+      titleI18n: {
+        en: 'I also want to work',
+        fr: 'Moi aussi, je veux travailler',
+        ar: 'أنا أيضاً أريد أن أعمل',
+        fa: 'من هم می‌خواهم کار کنم',
+        uk: 'Я також хочу працювати',
+        ru: 'Я тоже хочу работать',
+      },
+      subtitleI18n: {
+        en: 'Fadwa and Kemal on "НАП" (tax office), health insurance and "ДАБ" (refugee agency)',
+        fr: 'Fadwa et Kemal sur « НАП » (administration fiscale), l\'assurance maladie et « ДАБ » (agence des réfugiés)',
+        ar: 'فدوا وكمال عن «НАП» (مصلحة الضرائب) والتأمين الصحي و«ДАБ» (وكالة اللاجئين)',
+        fa: 'فدوا و کمال دربارهٔ «НАП» (ادارهٔ مالیات)، بیمهٔ درمان و «ДАБ» (آژانس پناهندگان)',
+        uk: 'Фадуа і Кемал про «НАП» (податкова), медичне страхування та «ДАБ» (агенція у справах біженців)',
+        ru: 'Фадуа и Кемал о «НАП» (налоговая), медицинской страховке и «ДАБ» (агентство по делам беженцев)',
+      },
+      theme: 'reading',
+    },
     textTitle: 'АЗ СЪЩО ИСКАМ ДА РАБОТЯ',
     images: [
       { imageUrl: '/assets/b1-lesson-09/06-upr-21-semeystvo/01-siriysko-semeystvo.jpg' },

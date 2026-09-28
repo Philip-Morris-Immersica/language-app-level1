@@ -481,6 +481,10 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
     blanks: number[];
     correctAnswers: string[];
     acceptableAnswers?: string[][];
+    /** Full-answer alternatives. Each inner array is one accepted combination
+     *  (same length as blanks). Use when order can swap — e.g. двете/трите and
+     *  трите/двете — so per-blank alternates do not also accept двете/двете. */
+    acceptableCombinations?: string[][];
     options?: string[] | string[][];
     isExample?: boolean;
     images?: string[];

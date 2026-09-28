@@ -78,6 +78,14 @@ function stripBold(text: string) {
   return text.replace(/\*\*(.+?)\*\*/g, '$1');
 }
 
+/** Same-path MP3 replacements stay in the browser media cache; a query busts it. */
+const TTS_CACHE_BUST = '20260920e';
+
+function paragraphTtsPath(exerciseId: string, index: number): string {
+  const path = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${index}`);
+  return path ? `${path}?v=${TTS_CACHE_BUST}` : path;
+}
+
 function CompactImageStrip({ images, columns = 3 }: { images: ReadingImage[]; columns?: number }) {
   const cols = Math.min(Math.max(columns, 2), 4);
   return (
@@ -319,7 +327,7 @@ function ReadingTextWithTaskTables({
           return;
         }
         setPlayingParaIndex(i);
-        const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${i}`);
+        const audioPath = paragraphTtsPath(exerciseId, i);
         playTtsAudio(audioPath, speakTextFor(exercise, i), 1, () => {
           if (tok.cancelled) return;
           window.setTimeout(() => {
@@ -424,16 +432,16 @@ function ReadingTextWithTaskTables({
         }`}>
           {images.map((img, i) => (
             <div key={i} className="flex flex-col items-center">
-              <div className="w-full aspect-[4/3] max-h-72 overflow-hidden">
-                {/* Use plain <img> so external URLs (e.g. Wikimedia) are not
-                    blocked by next/image's remotePatterns restriction. */}
-                <img
-                  src={img.imageUrl}
-                  alt={img.label}
-                  className="w-full h-full object-contain rounded-lg"
-                  loading="lazy"
-                />
-              </div>
+              {/* Show the full image (no 4:3 crop). External URLs stay on <img>
+                  so next/image remotePatterns do not block Wikimedia. */}
+              <img
+                src={img.imageUrl}
+                alt={img.label}
+                className={`w-full rounded-lg shadow-sm object-contain ${
+                  images.length === 1 ? 'max-h-96 md:max-h-[520px]' : 'max-h-72'
+                }`}
+                loading="lazy"
+              />
               {img.label && (
                 <span className="mt-2 text-xs md:text-sm text-gray-500 font-medium text-center">
                   {img.label}
@@ -464,8 +472,9 @@ function ReadingTextWithTaskTables({
             <div
               key={index}
               onClick={() => {
-                if (sequentialPlaying) stopSequentialPlayback();
-                const audioPath = getTtsAudioPath(exerciseId, 'texts', `${exerciseId}-p-${index}`);
+                stopSequentialPlayback();
+                stopTtsAudio();
+                const audioPath = paragraphTtsPath(exerciseId, index);
                 setPlayingParaIndex(index);
                 playTtsAudio(audioPath, speakTextFor(exercise, index), undefined, () =>
                   setPlayingParaIndex(null),
