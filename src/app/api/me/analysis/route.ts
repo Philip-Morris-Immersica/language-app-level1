@@ -141,6 +141,12 @@ export async function POST(req: NextRequest) {
       const summary = summarizeLessonProgress(lessonId, stateRows, allExIds.size, allExIds);
 
       for (const m of summary.exercisesWithMistakes) {
+        // Skip entries where the user left the field blank — that is "not
+        // attempted", not a wrong ANSWER, and must not be fed to the AI as a
+        // concrete mistake example (it was producing "your answer: (no answer)"
+        // examples that read as fabricated/nonsensical feedback).
+        const yourAnswer = extractUserAnswer(m.userAnswers);
+        if (!yourAnswer.trim()) continue;
         // Find the exercise in the test sections
         for (const section of testData.sections) {
           const ex = section.exercises.find((e) => e.id === m.exerciseId);
@@ -151,7 +157,7 @@ export async function POST(req: NextRequest) {
             lessonTitle: testData.title,
             exerciseId: m.exerciseId,
             instruction: extractInstruction(ex),
-            yourAnswer: extractUserAnswer(m.userAnswers),
+            yourAnswer,
             correctAnswer: correct,
             wrongCount: m.wrongCount,
           });
@@ -168,6 +174,9 @@ export async function POST(req: NextRequest) {
       const summary = summarizeLessonProgress(lessonId, stateRows, allEx.length, allExIds);
 
       for (const m of summary.exercisesWithMistakes) {
+        // Same blank-answer guard as the test branch above.
+        const yourAnswer = extractUserAnswer(m.userAnswers);
+        if (!yourAnswer.trim()) continue;
         const ex = allEx.find((e: { id: string }) => e.id === m.exerciseId);
         if (!ex) continue;
         const correct = extractCorrectAnswer(ex);
@@ -176,7 +185,7 @@ export async function POST(req: NextRequest) {
             lessonTitle: lessonData.title ?? lessonId,
           exerciseId: m.exerciseId,
           instruction: extractInstruction(ex),
-          yourAnswer: extractUserAnswer(m.userAnswers),
+          yourAnswer,
           correctAnswer: correct,
           wrongCount: m.wrongCount,
         });
@@ -208,9 +217,9 @@ export async function POST(req: NextRequest) {
   const mistakesText = topMistakes
     .map(
       (m, i) =>
-        `${i + 1}. Exercise "${m.exerciseId}" from "${m.lessonTitle}"\n` +
+        `${i + 1}. Exercise "${m.exerciseId}" from "${m.lessonTitle}" [lessonId: ${m.lessonId}]\n` +
         `   Instruction: ${m.instruction}\n` +
-        `   User answered: ${m.yourAnswer || '(no answer)'}\n` +
+        `   User answered: ${m.yourAnswer}\n` +
         `   Correct answer: ${m.correctAnswer || '(see content)'}\n` +
         `   Wrong parts: ${m.wrongCount}`,
     )
@@ -242,7 +251,7 @@ Analyze the mistakes below and return a JSON object with this exact structure:
       "explanation": "4-6 sentences addressed to the learner: explain the exact grammatical/vocabulary pattern they struggle with, why it is tricky, how it works in Bulgarian, and why mastering it will help them in real-life situations. Be educational and warm.",
       "examples": [
         {
-          "lessonId": "lesson-id-exactly-as-in-content",
+          "lessonId": "COPY the exact value shown in [lessonId: ...] next to the matching mistake below — do not reformat or guess it",
           "yourAnswer": "what the learner wrote (keep in Bulgarian)",
           "correctAnswer": "the correct Bulgarian form",
           "note": "2 sentences: first explain why this specific answer is wrong, then give the rule or tip to remember the correct form"
@@ -251,7 +260,7 @@ Analyze the mistakes below and return a JSON object with this exact structure:
       "recommendations": [
         {
           "type": "review_lesson",
-          "lessonId": "lesson-id-exactly-as-in-content",
+          "lessonId": "COPY the exact [lessonId: ...] value from the matching mistake below — do not reformat or guess it",
           "description": "2-3 sentences of personal advice: what specific section or exercise to focus on when revisiting, what mental model or trick to use"
         }
       ]
@@ -270,8 +279,7 @@ Rules:
 - 3-5 improvementAreas, grouped by grammatical/vocabulary theme (not by lesson)
 - Each improvementArea MUST have 2-4 concrete examples from the actual mistakes
 - recommendations type can be: "review_lesson", "redo_exercise", "alternative_practice"
-- lessonId values MUST use the exact IDs from the content: lesson-00, lesson-01, ..., lesson-11 (zero-padded two digits)
-- Be specific, educational, and reference actual Bulgarian grammar terms throughout
+- lessonId values are PROVIDED in the MISTAKES list as "[lessonId: ...]" next to each mistake — ALWAYS copy that exact string verbatim (it may be an A1 id like "lesson-05", an A2 id like "a2-lesson-03", a B1 id like "b1-lesson-07", or a test id like "test-a1-2"). NEVER invent, reformat, or renumber a lessonId — a wrong id produces a broken link on the learner's page.
 - Do NOT translate Bulgarian words/exercises — they stay in Bulgarian
 - Keep all explanatory text in ${langName}
 - Always use direct address — never refer to the learner in third person

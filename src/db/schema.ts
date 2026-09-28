@@ -128,6 +128,23 @@ export const chatMessagesTable = pgTable("chat_messages", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+// General feedback on the AI chatbot — one free-text comment per submission,
+// given via a single button at the top of the chat window (NOT per-message
+// thumbs up/down). Kept deliberately simple: no automatic AI classification
+// on insert (that would cost tokens on every submission). Admins read raw
+// comments in /admin/feedback and can trigger an on-demand AI summary for a
+// chosen date range (see /api/admin/feedback/analyze) — a single cheap call
+// only when an admin actually clicks it, never per-submission.
+export const chatFeedbackTable = pgTable("chat_feedback", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  conversationId: integer("conversation_id").references(() => chatConversationsTable.id, { onDelete: "set null" }),
+  userId: integer("user_id").references(() => usersTable.id, { onDelete: "set null" }),
+  comment: text().notNull(),
+  language: varchar({ length: 5 }).notNull().default('bg'),
+  reviewed: boolean().notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ── Admin tables ───────────────────────────────────────────────────────────────
 
 export const adminUsersTable = pgTable("admin_users", {

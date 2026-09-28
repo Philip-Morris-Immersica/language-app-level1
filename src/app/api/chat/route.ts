@@ -12,6 +12,7 @@ import { summarizeLessonProgress } from '@/lib/chat/progressAnalyzer';
 import { redactPII } from '@/lib/chat/piiRedactor';
 import { getLessonLevel } from '@/content/registry';
 import { computeCostMicroUsd } from '@/lib/chat/availableModels';
+import { getUserProgressSummary, getUserTestSummary } from '@/lib/admin/userProgress';
 
 const RATE_LIMIT_PER_HOUR = parseInt(process.env.CHAT_RATE_LIMIT_PER_HOUR ?? '30');
 const rateLimitMap = new Map<number, { count: number; resetAt: number }>();
@@ -96,7 +97,7 @@ export async function POST(req: NextRequest) {
     return Promise.resolve(null);
   })();
 
-  const [pageContext, progressRows, currentPageStates] = await Promise.all([
+  const [pageContext, progressRows, currentPageStates, overallLessonProgress, overallTestResults] = await Promise.all([
     pageContextPromise,
     db.selectDistinct({ lessonId: exerciseStatesTable.lessonId })
       .from(exerciseStatesTable)
@@ -112,6 +113,13 @@ export async function POST(req: NextRequest) {
           eq(exerciseStatesTable.lessonId, contextId),
         ))
       : Promise.resolve([] as Array<{ exerciseId: string; state: string }>),
+    // Cross-page progress/score summaries — this is what lets Robi answer
+    // "what did I get on test 2?" even when the user is chatting from a
+    // completely different page. Reuses the same helpers that power the
+    // admin dashboard and the learner's own /profile page, so the numbers
+    // Robi quotes always match what the user sees there.
+    getUserProgressSummary(payload.userId),
+    getUserTestSummary(payload.userId),
   ]);
 
   const completedLessons = progressRows.map((r) => r.lessonId);
@@ -171,6 +179,8 @@ export async function POST(req: NextRequest) {
     currentPage: currentPage ?? null,
     pageProgress,
     currentExercise: currentExercise ?? null,
+    overallLessonProgress: overallLessonProgress.perLesson,
+    overallTestResults,
   });
 
   const messages = buildMessages(systemPrompt, history, cleanMessage);

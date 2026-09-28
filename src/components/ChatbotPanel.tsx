@@ -9,6 +9,7 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { ChatbotVoiceInput, type VoiceStatus } from './ChatbotVoiceInput';
 import { getCurrentExercise } from '@/lib/chat/currentExercise';
+import { setCurrentConversationId } from '@/lib/chat/currentConversation';
 
 interface Message {
   role: 'user' | 'assistant' | 'info';
@@ -171,6 +172,12 @@ export function ChatbotPanel({ onNewConversation }: Props) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Publish conversationId so the feedback button (mounted separately in
+  // ChatbotWidget's header) can attach it to a submitted comment.
+  useEffect(() => {
+    setCurrentConversationId(conversationId);
+  }, [conversationId]);
 
   const dismissPrivacy = () => {
     sessionStorage.setItem('robi_privacy_seen', '1');
