@@ -15,10 +15,27 @@ interface WorkbookSentence {
   blanks: number[];
   correctAnswers: string[];
   acceptableAnswers?: string[][];
+  acceptableCombinations?: string[][];
   options?: string[] | string[][];
   isExample?: boolean;
   images?: string[];
   bubbleSide?: 'left' | 'right';
+}
+
+function correctionHint(sentence: WorkbookSentence): string {
+  if (sentence.acceptableCombinations?.length) {
+    return sentence.acceptableCombinations.map(combo => combo.join(' / ')).join(' или ');
+  }
+  return sentence.correctAnswers.join(' / ');
+}
+
+function combinationMatches(sentence: WorkbookSentence, userAnswers: string[]): boolean {
+  const combos = sentence.acceptableCombinations;
+  if (!combos?.length) return false;
+  const userVals = sentence.correctAnswers.map((_, i) => (userAnswers[i] || '').trim().toLowerCase());
+  return combos.some(combo =>
+    combo.length === userVals.length && combo.every((answer, i) => answer.toLowerCase() === userVals[i]),
+  );
 }
 
 function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx: number): string[] {
@@ -142,7 +159,11 @@ export function WorkbookFillBlank({
       }
 
       const userAnswers = answers[sIdx] || [];
+      const wholeCombo = sentence.acceptableCombinations?.length
+        ? combinationMatches(sentence, userAnswers)
+        : null;
       const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
+        if (wholeCombo !== null) return wholeCombo;
         const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
         const matchesPrimary = userVal === correct.toLowerCase();
         const alternates = sentence.acceptableAnswers?.[bIdx];
@@ -247,7 +268,7 @@ export function WorkbookFillBlank({
 
             return (
               <span key={segIdx} className="text-base">
-                {seg.value}
+                {renderBoldText(seg.value)}
               </span>
             );
           })}
@@ -261,7 +282,7 @@ export function WorkbookFillBlank({
           )}
           {isSubmitted && valid === false && (
             <span className="ml-2 text-sm text-[#D25A45] italic">
-              ({sentence.correctAnswers.join(' / ')})
+              ({correctionHint(sentence)})
             </span>
           )}
         </div>
@@ -349,7 +370,7 @@ export function WorkbookFillBlank({
             </select>
           );
         }
-        return <span key={segIdx} className="text-sm">{seg.value}</span>;
+        return <span key={segIdx} className="text-sm">{renderBoldText(seg.value)}</span>;
       });
     };
 
@@ -439,7 +460,7 @@ export function WorkbookFillBlank({
             />
           );
         }
-        return <span key={segIdx} className="text-base">{seg.value}</span>;
+        return <span key={segIdx} className="text-base">{renderBoldText(seg.value)}</span>;
       });
     };
 
@@ -468,7 +489,7 @@ export function WorkbookFillBlank({
         <div className="flex items-start gap-2">
           <span className="font-bold text-[#0072BC] shrink-0 pt-0.5">{displayNum}.</span>
           <div className="flex-1 space-y-1">
-            <p className="text-base font-semibold text-gray-800">{questionPart}</p>
+            <p className="text-base font-semibold text-gray-800">{renderBoldText(questionPart)}</p>
             <div className="flex flex-wrap items-baseline gap-x-1">
               {renderAnswerPart(answerPart)}
               {isSubmitted && (
@@ -481,7 +502,7 @@ export function WorkbookFillBlank({
               )}
               {isSubmitted && valid === false && (
                 <span className="ml-1 text-sm text-[#D25A45] italic">
-                  ({sentence.correctAnswers.join(' / ')})
+                  ({correctionHint(sentence)})
                 </span>
               )}
             </div>
