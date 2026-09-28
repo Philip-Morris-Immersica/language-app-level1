@@ -124,10 +124,23 @@ export interface SectionCelebration {
 export interface FinalCelebration {
   triggerExerciseId: string;
   done: DoneDescriptor;
-  /** Where the „Напред" button links (next lesson/test), or null if lesson is last. */
-  nextHref: string | null;
-  /** Bulgarian label for the next step, e.g. „Урок 2: Закуска" / „Тест — уроци 1, 2 и 3". */
+  /**
+   * Where the button links. Always set — falls back to `/level/<level>` when
+   * this is the last lesson/test of the level (see `isLevelComplete`).
+   */
+  nextHref: string;
+  /**
+   * Bulgarian label for the next step, e.g. „Урок 2: Закуска" / „Тест — уроци
+   * 1, 2 и 3". Null when `isLevelComplete` — there is no specific next item.
+   */
   nextLabelBg: string | null;
+  /**
+   * True when there is no next lesson/test in this level's nav — `nextHref`
+   * points back to the level's own roadmap page instead of a specific item.
+   */
+  isLevelComplete: boolean;
+  /** Uppercase Latin level label (e.g. „B1"), for the level-complete heading. */
+  levelLabel: string | null;
 }
 
 export interface CelebrationPlan {
@@ -196,6 +209,33 @@ function getNextNavTarget(lessonId: string): { href: string; label: string } | n
 }
 
 /**
+ * Resolves the target for the FINAL celebration of a lesson: the next
+ * lesson/test if there is one, otherwise a fallback to the level's own
+ * roadmap page (`/level/<level>`) — this is what fires for the last lesson of
+ * a level (e.g. `b1-lesson-15`, since B1 has no tests yet). Generic across all
+ * four levels; `/` is a last-resort fallback if the level can't be resolved.
+ */
+function getFinalTarget(lessonId: string): {
+  href: string;
+  label: string | null;
+  isLevelComplete: boolean;
+  levelLabel: string | null;
+} {
+  const level = getLessonLevel(lessonId);
+  const levelLabel = level ? level.toUpperCase() : null;
+  const next = getNextNavTarget(lessonId);
+  if (next) {
+    return { href: next.href, label: next.label, isLevelComplete: false, levelLabel };
+  }
+  return {
+    href: level ? `/level/${level}` : '/',
+    label: null,
+    isLevelComplete: true,
+    levelLabel,
+  };
+}
+
+/**
  * Builds the celebration plan for a lesson. Sections are split by `sectionStart`
  * in display (array) order; the workbook array is the final „Преговор" section.
  * Returns `null` for lessons outside the pilot.
@@ -232,12 +272,14 @@ export function buildCelebrationPlan(lessonData: LessonData, lessonId: string): 
 
     // Without a review section, the last section IS the lesson finale.
     if (isLastSection && !hasReview) {
-      const target = getNextNavTarget(lessonId);
+      const target = getFinalTarget(lessonId);
       final = {
         triggerExerciseId: trigger.id,
         done: doneDescriptorFor(trigger),
-        nextHref: target?.href ?? null,
-        nextLabelBg: target?.label ?? null,
+        nextHref: target.href,
+        nextLabelBg: target.label,
+        isLevelComplete: target.isLevelComplete,
+        levelLabel: target.levelLabel,
       };
       return;
     }
@@ -255,12 +297,14 @@ export function buildCelebrationPlan(lessonData: LessonData, lessonId: string): 
   });
 
   if (hasReview && workbookTrigger) {
-    const target = getNextNavTarget(lessonId);
+    const target = getFinalTarget(lessonId);
     final = {
       triggerExerciseId: workbookTrigger.id,
       done: doneDescriptorFor(workbookTrigger),
-      nextHref: target?.href ?? null,
-      nextLabelBg: target?.label ?? null,
+      nextHref: target.href,
+      nextLabelBg: target.label,
+      isLevelComplete: target.isLevelComplete,
+      levelLabel: target.levelLabel,
     };
   }
 

@@ -73,7 +73,7 @@ export const B1_LESSONS_METADATA: Array<{
   { id: 'b1-lesson-12', number: 12, title: 'Древните корени: траки, славяни и прабългари',      hasTest: false },
   { id: 'b1-lesson-13', number: 13, title: 'Първата българска държава и Златният век',          hasTest: false },
   { id: 'b1-lesson-14', number: 14, title: 'Втората българска държава и Възраждането',          hasTest: false },
-  { id: 'b1-lesson-15', number: 15, title: 'Големите българи',                                  hasTest: true, testId: 'test-b1-1' },
+  { id: 'b1-lesson-15', number: 15, title: 'Големите българи',                                  hasTest: false },
 ];
 
 export const B1_NAV_ITEMS: A1NavItem[] = [
@@ -87,12 +87,12 @@ export const B1_NAV_ITEMS: A1NavItem[] = [
   { type: 'lesson', id: 'b1-lesson-08', number: 8,  title: 'Щях да пътувам' },
   { type: 'lesson', id: 'b1-lesson-09', number: 9,  title: 'Всичко ще бъде наред' },
   { type: 'lesson', id: 'b1-lesson-10', number: 10, title: 'Ти какво каза?' },
+  { type: 'section', id: 'b1-section-bulgaria', title: 'Познавам и обичам България', subtitle: 'текстове' },
   { type: 'lesson', id: 'b1-lesson-11', number: 11, title: 'Природата и географията на България' },
   { type: 'lesson', id: 'b1-lesson-12', number: 12, title: 'Древните корени: траки, славяни и прабългари' },
   { type: 'lesson', id: 'b1-lesson-13', number: 13, title: 'Първата българска държава и Златният век' },
   { type: 'lesson', id: 'b1-lesson-14', number: 14, title: 'Втората българска държава и Възраждането' },
   { type: 'lesson', id: 'b1-lesson-15', number: 15, title: 'Големите българи' },
-  { type: 'test', id: 'test-b1-1', label: 'уроци 11–15' },
 ];
 
 // testId → folder name under `src/content/b1/tests/`. The `test-lessons-`

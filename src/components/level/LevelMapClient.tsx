@@ -46,6 +46,8 @@ type CardItem =
 interface Group {
   lessons: CardItem[];
   test: { id: string; label: string } | null;
+  /** Set only when a level's nav has a section heading before this group. */
+  section: { title: string; subtitle?: string } | null;
 }
 
 /**
@@ -67,10 +69,33 @@ function buildGroups(
     if (item.type === 'test') testLabelById.set(item.id, item.label);
   }
 
+  const sectionBeforeLesson = new Map<string, { title: string; subtitle?: string }>();
+  for (let i = 1; i < navItems.length; i++) {
+    const prev = navItems[i - 1];
+    const item = navItems[i];
+    if (prev.type === 'section' && item.type === 'lesson') {
+      sectionBeforeLesson.set(item.id, { title: prev.title, subtitle: prev.subtitle });
+    }
+  }
+
   const groups: Group[] = [];
   let current: CardItem[] = [];
+  let currentSection: { title: string; subtitle?: string } | null = null;
+
+  function closeGroup(test: { id: string; label: string } | null) {
+    if (current.length === 0) return;
+    groups.push({ lessons: current, test, section: currentSection });
+    current = [];
+    currentSection = null;
+  }
 
   for (const lesson of lessons) {
+    const section = sectionBeforeLesson.get(lesson.id);
+    if (section) {
+      closeGroup(null);
+      currentSection = section;
+    }
+
     if (level === 'a1' && lesson.id === 'lesson-00') {
       current.push({ kind: 'alphabet' });
       continue;
@@ -83,17 +108,14 @@ function buildGroups(
     });
 
     if (lesson.hasTest && lesson.testId) {
-      groups.push({
-        lessons: current,
-        test: { id: lesson.testId, label: testLabelById.get(lesson.testId) ?? lesson.testId },
+      closeGroup({
+        id: lesson.testId,
+        label: testLabelById.get(lesson.testId) ?? lesson.testId,
       });
-      current = [];
     }
   }
 
-  if (current.length > 0) {
-    groups.push({ lessons: current, test: null });
-  }
+  closeGroup(null);
 
   return groups;
 }
@@ -134,6 +156,26 @@ function LessonTitle({ title }: { title: string }) {
 
 function TestLabel({ label }: { label: string }) {
   return <>{useTranslate(label)}</>;
+}
+
+function SectionHeading({ title, subtitle }: { title: string; subtitle?: string }) {
+  const translatedTitle = useTranslate(title);
+  const translatedSubtitle = useTranslate(subtitle ?? '');
+  return (
+    <div className="flex items-start gap-3 mb-4">
+      <div className="w-10 h-10 rounded-xl bg-[#CDE3F1] text-[#0072BC] flex items-center justify-center shrink-0">
+        <BookOpen className="w-5 h-5" />
+      </div>
+      <div className="min-w-0 pt-0.5">
+        <h2 className="text-base md:text-lg font-bold text-[#05568B] leading-snug">
+          {translatedTitle}
+        </h2>
+        {subtitle && (
+          <p className="text-xs text-gray-500 mt-0.5">{translatedSubtitle}</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function LessonCard({
@@ -427,8 +469,9 @@ export function LevelMapClient({ level }: { level: Level }) {
           <div className="space-y-5">
             {groups.map((group, gi) => {
               const lessonCount = group.lessons.length;
-              const lessonGridClass =
-                lessonCount >= 4
+              const lessonGridClass = group.section
+                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                : lessonCount >= 4
                   ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
                   : lessonCount === 3
                     ? 'grid-cols-2 lg:grid-cols-3'
@@ -437,7 +480,14 @@ export function LevelMapClient({ level }: { level: Level }) {
                       : 'grid-cols-1';
 
               return (
-                <div key={gi} className="rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-100 p-4 lg:p-5 shadow-sm">
+                <div key={gi} className={`rounded-2xl backdrop-blur-sm p-4 lg:p-5 shadow-sm ${
+                  group.section
+                    ? 'bg-[#CDE3F1]/40 border border-[#0072BC]/20'
+                    : 'bg-white/60 border border-gray-100'
+                }`}>
+                  {group.section && (
+                    <SectionHeading title={group.section.title} subtitle={group.section.subtitle} />
+                  )}
                   <div className="flex flex-col lg:flex-row gap-4">
                     <div className={`flex-1 grid ${lessonGridClass} gap-3`}>
                       {group.lessons.map((item) => {
