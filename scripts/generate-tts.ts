@@ -735,7 +735,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'grammar_table' && e.rows)) {
+  for (const ex of exercises.filter(e => (e.type === 'grammar_table' || e.type === 'b1-grammar-table') && e.rows)) {
     for (let i = 0; i < ex.rows!.length; i++) {
       const row = ex.rows![i];
       const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
@@ -804,7 +804,7 @@ function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples') && !e.disableTts && e.examples)) {
+  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples' || e.type === 'b1-grammar-examples') && !e.disableTts && e.examples)) {
     const useFlash = !!ex.ttsFlash;
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];

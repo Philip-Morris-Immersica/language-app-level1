@@ -94,7 +94,12 @@ export function speakBulgarian(text: string, rate = 0.85, onEnd?: () => void): v
     if (window.speechSynthesis.paused) window.speechSynthesis.resume();
   }, 300);
   utterance.onend = () => { clearInterval(resumeTimer); onEnd?.(); };
-  utterance.onerror = () => { clearInterval(resumeTimer); onEnd?.(); };
+  utterance.onerror = (event) => {
+    clearInterval(resumeTimer);
+    // cancel() fires "interrupted" — do not advance a playback chain on top of the new clip.
+    if (event.error === 'interrupted' || event.error === 'canceled') return;
+    onEnd?.();
+  };
 
   window.speechSynthesis.speak(utterance);
 }
@@ -160,12 +165,17 @@ export function playTtsAudio(
     return;
   }
 
-  // Different URL (or no audio): stop the current one and play the new one.
+  // Different URL (or no audio): detach the previous clip before starting the next.
+  // Clearing handlers first stops a late `ended`/`error` from starting browser
+  // speech (or the next paragraph) on top of the new clip — two voices at once.
   if (currentAudio) {
+    currentAudio.onended = null;
+    currentAudio.onerror = null;
     currentAudio.pause();
     currentAudio = null;
     currentAudioUrl = null;
   }
+  stopSpeaking();
 
   if (!audioUrl) {
     if (fallbackText) speakBulgarian(fallbackText, rate, onPlaybackEnd);
@@ -193,9 +203,12 @@ export function playTtsAudio(
   // would advance within milliseconds, and each new speakBulgarian() call
   // cancels the previous one, so only the very last paragraph is ever heard.
   let failed = false;
+  let started = false;
   const handleFailure = () => {
-    if (failed) return;
+    if (failed || started) return;
     failed = true;
+    audio.onended = null;
+    audio.pause();
     if (currentAudio === audio) {
       currentAudio = null;
       currentAudioUrl = null;
@@ -205,6 +218,7 @@ export function playTtsAudio(
   };
   audio.onended = finish;
   audio.onerror = handleFailure;
+  audio.addEventListener('playing', () => { started = true; }, { once: true });
   audio.play().catch(handleFailure);
 }
 

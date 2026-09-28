@@ -705,7 +705,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
               <div
                 key={index}
                 onClick={() => {
-                  if (sequentialPlaying) stopSequentialPlayback();
+                  if (seqRef.current || sequentialPlaying || sequentialPaused) stopSequentialPlayback();
                   if (audioRef.current) {
                     audioRef.current.pause();
                     setIsPlaying(false);
