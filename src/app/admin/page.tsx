@@ -7,6 +7,7 @@ import { MessageSquare, Users, DollarSign, UserCheck, ChevronRight } from 'lucid
 import { getPlatformProgressStats } from '@/lib/admin/userProgress';
 import { getTotalCostMicroUsd, formatUsd } from '@/lib/admin/costEstimate';
 import { LEVELS } from '@/content/registry';
+import { RefreshStatsButton } from '@/components/admin/RefreshStatsButton';
 
 const DAY_MS = 86400_000;
 
@@ -134,10 +135,24 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Row 2 — Per-level learning progress (clickable) */}
-      <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
-        Learning progress
-        <span className="ml-2 font-normal text-[11px] text-gray-400 normal-case">click a level for lesson + test breakdown</span>
-      </h2>
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+          Learning progress
+          <span className="ml-2 font-normal text-[11px] text-gray-400 normal-case">click a level for lesson + test breakdown</span>
+        </h2>
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] text-gray-400">
+            Updated: {new Date(progress.computedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC
+          </span>
+          <RefreshStatsButton />
+        </div>
+      </div>
+      <p className="text-[11px] text-gray-400 mb-3">
+        Stats auto-refresh daily at 03:00 UTC.
+        {progress.trackingSince && (
+          <> Click tracking since {new Date(progress.trackingSince).toLocaleDateString('en-GB', { timeZone: 'UTC' })}; earlier activity reconstructed from saved answers.</>
+        )}
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {LEVELS.map((lvl) => {
           const data = progress.byLevel[lvl];
@@ -159,7 +174,14 @@ export default async function AdminDashboard() {
 
               <p className="text-3xl font-bold text-gray-900 tabular-nums">{data.avgPct}%</p>
               <p className="text-xs text-gray-500 mt-0.5">
-                avg completion across {data.activeUsers} learner{data.activeUsers === 1 ? '' : 's'}
+                avg level progress across {data.activeUsers} learner{data.activeUsers === 1 ? '' : 's'}
+              </p>
+              <p className="text-xs text-gray-700 mt-2">
+                <span className="font-semibold tabular-nums">{data.usersCompleted}</span> completed the level
+              </p>
+              <p className="text-xs text-gray-500">
+                avg lessons completed{' '}
+                <span className="font-semibold tabular-nums text-gray-700">{data.avgLessonsCompleted} / {data.lessonsTotal}</span>
               </p>
 
               {/* Mini histogram */}

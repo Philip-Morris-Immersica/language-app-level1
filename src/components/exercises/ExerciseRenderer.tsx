@@ -3,6 +3,7 @@
 import type { Exercise } from '@/content/types';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
+import { useExercisePersistenceContext } from '@/contexts/ExercisePersistenceContext';
 import { renderBoldText } from '@/lib/renderBoldText';
 import { FillInBlank } from './FillInBlank';
 import { MultipleChoice } from './MultipleChoice';
@@ -117,6 +118,7 @@ function ExerciseHeader({ titleBase, number, instruction, instructionKey, subtit
 export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: ExerciseRendererProps) {
   const number = exerciseNumber ?? exercise.order;
   const t = useT();
+  const { markTouched } = useExercisePersistenceContext();
   const translatedInstruction = useTranslate(exercise.instruction);
 
   // Custom Bulgarian label (НОВИ ДУМИ / ГРАМАТИКА / ДИАЛОЗИ / ПРЕГОВОР...) without its
@@ -145,8 +147,15 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
     const trackingProps = showHeader && number != null
       ? { 'data-exercise-id': exercise.id, 'data-exercise-number': number }
       : {};
+    const touch = () => markTouched(exercise.id);
     return (
-      <div {...trackingProps}>
+      <div
+        {...trackingProps}
+        onPointerDownCapture={touch}
+        onKeyDownCapture={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') touch();
+        }}
+      >
         {showHeader && <ExerciseHeader titleBase={titleBase} number={number ?? null} instruction={exercise.instruction} instructionKey={exercise.instructionKey} subtitle={subtitle} prominentSubtitle={prominentSubtitle} />}
         {hideHeader && exercise.instruction && (
           <p className="text-gray-500 text-sm md:text-base mb-5 leading-snug">
@@ -242,6 +251,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           items={exercise.items}
           columns={exercise.columns}
           onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.items.length)}
+          exerciseId={exercise.id}
         />
       );
 
@@ -423,6 +433,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
         <ConnectDots
           dots={exercise.dots}
           onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.dots.length)}
+          exerciseId={exercise.id}
         />
       );
 
@@ -434,6 +445,7 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           startImageUrl={exercise.startImageUrl}
           endImageUrl={exercise.endImageUrl}
           onComplete={wrapOneArgOnComplete(exercise.points ?? exercise.correctPath.length)}
+          exerciseId={exercise.id}
         />
       );
 

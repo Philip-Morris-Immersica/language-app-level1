@@ -70,7 +70,7 @@ import { B1_LESSONS_METADATA, B1_TEST_LOADERS } from '@/content/b1';
 import { B2_LESSONS_METADATA, B2_TEST_LOADERS } from '@/content/b2';
 import { TRANSLATION_OVERRIDES } from '@/i18n/translationOverrides';
 import { getModelCost } from '@/lib/chat/availableModels';
-import type { LessonData, TestData, Exercise } from '@/content/shared/types';
+import { extractLesson, extractTest, type ExtractedUnit } from './lib/translation-fields';
 
 // ---------------------------------------------------------------------------
 // Level selection — generic across A1/A2/B1/B2. All four level registries
@@ -149,212 +149,6 @@ const client = dryRun ? null : new OpenAI({ apiKey: process.env.OPENAI_API_KEY }
 let totalPromptTokens = 0;
 let totalCompletionTokens = 0;
 
-// ---------------------------------------------------------------------------
-// Field extraction — one Bulgarian string per hit, with a path (for the
-// human-readable context outline fed to the model alongside each batch).
-// ---------------------------------------------------------------------------
-interface FieldHit {
-  path: string;
-  text: string;
-  /** Grammar-terminology fields feed the Step 0 glossary pass; everything else is "content". */
-  isGlossary: boolean;
-}
-
-/** True if the string contains at least one letter (skips pure numbers/punctuation/dashes). */
-function hasLetters(s: string): boolean {
-  return /[a-zA-Zа-яА-ЯёЁіїєґІЇЄҮ]/.test(s);
-}
-
-/** Same transform `MultipleChoice.tsx` applies before calling useTranslate() on an option label. */
-function stripEmojiAndParen(text: string): string {
-  return text
-    .replace(/^[\p{Emoji}\p{Emoji_Presentation}\s]+/u, '')
-    .replace(/\s*\(.*\)$/, '')
-    .trim();
-}
-
-function collectFromExercise(ex: Exercise, hits: FieldHit[], pathPrefix: string) {
-  const add = (path: string, text: string | undefined | null, isGlossary = false) => {
-    if (!text) return;
-    const trimmed = text.trim();
-    if (!trimmed || !hasLetters(trimmed)) return;
-    hits.push({ path: `${pathPrefix}${path}`, text: trimmed, isGlossary });
-  };
-
-  if (ex.title) {
-    const titleBase = ex.title.replace(/\s+\d+$/, '');
-    add('title', titleBase);
-  }
-  if (!ex.instructionKey) add('instruction', ex.instruction);
-  if ('subtitle' in ex && (ex as { subtitle?: string }).subtitle) {
-    add('subtitle', (ex as { subtitle?: string }).subtitle);
-  }
-  if (ex.grammarHighlight && !ex.grammarHighlight.textKey) {
-    add('grammarHighlight.text', ex.grammarHighlight.text);
-  }
-
-  switch (ex.type) {
-    case 'grammar_table': {
-      add('tableTitle', ex.tableTitle, true);
-      (ex.columns ?? []).forEach((c, i) => add(`columns[${i}]`, c, true));
-      (ex.notes ?? []).forEach((n, i) => add(`notes[${i}]`, n, true));
-      (ex.rows ?? []).forEach((row, ri) => {
-        if (row.pronunciations) return; // pre-filled — GrammarTable shows that map instead
-        add(`rows[${ri}].pronoun`, row.pronoun, true);
-        (row.cells ?? []).forEach((cell, ci) => {
-          const clean = cell.replace(/\*\*/g, '').trim();
-          if (clean && clean !== '-') add(`rows[${ri}].cells[${ci}]`, clean, true);
-        });
-      });
-      break;
-    }
-    case 'table_fill': {
-      (ex.tables ?? []).forEach((table, ti) => {
-        add(`tables[${ti}].name`, table.name, true);
-        (table.columns ?? []).forEach((c, ci) => add(`tables[${ti}].columns[${ci}]`, c, true));
-      });
-      (ex.paragraphs ?? []).forEach((p, pi) => add(`paragraphs[${pi}].text`, p.text));
-      break;
-    }
-    case 'multiple_choice': {
-      (ex.questions ?? []).forEach((q, qi) => {
-        (q.options ?? []).forEach((opt, oi) => {
-          const stripped = stripEmojiAndParen(opt);
-          add(`questions[${qi}].options[${oi}]`, stripped);
-        });
-      });
-      break;
-    }
-    case 'grammar_examples': {
-      (ex.examples ?? []).forEach((example, ei) => {
-        add(`examples[${ei}].text`, example.text);
-        add(`examples[${ei}].subtext`, example.subtext);
-        add(`examples[${ei}].label`, example.label);
-        (example.lines ?? []).forEach((line, li) => {
-          if (line === '') return;
-          // Matches GrammarWithExamples.tsx: strip **bold** markers, then a leading ✓/✗ marker.
-          const plain = line.replace(/\*\*(.+?)\*\*/g, '$1').replace(/^\s*[✓✗]\s*/, '').trim();
-          add(`examples[${ei}].lines[${li}]`, plain);
-        });
-      });
-      break;
-    }
-    case 'grammar_visual': {
-      (ex.pronouns ?? []).forEach((p, pi) => {
-        add(`pronouns[${pi}].pronoun`, p.pronoun);
-        add(`pronouns[${pi}].description`, p.description);
-      });
-      break;
-    }
-    case 'dialogues': {
-      (ex.sections ?? []).forEach((section, si) => {
-        (section.lines ?? []).forEach((line, li) => {
-          add(`sections[${si}].lines[${li}].text`, line.text);
-        });
-      });
-      break;
-    }
-    case 'reading_text': {
-      add('textTitle', ex.textTitle);
-      (ex.paragraphs ?? []).forEach((p, pi) => add(`paragraphs[${pi}]`, p));
-      (ex.images ?? []).forEach((img, ii) => add(`images[${ii}].label`, img.label));
-      if (ex.checklist?.instruction) add('checklist.instruction', ex.checklist.instruction);
-      break;
-    }
-    case 'illustrated_cards': {
-      add('headerCaption', ex.headerCaption);
-      (ex.cards ?? []).forEach((card, ci) => {
-        add(`cards[${ci}].label`, card.label);
-        (card.sublabels ?? []).forEach((sub, si) => add(`cards[${ci}].sublabels[${si}]`, sub));
-      });
-      break;
-    }
-    case 'personal_choice': {
-      if (ex.model) {
-        add('model.question', ex.model.question);
-        add('model.positiveAnswer', ex.model.positiveAnswer);
-        add('model.negativeAnswer', ex.model.negativeAnswer);
-      }
-      (ex.items ?? []).forEach((item, ii) => add(`items[${ii}].question`, item.question));
-      break;
-    }
-  }
-}
-
-interface ExtractedUnit {
-  id: string;
-  /** All display strings in this unit, deduped, in source order — used as LLM context. */
-  allTexts: string[];
-  /** Subset of `allTexts` flagged as grammar terminology (feeds the glossary pass). */
-  glossaryTexts: string[];
-  /** Human-readable outline (path: text) fed to the model as context for this unit. */
-  outline: string;
-}
-
-function buildUnit(id: string, hits: FieldHit[]): ExtractedUnit {
-  const seen = new Set<string>();
-  const allTexts: string[] = [];
-  const glossaryTexts: string[] = [];
-  const outlineLines: string[] = [];
-  for (const hit of hits) {
-    outlineLines.push(`${hit.path}: ${hit.text}`);
-    if (seen.has(hit.text)) continue;
-    seen.add(hit.text);
-    allTexts.push(hit.text);
-    if (hit.isGlossary) glossaryTexts.push(hit.text);
-  }
-  return { id, allTexts, glossaryTexts, outline: outlineLines.join('\n') };
-}
-
-function extractLesson(lessonId: string, lesson: LessonData): ExtractedUnit {
-  const hits: FieldHit[] = [];
-  const add = (path: string, text: string | undefined | null, isGlossary = false) => {
-    if (!text) return;
-    const trimmed = text.trim();
-    if (!trimmed || !hasLetters(trimmed)) return;
-    hits.push({ path, text: trimmed, isGlossary });
-  };
-
-  add('lesson.title', lesson.title);
-  add('lesson.description', lesson.description);
-  (lesson.grammarTopics ?? []).forEach((topic, i) => add(`lesson.grammarTopics[${i}]`, topic));
-
-  if (lesson.content?.introduction) add('content.introduction', lesson.content.introduction);
-
-  (lesson.content?.vocabulary ?? []).forEach((v, i) => add(`content.vocabulary[${i}].bulgarian`, v.bulgarian));
-
-  (lesson.content?.culturalNotes ?? []).forEach((note, i) => {
-    if (typeof note.title === 'string') add(`content.culturalNotes[${i}].title`, note.title);
-    if (typeof note.content === 'string') add(`content.culturalNotes[${i}].content`, note.content);
-  });
-
-  [...(lesson.exercises ?? []), ...(lesson.workbookExercises ?? [])].forEach((ex, i) => {
-    collectFromExercise(ex, hits, `exercises[${i}].`);
-  });
-
-  return buildUnit(lessonId, hits);
-}
-
-function extractTest(testId: string, test: TestData): ExtractedUnit {
-  const hits: FieldHit[] = [];
-  const add = (path: string, text: string | undefined | null, isGlossary = false) => {
-    if (!text) return;
-    const trimmed = text.trim();
-    if (!trimmed || !hasLetters(trimmed)) return;
-    hits.push({ path, text: trimmed, isGlossary });
-  };
-
-  add('test.title', test.title);
-  if (test.introText) add('test.introText', test.introText);
-
-  test.sections.forEach((section, si) => {
-    add(`sections[${si}].name`, section.name);
-    if (section.instructions) add(`sections[${si}].instructions`, section.instructions);
-    section.exercises.forEach((ex, ei) => collectFromExercise(ex, hits, `sections[${si}].exercises[${ei}].`));
-  });
-
-  return buildUnit(testId, hits);
-}
 
 // ---------------------------------------------------------------------------
 // Overrides / output-cache lookups
@@ -385,18 +179,36 @@ function saveOutput(data: TranslationMap) {
 // ---------------------------------------------------------------------------
 // OpenAI call
 // ---------------------------------------------------------------------------
-const SYSTEM_PROMPT = `Ти си професионален преводач, локализиращ „Български език за бежанци A1" — интерактивен курс по български език за възрастни бежанци (проект на ВКБООН/UNHCR).
+const LEVEL_LABEL: Record<Level, string> = { a1: 'A1', a2: 'A2', b1: 'B1', b2: 'B2' };
+
+/** A2/B1/B2 rules: clean translations (client feedback round 2 on B1, 29.09.2026). */
+const ADVANCED_RULES = `- Превеждай ЧИСТО и естествено. НЕ повтаряй българската дума до превода във формат „дума (превод)" и не оставяй български думи в превода — само чист превод на езика-цел. Единствено когато клетката е САМО окончание/наставка (напр. „-ах", „-ях"), запиши я като „-ах (ending)" на езика-цел.
+- ИЗКЛЮЧЕНИЕ: когато текстът говори ЗА българска дума/форма/конструкция (в кавички, напр. конструкциите „Трябва ми" и „Харесва ми", глаголи с „се", „ти" или „Вие", думата „зимнина", поздравът „Здравейте"), остави я НА КИРИЛИЦА в кавички и добави кратък превод в скоби: “Трябва ми” (I need). НИКОГА не я транслитерирай с латиница или арабска писменост („Tryabva mi", „Vie", „زدرافي" са грешни). Транслитерират се само имена на хора, места и заведения.
+- НЕ използвай markdown (**удебеляване**) в превода — върни обикновен текст.
+- Запази точно времето, вида и лицето на глагола от оригинала (минало свършено/несвършено, бъдеще, повелително, 1/2/3 лице, ед./мн.ч.). Не превеждай „беше/бях/бяха" като сегашно време. Използвай естествени форми на езика-цел (напр. на английски: past simple / past continuous / used to / present perfect според смисъла).
+- Единни термини: „обичам" → love (не like); „говоря" → speak, „разговарям/приказвам" → talk; взаимно „си/се" (помагаме си) → each other; „той" → he; „те" → they. Не превеждай „участие/причастие" с други граматични термини.
+- „ДАБ" (Държавна агенция за бежанците): на en/fr/ar/fa пиши съкращението „SAR" (State Agency for Refugees и т.н.), а на uk/ru остави „ДАБ". Когато низът е бележка/обяснение и споменава агенцията за пръв път, добави пълното име на езика-цел и „(SAR; in Bulgarian: ДАБ)" на съответния език.
+- Ако низът е граматичен термин/клетка/кратка фраза без контекст — преведи го по най-вероятния смисъл в граматиката на български език, не буквално дума по дума.`;
+
+const A1_RULES = `- Единствено в граматичните таблици/примери, където конкретна българска дума/окончание е предмет на урока (напр. клетка с „пазар, студент" в таблица за членуване), запази българската дума в оригинал и добави превод/пояснение до нея — тук НЕ се транслитерира, а се обяснява.
+- Пази markdown **удебеляване** точно около съответната дума/окончание в превода (не го премахвай, не го местиш).
+- Когато текстът говори ЗА българска дума/поздрав/конструкция в кавички (напр. „ти" или „Вие", „Здравейте"), остави я НА КИРИЛИЦА и добави превод в скоби — НИКОГА не я транслитерирай с латиница или арабска писменост.`;
+
+function buildSystemPrompt(lvl: Level): string {
+  return `Ти си професионален преводач, локализиращ „Български език за бежанци ${LEVEL_LABEL[lvl]}" — интерактивен курс по български език за възрастни бежанци (проект на ВКБООН/UNHCR).
 
 Задача: преведи всеки подаден български низ на ВСИЧКИТЕ 6 езика: en, ar, fr, fa, uk, ru.
 
 Правила:
 - Имена на хора и населени места (в диалози, разкази, примерни изречения) — ТРАНСЛИТЕРИРАЙ ги на съответната писменост/език (напр. „Виталий" → „Vitaliy", „Бургас" → „Burgas", „Пловдив" → „Plovdiv"), никога не ги оставяй на кирилица в превод, чиято останала част е на друга писменост.
-- Единствено в граматичните таблици/примери, където конкретна българска дума/окончание е предмет на урока (напр. клетка с „пазар, студент" в таблица за членуване), запази българската дума в оригинал и добави превод/пояснение до нея — тук НЕ се транслитерира, а се обяснява.
-- Пази markdown **удебеляване** точно около съответната дума/окончание в превода (не го премахвай, не го местиш).
-- Тон: неутрален, учтив, подходящ за възрастен обучаем на ниво A1 — кратко и ясно, без сложни конструкции.
+${lvl === 'a1' ? A1_RULES : ADVANCED_RULES}
+- Тон: неутрален, учтив, подходящ за възрастен обучаем на ниво ${LEVEL_LABEL[lvl]} — кратко и ясно, без сложни конструкции.
 - Речник (glossary) с граматична терминология — ако даден низ или част от него присъства в речника, ползвай ТОЧНО подадения превод, никога не измисляй алтернативен превод на речникови термини.
 - Контекстът от урока/теста е само за ориентация — превеждай единствено низовете, поискани в "stringsToTranslate", не превеждай нищо извън тях.
 - Отговори САМО с валиден JSON obekt във формат: { "<точния low на български>": { "en": "...", "ar": "...", "fr": "...", "fa": "...", "uk": "...", "ru": "..." }, ... } — по един запис на всеки подаден низ, ключът трябва да е ТОЧНО същия текст като в "stringsToTranslate".`;
+}
+
+const SYSTEM_PROMPT = buildSystemPrompt(level);
 
 async function translateBatch(
   strings: string[],
@@ -407,7 +219,7 @@ async function translateBatch(
 
   const userPayload = {
     ...(opts.isGlossaryPass
-      ? { note: 'Това са повтарящи се граматични термини от таблиците в целия учебник A1 — преведи ги консистентно, все едно градиш терминологичен речник.' }
+      ? { note: 'Това са повтарящи се граматични термини от таблиците в целия учебник — преведи ги консистентно, все едно градиш терминологичен речник.' }
       : {}),
     glossary: opts.glossary && Object.keys(opts.glossary).length > 0 ? opts.glossary : undefined,
     lessonContext: opts.outline,

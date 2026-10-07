@@ -7,6 +7,8 @@ const VALID_SECTIONS: ReportSectionId[] = [
   'summary',
   'activeUsers',
   'levelProgress',
+  'lessonCompletion',
+  'testResults',
   'chatTranscripts',
 ];
 

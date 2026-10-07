@@ -3,14 +3,14 @@ import { requireAdmin, isNextResponse } from '@/lib/admin/requireRole';
 import { auditLog } from '@/lib/admin/audit';
 import { db } from '@/db';
 import { chatConversationsTable, usersTable, chatMessagesTable } from '@/db/schema';
-import { eq, desc, sql, and, gte, lte, like } from 'drizzle-orm';
+import { eq, desc, sql, and, gte, lte, or, ilike } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAdmin(req, 'admin');
   if (isNextResponse(auth)) return auth;
 
   const { searchParams } = req.nextUrl;
-  const page = parseInt(searchParams.get('page') ?? '1');
+  const page = Math.max(1, parseInt(searchParams.get('page') ?? '1') || 1);
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20'), 100);
   const offset = (page - 1) * limit;
   const lang = searchParams.get('lang');
@@ -26,6 +26,20 @@ export async function GET(req: NextRequest) {
   if (userId) conditions.push(eq(chatConversationsTable.userId, parseInt(userId)));
   if (from) conditions.push(gte(chatConversationsTable.startedAt, new Date(from)));
   if (to) conditions.push(lte(chatConversationsTable.startedAt, new Date(to)));
+
+  const searchTerm = (search ?? '').trim().slice(0, 100);
+  if (searchTerm) {
+    const pattern = `%${searchTerm.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+    conditions.push(or(ilike(usersTable.name, pattern), ilike(usersTable.email, pattern))!);
+  }
+  const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+  const [{ count: totalCount }] = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(chatConversationsTable)
+    .leftJoin(usersTable, eq(chatConversationsTable.userId, usersTable.id))
+    .where(where);
+  const total = Number(totalCount);
 
   const rows = await db
     .select({
@@ -43,12 +57,12 @@ export async function GET(req: NextRequest) {
     })
     .from(chatConversationsTable)
     .leftJoin(usersTable, eq(chatConversationsTable.userId, usersTable.id))
-    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .where(where)
     .orderBy(desc(chatConversationsTable.lastMessageAt))
     .limit(limit)
     .offset(offset);
 
   await auditLog(auth.userId, 'viewed_chats_list', `page=${page}`);
 
-  return NextResponse.json({ conversations: rows, page, limit });
+  return NextResponse.json({ conversations: rows, page, limit, total });
 }

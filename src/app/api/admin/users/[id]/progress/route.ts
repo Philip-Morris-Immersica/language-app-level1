@@ -3,7 +3,7 @@ import { requireAdmin, isNextResponse } from '@/lib/admin/requireRole';
 import { db } from '@/db';
 import { chatConversationsTable, chatMessagesTable } from '@/db/schema';
 import { eq, sql, and } from 'drizzle-orm';
-import { getUserProgressSummary, getUserTestSummary } from '@/lib/admin/userProgress';
+import { getTrackingSince, getUserProgressBundle } from '@/lib/admin/userProgress';
 
 /**
  * Per-user breakdown for /admin/users/[id]. Returns:
@@ -20,9 +20,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
   }
 
-  const [progress, tests] = await Promise.all([
-    getUserProgressSummary(userId),
-    getUserTestSummary(userId),
+  const [{ summary: progress, tests }, trackingSince] = await Promise.all([
+    getUserProgressBundle(userId),
+    getTrackingSince(),
   ]);
 
   // Chat totals — join on conversations so we can filter by user.
@@ -66,6 +66,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   return NextResponse.json({
     progress,
     tests,
+    trackingSince,
     chat: {
       totalMessages: Number(chatTotals?.totalMessages) ?? 0,
       assistantMessages: Number(chatTotals?.assistantMessages) ?? 0,

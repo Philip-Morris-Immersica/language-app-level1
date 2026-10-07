@@ -8,6 +8,8 @@ const VALID_SECTIONS: ReportSectionId[] = [
   'summary',
   'activeUsers',
   'levelProgress',
+  'lessonCompletion',
+  'testResults',
   'chatTranscripts',
 ];
 
@@ -47,6 +49,12 @@ function addCoverSheet(wb: ExcelJS.Workbook, data: ReportData, sections: ReportS
   sheet.addRow(['Period to', fmtDate(data.period.to)]);
   sheet.addRow(['Sections', sections.join(', ')]);
   sheet.addRow(['Generated at', new Date().toISOString()]);
+  if (data.trackingSince) {
+    sheet.addRow([
+      'Note',
+      `Click tracking since ${fmtDate(data.trackingSince)}; earlier activity reconstructed from saved answers.`,
+    ]);
+  }
   sheet.getColumn(1).width = 18;
   sheet.getColumn(2).width = 40;
 }
@@ -86,6 +94,8 @@ function addActiveUsersSheet(wb: ExcelJS.Workbook, data: ReportData) {
     'Current level',
     'Level progress %',
     'Total lessons attempted',
+    'Lessons completed',
+    'Tests completed',
     'Exercises in period',
     'Chat messages in period',
     'Chat cost in period (USD)',
@@ -99,6 +109,8 @@ function addActiveUsersSheet(wb: ExcelJS.Workbook, data: ReportData) {
       r.highestLevel ? r.highestLevel.toUpperCase() : '',
       r.highestLevelPct,
       r.totalLessonsAttempted,
+      r.lessonsCompleted,
+      r.testsCompleted,
       r.exercisesInPeriod,
       r.chatMessagesInPeriod,
       Number(r.chatCostUsd.toFixed(4)),
@@ -118,12 +130,13 @@ function addPerLessonSheet(wb: ExcelJS.Workbook, data: ReportData) {
     'Lesson',
     'Attempted',
     'Total exercises',
-    'Completion %',
+    'Progress %',
+    'Completed',
   ]);
   applyHeader(sheet.lastRow!);
   for (const u of rows) {
     if (u.perLesson.length === 0) {
-      sheet.addRow([u.name, u.email, '', '(no lesson activity)', 0, 0, 0]);
+      sheet.addRow([u.name, u.email, '', '(no lesson activity)', 0, 0, 0, '']);
       continue;
     }
     for (const l of u.perLesson) {
@@ -135,6 +148,7 @@ function addPerLessonSheet(wb: ExcelJS.Workbook, data: ReportData) {
         l.attemptedCount,
         l.totalCount,
         l.pct,
+        l.completed ? 'yes' : 'no',
       ]);
     }
   }
@@ -147,10 +161,18 @@ function addLevelProgressSheet(wb: ExcelJS.Workbook, data: ReportData) {
   const sheet = wb.addWorksheet('Level progress');
   sheet.addRow(['Cumulative learning progress across all users (all-time)']).font = { italic: true, color: { argb: 'FF888888' } };
   sheet.addRow([]);
-  sheet.addRow(['Level', 'Active users', 'Average completion %']);
+  sheet.addRow([
+    'Level',
+    'Active users',
+    'Average level progress %',
+    'Learners who completed the level',
+    'Avg lessons completed',
+    'Lessons in level',
+    'Tests in level',
+  ]);
   applyHeader(sheet.lastRow!);
   for (const r of lp.byLevel) {
-    sheet.addRow([r.level.toUpperCase(), r.activeUsers, r.avgPct]);
+    sheet.addRow([r.level.toUpperCase(), r.activeUsers, r.avgPct, r.usersCompleted, r.avgLessonsCompleted, r.lessonsTotal, r.testsTotal]);
   }
   sheet.addRow([]);
   sheet.addRow(['Distribution by level (users per progress bucket)']).font = { bold: true };
@@ -159,6 +181,75 @@ function addLevelProgressSheet(wb: ExcelJS.Workbook, data: ReportData) {
   applyHeader(sheet.lastRow!);
   for (const r of lp.histogramByLevel) {
     sheet.addRow([r.level.toUpperCase(), ...r.buckets.map((b) => b.users)]);
+  }
+  autoFitColumns(sheet);
+}
+
+function addLessonCompletionSheet(wb: ExcelJS.Workbook, data: ReportData) {
+  const rows = data.sections.lessonCompletion;
+  if (!rows) return;
+  const sheet = wb.addWorksheet('Lesson completion');
+  sheet.addRow(['All-time. Completed = learner checked every exercise with points.']).font = { italic: true, color: { argb: 'FF888888' } };
+  sheet.addRow([]);
+  sheet.addRow(['Level', 'Lesson', 'Title', 'Learners started', 'Learners completed', 'Avg progress %', 'Avg accuracy %']);
+  applyHeader(sheet.lastRow!);
+  for (const r of rows) {
+    sheet.addRow([
+      r.level.toUpperCase(),
+      r.lessonId,
+      r.title,
+      r.learnersStarted,
+      r.learnersCompleted,
+      r.avgProgressPct,
+      r.avgAccuracyPct ?? '',
+    ]);
+  }
+  autoFitColumns(sheet);
+}
+
+function addTestResultsSheet(wb: ExcelJS.Workbook, data: ReportData) {
+  const rows = data.sections.testResults;
+  if (!rows) return;
+  const sheet = wb.addWorksheet('Test results');
+  sheet.addRow(['All-time. Completed = learner checked every exercise with points. Score = points % with current answers.']).font = { italic: true, color: { argb: 'FF888888' } };
+  sheet.addRow([]);
+  sheet.addRow([
+    'Level',
+    'Test',
+    'Title',
+    'Section',
+    'Max points',
+    'Learners started',
+    'Learners completed',
+    'Avg points % (all)',
+    'Avg points % (completers)',
+  ]);
+  applyHeader(sheet.lastRow!);
+  for (const t of rows) {
+    sheet.addRow([
+      t.level.toUpperCase(),
+      t.testId,
+      t.title,
+      '(whole test)',
+      t.totalPoints,
+      t.learnersStarted,
+      t.learnersCompleted,
+      t.avgScorePctAll,
+      t.avgScorePctCompleters,
+    ]).font = { bold: true };
+    for (const s of t.sections) {
+      sheet.addRow([
+        t.level.toUpperCase(),
+        t.testId,
+        t.title,
+        s.name,
+        s.maxPoints,
+        '',
+        '',
+        s.avgScorePctAll,
+        s.avgScorePctCompleters,
+      ]);
+    }
   }
   autoFitColumns(sheet);
 }
@@ -250,6 +341,8 @@ export async function GET(req: NextRequest) {
   addActiveUsersSheet(wb, data);
   addPerLessonSheet(wb, data);
   addLevelProgressSheet(wb, data);
+  addLessonCompletionSheet(wb, data);
+  addTestResultsSheet(wb, data);
   addChatTranscriptsSheet(wb, data);
 
   const buffer = await wb.xlsx.writeBuffer();

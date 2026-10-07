@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface Column {
   id: string;
@@ -25,6 +26,38 @@ interface DragToColumnsProps {
     correctItems: string[];
   }[];
   onComplete?: (isCorrect: boolean) => void;
+  exerciseId?: string;
+}
+
+type Placements = Record<string, string | null>;
+
+interface PersistedState {
+  placements: Placements;
+  validation: Record<string, boolean>;
+  isSubmitted: boolean;
+}
+
+function buildPlacements(items: string[], columns: Column[]): Placements {
+  return Object.fromEntries(
+    items.map((item) => [item, columns.find((col) => col.items.includes(item))?.id ?? null]),
+  );
+}
+
+function restoreState(
+  items: string[],
+  columnConfig: DragToColumnsProps['columns'],
+  saved: unknown,
+): PersistedState | null {
+  const s = saved as Partial<PersistedState> | undefined;
+  if (!s?.placements) return null;
+  const placements: Placements = Object.fromEntries(
+    items.map((item) => {
+      const columnId = s.placements?.[item];
+      return [item, columnConfig.some((col) => col.id === columnId) ? (columnId as string) : null];
+    }),
+  );
+  const isSubmitted = !!s.isSubmitted && items.every((item) => placements[item] !== null);
+  return { placements, validation: isSubmitted ? s.validation ?? {} : {}, isSubmitted };
 }
 
 function shortenTitle(title: string): string {
@@ -101,7 +134,11 @@ export function DragToColumns({
   items,
   columns: columnConfig,
   onComplete,
+  exerciseId,
 }: DragToColumnsProps) {
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const initialSaved = useRef(savedState).current;
+  const [validation, setValidation] = useState<Record<string, boolean>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [columns, setColumns] = useState<Column[]>([]);
   const [shuffledItems, setShuffledItems] = useState<string[]>([]);
@@ -119,21 +156,59 @@ export function DragToColumns({
   const touchStartY = useRef<number>(0);
   const touchEndY = useRef<number>(0);
 
+  const lastSavedSig = useRef<string | null>(null);
+  if (lastSavedSig.current === null) {
+    const restored = restoreState(items, columnConfig, initialSaved);
+    lastSavedSig.current = JSON.stringify(
+      restored ?? {
+        placements: Object.fromEntries(items.map((item) => [item, null])),
+        validation: {},
+        isSubmitted: false,
+      },
+    );
+  }
+
   useEffect(() => {
-    const shuffled = [...items].sort(() => Math.random() - 0.5);
-    setShuffledItems(shuffled);
-    setCurrentIndex(0);
+    const restored = resetKey === 0 ? restoreState(items, columnConfig, initialSaved) : null;
+    const placedItems = restored ? items.filter((item) => restored.placements[item] !== null) : [];
+    const unplacedItems = items.filter((item) => !placedItems.includes(item));
+    const shuffled = [...unplacedItems].sort(() => Math.random() - 0.5);
+    setShuffledItems([...placedItems, ...shuffled]);
+    setCurrentIndex(placedItems.length);
 
     const initialColumns = columnConfig.map((col) => ({
       ...col,
       icon: col.icon || '',
-      items: [] as string[],
+      items: restored ? items.filter((item) => restored.placements[item] === col.id) : [],
     }));
     setColumns(initialColumns);
-    setSubmitted(false);
-    setIsCorrect(false);
+    setSubmitted(restored?.isSubmitted ?? false);
+    setValidation(restored?.validation ?? {});
+    setIsCorrect(
+      !!restored?.isSubmitted &&
+        initialColumns.every(
+          (col) =>
+            col.items.length === col.correctItems.length &&
+            col.items.every((item) => col.correctItems.includes(item)),
+        ),
+    );
     setSwipeDirection(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, columnConfig, resetKey]);
+
+  useEffect(() => {
+    if (columns.length === 0) return;
+    const state: PersistedState = {
+      placements: buildPlacements(items, columns),
+      validation,
+      isSubmitted: submitted,
+    };
+    const sig = JSON.stringify(state);
+    if (sig === lastSavedSig.current) return;
+    lastSavedSig.current = sig;
+    saveState(state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns, validation, submitted]);
 
   const currentItem = shuffledItems[currentIndex];
   const allItemsPlaced = currentIndex >= shuffledItems.length;
@@ -270,6 +345,11 @@ export function DragToColumns({
     });
 
     setIsCorrect(allCorrect);
+    setValidation(
+      Object.fromEntries(
+        items.map((item) => [item, columns.some((col) => col.items.includes(item) && col.correctItems.includes(item))]),
+      ),
+    );
     setSubmitted(true);
 
     if (onComplete) {
@@ -278,6 +358,14 @@ export function DragToColumns({
   };
 
   const handleReset = () => {
+    const cleared: PersistedState = {
+      placements: Object.fromEntries(items.map((item) => [item, null])),
+      validation: {},
+      isSubmitted: false,
+    };
+    lastSavedSig.current = JSON.stringify(cleared);
+    saveState(cleared);
+    setValidation({});
     setResetKey(prev => prev + 1);
   };
 

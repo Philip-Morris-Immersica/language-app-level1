@@ -836,7 +836,7 @@ export const exercises: Exercise[] = [
         ttsText: 'Дани, не закъснявай за срещата!',
         ttsModel: 'pro',
         ttsPrompt:
-          'Clear standard Bulgarian command. Word срещата = SRESH-ta-ta — NEVER срещуто / sreshtuto. Once only.',
+          'Clear standard Bulgarian command. The name Дани is stressed on the FIRST syllable: DA-ni. Word срещата = SRESH-ta-ta — NEVER срещуто / sreshtuto. Once only.',
         voiceGender: 'male',
       },
     ],

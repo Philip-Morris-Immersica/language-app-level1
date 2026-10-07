@@ -25,18 +25,6 @@ interface LevelView {
   enabled: boolean;
 }
 
-/**
- * Derives the level a lesson ID belongs to from its prefix. A1 IDs are kept
- * un-prefixed for historical reasons (`lesson-XX`), so the absence of a known
- * prefix means A1.
- */
-function levelOfLessonId(id: string): Level {
-  if (id.startsWith('a2-')) return 'a2';
-  if (id.startsWith('b1-')) return 'b1';
-  if (id.startsWith('b2-')) return 'b2';
-  return 'a1';
-}
-
 function ProgressBar({ value }: { value: number }) {
   return (
     <div className="w-full h-2 bg-white/40 rounded-full overflow-hidden mt-2">
@@ -86,20 +74,10 @@ export function HomePageClient({ enabledLevels }: HomePageClientProps) {
     fetch('/api/progress/summary')
       .then((r) => r.json())
       .then((data) => {
-        if (!data.lessons) return;
-        const sums: Record<Level, number> = { a1: 0, a2: 0, b1: 0, b2: 0 };
-        for (const [lessonId, value] of Object.entries(
-          data.lessons as Record<string, { completed: number; total: number }>,
-        )) {
-          if (value.total <= 0) continue;
-          const lvl = levelOfLessonId(lessonId);
-          sums[lvl] += value.completed / value.total;
-        }
+        if (!data.levels) return;
         const next: Record<Level, number> = { a1: 0, a2: 0, b1: 0, b2: 0 };
         for (const view of levelViews) {
-          next[view.code] = view.totalItems > 0
-            ? Math.round((sums[view.code] / view.totalItems) * 100)
-            : 0;
+          next[view.code] = data.levels[view.code]?.percent ?? 0;
         }
         setProgressByLevel(next);
       })

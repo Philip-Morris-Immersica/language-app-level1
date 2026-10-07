@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth/jwt';
 import { db } from '@/db';
 import { exerciseStatesTable } from '@/db/schema';
+import { recordSave } from '@/lib/learnerProgress';
+
 export async function POST(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value;
   if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -32,6 +34,13 @@ export async function POST(req: NextRequest) {
         updatedAt: new Date(),
       },
     });
+
+  try {
+    await recordSave(payload.userId, lessonId, exerciseId, state);
+  } catch (err) {
+    // The answers are saved; activity/progress cache can be rebuilt later.
+    console.error('[progress/save] recordSave failed', err);
+  }
 
   return NextResponse.json({ ok: true });
 }

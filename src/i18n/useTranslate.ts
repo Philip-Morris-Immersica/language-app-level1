@@ -33,31 +33,10 @@ function getCacheKey(text: string, lang: string) {
 function postProcess(text: string, lang: string): string {
   if (lang === 'en') {
     text = text.replace(/\bi\b/g, 'I');
-    text = text.replace(/\boil\b/gi, 'butter');
-    text = text.replace(/\bOil\b/g, 'Butter');
-    text = text.replace(/\bpercent\b/gi, 'one hundred');
-    text = text.replace(/\bIrish\b/g, 'ayran');
-    text = text.replace(/\bYAM\b/g, 'EAT');
-    text = text.replace(/\bPIYA\b/g, 'DRINK');
-    text = text.replace(/^Can the bill\?$/i, 'Can I have the bill?');
-    if (/^three$/i.test(text)) text = 'ice cream';
-    text = text.replace(/\blove\b/g, 'like');
-    text = text.replace(/\bLove\b/g, 'Like');
-    text = text.replace(/M\.Sc\./g, '(masc.)');
-    text = text.replace(/\bg\.r\.\b/gi, '(fem.)');
-    text = text.replace(/\bsr\.r\.\b/gi, '(neut.)');
-    text = text.replace(/Mm M m Mohammed/gi, 'garlic');
-    text = text.replace(/\bshop salad\b/gi, 'Shopska salad');
-    text = text.replace(/\bhypermarket\b/gi, 'city');
-    text = text.replace(/\bparticiple\b/gi, 'definite article');
-    if (/^It doesn't like salami\.?$/i.test(text)) text = 'supermarket';
-    if (/^coffee$/i.test(text)) text = 'café';
-    if (/^answer the questions\.?$/i.test(text)) text = 'apartment';
-    text = text.replace(/\bs\. = /gi, '');
-    text = text.replace(/\bsq\. = /gi, '');
-    text = text.replace(/\bEd\. number\b/gi, 'Singular');
-    text = text.replace(/\bWith number\b/gi, 'Counting');
-    text = text.replace(/\bBy the number of/gi, 'Counting');
+    // The old content-specific patches (love→like, oil→butter, percent, hypermarket,
+    // participle, …) were removed: every Bulgarian string in A1/A2/B1 now has a
+    // pre-translated entry in generated/translations.json (see `npm run check:translations`),
+    // so live Google results are only an emergency fallback for brand-new text.
   }
   return text;
 }

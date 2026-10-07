@@ -9,15 +9,18 @@ interface LessonStats {
   number: number;
   title: string;
   totalExercises: number;
+  gradedExercises: number;
   usersAttempted: number;
   avgPct: number;
   usersCompleted: number;
+  avgAccuracyPct: number | null;
 }
 
 interface SectionStats {
   sectionId: string;
   name: string;
   totalExercises: number;
+  maxPoints: number;
   avgAttemptedPct: number;
   avgScorePctAll: number;
   avgScorePctCompleters: number;
@@ -28,6 +31,7 @@ interface TestStats {
   number: number;
   title: string;
   totalExercises: number;
+  totalPoints: number;
   usersAttempted: number;
   usersCompleted: number;
   avgAttemptedPct: number;
@@ -134,11 +138,17 @@ export default function AdminLevelDetailPage({ params }: { params: Promise<{ lev
                     <th className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider">
                       <Users className="w-3 h-3 inline mr-1" /> Learners
                     </th>
-                    <th className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider">Completed</th>
-                    <th className="px-4 py-2.5 text-left font-medium text-xs uppercase tracking-wider">
-                      <TrendingUp className="w-3 h-3 inline mr-1" /> Avg %
+                    <th
+                      className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider"
+                      title="Learners who checked every exercise with points"
+                    >
+                      Completed
                     </th>
-                    <th className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider">Ex.</th>
+                    <th className="px-4 py-2.5 text-left font-medium text-xs uppercase tracking-wider">
+                      <TrendingUp className="w-3 h-3 inline mr-1" /> Avg progress
+                    </th>
+                    <th className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider">Avg accuracy</th>
+                    <th className="px-4 py-2.5 text-right font-medium text-xs uppercase tracking-wider" title="Exercises with points / all exercises">Ex.</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -160,14 +170,22 @@ export default function AdminLevelDetailPage({ params }: { params: Promise<{ lev
                           </span>
                         </div>
                       </td>
+                      <td className="px-4 py-2.5 text-right tabular-nums text-xs text-gray-700">
+                        {l.avgAccuracyPct !== null ? `${l.avgAccuracyPct}%` : '—'}
+                      </td>
                       <td className="px-4 py-2.5 text-right tabular-nums text-xs text-gray-400">
-                        {l.totalExercises}
+                        {l.gradedExercises}/{l.totalExercises}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
+            <p className="px-5 py-3 border-t border-gray-100 text-[10px] text-gray-400 italic leading-relaxed">
+              <span className="font-semibold">Completed</span> = learner checked every exercise with points (&ldquo;Провери&rdquo;).
+              {' '}<span className="font-semibold">Avg progress</span> = exercises clicked ÷ exercises with something to do, over learners who started the lesson.
+              {' '}<span className="font-semibold">Avg accuracy</span> = correct ÷ answers over checked exercises.
+            </p>
           </div>
 
           {/* Per-test (with section breakdown expandable) */}
@@ -205,7 +223,7 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
   // The "headline" score: prefer completers (representative). If no one finished
   // yet, fall back to "all" with a small note.
   const headlineScore = hasCompleters ? test.avgScorePctCompleters : test.avgScorePctAll;
-  const headlineLabel = hasCompleters ? 'Score (finished)' : 'Score (all)';
+  const headlineLabel = hasCompleters ? 'Avg score (completed)' : 'Avg score (all)';
 
   return (
     <div>
@@ -226,13 +244,13 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
             <p className="text-sm font-semibold tabular-nums text-gray-800">{test.usersAttempted}</p>
             {hasActivity && (
               <p className="text-[10px] text-gray-400">
-                · {test.usersCompleted} finished {hasCompleters && `(${completionPct}%)`}
+                · {test.usersCompleted} completed {hasCompleters && `(${completionPct}%)`}
               </p>
             )}
           </div>
         </div>
         <div className="col-span-3">
-          <p className="text-xs text-gray-500">Avg attempted (all)</p>
+          <p className="text-xs text-gray-500">Avg progress</p>
           <div className="flex items-center gap-2 mt-1">
             <Bar pct={test.avgAttemptedPct} color={colors.mid} />
             <span className="text-xs font-medium tabular-nums w-9 text-right">{test.avgAttemptedPct}%</span>
@@ -245,7 +263,7 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
             <span className="text-xs font-medium tabular-nums w-9 text-right">{headlineScore}%</span>
           </div>
           {!hasCompleters && hasActivity && (
-            <p className="text-[10px] text-gray-400 mt-0.5">no learner finished ≥80% yet</p>
+            <p className="text-[10px] text-gray-400 mt-0.5">no learner has completed it yet</p>
           )}
         </div>
         <div className="col-span-1 text-right text-xs text-gray-400">
@@ -258,24 +276,24 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
           {/* Overall summary line */}
           <div className="grid grid-cols-4 gap-3 pb-3 mb-3 border-b border-gray-200">
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-semibold">Finished (≥80%)</p>
+              <p className="text-[10px] text-gray-500 uppercase font-semibold">Completed</p>
               <p className="text-sm font-semibold text-gray-800 tabular-nums">
                 {test.usersCompleted} / {test.usersAttempted}
                 <span className="text-xs text-gray-400 ml-1">({completionPct}%)</span>
               </p>
             </div>
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-semibold">Avg attempted</p>
+              <p className="text-[10px] text-gray-500 uppercase font-semibold">Avg progress</p>
               <p className="text-sm font-semibold text-gray-800 tabular-nums">{test.avgAttemptedPct}%</p>
             </div>
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-semibold">Score (finished)</p>
+              <p className="text-[10px] text-gray-500 uppercase font-semibold">Avg score % (completers)</p>
               <p className="text-sm font-semibold tabular-nums" style={{ color: hasCompleters ? '#1F5741' : '#9ca3af' }}>
                 {hasCompleters ? `${test.avgScorePctCompleters}%` : '—'}
               </p>
             </div>
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-semibold">Score (all attempters)</p>
+              <p className="text-[10px] text-gray-500 uppercase font-semibold">Avg score % (all who checked)</p>
               <p className="text-sm font-semibold text-gray-600 tabular-nums">{test.avgScorePctAll}%</p>
             </div>
           </div>
@@ -290,22 +308,22 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
                   {s.name}
                 </div>
                 <div className="col-span-1 text-right text-gray-400 tabular-nums">
-                  {s.totalExercises} ex.
+                  {s.maxPoints} pts
                 </div>
                 <div className="col-span-3 flex items-center gap-2">
-                  <span className="text-[10px] text-gray-400 w-12">attempted</span>
+                  <span className="text-[10px] text-gray-400 w-12">checked</span>
                   <Bar pct={s.avgAttemptedPct} color={colors.mid} />
                   <span className="tabular-nums w-9 text-right text-gray-600">{s.avgAttemptedPct}%</span>
                 </div>
                 <div className="col-span-2 flex items-center gap-2">
-                  <span className="text-[10px] text-gray-400 w-12">score (fin)</span>
+                  <span className="text-[10px] text-gray-400 w-16">pts % (compl.)</span>
                   <Bar pct={s.avgScorePctCompleters} color="#32C189" />
                   <span className="tabular-nums w-9 text-right text-gray-600">
                     {hasCompleters ? `${s.avgScorePctCompleters}%` : '—'}
                   </span>
                 </div>
                 <div className="col-span-3 flex items-center gap-2">
-                  <span className="text-[10px] text-gray-400 w-9">score (all)</span>
+                  <span className="text-[10px] text-gray-400 w-14">pts % (all)</span>
                   <Bar pct={s.avgScorePctAll} color="#A6E3C8" />
                   <span className="tabular-nums w-9 text-right text-gray-600">{s.avgScorePctAll}%</span>
                 </div>
@@ -313,9 +331,9 @@ function TestRow({ test, colors }: { test: TestStats; colors: { accent: string; 
             ))}
           </div>
           <p className="mt-3 text-[10px] text-gray-400 italic leading-relaxed">
-            <span className="font-semibold">Finished</span> = learner attempted ≥ 80% of the test&apos;s exercises (representative engagement).
-            {' '}<span className="font-semibold">Score</span> = correct ÷ (correct + wrong) across exercises the user submitted (clicked &ldquo;Провери&rdquo;).
-            {' '}<span className="font-semibold">Score (finished)</span> is the meaningful one — filters out users who only opened the test.
+            <span className="font-semibold">Completed</span> = learner checked every exercise with points (&ldquo;Провери&rdquo;).
+            {' '}<span className="font-semibold">Score %</span> = points with the learner&apos;s current answers ÷ total points ({test.totalPoints}), proportional per exercise.
+            {' '}<span className="font-semibold">Completers</span> is the representative figure — it excludes learners who only checked part of the test.
           </p>
         </div>
       )}

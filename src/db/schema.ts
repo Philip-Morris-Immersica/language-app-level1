@@ -83,6 +83,66 @@ export const exerciseStatesTable = pgTable("exercise_states", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (t) => [unique().on(t.userId, t.lessonId, t.exerciseId)]);
 
+// Exercise activity — one row per (user, lesson/test, exercise) the learner has
+// interacted with. Unlike `exercise_states` (which only holds the CURRENT
+// answers and is overwritten on every save), this keeps history-style facts:
+// when the exercise was first/last touched (any click inside it), when it was
+// first/last checked, and the best score ever reached. Lesson completion and
+// progress % are derived from here, so changing an answer after checking never
+// "un-completes" a lesson.
+export const exerciseActivityTable = pgTable("exercise_activity", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  lessonId: varchar("lesson_id", { length: 50 }).notNull(),
+  exerciseId: varchar("exercise_id", { length: 50 }).notNull(),
+  firstTouchedAt: timestamp("first_touched_at").notNull().defaultNow(),
+  lastTouchedAt: timestamp("last_touched_at").notNull().defaultNow(),
+  firstSubmittedAt: timestamp("first_submitted_at"),
+  lastSubmittedAt: timestamp("last_submitted_at"),
+  /** Best correct-units ratio ever reached, in ‰ (0–1000). Null until first check. */
+  bestScorePermille: integer("best_score_permille"),
+}, (t) => [unique().on(t.userId, t.lessonId, t.exerciseId)]);
+
+// Per-user, per-lesson/test progress cache. Written whenever the learner saves
+// or touches an exercise (see `lib/learnerProgress/store.ts`) and read by the admin
+// panel and reports so they don't have to re-grade every saved answer of every
+// user. `engineVersion` + `contentSig` mark a row stale when grading rules or
+// the lesson content change; stale rows are recomputed on read / by
+// `scripts/recompute-progress.ts`.
+export const lessonProgressSummaryTable = pgTable("lesson_progress_summary", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  itemId: varchar("item_id", { length: 50 }).notNull(),
+  level: varchar({ length: 5 }).notNull(),
+  isTest: boolean("is_test").notNull().default(false),
+  percent: integer().notNull().default(0),
+  completed: boolean().notNull().default(false),
+  countable: integer().notNull().default(0),
+  touched: integer().notNull().default(0),
+  graded: integer().notNull().default(0),
+  gradedSubmitted: integer("graded_submitted").notNull().default(0),
+  correctUnits: integer("correct_units").notNull().default(0),
+  totalUnits: integer("total_units").notNull().default(0),
+  pointsEarned: integer("points_earned"),
+  pointsBest: integer("points_best"),
+  pointsTotal: integer("points_total"),
+  /** JSON: per-section test scores (null for lessons). */
+  detailJson: text("detail_json"),
+  lastActivityAt: timestamp("last_activity_at"),
+  engineVersion: integer("engine_version").notNull(),
+  contentSig: varchar("content_sig", { length: 64 }).notNull(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (t) => [unique().on(t.userId, t.itemId)]);
+
+// Key/value store for precomputed admin aggregates (dashboard level stats,
+// tracking-start date …). Refreshed daily by the Vercel cron and on demand via
+// the "Обнови сега" button.
+export const adminStatsSnapshotTable = pgTable("admin_stats_snapshot", {
+  key: varchar({ length: 64 }).primaryKey(),
+  dataJson: text("data_json").notNull(),
+  computedAt: timestamp("computed_at").notNull().defaultNow(),
+});
+
 // Password reset tokens — short-lived, single-use tokens for forgot-password flow.
 // We store ONLY a SHA-256 hash of the raw token (never plaintext) so a DB leak
 // can't be used to reset anyone's password. The raw token is sent to the user

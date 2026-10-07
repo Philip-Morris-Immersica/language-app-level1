@@ -130,8 +130,9 @@ function PartHeader({ index, title, subtitle, titleI18n, subtitleI18n, theme, lo
   const { lang } = useLanguage();
   const partWord = t('lesson.part');
   // Auto-translate always runs (hook rule); prefer the hand-written translation when present.
-  const autoTitle = useTranslate(title);
-  const autoSubtitle = useTranslate(subtitle || '');
+  // When the hand-written translation exists we pass '' so no (unused) live request is made.
+  const autoTitle = useTranslate(titleI18n?.[lang] ? '' : title);
+  const autoSubtitle = useTranslate(subtitleI18n?.[lang] ? '' : subtitle || '');
   const isBg = lang === 'bg';
   // The Bulgarian title is always the bold anchor. A translated line is shown beneath it
   // for non-Bulgarian users (hand translation if available, otherwise Google).

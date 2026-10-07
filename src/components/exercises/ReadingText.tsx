@@ -12,6 +12,7 @@ import { AudioIcon } from '@/components/AudioIcon';
 import { Music } from 'lucide-react';
 import { speakBulgarian, stopSpeaking, stopTtsAudio, pauseTtsAudio, resumeTtsAudio, setTtsAudioRate, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { TtsHint } from '@/components/TtsHint';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface ChecklistItem {
   id: string;
@@ -116,9 +117,35 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const songAudioRef = useRef<HTMLAudioElement | null>(null);
   const [songPlaying, setSongPlaying] = useState(false);
-  const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>({});
-  const [checkSubmitted, setCheckSubmitted] = useState(false);
-  const completedRef = useRef(false);
+  const { savedState, saveState } = useExercisePersistence(checklist ? exerciseId : undefined);
+  const savedChecklist = savedState as {
+    checklistAnswers?: Record<string, 'true' | 'false'>;
+    validation?: Record<string, boolean>;
+    isSubmitted?: boolean;
+  } | undefined;
+  const [checkAnswers, setCheckAnswers] = useState<Record<string, boolean | null>>(() =>
+    Object.fromEntries(
+      Object.entries(savedChecklist?.checklistAnswers ?? {}).map(([id, v]) => [id, v === 'true']),
+    ),
+  );
+  const [checkValidation, setCheckValidation] = useState<Record<string, boolean>>(() => savedChecklist?.validation ?? {});
+  const [checkSubmitted, setCheckSubmitted] = useState(() => savedChecklist?.isSubmitted ?? false);
+  const completedRef = useRef(checkSubmitted);
+  const checklistMounted = useRef(false);
+
+  useEffect(() => {
+    if (!checklistMounted.current) { checklistMounted.current = true; return; }
+    saveState({
+      checklistAnswers: Object.fromEntries(
+        Object.entries(checkAnswers)
+          .filter(([, v]) => v !== null && v !== undefined)
+          .map(([id, v]) => [id, v ? 'true' : 'false']),
+      ),
+      validation: checkValidation,
+      isSubmitted: checkSubmitted,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkAnswers, checkValidation, checkSubmitted]);
   const translatedChecklistInstruction = useTranslate(checklist?.instruction ?? '');
 
   /** Sequential „Слушай“ (paragraph p-0, then p-1, …) when no single `audioUrl` full file */
@@ -818,6 +845,7 @@ export function ReadingText({ audioUrl, songUrl, disableParagraphAudio, textTitl
               onClick={() => {
                 const allAnswered = checklist.items.every(item => checkAnswers[item.id] !== null && checkAnswers[item.id] !== undefined);
                 if (!allAnswered) return;
+                setCheckValidation(Object.fromEntries(checklist.items.map(item => [item.id, checkAnswers[item.id] === item.isTrue])));
                 setCheckSubmitted(true);
                 const allCorrect = checklist.items.every(item => checkAnswers[item.id] === item.isTrue);
                 if (!completedRef.current) {

@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { Button } from '@/components/ui/button';
 import { speakBulgarian, getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { TtsHint } from '@/components/TtsHint';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface PersonalChoiceProps {
   exerciseId?: string;
@@ -32,6 +33,8 @@ type ItemState =
   | { phase: 'choose' }
   | { phase: 'fill'; preference: 'positive' | 'negative' }
   | { phase: 'done'; preference: 'positive' | 'negative'; correct: boolean };
+
+type SavedItemState = ItemState & { selection?: string };
 
 function speak(text: string) {
   speakBulgarian(text);
@@ -95,8 +98,20 @@ function SentenceWithBlank({
 export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, items, onComplete }: PersonalChoiceProps) {
   const t = useT();
   const { lang } = useLanguage();
-  const [states, setStates] = useState<Record<string, ItemState>>({});
-  const [selections, setSelections] = useState<Record<string, string>>({});
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const savedItems = (savedState as { itemStates?: Record<string, SavedItemState> } | undefined)?.itemStates;
+  const [states, setStates] = useState<Record<string, ItemState>>(() =>
+    Object.fromEntries(
+      Object.entries(savedItems ?? {}).map(([id, { selection: _selection, ...state }]) => [id, state as ItemState]),
+    ),
+  );
+  const [selections, setSelections] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      Object.entries(savedItems ?? {})
+        .filter(([, saved]) => !!saved.selection)
+        .map(([id, saved]) => [id, saved.selection as string]),
+    ),
+  );
   const [modelTranslationVisible, setModelTranslationVisible] = useState(false);
   const [revealedQuestions, setRevealedQuestions] = useState<Set<string>>(new Set());
 
@@ -107,7 +122,20 @@ export function PersonalChoice({ exerciseId, imageUrls, model, blankOptions, ite
       return next;
     });
   }, []);
-  const completedRef = useRef(false);
+  const completedRef = useRef(items.length > 0 && items.every(i => states[i.id]?.phase === 'done'));
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    const itemStates: Record<string, SavedItemState> = {};
+    const validation: Record<string, boolean> = {};
+    for (const [id, state] of Object.entries(states)) {
+      itemStates[id] = selections[id] ? { ...state, selection: selections[id] } : state;
+      if (state.phase === 'done') validation[id] = state.correct;
+    }
+    saveState({ itemStates, validation, isSubmitted: Object.keys(validation).length > 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [states, selections]);
 
   const getState = (id: string): ItemState => states[id] ?? { phase: 'choose' };
 

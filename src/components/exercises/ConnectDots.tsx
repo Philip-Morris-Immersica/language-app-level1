@@ -5,6 +5,7 @@ import { useT } from '@/i18n/useT';
 import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { playTtsAudio } from '@/lib/tts';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface Dot {
   id: string;
@@ -17,6 +18,7 @@ interface Dot {
 interface ConnectDotsProps {
   dots: Dot[];
   onComplete?: (isCorrect: boolean) => void;
+  exerciseId?: string;
 }
 
 const MOBILE_COLS = 3;
@@ -58,14 +60,16 @@ function buildBodyPath(
   return d;
 }
 
-export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
+export function ConnectDots({ dots, onComplete, exerciseId }: ConnectDotsProps) {
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const wasFinished = !!(savedState as { finished?: boolean } | undefined)?.finished;
   const sortedDots = [...dots].sort((a, b) => a.position - b.position);
   const total = sortedDots.length;
 
-  const [connected, setConnected] = useState<number[]>([]);
+  const [connected, setConnected] = useState<number[]>(() => (wasFinished ? sortedDots.map((_, i) => i) : []));
   const [shakeId, setShakeId] = useState<string | null>(null);
-  const [completed, setCompleted] = useState(false);
-  const completedRef = useRef(false);
+  const [completed, setCompleted] = useState(wasFinished);
+  const completedRef = useRef(wasFinished);
   const containerRef = useRef<HTMLDivElement>(null);
   const [cols, setCols] = useState(MOBILE_COLS);
   const [cellW, setCellW] = useState(80);
@@ -113,6 +117,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
         if (next.length === total && !completedRef.current) {
           completedRef.current = true;
           setCompleted(true);
+          saveState({ finished: true, isSubmitted: true });
           onComplete?.(true);
         }
       } else {
@@ -120,7 +125,7 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
         setTimeout(() => setShakeId(null), 500);
       }
     },
-    [completed, connected, nextExpected, total, onComplete],
+    [completed, connected, nextExpected, total, onComplete, saveState],
   );
 
   const handleReset = useCallback(() => {
@@ -128,7 +133,8 @@ export function ConnectDots({ dots, onComplete }: ConnectDotsProps) {
     setCompleted(false);
     completedRef.current = false;
     setShakeId(null);
-  }, []);
+    saveState({ finished: false, isSubmitted: false });
+  }, [saveState]);
 
   function center(index: number) {
     const { row, col } = getSnakePos(index, cols);

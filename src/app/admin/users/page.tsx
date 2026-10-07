@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Users, ArrowUp, ArrowDown } from 'lucide-react';
+import AdminSearchInput from '@/components/admin/AdminSearchInput';
+import AdminPagination from '@/components/admin/AdminPagination';
+
+const PAGE_SIZE = 20;
 
 interface User {
   id: number;
@@ -14,6 +18,7 @@ interface User {
   progressLevel: 'a1' | 'a2' | 'b1' | 'b2' | null;
   progressPct: number;
   lessonsAttempted: number;
+  lessonsCompleted: number;
   costUsd30d: number;
 }
 
@@ -26,17 +31,28 @@ export default function AdminUsersPage() {
   const [total, setTotal] = useState(0);
   const [sort, setSort] = useState<SortKey>('created');
   const [order, setOrder] = useState<'asc' | 'desc'>('desc');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
-    fetch(`/api/admin/users?page=${page}&limit=20&sort=${sort}&order=${order}`)
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(PAGE_SIZE),
+      sort,
+      order,
+    });
+    if (search) params.set('search', search);
+    fetch(`/api/admin/users?${params}`)
       .then((r) => r.json())
       .then(({ users, total }) => {
+        if (cancelled) return;
         setUsers(users ?? []);
-        setTotal(Number(total) ?? 0);
+        setTotal(Number(total) || 0);
       })
-      .finally(() => setLoading(false));
-  }, [page, sort, order]);
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [page, sort, order, search]);
 
   const setSorting = (key: SortKey) => {
     if (key === sort) {
@@ -67,27 +83,39 @@ export default function AdminUsersPage() {
       return <span className="text-xs text-gray-400">No activity</span>;
     }
     return (
-      <div className="flex items-center gap-2 min-w-[140px]">
-        <span className="text-[11px] font-semibold text-gray-700 uppercase tabular-nums">
-          {u.progressLevel}: {u.progressPct}%
-        </span>
-        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[#32C189]"
-            style={{ width: `${Math.min(100, Math.max(2, u.progressPct))}%` }}
-          />
+      <div className="min-w-[140px]">
+        <div className="flex items-center gap-2" title="Current level and level progress">
+          <span className="text-[11px] font-semibold text-gray-700 uppercase tabular-nums">
+            {u.progressLevel}: {u.progressPct}%
+          </span>
+          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#32C189]"
+              style={{ width: `${Math.min(100, Math.max(2, u.progressPct))}%` }}
+            />
+          </div>
         </div>
+        <p className="text-[10px] text-gray-400 mt-0.5">
+          {u.lessonsCompleted} lesson{u.lessonsCompleted === 1 ? '' : 's'} completed
+        </p>
       </div>
     );
   };
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-        <span className="text-sm text-gray-400 flex items-center gap-1">
-          <Users className="w-4 h-4" /> {total} total · {users.length} shown
-        </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <AdminSearchInput
+            value={search}
+            onChange={(v) => { setSearch(v); setPage(1); }}
+            placeholder="Search by name or email…"
+          />
+          <span className="text-sm text-gray-400 flex items-center gap-1">
+            <Users className="w-4 h-4" /> {total} {search ? 'found' : 'total'} · {users.length} shown
+          </span>
+        </div>
       </div>
 
       {loading ? (
@@ -99,7 +127,7 @@ export default function AdminUsersPage() {
               <tr className="bg-gray-50 border-b border-gray-100">
                 {headerCell('name', 'User')}
                 <th className="px-4 py-3 text-left font-medium text-gray-600">Role</th>
-                {headerCell('progress', 'Progress')}
+                {headerCell('progress', 'Current level · level %')}
                 {headerCell('cost', 'Cost / 30d')}
                 {headerCell('created', 'Joined')}
                 <th className="px-4 py-3" />
@@ -136,13 +164,11 @@ export default function AdminUsersPage() {
               )}
             </tbody>
           </table>
-          <div className="px-4 py-3 border-t border-gray-100 flex items-center gap-3">
-            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-              className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">← Prev</button>
-            <span className="text-xs text-gray-500">Page {page}</span>
-            <button onClick={() => setPage((p) => p + 1)} disabled={page * 20 >= total}
-              className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">Next →</button>
-          </div>
+          <AdminPagination
+            page={page}
+            totalPages={Math.max(1, Math.ceil(total / PAGE_SIZE))}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </div>

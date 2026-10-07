@@ -2,23 +2,35 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin, isNextResponse } from '@/lib/admin/requireRole';
 import { db } from '@/db';
 import { usersTable, adminUsersTable, chatConversationsTable, chatMessagesTable } from '@/db/schema';
-import { eq, sql, desc, asc } from 'drizzle-orm';
+import { eq, sql, desc, asc, or, ilike } from 'drizzle-orm';
 import { getUserProgressSummaries } from '@/lib/admin/userProgress';
 
 type SortKey = 'name' | 'progress' | 'cost' | 'created';
 const SORT_KEYS: SortKey[] = ['name', 'progress', 'cost', 'created'];
+
+/** Escape LIKE wildcards so user input is matched literally. */
+const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 export async function GET(req: NextRequest) {
   const auth = await requireAdmin(req, 'admin');
   if (isNextResponse(auth)) return auth;
 
   const { searchParams } = req.nextUrl;
-  const page = parseInt(searchParams.get('page') ?? '1');
+  const page = Math.max(1, parseInt(searchParams.get('page') ?? '1') || 1);
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20'), 100);
   const offset = (page - 1) * limit;
   const sortParam = (searchParams.get('sort') ?? 'created') as SortKey;
   const sort: SortKey = SORT_KEYS.includes(sortParam) ? sortParam : 'created';
   const orderDir = (searchParams.get('order') ?? 'desc') === 'asc' ? 'asc' : 'desc';
+
+  // Optional search by name or email (case-insensitive, substring match).
+  const search = (searchParams.get('search') ?? '').trim().slice(0, 100);
+  const searchCond = search
+    ? or(
+        ilike(usersTable.name, `%${escapeLike(search)}%`),
+        ilike(usersTable.email, `%${escapeLike(search)}%`),
+      )
+    : undefined;
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400_000);
 
@@ -42,7 +54,8 @@ export async function GET(req: NextRequest) {
       )`,
     })
     .from(usersTable)
-    .leftJoin(adminUsersTable, eq(usersTable.id, adminUsersTable.userId));
+    .leftJoin(adminUsersTable, eq(usersTable.id, adminUsersTable.userId))
+    .where(searchCond);
 
   // For sort by name/created we can do it in SQL. For sort by progress/cost
   // we need the cost computed; cost we already have in SQL. Progress requires
@@ -90,6 +103,7 @@ export async function GET(req: NextRequest) {
       progressLevel: p?.highestLevel ?? null,
       progressPct: p?.highestLevelPct ?? 0,
       lessonsAttempted: p?.totalLessonsAttempted ?? 0,
+      lessonsCompleted: p?.lessonsCompleted ?? 0,
       costUsd30d: Number(r.costMicro30d) / 1_000_000,
     };
   });

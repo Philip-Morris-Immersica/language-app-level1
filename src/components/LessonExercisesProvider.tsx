@@ -79,6 +79,60 @@ function useDebouncedSave(lessonId: string) {
   }, [lessonId]);
 }
 
+// Batches "clicked inside exercise X" signals: each exercise is sent once per
+// page view, at most once per second, and flushed when the page is hidden.
+function useTouchTracker(lessonId: string) {
+  const sent = useRef<Set<string>>(new Set());
+  const pending = useRef<Set<string>>(new Set());
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const flush = useCallback((useBeacon = false) => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+    if (pending.current.size === 0) return;
+    const exerciseIds = [...pending.current];
+    pending.current.clear();
+    const body = JSON.stringify({ lessonId, exerciseIds });
+    if (useBeacon && typeof navigator !== 'undefined' && navigator.sendBeacon) {
+      navigator.sendBeacon('/api/progress/activity', new Blob([body], { type: 'application/json' }));
+      return;
+    }
+    fetch('/api/progress/activity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => {
+      // Retry with the next batch.
+      exerciseIds.forEach((id) => {
+        sent.current.delete(id);
+      });
+    });
+  }, [lessonId]);
+
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') flush(true);
+    };
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onHide);
+      flush(true);
+    };
+  }, [flush]);
+
+  return useCallback((exerciseId: string) => {
+    if (sent.current.has(exerciseId)) return;
+    sent.current.add(exerciseId);
+    pending.current.add(exerciseId);
+    if (!timer.current) timer.current = setTimeout(() => flush(), 1000);
+  }, [flush]);
+}
+
 export function LessonExercisesProvider({ lessonId, children, celebrationPlan = null }: LessonExercisesProviderProps) {
   const [savedStates, setSavedStates] = useState<Record<string, unknown>>({});
   const [loaded, setLoaded] = useState(false);
@@ -88,6 +142,7 @@ export function LessonExercisesProvider({ lessonId, children, celebrationPlan = 
   const [resumeTarget, setResumeTarget] = useState<{ id: string; number: number } | null>(null);
   const [resumeDismissed, setResumeDismissed] = useState(false);
   const debouncedSave = useDebouncedSave(lessonId);
+  const markTouched = useTouchTracker(lessonId);
 
   // Load saved states from server on mount
   useEffect(() => {
@@ -234,7 +289,7 @@ export function LessonExercisesProvider({ lessonId, children, celebrationPlan = 
   }
 
   return (
-    <ExercisePersistenceContext.Provider value={{ savedStates, saveState, lastExerciseId }}>
+    <ExercisePersistenceContext.Provider value={{ savedStates, saveState, lastExerciseId, markTouched }}>
       {resumeTarget && !resumeDismissed && (
         <ResumeBanner
           exerciseId={resumeTarget.id}

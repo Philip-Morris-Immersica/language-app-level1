@@ -6,6 +6,7 @@ import { useT } from '@/i18n/useT';
 import { useLanguage } from '@/i18n/LanguageContext';
 import Link from 'next/link';
 import { getLessonMetadata } from '@/content';
+import { Tr } from '@/components/profile/Tr';
 import {
   GraduationCap,
   ClipboardCheck,
@@ -39,6 +40,10 @@ interface LessonProgress {
   attemptedCount: number;
   totalCount: number;
   pct: number;
+  completed: boolean;
+  gradedTotal: number;
+  gradedChecked: number;
+  accuracyPct: number | null;
 }
 
 interface TestSection {
@@ -52,6 +57,7 @@ interface TestSection {
   wrongCount: number;
   scorePct: number;
   pointsEarned: number;
+  pointsBest: number;
   maxPoints: number;
   pointsScorePct: number;
 }
@@ -70,16 +76,30 @@ interface UserTestResult {
   scorePct: number;
   completed: boolean;
   pointsEarned: number;
+  pointsBest: number;
   totalPoints: number;
   pointsScorePct: number;
   bySection: TestSection[];
+}
+
+interface LevelSummary {
+  percent: number;
+  started: boolean;
+  completed: boolean;
+  lessonsTotal: number;
+  lessonsStarted: number;
+  lessonsCompleted: number;
+  testsTotal: number;
+  testsStarted: number;
+  testsCompleted: number;
+  accuracyPct: number | null;
 }
 
 interface ProgressData {
   progress: {
     userId: number;
     totalLessonsAttempted: number;
-    byLevel: Record<'a1' | 'a2' | 'b1' | 'b2', { lessonsAttempted: number; avgPct: number }>;
+    byLevel: Record<'a1' | 'a2' | 'b1' | 'b2', LevelSummary>;
     highestLevel: string | null;
     highestLevelPct: number;
     perLesson: LessonProgress[];
@@ -253,6 +273,9 @@ export default function ProfilePage() {
                   {data.progress.totalLessonsAttempted} {t('profile.lessonsTouched')}
                 </span>
               </div>
+              <p className="mb-3 text-[10px] text-gray-400 italic">
+                <Tr text="Процентът показва в колко упражнения си работил. Урокът е завършен, когато си проверил всички упражнения с точки (бутон „Провери“). Процентът на нивото е средното за всички негови уроци и тестове." />
+              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
                 {(['a1', 'a2', 'b1', 'b2'] as const).map((lvl) => {
@@ -265,9 +288,29 @@ export default function ProfilePage() {
                         isCurrent ? 'border-[#0072BC] bg-[#CDE3F1]/30' : 'border-gray-100 bg-gray-50'
                       }`}
                     >
-                      <p className="text-xs font-semibold text-gray-600 uppercase">{lvl}</p>
-                      <p className="text-2xl font-bold text-gray-900 tabular-nums">{lvlData.avgPct}%</p>
-                      <p className="text-[10px] text-gray-400">{lvlData.lessonsAttempted} {t('profile.lessonsTouched')}</p>
+                      <div className="flex items-center justify-between gap-1">
+                        <p className="text-xs font-semibold text-gray-600 uppercase">{lvl}</p>
+                        {lvlData.completed && (
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 bg-[#DAF6EB] text-[#1F5741] rounded inline-flex items-center gap-0.5">
+                            <CheckCircle2 className="w-3 h-3" />
+                            <Tr text="Нивото е завършено" />
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900 tabular-nums">{lvlData.percent}%</p>
+                      <p className="text-[10px] text-gray-500">
+                        <Tr text="Завършени уроци" /> {lvlData.lessonsCompleted}/{lvlData.lessonsTotal}
+                      </p>
+                      {lvlData.testsTotal > 0 && (
+                        <p className="text-[10px] text-gray-500">
+                          <Tr text="Завършени тестове" /> {lvlData.testsCompleted}/{lvlData.testsTotal}
+                        </p>
+                      )}
+                      {lvlData.accuracyPct !== null && (
+                        <p className="text-[10px] text-gray-400">
+                          <Tr text="Точност" /> {lvlData.accuracyPct}%
+                        </p>
+                      )}
                     </div>
                   );
                 })}
@@ -290,9 +333,12 @@ export default function ProfilePage() {
                           style={{ width: `${Math.min(100, Math.max(2, l.pct))}%` }}
                         />
                       </div>
-                      <span className="tabular-nums text-gray-700 w-12 text-right">{l.pct}%</span>
-                      <span className="tabular-nums text-gray-400 w-16 text-right">
-                        {l.attemptedCount}/{l.totalCount}
+                      <span className="tabular-nums text-gray-700 w-10 text-right">{l.pct}%</span>
+                      <span className="w-4 flex-shrink-0">
+                        {l.completed && <CheckCircle2 className="w-4 h-4 text-[#32C189]" />}
+                      </span>
+                      <span className="tabular-nums text-gray-400 w-24 text-right">
+                        {l.accuracyPct !== null ? <><Tr text="Точност" /> {l.accuracyPct}%</> : '—'}
                       </span>
                     </div>
                     );
@@ -320,7 +366,7 @@ export default function ProfilePage() {
                 ))}
               </div>
               <p className="mt-3 text-[10px] text-gray-400 italic">
-                {t('profile.score')} = {t('profile.attempted')} ÷ (✓ + ✗).
+                <Tr text="Резултатът е в точки според текущите ти отговори. Тестът е завършен, когато си проверил всички упражнения с точки." />
               </p>
             </div>
           )}
@@ -383,7 +429,9 @@ function TestRow({ test, t }: { test: UserTestResult; t: (k: string) => string }
   const badge = test.completed ? (
     <span className="text-[10px] font-medium px-1.5 py-0.5 bg-[#DAF6EB] text-[#1F5741] rounded">{t('profile.finished')}</span>
   ) : (
-    <span className="text-[10px] font-medium px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">{t('profile.inProgress')}</span>
+    <span className="text-[10px] font-medium px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded inline-block leading-tight">
+      <Tr text="Не всички упражнения са проверени" />
+    </span>
   );
 
   return (
@@ -408,7 +456,9 @@ function TestRow({ test, t }: { test: UserTestResult; t: (k: string) => string }
             </div>
             <span className="text-[11px] tabular-nums w-9 text-right text-gray-700">{test.attemptedPct}%</span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-0.5">{test.attemptedCount}/{test.totalExercises}</p>
+          <p className="text-[10px] text-gray-400 mt-0.5">
+            <Tr text="Проверени" /> {test.submittedCount}/{test.totalExercises}
+          </p>
         </div>
         <div className="col-span-2">
           <p className="text-[10px] text-gray-500">{t('profile.score')}</p>
@@ -426,6 +476,11 @@ function TestRow({ test, t }: { test: UserTestResult; t: (k: string) => string }
           <p className="text-[10px] text-gray-400 mt-0.5 tabular-nums">
             {test.pointsEarned}/{test.totalPoints} т.
           </p>
+          {test.pointsBest > test.pointsEarned && (
+            <p className="text-[10px] text-[#1F5741] mt-0.5 tabular-nums">
+              <Tr text="Най-добър резултат" />: {test.pointsBest}
+            </p>
+          )}
         </div>
         <div className="col-span-1 text-right text-xs text-gray-400">
           {expanded ? <ChevronUp className="w-3.5 h-3.5 inline" /> : <ChevronDown className="w-3.5 h-3.5 inline" />}
@@ -456,6 +511,9 @@ function TestRow({ test, t }: { test: UserTestResult; t: (k: string) => string }
                   </div>
                   <div className={`col-span-2 text-right text-[11px] font-bold tabular-nums ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
                     {s.pointsEarned}/{s.maxPoints}
+                    {s.pointsBest > s.pointsEarned && (
+                      <span className="block text-[10px] font-normal text-[#1F5741]">↑ {s.pointsBest}</span>
+                    )}
                   </div>
                 </div>
               );
