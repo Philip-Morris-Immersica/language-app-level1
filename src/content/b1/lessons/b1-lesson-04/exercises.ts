@@ -407,7 +407,7 @@ export const exercises: Exercise[] = [
     id: 'b1-l04-ex-06',
     type: 'workbook_fill_blank',
     title: 'УПРАЖНЕНИЕ 6',
-    instruction: 'Изберете глаголите в скоби в минало несвършено време. Марин разказва за себе си, затова формата е за 3 л. ед.ч. (той).',
+    instruction: 'Изберете глаголите в скоби в минало несвършено време. Текстът е за Марин, затова формата е за 3 л. ед.ч. (той).',
     order: 10,
     points: 16,
     layout: 'single',
@@ -416,7 +416,7 @@ export const exercises: Exercise[] = [
       { imageUrl: '/assets/b1-lesson-04/04-upr-06-marin-student/01-marin-biblioteka.jpg', label: 'Марин — студент' },
     ],
     sentences: [
-      { text: 'Когато Марин беше студент, той разказва какъв е бил животът му тогава:', blanks: [], correctAnswers: [], isExample: true },
+      { text: 'Ето какъв беше животът на Марин, когато беше студент:', blanks: [], correctAnswers: [], isExample: true },
       { text: 'Марин _______ (живея) в малък апартамент, _______ (ходя) на лекции всеки ден, _______ (чета) и _______ (уча) много.', blanks: [0, 1, 2, 3], correctAnswers: ['живееше', 'ходеше', 'четеше', 'учеше'],
         options: [
           ['живееше', 'живеех', 'живееха', 'живеехме'],

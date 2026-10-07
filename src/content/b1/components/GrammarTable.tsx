@@ -95,7 +95,8 @@ function ClickTranslateTh({
   style?: CSSProperties;
 }) {
   const { lang } = useLanguage();
-  const translated = useTranslate(text);
+  // Strip **bold** markers: Google would otherwise echo them into the translation.
+  const translated = useTranslate(text.replace(/\*\*(.+?)\*\*/g, '$1'));
   const isNonBg = lang !== 'bg';
 
   return (
@@ -109,7 +110,7 @@ function ClickTranslateTh({
         <span>{text}</span>
         {showSpeaker ? <Volume2 className="w-3.5 h-3.5 text-white/80 shrink-0" /> : null}
       </span>
-      {isNonBg && translated !== text && (
+      {isNonBg && translated !== text.replace(/\*\*(.+?)\*\*/g, '$1') && (
         <span className="block text-xs font-normal text-white/75 mt-0.5 italic">
           {translated}
         </span>
