@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { getLetterAudioPath } from '@/lib/letterTTS';
 import { playTtsAudio } from '@/lib/tts';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 
 interface AlphabetMazeProps {
   grid: string[][];
@@ -14,6 +15,7 @@ interface AlphabetMazeProps {
   startImageUrl?: string;
   endImageUrl?: string;
   onComplete?: (isCorrect: boolean) => void;
+  exerciseId?: string;
 }
 
 export function AlphabetMaze({
@@ -22,11 +24,14 @@ export function AlphabetMaze({
   startImageUrl,
   endImageUrl,
   onComplete,
+  exerciseId,
 }: AlphabetMazeProps) {
-  const [step, setStep] = useState(0);
+  const { savedState, saveState } = useExercisePersistence(exerciseId);
+  const wasFinished = !!(savedState as { finished?: boolean } | undefined)?.finished;
+  const [step, setStep] = useState(wasFinished ? correctPath.length : 0);
   const [shakeCell, setShakeCell] = useState<string | null>(null);
-  const [completed, setCompleted] = useState(false);
-  const completedRef = useRef(false);
+  const [completed, setCompleted] = useState(wasFinished);
+  const completedRef = useRef(wasFinished);
   const containerRef = useRef<HTMLDivElement>(null);
   const [cellPx, setCellPx] = useState(52);
   const t = useT();
@@ -73,6 +78,7 @@ export function AlphabetMaze({
         if (next === correctPath.length && !completedRef.current) {
           completedRef.current = true;
           setCompleted(true);
+          saveState({ finished: true, isSubmitted: true });
           onComplete?.(true);
         }
       } else {
@@ -80,7 +86,7 @@ export function AlphabetMaze({
         setTimeout(() => setShakeCell(null), 500);
       }
     },
-    [completed, currentTarget, step, correctPath.length, onComplete, grid],
+    [completed, currentTarget, step, correctPath.length, onComplete, grid, saveState],
   );
 
   const handleReset = useCallback(() => {
@@ -88,7 +94,8 @@ export function AlphabetMaze({
     setCompleted(false);
     completedRef.current = false;
     setShakeCell(null);
-  }, []);
+    saveState({ finished: false, isSubmitted: false });
+  }, [saveState]);
 
   const cx = (c: number) => c * (cellPx + GAP) + cellPx / 2;
   const cy = (r: number) => r * (cellPx + GAP) + cellPx / 2;

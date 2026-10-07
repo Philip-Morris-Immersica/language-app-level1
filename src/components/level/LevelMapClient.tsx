@@ -36,6 +36,15 @@ const LATIN_LABEL: Record<Level, string> = {
 interface LessonProgress {
   completed: number;
   total: number;
+  percent: number;
+  done: boolean;
+  started: boolean;
+}
+
+interface LevelSummary {
+  percent: number;
+  lessonsCompleted: number;
+  lessonsTotal: number;
 }
 
 type CardItem =
@@ -191,11 +200,9 @@ function LessonCard({
   progress: LessonProgress | null;
   t: (key: string) => string;
 }) {
-  const completed = progress?.completed ?? 0;
-  const total = progress?.total ?? 0;
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-  const isStarted = completed > 0;
-  const isDone = total > 0 && completed >= total;
+  const percent = progress?.percent ?? 0;
+  const isStarted = progress?.started ?? false;
+  const isDone = progress?.done ?? false;
 
   const borderClass = isDone
     ? 'border-[#32C189]'
@@ -231,10 +238,9 @@ function LessonCard({
           </div>
         </div>
 
-        {total > 0 ? (
+        {(progress?.total ?? 0) > 0 ? (
           <div>
-            <div className="flex items-center justify-between text-[10px] text-gray-400 mb-1">
-              <span>{completed}/{total}</span>
+            <div className="flex items-center justify-end text-[10px] text-gray-400 mb-1">
               <span className="font-semibold text-gray-600">{percent}%</span>
             </div>
             <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -361,14 +367,10 @@ export function LevelMapClient({ level }: { level: Level }) {
     () => buildGroups(level, def.lessonsMetadata, def.navItems),
     [level, def.lessonsMetadata, def.navItems],
   );
-  const totalItems = useMemo(
-    () => groups.reduce((sum, g) => sum + g.lessons.length + (g.test ? 1 : 0), 0),
-    [groups],
-  );
-
   const isEmpty = def.lessonsMetadata.length === 0;
 
   const [progressData, setProgressData] = useState<Record<string, LessonProgress>>({});
+  const [levelSummary, setLevelSummary] = useState<LevelSummary | null>(null);
   const [loading, setLoading] = useState(!isEmpty);
 
   useEffect(() => {
@@ -377,35 +379,15 @@ export function LevelMapClient({ level }: { level: Level }) {
       .then(r => r.json())
       .then(data => {
         if (data.lessons) setProgressData(data.lessons);
+        if (data.levels?.[level]) setLevelSummary(data.levels[level]);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [isEmpty]);
+  }, [isEmpty, level]);
 
-  let weightedSum = 0;
-  for (const group of groups) {
-    for (const item of group.lessons) {
-      if (item.kind === 'lesson') {
-        const p = progressData[item.id];
-        if (p && p.total > 0) {
-          weightedSum += p.completed / p.total;
-        }
-      }
-    }
-  }
-  const overallPercent = totalItems > 0 ? Math.round((weightedSum / totalItems) * 100) : 0;
-
-  const lessonsCompleted = groups.reduce((count, g) => {
-    return count + g.lessons.filter(item => {
-      if (item.kind !== 'lesson') return false;
-      const p = progressData[item.id];
-      return p && p.total > 0 && p.completed >= p.total;
-    }).length;
-  }, 0);
-
-  const lessonsTotal = def.lessonsMetadata.filter(
-    (m) => !(level === 'a1' && m.id === 'lesson-00'),
-  ).length;
+  const overallPercent = levelSummary?.percent ?? 0;
+  const lessonsCompleted = levelSummary?.lessonsCompleted ?? 0;
+  const lessonsTotal = levelSummary?.lessonsTotal ?? def.lessonsMetadata.length;
 
   if (loading) {
     return (

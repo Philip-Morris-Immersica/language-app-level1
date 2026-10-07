@@ -26,6 +26,24 @@ interface LessonProgress {
   attemptedCount: number;
   totalCount: number;
   pct: number;
+  completed: boolean;
+  gradedTotal: number;
+  gradedChecked: number;
+  accuracyPct: number | null;
+  lastActivityAt: string | null;
+}
+
+interface LevelSummary {
+  percent: number;
+  started: boolean;
+  completed: boolean;
+  lessonsTotal: number;
+  lessonsStarted: number;
+  lessonsCompleted: number;
+  testsTotal: number;
+  testsStarted: number;
+  testsCompleted: number;
+  accuracyPct: number | null;
 }
 
 interface TestSection {
@@ -39,6 +57,7 @@ interface TestSection {
   wrongCount: number;
   scorePct: number;
   pointsEarned: number;
+  pointsBest: number;
   maxPoints: number;
   pointsScorePct: number;
 }
@@ -57,6 +76,7 @@ interface UserTestResult {
   scorePct: number;
   completed: boolean;
   pointsEarned: number;
+  pointsBest: number;
   totalPoints: number;
   pointsScorePct: number;
   bySection: TestSection[];
@@ -66,12 +86,16 @@ interface ProgressData {
   progress: {
     userId: number;
     totalLessonsAttempted: number;
-    byLevel: Record<'a1' | 'a2' | 'b1' | 'b2', { lessonsAttempted: number; avgPct: number }>;
+    lessonsCompleted: number;
+    testsCompleted: number;
+    byLevel: Record<'a1' | 'a2' | 'b1' | 'b2', LevelSummary>;
     highestLevel: string | null;
     highestLevelPct: number;
     perLesson: LessonProgress[];
+    lastActivityAt: string | null;
   };
   tests: UserTestResult[];
+  trackingSince: string | null;
   chat: {
     totalMessages: number;
     assistantMessages: number;
@@ -168,7 +192,9 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
                 <GraduationCap className="w-4 h-4 text-[#0072BC]" />
                 <h3 className="text-base font-semibold text-gray-800">Learning progress</h3>
                 <span className="ml-auto text-xs text-gray-400">
-                  {data.progress.totalLessonsAttempted} lesson{data.progress.totalLessonsAttempted === 1 ? '' : 's'} touched
+                  {data.progress.totalLessonsAttempted} lesson{data.progress.totalLessonsAttempted === 1 ? '' : 's'} started
+                  {' · '}{data.progress.lessonsCompleted} completed
+                  {data.progress.highestLevel && <> · current level {data.progress.highestLevel.toUpperCase()}</>}
                 </span>
               </div>
 
@@ -184,9 +210,24 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
                         isCurrent ? 'border-[#0072BC] bg-[#CDE3F1]/30' : 'border-gray-100 bg-gray-50'
                       }`}
                     >
-                      <p className="text-xs font-semibold text-gray-600 uppercase">{lvl}</p>
-                      <p className="text-xl font-bold text-gray-900 tabular-nums">{lvlData.avgPct}%</p>
-                      <p className="text-[10px] text-gray-400">{lvlData.lessonsAttempted} lessons</p>
+                      <div className="flex items-center justify-between gap-1">
+                        <p className="text-xs font-semibold text-gray-600 uppercase">{lvl}</p>
+                        {lvlData.completed && (
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 bg-[#DAF6EB] text-[#1F5741] rounded">Level completed</span>
+                        )}
+                      </div>
+                      <p className="text-xl font-bold text-gray-900 tabular-nums">{lvlData.percent}%</p>
+                      <p className="text-[10px] text-gray-500">
+                        Lessons completed {lvlData.lessonsCompleted}/{lvlData.lessonsTotal}
+                      </p>
+                      {lvlData.testsTotal > 0 && (
+                        <p className="text-[10px] text-gray-500">
+                          Tests completed {lvlData.testsCompleted}/{lvlData.testsTotal}
+                        </p>
+                      )}
+                      {lvlData.accuracyPct !== null && (
+                        <p className="text-[10px] text-gray-400">Accuracy {lvlData.accuracyPct}%</p>
+                      )}
                     </div>
                   );
                 })}
@@ -194,27 +235,62 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
               {/* Per-lesson bars */}
               {data.progress.perLesson.length > 0 ? (
-                <div className="space-y-1.5">
-                  {data.progress.perLesson.map((l) => (
-                    <div key={l.lessonId} className="flex items-center gap-2 text-xs">
-                      <span className="font-mono text-gray-500 w-32 truncate">{l.lessonId}</span>
-                      <span className="uppercase text-[10px] text-gray-400 w-6">{l.level}</span>
-                      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-[#32C189]"
-                          style={{ width: `${Math.min(100, Math.max(2, l.pct))}%` }}
-                        />
-                      </div>
-                      <span className="tabular-nums text-gray-700 w-12 text-right">{l.pct}%</span>
-                      <span className="tabular-nums text-gray-400 w-14 text-right">
-                        {l.attemptedCount}/{l.totalCount}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-gray-100 text-gray-500">
+                      <th className="py-1.5 text-left font-medium">Lesson</th>
+                      <th className="py-1.5 text-left font-medium w-1/4">Progress</th>
+                      <th className="py-1.5 text-center font-medium">Completed</th>
+                      <th className="py-1.5 text-right font-medium">Checked</th>
+                      <th className="py-1.5 text-right font-medium">Accuracy</th>
+                      <th className="py-1.5 text-right font-medium">Last activity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.progress.perLesson.map((l) => (
+                      <tr key={l.lessonId} className="border-b border-gray-50">
+                        <td className="py-1.5 text-gray-600">
+                          <span className="font-mono">{l.lessonId}</span>{' '}
+                          <span className="uppercase text-[10px] text-gray-400">{l.level}</span>
+                        </td>
+                        <td className="py-1.5">
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-[#32C189]"
+                                style={{ width: `${Math.min(100, Math.max(2, l.pct))}%` }}
+                              />
+                            </div>
+                            <span className="tabular-nums text-gray-700 w-9 text-right">{l.pct}%</span>
+                          </div>
+                        </td>
+                        <td className="py-1.5 text-center text-[#1F5741] font-semibold">{l.completed ? '✓' : ''}</td>
+                        <td className="py-1.5 text-right tabular-nums text-gray-500">
+                          {l.gradedChecked}/{l.gradedTotal}
+                        </td>
+                        <td className="py-1.5 text-right tabular-nums text-gray-700">
+                          {l.accuracyPct !== null ? `${l.accuracyPct}%` : '—'}
+                        </td>
+                        <td className="py-1.5 text-right text-gray-400">
+                          {l.lastActivityAt ? new Date(l.lastActivityAt).toLocaleDateString() : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <p className="text-sm text-gray-400">No exercise activity yet.</p>
               )}
+              <p className="mt-3 text-[10px] text-gray-400 italic">
+                Progress = exercises the learner clicked inside ÷ exercises with something to do (100% once completed).
+                A lesson is completed when every exercise with points was checked (&ldquo;Провери&rdquo;) at least once.
+                Level % = average over all lessons and tests of the level (untouched = 0).
+                {data.trackingSince && (
+                  <>
+                    {' '}Click tracking since {new Date(data.trackingSince).toLocaleDateString()}; earlier activity reconstructed from saved answers.
+                  </>
+                )}
+              </p>
             </div>
           )}
 
@@ -225,7 +301,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
                 <ClipboardCheck className="w-4 h-4 text-[#0072BC]" />
                 <h3 className="text-base font-semibold text-gray-800">Test results</h3>
                 <span className="ml-auto text-xs text-gray-400">
-                  {data.tests.filter((t) => t.completed).length} of {data.tests.length} finished (≥80%)
+                  {data.tests.filter((t) => t.completed).length} of {data.tests.length} completed
                 </span>
               </div>
               <div className="divide-y divide-gray-100">
@@ -234,8 +310,8 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
                 ))}
               </div>
               <p className="mt-3 text-[10px] text-gray-400 italic">
-                Score = correct ÷ (correct + wrong) over exercises the user submitted (clicked &ldquo;Провери&rdquo;).
-                A test is marked <span className="font-semibold">Finished</span> if the user attempted ≥ 80% of its exercises.
+                Points are proportional per exercise with the current answers (same as the score block inside the test); &ldquo;best&rdquo; is the best ever reached.
+                A test is <span className="font-semibold">Completed</span> when every exercise with points was checked (&ldquo;Провери&rdquo;).
               </p>
             </div>
           )}
@@ -327,8 +403,8 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 function UserTestRow({ test }: { test: UserTestResult }) {
   const [expanded, setExpanded] = useState(false);
   const finishedBadge = test.completed
-    ? <span className="text-[10px] font-medium px-1.5 py-0.5 bg-[#DAF6EB] text-[#1F5741] rounded">Finished</span>
-    : <span className="text-[10px] font-medium px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">In progress</span>;
+    ? <span className="text-[10px] font-medium px-1.5 py-0.5 bg-[#DAF6EB] text-[#1F5741] rounded">Completed</span>
+    : <span className="text-[10px] font-medium px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">Not completed</span>;
 
   return (
     <div>
@@ -346,7 +422,7 @@ function UserTestRow({ test }: { test: UserTestResult }) {
         </div>
         <div className="col-span-2">{finishedBadge}</div>
         <div className="col-span-3">
-          <p className="text-[10px] text-gray-500">Attempted</p>
+          <p className="text-[10px] text-gray-500">Progress</p>
           <div className="flex items-center gap-2 mt-0.5">
             <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div className="h-full bg-[#0072BC]" style={{ width: `${test.attemptedPct}%` }} />
@@ -354,7 +430,7 @@ function UserTestRow({ test }: { test: UserTestResult }) {
             <span className="text-[11px] tabular-nums w-9 text-right text-gray-700">{test.attemptedPct}%</span>
           </div>
           <p className="text-[10px] text-gray-400 mt-0.5">
-            {test.attemptedCount}/{test.totalExercises} ex.
+            {test.submittedCount}/{test.totalExercises} checked
           </p>
         </div>
         <div className="col-span-2">
@@ -373,6 +449,7 @@ function UserTestRow({ test }: { test: UserTestResult }) {
           <p className="text-[10px] text-gray-400 mt-0.5 tabular-nums">
             {test.pointsEarned}/{test.totalPoints} pts
           </p>
+          <p className="text-[10px] text-gray-400 tabular-nums">best {test.pointsBest}</p>
         </div>
         <div className="col-span-1 text-right text-xs text-gray-400">
           {expanded ? '▾' : '▸'}
@@ -405,6 +482,7 @@ function UserTestRow({ test }: { test: UserTestResult }) {
                   </div>
                   <div className={`col-span-2 text-right text-[11px] font-bold tabular-nums ${needsWork ? 'text-[#D25A45]' : 'text-gray-700'}`}>
                     {s.pointsEarned}/{s.maxPoints}
+                    <span className="block text-[10px] font-normal text-gray-400">best {s.pointsBest}</span>
                   </div>
                 </div>
               );

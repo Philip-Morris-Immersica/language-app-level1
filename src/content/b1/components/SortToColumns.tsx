@@ -1,14 +1,41 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { CheckCircle2, XCircle, RotateCcw, Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
+import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import type { B1SortToColumnsExercise } from '../types';
 
 interface Props {
   exercise: B1SortToColumnsExercise;
   onComplete?: (correct: boolean, score: number) => void;
+  exerciseId?: string;
+}
+
+type Placements = Record<string, string | null>;
+
+interface PersistedState {
+  placements: Placements;
+  validation: Record<string, boolean>;
+  isSubmitted: boolean;
+}
+
+function restoreState(
+  trackedItems: string[],
+  columnIds: string[],
+  saved: unknown,
+): PersistedState | null {
+  const s = saved as Partial<PersistedState> | undefined;
+  if (!s?.placements) return null;
+  const placements: Placements = Object.fromEntries(
+    trackedItems.map((item) => {
+      const columnId = s.placements?.[item];
+      return [item, columnIds.includes(columnId as string) ? (columnId as string) : null];
+    }),
+  );
+  const isSubmitted = !!s.isSubmitted && trackedItems.every((item) => placements[item] !== null);
+  return { placements, validation: isSubmitted ? s.validation ?? {} : {}, isSubmitted };
 }
 
 /**
@@ -18,15 +45,19 @@ interface Props {
  * which only ever wires up 3 swipe directions and silently drops a 4th
  * group — see `../types.ts` for the full rationale).
  */
-export function SortToColumns({ exercise, onComplete }: Props) {
+export function SortToColumns({ exercise, onComplete, exerciseId }: Props) {
   const { items, columns: columnConfig } = exercise;
   const t = useT();
+  const { savedState, saveState } = useExercisePersistence(exerciseId ?? exercise.id);
+  const initialSaved = useRef(savedState).current;
 
   const exampleItems = useMemo(
     () => new Set(columnConfig.map(c => c.exampleItem).filter((x): x is string => !!x)),
     [columnConfig],
   );
+  const trackedItems = useMemo(() => items.filter(i => !exampleItems.has(i)), [items, exampleItems]);
 
+  const [validation, setValidation] = useState<Record<string, boolean>>({});
   const [pool, setPool] = useState<string[]>([]);
   const [placed, setPlaced] = useState<Record<string, string[]>>({});
   const [selected, setSelected] = useState<string | null>(null);
@@ -34,17 +65,62 @@ export function SortToColumns({ exercise, onComplete }: Props) {
   const [isCorrect, setIsCorrect] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
-  useEffect(() => {
-    const initialPlaced = Object.fromEntries(
-      columnConfig.map(c => [c.id, c.exampleItem ? [c.exampleItem] : []]),
+  const lastSavedSig = useRef<string | null>(null);
+  if (lastSavedSig.current === null) {
+    const restored = restoreState(trackedItems, columnConfig.map(c => c.id), initialSaved);
+    lastSavedSig.current = JSON.stringify(
+      restored ?? {
+        placements: Object.fromEntries(trackedItems.map(item => [item, null])),
+        validation: {},
+        isSubmitted: false,
+      },
     );
-    const remaining = items.filter(i => !exampleItems.has(i));
+  }
+
+  useEffect(() => {
+    const restored = resetKey === 0
+      ? restoreState(trackedItems, columnConfig.map(c => c.id), initialSaved)
+      : null;
+    const initialPlaced = Object.fromEntries(
+      columnConfig.map(c => [
+        c.id,
+        [
+          ...(c.exampleItem ? [c.exampleItem] : []),
+          ...(restored ? trackedItems.filter(i => restored.placements[i] === c.id) : []),
+        ],
+      ]),
+    );
+    const remaining = trackedItems.filter(i => !restored || restored.placements[i] === null);
     setPool([...remaining].sort(() => Math.random() - 0.5));
     setPlaced(initialPlaced);
     setSelected(null);
-    setSubmitted(false);
-    setIsCorrect(false);
-  }, [items, columnConfig, exampleItems, resetKey]);
+    setSubmitted(restored?.isSubmitted ?? false);
+    setValidation(restored?.validation ?? {});
+    setIsCorrect(
+      !!restored?.isSubmitted &&
+        columnConfig.every(col => {
+          const colItems = initialPlaced[col.id] ?? [];
+          return colItems.length === col.correctItems.length && colItems.every(i => col.correctItems.includes(i));
+        }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackedItems, columnConfig, resetKey]);
+
+  useEffect(() => {
+    if (Object.keys(placed).length === 0) return;
+    const state: PersistedState = {
+      placements: Object.fromEntries(
+        trackedItems.map(item => [item, columnConfig.find(c => placed[c.id]?.includes(item))?.id ?? null]),
+      ),
+      validation,
+      isSubmitted: submitted,
+    };
+    const sig = JSON.stringify(state);
+    if (sig === lastSavedSig.current) return;
+    lastSavedSig.current = sig;
+    saveState(state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placed, validation, submitted]);
 
   const allPlaced = pool.length === 0;
   const placedCount = items.length - pool.length;
@@ -75,11 +151,26 @@ export function SortToColumns({ exercise, onComplete }: Props) {
       return colItems.length === col.correctItems.length && colItems.every(i => col.correctItems.includes(i));
     });
     setIsCorrect(allCorrect);
+    setValidation(
+      Object.fromEntries(
+        trackedItems.map(item => [item, columnConfig.some(col => placed[col.id]?.includes(item) && col.correctItems.includes(item))]),
+      ),
+    );
     setSubmitted(true);
     onComplete?.(allCorrect, allCorrect ? 1 : 0);
   };
 
-  const handleReset = () => setResetKey(prev => prev + 1);
+  const handleReset = () => {
+    const cleared: PersistedState = {
+      placements: Object.fromEntries(trackedItems.map(item => [item, null])),
+      validation: {},
+      isSubmitted: false,
+    };
+    lastSavedSig.current = JSON.stringify(cleared);
+    saveState(cleared);
+    setValidation({});
+    setResetKey(prev => prev + 1);
+  };
 
   const gridColsClass =
     columnConfig.length >= 4 ? 'grid-cols-2 md:grid-cols-4' :

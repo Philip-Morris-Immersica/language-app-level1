@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
@@ -36,7 +36,10 @@ export function SelectWords({ exercise, onComplete, exerciseId }: Props) {
   const [picks, setPicks] = useState<Record<string, string[]>>(() => restored?.picks ?? {});
   const [submitted, setSubmitted] = useState(() => restored?.submitted ?? false);
 
+  const mounted = useRef(false);
+
   useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
     saveState({ picks, submitted });
   }, [picks, submitted, saveState]);
 

@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { MessageSquare, Filter } from 'lucide-react';
+import AdminSearchInput from '@/components/admin/AdminSearchInput';
+import AdminPagination from '@/components/admin/AdminPagination';
+
+const PAGE_SIZE = 20;
 
 interface Conversation {
   id: number;
@@ -25,23 +29,42 @@ export default function AdminChatsPage() {
   const [lang, setLang] = useState('');
   const [level, setLevel] = useState('');
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: '20' });
+    const params = new URLSearchParams({ page: String(page), limit: String(PAGE_SIZE) });
     if (lang) params.set('lang', lang);
     if (level) params.set('level', level);
+    if (search) params.set('search', search);
     fetch(`/api/admin/chats?${params}`)
       .then((r) => r.json())
-      .then(({ conversations }) => setConversations(conversations ?? []))
-      .finally(() => setLoading(false));
-  }, [lang, level, page]);
+      .then(({ conversations, total }) => {
+        if (cancelled) return;
+        setConversations(conversations ?? []);
+        setTotal(Number(total) || 0);
+      })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [lang, level, search, page]);
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Conversations</h1>
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Conversations
+          <span className="ml-3 text-sm font-normal text-gray-400">
+            {total} {search || lang || level ? 'found' : 'total'}
+          </span>
+        </h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <AdminSearchInput
+            value={search}
+            onChange={(v) => { setSearch(v); setPage(1); }}
+            placeholder="Search by name or email…"
+          />
           <Filter className="w-4 h-4 text-gray-400" />
           <select value={lang} onChange={(e) => { setLang(e.target.value); setPage(1); }}
             className="text-sm border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0072BC]/30">
@@ -97,13 +120,11 @@ export default function AdminChatsPage() {
               )}
             </tbody>
           </table>
-          <div className="px-4 py-3 border-t border-gray-100 flex items-center gap-3">
-            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-              className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">← Prev</button>
-            <span className="text-xs text-gray-500">Page {page}</span>
-            <button onClick={() => setPage((p) => p + 1)} disabled={conversations.length < 20}
-              className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">Next →</button>
-          </div>
+          <AdminPagination
+            page={page}
+            totalPages={Math.max(1, Math.ceil(total / PAGE_SIZE))}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </div>

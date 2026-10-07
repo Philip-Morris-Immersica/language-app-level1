@@ -1,114 +1,97 @@
 /**
  * Test scoring — single source of truth for "how many points did the user
- * earn on this test exercise / section / test as a whole?"
+ * earn on this test exercise / section / test as a whole?".
  *
  * Used by:
- *   • TestScoreSummary.tsx (client) — to show the score block at the bottom
- *     of every test page right after the user finishes
- *   • lib/admin/userProgress.ts (server) — to expose the same numbers in
- *     the admin user-detail page and the user's own /profile page
+ *   • TestScoreSummary.tsx (client) — the score block at the bottom of every test
+ *   • lib/learnerProgress (server) — profile, admin user detail, level stats, reports
  *
- * The shape mirrors what saved exercise states look like in the DB
- * (`exercise_states.state` JSON). When the user clicks "Провери" the
- * `validation`/`isSubmitted`/`checked` fields appear and we count points.
+ * Each exercise is worth exactly its `points`: the learner earns
+ * `correct units ÷ total units × points` (see `lib/grading`). This keeps the
+ * textbook point values even where they differ from the number of blanks, and
+ * a section can never exceed its `maxPoints`.
  *
  * IMPORTANT: keep this file framework-free (no React imports, no `'use client'`)
  * so server code can use it safely.
  */
 
-import type { TestSection, Exercise } from '@/content/types';
-import { isWordOrderAnswerCorrect } from '@/lib/wordOrder';
+import type { TestSection, TestData, Exercise } from '@/content/types';
+import { classifyExercise, gradeExercise, isRequiredForCompletion } from '@/lib/grading';
 
 /**
- * Compute the points earned on a single exercise. Returns null when the
- * user has not yet checked their answers (so the calling code can show
- * "—" instead of "0/N").
+ * Points earned on a single exercise (unrounded). Returns null when the
+ * learner has not checked it yet, so callers can show "—" instead of "0/N".
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getExercisePoints(exercise: Exercise, savedState: unknown): number | null {
+  const points = exercise.points ?? 0;
+  if (points <= 0) return null;
+  const grade = gradeExercise(exercise, savedState);
+  if (!grade || !grade.submitted || grade.total === 0) return null;
+  return (grade.correct / grade.total) * points;
+}
+
+/** Rounded variant of `getExercisePoints`. */
 export function getExerciseScore(exercise: Exercise, savedState: unknown): number | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const s = savedState as any;
-  if (!s) return null;
-
-  switch (exercise.type) {
-    case 'true_false': {
-      if (!s.checked) return null;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ex = exercise as any;
-      let correct = 0;
-      for (const sentence of ex.sentences) {
-        if ((s.answers?.[sentence.id] === 'true') === sentence.isTrue) correct++;
-      }
-      return correct;
-    }
-
-    case 'workbook_fill_blank': {
-      if (!s.isSubmitted) return null;
-      const v = s.validation as Record<string, boolean | null> | undefined;
-      if (!v) return null;
-      return Object.values(v).filter(val => val === true).length;
-    }
-
-    case 'multiple_choice': {
-      if (!s.isSubmitted) return null;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ex = exercise as any;
-      let correct = 0;
-      for (let i = 0; i < ex.questions.length; i++) {
-        if (s.selectedAnswers?.[i] === ex.questions[i].correctIndex) correct++;
-      }
-      return correct;
-    }
-
-    case 'word_order': {
-      if (!s.isSubmitted) return null;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ex = exercise as any;
-      let correct = 0;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const states = s.questionStates as any[] | undefined;
-      if (!states) return null;
-      for (let i = 0; i < ex.questions.length; i++) {
-        const qs = states[i];
-        if (isWordOrderAnswerCorrect(qs?.built, ex.questions[i])) correct++;
-      }
-      return correct;
-    }
-
-    case 'syllable_blocks': {
-      const completed = s.completed as Record<string, boolean> | undefined;
-      if (!completed) return null;
-      return Object.values(completed).filter(Boolean).length;
-    }
-
-    default:
-      return null;
-  }
+  const pts = getExercisePoints(exercise, savedState);
+  return pts === null ? null : Math.round(pts);
 }
 
 /**
- * Compute the score for a test section (e.g. "СЛУШАНЕ").
- *   • earned  — points the user actually got
- *   • total   — section.maxPoints (constant from content)
- *   • completed — true if every scoreable exercise has been checked
+ * Score for a test section (e.g. "СЛУШАНЕ").
+ *   • earned    — points the learner got (rounded once, never above `total`)
+ *   • total     — section.maxPoints
+ *   • completed — every exercise required for completion has been checked
  */
 export function getSectionScore(
   section: TestSection,
   savedStates: Record<string, unknown>,
-): { earned: number; total: number; completed: boolean } {
-  let earned = 0;
+): { earned: number; total: number; completed: boolean; checkedCount: number; gradedCount: number } {
   const total = section.maxPoints;
-  let allCompleted = true;
+  let raw = 0;
+  let gradedCount = 0;
+  let checkedCount = 0;
 
   for (const ex of section.exercises) {
-    if (!ex.points || ex.points === 0) continue;
-    const score = getExerciseScore(ex, savedStates[ex.id]);
-    if (score === null) {
-      allCompleted = false;
-    } else {
-      earned += score;
+    if (classifyExercise(ex) !== 'graded') continue;
+    const required = isRequiredForCompletion(ex);
+    if (required) gradedCount++;
+    const pts = getExercisePoints(ex, savedStates[ex.id]);
+    if (pts !== null) {
+      if (required) checkedCount++;
+      raw += pts;
     }
   }
 
-  return { earned, total, completed: allCompleted };
+  return {
+    earned: Math.min(total, Math.round(raw)),
+    total,
+    completed: checkedCount === gradedCount,
+    checkedCount,
+    gradedCount,
+  };
+}
+
+/** Whole-test score: sum of rounded section scores. */
+export function getTestScore(
+  test: TestData,
+  savedStates: Record<string, unknown>,
+): {
+  earned: number;
+  total: number;
+  completed: boolean;
+  started: boolean;
+  sections: Array<{ sectionId: string; name: string } & ReturnType<typeof getSectionScore>>;
+} {
+  const sections = test.sections.map((section) => ({
+    sectionId: section.id,
+    name: section.name,
+    ...getSectionScore(section, savedStates),
+  }));
+  return {
+    earned: sections.reduce((n, s) => n + s.earned, 0),
+    total: test.totalPoints,
+    completed: sections.every((s) => s.completed),
+    started: sections.some((s) => s.checkedCount > 0),
+    sections,
+  };
 }

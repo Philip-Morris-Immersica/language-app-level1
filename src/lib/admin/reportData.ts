@@ -22,6 +22,8 @@ import { getCostByModel, bucketsToByModelRows } from './costEstimate';
 import {
   getUserProgressSummaries,
   getPlatformProgressStats,
+  getLevelDetailStats,
+  getTrackingSince,
   type UserProgressSummary,
 } from './userProgress';
 import { LEVELS, type Level } from '@/content/registry';
@@ -30,6 +32,8 @@ export type ReportSectionId =
   | 'summary'
   | 'activeUsers'
   | 'levelProgress'
+  | 'lessonCompletion'
+  | 'testResults'
   | 'chatTranscripts';
 
 export interface ReportOptions {
@@ -64,6 +68,7 @@ export interface ActiveUserLessonProgress {
   attemptedCount: number;
   totalCount: number;
   pct: number;
+  completed: boolean;
 }
 
 export interface ActiveUserRow {
@@ -78,16 +83,56 @@ export interface ActiveUserRow {
   highestLevel: Level | null;
   highestLevelPct: number;
   totalLessonsAttempted: number;
+  lessonsCompleted: number;
+  testsCompleted: number;
   /** Per-lesson progress (cumulative). Sorted by level then lesson id. */
   perLesson: ActiveUserLessonProgress[];
 }
 
 export interface LevelProgressSection {
   /** All-time, not period-filtered. The header in the UI labels it as such. */
-  byLevel: Array<{ level: Level; activeUsers: number; avgPct: number }>;
+  byLevel: Array<{
+    level: Level;
+    activeUsers: number;
+    /** Average level progress % over active learners. */
+    avgPct: number;
+    usersCompleted: number;
+    avgLessonsCompleted: number;
+    lessonsTotal: number;
+    testsTotal: number;
+  }>;
   histogramByLevel: Array<{
     level: Level;
     buckets: Array<{ bucket: string; users: number }>;
+  }>;
+}
+
+export interface LessonCompletionRow {
+  level: Level;
+  lessonId: string;
+  number: number;
+  title: string;
+  learnersStarted: number;
+  learnersCompleted: number;
+  avgProgressPct: number;
+  avgAccuracyPct: number | null;
+}
+
+export interface TestResultRow {
+  level: Level;
+  testId: string;
+  number: number;
+  title: string;
+  totalPoints: number;
+  learnersStarted: number;
+  learnersCompleted: number;
+  avgScorePctAll: number;
+  avgScorePctCompleters: number;
+  sections: Array<{
+    name: string;
+    maxPoints: number;
+    avgScorePctAll: number;
+    avgScorePctCompleters: number;
   }>;
 }
 
@@ -120,8 +165,12 @@ export interface ReportData {
     summary?: SummarySection;
     activeUsers?: ActiveUserRow[];
     levelProgress?: LevelProgressSection;
+    lessonCompletion?: LessonCompletionRow[];
+    testResults?: TestResultRow[];
     chatTranscripts?: ChatTranscriptRow[];
   };
+  /** Since when clicks are tracked; earlier activity was reconstructed from saved answers. */
+  trackingSince: string | null;
 }
 
 // ── Section builders ─────────────────────────────────────────────────────────
@@ -303,6 +352,8 @@ async function buildActiveUsers(from: Date, to: Date): Promise<ActiveUserRow[]> 
       highestLevel: p?.highestLevel ?? null,
       highestLevelPct: p?.highestLevelPct ?? 0,
       totalLessonsAttempted: p?.totalLessonsAttempted ?? 0,
+      lessonsCompleted: p?.lessonsCompleted ?? 0,
+      testsCompleted: p?.testsCompleted ?? 0,
       perLesson: p?.perLesson ?? [],
     };
   });
@@ -319,12 +370,55 @@ async function buildLevelProgress(): Promise<LevelProgressSection> {
       level: lvl,
       activeUsers: stats.byLevel[lvl].activeUsers,
       avgPct: stats.byLevel[lvl].avgPct,
+      usersCompleted: stats.byLevel[lvl].usersCompleted,
+      avgLessonsCompleted: stats.byLevel[lvl].avgLessonsCompleted,
+      lessonsTotal: stats.byLevel[lvl].lessonsTotal,
+      testsTotal: stats.byLevel[lvl].testsTotal,
     })),
     histogramByLevel: LEVELS.map((lvl) => ({
       level: lvl,
       buckets: stats.histogramByLevel[lvl],
     })),
   };
+}
+
+async function buildLessonCompletion(): Promise<LessonCompletionRow[]> {
+  const details = await Promise.all(LEVELS.map((lvl) => getLevelDetailStats(lvl)));
+  return details.flatMap((d) =>
+    d.lessons.map((l) => ({
+      level: d.level,
+      lessonId: l.lessonId,
+      number: l.number,
+      title: l.title,
+      learnersStarted: l.usersAttempted,
+      learnersCompleted: l.usersCompleted,
+      avgProgressPct: l.avgPct,
+      avgAccuracyPct: l.avgAccuracyPct,
+    })),
+  );
+}
+
+async function buildTestResults(): Promise<TestResultRow[]> {
+  const details = await Promise.all(LEVELS.map((lvl) => getLevelDetailStats(lvl)));
+  return details.flatMap((d) =>
+    d.tests.map((t) => ({
+      level: d.level,
+      testId: t.testId,
+      number: t.number,
+      title: t.title,
+      totalPoints: t.totalPoints,
+      learnersStarted: t.usersAttempted,
+      learnersCompleted: t.usersCompleted,
+      avgScorePctAll: t.avgScorePctAll,
+      avgScorePctCompleters: t.avgScorePctCompleters,
+      sections: t.bySection.map((s) => ({
+        name: s.name,
+        maxPoints: s.maxPoints,
+        avgScorePctAll: s.avgScorePctAll,
+        avgScorePctCompleters: s.avgScorePctCompleters,
+      })),
+    })),
+  );
 }
 
 async function buildChatTranscripts(from: Date, to: Date): Promise<ChatTranscriptRow[]> {
@@ -415,19 +509,25 @@ export async function buildReport(opts: ReportOptions): Promise<ReportData> {
   const wanted = new Set(sections);
 
   // Run requested sections in parallel — each section's data is independent.
-  const [summary, activeUsers, levelProgress, chatTranscripts] = await Promise.all([
+  const [summary, activeUsers, levelProgress, lessonCompletion, testResults, chatTranscripts, trackingSince] = await Promise.all([
     wanted.has('summary') ? buildSummary(from, to) : Promise.resolve(undefined),
     wanted.has('activeUsers') ? buildActiveUsers(from, to) : Promise.resolve(undefined),
     wanted.has('levelProgress') ? buildLevelProgress() : Promise.resolve(undefined),
+    wanted.has('lessonCompletion') ? buildLessonCompletion() : Promise.resolve(undefined),
+    wanted.has('testResults') ? buildTestResults() : Promise.resolve(undefined),
     wanted.has('chatTranscripts') ? buildChatTranscripts(from, to) : Promise.resolve(undefined),
+    getTrackingSince(),
   ]);
 
   return {
     period: { from: from.toISOString(), to: to.toISOString() },
+    trackingSince,
     sections: {
       ...(summary && { summary }),
       ...(activeUsers && { activeUsers }),
       ...(levelProgress && { levelProgress }),
+      ...(lessonCompletion && { lessonCompletion }),
+      ...(testResults && { testResults }),
       ...(chatTranscripts && { chatTranscripts }),
     },
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   FileText, BarChart2, Loader2, Users, GraduationCap,
@@ -9,7 +9,7 @@ import {
 
 // ── Types (mirror src/lib/admin/reportData.ts) ───────────────────────────────
 
-type SectionId = 'summary' | 'activeUsers' | 'levelProgress' | 'chatTranscripts';
+type SectionId = 'summary' | 'activeUsers' | 'levelProgress' | 'lessonCompletion' | 'testResults' | 'chatTranscripts';
 
 interface SummarySection {
   newUsers: number;
@@ -29,6 +29,7 @@ interface ActiveUserLessonProgress {
   attemptedCount: number;
   totalCount: number;
   pct: number;
+  completed: boolean;
 }
 
 interface ActiveUserRow {
@@ -42,15 +43,49 @@ interface ActiveUserRow {
   highestLevel: 'a1' | 'a2' | 'b1' | 'b2' | null;
   highestLevelPct: number;
   totalLessonsAttempted: number;
+  lessonsCompleted: number;
+  testsCompleted: number;
   perLesson: ActiveUserLessonProgress[];
 }
 
 interface LevelProgressSection {
-  byLevel: Array<{ level: 'a1' | 'a2' | 'b1' | 'b2'; activeUsers: number; avgPct: number }>;
+  byLevel: Array<{
+    level: 'a1' | 'a2' | 'b1' | 'b2';
+    activeUsers: number;
+    avgPct: number;
+    usersCompleted: number;
+    avgLessonsCompleted: number;
+    lessonsTotal: number;
+    testsTotal: number;
+  }>;
   histogramByLevel: Array<{
     level: 'a1' | 'a2' | 'b1' | 'b2';
     buckets: Array<{ bucket: string; users: number }>;
   }>;
+}
+
+interface LessonCompletionRow {
+  level: 'a1' | 'a2' | 'b1' | 'b2';
+  lessonId: string;
+  number: number;
+  title: string;
+  learnersStarted: number;
+  learnersCompleted: number;
+  avgProgressPct: number;
+  avgAccuracyPct: number | null;
+}
+
+interface TestResultRow {
+  level: 'a1' | 'a2' | 'b1' | 'b2';
+  testId: string;
+  number: number;
+  title: string;
+  totalPoints: number;
+  learnersStarted: number;
+  learnersCompleted: number;
+  avgScorePctAll: number;
+  avgScorePctCompleters: number;
+  sections: Array<{ name: string; maxPoints: number; avgScorePctAll: number; avgScorePctCompleters: number }>;
 }
 
 interface ChatTranscriptMessage {
@@ -78,10 +113,13 @@ interface ChatTranscriptRow {
 
 interface ReportData {
   period: { from: string; to: string };
+  trackingSince: string | null;
   sections: {
     summary?: SummarySection;
     activeUsers?: ActiveUserRow[];
     levelProgress?: LevelProgressSection;
+    lessonCompletion?: LessonCompletionRow[];
+    testResults?: TestResultRow[];
     chatTranscripts?: ChatTranscriptRow[];
   };
 }
@@ -112,8 +150,20 @@ const SECTIONS: SectionDef[] = [
   {
     id: 'levelProgress',
     label: 'Learning progress by level',
-    description: 'Average completion + distribution histogram per level. Cumulative across all users (not period-filtered).',
+    description: 'Average level progress, learners who completed the level, average lessons completed + distribution histogram per level. Cumulative across all users (not period-filtered).',
     defaultOn: true,
+  },
+  {
+    id: 'lessonCompletion',
+    label: 'Lesson completion',
+    description: 'Per level and lesson: learners who started / completed it, average progress % and average accuracy. Cumulative (not period-filtered).',
+    defaultOn: false,
+  },
+  {
+    id: 'testResults',
+    label: 'Test results',
+    description: 'Per test: learners who started / completed it, average points % (all / completers) and per-section average points %. Cumulative (not period-filtered).',
+    defaultOn: false,
   },
   {
     id: 'chatTranscripts',
@@ -303,9 +353,16 @@ export default function AdminReportsPage() {
       {/* ── Preview ────────────────────────────────────────────────────── */}
       {report && (
         <div className="space-y-5">
+          {report.trackingSince && (
+            <p className="text-[11px] text-gray-400 italic">
+              Click tracking since {new Date(report.trackingSince).toLocaleDateString()}; earlier activity reconstructed from saved answers.
+            </p>
+          )}
           {report.sections.summary && <SummaryView data={report.sections.summary} />}
           {report.sections.activeUsers && <ActiveUsersView rows={report.sections.activeUsers} />}
           {report.sections.levelProgress && <LevelProgressView data={report.sections.levelProgress} />}
+          {report.sections.lessonCompletion && <LessonCompletionView rows={report.sections.lessonCompletion} />}
+          {report.sections.testResults && <TestResultsView rows={report.sections.testResults} />}
           {report.sections.chatTranscripts && <ChatTranscriptsView rows={report.sections.chatTranscripts} />}
           {selectedSections.length === 0 && (
             <div className="bg-white rounded-xl p-8 text-center text-sm text-gray-400">
@@ -401,7 +458,8 @@ function ActiveUsersView({ rows }: { rows: ActiveUserRow[] }) {
                 <th className="py-1.5 text-left font-medium">User</th>
                 <th className="py-1.5 text-left font-medium">Level</th>
                 <th className="py-1.5 text-right font-medium">Progress</th>
-                <th className="py-1.5 text-right font-medium">Lessons</th>
+                <th className="py-1.5 text-right font-medium" title="Lessons completed / started">Lessons done</th>
+                <th className="py-1.5 text-right font-medium">Tests done</th>
                 <th className="py-1.5 text-right font-medium">Exercises</th>
                 <th className="py-1.5 text-right font-medium">Chat msgs</th>
                 <th className="py-1.5 text-right font-medium">Cost</th>
@@ -461,7 +519,8 @@ function ActiveUserRowView({ user }: { user: ActiveUserRow }) {
             <span className="tabular-nums text-gray-700 w-9 text-right">{user.highestLevelPct}%</span>
           </div>
         </td>
-        <td className="py-2 text-right tabular-nums text-gray-600">{user.totalLessonsAttempted}</td>
+        <td className="py-2 text-right tabular-nums text-gray-600">{user.lessonsCompleted}/{user.totalLessonsAttempted}</td>
+        <td className="py-2 text-right tabular-nums text-gray-600">{user.testsCompleted}</td>
         <td className="py-2 text-right tabular-nums text-gray-600">{user.exercisesInPeriod}</td>
         <td className="py-2 text-right tabular-nums text-gray-600">{user.chatMessagesInPeriod}</td>
         <td className="py-2 text-right tabular-nums text-gray-700 font-medium">{fmtUsd(user.chatCostUsd)}</td>
@@ -472,7 +531,7 @@ function ActiveUserRowView({ user }: { user: ActiveUserRow }) {
       {open && hasLessons && (
         <tr className="bg-gray-50/60 border-b border-gray-100">
           <td></td>
-          <td colSpan={8} className="py-3 px-2">
+          <td colSpan={9} className="py-3 px-2">
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
               Per-lesson progress (cumulative)
             </p>
@@ -490,6 +549,7 @@ function ActiveUserRowView({ user }: { user: ActiveUserRow }) {
                       />
                     </div>
                     <span className="tabular-nums text-gray-700 w-9 text-right">{l.pct}%</span>
+                    <span className="w-4 text-[#1F5741] font-semibold">{l.completed ? '✓' : ''}</span>
                     <span className="tabular-nums text-gray-400 w-12 text-right">
                       {l.attemptedCount}/{l.totalCount}
                     </span>
@@ -525,7 +585,9 @@ function LevelProgressView({ data }: { data: LevelProgressSection }) {
             >
               <p className={`text-xs font-bold uppercase ${colors.text}`}>{lvl.level}</p>
               <p className="text-2xl font-bold text-gray-900 tabular-nums mt-0.5">{lvl.avgPct}%</p>
-              <p className="text-[10px] text-gray-500">avg, {lvl.activeUsers} learners</p>
+              <p className="text-[10px] text-gray-500">avg level progress, {lvl.activeUsers} learners</p>
+              <p className="text-[10px] text-gray-700 mt-1">{lvl.usersCompleted} completed the level</p>
+              <p className="text-[10px] text-gray-500">avg lessons completed {lvl.avgLessonsCompleted} / {lvl.lessonsTotal}</p>
               {lvl.activeUsers > 0 ? (
                 <div className="mt-2 flex items-end gap-0.5 h-10">
                   {hist.map((b) => (
@@ -544,6 +606,115 @@ function LevelProgressView({ data }: { data: LevelProgressSection }) {
           );
         })}
       </div>
+    </section>
+  );
+}
+
+function LessonCompletionView({ rows }: { rows: LessonCompletionRow[] }) {
+  return (
+    <section className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div className="flex items-center gap-2 mb-3">
+        <GraduationCap className="w-4 h-4 text-[#0072BC]" />
+        <h2 className="text-base font-semibold text-gray-800">Lesson completion</h2>
+        <span className="ml-auto text-[11px] text-gray-400 italic">cumulative — all-time</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="border-b border-gray-100 text-gray-500">
+              <th className="py-1.5 text-left font-medium">Level</th>
+              <th className="py-1.5 text-left font-medium">Lesson</th>
+              <th className="py-1.5 text-right font-medium">Started</th>
+              <th className="py-1.5 text-right font-medium">Completed</th>
+              <th className="py-1.5 text-right font-medium">Avg progress</th>
+              <th className="py-1.5 text-right font-medium">Avg accuracy</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => {
+              const colors = LEVEL_COLORS[r.level];
+              return (
+                <tr key={r.lessonId} className="border-b border-gray-50 hover:bg-gray-50">
+                  <td className="py-1.5">
+                    <span className={`text-[10px] font-mono uppercase px-1.5 py-0.5 rounded ${colors.bg} ${colors.text} font-semibold`}>{r.level}</span>
+                  </td>
+                  <td className="py-1.5 text-gray-800">
+                    <span className="font-mono text-gray-400 mr-2">{r.lessonId}</span>{r.title}
+                  </td>
+                  <td className="py-1.5 text-right tabular-nums">{r.learnersStarted}</td>
+                  <td className="py-1.5 text-right tabular-nums text-gray-600">{r.learnersCompleted}</td>
+                  <td className="py-1.5 text-right tabular-nums text-gray-700">{r.avgProgressPct}%</td>
+                  <td className="py-1.5 text-right tabular-nums text-gray-700">{r.avgAccuracyPct !== null ? `${r.avgAccuracyPct}%` : '—'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 text-[10px] text-gray-400 italic">
+        Completed = learner checked every exercise with points. Avg progress is over learners who started the lesson.
+      </p>
+    </section>
+  );
+}
+
+function TestResultsView({ rows }: { rows: TestResultRow[] }) {
+  return (
+    <section className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+      <div className="flex items-center gap-2 mb-3">
+        <GraduationCap className="w-4 h-4 text-[#0072BC]" />
+        <h2 className="text-base font-semibold text-gray-800">Test results</h2>
+        <span className="ml-auto text-[11px] text-gray-400 italic">cumulative — all-time</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="border-b border-gray-100 text-gray-500">
+              <th className="py-1.5 text-left font-medium">Level</th>
+              <th className="py-1.5 text-left font-medium">Test / section</th>
+              <th className="py-1.5 text-right font-medium">Max pts</th>
+              <th className="py-1.5 text-right font-medium">Started</th>
+              <th className="py-1.5 text-right font-medium">Completed</th>
+              <th className="py-1.5 text-right font-medium">Avg pts % (all)</th>
+              <th className="py-1.5 text-right font-medium">Avg pts % (completers)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((t) => {
+              const colors = LEVEL_COLORS[t.level];
+              return (
+                <Fragment key={t.testId}>
+                  <tr className="border-b border-gray-50 bg-gray-50/60">
+                    <td className="py-1.5">
+                      <span className={`text-[10px] font-mono uppercase px-1.5 py-0.5 rounded ${colors.bg} ${colors.text} font-semibold`}>{t.level}</span>
+                    </td>
+                    <td className="py-1.5 font-medium text-gray-800">{t.title}</td>
+                    <td className="py-1.5 text-right tabular-nums">{t.totalPoints}</td>
+                    <td className="py-1.5 text-right tabular-nums">{t.learnersStarted}</td>
+                    <td className="py-1.5 text-right tabular-nums text-gray-600">{t.learnersCompleted}</td>
+                    <td className="py-1.5 text-right tabular-nums text-gray-700">{t.avgScorePctAll}%</td>
+                    <td className="py-1.5 text-right tabular-nums text-gray-700">{t.learnersCompleted > 0 ? `${t.avgScorePctCompleters}%` : '—'}</td>
+                  </tr>
+                  {t.sections.map((s) => (
+                    <tr key={`${t.testId}-${s.name}`} className="border-b border-gray-50">
+                      <td></td>
+                      <td className="py-1 pl-4 text-gray-600">{s.name}</td>
+                      <td className="py-1 text-right tabular-nums text-gray-500">{s.maxPoints}</td>
+                      <td></td>
+                      <td></td>
+                      <td className="py-1 text-right tabular-nums text-gray-600">{s.avgScorePctAll}%</td>
+                      <td className="py-1 text-right tabular-nums text-gray-600">{t.learnersCompleted > 0 ? `${s.avgScorePctCompleters}%` : '—'}</td>
+                    </tr>
+                  ))}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 text-[10px] text-gray-400 italic">
+        Completed = learner checked every exercise with points. Points % = points with current answers ÷ max points.
+      </p>
     </section>
   );
 }

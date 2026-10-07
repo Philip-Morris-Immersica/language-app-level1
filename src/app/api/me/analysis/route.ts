@@ -200,7 +200,12 @@ export async function POST(req: NextRequest) {
   // Build level summary for context
   const levelSummary = Object.entries(progress.byLevel)
     .filter(([, v]) => v.lessonsAttempted > 0)
-    .map(([lvl, v]) => `${lvl.toUpperCase()}: ${v.lessonsAttempted} уроци, средно ${v.avgPct}%`)
+    .map(
+      ([lvl, v]) =>
+        `${lvl.toUpperCase()}: ${v.percent}% of the level, ${v.lessonsCompleted}/${v.lessonsTotal} lessons completed, ${v.lessonsAttempted} started` +
+        (v.testsTotal > 0 ? `, ${v.testsCompleted}/${v.testsTotal} tests completed` : '') +
+        (v.accuracyPct !== null ? `, accuracy ${v.accuracyPct}%` : ''),
+    )
     .join('; ');
 
   const langNames: Record<string, string> = {
@@ -230,7 +235,7 @@ Address the learner directly using "you" / "your" throughout — never say "the 
 Write as if speaking face-to-face with the person. Be specific, detailed, and insightful — this is a full learning report, not a short summary.
 
 The learner's progress: ${levelSummary || 'just started'}.
-Current level: ${progress.highestLevel?.toUpperCase() ?? 'A1'} (${progress.highestLevelPct}% average completion).
+Current level: ${progress.highestLevel?.toUpperCase() ?? 'A1'} (${progress.highestLevelPct}% of the level done).
 Total exercises attempted: ${totalAttempted}.
 
 IMPORTANT: Write your ENTIRE response in ${langName}. All section headers, explanations, recommendations and text must be in ${langName}.

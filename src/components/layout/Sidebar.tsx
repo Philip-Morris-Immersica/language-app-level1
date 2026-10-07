@@ -65,6 +65,9 @@ function detectActiveLevel(pathname: string | null): Level {
 interface LessonProgress {
   completed: number;
   total: number;
+  percent: number;
+  done: boolean;
+  started: boolean;
 }
 
 function LessonTitle({ title }: { title: string }) {
@@ -152,9 +155,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const p = progressData[lessonId];
     const total = p?.total ?? 0;
     const done = p?.completed ?? 0;
-    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-    const isStarted = done > 0;
-    const isDone = total > 0 && done >= total;
+    const percent = p?.percent ?? 0;
+    const isStarted = p?.started ?? false;
+    const isDone = p?.done ?? false;
     return { percent, isStarted, isDone, done, total };
   }
 

@@ -274,16 +274,20 @@ export function buildSystemPrompt({
   // results": before, only the CURRENT page's exercises were visible; now
   // the full cross-page history + real test scores is always in context.
   if (overallLessonProgress && overallLessonProgress.length > 0) {
-    system += `\n\nUSER OVERALL PROGRESS — LESSONS (all levels, only lessons with at least one attempt; % = exercises attempted, not correctness):`;
+    system += `\n\nUSER OVERALL PROGRESS — LESSONS (all levels, only lessons with at least one attempt; % = exercises opened/worked on, not correctness; COMPLETED = every exercise with points was checked; accuracy = share of correct answers in checked exercises):`;
     for (const l of overallLessonProgress) {
-      system += `\n- ${l.lessonId} (${l.level.toUpperCase()}): ${l.pct}% attempted (${l.attemptedCount}/${l.totalCount})`;
+      const status = l.completed ? 'COMPLETED' : `${l.pct}% (${l.attemptedCount}/${l.totalCount} exercises, ${l.gradedChecked}/${l.gradedTotal} checked)`;
+      const accuracy = l.accuracyPct !== null ? `, accuracy ${l.accuracyPct}%` : '';
+      system += `\n- ${l.lessonId} (${l.level.toUpperCase()}): ${status}${accuracy}`;
     }
   }
 
   if (overallTestResults && overallTestResults.length > 0) {
     system += `\n\nUSER OVERALL PROGRESS — TESTS (all levels, real saved scores — see TEST POLICY for what you may share):`;
     for (const t of overallTestResults) {
-      const status = t.completed ? 'FINISHED' : `IN PROGRESS (${t.attemptedPct}% attempted — score not final)`;
+      const status = t.completed
+        ? 'FINISHED'
+        : `IN PROGRESS (${t.submittedCount}/${t.totalExercises} exercises checked — score not final)`;
       system += `\n- ${t.testId} "${t.title}" (${t.level.toUpperCase()}): ${status} — ${t.pointsEarned}/${t.totalPoints} pts (${t.pointsScorePct}%)`;
       if (t.bySection.length > 0) {
         const sections = t.bySection.map((s) => `${s.name} ${s.pointsEarned}/${s.maxPoints}`).join(', ');
