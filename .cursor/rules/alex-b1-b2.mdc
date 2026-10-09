@@ -28,8 +28,12 @@ alwaysApply: false
 3. **Composer 2.5 Fast / Grok 4.7 High Fast** — TTS execution, Git и exact fixes.
 4. Sonnet за TTS само при езиков/структурен проблем.
 
-Не смесвай Plan, Build и TTS в един чат. Голям урок се дели на Build batches
-в `_PLAN`; един Sonnet чат изпълнява един batch.
+Plan, Build и TTS никога не делят един контекст. Голям урок се дели на Build
+batches в `_PLAN`. Основно: `/b2-lesson` в един Sonnet coordinator чат пуска
+плана (Opus subagent), всеки batch, review-то и поправките като отделни
+subagents и пази само кратките им отчети. Резервно: отделни чатове
+`/b2-plan` → `/b2-build` (един batch на чат) → `/b2-review`. TTS винаги е
+отделен Composer чат след преглед на урока.
 
 ## Материали и клиентски план — отделна задължителна стъпка
 

@@ -18,10 +18,14 @@ alwaysApply: true
   correction batch, or TTS.
 - Never continue implementation in the Opus planning chat. Persist the approved
   plan in `_PLAN-<lesson-id>.md`, then start a fresh Sonnet chat.
-- A large lesson may have 2–3 Build batches defined by the plan. One Sonnet chat
-  executes one batch only.
+- A large lesson may have 2–3 Build batches defined by the plan. Each batch runs
+  in a fresh context: either one Sonnet chat per batch, or the `/b2-lesson`
+  coordinator chat that runs the plan (Opus subagent), each batch, the review
+  and the fixes as separate subagents and keeps only their short reports.
+- After answering plan questions, the Opus chat records `R1…Rn` and sets
+  `READY` itself; recommended answers are written into the plan rows up front.
 - After completing a phase, give one short, phase-specific next-chat prompt
-  (`/b2-build`, `/b2-fix`, `/b2-tts` or a one-line commit request). Do not always tell the
+  (`/b2-lesson`, `/b2-build`, `/b2-fix`, `/b2-tts` or a one-line commit request). Do not always tell the
   next agent to reread `exercises.ts`/`content.ts` when the next phase is Git or TTS.
 - At 20+ messages, ALWAYS add a reminder: "Чатът стана дълъг — нов чат ще спести токени и ще работи по-бързо."
 - NEVER ignore these reminders — they are critical for the user's budget.
@@ -37,8 +41,10 @@ Only surface items that apply — do NOT add the checklist header if nothing app
 ## Lesson Workflow
 The standard lesson workflow uses separate, short phases:
 1. **Opus 5.5:** source-folder audit + approved `_PLAN` only.
-2. **Sonnet 5.5:** implementation (one batch for a large lesson).
-3. **Sonnet 5.5:** correction batch only when feedback exists; optional QA before merge.
+2. **Sonnet 5.5:** `/b2-lesson` — one coordinator chat runs steps 1–3 as
+   subagents (plan with Opus, build batches + review with Sonnet, exact fixes);
+   fallback: separate chats per phase.
+3. **Sonnet 5.5:** correction batch only when later feedback exists.
 4. **Composer/Grok:** TTS audit + generation after content freeze.
 5. Commit content first; commit audio separately after human listening.
 
