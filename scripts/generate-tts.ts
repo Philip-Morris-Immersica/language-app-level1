@@ -18,17 +18,29 @@ function parseArg(name: string): string | undefined {
   return process.argv[idx + 1];
 }
 
+function hasFlag(name: string): boolean {
+  return process.argv.includes(`--${name}`);
+}
+
 const lessonNum = parseArg('lesson');
 const testNum = parseArg('test');
 if (!lessonNum && !testNum) {
-  console.error('Usage: tsx scripts/generate-tts.ts --lesson 04 [--model gemini|chirp]');
+  console.error('Usage: tsx scripts/generate-tts.ts --lesson 04|b2-lesson-01 [--model gemini|chirp]');
   console.error('       tsx scripts/generate-tts.ts --test 4 [--model gemini|chirp]');
+  console.error('       Add --audit for a read-only preflight (no API calls or file writes).');
   process.exit(1);
 }
 const IS_TEST = !!testNum;
+const AUDIT_ONLY = hasFlag('audit');
+const AUDIT_STRICT = hasFlag('strict');
+const AUDIT_VERBOSE = hasFlag('verbose');
 // --test accepts the folder suffix: e.g. --test 4 → test-lessons-4, --test 1-2-3 → test-lessons-1-2-3
 
 const modelFlag = parseArg('model') || 'gemini';
+if (modelFlag !== 'gemini' && modelFlag !== 'chirp') {
+  console.error(`Invalid --model "${modelFlag}". Use "gemini" or "chirp".`);
+  process.exit(1);
+}
 const USE_GEMINI = modelFlag === 'gemini';
 
 const FEMALE_VOICE = USE_GEMINI ? 'Achernar' : 'bg-BG-Chirp3-HD-Achernar';
@@ -292,10 +304,14 @@ interface Exercise {
   id: string;
   type: string;
   disableTts?: boolean;
+  disableAudio?: boolean;
   audioUrl?: string;
   listeningText?: string;
   voiceGender?: 'male' | 'female';
   textTitle?: string;
+  headerCaption?: string;
+  ttsCaptionText?: string;
+  displayType?: string;
   paragraphs?: string[] | { text: string; speaker?: string }[];
   /** TTS-friendly text per paragraph (overrides `paragraphs` for audio only). */
   ttsParagraphs?: string[];
@@ -309,9 +325,31 @@ interface Exercise {
     ttsPrompt?: string;
     /** TTS-only override: exact text spoken instead of joining pronoun + cells. */
     ttsText?: string;
+    voiceGender?: 'male' | 'female';
+    /** Row is visual-only and must not get a TTS job. */
+    noAudio?: boolean;
+  }[];
+  panels?: {
+    rows: {
+      pronoun: string;
+      cells: string[];
+      ttsModel?: 'flash' | 'pro';
+      ttsPrompt?: string;
+      ttsText?: string;
+      voiceGender?: 'male' | 'female';
+      noAudio?: boolean;
+    }[];
+    fullWidth?: boolean;
   }[];
   ttsFlash?: boolean;
-  examples?: { text: string; ttsText?: string; subtext?: string; lines?: string[]; voiceGender?: 'male' | 'female' }[];
+  examples?: {
+    text: string;
+    ttsText?: string;
+    ttsPrompt?: string;
+    subtext?: string;
+    lines?: string[];
+    voiceGender?: 'male' | 'female';
+  }[];
   sections?: { id: string; lines: { text: string; ttsText?: string; speaker?: string; voiceGender?: 'male' | 'female' }[] }[];
   notes?: string[];
   ttsNotes?: string[];
@@ -338,6 +376,13 @@ interface Exercise {
     ttsPrompt?: string;
   }[];
   pronouns?: { pronoun: string; description?: string }[];
+  grammarHighlight?: {
+    interactiveExamples?: boolean;
+    examples?: string[];
+    exampleTtsTexts?: string[];
+    ttsFlash?: boolean;
+    ttsPro?: boolean;
+  };
   /** audio_choice — one MP3 per question (letter name or word). */
   questions?: {
     id: string;
@@ -424,9 +469,16 @@ async function synthesizeGemini(text: string, voice: string, model: string, prom
     try {
       return await synthesizeGeminiOnce(text, voice, model, prompt);
     } catch (err: unknown) {
-      const isRetryable = typeof err === 'object' && err !== null && 'retryable' in err;
-      if (isRetryable && attempt < MAX_RETRIES - 1) {
-        const waitMs = (err as { waitMs: number }).waitMs;
+      const retryableError =
+        typeof err === 'object' && err !== null && 'retryable' in err
+          ? (err as { retryable?: unknown; waitMs?: unknown; message?: unknown })
+          : null;
+      if (
+        retryableError?.retryable === true &&
+        typeof retryableError.waitMs === 'number' &&
+        attempt < MAX_RETRIES - 1
+      ) {
+        const waitMs = retryableError.waitMs;
         process.stdout.write(` [rate-limited, waiting ${Math.round(waitMs / 1000)}s]`);
         await sleep(waitMs);
         continue;
@@ -470,42 +522,71 @@ const SPEAKER_VOICE_MAP: Record<string, string> = {
   'госпожа': FEMALE_VOICE,
 };
 
-function getDialogueVoice(speaker: string | undefined, lineIndex: number): string {
-  if (speaker) {
-    const mapped = SPEAKER_VOICE_MAP[speaker.toLowerCase()];
-    if (mapped) return mapped;
-  }
-  return lineIndex % 2 === 0 ? FEMALE_VOICE : MALE_VOICE;
+type DialogueLine = {
+  text: string;
+  ttsText?: string;
+  speaker?: string;
+  voiceGender?: 'male' | 'female';
+};
+
+interface DialogueVoiceState {
+  female: Map<string, string>;
+  male: Map<string, string>;
+  genders: Map<string, 'male' | 'female'>;
 }
 
-/** Per-section counters so consecutive same-gender lines get voice alternation. */
+function normaliseSpeaker(value: string): string {
+  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('bg');
+}
+
+/** Stable character key: explicit speaker → "Name:" prefix → anonymous A/B turn. */
+function dialogueCharacterKey(line: DialogueLine, lineIndex: number): string {
+  if (line.speaker?.trim()) return normaliseSpeaker(line.speaker);
+  const withoutDash = line.text.replace(/^[–—-]\s*/, '');
+  const prefixedName = withoutDash.match(/^([А-Яа-яA-Za-z0-9][^:\n]{0,48}?):\s/);
+  if (prefixedName) return normaliseSpeaker(prefixedName[1]);
+  return `__anonymous_${lineIndex % 2}`;
+}
+
+function mappedSpeakerGender(speaker: string | undefined): 'male' | 'female' | undefined {
+  if (!speaker) return undefined;
+  const mapped = SPEAKER_VOICE_MAP[normaliseSpeaker(speaker)];
+  if (!mapped) return undefined;
+  return mapped === MALE_VOICE || mapped === MALE_VOICE_ALT ? 'male' : 'female';
+}
+
+/**
+ * Assigns one stable voice to one character for the whole dialogue section.
+ * Alternate voices are used for a second distinct character of the same gender,
+ * never merely because two consecutive lines share a gender.
+ */
 function dialogueLineVoice(
-  line: { text: string; speaker?: string; voiceGender?: 'male' | 'female' },
+  line: DialogueLine,
   lineIndex: number,
-  maleTurn: { n: number },
-  femaleTurn: { n: number },
-  prevGender: { g: 'male' | 'female' | null },
+  state: DialogueVoiceState,
 ): string {
-  if (line.voiceGender === 'female') {
-    // Reset alt counter when gender changes so non-consecutive female lines
-    // (e.g. f, m, f) use the same primary voice — avoids accidental voice switches
-    // for the same character. Alt only engages for truly consecutive f-f lines.
-    if (prevGender.g !== 'female') femaleTurn.n = 0;
-    const v = femaleTurn.n % 2 === 0 ? FEMALE_VOICE : FEMALE_VOICE_ALT;
-    femaleTurn.n++;
-    prevGender.g = 'female';
-    return v;
-  }
-  if (line.voiceGender === 'male') {
-    // Same logic for male: m, f, m → Charon, Achernar, Charon (not Charon, Achernar, Achird)
-    if (prevGender.g !== 'male') maleTurn.n = 0;
-    const v = maleTurn.n % 2 === 0 ? MALE_VOICE : MALE_VOICE_ALT;
-    maleTurn.n++;
-    prevGender.g = 'male';
-    return v;
-  }
-  prevGender.g = null;
-  return getDialogueVoice(line.speaker, lineIndex);
+  const key = dialogueCharacterKey(line, lineIndex);
+  const rememberedGender = state.genders.get(key);
+  const gender =
+    line.voiceGender ??
+    rememberedGender ??
+    mappedSpeakerGender(line.speaker) ??
+    (key.startsWith('__anonymous_') && lineIndex % 2 === 1 ? 'male' : 'female');
+
+  state.genders.set(key, gender);
+  const map = gender === 'female' ? state.female : state.male;
+  const existing = map.get(key);
+  if (existing) return existing;
+
+  const pool =
+    gender === 'female'
+      ? [FEMALE_VOICE, FEMALE_VOICE_ALT]
+      : [MALE_VOICE, MALE_VOICE_ALT];
+  // More than two same-gender characters share the primary voice; tts:audit
+  // reports that limitation so the author can decide whether it is acceptable.
+  const voice = pool[map.size] ?? pool[0];
+  map.set(key, voice);
+  return voice;
 }
 
 function stripGrammarLabels(subtext: string): string {
@@ -515,6 +596,10 @@ function stripGrammarLabels(subtext: string): string {
 // ---------------------------------------------------------------------------
 // Collect jobs
 // ---------------------------------------------------------------------------
+function ttsEnabled(exercise: Exercise): boolean {
+  return !exercise.disableAudio && !exercise.disableTts;
+}
+
 function collectVocabularyJobs(content: LessonContent): TtsJob[] {
   return content.vocabulary.map(item => {
     // Content-level override has priority; falls back to hardcoded A1 sets for backward compat.
@@ -535,9 +620,22 @@ function collectVocabularyJobs(content: LessonContent): TtsJob[] {
  * Illustrated cards use `words/{card.id}.mp3` — may differ from vocabulary ids (e.g. lesson 01).
  * Pro + warm prompt: short phrases sound more natural than Flash (stress/intonation on e.g. „Добър ден!“).
  */
+const ILLUSTRATED_CARD_TYPES = new Set([
+  'illustrated_cards',
+  'b1-illustrated-cards-grouped',
+  'b2-illustrated-cards-grouped',
+]);
+
+function isIllustratedCards(ex: Exercise): boolean {
+  return ILLUSTRATED_CARD_TYPES.has(ex.type) && !!ex.cards;
+}
+
 function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
+  for (const ex of exercises.filter(
+    e => isIllustratedCards(e) && ttsEnabled(e),
+  )) {
+    const voice = ex.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE;
     for (const card of ex.cards!) {
       let joined: string;
       if (card.ttsLabel) {
@@ -558,13 +656,32 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
         category: 'words',
         filename: `${card.id}.mp3`,
         text: clean(joined),
-        voice: FEMALE_VOICE,
+        voice,
         model,
         prompt,
       });
     }
   }
   return jobs;
+}
+
+/** Illustrated-card header caption: `texts/{exerciseId}-caption.mp3` (Pro). */
+function collectIllustratedCardCaptionJobs(exercises: Exercise[]): TtsJob[] {
+  return exercises
+    .filter(
+      e =>
+        isIllustratedCards(e) &&
+        ttsEnabled(e) &&
+        !!e.headerCaption?.trim(),
+    )
+    .map(e => ({
+      category: 'texts',
+      filename: `${e.id}-caption.mp3`,
+      text: clean(e.ttsCaptionText ?? e.headerCaption!),
+      voice: e.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE,
+      model: GEMINI_MODEL,
+      prompt: GEMINI_PROMPT,
+    }));
 }
 
 /**
@@ -575,7 +692,9 @@ function collectIllustratedCardJobs(exercises: Exercise[]): TtsJob[] {
 /** reading_text — optional `images[].ttsWordId` + `label` for flip-card word clips (`words/{ttsWordId}.mp3`). */
 function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'reading_text' && e.images)) {
+  for (const ex of exercises.filter(
+    e => e.type === 'reading_text' && e.images && ttsEnabled(e),
+  )) {
     for (const img of ex.images!) {
       const raw = img as {
         label?: string;
@@ -607,11 +726,16 @@ function collectReadingTextImageWordJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
   const illustratedIds = new Set<string>();
-  for (const ex of exercises.filter(e => e.type === 'illustrated_cards' && e.cards)) {
+  for (const ex of exercises.filter(ex => isIllustratedCards(ex) && ttsEnabled(ex))) {
     for (const c of ex.cards!) illustratedIds.add(c.id);
   }
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'image_labeling' || e.type === 'a2-image-labeling') && e.images)) {
+  for (const ex of exercises.filter(
+    e =>
+      (e.type === 'image_labeling' || e.type === 'a2-image-labeling') &&
+      e.images &&
+      ttsEnabled(e),
+  )) {
     const isFlags = ex.displayType === 'flags';
     for (const img of ex.images!) {
       // Flag exercises use a dedicated filename so TTS is only correctLabel (country name),
@@ -651,7 +775,9 @@ function collectImageLabelingJobs(exercises: Exercise[]): TtsJob[] {
  */
 function collectAudioChoiceJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'audio_choice' && e.questions)) {
+  for (const ex of exercises.filter(
+    e => e.type === 'audio_choice' && e.questions && ttsEnabled(e),
+  )) {
     for (const q of ex.questions!) {
       if (!q.word) continue;
       jobs.push({
@@ -670,7 +796,9 @@ function collectAudioChoiceJobs(exercises: Exercise[]): TtsJob[] {
 /** grammar_visual — one MP3 per pronoun tile. If `description` is set, speak question + answer (Pro); else isolated pronoun (Flash). */
 function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'grammar_visual' && e.pronouns)) {
+  for (const ex of exercises.filter(
+    e => e.type === 'grammar_visual' && e.pronouns && ttsEnabled(e),
+  )) {
     for (let i = 0; i < ex.pronouns!.length; i++) {
       const tile = ex.pronouns![i];
       const desc = tile.description?.trim();
@@ -692,7 +820,9 @@ function collectGrammarVisualJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectWideCardJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'a2-wide-cards' && e.cards)) {
+  for (const ex of exercises.filter(
+    e => e.type === 'a2-wide-cards' && e.cards && ttsEnabled(e),
+  )) {
     for (const card of ex.cards!) {
       const text = (card as { ttsLabel?: string; label: string }).ttsLabel ?? card.label;
       jobs.push({
@@ -710,11 +840,18 @@ function collectWideCardJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'dialogues' || e.type === 'a2-dialogues') && e.sections)) {
+  for (const ex of exercises.filter(
+    e =>
+      (e.type === 'dialogues' || e.type === 'a2-dialogues') &&
+      e.sections &&
+      ttsEnabled(e),
+  )) {
     for (const section of ex.sections!) {
-      const maleTurn = { n: 0 };
-      const femaleTurn = { n: 0 };
-      const prevGender = { g: null as 'male' | 'female' | null };
+      const voiceState: DialogueVoiceState = {
+        female: new Map(),
+        male: new Map(),
+        genders: new Map(),
+      };
       for (let i = 0; i < section.lines.length; i++) {
         const line = section.lines[i];
         // Use ttsText override when set (e.g. to expand abbreviations); display text stays unchanged
@@ -723,7 +860,7 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
           category: 'dialogues',
           filename: `${ex.id}-${section.id}-line-${i}.mp3`,
           text: clean(rawText),
-          voice: dialogueLineVoice(line, i, maleTurn, femaleTurn, prevGender),
+          voice: dialogueLineVoice(line, i, voiceState),
           model: GEMINI_MODEL,
           prompt: GEMINI_PROMPT,
         });
@@ -733,11 +870,39 @@ function collectDialogueJobs(exercises: Exercise[]): TtsJob[] {
   return jobs;
 }
 
+const GRAMMAR_TABLE_TYPES = new Set([
+  'grammar_table',
+  'b1-grammar-table',
+  'b2-grammar-table',
+]);
+
+function orderedGrammarRows(ex: Exercise): NonNullable<Exercise['rows']> {
+  // The B1/B2 panel renderer ignores top-level `rows` when `panels` is set.
+  if (ex.panels?.length) {
+    const orderedPanels = [
+      ...ex.panels.filter(panel => !panel.fullWidth),
+      ...ex.panels.filter(panel => panel.fullWidth),
+    ];
+    return orderedPanels.flatMap(panel => panel.rows);
+  }
+  return ex.rows ?? [];
+}
+
 function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'grammar_table' || e.type === 'b1-grammar-table') && e.rows)) {
-    for (let i = 0; i < ex.rows!.length; i++) {
-      const row = ex.rows![i];
+  for (const ex of exercises.filter(
+    e =>
+      GRAMMAR_TABLE_TYPES.has(e.type) &&
+      ttsEnabled(e) &&
+      (!!e.rows?.length || !!e.panels?.length),
+  )) {
+    // B1/B2 panel renderers order side-by-side panels first and full-width
+    // panels second; the UI uses the same flattened row index for MP3 paths.
+    const rows = orderedGrammarRows(ex);
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (row.noAudio) continue;
       const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
       const speakableCells = row.cells.filter(c => !c.trim().startsWith('-'));
       const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
@@ -749,7 +914,7 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
         category: 'grammar',
         filename: `${rowKey}.mp3`,
         text: clean(rowSource),
-        voice: FEMALE_VOICE,
+        voice: row.voiceGender === 'male' ? MALE_VOICE : FEMALE_VOICE,
         model: useProForRow ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
         prompt: row.ttsPrompt ?? (useProForRow ? GEMINI_PROMPT : GEMINI_WORD_PROMPT),
       });
@@ -782,10 +947,10 @@ function collectGrammarTableJobs(exercises: Exercise[]): TtsJob[] {
 function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
   for (const ex of exercises) {
-    const gh = (ex as Exercise & {
-      grammarHighlight?: { interactiveExamples?: boolean; examples?: string[]; exampleTtsTexts?: string[] };
-    }).grammarHighlight;
+    if (!ttsEnabled(ex)) continue;
+    const gh = ex.grammarHighlight;
     if (!gh || gh.interactiveExamples !== true || !gh.examples) continue;
+    const usePro = gh.ttsPro === true && gh.ttsFlash !== true;
     for (let i = 0; i < gh.examples.length; i++) {
       const src = gh.exampleTtsTexts?.[i]?.trim() || gh.examples[i];
       if (!src?.trim()) continue;
@@ -794,8 +959,8 @@ function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
         filename: `${ex.id}-highlight-${i}.mp3`,
         text: clean(src),
         voice: FEMALE_VOICE,
-        model: GEMINI_FLASH_MODEL,
-        prompt: GEMINI_WORD_PROMPT,
+        model: usePro ? GEMINI_MODEL : GEMINI_FLASH_MODEL,
+        prompt: usePro ? GEMINI_PROMPT : GEMINI_WORD_PROMPT,
       });
     }
   }
@@ -804,7 +969,14 @@ function collectGrammarHighlightJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => (e.type === 'grammar_examples' || e.type === 'a2-grammar-examples' || e.type === 'b1-grammar-examples') && !e.disableTts && e.examples)) {
+  for (const ex of exercises.filter(
+    e =>
+      (e.type === 'grammar_examples' ||
+        e.type === 'a2-grammar-examples' ||
+        e.type === 'b1-grammar-examples') &&
+      ttsEnabled(e) &&
+      e.examples,
+  )) {
     const useFlash = !!ex.ttsFlash;
     for (let i = 0; i < ex.examples!.length; i++) {
       const card = ex.examples![i];
@@ -838,7 +1010,7 @@ function collectGrammarExampleJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectTableFillParagraphJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'table_fill')) {
+  for (const ex of exercises.filter(e => e.type === 'table_fill' && ttsEnabled(e))) {
     const paras = (ex as Exercise & { paragraphs?: { text: string }[] }).paragraphs;
     if (!paras?.length) continue;
     const genders = (ex as Exercise).paragraphVoiceGenders;
@@ -861,7 +1033,13 @@ function collectTableFillParagraphJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'reading_text' && e.paragraphs && !READING_TEXT_EXCLUDE.has(e.id))) {
+  for (const ex of exercises.filter(
+    e =>
+      e.type === 'reading_text' &&
+      e.paragraphs &&
+      ttsEnabled(e) &&
+      !READING_TEXT_EXCLUDE.has(e.id),
+  )) {
     const paragraphs = ex.paragraphs as string[];
     // Use ttsParagraphs for audio when provided (display text stays unchanged)
     const ttsParagraphs = ex.ttsParagraphs && ex.ttsParagraphs.length === paragraphs.length
@@ -898,13 +1076,15 @@ function collectReadingTextJobs(exercises: Exercise[]): TtsJob[] {
 
 function collectListeningJobs(exercises: Exercise[]): TtsJob[] {
   return exercises
-    .filter(e => e.listeningText)
+    .filter(e => e.listeningText && ttsEnabled(e))
     .map(e => ({ category: 'listening', filename: `${e.id}.mp3`, text: clean(e.listeningText!), voice: FEMALE_VOICE, model: GEMINI_MODEL, prompt: GEMINI_PROMPT }));
 }
 
 function collectPersonalChoiceJobs(exercises: Exercise[]): TtsJob[] {
   const jobs: TtsJob[] = [];
-  for (const ex of exercises.filter(e => e.type === 'personal_choice' && e.model)) {
+  for (const ex of exercises.filter(
+    e => e.type === 'personal_choice' && e.model && ttsEnabled(e),
+  )) {
     const { question, positiveAnswer, negativeAnswer } = ex.model!;
     const modelText = clean(`${question} ${positiveAnswer} ${negativeAnswer}`);
     jobs.push({
@@ -920,11 +1100,395 @@ function collectPersonalChoiceJobs(exercises: Exercise[]): TtsJob[] {
 }
 
 // ---------------------------------------------------------------------------
+// Read-only audit
+// ---------------------------------------------------------------------------
+interface AuditFinding {
+  severity: 'error' | 'warning';
+  code: string;
+  message: string;
+}
+
+// Digits, "=", a "/" glued to a word (м/ж, км/ч) or a common abbreviation.
+// `\b` is ASCII-only in JS, so Cyrillic boundaries are checked explicitly.
+const RISKY_SPOKEN_TEXT =
+  /\d|=|\S\/\S|(?:^|[^А-Яа-яA-Za-z])(?:бул|ул|пл|жк|г|стр)\./iu;
+
+function printTtsAudit(
+  content: LessonContent | null,
+  exercises: Exercise[],
+  rawJobs: TtsJob[],
+  uniqueJobs: TtsJob[],
+): { errors: number; warnings: number } {
+  const findings: AuditFinding[] = [];
+  const add = (
+    severity: AuditFinding['severity'],
+    code: string,
+    message: string,
+  ) => findings.push({ severity, code, message });
+
+  const jobKeys = new Set(uniqueJobs.map(job => `${job.category}/${job.filename}`));
+  const expected = new Map<string, string>();
+  const expect = (key: string, source: string) => expected.set(key, source);
+  const illustratedCardIds = new Set(
+    exercises
+      .filter(ex => isIllustratedCards(ex) && ttsEnabled(ex))
+      .flatMap(ex => (ex.cards ?? []).map(card => card.id)),
+  );
+
+  for (const item of content?.vocabulary ?? []) {
+    expect(`words/${item.id}.mp3`, `vocabulary:${item.id}`);
+    const spoken = item.ttsText ?? item.bulgarian;
+    if (RISKY_SPOKEN_TEXT.test(spoken)) {
+      add('warning', 'risky-vocabulary-text', `${item.id}: spoken text still contains digits/symbols/abbreviations.`);
+    }
+  }
+
+  for (const ex of exercises) {
+    if (isIllustratedCards(ex) && !ex.disableAudio && !ex.disableTts) {
+      for (const card of ex.cards ?? []) {
+        expect(`words/${card.id}.mp3`, `${ex.id}:card:${card.id}`);
+        const spoken = card.ttsLabel ?? card.label;
+        if (RISKY_SPOKEN_TEXT.test(spoken)) {
+          add('warning', 'risky-card-text', `${ex.id}/${card.id}: add a TTS-safe ttsLabel.`);
+        }
+      }
+      if (ex.headerCaption?.trim()) {
+        expect(`texts/${ex.id}-caption.mp3`, `${ex.id}:headerCaption`);
+      }
+    }
+
+    if (ex.type === 'a2-wide-cards' && ex.cards && ttsEnabled(ex)) {
+      ex.cards.forEach(card =>
+        expect(`words/${card.id}.mp3`, `${ex.id}:wide-card:${card.id}`),
+      );
+    }
+
+    if (ex.type === 'reading_text' && ex.images && ttsEnabled(ex)) {
+      for (const image of ex.images as Array<{ ttsWordId?: string }>) {
+        if (image.ttsWordId?.trim()) {
+          expect(`words/${image.ttsWordId}.mp3`, `${ex.id}:reading-image:${image.ttsWordId}`);
+        }
+      }
+    }
+
+    if (
+      (ex.type === 'image_labeling' || ex.type === 'a2-image-labeling') &&
+      ex.images &&
+      ttsEnabled(ex)
+    ) {
+      for (const image of ex.images) {
+        if (ex.displayType === 'flags') {
+          expect(`words/${ex.id}-flag-${image.id}.mp3`, `${ex.id}:flag:${image.id}`);
+        } else if (!illustratedCardIds.has(image.id)) {
+          expect(`words/${image.id}.mp3`, `${ex.id}:image:${image.id}`);
+        }
+      }
+    }
+
+    if (ex.type === 'audio_choice' && ex.questions && ttsEnabled(ex)) {
+      ex.questions
+        .filter(question => question.word)
+        .forEach(question =>
+          expect(`words/${question.id}.mp3`, `${ex.id}:audio-choice:${question.id}`),
+        );
+    }
+
+    if (ex.type === 'grammar_visual' && ex.pronouns && ttsEnabled(ex)) {
+      ex.pronouns.forEach((_, index) =>
+        expect(`grammar/${ex.id}-pronoun-${index}.mp3`, `${ex.id}:pronoun-${index}`),
+      );
+    }
+
+    if (
+      (ex.type === 'dialogues' || ex.type === 'a2-dialogues') &&
+      ex.sections &&
+      ttsEnabled(ex)
+    ) {
+      for (const section of ex.sections) {
+        const characterGenders = new Map<string, 'male' | 'female'>();
+        const femaleCharacters = new Set<string>();
+        const maleCharacters = new Set<string>();
+
+        section.lines.forEach((line, index) => {
+          expect(
+            `dialogues/${ex.id}-${section.id}-line-${index}.mp3`,
+            `${ex.id}/${section.id}/line-${index}`,
+          );
+
+          const spoken = line.ttsText ?? line.text;
+          if (RISKY_SPOKEN_TEXT.test(spoken)) {
+            add(
+              'warning',
+              'risky-dialogue-text',
+              `${ex.id}/${section.id}/line-${index}: add or fix ttsText (digits, symbols or abbreviation found).`,
+            );
+          }
+
+          const key = dialogueCharacterKey(line, index);
+          const mappedGender = mappedSpeakerGender(line.speaker);
+          const gender =
+            line.voiceGender ??
+            mappedGender ??
+            (key.startsWith('__anonymous_') && index % 2 === 1 ? 'male' : 'female');
+          const previous = characterGenders.get(key);
+          // Anonymous parity keys are a voice heuristic, not a character identity,
+          // so a gender change there is expected (e.g. f, f, m) and not an error.
+          if (previous && previous !== gender && !key.startsWith('__anonymous_')) {
+            add(
+              'error',
+              'dialogue-gender-conflict',
+              `${ex.id}/${section.id}: speaker "${line.speaker ?? key}" changes gender.`,
+            );
+          }
+          characterGenders.set(key, gender);
+          (gender === 'female' ? femaleCharacters : maleCharacters).add(key);
+
+          if (!line.voiceGender && !mappedGender && line.speaker) {
+            add(
+              'warning',
+              'dialogue-gender-unknown',
+              `${ex.id}/${section.id}: speaker "${line.speaker}" needs voiceGender.`,
+            );
+          }
+        });
+
+        if (femaleCharacters.size > 2) {
+          add(
+            'warning',
+            'dialogue-female-voice-limit',
+            `${ex.id}/${section.id}: ${femaleCharacters.size} female characters share 2 available voices.`,
+          );
+        }
+        if (maleCharacters.size > 2) {
+          add(
+            'warning',
+            'dialogue-male-voice-limit',
+            `${ex.id}/${section.id}: ${maleCharacters.size} male characters share 2 available voices.`,
+          );
+        }
+      }
+    }
+
+    if (GRAMMAR_TABLE_TYPES.has(ex.type) && ttsEnabled(ex)) {
+      const rows = orderedGrammarRows(ex);
+      rows.forEach((row, index) => {
+        if (row.noAudio) return;
+        expect(`grammar/${ex.id}-row-${index}.mp3`, `${ex.id}:row-${index}`);
+        const spoken = row.ttsText ?? [row.pronoun, ...row.cells].join('. ');
+        if (RISKY_SPOKEN_TEXT.test(spoken)) {
+          add(
+            'warning',
+            'risky-grammar-row',
+            `${ex.id}/row-${index}: add a TTS-safe row.ttsText.`,
+          );
+        }
+      });
+      ex.notes?.forEach((note, index) => {
+        expect(`grammar/${ex.id}-note-${index}.mp3`, `${ex.id}:note-${index}`);
+        const spoken = ex.ttsNotes?.[index] ?? note;
+        if (RISKY_SPOKEN_TEXT.test(spoken)) {
+          add(
+            'warning',
+            'risky-grammar-note',
+            `${ex.id}/note-${index}: add a TTS-safe ttsNotes entry.`,
+          );
+        }
+      });
+      if (ex.ttsNotes && ex.notes && ex.ttsNotes.length !== ex.notes.length) {
+        add(
+          'error',
+          'tts-notes-length',
+          `${ex.id}: ttsNotes length ${ex.ttsNotes.length} does not match notes length ${ex.notes.length}.`,
+        );
+      }
+    }
+
+    if (
+      (ex.type === 'grammar_examples' ||
+        ex.type === 'a2-grammar-examples' ||
+        ex.type === 'b1-grammar-examples') &&
+      ttsEnabled(ex)
+    ) {
+      ex.examples?.forEach((_, index) =>
+        expect(`grammar/${ex.id}-card-${index}.mp3`, `${ex.id}:card-${index}`),
+      );
+    }
+
+    if (
+      ttsEnabled(ex) &&
+      ex.grammarHighlight?.interactiveExamples &&
+      ex.grammarHighlight.examples
+    ) {
+      ex.grammarHighlight.examples.forEach((_, index) =>
+        expect(`grammar/${ex.id}-highlight-${index}.mp3`, `${ex.id}:highlight-${index}`),
+      );
+    }
+
+    if (ex.type === 'reading_text' && Array.isArray(ex.paragraphs) && ttsEnabled(ex)) {
+      const paragraphs = ex.paragraphs as string[];
+      if (ex.ttsParagraphs && ex.ttsParagraphs.length !== paragraphs.length) {
+        add(
+          'error',
+          'tts-paragraphs-length',
+          `${ex.id}: ttsParagraphs length ${ex.ttsParagraphs.length} does not match paragraphs length ${paragraphs.length}.`,
+        );
+      }
+      if (
+        ex.paragraphVoiceGenders &&
+        ex.paragraphVoiceGenders.length !== paragraphs.length
+      ) {
+        add(
+          'error',
+          'paragraph-voices-length',
+          `${ex.id}: paragraphVoiceGenders length ${ex.paragraphVoiceGenders.length} does not match paragraphs length ${paragraphs.length}.`,
+        );
+      }
+      if (!READING_TEXT_EXCLUDE.has(ex.id)) {
+        paragraphs.forEach((paragraph, index) => {
+          expect(`texts/${ex.id}-p-${index}.mp3`, `${ex.id}:paragraph-${index}`);
+          const spoken = ex.ttsParagraphs?.[index] ?? paragraph;
+          if (RISKY_SPOKEN_TEXT.test(spoken)) {
+            add(
+              'warning',
+              'risky-reading-text',
+              `${ex.id}/paragraph-${index}: add or fix ttsParagraphs.`,
+            );
+          }
+        });
+      }
+    }
+
+    if (ex.type === 'table_fill' && Array.isArray(ex.paragraphs) && ttsEnabled(ex)) {
+      (ex.paragraphs as { text: string }[]).forEach((paragraph, index) => {
+        if (paragraph.text?.trim()) {
+          expect(`texts/${ex.id}-p-${index}.mp3`, `${ex.id}:table-paragraph-${index}`);
+        }
+      });
+    }
+
+    if (ex.listeningText && ttsEnabled(ex)) {
+      expect(`listening/${ex.id}.mp3`, `${ex.id}:listening`);
+    }
+
+    if (ex.type === 'personal_choice' && ex.model && ttsEnabled(ex)) {
+      expect(`texts/${ex.id}-model.mp3`, `${ex.id}:model`);
+    }
+
+    const knownCustomAudioType =
+      ILLUSTRATED_CARD_TYPES.has(ex.type) ||
+      GRAMMAR_TABLE_TYPES.has(ex.type) ||
+      ex.type === 'b1-grammar-examples';
+    if (
+      ex.type.startsWith('b2-') &&
+      !knownCustomAudioType &&
+      ttsEnabled(ex) &&
+      (ex.cards || ex.sections || ex.rows || ex.panels || ex.paragraphs)
+    ) {
+      add(
+        'error',
+        'unsupported-b2-audio-type',
+        `${ex.id}: custom type "${ex.type}" has audio-shaped content but no registered TTS collector.`,
+      );
+    }
+  }
+
+  for (const [key, source] of expected) {
+    if (!jobKeys.has(key)) {
+      add('error', 'tts-job-missing', `${source}: UI expects ${key}, but no TTS job was collected.`);
+    }
+  }
+
+  const rawByKey = new Map<string, TtsJob[]>();
+  for (const job of rawJobs) {
+    const key = `${job.category}/${job.filename}`;
+    const group = rawByKey.get(key) ?? [];
+    group.push(job);
+    rawByKey.set(key, group);
+  }
+  for (const [key, group] of rawByKey) {
+    const spokenVariants = new Set(group.map(job => job.text));
+    if (group.length > 1 && spokenVariants.size > 1) {
+      add(
+        'warning',
+        'tts-job-collision',
+        `${key}: ${group.length} jobs have different spoken text; the last job wins.`,
+      );
+    }
+  }
+
+  const existing = uniqueJobs.filter(job =>
+    fs.existsSync(path.join(OUTPUT_BASE, job.category, job.filename)),
+  ).length;
+  const missing = uniqueJobs.length - existing;
+  const errors = findings.filter(finding => finding.severity === 'error').length;
+  const warnings = findings.filter(finding => finding.severity === 'warning').length;
+
+  console.log('\n--- TTS audit (read-only) ---');
+  console.log(`Expected UI files: ${expected.size}`);
+  console.log(`Collected jobs: ${uniqueJobs.length}`);
+  console.log(`Existing files: ${existing}`);
+  console.log(`Missing files (would generate): ${missing}`);
+  console.log(`Errors: ${errors}`);
+  console.log(`Warnings: ${warnings}`);
+
+  const byModel = new Map<string, number>();
+  const byVoice = new Map<string, number>();
+  for (const job of uniqueJobs) {
+    byModel.set(job.model, (byModel.get(job.model) ?? 0) + 1);
+    byVoice.set(job.voice, (byVoice.get(job.voice) ?? 0) + 1);
+  }
+  console.log(`Models: ${[...byModel].map(([key, count]) => `${key}=${count}`).join(', ') || 'none'}`);
+  console.log(`Voices: ${[...byVoice].map(([key, count]) => `${key}=${count}`).join(', ') || 'none'}`);
+
+  if (findings.length > 0) {
+    console.log('\nFindings:');
+    for (const finding of findings) {
+      const label = finding.severity === 'error' ? 'ERROR' : 'WARN';
+      console.log(`  ${label} [${finding.code}] ${finding.message}`);
+    }
+  }
+
+  if (AUDIT_VERBOSE) {
+    console.log('\nJobs:');
+    for (const job of uniqueJobs) {
+      const file = `${job.category}/${job.filename}`;
+      const status = fs.existsSync(path.join(OUTPUT_BASE, file)) ? 'exists' : 'missing';
+      console.log(`  ${status} | ${job.model} | ${job.voice} | ${file} | ${job.text}`);
+    }
+
+    console.log('\nDialogue character voices:');
+    for (const ex of exercises.filter(
+      exercise =>
+        (exercise.type === 'dialogues' || exercise.type === 'a2-dialogues') &&
+        exercise.sections,
+    )) {
+      for (const section of ex.sections ?? []) {
+        const state: DialogueVoiceState = {
+          female: new Map(),
+          male: new Map(),
+          genders: new Map(),
+        };
+        section.lines.forEach((line, index) => {
+          dialogueLineVoice(line, index, state);
+        });
+        for (const [key, voice] of [...state.female, ...state.male]) {
+          console.log(`  ${ex.id}/${section.id} | ${key} | ${state.genders.get(key)} | ${voice}`);
+        }
+      }
+    }
+  }
+  console.log();
+
+  return { errors, warnings };
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
   const modelLabel = USE_GEMINI ? 'Gemini TTS (Pro + Flash)' : 'Chirp3-HD';
-  console.log(`\nGenerating TTS audio for ${CONTENT_ID} [model: ${modelLabel}]\n`);
+  const actionLabel = AUDIT_ONLY ? 'Auditing TTS readiness' : 'Generating TTS audio';
+  console.log(`\n${actionLabel} for ${CONTENT_ID} [model: ${modelLabel}]\n`);
 
   let content: LessonContent | null = null;
   let exercises: Exercise[];
@@ -961,6 +1525,7 @@ async function main() {
   const jobs: TtsJob[] = [
     ...(content ? collectVocabularyJobs(content) : []),
     ...collectIllustratedCardJobs(exercises),
+    ...collectIllustratedCardCaptionJobs(exercises),
     ...collectWideCardJobs(exercises),
     ...collectReadingTextImageWordJobs(exercises),
     ...collectImageLabelingJobs(exercises),
@@ -984,6 +1549,19 @@ async function main() {
   const uniqueJobs = [...jobMap.values()];
 
   console.log(`Total jobs: ${uniqueJobs.length}\n`);
+
+  const auditResult = printTtsAudit(content, exercises, jobs, uniqueJobs);
+  if (AUDIT_ONLY) {
+    if (auditResult.errors > 0 || (AUDIT_STRICT && auditResult.warnings > 0)) {
+      process.exitCode = 1;
+    }
+    return;
+  }
+  if (auditResult.errors > 0) {
+    console.error('TTS generation stopped: fix audit errors first.\n');
+    process.exitCode = 1;
+    return;
+  }
 
   const categories = [...new Set(uniqueJobs.map(j => j.category))];
   for (const cat of categories) {

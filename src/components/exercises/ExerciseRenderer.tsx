@@ -35,13 +35,14 @@ import { GrammarHighlight } from './GrammarHighlight';
 import { MapWithLabels } from './MapWithLabels';
 import { A2_CUSTOM_RENDERERS, type CustomExerciseRenderer } from '@/content/a2/exercise-components';
 import { B1_CUSTOM_RENDERERS } from '@/content/b1/exercise-components';
+import { B2_CUSTOM_RENDERERS } from '@/content/b2/exercise-components';
 
 /**
  * Custom exercise renderers contributed by per-level domains.
  * Looked up BEFORE the built-in switch so levels can add new types (or
  * level-specific variants of existing types) without editing this file. See
- * `src/content/a2/exercise-components.ts` and `src/content/b1/exercise-components.ts`
- * for the per-level entries.
+ * `src/content/a2/exercise-components.ts`, `src/content/b1/exercise-components.ts`
+ * and `src/content/b2/exercise-components.ts` for the per-level entries.
  *
  * Kept PER LEVEL (not flat-merged) so a level can override an unprefixed
  * shared type (e.g. `reading_text`, `grammar_table`) for its own lessons
@@ -51,7 +52,7 @@ import { B1_CUSTOM_RENDERERS } from '@/content/b1/exercise-components';
 const LEVEL_CUSTOM_RENDERERS: Record<string, Record<string, CustomExerciseRenderer>> = {
   a2: A2_CUSTOM_RENDERERS,
   b1: B1_CUSTOM_RENDERERS,
-  // Future levels (b2) can add their map here.
+  b2: B2_CUSTOM_RENDERERS,
 };
 
 /** Derives the content level from an exercise id. A1 ids have no prefix. */

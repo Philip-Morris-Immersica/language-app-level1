@@ -164,7 +164,7 @@ export function GrammarTable({
                         key={cIdx}
                         className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${boldColumns.includes(cIdx) ? 'font-bold text-[#2d5a1b]' : 'font-medium'}`}
                       >
-                        {cell}
+                        {renderBoldText(cell)}
                       </td>
                     ))}
                   </tr>

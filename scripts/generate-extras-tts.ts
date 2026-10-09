@@ -169,9 +169,16 @@ async function synthesize(text: string, model: string, prompt: string): Promise<
     try {
       return await synthesizeOnce(text, model, prompt);
     } catch (err: unknown) {
-      const isRetryable = typeof err === 'object' && err !== null && 'retryable' in err;
-      if (isRetryable && attempt < MAX_RETRIES - 1) {
-        const waitMs = (err as { waitMs: number }).waitMs;
+      const retryableError =
+        typeof err === 'object' && err !== null && 'retryable' in err
+          ? (err as { retryable?: unknown; waitMs?: unknown; message?: unknown })
+          : null;
+      if (
+        retryableError?.retryable === true &&
+        typeof retryableError.waitMs === 'number' &&
+        attempt < MAX_RETRIES - 1
+      ) {
+        const waitMs = retryableError.waitMs;
         process.stdout.write(` [rate-limited, waiting ${Math.round(waitMs / 1000)}s]`);
         await new Promise(r => setTimeout(r, waitMs));
         continue;
