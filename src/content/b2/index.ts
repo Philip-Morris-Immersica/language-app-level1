@@ -1,11 +1,10 @@
 /**
  * B2 level registry.
  *
- * The lesson titles below are the official B2 syllabus. Loaders are
- * intentionally empty — each lesson is registered in metadata so the home
- * page, level map and sidebar can already render the full B2 outline, but
- * the actual lesson modules will be added one by one under
- * `src/content/b2/lessons/`.
+ * The lesson titles below are the official B2 syllabus. Every lesson is
+ * registered in metadata so the home page, level map and sidebar render the
+ * full B2 outline; a loader is enabled only once the lesson folder exists
+ * under `src/content/b2/lessons/`.
  *
  * To digitalise a lesson:
  *   1. Create `src/content/b2/lessons/<lesson-id>/` with the standard five
@@ -27,7 +26,7 @@ export const B2_LESSON_LOADERS: Record<
   string,
   () => Promise<{ lessonData?: LessonData; default?: LessonData }>
 > = {
-  // 'b2-lesson-01': () => import('./lessons/b2-lesson-01'),
+  'b2-lesson-01': () => import('./lessons/b2-lesson-01'),
   // ...
 };
 
@@ -72,4 +71,6 @@ export const B2_TEST_FOLDER_MAP: Record<string, string> = {};
 
 export const B2_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
 
-export const B2_LESSON_EXERCISE_COUNTS: Record<string, number> = {};
+export const B2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
+  'b2-lesson-01': 24,
+};
