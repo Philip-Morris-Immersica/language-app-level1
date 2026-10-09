@@ -15,7 +15,7 @@
  *   npm run check:audio
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -63,11 +63,37 @@ const rows = list
 
 let pointers = 0;
 let total = 0;
+// Ask Git for every blob size in one process. The previous one-process-per-MP3
+// loop took ~10 minutes on Windows once the repository reached 5,000+ clips.
+const uniqueShas = [...new Set(rows.map(row => row.sha))];
+const batchSizes = execFileSync(
+  'git',
+  ['cat-file', '--batch-check=%(objectname) %(objectsize)'],
+  {
+    input: `${uniqueShas.join('\n')}\n`,
+    encoding: 'utf8',
+    maxBuffer: 10 * 1024 * 1024,
+  },
+);
+const sizeBySha = new Map(
+  batchSizes
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map(line => {
+      const [sha, rawSize] = line.trim().split(/\s+/);
+      return [sha, Number.parseInt(rawSize, 10)];
+    }),
+);
+
 for (const { sha, path } of rows) {
   total++;
-  const size = parseInt(execSync(`git cat-file -s ${sha}`, { encoding: 'utf8' }).trim(), 10);
+  const size = sizeBySha.get(sha);
+  if (size === undefined || Number.isNaN(size)) {
+    fail(`Could not inspect Git blob for MP3: ${path}`);
+    continue;
+  }
   if (size > 500) continue;
-  const head = execSync(`git cat-file -p ${sha}`, { encoding: 'utf8' }).slice(0, 80);
+  const head = execFileSync('git', ['cat-file', '-p', sha], { encoding: 'utf8' }).slice(0, 80);
   if (head.startsWith('version https://git-lfs.github.com/spec/v1')) {
     pointers++;
     fail(`LFS pointer instead of real MP3: ${path} (${size} bytes)`);

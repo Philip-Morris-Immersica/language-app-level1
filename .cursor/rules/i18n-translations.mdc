@@ -32,7 +32,7 @@ hand-translated; the Bulgarian headword stays Bulgarian.)
 
 | Content | Where translations live |
 |---|---|
-| Exercise instructions | `instructionKey` → `ui.ts` (Philip) / `a2.ts` / `b1.ts` (level authors) |
+| Exercise instructions | `instructionKey` → `ui.ts` (Philip) / `a2.ts` / `b1.ts` / `b2.ts` (level authors) |
 | Exercise titles & subtitles | inline translation slot in the exercise object |
 | Section titles & subtitles (`sectionStart`) | `titleI18n` / `subtitleI18n` (`Record<lang>`) |
 | Grammar table titles, notes, column headers | inline translation slot / `Record<lang>` |
@@ -56,9 +56,9 @@ level's author in their own `src/i18n/<level>.ts`. Section titles
 (`sectionStart.titleI18n`) arrive with the level-finalize pass, which is
 Philip's — see [level-finalize.mdc](mdc:.cursor/rules/level-finalize.mdc).
 
-**Status:** A1 ✅ and A2 ✅ (56 + 49 sections, all 6 languages, verified by the
-`section-translations` lint rule). B1 has no sections yet — they come when the
-level is content-complete. B2 not started.
+**Status:** A1, A2 and B1 are finalised. B2 authoring starts with level-scoped
+instruction keys in `b2.ts`; section translations arrive in Philip's
+level-finalize pass.
 
 ## Third layer — the pre-translation cache
 
@@ -118,9 +118,10 @@ merged into `ui.ts` automatically:
 |---|---|---|
 | A2 (Nina) | `src/i18n/a2.ts` (`A2_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, A2_TRANSLATIONS)` in `ui.ts` |
 | B1 (Alex) | `src/i18n/b1.ts` (`B1_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, B1_TRANSLATIONS)` in `ui.ts` |
+| B2 (Alex) | `src/i18n/b2.ts` (`B2_TRANSLATIONS`) | `Object.assign(UI_TRANSLATIONS, B2_TRANSLATIONS)` in `ui.ts` |
 
 Same shape and same 7-language rule as above. Prefix keys with the level
-(`'a2.…'`, `'b1.…'`) to avoid collisions. Never duplicate an existing `ui.ts` key.
+(`'a2.…'`, `'b1.…'`, `'b2.…'`) to avoid collisions. Never duplicate an existing `ui.ts` key.
 
 RTL languages: `ar` (Arabic) and `fa` (Farsi/Persian).
 

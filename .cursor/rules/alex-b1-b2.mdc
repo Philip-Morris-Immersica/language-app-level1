@@ -1,0 +1,189 @@
+---
+description: Alex author guide — autonomous B1+B2 content, strict folder ownership and repeatable lesson workflow
+globs: src/content/b1/**,src/content/b2/**,src/i18n/b1.ts,src/i18n/b2.ts,public/assets/b1-lesson-*/**,public/assets/b2-lesson-*/**
+alwaysApply: false
+---
+
+# Alex — B1 + B2 Author Guide
+
+Алекс работи на branch `alex`. B1 е готово; новата работа е B2, а B1 се
+променя само при конкретна бъдеща корекция.
+
+## Свободен домейн
+
+- `src/content/b1/**`
+- `src/content/b2/**`
+- `src/i18n/b1.ts`, `src/i18n/b2.ts`
+- `public/assets/b1-lesson-*/**`, `public/assets/b2-lesson-*/**`
+- В `b1/index.ts` / `b2/index.ts`: само lesson loaders и exercise counts.
+
+Никога не променяй A1/A2, `shared/**`, `src/components/**`, `src/lib/**`,
+`src/app/**`, `src/db/**`, `scripts/**`, `ui.ts` или конфигурация.
+
+## Модели и отделни чатове
+
+1. **Claude Opus 5.5 High, Agent mode** — plan-only chat; може да промени
+   единствено `_PLAN-b2-lesson-NN.md`, за да го предаде на следващия чат.
+2. **Claude Sonnet 5.5 High, Agent mode** — implementation или correction batch.
+3. **Composer 2.5 Fast / Grok 4.7 High Fast** — TTS execution, Git и exact fixes.
+4. Sonnet за TTS само при езиков/структурен проблем.
+
+Не смесвай Plan, Build и TTS в един чат. Голям урок се дели на Build batches
+в `_PLAN`; един Sonnet чат изпълнява един batch.
+
+## Материали и клиентски план — отделна задължителна стъпка
+
+За B2 потребителят дава един абсолютен път до папката на урока. Агентът:
+
+1. Прави inventory на PDF-и, страници, screenshots, client plan и images.
+2. Извлича съдържанието еднократно с
+   `npm run source:extract -- --dir "<папка>" --first-page N` →
+   `SOURCE-TEXTBOOK.md`, `SOURCE-CLIENT.md`, `SOURCE-ASSETS.md`,
+   `SOURCE-IMAGES/`, `SOURCE-PAGES/` в локалната materials папка (извън Git).
+   Авторът не цепи PDF-а и не извлича картинки ръчно. Неясните места сочат
+   обратно към original file/page.
+3. Следващите чатове четат Markdown източниците; оригиналите се отварят само
+   при неяснота или променен файл.
+4. Прави crosswalk:
+   `страница → учебник № → client instruction → digital order → exercise id`.
+5. Client instruction override-ва учебника само когато е изрично.
+6. Учебникът остава истина за пълния текст, контекста, реда и таблиците.
+7. Platform accessibility rules определят digital interaction.
+8. При противоречие, липсващ текст/answer key или duplicate numbering — пита.
+9. Очевиден typo се поправя само ако учебникът го потвърждава; корекцията се
+   описва в плана. Смислова/scoring промяна винаги чака решение.
+10. Планът завършва с `READY` или `NOT READY`. При `NOT READY` не се пише код.
+
+Не търси отделни workbook/dictionary/grammar/culture файлове за B2 — няма
+такива. Граматиката и речникът се извличат от учебника + client plan.
+
+## Планът е договорът за имплементация
+
+`_PLAN-b2-lesson-NN.md` съдържа:
+
+- source inventory и unresolved questions;
+- exact order, id, type, points;
+- какво вижда и какво прави ученикът;
+- exact scoring + всички допустими отговори;
+- vocabulary и asset mapping;
+- TTS risks;
+- shared template / B2 component decision;
+- Build batches с модел.
+
+Дългите текстове не се копират в плана, ако са налични в source папката.
+
+## Избор на exercise type — калъп преди нов компонент
+
+1. Прочети нужния шаблон от `shared/EXERCISE_TEMPLATES.ts`.
+2. Използвай shared type, ако реализира задачата коректно.
+3. Виж максимум 1–2 близки B1 примера само за технически подход.
+4. Не копирай B1 съдържание, IDs, imports или components.
+5. Нов B2 type се допуска само ако планът обяснява защо shared типовете не
+   стигат. Постави го в `b2/types.ts`, `b2/components/` и
+   `b2/exercise-components.ts` с `b2-` префикс.
+6. Не регистрирай B1-style override на unprefixed shared type (`grammar_table`,
+   `reading_text`, `dialogues` и др.) без изрично Philip approval. B1 forks са
+   исторически workaround, не B2 template.
+7. Нов B2 component е готов за client review само когато UI labels са в
+   `b2.ts` и Philip е потвърдил, че translatable полетата се извличат/пазят
+   правилно. Българското exercise content остава непреведено по дизайн.
+
+Готови B2-specific типове:
+
+- `b2-select-words-inline` — inline word selection:
+  - `mode: 'scored'` за конкретни target occurrences;
+  - `mode: 'free'` за неоценявано подчертаване на непознати думи.
+- `b2-opinion-choice` — всички мнения са допустими, `points: 0`.
+
+## Без свободно писане на български
+
+Много учащи нямат българска клавиатура. Не създавай free-text Bulgarian input,
+дори в B2.
+
+Paper „Напишете“ се адаптира до dropdown, word order, sentence builder,
+table selection или друга selectable интеракция. Ако клиентът изрично настоява
+за typing, докладвай конфликта на Philip — не заобикаляй правилото.
+
+## Vocabulary за всеки B2 урок
+
+Всеки урок има `content.vocabulary`:
+
+- всички изрично дадени нови думи;
+- само ключовите непознати B2 думи, нужни за разбиране;
+- без произволно измислена лексика;
+- Bulgarian headword остава на български; gloss/translations са по наличния
+  multilingual формат;
+- поставяй vocabulary/grammar преди първата задача, която ги използва;
+- `showDictionary: true` при подходящи reading texts.
+
+`workbook.ts` е валиден празен масив, освен ако самият B2 учебник съдържа review.
+Не измисляй `grammarReference`, cultural notes или workbook content.
+
+Multiple-choice distractors идват само от client plan или учебника. Не
+измисляй фактологични грешни опции от общи знания.
+
+Не сливай, разделяй или мести source упражнения, освен ако client plan го
+изисква или потребителят го одобри след ясно предложение.
+
+## IDs и lint
+
+- Lesson: `b2-lesson-01`
+- Exercise: `b2-l01-ex-01` (пореден дигитален номер)
+- НОВИ ДУМИ секция: `b2-l01-novi-dumi-01`
+- Граматика: `b2-l01-gramatika-01`
+- Диалози: `b2-l01-dialozi-01`
+- Дума в `content.vocabulary`: `b2-l01-vocab-01`
+- Instruction key: `b2.l01.ex01` в `src/i18n/b2.ts`
+- Custom type: `b2-...`
+
+Винаги линтвай B2 с пълния ID:
+
+```powershell
+npm run content:lint -- --lesson b2-lesson-01
+```
+
+0 errors е задължително. Числовото `--lesson 01` проверява всички нива с №01
+и не се използва в нормалния B2 workflow.
+
+Преди „lesson complete“ сравни всеки plan row `(order + id)` с реален
+`exercises.ts` object и повтори client factual corrections (дати, имена,
+бройки). Exercise count в `b2/index.ts` не доказва пълнота — то брои само
+scored блокове.
+
+B2 test loader не се добавя, преди реалната test папка и всичките ѝ файлове да
+съществуват.
+
+## TTS
+
+- TTS се прави след content review/freeze, никога в Build чата.
+- Преди generation:
+  `npm run tts:audit -- --lesson b2-lesson-01`.
+- Generation:
+  `npm run tts:generate -- --lesson b2-lesson-01 --model gemini`.
+- След това: audit + `npm run check:audio` + човешко прослушване.
+- Произношение се поправя в B1/B2 content чрез `ttsText`, `ttsLabel`,
+  `ttsParagraphs`, `ttsNotes`, `ttsModel`, `ttsPrompt`, `speaker`,
+  `voiceGender`.
+- Не редактирай `scripts/generate-tts.ts`. Неподдържан B2 audio component се
+  докладва на Philip.
+- Скриптът skip-ва съществуващи MP3: при корекция се трие само точният засегнат
+  файл преди повторно генериране.
+
+## Sections, преводи и финализиране
+
+- Не добавяй `sectionStart`, celebrations или pretranslate по време на lesson build.
+- Philip ги прави с един level-finalize pass след готово ниво.
+- Нов `instructionKey` е `b2.*` в `src/i18n/b2.ts`, винаги на 7 езика.
+- Не редактирай `src/i18n/ui.ts`.
+
+## Commit/push
+
+След clean content:
+
+1. `git status` — само текущият B1/B2 lesson, неговите assets и level i18n.
+2. Full-ID content lint.
+3. Stage explicit paths — никога `git add .` / `git add -A`.
+4. Push само към `origin/alex`.
+
+Content и TTS са отделни commits. Никога push към `master`, `nina` или `philip`;
+никога force-push.

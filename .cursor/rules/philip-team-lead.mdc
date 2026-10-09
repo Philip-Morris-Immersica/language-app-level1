@@ -24,7 +24,7 @@ per-level i18n, TTS content overrides) прави нормалните PR-и о�
 
 1. **Файлова собственост** (виж [branch-hygiene.mdc](mdc:.cursor/rules/branch-hygiene.mdc))
    - Nina свободен домейн: `src/content/a2/**`, `src/i18n/a2.ts`, `public/assets/a2-lesson-*/`
-   - Alex свободен домейн: `src/content/b1/**`, `src/i18n/b1.ts`, `public/assets/b1-lesson-*/`
+   - Alex свободен домейн: B1 + B2 content, level i18n and matching assets
    - **Ако всичко е в техния домейн → бърз мърдж, без задълбочен преглед.**
    - Ако има промени извън — виж секцията „Споделени промени" по-долу.
 
@@ -37,7 +37,7 @@ per-level i18n, TTS content overrides) прави нормалните PR-и о�
 
 4. **`content:lint` минава** на новите уроци:
    ```bash
-   npm run content:lint -- --lesson NN      # само НОМЕРА, не пълното id
+   npm run content:lint -- --lesson b2-lesson-01  # пълен id = само конкретния урок
    ```
    → 0 errors задължително.
 
@@ -59,7 +59,7 @@ git fetch origin
 git checkout master && git pull
 git checkout -b <name>-merge origin/<name>   # nina-merge / alex-merge
 git merge master                              # резолни конфликти
-npm run content:lint -- --lesson <lesson>     # 0 errors
+npm run content:lint -- --lesson <full-lesson-id> # 0 errors
 npm run build                                  # 0 errors
 git push origin <name>-merge
 gh pr create --base master --head <name>-merge
@@ -100,8 +100,8 @@ gh pr create --base master --head <name>-merge
 финализирам на `philip` в отделен PR, и накрая му казвам да се ре-синкне —
 иначе следващите му корекции ще гърмят в конфликт във всеки `exercises.ts`.
 
-**Състояние по нива:** A1 ✅, A2 ✅, B1 — чака Алекс да завърши уроците,
-B2 — не е започнато.
+**Състояние по нива:** A1 ✅, A2 ✅, B1 ✅ merged/finalised.
+B2 има registry/nav/sandbox; Алекс създава уроците един по един.
 
 ## Споделени промени — рядко, защото архитектурата ги избягва
 
@@ -109,7 +109,7 @@ B2 — не е започнато.
 - Нови типове упражнения → `src/content/<level>/components/` + `exercise-components.ts`
 - Нови `instructionKey` → `src/i18n/<level>.ts`
 - TTS произношение → `ttsModel` / `ttsPrompt` / `ttsText` полета в content
-- Визуални варианти → A2/B1 компонент, wrap-ващ shared-а
+- Визуални варианти → level-local A2/B1/B2 компонент
 
 Когато все пак нещо ИЗИСКВА промяна в `shared/`, `src/components/`, `ui.ts`,
 `scripts/generate-tts.ts` или конфигурация:
@@ -122,7 +122,7 @@ B2 — не е започнато.
 Ако вече са комитнали такава промяна по навик (както стана с a2-lesson-02 преди архитектурата):
 - Прегледай diff-а на споделените файлове отделно от съдържанието.
 - Ако промяната е универсално подобрение → мърджни.
-- Ако е A2/B1-специфична → помоли ги да я преместят в техния домейн (`a2/components/` или `a2.ts`).
+- Ако е level-specific → премести я в съответния `a2/b1/b2` домейн.
 
 ## Никога
 
@@ -133,6 +133,6 @@ B2 — не е започнато.
 
 ## За референция
 
-- Текущи активни branches: `philip` (твоя), `nina` (A2), `alex` (B1)
+- Текущи активни branches: `philip` (твоя), `nina` (A2), `alex` (B1+B2)
 - Архивирани/feature branches: `feature/external-login`, `feat/multi-level-content-structure`
 - Source branch на main work: `philip` → PR → `master`

@@ -177,7 +177,7 @@ alwaysApply: false
 ## Преди commit — задължително
 
 ```bash
-npm run content:lint -- --lesson XX      # само НОМЕРА (03), не a2-lesson-03
+npm run content:lint -- --lesson a2-lesson-XX
 ```
 
 0 errors задължително (warnings са OK за следваща итерация). После commit, после push към `nina`.

@@ -1,12 +1,13 @@
 import type { SupportedLang } from './languages';
 import { A2_TRANSLATIONS } from './a2';
 import { B1_TRANSLATIONS } from './b1';
+import { B2_TRANSLATIONS } from './b2';
 
 // All static UI strings used throughout the app.
 // Keys map to translated strings in each of the 7 supported languages.
 //
-// Per-level keys (e.g. `a2.*`) live in their own files (`./a2.ts`, future `./b1.ts`)
-// and are merged in at the bottom of this file. That way A2/B1 authors add keys
+// Per-level keys (e.g. `a2.*`) live in their own files (`./a2.ts`, `./b1.ts`, `./b2.ts`)
+// and are merged in at the bottom of this file. That way level authors add keys
 // in their own files without touching the shared dictionary.
 export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
 
@@ -877,10 +878,10 @@ export const UI_TRANSLATIONS: Record<string, Record<SupportedLang, string>> = {
   'admin.nav.audit':        { bg: 'Одит лог (IT)', ar: 'سجل التدقيق (IT)', fr: 'Journal d\'audit (IT)', en: 'Audit log (IT)', fa: 'گزارش حسابرسی (IT)', uk: 'Журнал аудиту (IT)', ru: 'Журнал аудита (IT)' },
 };
 
-// Merge per-level translation dictionaries. Keys defined in `A2_TRANSLATIONS`
-// / `B1_TRANSLATIONS` become available via `useT('a2.…')` / `useT('b1.…')`
-// exactly like any other UI key.
+// Merge per-level translation dictionaries. Their keys become available via
+// `useT('a2.…')`, `useT('b1.…')` and `useT('b2.…')` like shared UI keys.
 Object.assign(UI_TRANSLATIONS, A2_TRANSLATIONS);
 Object.assign(UI_TRANSLATIONS, B1_TRANSLATIONS);
+Object.assign(UI_TRANSLATIONS, B2_TRANSLATIONS);
 
 export type UIKey = keyof typeof UI_TRANSLATIONS;

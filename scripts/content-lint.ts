@@ -755,7 +755,129 @@ defineRule({
   },
 });
 
-// ─── R18: section-translations ────────────────────────────────────────────────
+// ─── R18: b2-interaction-contracts ───────────────────────────────────────────
+defineRule({
+  id: 'b2-interaction-contracts',
+  description: 'B2 custom interactions must be selectable, uniquely keyed and scored consistently.',
+  run: (ctx) => {
+    if (!ctx.lessonId.startsWith('b2-')) return [];
+    const out: Finding[] = [];
+    const add = (ex: any, message: string) => {
+      const f = finding(ctx, 'b2-interaction-contracts', 'error', message, ex.id);
+      if (f) out.push(f);
+    };
+
+    const lessonNumber = ctx.lessonId.match(/^b2-lesson-(\d{2})$/)?.[1];
+    const expectedIdPrefix = lessonNumber ? `b2-l${lessonNumber}-` : 'b2-l';
+    const rendererPath = path.join(CONTENT_DIR, 'b2', 'exercise-components.ts');
+    const rendererText = fs.existsSync(rendererPath)
+      ? fs.readFileSync(rendererPath, 'utf8')
+      : '';
+    const rendererKeys = new Set(
+      [...rendererText.matchAll(/^\s*['"]([^'"]+)['"]\s*:/gm)].map(match => match[1]),
+    );
+    for (const type of rendererKeys) {
+      if (!type.startsWith('b2-')) {
+        const f = finding(
+          ctx,
+          'b2-interaction-contracts',
+          'error',
+          `B2 renderer overrides unprefixed shared type "${type}". Use a b2-* type or get Philip approval.`,
+        );
+        if (f) out.push(f);
+      }
+    }
+
+    const typingKey = /^(freeText|freeTextBlocks|textInput|textArea|typedAnswer|requiresTyping)$/i;
+    const containsTypingContract = (value: any): boolean => {
+      if (!value || typeof value !== 'object') return false;
+      if (Array.isArray(value)) return value.some(containsTypingContract);
+      return Object.entries(value).some(
+        ([key, nested]) =>
+          (typingKey.test(key) && nested !== false && nested != null) ||
+          containsTypingContract(nested),
+      );
+    };
+
+    for (const ex of allExercises(ctx)) {
+      if (ex?.id && !ex.id.startsWith(expectedIdPrefix)) {
+        add(ex, `Exercise id must start with "${expectedIdPrefix}", got "${ex.id}".`);
+      }
+
+      if (ex?.type?.startsWith('b2-') && !rendererKeys.has(ex.type)) {
+        add(ex, `Custom type "${ex.type}" is not registered in b2/exercise-components.ts.`);
+      }
+
+      if (ex?.type?.startsWith('b2-') && containsTypingContract(ex)) {
+        add(ex, `${ex.type} exposes free Bulgarian writing; use a selectable interaction.`);
+      }
+
+      if (ex?.type === 'b2-select-words-inline') {
+        if (ex.mode !== 'scored' && ex.mode !== 'free') {
+          add(ex, `mode must be "scored" or "free".`);
+        }
+        if (ex.mode === 'free' && (ex.points ?? 0) !== 0) {
+          add(ex, `free mode must have points: 0 (or omit points).`);
+        }
+        if (ex.mode === 'scored' && (!Number.isFinite(ex.points) || ex.points <= 0)) {
+          add(ex, `scored mode needs a positive points value.`);
+        }
+
+        const blockIds = new Set<string>();
+        let correctCount = 0;
+        for (const block of ex.blocks ?? []) {
+          if (!block?.id || blockIds.has(block.id)) {
+            add(ex, `Every block needs a unique id; duplicate/missing "${block?.id ?? ''}".`);
+          }
+          blockIds.add(block?.id);
+
+          const tokenIds = new Set<string>();
+          for (const token of block?.tokens ?? []) {
+            if (!token?.id || tokenIds.has(token.id)) {
+              add(ex, `Block "${block?.id}" has duplicate/missing token id "${token?.id ?? ''}".`);
+            }
+            tokenIds.add(token?.id);
+            if (token?.correct) {
+              correctCount++;
+              if (token.selectable === false) {
+                add(ex, `Correct token "${block?.id}:${token.id}" cannot be non-selectable.`);
+              }
+            }
+          }
+        }
+        if (ex.mode === 'scored' && correctCount === 0) {
+          add(ex, `scored mode needs at least one correct token occurrence.`);
+        }
+      }
+
+      if (ex?.type === 'b2-opinion-choice') {
+        if ((ex.points ?? 0) !== 0) {
+          add(ex, `Opinion choices are ungraded and must have points: 0 (or omit points).`);
+        }
+        const questionIds = new Set<string>();
+        for (const question of ex.questions ?? []) {
+          if (!question?.id || questionIds.has(question.id)) {
+            add(ex, `Every opinion question needs a unique id.`);
+          }
+          questionIds.add(question?.id);
+          if (!Array.isArray(question?.options) || question.options.length < 2) {
+            add(ex, `Opinion question "${question?.id}" needs at least two options.`);
+          }
+          const optionIds = new Set<string>();
+          for (const option of question?.options ?? []) {
+            if (!option?.id || optionIds.has(option.id)) {
+              add(ex, `Question "${question?.id}" has duplicate/missing option id.`);
+            }
+            optionIds.add(option?.id);
+          }
+        }
+      }
+    }
+    return out;
+  },
+});
+
+// ─── R19: section-translations ────────────────────────────────────────────────
 // `sectionStart` renders the most visible text in a lesson (the collapsible
 // part header). Bulgarian lives in `title`/`subtitle`; the other six languages
 // live inline in `titleI18n`/`subtitleI18n`. A missing slot silently degrades
@@ -974,14 +1096,30 @@ async function main() {
     .map((entry) => entry.id)
     .filter((id) => /lesson-\d{2}$/.test(id));
 
-  const target = lessonArg
-    ? lessons.filter(
-        (l) =>
-          l === `lesson-${lessonArg.padStart(2, '0')}` ||
-          l.endsWith(`-lesson-${lessonArg.padStart(2, '0')}`) ||
-          l.endsWith(`-${lessonArg}`),
-      )
-    : lessons;
+  let target = lessons;
+  if (lessonArg) {
+    // Prefer an exact lesson folder/id. This keeps level-prefixed checks scoped:
+    //   --lesson b2-lesson-01 → B2 only
+    // Numeric shorthand intentionally preserves the legacy cross-level behavior:
+    //   --lesson 01 → lesson-01 + a2/b1/b2-lesson-01
+    if (lessons.includes(lessonArg)) {
+      target = [lessonArg];
+    } else if (/^\d+$/.test(lessonArg)) {
+      const padded = lessonArg.padStart(2, '0');
+      target = lessons.filter(
+        (l) => l === `lesson-${padded}` || l.endsWith(`-lesson-${padded}`),
+      );
+    } else {
+      // Convenience shorthand: b2-1 / b1-03 / a2-8.
+      const shorthand = lessonArg.match(/^(a2|b1|b2)-(\d{1,2})$/);
+      if (shorthand) {
+        const id = `${shorthand[1]}-lesson-${shorthand[2].padStart(2, '0')}`;
+        target = lessons.includes(id) ? [id] : [];
+      } else {
+        target = [];
+      }
+    }
+  }
 
   if (target.length === 0) {
     console.error(`No lessons matched (arg: ${lessonArg ?? 'all'}).`);
