@@ -31,7 +31,11 @@ cannot be read, report a blocker instead of guessing.
 Return only:
 
 - blockers;
-- warnings;
-- optional improvements;
-- passed checks;
-- the exact proposed correction batch.
+- should-fix;
+- nits;
+- passed checks (short);
+- the correction batch.
+
+Each finding: exercise id, exact current text and exact replacement text or
+code, so it can be applied without rereading the sources. Mark findings that
+change scoring or a plan decision as `needs decision`.

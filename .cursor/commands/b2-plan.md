@@ -76,4 +76,10 @@ them, but include enough exact decisions that Sonnet does not need to guess what
 Opus intended. Length is a guideline (~150–250 lines): a 40-item lesson may
 legitimately need more; a client questionnaire never belongs in the plan.
 
-Do not implement, generate TTS or commit. End with the exact `/b2-build` prompt.
+For every question, write your recommended answer into the plan rows already
+and list the alternatives in §9. When the author replies (e.g. "всички по
+препоръка" or "Q2 Б"), record them in this chat as `R1…Rn`, adjust only the
+affected rows and set `READY` — no new plan chat is needed.
+
+Do not implement, generate TTS or commit. End with the next prompt:
+`/b2-lesson` + `Урок: b2-lesson-NN` (or `/b2-build` Batch 1 for separate chats).

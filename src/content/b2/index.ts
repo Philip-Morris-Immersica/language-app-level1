@@ -27,6 +27,8 @@ export const B2_LESSON_LOADERS: Record<
   () => Promise<{ lessonData?: LessonData; default?: LessonData }>
 > = {
   'b2-lesson-01': () => import('./lessons/b2-lesson-01'),
+  'b2-lesson-02': () => import('./lessons/b2-lesson-02'),
+  'b2-lesson-03': () => import('./lessons/b2-lesson-03'),
   // ...
 };
 
@@ -73,4 +75,6 @@ export const B2_TEST_NEXT_LESSON_MAP: Record<string, string> = {};
 
 export const B2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b2-lesson-01': 24,
+  'b2-lesson-02': 16,
+  'b2-lesson-03': 21,
 };
