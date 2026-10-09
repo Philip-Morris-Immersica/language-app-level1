@@ -4,14 +4,25 @@ alwaysApply: true
 # Cost & Token Optimization
 
 ## Model Recommendations
-- **Sonnet 4.6 Thinking** — for most tasks: lessons, corrections, feedback, audio, debugging
-- **Opus 4.6 Thinking** — ONLY for: new exercise types, new component architecture, complex refactoring
+- **Claude Opus 5.5 High** — lesson plan and genuinely new exercise/component architecture.
+- **Claude Sonnet 5.5 High** — lesson implementation, source/image analysis,
+  linguistic QA, answer keys and multi-exercise correction batches.
+- **Composer 2.5 Fast / Grok 4.7 High Fast** — standard TTS execution, Git,
+  exact path/text fixes and other deterministic small tasks.
+- TTS escalates to Sonnet only when the issue needs Bulgarian-language
+  reasoning, a content-model change or a new unsupported exercise type.
 - When creating a lesson plan, ALWAYS label each step with the recommended model (Opus / Sonnet)
 
 ## Session Management (ALWAYS follow)
-- One topic = one chat. One lesson = one chat for content work.
-- After completing a task (plan done, implementation done, review done), ALWAYS say:
-  "Тази задача е готова. За следващата стъпка препоръчвам нов чат: 'Продължавам работата по урок X. Прегледай exercises.ts и content.ts. Следващата задача: [...]'"
+- One lesson at a time. One major phase = one chat: Plan, Build batch,
+  correction batch, or TTS.
+- Never continue implementation in the Opus planning chat. Persist the approved
+  plan in `_PLAN-<lesson-id>.md`, then start a fresh Sonnet chat.
+- A large lesson may have 2–3 Build batches defined by the plan. One Sonnet chat
+  executes one batch only.
+- After completing a phase, give one short, phase-specific next-chat prompt
+  (`/b2-build`, `/b2-fix`, `/b2-tts` or a one-line commit request). Do not always tell the
+  next agent to reread `exercises.ts`/`content.ts` when the next phase is Git or TTS.
 - At 20+ messages, ALWAYS add a reminder: "Чатът стана дълъг — нов чат ще спести токени и ще работи по-бързо."
 - NEVER ignore these reminders — they are critical for the user's budget.
 
@@ -24,18 +35,23 @@ At the end of EVERY response, silently check and act on:
 Only surface items that apply — do NOT add the checklist header if nothing applies.
 
 ## Lesson Workflow
-The standard lesson workflow uses SEPARATE chats:
-1. **Chat 1 (Opus → Sonnet):** Plan + implementation
-2. **Chat 2 (Sonnet):** Review + corrections from feedback
-3. **Chat 3 (Sonnet):** Audio generation via `npm run tts:generate -- --lesson XX --model gemini`
-4. **Chat 4 (Sonnet):** Grammar reference + final polish
-After finishing each phase, remind the user to start a new chat for the next phase.
+The standard lesson workflow uses separate, short phases:
+1. **Opus 5.5:** source-folder audit + approved `_PLAN` only.
+2. **Sonnet 5.5:** implementation (one batch for a large lesson).
+3. **Sonnet 5.5:** correction batch only when feedback exists; optional QA before merge.
+4. **Composer/Grok:** TTS audit + generation after content freeze.
+5. Commit content first; commit audio separately after human listening.
+
+The source folder path is the input. Do not paste or re-copy full PDFs/client
+plans into each chat.
 
 ## Audio Generation
 - Generate audio AFTER lesson content is reviewed and finalized.
-- Use the batch script: `npm run tts:generate -- --lesson XX --model gemini`
+- For A2/B1/B2 always use the full id:
+  `npm run tts:generate -- --lesson b2-lesson-01 --model gemini`.
+- Run `npm run tts:audit -- --lesson <full-id>` before generation.
 - NEVER generate MP3 files one by one — the script handles everything automatically.
-- Only modify `scripts/generate-tts.ts` if new speaker roles or exercise types need TTS.
+- Only Philip modifies `scripts/generate-tts.ts`; authors report unsupported audio types.
 
 ## Feedback & Corrections
 - Content-specific feedback: separate chat per lesson.
@@ -44,6 +60,19 @@ After finishing each phase, remind the user to start a new chat for the next pha
 ## General Efficiency
 - Check `.cursor/rules/` BEFORE exploring the codebase — patterns are documented there.
 - Do not re-read files already in context.
+- Read the current `_PLAN`, the current lesson source folder and at most two
+  relevant reference lessons. Never scan all B1 lessons for one B2 exercise.
+- Use deterministic lint/audit before manual AI review.
+- Keep long textbook passages in the source folder or one canonical code
+  constant. Plans contain references and decisions, not duplicate source prose.
+- Extract PDF/DOCX/screenshots once with `npm run source:extract` into local
+  `SOURCE-*.md` files and reuse them in Plan/Build/Review; reopen originals
+  only for unclear/changed items. Never write throwaway extraction scripts.
+- Keep a normal lesson `_PLAN` near 150 lines and a very large lesson under
+  about 200 lines; client questionnaires/answer lists remain in source files.
+- For feedback, read only the named exercise IDs and necessary surrounding code.
+- Do not run browser, build, TTS or translation phases unless they belong to the
+  current task.
 - Group related edits when practical.
 - For repetitive changes: do the first one carefully, then batch the rest.
 - Prefer text over screenshots when the issue is text-based.

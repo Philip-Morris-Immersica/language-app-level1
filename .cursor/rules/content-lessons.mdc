@@ -18,13 +18,17 @@ src/content/
 │   ├── tests/test-…/
 │   └── index.ts           ← A1 registry: loaders, navItems, metadata
 ├── a2/                    ← same shape
-├── b1/, b2/               ← same shape (skeletons)
+├── b1/                    ← completed level + B1-specific components
+├── b2/                    ← B2 author sandbox; lessons added one by one
 ├── registry.ts            ← global cross-level registry (loaders, lookups)
 └── index.ts               ← public barrel: types + helpers + registry
 ```
 
-When adding a new exercise type, template, or rule, put it in `shared/` so it
-is available for every level — never duplicate per level.
+When adding a new interaction:
+- use an existing shared template first;
+- level-specific variants live in `src/content/<level>/types.ts`,
+  `components/` and `exercise-components.ts` with a level-prefixed type;
+- only Philip promotes a genuinely universal interaction to `shared/`.
 
 ## Lesson Folder Structure
 
@@ -86,7 +90,7 @@ or the equivalent A2/B1/B2 source folders.
 - The `order` field must match the exact sequence in the PDF
 - Informational sections (НОВИ ДУМИ, ГРАМАТИКА, ДИАЛОЗИ) have no `points` field
 - Actual exercises have a `points` field
-- **`points` = number of blanks/questions, NOT number of sentences.** For `table_fill`, points = number of rows.
+- **`points` = number of blanks/questions, NOT number of sentences.** For `table_fill`, points = number of cells that have a dropdown (the grading code counts cells, not rows).
 - **Do NOT duplicate examples as interactive items.** If `isExample: true`, it must not count toward points.
 - Instructions must match the **digital-format standards** — see `content-quality-checklist.mdc` §A3 for the standardized instruction table per exercise type. Do NOT copy verbatim from the textbook; do NOT improvise new instructions for standard exercise types.
 - When a lesson has **multiple sections of the same type**, always number them: НОВИ ДУМИ 1, НОВИ ДУМИ 2... / ГРАМАТИКА 1, 2... / ДИАЛОЗИ 1, 2...
@@ -106,6 +110,10 @@ or the equivalent A2/B1/B2 source folders.
 ## Grammar Reference (`grammarReference` on `LessonContent`)
 
 Each lesson can have a structured grammar reference attached to its `content.ts`:
+
+Do not invent one merely because the field exists. For B2, add
+`grammarReference` only when the textbook/client plan explicitly requires a
+separate reference; grammar tables inside the lesson remain exercise sections.
 
 ```ts
 // src/content/<level>/lessons/<lesson-id>/content.ts
@@ -140,13 +148,13 @@ For visually prominent grammar notes that need to stand out from the exercise bo
 
 ```ts
 grammarHighlight: {
-  textKey: 'exercise.sSusWith',  // key in ui.ts (pre-translated on 7 languages)
+  textKey: 'exercise.sSusWith',  // shared ui.ts or the author's level i18n file
   // OR inline text if translation will be auto:
   // text: 'Когато дума след „с" ...',
 }
 ```
 
-The component renders it as a green info box with an „ℹ" icon above the exercise body. Add the translation key to `src/i18n/ui.ts` on all 7 languages.
+The component renders it as a green info box with an „ℹ" icon above the exercise body. Level authors add the translation key to `src/i18n/<level>.ts` on all 7 languages; only Philip edits shared `ui.ts`.
 
 ## Exercise Types — 5 Categories
 
@@ -219,7 +227,7 @@ sentences, correct answers). The dictionary *gloss* (a word's meaning) IS
 hand-translated; the Bulgarian headword stays Bulgarian.
 
 **Mechanism:** instructions → `instructionKey` in `ui.ts` (Philip) / `a2.ts`,
-`b1.ts` (level authors). Inline content strings → their `Record<lang>` slot (e.g.
+`b1.ts`, `b2.ts` (level authors). Inline content strings → their `Record<lang>` slot (e.g.
 `titleI18n` / `subtitleI18n` on `sectionStart`). If a field has no translation
 slot yet, Philip adds one to `shared/types.ts` — do not leave it on auto. See
 `i18n-translations` and `content-quality-checklist` §A4 for the full policy.
@@ -261,12 +269,15 @@ Reference: [LESSON_STRUCTURE.md](mdc:LESSON_STRUCTURE.md) shows how lesson-01 PD
 
 ## Adding a New Exercise Type — Checklist
 
-New exercise types live in `shared/` so they are immediately available for
-every CEFR level.
+For Alex/Nina level-specific work:
 
-1. Add interface + type to [src/content/shared/types.ts](mdc:src/content/shared/types.ts)
-   (the legacy alias `@/content/types` still works — it re-exports from `shared/`)
-2. Create component in `src/components/exercises/`
-3. Add `case` in [src/components/exercises/ExerciseRenderer.tsx](mdc:src/components/exercises/ExerciseRenderer.tsx)
-4. Add template to [src/content/shared/EXERCISE_TEMPLATES.ts](mdc:src/content/shared/EXERCISE_TEMPLATES.ts)
-5. Add type to the category list in this rule
+1. Prove in the lesson plan why no shared template fits.
+2. Add a level-prefixed interface in `src/content/<level>/types.ts`.
+3. Create the component in `src/content/<level>/components/`.
+4. Register it in `src/content/<level>/exercise-components.ts`.
+5. Keep all supporting translations in `src/i18n/<level>.ts`.
+6. If it has audio controls, ask Philip to add/verify TTS collection.
+
+For a truly universal type, Philip may instead update `shared/types.ts`,
+`src/components/exercises/`, `ExerciseRenderer.tsx` and
+`EXERCISE_TEMPLATES.ts`.

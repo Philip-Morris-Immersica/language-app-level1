@@ -1,397 +1,193 @@
 ---
+description: Current TTS policy — Gemini routing, character voices, audit, generation and targeted regeneration
 globs: scripts/generate-tts.ts,src/lib/tts.ts,public/assets/**/audio/tts/**
 ---
-# TTS Audio Generation
 
-## Quick Start
+# TTS Audio — Current Source of Truth
 
-```bash
+The implementation in `scripts/generate-tts.ts` and `npm run tts:audit` is
+authoritative. Content authors fix pronunciation through content fields, not by
+editing the script.
+
+## Commands
+
+Use full lesson IDs for A2/B1/B2:
+
+```powershell
+npm run tts:audit -- --lesson b2-lesson-01
+npm run tts:generate -- --lesson b2-lesson-01 --model gemini
+npm run tts:audit -- --lesson b2-lesson-01
+npm run check:audio
+```
+
+A1 numeric shorthand remains valid:
+
+```powershell
 npm run tts:generate -- --lesson 04 --model gemini
 ```
 
-The script **skips files that already exist**. To regenerate a clip you MUST
-delete the MP3 first — see "When to Delete Old MP3s" below.
+`tts:audit` is read-only: no API calls, directories, MP3 writes or deletes. It
+reports expected jobs, existing/missing files, model/voice counts, unsupported
+types, risky spoken text and coverage gaps. Add `--verbose` to list each job.
 
----
+## Gemini models
 
-## Voices — Only 2
+### Gemini 2.5 Flash TTS
 
-Дефолт гласове (Gemini TTS):
+Default for isolated lexical/grammar material:
 
-| Глас | Кога |
-|------|------|
-| `Achernar` | Женски — default за всичко |
-| `Charon` | Мъжки — за реплики с `voiceGender: 'male'` или `Speaker_Voice_Map` |
+- `content.vocabulary`;
+- image labels and flags;
+- reading flip-card words;
+- `audio_choice` words;
+- grammar table rows/notes;
+- grammar highlights;
+- grammar visual tiles without a connected description;
+- A2 wide cards.
 
-`FEMALE_VOICE_ALT` и `MALE_VOICE_ALT` са **alias към Achernar/Charon**. Няма
-втори тембър — две жени или двама мъже подред звучат с един и същ глас.
-(Старите Despina/Achird presets са изключени — team preference.)
+### Gemini 2.5 Pro TTS
 
----
+Default for connected speech:
 
-## Models — Flash за граматика, Pro само за свързан текст
+- dialogues;
+- reading paragraphs and optional full reading;
+- listening;
+- table-fill paragraphs;
+- personal-choice models;
+- grammar examples (unless the exercise explicitly requests Flash);
+- illustrated cards/phrases (unless a card explicitly requests Flash);
+- grammar visual tiles with a description;
+- illustrated-card header captions.
 
-| Модел | За какво |
-|-------|---------|
-| `gemini-2.5-flash-tts` + `"make sure the word is clearly in Bulgarian with the right pronunciation"` | **Всичко освен диалози и текстове:** vocabulary, illustrated_cards, grammar_table rows/notes, grammar_examples cards, grammar_highlights, grammar_visual pronouns, image labeling, reading_text flip-card words |
-| `gemini-2.5-pro-tts` + `"Read aloud in a warm, welcoming tone."` | **Само свързан текст:** dialogues, reading_text paragraphs, listening, personal_choice models, table_fill paragraphs |
+Very short Pro clips can truncate; isolated difficult words may still sound
+better with Pro. Content overrides decide exceptional cases.
 
-**ПРАВИЛО — веднъж завинаги:**
-- Flash = Achernar + clarity prompt → граматика (таблици, примери, highlight), думи, картички
-- Pro = Achernar + warm prompt → диалози, текстове за четене/слушане
-- **Никога не добавяй граматика в `GRAMMAR_TABLE_PRO_ROWS`, `GRAMMAR_TABLE_PRO_NOTES`, `GRAMMAR_PRO_ACHERNAR_ONLY_IDS`** — тези сетове са умишлено празни.
-- Ако Flash произнася погрешно дадена дума — добави custom Flash prompt в `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID` или пренапиши текста в `GRAMMAR_TABLE_ROW_TTS_TEXT` / `ttsNotes[]`.
+Chirp is a Philip-only fallback, not the normal lesson workflow.
 
-**Защо НЕ Chirp3-HD:** има акцентни/ударителни проблеми на български. Gemini
-TTS дава по-естествено произношение.
+## Override priority
 
----
+Prefer fields beside the content:
 
-## What Gets Generated — Authoritative Table
+1. Spoken text:
+   - `ttsText`
+   - `ttsLabel`
+   - `ttsParagraphs`
+   - `ttsNotes`
+   - `exampleTtsTexts`
+2. Model: `ttsModel: 'flash' | 'pro'` or an exercise-level `ttsFlash/ttsPro`.
+3. Prompt: `ttsPrompt`.
+4. Legacy script ID maps exist only for A1/A2 backward compatibility.
 
-Този ред в кода е истината — съответства точно на функциите в
-[generate-tts.ts](mdc:scripts/generate-tts.ts).
+Alex must not add B1/B2 IDs to script-level maps.
 
-| Категория | Източник | Глас | Модел |
-|-----------|---------|------|-------|
-| Vocabulary | `content.vocabulary[].bulgarian` | Achernar | **Flash** |
-| Illustrated cards | `exercises[type=illustrated_cards].cards[]` — `label` (или `ttsLabel`); `ttsIncludeSublabels: true` за обединяване със sublabels | Achernar | **Flash** (custom prompt per card в `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID`) |
-| Image labeling | `words/{image.id}.mp3`; `displayType: 'flags'` → `words/{exerciseId}-flag-{image.id}.mp3` | Achernar | **Flash** |
-| Reading text images (flip cards) | `images[]` с `ttsWordId` + `label` → `words/{ttsWordId}.mp3` | Achernar | **Flash** |
-| Grammar tables | `grammar_table.rows[]` | Achernar | **Flash**; `GRAMMAR_TABLE_ROW_TTS_TEXT` презаписва текста при нужда |
-| Grammar table notes | `grammar_table.notes[]` (използва `ttsNotes[i]` ако е зададен) | Achernar | **Flash** |
-| Grammar visual pronouns | `grammar_visual.pronouns[]` | Achernar | **Flash** |
-| Grammar examples | `grammar_examples.examples[]` (използва `ttsText` ако е зададен) | Achernar (или Charon ако card има `voiceGender: 'male'`) | **Flash** |
-| Grammar highlight | `grammarHighlight.exampleTtsTexts[]` / `examples[]` (само когато `interactiveExamples: true`) | Achernar | **Flash** (custom prompt per key в `GRAMMAR_HIGHLIGHT_FLASH_PROMPT_BY_ID`) |
-| Dialogues | `dialogues.sections[].lines[]` (използва `ttsText` ако е зададен) | По `voiceGender` или `SPEAKER_VOICE_MAP` | **Pro** |
-| Reading texts | `reading_text.paragraphs[]` (използва `ttsParagraphs[]` ако е зададен) | Achernar (Charon за `voiceGender: 'male'`); `paragraphVoiceGenders[]` за per-параграф | **Pro** |
-| Table fill paragraphs | `table_fill.paragraphs[].text` | Achernar (по `paragraphVoiceGenders`) | **Pro** |
-| Listening | `exercises[].listeningText` | Achernar | **Pro** |
-| Personal choice models | `personal_choice.model` (question + positive + negative) | Achernar | **Pro** |
+## Dialogue voices — stable by character
 
-**НЕ се генерира за:** интерактивни упражнения (`fill_in_blank`, `dropdown_match`, `word_order`, …), карти с `disableTts: true`, упражнения в `READING_TEXT_EXCLUDE` / `SKIP_FULL_TEXT`.
+Available Gemini voices:
 
----
+- female primary: Achernar;
+- female secondary: Despina;
+- male primary: Charon;
+- male secondary: Achird.
 
-## File Structure
+Assignment is per dialogue section:
 
-```
-public/assets/lesson-XX/audio/tts/
-  words/         — {vocabularyItemId}.mp3, {card.id}.mp3, {ttsWordId}.mp3
-  dialogues/     — {exerciseId}-{sectionId}-line-{index}.mp3
-  grammar/       — {exerciseId}-row-{index}.mp3       (tables)
-                   {exerciseId}-note-{index}.mp3      (table notes)
-                   {exerciseId}-card-{index}.mp3      (examples)
-                   {exerciseId}-pronoun-{index}.mp3   (grammar_visual)
-                   {exerciseId}-highlight-{index}.mp3 (interactive highlights)
-  texts/         — {exerciseId}-p-{index}.mp3         (per paragraph)
-                   {exerciseId}-full.mp3              (full text, <2000 chars)
-                   {exerciseId}-model.mp3             (personal_choice)
-  listening/     — {exerciseId}.mp3
-```
+1. `speaker` is the stable character identity.
+2. First female character → Achernar; second → Despina.
+3. First male character → Charon; second → Achird.
+4. The same `speaker` keeps the same voice across all turns.
+5. Unnamed two-person legacy dialogues use stable even/odd turns.
+6. More than two same-gender characters share the primary voice and produce an
+   audit warning.
 
----
+Always provide `speaker` and `voiceGender` when the textbook identifies a
+character. Do not alternate voices merely because two consecutive lines have
+the same gender.
 
-## ⚠️ CRITICAL — When to DELETE Old MP3s
+## What the main generator collects
 
-Скриптът **skip-ва файлове, които съществуват**. Ако смениш текста, модела или
-гласа в скрипта/съдържанието и НЕ изтриеш стария файл, генерирането **няма да
-направи нищо**.
+- vocabulary → `words/{id}.mp3`
+- illustrated/grouped cards → `words/{card.id}.mp3`
+- illustrated-card caption → `texts/{exerciseId}-caption.mp3`
+- image labels / flags / audio-choice words → `words/*.mp3`
+- dialogues → `dialogues/{exerciseId}-{sectionId}-line-{index}.mp3`
+- grammar visual/table/examples/highlight → `grammar/*.mp3`
+- reading/table-fill paragraphs → `texts/{exerciseId}-p-{index}.mp3`
+- eligible full reading → `texts/{exerciseId}-full.mp3`
+- listening → `listening/{exerciseId}.mp3`
+- personal choice model → `texts/{exerciseId}-model.mp3`
 
-**Винаги триеш ПРЕДИ да генерираш отново, когато:**
+The generator respects `disableAudio`, `disableTts` and grammar-row `noAudio`.
+B1/B2 multi-panel grammar rows use the same flattened index as the UI.
 
-| Промяна | Какво триеш |
-|---------|-------------|
-| Добавил си `ttsText` на dialogue line | `dialogues/{exerciseId}-{sectionId}-line-{index}.mp3` |
-| Сменил си `voiceGender` на dialogue line | същия файл |
-| Сменил си `ttsParagraphs` на reading_text | `texts/{exerciseId}-p-*.mp3` И `texts/{exerciseId}-full.mp3` |
-| Сменил си `label` на illustrated_card | `words/{card.id}.mp3` |
-| Добавил си override в `GRAMMAR_TABLE_PRO_ROWS` | `grammar/{exerciseId}-row-{index}.mp3` |
-| Добавил си override в `GRAMMAR_TABLE_ROW_TTS_TEXT` | същия файл |
-| Сменил си `ttsNotes` на grammar_table | `grammar/{exerciseId}-note-{index}.mp3` |
-| Промяна в `FEMALE_VOICE_ALT` / `MALE_VOICE_ALT` | ВСИЧКИ диалози на засегнатите уроци |
-| Сменил си модела/промта в `generate-tts.ts` | всички файлове, засегнати от промяната |
+If a custom B2 component calls `getTtsAudioPath()` but audit reports
+`unsupported-b2-audio-type`, stop and ask Philip to add a collector.
 
-**PowerShell команди (Windows):**
+## Preflight before first generation
 
-```powershell
-# Конкретен файл
-Remove-Item "public/assets/lesson-10/audio/tts/dialogues/l10-dialozi-02-а.-line-1.mp3" -Force
+Content must be reviewed/frozen first.
 
-# Целия диалог по pattern
-Remove-Item "public/assets/lesson-10/audio/tts/dialogues/l10-dialozi-03-*.mp3" -Force
+Check:
 
-# Всички думи на урок 10
-Remove-Item "public/assets/lesson-10/audio/tts/words/*.mp3" -Force
+- every dialogue line: `speaker`, `voiceGender`, numbers/abbreviations;
+- numbers, years, times, prices and measurements use spoken words in TTS fields;
+- `=` and `/` are replaced with natural pauses/words in spoken text;
+- abbreviations (`НДК`, `жк`, `бул.`, `ул.`, `г.`) are expanded;
+- `ttsParagraphs.length === paragraphs.length`;
+- `paragraphVoiceGenders.length === paragraphs.length` when present;
+- `ttsNotes.length === notes.length` when present;
+- custom exercise types have collected jobs.
 
-# Всички диалози на урок 10
-Remove-Item "public/assets/lesson-10/audio/tts/dialogues/*.mp3" -Force
-```
+Run audit. Fix errors before generation; review warnings instead of blindly
+suppressing them.
 
-След изтриването → `npm run tts:generate -- --lesson 10 --model gemini`.
+## Numbers and abbreviations
 
----
-
-## ⚠️ CRITICAL — Numbers Must Be Words
-
-TTS чете цифрите неестествено. **Винаги** трансформирай в думи:
-
-### Dialogue lines с цифри → задължителен `ttsText`
+Display text may keep digits. Spoken text should use natural Bulgarian:
 
 ```ts
-// ✗ ГРЕШНО — TTS чете „едно запетая десет"
-{ voiceGender: 'female', text: '– Билетът е 1,10 евро.' }
-
-// ✓ ПРАВИЛНО
-{ voiceGender: 'female',
-  text: '– Билетът е 1,10 евро.',
-  ttsText: '– Билетът е едно евро и десет евроцента.' }
+{
+  text: 'Билетът е 5,50 евро.',
+  ttsText: 'Билетът е пет евро и петдесет евроцента.',
+}
 ```
 
-**Чести случаи в диалози:**
-
-| Display (text) | TTS (ttsText) |
-|----------------|---------------|
-| `1,10 евро` | едно евро и десет евроцента |
-| `5,50 евро` | пет евро и петдесет евроцента |
-| `23 евро` | двадесет и три евро |
-| `7:00 часà` | седем часà |
-| `12:00 часà` | дванадесет часà |
-| `12:30` | дванадесет часà и тридесет минути |
-| `11:20` | единадесет и двадесет |
-| `сектор 3` | сектор три |
-| `трамвай 22` | трамвай двадесет и две |
-
-### `reading_text.paragraphs` с цифри → използвай `ttsParagraphs`
+Reading:
 
 ```ts
-paragraphs:    ['Тръгва в 8:00 часà.'],
-ttsParagraphs: ['Тръгва в осем часà.'],
+paragraphs: ['Паркът е създаден през 1882 г.'],
+ttsParagraphs: ['Паркът е създаден през хиляда осемстотин осемдесет и втора година.'],
 ```
 
-### `grammar_table.rows` с цифри → `GRAMMAR_TABLE_ROW_TTS_TEXT`
+Do not put raw `=`, `/`, table separators or grammar abbreviations into spoken
+text. Use periods/commas for clear pauses.
 
-В `generate-tts.ts` добави override с думи И точки за пауза между клетките:
+## Regeneration
 
-```ts
-'l10-gramatika-01b-row-0':
-  'Пловдив. Осем часа и петнадесет минути. Първи коловоз. Пет минути закъснение.',
-```
+The generator skips existing files. For a correction:
 
-**Точките (`.`) дават естествена пауза** между логическите елементи (град,
-час, коловоз, закъснение) и помагат за разбирането.
+1. Identify the exact affected MP3 from audit/component path.
+2. Fix the content override.
+3. Delete only that MP3 (or the smallest exact pattern).
+4. Run the lesson generator again.
+5. Audit + `check:audio`.
+6. Human-listen to the affected clip in the browser.
 
-### `grammar_table.notes` с цифри → `ttsNotes`
+Never delete a whole lesson audio folder for one bad word.
 
-```ts
-notes:    ['Заминаващи: Бургас 07:00 коловоз 2 | Варна 11:20 коловоз 5'],
-ttsNotes: ['Заминаващи. Бургас. Седем часа. Втори коловоз. Варна. Единадесет и двадесет. Пети коловоз.'],
-```
+## Human listening remains required
 
-### Listening texts → ВИНАГИ с думи (няма override)
+Audit cannot judge stress, emotion, pacing or whether a homograph sounds
+natural. Listen at minimum to:
 
-```ts
-listeningText: 'Тръгвам в осем часа сутринта. В единадесет и тридесет пристигам.',
-```
+- every dialogue section;
+- every long reading/listening text;
+- client-reported problem words;
+- grammar rows with numbers/symbols;
+- clips using custom prompts/models.
 
----
+## Git
 
-## ⚠️ CRITICAL — Abbreviations Need `ttsText`
-
-TTS чете съкращенията буква по буква (или ги изпуска). За **всяко** съкращение
-в диалог/текст използвай `ttsText` с пълна форма или фонетична транскрипция:
-
-| Display | TTS |
-|---------|-----|
-| `НДК` | ЕнДеКа |
-| `жк „Люлин"` | Люлин (пропусни „жк") |
-| `бул. „Витоша"` | булевард Витоша |
-| `ул. „Раковски"` | улица Раковски |
-| `пл. „Света Неделя"` | площад Света Неделя |
-| `Св. Александър Невски` | Свети Александър Невски |
-| `св. св. Кирил и Методий` | свети свети Кирил и Методий |
-| `1998 г.` | хиляда деветстотин деветдесет и осма година |
-| `2022 г.` | две хиляди двадесет и втора година |
-
-**Граматични съкращения в `grammar_examples.subtext`** (м.р., ж.р., ср.р.,
-мн.ч., мъжки род, женски род, …) се **махат автоматично** от TTS чрез
-`stripGrammarLabels()` — не пиши нищо специално в съдържанието.
-
----
-
-## Dialogue Voices
-
-В `exercises.ts`, всяка реплика на диалог МОЖЕ да има `voiceGender`:
-
-```ts
-{ voiceGender: 'male',   text: '– Колко струва?' },
-{ voiceGender: 'female', text: '– Десет евро.' },
-```
-
-- **female** → Achernar
-- **male** → Charon
-- **без `voiceGender`** → fallback по `SPEAKER_VOICE_MAP` (ключови думи в speaker name) или alternation по line index (четно=female, нечетно=male)
-
-**ВАЖНО:** Само 2 гласа. Две жени или двама мъже подред = един и същ глас.
-Различават се **по текст**, не по тембър.
-
----
-
-## Editing Files with Cyrillic — DO NOT Use PowerShell
-
-PowerShell `Set-Content` без `-Encoding UTF8` корумпира кирилицата (превръща я
-в `?`). Ако трябва да правиш масови замени с кирилица в `generate-tts.ts`:
-
-```powershell
-# ✗ НЕ
-(Get-Content file.ts -Raw) -replace 'A','B' | Set-Content file.ts
-
-# ✓ ДА — използвай Node.js скрипт
-node -e "const fs=require('fs'); let c=fs.readFileSync('file.ts','utf8'); c=c.replace(/A/g,'Б'); fs.writeFileSync('file.ts',c,'utf8');"
-```
-
-**По-добре** използвай `StrReplace` tool-а (Cursor agent), който запазва
-encoding-а коректно.
-
----
-
-## Known Problematic Words — Add to PRO Override
-
-Когато Flash греши на дума, добави я в съответния override Set в
-[generate-tts.ts](mdc:scripts/generate-tts.ts):
-
-| Списък | За какво |
-|--------|---------|
-| `VOCAB_USE_PRO_IDS` | Vocabulary `words/{id}.mp3` (kiselo-mlyako, otset, taksi) |
-| `GRAMMAR_TABLE_PRO_ROWS` | Grammar table rows |
-| `GRAMMAR_TABLE_PRO_NOTES` | Grammar table notes |
-| `GRAMMAR_TABLE_ROW_TTS_TEXT` | Override на текста (не само модела) |
-| `READING_TEXT_IMAGE_STRESS_IDS` | Flip-card думи |
-| `ILLUSTRATED_CARD_FLASH_PROMPT_BY_ID` | Per-card prompt override |
-| `GRAMMAR_PRO_ACHERNAR_ONLY_IDS` | Цели grammar_examples упражнения |
-
-**Известни проблемни думи (ползват Pro):**
-боб, литър, четвърт, хиляда, сандвич(а), кроасан, баклава, годеник, Каритас,
-добър, такси, Лейла, сина ми, мъжа ми, тя й, двайсет и пети, хладилник,
-спалня, мивка, душ, тоалетна.
-
----
-
-## Известни Workarounds в Текста
-
-| Проблем | Решение в съдържанието |
-|---------|----------------------|
-| Й (буквата) → грешно | Заменяй с „и кратко" |
-| ь (буквата) → грешно | Заменяй с „ер малък" |
-| „евроцента" → „евроцентър" | Регенерирай с PRO |
-| „1,5 кг" → пропуска | Пиши „един килограм и половина" |
-| „с зеленчуци" → „със" | Пиши явно „със зеленчуци" |
-| в/във, с/със | **във** само пред дума на **в/ф**; иначе **в**. **със** само пред дума на **с/з**; иначе **с**. TTS: „в Плиска", не „във Плиска". |
-| Числа `2 098 000` | Изписвай с думи |
-| `2022 г.` | Пиши „две хиляди двадесет и втора година" |
-| „двайсет и пети" | Пиши „двайсет и пет" ако е адрес/номер |
-| Чужди имена | Българска форма (Алепо, не Халеб) |
-| „часа" в ТОЧЕН час (без следващи минути), напр. „Дванайсет часа.", „Три часа следобед." — Flash изяжда/сгрешава ударението | Пиши „**часът**" вместо „часа" (напр. „Дванайсет часът.", „Три часът следобед."). **НЕ** ползвай „часъ" или комбиниращо ударение (U+0300) върху думата — доказано кара модела да я ИЗПУСНЕ изцяло. Когато след часа следват минути („осем часа и петнайсет минути") „часа" си остава нормално — проблемът е само при точен кръгъл час без минути. |
-
----
-
-## Toggle Behaviour
-
-Всички TTS компоненти имплементират **toggle на втория клик**: повторен клик
-върху същия елемент СПИРА аудиото. Различен елемент → спира текущото и пуска
-новото. Имплементирано в `useAudioPlayer` от
-[src/lib/tts.ts](mdc:src/lib/tts.ts).
-
----
-
-## Audio Files in Git — НЕ Git LFS
-
-**MP3 файловете се commit-ват като обикновени Git blob-ове. НЕ Git LFS.**
-
-Vercel build-ът не пуска `git lfs fetch` по подразбиране — ако MP3-тата са в
-LFS, deploy-натият сайт сервира pointer файлове вместо звук → всеки „Слушай"
-бутон свири счупено.
-
-### `.gitattributes` ТРЯБВА да изглежда така
-
-```gitattributes
-# *.mp3 НЕ е тук — нарочно
-*.wav filter=lfs diff=lfs merge=lfs -text
-*.ogg filter=lfs diff=lfs merge=lfs -text
-```
-
-### Commit flow
-
-```bash
-npm run tts:generate -- --lesson XX --model gemini
-git add -A
-git commit -m "feat(lesson-XX): TTS audio"
-git push
-```
-
-**Никога:**
-- ❌ `git lfs track "*.mp3"`
-- ❌ `git lfs migrate import --include="*.mp3"`
-- ❌ Преименуване на MP3 ръчно — пътищата идват от `getTtsAudioPath()`
-
-### Sanity check ПРЕДИ push
-
-```bash
-npm run check:audio
-```
-
-Трябва да отпечата:
-```
-✓ .gitattributes does not route *.mp3 through LFS
-✓ All N tracked *.mp3 files are real binaries (no LFS pointers)
-```
-
-`npm run build` (и Vercel deploy) пуска `check:audio` като `prebuild` —
-счупен MP3 проваля build-а вместо да пусне беззвучен сайт.
-
-### Ако `check:audio` намери LFS pointer-и
-
-```bash
-git add --renormalize -- "public/assets/**/*.mp3"
-git commit -m "fix(audio): renormalize MP3s out of LFS"
-git push
-npm run check:audio
-```
-
----
-
-## Convention-Based Audio Paths
-
-Компонентите ползват `getTtsAudioPath()` от [src/lib/tts.ts](mdc:src/lib/tts.ts):
-
-```
-/assets/lesson-{num}/audio/tts/{category}/{filename}.mp3
-```
-
-Не е нужен ръчен `audioUrl` за vocabulary, dialogues, grammar — пътят се
-извлича от exercise/vocabulary ID-то. Единствено `reading_text` понякога
-ползва `audioUrl` за `-full.mp3`.
-
----
-
-## Adding a New Lesson — Checklist
-
-1. `content.ts` и `exercises.ts` са пълни и review-нати
-2. Прегледай **всеки диалог** за цифри/съкращения → добави `ttsText`
-3. Прегледай **reading_text** за цифри → добави `ttsParagraphs`
-4. Прегледай **grammar_table** за цифри в `rows[]` → добави в `GRAMMAR_TABLE_ROW_TTS_TEXT`
-5. Прегледай **listeningText** — числата с думи (няма override механизъм)
-6. Ако се добавя нов speaker role → `SPEAKER_VOICE_MAP` в `generate-tts.ts`
-7. `npm run tts:generate -- --lesson XX --model gemini`
-8. Тествай в браузъра — `npm run dev`
-9. Ако нещо звучи зле → **изтрий конкретния файл** → промени override → пусни пак
-10. `npm run check:audio` — задължително преди push
-11. `git add -A && git commit && git push` — без LFS команди
-
----
-
-## Dependencies
-
-- `google-auth-library` (devDependency) — OAuth от service account
-- `dotenv-cli` — зарежда `.env.local`
-- `tsx` — пуска TypeScript директно
+- MP3 files are ordinary Git blobs, never Git LFS.
+- Commit content first.
+- Commit reviewed audio separately.
+- `npm run check:audio` must pass before audio push.

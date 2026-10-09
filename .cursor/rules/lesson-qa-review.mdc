@@ -8,27 +8,34 @@ Use this workflow when the user asks to review a finished lesson (e.g. „пре
 ## Phase 0 — Clarify scope (1 question max)
 
 Before starting, confirm with the user:
-- Which lesson? (e.g. `lesson-07` or just `7`)
+- Which lesson? Use the full id for A2/B1/B2 (e.g. `b2-lesson-01`).
 - Only main lesson, or also matching test? (Tests live in `src/content/tests/test-lessons-N/`.)
 
-Do NOT ask more questions. Proceed with defaults if user is vague (just the lesson, no test).
+Do NOT ask more questions. Proceed with defaults if user is vague (just the lesson, no test). Skip Phase 0 entirely when the invoking command already states the lesson and scope.
 
 ## Phase 1 — Deterministic lint (ZERO tokens)
 
 Run the content linter. Treat its output as authoritative for everything it checks.
 
 ```bash
-npm run content:lint -- --lesson NN
+npm run content:lint -- --lesson <full-lesson-id>
 ```
+
+Examples: `lesson-07`, `a2-lesson-03`, `b1-lesson-12`,
+`b2-lesson-01`. Numeric shorthand intentionally checks the same lesson number
+across all levels and should not be used for a normal level-specific review.
 
 Report the findings to the user, grouped by exercise id. Note which errors are blockers vs warnings-for-discussion. Do NOT manually verify anything the linter already covers (duplicate ids, missing images, Latin dialogue ids, points/blanks mismatch, paper-book phrases, verb mismatch, lazy shuffle, true/false grouping, digits in listeningText, `grammar_table` alignment, `order` duplicates).
 
 ## Phase 2 — Content integrity (targeted file reads)
 
-Read ONLY the files necessary to verify content. Never read `index.ts`, `metadata.ts`, or `workbook.ts` unless the user requested workbook review. For the main pass:
+Read ONLY the files necessary to verify content. Do not read `metadata.ts` or
+`workbook.ts` unless requested. Read the level `index.ts` only for a final-batch
+loader/count check.
 
 1. **Read `exercises.ts`** — this is the primary source.
-2. **Read `content.ts`** — only if the lesson has dialogues (to cross-check them).
+2. **Read `content.ts`** for B2 (vocabulary is mandatory); for older levels,
+   read it when dialogues/vocabulary are in scope.
 
 Then perform these checks (each ≈ 1 sentence per finding, no filler prose):
 
@@ -38,8 +45,9 @@ Then perform these checks (each ≈ 1 sentence per finding, no filler prose):
 - [ ] New grammar structure is introduced BEFORE exercises that drill it.
 
 ### 2b. Instructions
-- [ ] Each `instruction` describes a DIGITAL action (Изберете / Плъзнете / Напишете / Свържете / Подредете) that matches the interaction type.
-- [ ] Complex or new-pattern instructions have an `instructionKey` registered in `src/locales/*/ui.ts` (all 7 languages).
+- [ ] Each `instruction` describes a DIGITAL action (Изберете / Плъзнете / Свържете / Подредете) that matches the interaction type.
+- [ ] No exercise requires free Bulgarian typing.
+- [ ] Complex or new-pattern instructions have an `instructionKey` in shared `ui.ts` or `src/i18n/<level>.ts` (all 7 languages).
 - [ ] No paper-book references survived the linter's `forbidden-phrases` rule (double-check anyway in case the phrase was rephrased).
 
 ### 2c. Answer correctness
@@ -55,6 +63,11 @@ Then perform these checks (each ≈ 1 sentence per finding, no filler prose):
 ### 2e. Dialogue consistency (skip if no dialogues)
 - [ ] Every dialogue in `exercises.ts` appears identically in `content.ts` (same speakers, same lines).
 - [ ] Every dialogue line has `voiceGender` when the speaker's gender is clear.
+
+### 2f. B2 final-batch registration
+- [ ] The exact B2 loader is enabled only after all five lesson files exist.
+- [ ] `B2_LESSON_EXERCISE_COUNTS` equals the number of interactive entries with `points > 0`.
+- [ ] `content.vocabulary` exists and is derived from the textbook/client plan.
 
 ## Phase 3 — Structured report
 
@@ -83,11 +96,14 @@ Output a single consolidated report in this format (keep it terse, no preamble):
 
 Do NOT apply fixes automatically. Wait for user approval: „искаш ли да оправя всички blockers автоматично?" If yes, batch the fixes in one pass and re-run the linter to confirm.
 
-## What NOT to check (explicit skip list — saves tokens)
+## What requires a separate browser QA (do not claim it is covered)
 
-- **Visual layout / component styling** — handled by shared templates, assume correct.
+- **Visual layout / component styling** — shared templates are lower risk;
+  new B2 components still require browser/mobile inspection.
 - **TTS audio quality / pronunciation** — cannot be verified without listening; skip.
-- **Button behavior, navigation, scoring UI** — covered by templates and existing tests.
+- **Button behavior, navigation and scoring UI** — this repository has no
+  complete automated UI suite. Shared templates lower risk, but new B2
+  components require a browser check (correct/wrong/reset/mobile).
 - **Image aesthetics** — only check file existence (linter already does this); do NOT open images to judge them.
-- **Translation accuracy in ui.ts** — separate workflow; skip unless user asks.
+- **Translation accuracy in ui.ts / level i18n** — separate workflow; skip unless user asks.
 - **„Непознатите думи потърсете в речника."** — NOT enforced as hard rule (user is still deciding); flag only as a soft suggestion if present.

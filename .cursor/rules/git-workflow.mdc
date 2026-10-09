@@ -13,10 +13,22 @@ alwaysApply: true
 - `master` = official project — never commit directly here
 
 ## How to save work
-Tell the AI agent in chat: "commit" or "push".
-The agent reads the diff, writes the commit message, and pushes to your personal branch automatically.
+For Alex B2 work, say:
+
+```text
+Commit и push само текущия b2-lesson-NN в branch alex.
+Провери първо за чужди файлове.
+```
+
+The agent enforces branch, path ownership and lesson checks from the rules.
+
+Philip/Nina may ask the agent to commit/push, but it must still inspect domain
+ownership and stage explicit paths.
 
 ## Cursor Source Control (no terminal needed)
+Alex normally lets the agent commit/push B2 work after the explicit request
+above. For other approved workflows:
+
 1. Press `Ctrl+Shift+G` to open Source Control panel
 2. Type a message in the box at the top
 3. Click the **✓ Commit** button
@@ -24,7 +36,9 @@ The agent reads the diff, writes the commit message, and pushes to your personal
 
 ## File access rules (AGENT MUST ENFORCE)
 - Nina (`nina` branch) → may ONLY edit files inside `src/content/a2/` and `public/assets/a2-lesson-*/`
-- Alex (`alex` branch) → may ONLY edit files inside `src/content/b1/` and `public/assets/b1-lesson-*/`
+- Alex (`alex` branch) → may edit `src/content/b1/**`, `src/content/b2/**`,
+  `src/i18n/b1.ts`, `src/i18n/b2.ts`, `public/assets/b1-lesson-*/**` and
+  `public/assets/b2-lesson-*/**`
 - Philip (`philip` branch) → full access to all files
 - NEVER edit files outside your designated folder (see `branch-hygiene.mdc` for the full list of shared files)
 - NEVER commit or push to another person's branch

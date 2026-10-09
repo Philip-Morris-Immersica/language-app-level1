@@ -139,8 +139,9 @@ git diff --stat origin/master -- . ":!src/content/<level>/lessons/*/exercises.ts
   **Винаги проверявай `git branch --show-current`, преди да гледаш localhost.**
 - **`npm run build` НЕ прави type-check** (`ignoreBuildErrors: true`). За типове:
   `npx tsc --noEmit` — но там има заварени грешки в `a2/types.ts` и `b1/types.ts`.
-- **`content:lint --lesson` приема само НОМЕР.** `--lesson 03` линтва `lesson-03`
-  + `a2-lesson-03` + `b1-lesson-03`. `--lesson a2-lesson-03` → „No lessons matched".
+- **`content:lint --lesson` приема пълен lesson id.** Ползвай
+  `--lesson a2-lesson-03` за точно един урок. Числовото `--lesson 03` остава
+  cross-level shorthand и линтва всички нива с номер 03.
 - `rg` не е в PATH. `| cat` в PowerShell гърми при git команди.
 - Dev сървърът е на порт **3010**.
 

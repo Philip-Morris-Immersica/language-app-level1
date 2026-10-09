@@ -11,8 +11,11 @@ Apply this checklist BEFORE finalizing any lesson or test content. Every rule be
 
 ```bash
 npm run content:lint                  # all lessons
-npm run content:lint -- --lesson 07   # single lesson
+npm run content:lint -- --lesson b2-lesson-01  # one exact A2/B1/B2 lesson
 ```
+
+Numeric shorthand (e.g. `--lesson 07`) checks that lesson number across every
+level. Use the full lesson id for normal level-specific work.
 
 The linter catches mechanically (without tokens): duplicate ids/orders, Latin characters in `dialogue(_builder).sections[].id`, `grammar_table` column/row misalignment, missing images under `/public/assets`, points ↔ blanks mismatch, paper-book phrases („по двойки", „на хартия", „в тетрадката", „от работната тетрадка"), verb mismatch (dropdown → „Напишете"), lazy shuffle (first syllable starts correct word), grouped true/false, digits in `listeningText`, and missing period on `instruction`. Fix linter findings FIRST — they're deterministic truth.
 
@@ -111,7 +114,7 @@ To suppress a specific rule in a file when the code is intentionally exempt:
 
 | Механизъм | Как работи | За какво |
 |---|---|---|
-| `instructionKey` + `ui.ts` (`a2.ts` / `b1.ts`) | Предварително преведено на 7 езика от човек | Инструкции и самостоятелни UI фрази |
+| `instructionKey` + `ui.ts` (`a2.ts` / `b1.ts` / `b2.ts`) | Предварително преведено на 7 езика от човек | Инструкции и самостоятелни UI фрази |
 | Inline `Record<lang>` слот (напр. `titleI18n`) | Преводите стоят до българския в content файла | Заглавия, подзаглавия, таблици, речник, култура и т.н. |
 
 **Какво трябва да е ръчно преведено (не изчерпателно):**
@@ -119,7 +122,7 @@ To suppress a specific rule in a file when the code is intentionally exempt:
 - exercise `instruction` (през `instructionKey`)
 - заглавия и подзаглавия на раздели (`sectionStart` → `titleI18n` / `subtitleI18n`)
 - `tableTitle`, бележки и заглавия на колони в GrammarTable
-- граматичен справочник (`grammarReference`) — вече задължително на 7 езика
+- граматичен справочник (`grammarReference`), когато урокът изрично има такъв — на 7 езика
 - културни/наративни бележки
 - описание на урока, grammar topics (тагове)
 - гланцове на думите в речника (значенията)
@@ -211,7 +214,7 @@ inline съдържание. Винаги 7 езика, винаги в реда
 Преди финализиране на урок/тест, провери:
 
 ### Механично (лови се от линтера)
-0. ☐ `npm run content:lint -- --lesson NN` — 0 errors, minimum warnings
+0. ☐ `npm run content:lint -- --lesson <full-lesson-id>` — 0 errors, minimum warnings
 
 ### Съдържателно (изисква човешки/AI преглед)
 1. ☐ Всеки отговор е граматически верен (род, член, лице)
@@ -228,8 +231,8 @@ inline съдържание. Винаги 7 езика, винаги в реда
 12. ☐ Първата дума във всяко изречение е с главна буква
 13. ☐ content.ts диалози = exercises.ts диалози (идентични)
 14. ☐ НОВИ ДУМИ идват преди упражненията, които ги ползват
-15. ☐ Граматика `instructionKey` е зададен и записан в `ui.ts` на 7 езика
-16. ☐ Сложни инструкции (нова интеракция) имат `instructionKey` в `ui.ts`
+15. ☐ Граматика `instructionKey` е зададен в shared `ui.ts` или level i18n файла на 7 езика
+16. ☐ Сложни инструкции (нова интеракция) имат `instructionKey` в level i18n файла
 16а. ☐ Всичко за ученика е ръчно преведено на 7 езика (заглавия, подзаглавия, раздели, таблици, речник, култура, описание) — нищо не разчита на авто-превод като финал (виж §A4)
 17. ☐ Числовите форми (двайсет/двадесет) консистентни в целия урок и съвпадат с TTS
 18. ☐ Чужди имена в българска форма (Алепо, не Халеб)

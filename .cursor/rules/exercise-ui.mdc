@@ -115,8 +115,9 @@ stopSpeaking();
 ```
 
 ### Model strategy (see `tts-audio` rule for details)
-- **Flash** (`gemini-2.5-flash-tts`) — single words, grammar table rows/notes
-- **Pro** (`gemini-2.5-pro-tts`) — sentences, dialogues, reading texts, personal choice models, illustrated_cards
+- **Flash** (`gemini-2.5-flash-tts`) — isolated words, labels and short grammar forms
+- **Pro** (`gemini-2.5-pro-tts`) — connected sentences, dialogues, reading/listening and illustrated phrases
+- Content `ttsModel` / `ttsPrompt` overrides category defaults.
 
 ### Dialogue playback (`Dialogues.tsx`) — two modes, one component
 Every `dialogues` exercise automatically gets both modes (no config needed):
@@ -130,7 +131,10 @@ Every `dialogues` exercise automatically gets both modes (no config needed):
 
 Rules when authoring `dialogues`:
 - Do **not** add an `audioUrl` — per-line MP3 paths are convention-based.
-- Prefer explicit `voiceGender: 'male' | 'female'` on each line so the generator picks Charon/Achird vs Achernar/Despina correctly (see `tts-audio` rule).
+- Set `speaker` + `voiceGender` when characters are known. The generator assigns
+  one stable voice per character (Achernar/Despina for female characters,
+  Charon/Achird for male characters); it does not switch voices merely because
+  consecutive lines share a gender.
 - The component lives in [Dialogues.tsx](mdc:src/components/exercises/Dialogues.tsx); changes there propagate to all lessons.
 
 ## State Persistence

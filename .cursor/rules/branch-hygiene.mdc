@@ -18,14 +18,15 @@ alwaysApply: true
 | Branch | Свободен домейн |
 |---|---|
 | `nina` | `src/content/a2/**`, `src/i18n/a2.ts`, `public/assets/a2-lesson-*/**` |
-| `alex` | `src/content/b1/**`, `src/i18n/b1.ts`, `public/assets/b1-lesson-*/**` |
+| `alex` | `src/content/b1/**`, `src/content/b2/**`, `src/i18n/b1.ts`, `src/i18n/b2.ts`, `public/assets/b1-lesson-*/**`, `public/assets/b2-lesson-*/**` |
 | `philip` | Всичко (team lead) |
 
 **Важно:** `src/content/a2/**` включва `lessons/`, `tests/`, `types.ts`,
 `components/`, `exercise-components.ts` — целият A2 домейн е самодостатъчен.
-**B1 домейнът вече е отворен със същата структура:** `src/content/b1/**` включва
-`lessons/`, `tests/`, `types.ts`, `components/`, `exercise-components.ts`, а
-`src/i18n/b1.ts` е създаден и закачен в `ui.ts`. B1 е самодостатъчен точно като A2.
+**B1 и B2 домейните на Алекс са самодостатъчни:** всеки включва `lessons/`,
+`tests/`, `types.ts`, `components/`, `exercise-components.ts` и собствен
+`src/i18n/<level>.ts`. Нов B2 компонент остава в `b2/components/`; B1 се ползва
+само като техническа референция, не се променя при работа по B2.
 
 В рамките на `src/content/<level>/index.ts` се позволяват **само**:
 - Uncomment / add на `<LEVEL>_LESSON_LOADERS` и `<LEVEL>_TEST_LOADERS`
@@ -50,7 +51,7 @@ UNHCR syllabus-а и не се променя.
 - **НЕ push към `master` директно** — мърджът минава САМО през Pull Request от Philip.
 - **НЕ push към чужд branch** (`git push origin nina` от Alex или Philip — забранено).
 - **НЕ променяй ID конвенции** (виж таблицата по-долу) — счупват backward compatibility.
-- **НЕ променяй чужди нива** (Нина не пипа `a1`, `b1`, `b2`; Alex не пипа `a1`, `a2`, `b2`).
+- **НЕ променяй чужди нива** (Нина не пипа `a1`, `b1`, `b2`; Алекс не пипа `a1`, `a2`).
 - **НЕ променяй** `src/content/registry.ts`, `src/content/index.ts`, `src/content/shared/**` (само Philip).
 - **НЕ променяй** `src/components/**` директно от Нина/Алекс. За level-специфични визии → `src/content/<level>/components/`.
 - **НЕ променяй** `src/lib/**`, `src/app/**`, `src/db/**` (никога не са в content поток).
@@ -99,7 +100,8 @@ A2/B1/B2 exercise types (нови): задължително префикс `<le
    npm run content:lint -- --lesson <lesson-id>
    ```
    → 0 errors задължително.
-4. Commit само твоите файлове: `git add src/content/<level>/` + `git add public/assets/<level-lesson>/` + ако ползваш — `git add src/i18n/<level>.ts`.
+4. Commit само файловете за текущия урок чрез explicit paths. Алекс може да
+   stage-ва B1/B2, Нина — само A2. Не използвай `git add .` или `git add -A`.
 5. Push към собствения си branch (никога към master, никога към чужд branch).
 
 ## Никога
