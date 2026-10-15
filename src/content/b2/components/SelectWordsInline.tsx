@@ -87,7 +87,7 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
               <h4 className="mb-3 font-bold text-[#0072BC]">{block.heading}</h4>
             )}
             <p className="text-base leading-9 text-gray-900 md:text-lg">
-              {block.tokens.map(token => {
+              {block.tokens.map((token, tokenIndex) => {
                 const selectionId = tokenKey(block.id, token.id);
                 const selectable = token.selectable !== false;
                 const isSelected = selectedSet.has(selectionId);
@@ -95,6 +95,34 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
                 const missed = submitted && isCorrect && !isSelected;
                 const wrong = submitted && isSelected && !isCorrect;
                 const accepted = submitted && isSelected && isCorrect;
+
+                // Neighbouring words in the same state form one continuous phrase:
+                // the space between them is highlighted/underlined too.
+                const stateOf = (blockToken?: (typeof block.tokens)[number]) => {
+                  if (!blockToken || blockToken.selectable === false) return '';
+                  const id = tokenKey(block.id, blockToken.id);
+                  const sel = selectedSet.has(id);
+                  const cor = correctIds.has(id);
+                  if (submitted) {
+                    if (sel && cor) return 'accepted';
+                    if (sel) return 'wrong';
+                    if (cor) return 'missed';
+                    return '';
+                  }
+                  return sel ? 'selected' : '';
+                };
+                const state = stateOf(token);
+                const joinNext =
+                  selectable &&
+                  state !== '' &&
+                  state === stateOf(block.tokens[tokenIndex + 1]) &&
+                  (token.trailing ?? ' ').trim() === '';
+                const joinClass =
+                  state === 'wrong'
+                    ? 'bg-[#FCE2DE] line-through decoration-2'
+                    : state === 'missed'
+                      ? 'bg-[#FEF1D1] underline decoration-dashed decoration-2 underline-offset-4'
+                      : 'bg-[#DAF6EB] underline decoration-2 underline-offset-4';
 
                 if (!selectable) {
                   return (
@@ -133,7 +161,11 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
                     >
                       {token.text}
                     </button>
-                    {token.trailing ?? ' '}
+                    {joinNext ? (
+                      <span className={joinClass}>{token.trailing ?? ' '}</span>
+                    ) : (
+                      (token.trailing ?? ' ')
+                    )}
                   </span>
                 );
               })}

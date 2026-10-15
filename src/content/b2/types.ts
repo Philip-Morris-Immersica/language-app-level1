@@ -56,6 +56,90 @@ export interface B2OpinionChoiceExercise extends B2BaseExercise {
   }[];
 }
 
+/**
+ * b2-match-pairs-dragdrop — drag a word from an alphabetical pool onto the
+ * field next to each left item. Same data shape as B1's drag-and-drop matcher,
+ * but B2-owned (B1 is never imported). Pool order = `shuffledRights` as given.
+ *
+ * Mix & match (two targets per row): when pairs carry `correctRight2`, every row
+ * shows TWO drop fields (e.g. idiom → meaning + example), each fed from its own
+ * pool (`shuffledRights` for the first field, `shuffledRights2` for the second).
+ * A tile can only be dropped in a field of its own column.
+ */
+export interface B2MatchPairsDragDropExercise extends B2BaseExercise {
+  type: 'b2-match-pairs-dragdrop';
+  title: string;
+  pairs: {
+    id: string;
+    left: string;
+    correctRight: string;
+    /** Second target of the row (mix & match mode). */
+    correctRight2?: string;
+  }[];
+  /** Exact pool order (e.g. alphabetical). Falls back to a random order when omitted. */
+  shuffledRights?: string[];
+  /** Pool order of the second column (mix & match mode). */
+  shuffledRights2?: string[];
+  /** `b2.ts` keys for the captions of the first / second column (mix & match mode). */
+  rightLabelKey?: string;
+  rightLabelKey2?: string;
+  showLeftOrdinal?: boolean;
+}
+
+/**
+ * b2-grammar-table — visually identical to the shared `grammar_table`, plus:
+ *  - `tableSubtitle`: a line directly under the green table-title bar
+ *    (e.g. „Образува се от глаголи от несвършен вид.");
+ *  - list notes: a `notes[]` string may contain `\n`; lines starting with `- `
+ *    render as a bulleted list inside the same green box.
+ * Audio paths match the shared table: `{id}-row-{i}` and `{id}-note-{i}`.
+ */
+export interface B2GrammarTableExercise extends B2BaseExercise {
+  type: 'b2-grammar-table';
+  title: string;
+  /** Exercise-level subtitle (grey text under the section title, above the table). */
+  subtitle?: string;
+  /**
+   * Long explanatory text shown in its OWN framed box between the header
+   * (title + instruction) and the table — so the instruction stays directly
+   * under the title. Not read by TTS.
+   */
+  introText?: string;
+  /**
+   * Show a repeated `pronoun` (e.g. the grammatical gender) only once: on the first
+   * row of a run of identical values, spanning the whole run (`rowSpan`).
+   */
+  mergePronouns?: boolean;
+  tableTitle?: string;
+  /** Shown under the table-title bar, inside the table frame. */
+  tableSubtitle?: string;
+  columns?: string[];
+  pronounColumnLabel?: string;
+  rows?: {
+    pronoun: string;
+    cells: string[];
+    pronunciations?: Record<string, string>;
+    ttsModel?: 'flash' | 'pro';
+    ttsPrompt?: string;
+    ttsText?: string;
+    voiceGender?: 'male' | 'female';
+    noAudio?: boolean;
+  }[];
+  notes?: string[];
+  ttsNotes?: string[];
+  ttsNoteModels?: ('flash' | 'pro')[];
+  boldColumns?: number[];
+  widePronouns?: boolean;
+  /**
+   * `'stacked'` — textbook-style framed list: each row is a centred bold heading
+   * (`pronoun`) followed by its `cells` as green lines (a cell written fully as
+   * `**text**` renders as a dark bold line). Default `'table'`.
+   */
+  layout?: 'table' | 'stacked';
+}
+
 export type B2Exercise =
   | B2SelectWordsInlineExercise
-  | B2OpinionChoiceExercise;
+  | B2OpinionChoiceExercise
+  | B2MatchPairsDragDropExercise
+  | B2GrammarTableExercise;
