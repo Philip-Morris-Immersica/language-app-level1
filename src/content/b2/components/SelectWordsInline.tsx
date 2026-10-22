@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CheckCircle2, RotateCcw, XCircle } from 'lucide-react';
+import { Check, CheckCircle2, RotateCcw, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
@@ -77,6 +77,117 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
     setSelected([]);
     setSubmitted(false);
   };
+
+  if (exercise.presentation === 'checklist') {
+    const options = exercise.blocks.flatMap(block =>
+      block.tokens.filter(token => token.selectable !== false).map(token => ({
+        key: tokenKey(block.id, token.id),
+        text: token.text,
+      })),
+    );
+    return (
+      <div className="rounded-xl bg-white p-4 shadow-md md:p-8">
+        <ul className="space-y-3">
+          {options.map(option => {
+            const isSelected = selectedSet.has(option.key);
+            const isCorrect = correctIds.has(option.key);
+            const accepted = submitted && isSelected && isCorrect;
+            const wrong = submitted && isSelected && !isCorrect;
+            const missed = submitted && !isSelected && isCorrect;
+            // Tailwind does not scan `src/content/` — novel styles are inline.
+            const tone = accepted
+              ? { border: '#32C189', bg: '#DAF6EB', text: '#1F5741' }
+              : wrong
+                ? { border: '#D25A45', bg: '#FCE2DE', text: '#683229' }
+                : missed
+                  ? { border: '#E0A526', bg: '#FEF1D1', text: '#684D0B' }
+                  : isSelected
+                    ? { border: '#32C189', bg: '#DAF6EB', text: '#1F5741' }
+                    : { border: '#e5e7eb', bg: '#f9fafb', text: '#111827' };
+            const boxStyle = wrong
+              ? { borderColor: '#D25A45', backgroundColor: '#D25A45', color: '#fff' }
+              : isSelected
+                ? { borderColor: '#32C189', backgroundColor: '#32C189', color: '#fff' }
+                : missed
+                  ? { borderColor: '#E0A526', backgroundColor: '#fff', color: '#E0A526' }
+                  : { borderColor: '#9ca3af', backgroundColor: '#fff', color: 'transparent' };
+            return (
+              <li key={option.key}>
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked={isSelected}
+                  disabled={submitted}
+                  onClick={() => toggle(option.key)}
+                  className="text-base md:text-lg"
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    minHeight: 48,
+                    alignItems: 'center',
+                    gap: 12,
+                    padding: '12px 16px',
+                    textAlign: 'start',
+                    borderRadius: 8,
+                    border: `2px solid ${tone.border}`,
+                    backgroundColor: tone.bg,
+                    color: tone.text,
+                    cursor: submitted ? 'default' : 'pointer',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'flex',
+                      width: 24,
+                      height: 24,
+                      flexShrink: 0,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 4,
+                      border: '2px solid',
+                      ...boxStyle,
+                    }}
+                  >
+                    {wrong ? <XCircle className="h-4 w-4" /> : <Check className="h-4 w-4" strokeWidth={3} />}
+                  </span>
+                  <span style={wrong ? { textDecoration: 'line-through' } : undefined}>{option.text}</span>
+                </button>              </li>
+            );
+          })}
+        </ul>
+
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          {exercise.mode === 'scored' && !submitted && (
+            <Button
+              onClick={submit}
+              disabled={selected.length === 0}
+              className="min-h-[48px] rounded-lg bg-[#32C189] px-6 py-3 text-base font-semibold text-white hover:bg-[#257958] disabled:bg-[#E5E5E5] disabled:text-[#737373]"
+            >
+              {t('exercise.checkAnswers')}
+            </Button>
+          )}
+          {exercise.mode === 'scored' && submitted && (
+            <div
+              className={`flex min-h-[48px] items-center gap-2 rounded-lg px-5 py-3 font-bold text-white ${
+                exactMatch ? 'bg-[#32C189]' : 'bg-[#D25A45]'
+              }`}
+            >
+              {exactMatch ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
+              {t('exercise.result')} {score} / {maxPoints}
+            </div>
+          )}
+          <Button
+            variant="outline"
+            onClick={reset}
+            className="min-h-[48px] rounded-lg px-5 py-3 text-base font-semibold"
+          >
+            <RotateCcw className="me-2 h-4 w-4" />
+            {t('exercise.reset')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-xl bg-white p-4 shadow-md md:p-8">

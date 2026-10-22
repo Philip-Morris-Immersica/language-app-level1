@@ -244,16 +244,16 @@ export function MatchPairsDragDrop({ exercise, onComplete }: Props) {
       setValidation({});
     }
 
-    let displaced: string | null = null;
-    setPlacements(prev => {
-      const next = { ...prev };
-      for (const key of Object.keys(next)) {
-        if (colOfSlot(key) === col && next[key] === text) next[key] = null;
-      }
-      displaced = next[targetKey] ?? null;
-      next[targetKey] = text;
-      return next;
-    });
+    // Compute from the current state (not inside the updater): updaters run lazily, so a
+    // value captured there would still be null when the pool updater runs — and the word
+    // that was replaced in the slot would vanish from the list.
+    const next = { ...placements };
+    for (const key of Object.keys(next)) {
+      if (colOfSlot(key) === col && next[key] === text) next[key] = null;
+    }
+    const displaced = next[targetKey] ?? null;
+    next[targetKey] = text;
+    setPlacements(next);
     setPools(prev => {
       const list = prev[col].filter(w => w !== text);
       if (displaced && !list.includes(displaced)) list.push(displaced);
@@ -267,14 +267,12 @@ export function MatchPairsDragDrop({ exercise, onComplete }: Props) {
       setValidation({});
     }
     const col = colOfSlot(key);
-    setPlacements(prev => {
-      const word = prev[key];
-      if (!word) return prev;
-      setPools(poolPrev =>
-        poolPrev[col].includes(word) ? poolPrev : { ...poolPrev, [col]: [...poolPrev[col], word] },
-      );
-      return { ...prev, [key]: null };
-    });
+    const word = placements[key];
+    if (!word) return;
+    setPools(poolPrev =>
+      poolPrev[col].includes(word) ? poolPrev : { ...poolPrev, [col]: [...poolPrev[col], word] },
+    );
+    setPlacements(prev => ({ ...prev, [key]: null }));
   };
 
   const handleReset = () => {

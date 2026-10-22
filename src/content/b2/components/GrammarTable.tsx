@@ -27,6 +27,10 @@ interface Props {
   exercise: B2GrammarTableExercise;
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
+  /** Internal: render without the white card wrapper / hint (used for `thenTable`). */
+  bare?: boolean;
+  /** Internal: added to every row index when building MP3 paths (`thenTable` shares the main exercise's hidden audio rows). */
+  rowAudioOffset?: number;
 }
 
 /** Tailwind does not scan `src/content/` — novel styles are inline. */
@@ -45,7 +49,12 @@ const INTRO_BOX: CSSProperties = {
   lineHeight: 1.6,
 };
 const MERGED_PRONOUN_CELL: CSSProperties = {
+  borderLeft: '2px solid #7ab356',
   verticalAlign: 'top',
+  backgroundColor: '#ffffff',
+};
+const MERGED_CELL: CSSProperties = {
+  verticalAlign: 'middle',
   backgroundColor: '#ffffff',
 };
 const NOTE_LIST: CSSProperties = {
@@ -77,10 +86,12 @@ function ClickTranslateDiv({
   text,
   revealed,
   onClick,
+  audio = false,
 }: {
   text: string;
   revealed: boolean;
   onClick: () => void;
+  audio?: boolean;
 }) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
@@ -88,9 +99,10 @@ function ClickTranslateDiv({
   return (
     <div
       onClick={onClick}
-      className={`bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4 text-center ${isNonBg ? 'cursor-pointer' : ''}`}
+      className={`bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4 text-center ${isNonBg || audio ? 'cursor-pointer' : ''}`}
     >
       <span>{text}</span>
+      {audio && <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />}
       {isNonBg && revealed && translated !== text && (
         <span className="block text-xs font-normal text-white/75 mt-0.5 italic">{translated}</span>
       )}
@@ -103,19 +115,27 @@ function ClickTranslateTh({
   className,
   colSpan,
   revealed,
+  onAudio,
 }: {
   text: string;
   className: string;
   colSpan?: number;
   revealed: boolean;
+  /** When set, the heading is spoken on click and shows a speaker icon. */
+  onAudio?: () => void;
 }) {
   const { lang } = useLanguage();
   const translated = useTranslate(text);
   const isNonBg = lang !== 'bg';
 
   return (
-    <th className={className} colSpan={colSpan}>
+    <th
+      className={`${className}${onAudio ? ' cursor-pointer' : ''}`}
+      colSpan={colSpan}
+      onClick={onAudio}
+    >
       <span>{text}</span>
+      {onAudio && <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />}
       {isNonBg && revealed && translated !== text && (
         <span className="block text-xs font-normal text-white/75 mt-0.5 italic">{translated}</span>
       )}
@@ -178,7 +198,7 @@ function CellBody({ cell }: { cell: string }) {
   );
 }
 
-export function GrammarTable({ exercise, exerciseId }: Props) {
+export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffset = 0 }: Props) {
   const { lang } = useLanguage();
   const t = useT();
   const {
@@ -193,11 +213,16 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
     pronounColumnLabel,
     introText,
     mergePronouns = false,
+    mergeCells = false,
+    lead,
+    notesNoAudio = false,
+    headerAudio,
   } = exercise;
 
   const [revealedRows, setRevealedRows] = useState<Set<number>>(new Set());
   const [revealedNotes, setRevealedNotes] = useState<Set<number>>(new Set());
   const [headerRevealed, setHeaderRevealed] = useState(false);
+  const [leadRevealed, setLeadRevealed] = useState(false);
   const translatedSubtitle = useTranslate(tableSubtitle ?? '');
   const translatedIntro = useTranslate(introText ?? '');
 
@@ -211,9 +236,72 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   const isRunStart = (idx: number) =>
     !mergePronouns || idx === 0 || rows[idx - 1].pronoun !== rows[idx].pronoun;
 
+  /** `mergeCells`: size of the run of identical cells in column `cIdx` starting at row `idx`. */
+  const cellRunSize = (idx: number, cIdx: number) => {
+    if (!mergeCells) return 1;
+    let n = 1;
+    while (idx + n < rows.length && rows[idx + n].cells[cIdx] === rows[idx].cells[cIdx]) n++;
+    return n;
+  };
+  const isCellRunStart = (idx: number, cIdx: number) =>
+    !mergeCells || idx === 0 || rows[idx - 1].cells[cIdx] !== rows[idx].cells[cIdx];
+
+  const leadBox = lead ? (
+    <div style={{ ...STACK_FRAME, marginBottom: '0.75rem' }}>
+      <ClickTranslateDiv
+        text={lead.title}
+        revealed={leadRevealed}
+        onClick={() => setLeadRevealed(v => !v)}
+      />
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${lead.columns.length}, minmax(0, 1fr))`,
+          gap: '0.75rem 1.5rem',
+          padding: '1rem 1.25rem',
+        }}
+      >
+        {lead.columns.map((lines, i) => {
+          const audioIdx = lead.audio?.[i];
+          return (
+            <div
+              key={i}
+              style={{ textAlign: 'center', ...(audioIdx !== undefined ? { cursor: 'pointer' } : {}) }}
+              onClick={audioIdx !== undefined ? () => playRowAudio(audioIdx) : undefined}
+            >
+              {lines.map((line, j) => (
+                <p
+                  key={j}
+                  className="text-sm md:text-base font-medium text-gray-800"
+                  style={{ margin: '0.15rem 0' }}
+                >
+                  {renderBoldText(line)}
+                  {audioIdx !== undefined && j === lines.length - 1 && (
+                    <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />
+                  )}
+                </p>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  ) : null;
+
   const introBox = introText ? (
-    <div style={INTRO_BOX} className="text-sm md:text-base">
-      <p style={{ margin: 0 }}>{renderBoldText(introText)}</p>
+    <div
+      style={{ ...INTRO_BOX, ...(headerAudio?.intro !== undefined ? { cursor: 'pointer' } : {}) }}
+      className="text-sm md:text-base"
+      onClick={() => {
+        if (headerAudio?.intro !== undefined) playRowAudio(headerAudio.intro);
+      }}
+    >
+      <p style={{ margin: 0 }}>
+        {renderBoldText(introText)}
+        {headerAudio?.intro !== undefined && (
+          <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />
+        )}
+      </p>
       {lang !== 'bg' && translatedIntro !== introText && (
         <p className="text-xs mt-2 italic text-[#0072BC]" style={{ margin: '0.5rem 0 0' }}>
           {translatedIntro}
@@ -232,21 +320,34 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   };
 
   const playRow = (idx: number) => {
+    playRowAudio(idx);
+    toggle(setRevealedRows, idx);
+  };
+
+  /** Plays the MP3 of `rows[idx]` (a visible row or a `hidden` heading row) without touching translations. */
+  const playRowAudio = (idx: number) => {
     const row = rows[idx];
     const isNumericPronoun = /^\d[\d\s]*$/.test(row.pronoun.trim());
     // Skip bare endings like "-л, -ла" (but keep list cells that start with "- ").
     const speakableCells = row.cells.filter(c => !/^-(?!\s)/.test(c.trim()));
     const parts = isNumericPronoun ? speakableCells : [row.pronoun, ...speakableCells];
     const audioPath = exerciseId
-      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx}`)
+      ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-row-${idx + rowAudioOffset}`)
       : '';
     const spoken =
       row.ttsText ?? parts.join('. ').replace(/^- /gm, '').replace(/\n+/g, '. ');
     playTtsAudio(audioPath, spoken.replace(/\*\*/g, ''));
-    toggle(setRevealedRows, idx);
   };
 
+  /** Click handler for a heading that has `headerAudio`; `undefined` = heading stays silent. */
+  const headingAudio = (idx: number | undefined) =>
+    idx === undefined ? undefined : () => playRowAudio(idx);
+
   const playNote = (idx: number, note: string) => {
+    if (notesNoAudio) {
+      toggle(setRevealedNotes, idx);
+      return;
+    }
     const audioPath = exerciseId
       ? getTtsAudioPath(exerciseId, 'grammar', `${exerciseId}-note-${idx}`)
       : '';
@@ -257,6 +358,15 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
   const colSpan = columns.length > 0 ? columns.length + 1 : (rows[0]?.cells.length ?? 0) + 1;
 
   if (exercise.layout === 'stacked') {
+    // Rows with `cardStart` (or every row with `stackDividers`) start a new block separated by a divider line;
+    // row indices (audio paths) stay global.
+    const stackSegments: { row: (typeof rows)[number]; rIdx: number }[][] = [];
+    rows.forEach((row, rIdx) => {
+      if (exercise.titleRowAudio && rIdx === rows.length - 1) return; // title row: played from the green title bar
+      if (row.hidden) return; // audio-only heading row (see `headerAudio`)
+      if (row.cardStart || exercise.stackDividers || stackSegments.length === 0) stackSegments.push([]);
+      stackSegments[stackSegments.length - 1].push({ row, rIdx });
+    });
     return (
       <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
         {introBox}
@@ -270,15 +380,28 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
             <ClickTranslateDiv
               text={tableTitle}
               revealed={headerRevealed}
-              onClick={() => setHeaderRevealed(v => !v)}
+              audio={!!exercise.titleRowAudio || headerAudio?.title !== undefined}
+              onClick={() => {
+                if (exercise.titleRowAudio) playRowAudio(rows.length - 1);
+                else if (headerAudio?.title !== undefined) playRowAudio(headerAudio.title);
+                setHeaderRevealed(v => !v);
+              }}
             />
           )}
           {tableSubtitle && (
             <div
-              style={{ ...SUBTITLE_CELL, textAlign: 'center' }}
+              style={{
+                ...SUBTITLE_CELL,
+                textAlign: 'center',
+                ...(headerAudio?.subtitle !== undefined ? { cursor: 'pointer' } : {}),
+              }}
               className="text-sm md:text-base font-medium py-2 px-4"
+              onClick={headingAudio(headerAudio?.subtitle)}
             >
               <span>{tableSubtitle}</span>
+              {headerAudio?.subtitle !== undefined && (
+                <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />
+              )}
               {lang !== 'bg' && translatedSubtitle !== tableSubtitle && (
                 <span className="block text-xs font-normal mt-0.5 italic text-[#0072BC]">
                   {translatedSubtitle}
@@ -286,34 +409,52 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
               )}
             </div>
           )}
-          <div style={{ padding: '0.5rem 0.75rem 1rem' }}>
-            {rows.map((row, rIdx) => (
+          {stackSegments.map((segment, sIdx) => (
+          <div
+            key={sIdx}
+            style={{
+              padding: '0.5rem 0.75rem 1rem',
+              ...(sIdx > 0 ? { borderTop: '2px solid #7ab356', paddingTop: '1rem' } : {}),
+            }}
+          >
+            {segment.map(({ row, rIdx }) => (
               <div
                 key={rIdx}
                 onClick={() => playRow(rIdx)}
                 className="cursor-pointer hover:bg-[#f4faee] transition-colors rounded-lg"
                 style={STACK_ROW}
               >
-                <div
-                  className="flex items-center justify-center gap-1.5 font-bold text-gray-900 text-sm md:text-base"
-                  style={{ textAlign: 'center' }}
-                >
-                  <span>{row.pronoun}</span>
-                  <AudioIcon className="w-3.5 h-3.5" />
-                </div>
+                {row.pronoun && (
+                  <div
+                    className="flex items-center justify-center gap-1.5 font-bold text-gray-900 text-sm md:text-base"
+                    style={{ textAlign: 'center' }}
+                  >
+                    <span>{row.pronoun}</span>
+                    <AudioIcon className="w-3.5 h-3.5" />
+                  </div>
+                )}
                 {row.cells
                   // A cell may hold several lines (`\n`, optional "- " prefix) — one line each.
                   .flatMap(cell => cell.split('\n').map(line => line.replace(/^- /, '').trim()))
                   .filter(Boolean)
                   .map((line, cIdx) => {
                     const dark = /^\*\*[^*]+\*\*$/.test(line);
+                    // A row without a heading is a single playable line: its own speaker icon.
+                    const icon = !row.pronoun && cIdx === 0;
                     return (
-                      <p key={cIdx} style={dark ? STACK_DARK_LINE : STACK_GREEN_LINE}>
-                        {dark ? line.slice(2, -2) : renderBoldText(line)}
+                      <p
+                        key={cIdx}
+                        style={{
+                          ...(dark ? STACK_DARK_LINE : STACK_GREEN_LINE),
+                          ...(icon ? { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.375rem' } : {}),
+                        }}
+                      >
+                        <span>{dark ? line.slice(2, -2) : renderBoldText(line)}</span>
+                        {icon && <AudioIcon className="w-3.5 h-3.5" />}
                       </p>
                     );
                   })}
-                {lang !== 'bg' && revealedRows.has(rIdx) && (
+                {lang !== 'bg' && row.pronoun && revealedRows.has(rIdx) && (
                   <div style={{ marginTop: '0.35rem' }}>
                     <InlineTranslation text={row.pronoun} visible={true} className="mt-0" />
                   </div>
@@ -321,20 +462,27 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
               </div>
             ))}
           </div>
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6">
+    <div className={bare ? 'space-y-6' : 'bg-white rounded-xl p-6 md:p-10 shadow-md space-y-6'}>
       {introBox}
-      <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
-        <AudioIcon className="w-3 h-3" />
-        {t('exercise.tapRowToHear')}
-      </p>
+      {leadBox}
+      {!bare && (
+        <p className="text-xs text-gray-400 text-center italic flex items-center justify-center gap-1">
+          <AudioIcon className="w-3 h-3" />
+          {t('exercise.tapRowToHear')}
+        </p>
+      )}
 
-      <div className="overflow-x-auto">
+      <div
+        className="overflow-x-auto"
+        style={exercise.outlined ? { border: '2px solid #7ab356', borderRadius: '0.75rem' } : undefined}
+      >
         <table className="w-full border-collapse rounded-xl overflow-hidden shadow-sm text-center">
           {tableTitle && (
             <thead>
@@ -347,16 +495,24 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                   className="bg-[#5a8a3c] text-white text-base md:text-lg font-bold py-3 px-4"
                   colSpan={colSpan}
                   revealed={headerRevealed}
+                  onAudio={headingAudio(headerAudio?.title)}
                 />
               </tr>
               {tableSubtitle && (
                 <tr>
                   <th
                     colSpan={colSpan}
-                    style={SUBTITLE_CELL}
+                    style={{
+                      ...SUBTITLE_CELL,
+                      ...(headerAudio?.subtitle !== undefined ? { cursor: 'pointer' } : {}),
+                    }}
                     className="text-sm md:text-base font-medium py-2 px-4"
+                    onClick={headingAudio(headerAudio?.subtitle)}
                   >
                     <span>{tableSubtitle}</span>
+                    {headerAudio?.subtitle !== undefined && (
+                      <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />
+                    )}
                     {lang !== 'bg' && translatedSubtitle !== tableSubtitle && (
                       <span className="block text-xs font-normal mt-0.5 italic text-[#0072BC]">
                         {translatedSubtitle}
@@ -375,6 +531,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                       text={pronounColumnLabel}
                       className={`py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 whitespace-nowrap ${widePronouns ? 'w-1/2' : 'min-w-[3.5rem] md:min-w-[5rem] w-[3.5rem] md:w-[5rem]'}`}
                       revealed={headerRevealed}
+                      onAudio={headingAudio(headerAudio?.pronounLabel)}
                     />
                   ) : (
                     <th
@@ -389,6 +546,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                       text={col}
                       className="py-2 px-3 md:px-5 font-bold text-sm md:text-base border-r border-[#5a8a3c]/30 last:border-r-0 whitespace-nowrap"
                       revealed={headerRevealed}
+                      onAudio={headingAudio(headerAudio?.columns?.[i])}
                     />
                   ))}
                 </tr>
@@ -397,7 +555,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
           )}
 
           <tbody>
-            {rows.map((row, rIdx) => (
+            {rows.map((row, rIdx) => row.hidden ? null : (
               <React.Fragment key={rIdx}>
                 <tr
                   onClick={() => playRow(rIdx)}
@@ -429,22 +587,54 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                     )
                   ) : (
                     <td
-                      className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}
+                      className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'} ${exercise.leftPronouns ? 'text-left whitespace-nowrap' : ''}`}
                     >
-                      <div className="flex items-center justify-between gap-1">
-                        <span>{row.pronoun}</span>
-                        <AudioIcon className="w-3.5 h-3.5" />
-                      </div>
+                      {exercise.centerPronouns ? (
+                        // Текстът е истински центриран; иконата е извън потока (симетричен падинг от двете страни).
+                        <div className="relative flex items-center justify-center">
+                          <span className="text-center px-5">{row.pronoun}</span>
+                          <AudioIcon className="w-3.5 h-3.5 absolute right-0 top-1/2 -translate-y-1/2" />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 justify-between">
+                          <span>{row.pronoun}</span>
+                          <AudioIcon className="w-3.5 h-3.5" />
+                        </div>
+                      )}
                     </td>
                   )}
-                  {row.cells.map((cell, cIdx) => (
+                  {row.cells.map((cell, cIdx) => {
+                    if (!isCellRunStart(rIdx, cIdx)) return null;
+                    const cRun = cellRunSize(rIdx, cIdx);
+                    const mergedCell = cRun > 1;
+                    const revealedInRun = Array.from({ length: cRun }, (_, k) => rIdx + k).filter(i =>
+                      revealedRows.has(i),
+                    ).length;
+                    return (
                     <td
                       key={cIdx}
+                      rowSpan={mergedCell ? cRun + (lang !== 'bg' ? revealedInRun : 0) : undefined}
+                      style={mergedCell ? MERGED_CELL : undefined}
                       className={`py-2.5 px-3 md:px-5 text-sm md:text-base text-gray-800 border-r border-gray-200 border-b border-b-gray-100 last:border-r-0 ${boldColumns.includes(cIdx) ? 'font-bold text-[#2d5a1b]' : 'font-medium'}`}
                     >
-                      <CellBody cell={cell} />
+                      {mergePronouns && cIdx === row.cells.length - 1 ? (
+                        <div className="flex items-center justify-center gap-1.5">
+                          <CellBody cell={cell} />
+                          <AudioIcon className="w-3.5 h-3.5" />
+                        </div>
+                      ) : (
+                        <CellBody cell={cell} />
+                      )}
+                      {mergedCell && lang !== 'bg' && revealedInRun > 0 && (
+                        <InlineTranslation
+                          text={cell.replace(/^- /gm, '')}
+                          visible={true}
+                          className="mt-1 whitespace-pre-line"
+                        />
+                      )}
                     </td>
-                  ))}
+                    );
+                  })}
                 </tr>
                 {lang !== 'bg' && revealedRows.has(rIdx) && (
                   <tr className="bg-[#e8f4fd]">
@@ -453,7 +643,9 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                         <InlineTranslation text={row.pronoun} visible={true} className="mt-0" />
                       </td>
                     )}
-                    {row.cells.map((cell, cIdx) => (
+                    {row.cells.map((cell, cIdx) =>
+                      // Merged cells show their translation inside the merged cell itself.
+                      mergeCells && (!isCellRunStart(rIdx, cIdx) || cellRunSize(rIdx, cIdx) > 1) ? null : (
                       <td
                         key={cIdx}
                         className="py-1.5 px-3 md:px-5 border-b border-b-gray-100 border-r border-r-gray-200 last:border-r-0 text-center"
@@ -464,7 +656,8 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
                           className="mt-0 whitespace-pre-line"
                         />
                       </td>
-                    ))}
+                      ),
+                    )}
                   </tr>
                 )}
               </React.Fragment>
@@ -483,7 +676,7 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
             >
               <div className="flex items-center justify-center gap-2">
                 <NoteBody note={note} />
-                <AudioIcon className="w-3.5 h-3.5" />
+                {!notesNoAudio && <AudioIcon className="w-3.5 h-3.5" />}
               </div>
               <InlineTranslation
                 text={note.replace(/^- /gm, '')}
@@ -492,6 +685,23 @@ export function GrammarTable({ exercise, exerciseId }: Props) {
               />
             </div>
           ))}
+        </div>
+      )}
+
+      {exercise.thenTable && (
+        <div style={{ marginTop: '2.5rem' }}>
+          <GrammarTable
+            bare
+            exercise={{ outlined: exercise.outlined, ...exercise.thenTable, id: `${exercise.id}-t2`, type: 'b2-grammar-table', title: '' } as B2GrammarTableExercise}
+            exerciseId={
+              exerciseId
+                ? exercise.thenTableAudio !== undefined
+                  ? exerciseId
+                  : `${exerciseId}-t2`
+                : undefined
+            }
+            rowAudioOffset={exercise.thenTableAudio ?? 0}
+          />
         </div>
       )}
     </div>
