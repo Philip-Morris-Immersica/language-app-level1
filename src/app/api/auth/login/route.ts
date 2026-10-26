@@ -14,19 +14,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Попълнете всички полета.' }, { status: 400 });
     }
 
-    console.log('[login] attempting login for:', email);
     console.log('[login] DATABASE_URL set?', !!process.env.DATABASE_URL);
     console.log('[login] JWT_SECRET set?', !!process.env.JWT_SECRET);
 
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1);
     if (!user) {
-      console.log('[login] user not found:', email);
+      console.log('[login] user not found');
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
 
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
-      console.log('[login] invalid password for:', email);
+      console.log('[login] invalid password for user_id:', user.id);
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
 

@@ -23,10 +23,10 @@ import { LEVELS, type Level } from '@/content';
 
 /**
  * Levels released to the public link. A2 was signed off by UNHCR (Sep 2026);
- * B1 is digitalised but has not had its content QA pass, and B2 has no content
- * yet — both stay internal-only until they are signed off too.
+ * B1 was signed off after the client's final review (Oct 2026). B2 has no
+ * finished content yet and stays internal-only until it is signed off too.
  */
-const PUBLIC_RELEASE_LEVELS: readonly Level[] = ['a1', 'a2'];
+const PUBLIC_RELEASE_LEVELS: readonly Level[] = ['a1', 'a2', 'b1'];
 
 /** Domains that show only `PUBLIC_RELEASE_LEVELS` (the link users get). */
 const PUBLIC_RELEASE_HOSTS: readonly string[] = [

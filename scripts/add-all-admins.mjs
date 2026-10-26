@@ -19,7 +19,7 @@ for (const file of ['.env', '.env.local']) {
 const sql = neon(process.env.DATABASE_URL);
 
 // Add ALL Philip accounts as IT admin
-const philipIds = [3, 4, 16, 17, 11]; // all philip/filip accounts + filip@abv.bg
+const philipIds = [3, 4, 16, 17, 11]; // all philip/filip accounts
 
 for (const userId of philipIds) {
   const existing = await sql`SELECT id FROM admin_users WHERE user_id = ${userId}`;
