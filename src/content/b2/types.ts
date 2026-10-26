@@ -30,6 +30,8 @@ interface B2SelectWordsInlineBase extends B2BaseExercise {
    * (multi-answer question). Default `inline`: words are clicked inside running text.
    */
   presentation?: 'inline' | 'checklist';
+  /** Optional photo above the text (inline mode), shown at its natural aspect ratio. */
+  image?: { imageUrl: string; alt?: string };
   blocks: {
     id: string;
     /** Optional heading above this text block. */

@@ -191,6 +191,17 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
 
   return (
     <div className="rounded-xl bg-white p-4 shadow-md md:p-8">
+      {exercise.image && (
+        // Natural aspect ratio (no fixed box) so the photo never gets bars above/below.
+        <div style={{ maxWidth: 672, margin: '0 auto 20px' }}>
+          <img
+            src={exercise.image.imageUrl}
+            alt={exercise.image.alt ?? ''}
+            loading="lazy"
+            style={{ display: 'block', width: '100%', height: 'auto', borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.08)' }}
+          />
+        </div>
+      )}
       <div className="space-y-5">
         {exercise.blocks.map(block => (
           <section key={block.id} className="rounded-xl border border-gray-200 bg-gray-50 p-4">

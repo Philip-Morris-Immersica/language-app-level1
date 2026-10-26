@@ -530,6 +530,7 @@ export const exercises: Exercise[] = [
     order: 7,
     mode: 'scored',
     points: 49,
+    image: { imageUrl: '/assets/b2-lesson-01/exercise-06-chernomorie/chernomorie.jpg', alt: 'Българското Черноморие' },
     blocks: BROCHURE_BLOCKS.map((b) => ({
       id: b.id,
       ...(b.heading ? { heading: b.heading } : {}),
@@ -863,6 +864,7 @@ export const exercises: Exercise[] = [
     order: 16,
     mode: 'free',
     points: 0,
+    image: { imageUrl: '/assets/b2-lesson-01/exercise-14-tantsuvashti-mechki/mechka.jpg', alt: 'Кафява мечка' },
     blocks: bearBlocks(),
   } satisfies B2SelectWordsInlineExercise) as unknown as Exercise,
 
