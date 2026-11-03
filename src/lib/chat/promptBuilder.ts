@@ -169,6 +169,10 @@ interface BuildSystemPromptArgs {
   overallTestResults?: UserTestProgress[];
 }
 
+// Matches the placeholders written by piiRedactor.ts.
+const REDACTION_NOTE = `# REMOVED PERSONAL DATA
+Placeholders such as [NAME], [ADDRESS], [NUMBER], [EMAIL], [DOCUMENT] and [IBAN] replace personal data that was removed from the user's message for privacy. Treat each one as a valid word in the sentence (e.g. "Казвам се [NAME]" is a correct sentence), never repeat the placeholder back as if it were the real value, and never ask the user to share the removed data.`;
+
 export function buildSystemPrompt({
   basePrompt,
   levelPrompt,
@@ -189,7 +193,7 @@ export function buildSystemPrompt({
     .replace('{USER_LANGUAGE}', langName)
     .replace('{LEVEL}', levelLabel);
 
-  let system = `${CAPABILITIES_BLOCK}\n\n${PLATFORM_KNOWLEDGE}\n\n${behavior}`;
+  let system = `${CAPABILITIES_BLOCK}\n\n${PLATFORM_KNOWLEDGE}\n\n${behavior}\n\n${REDACTION_NOTE}`;
 
   if (levelPrompt) {
     system += `\n\n# LEVEL-SPECIFIC INSTRUCTIONS (${levelLabel})\n${levelPrompt}`;
