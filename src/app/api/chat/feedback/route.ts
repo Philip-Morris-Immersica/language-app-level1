@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth/jwt';
 import { db } from '@/db';
 import { chatFeedbackTable } from '@/db/schema';
+import { redactPII } from '@/lib/chat/piiRedactor';
 
 /**
  * Stores one free-text feedback comment from the single button at the top of
@@ -17,7 +18,8 @@ export async function POST(req: NextRequest) {
   if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await req.json().catch(() => null);
-  const comment = typeof body?.comment === 'string' ? body.comment.trim().slice(0, 2000) : '';
+  // Filtered before storing: admins can later send comments to the AI summary.
+  const comment = typeof body?.comment === 'string' ? redactPII(body.comment.trim().slice(0, 2000)).text : '';
   if (!comment) {
     return NextResponse.json({ error: 'Comment is required' }, { status: 400 });
   }

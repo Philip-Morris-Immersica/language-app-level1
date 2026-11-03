@@ -5,6 +5,7 @@ import { usersTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { signToken } from '@/lib/auth/jwt';
 import { seedAdminFromEnv } from '@/lib/admin/seedFromEnv';
+import { isLoginLocked, recordLoginFailure, clearLoginFailures, LOGIN_LOCK_MINUTES } from '@/lib/auth/loginRateLimit';
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,20 +15,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Попълнете всички полета.' }, { status: 400 });
     }
 
+    if (isLoginLocked(email)) {
+      return NextResponse.json(
+        { error: `Твърде много неуспешни опити. Опитайте отново след ${LOGIN_LOCK_MINUTES} минути.` },
+        { status: 429 },
+      );
+    }
+
     console.log('[login] DATABASE_URL set?', !!process.env.DATABASE_URL);
     console.log('[login] JWT_SECRET set?', !!process.env.JWT_SECRET);
 
     const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1);
     if (!user) {
       console.log('[login] user not found');
+      recordLoginFailure(email);
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
 
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
       console.log('[login] invalid password for user_id:', user.id);
+      recordLoginFailure(email);
       return NextResponse.json({ error: 'Грешен имейл или парола.' }, { status: 401 });
     }
+
+    clearLoginFailures(email);
 
     const token = await signToken({ userId: user.id, name: user.name, email: user.email });
 
