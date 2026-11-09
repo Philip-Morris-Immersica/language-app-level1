@@ -20,6 +20,7 @@ import { useTranslate } from '@/i18n/useTranslate';
 import { InlineTranslation } from '@/components/InlineTranslation';
 import { getTtsAudioPath, playTtsAudio } from '@/lib/tts';
 import { renderBoldText } from '@/lib/renderBoldText';
+import { renderGrammarText } from '../lib/renderGrammarText';
 import { AudioIcon } from '@/components/AudioIcon';
 import type { B2GrammarTableExercise } from '../types';
 
@@ -429,7 +430,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                     className="flex items-center justify-center gap-1.5 font-bold text-gray-900 text-sm md:text-base"
                     style={{ textAlign: 'center' }}
                   >
-                    <span>{row.pronoun}</span>
+                    <span>{renderGrammarText(row.pronoun, 'neutral')}</span>
                     <AudioIcon className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -438,7 +439,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                   .flatMap(cell => cell.split('\n').map(line => line.replace(/^- /, '').trim()))
                   .filter(Boolean)
                   .map((line, cIdx) => {
-                    const dark = /^\*\*[^*]+\*\*$/.test(line);
+                    const dark = /^__[^_]+__$/.test(line);
                     // A row without a heading is a single playable line: its own speaker icon.
                     const icon = !row.pronoun && cIdx === 0;
                     return (
@@ -449,7 +450,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                           ...(icon ? { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.375rem' } : {}),
                         }}
                       >
-                        <span>{dark ? line.slice(2, -2) : renderBoldText(line)}</span>
+                        <span>{dark ? line.slice(2, -2) : renderGrammarText(line)}</span>
                         {icon && <AudioIcon className="w-3.5 h-3.5" />}
                       </p>
                     );
@@ -576,7 +577,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                         onClick={e => e.stopPropagation()}
                         className={`py-2.5 px-3 md:px-5 font-bold text-[#2d5a1b] text-sm md:text-base border-r border-gray-200 border-b border-b-gray-100 text-left ${widePronouns ? 'w-1/2' : 'min-w-[5rem] md:min-w-[7rem]'}`}
                       >
-                        <span>{row.pronoun}</span>
+                        <span>{renderGrammarText(row.pronoun, 'neutral')}</span>
                         {lang !== 'bg' &&
                           Array.from({ length: runSize(rIdx) }, (_, k) => rIdx + k).some(i =>
                             revealedRows.has(i),
@@ -597,7 +598,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                         </div>
                       ) : (
                         <div className="flex items-center gap-1 justify-between">
-                          <span>{row.pronoun}</span>
+                          <span>{renderGrammarText(row.pronoun, 'neutral')}</span>
                           <AudioIcon className="w-3.5 h-3.5" />
                         </div>
                       )}

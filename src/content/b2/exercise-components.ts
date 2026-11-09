@@ -11,6 +11,7 @@ import { SelectWordsInline } from './components/SelectWordsInline';
 import { MatchPairsDragDrop } from './components/MatchPairsDragDrop';
 import { GrammarTable } from './components/GrammarTable';
 import { B2DragToColumns } from './components/B2DragToColumns';
+import { B2WorkbookFillBlank } from './components/B2WorkbookFillBlank';
 
 export interface CustomExerciseRendererProps {
   exercise: { id: string; type: string; [key: string]: unknown };
@@ -30,4 +31,5 @@ export const B2_CUSTOM_RENDERERS: Record<string, CustomExerciseRenderer> = {
   'b2-grammar-table': GrammarTable as unknown as CustomExerciseRenderer,
   // Swipe-to-column sorter: flat green icons, title shown once, long items clamped to 3 lines.
   'b2-drag-to-columns': B2DragToColumns as unknown as CustomExerciseRenderer,
+  workbook_fill_blank: B2WorkbookFillBlank as unknown as CustomExerciseRenderer,
 };

@@ -29,6 +29,7 @@ export const B2_LESSON_LOADERS: Record<
   'b2-lesson-01': () => import('./lessons/b2-lesson-01'),
   'b2-lesson-02': () => import('./lessons/b2-lesson-02'),
   'b2-lesson-03': () => import('./lessons/b2-lesson-03'),
+  'b2-lesson-04': () => import('./lessons/b2-lesson-04'),
   // ...
 };
 
@@ -77,4 +78,5 @@ export const B2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b2-lesson-01': 24,
   'b2-lesson-02': 16,
   'b2-lesson-03': 21,
+  'b2-lesson-04': 21,
 };
