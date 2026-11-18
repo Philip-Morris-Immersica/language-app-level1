@@ -221,6 +221,16 @@ export function ExerciseRenderer({ exercise, onComplete, exerciseNumber }: Exerc
           images={exercise.images}
           headerImages={exercise.headerImages}
           listeningText={exercise.listeningText}
+          hideDropdownPlaceholder={
+            'hideDropdownPlaceholder' in exercise
+              ? Boolean((exercise as { hideDropdownPlaceholder?: boolean }).hideDropdownPlaceholder)
+              : false
+          }
+          blankDropdownOptions={
+            'blankDropdownOptions' in exercise
+              ? (exercise as { blankDropdownOptions?: string[] }).blankDropdownOptions
+              : undefined
+          }
           onComplete={onComplete}
           exerciseId={exercise.id}
         />

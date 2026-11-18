@@ -30,12 +30,20 @@ interface B2SelectWordsInlineBase extends B2BaseExercise {
    * (multi-answer question). Default `inline`: words are clicked inside running text.
    */
   presentation?: 'inline' | 'checklist';
+  /** Green „Модел:“ box above the blocks; one entry per line, `**…**` = the model answer. */
+  model?: string[];
+  /** Plain context sentence before the interactive blocks (not clickable, no framed box). */
+  prefaceText?: string;
   /** Optional photo above the text (inline mode), shown at its natural aspect ratio. */
   image?: { imageUrl: string; alt?: string };
   blocks: {
     id: string;
     /** Optional heading above this text block. */
     heading?: string;
+    /** When true, the block is plain text without the grey framed box. */
+    plain?: boolean;
+    /** Optional photo at the top of this block (inside the box), natural aspect ratio. */
+    image?: { imageUrl: string; alt?: string };
     tokens: B2SelectableToken[];
   }[];
 }
@@ -79,7 +87,14 @@ export interface B2MatchPairsDragDropExercise extends B2BaseExercise {
   pairs: {
     id: string;
     left: string;
+    /**
+     * Picture instead of the `left` text (single-column mode): the learner sees the image
+     * (click = zoom) and drags the matching word under/next to it. `left` may then be `''`.
+     */
+    leftImageUrl?: string;
     correctRight: string;
+    /** Other tiles that are also accepted in the first field (several valid combinations). */
+    acceptedRights?: string[];
     /** Second target of the row (mix & match mode). */
     correctRight2?: string;
   }[];
@@ -202,6 +217,12 @@ export interface B2GrammarTableExercise extends B2BaseExercise {
    * `**text**` renders as a dark bold line). Default `'table'`.
    */
   layout?: 'table' | 'stacked';
+  /**
+   * `layout: 'stacked'` only: `'plain'` — основният текст е черен и неудебелен, акцентите `**…**` са зелени
+   * и удебелени (без подчертаване), `__…__` вътре в ред = черно удебелено (като в учебника).
+   */
+  /** `'plain-regular'` — като `'plain'`, но акцентите `**…**` са зелени и НЕудебелени. */
+  stackText?: 'plain' | 'plain-regular';
 }
 
 /**
@@ -216,12 +237,25 @@ export interface B2DragToColumnsExercise extends B2BaseExercise {
   /** One point per item. */
   points: number;
   imageUrl?: string;
+  /** Green „Модел:“ box above the cards; one entry per line, `**…**` = the model answer. */
+  model?: string[];
   items: string[];
   columns: {
     id: string;
     title: string;
     correctItems: string[];
   }[];
+}
+
+/** B2-only options on the shared `workbook_fill_blank`, read by `B2WorkbookFillBlank`. */
+export interface B2WorkbookFillBlankExtras {
+  /**
+   * Every `isExample` row (blank rows and context rows) leaves the list and is shown in a green
+   * „Модел:“ box above it: the answer is bold green, `|` starts a new line. Rows are numbered without it.
+   */
+  modelBox?: boolean;
+  /** `qa-stacked`: grey row numbers instead of blue. */
+  plainNumbers?: boolean;
 }
 
 export type B2Exercise =

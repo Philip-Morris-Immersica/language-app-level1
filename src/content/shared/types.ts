@@ -469,6 +469,10 @@ export interface WorkbookFillBlankExercise extends BaseExercise {
   imageUrl?: string;
   /** When true, the image is shown without zoom/lightbox. Useful for simple reference photos. */
   noZoom?: boolean;
+  /** When true, dropdown blanks show only the given options — no empty „—“ placeholder row. */
+  hideDropdownPlaceholder?: boolean;
+  /** When set, every scored blank uses exactly this option list (ignores per-sentence `options`). */
+  blankDropdownOptions?: string[];
   /** Множество снимки, показвани един до друг (напр. две къщи за сравнение). */
   images?: { imageUrl: string; label?: string }[];
   /** Масив от снимки, показвани центрирано над изреченията (напр. два персонажа). */

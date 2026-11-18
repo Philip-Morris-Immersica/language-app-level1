@@ -81,6 +81,7 @@ const STACK_GREEN_LINE: CSSProperties = {
   fontWeight: 600,
   lineHeight: 1.5,
 };
+const STACK_PLAIN_LINE: CSSProperties = { ...STACK_GREEN_LINE, color: '#111827', fontWeight: 400 };
 const STACK_DARK_LINE: CSSProperties = { ...STACK_GREEN_LINE, color: '#111827', fontWeight: 700 };
 
 function ClickTranslateDiv({
@@ -184,8 +185,9 @@ function NoteBody({ note }: { note: string }) {
 }
 
 /** Table cell: plain text, or — when it contains `\n` — a left-aligned bulleted list (one item per line). */
-function CellBody({ cell }: { cell: string }) {
-  if (!cell.includes('\n')) return <>{renderBoldText(cell)}</>;
+function CellBody({ cell, accent = false, regular = false }: { cell: string; accent?: boolean; regular?: boolean }) {
+  const render = (text: string) => (accent ? renderGrammarText(text, regular ? 'regular' : 'dark') : renderBoldText(text));
+  if (!cell.includes('\n')) return <>{render(cell)}</>;
   const items = cell
     .split('\n')
     .map(line => line.replace(/^- /, '').trim())
@@ -193,7 +195,7 @@ function CellBody({ cell }: { cell: string }) {
   return (
     <ul style={{ ...NOTE_LIST, margin: 0, display: 'inline-block' }}>
       {items.map((item, i) => (
-        <li key={i}>{renderBoldText(item)}</li>
+        <li key={i}>{render(item)}</li>
       ))}
     </ul>
   );
@@ -297,7 +299,7 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
         if (headerAudio?.intro !== undefined) playRowAudio(headerAudio.intro);
       }}
     >
-      <p style={{ margin: 0 }}>
+      <p style={{ margin: 0, whiteSpace: 'pre-line' }}>
         {renderBoldText(introText)}
         {headerAudio?.intro !== undefined && (
           <AudioIcon className="w-3.5 h-3.5 inline-block ml-1.5 align-middle" />
@@ -439,18 +441,20 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                   .flatMap(cell => cell.split('\n').map(line => line.replace(/^- /, '').trim()))
                   .filter(Boolean)
                   .map((line, cIdx) => {
-                    const dark = /^__[^_]+__$/.test(line);
+                    const plain = exercise.stackText === 'plain' || exercise.stackText === 'plain-regular';
+                    const accentBase = exercise.stackText === 'plain-regular' ? 'regular' : 'dark';
+                    const dark = !plain && /^__[^_]+__$/.test(line);
                     // A row without a heading is a single playable line: its own speaker icon.
                     const icon = !row.pronoun && cIdx === 0;
                     return (
                       <p
                         key={cIdx}
                         style={{
-                          ...(dark ? STACK_DARK_LINE : STACK_GREEN_LINE),
+                          ...(plain ? STACK_PLAIN_LINE : dark ? STACK_DARK_LINE : STACK_GREEN_LINE),
                           ...(icon ? { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.375rem' } : {}),
                         }}
                       >
-                        <span>{dark ? line.slice(2, -2) : renderGrammarText(line)}</span>
+                        <span>{plain ? renderGrammarText(/^__[^_]+__$/.test(line) ? line.slice(2, -2) : line, accentBase) : dark ? renderGrammarText(line.slice(2, -2), 'dark') : renderGrammarText(line)}</span>
                         {icon && <AudioIcon className="w-3.5 h-3.5" />}
                       </p>
                     );
@@ -620,11 +624,11 @@ export function GrammarTable({ exercise, exerciseId, bare = false, rowAudioOffse
                     >
                       {mergePronouns && cIdx === row.cells.length - 1 ? (
                         <div className="flex items-center justify-center gap-1.5">
-                          <CellBody cell={cell} />
+                          <CellBody cell={cell} accent={exercise.stackText === 'plain' || exercise.stackText === 'plain-regular'} regular={exercise.stackText === 'plain-regular'} />
                           <AudioIcon className="w-3.5 h-3.5" />
                         </div>
                       ) : (
-                        <CellBody cell={cell} />
+                        <CellBody cell={cell} accent={exercise.stackText === 'plain' || exercise.stackText === 'plain-regular'} regular={exercise.stackText === 'plain-regular'} />
                       )}
                       {mergedCell && lang !== 'bg' && revealedInRun > 0 && (
                         <InlineTranslation

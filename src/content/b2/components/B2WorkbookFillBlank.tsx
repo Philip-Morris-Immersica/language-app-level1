@@ -2,6 +2,8 @@
 
 import { WorkbookFillBlank as SharedWorkbookFillBlank } from '@/components/exercises/WorkbookFillBlank';
 import type { WorkbookFillBlankExercise } from '@/content/types';
+import type { B2WorkbookFillBlankExtras } from '../types';
+import { ModelBox } from './ModelBox';
 
 interface Props {
   exercise: WorkbookFillBlankExercise;
@@ -41,11 +43,30 @@ function stripOptionSi(sentences: WorkbookFillBlankExercise['sentences']) {
   });
 }
 
-/** B2 workbook_fill_blank — optional `hideDropdownPlaceholder` (no „—“ / „Избери“ row in dropdowns). */
+/** Model rows → box lines: each blank gets its answer as `**…**`, `|` splits a row into lines. */
+function modelLines(rows: WorkbookFillBlankExercise['sentences']): string[] {
+  return rows.flatMap(row => {
+    let i = 0;
+    const filled = row.text.replace(/_{3,}/g, () => `**${row.correctAnswers[i++] ?? ''}**`);
+    return filled.split('|').map(part => part.trim()).filter(Boolean);
+  });
+}
+
+/** Nested shared card loses its own frame; qa-stacked numbers turn grey. */
+const FLAT_CSS = `
+.b2-wfb-flat > div { padding: 0 !important; box-shadow: none !important; border-radius: 0 !important; }
+.b2-wfb-plain-num span.text-\\[\\#0072BC\\] { color: #737373; }
+`;
+
+/**
+ * B2 workbook_fill_blank — optional `hideDropdownPlaceholder` (no „—“ / „Избери“ row in dropdowns);
+ * `modelBox` / `plainNumbers` see `B2WorkbookFillBlankExtras`.
+ */
 export function B2WorkbookFillBlank({ exercise, onComplete, exerciseId }: Props) {
   const id = exerciseId ?? exercise.id;
+  const { modelBox, plainNumbers } = exercise as WorkbookFillBlankExercise & B2WorkbookFillBlankExtras;
   const {
-    sentences: rawSentences,
+    sentences: allSentences,
     layout,
     columnSplitAt,
     hideSentenceNumbers,
@@ -59,10 +80,12 @@ export function B2WorkbookFillBlank({ exercise, onComplete, exerciseId }: Props)
     blankDropdownOptions,
   } = exercise;
 
+  const model = modelBox ? modelLines(allSentences.filter(s => s.isExample)) : [];
+  const rawSentences = modelBox ? allSentences.filter(s => !s.isExample) : allSentences;
   const sentences = id === 'b2-l04-ex-13' ? stripOptionSi(rawSentences) : rawSentences;
   const hidePlaceholder = Boolean(hideDropdownPlaceholder) || inferHideDropdownPlaceholder(exercise);
 
-  return (
+  const shared = (
     <SharedWorkbookFillBlank
       sentences={sentences}
       layout={layout}
@@ -79,5 +102,21 @@ export function B2WorkbookFillBlank({ exercise, onComplete, exerciseId }: Props)
       onComplete={onComplete}
       exerciseId={id}
     />
+  );
+
+  if (model.length === 0 && !plainNumbers) return shared;
+
+  return (
+    <>
+      <style>{FLAT_CSS}</style>
+      {model.length > 0 ? (
+        <div className="bg-white rounded-xl p-6 md:p-8 shadow-md">
+          <ModelBox lines={model} />
+          <div className={`b2-wfb-flat${plainNumbers ? ' b2-wfb-plain-num' : ''}`}>{shared}</div>
+        </div>
+      ) : (
+        <div className="b2-wfb-plain-num">{shared}</div>
+      )}
+    </>
   );
 }

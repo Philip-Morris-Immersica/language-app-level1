@@ -29,6 +29,7 @@ import { useT } from '@/i18n/useT';
 import { useTranslate } from '@/i18n/useTranslate';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import type { B2DragToColumnsExercise } from '../types';
+import { ModelBox } from './ModelBox';
 
 interface Props {
   exercise: B2DragToColumnsExercise;
@@ -428,6 +429,7 @@ export function B2DragToColumns({ exercise, onComplete, exerciseId }: Props) {
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-8 shadow-md">
+      {exercise.model && exercise.model.length > 0 && <ModelBox lines={exercise.model} />}
       {exercise.imageUrl && (
         <div className="mb-5 flex justify-center">
           <img

@@ -30,6 +30,7 @@ export const B2_LESSON_LOADERS: Record<
   'b2-lesson-02': () => import('./lessons/b2-lesson-02'),
   'b2-lesson-03': () => import('./lessons/b2-lesson-03'),
   'b2-lesson-04': () => import('./lessons/b2-lesson-04'),
+  'b2-lesson-05': () => import('./lessons/b2-lesson-05'),
   // ...
 };
 
@@ -50,11 +51,6 @@ export const B2_LESSONS_METADATA: Array<{
   { id: 'b2-lesson-03', number: 3,  title: 'Паметници на ЮНЕСКО в България',   hasTest: false },
   { id: 'b2-lesson-04', number: 4,  title: 'Хора',                             hasTest: false },
   { id: 'b2-lesson-05', number: 5,  title: 'Работа',                           hasTest: false },
-  { id: 'b2-lesson-06', number: 6,  title: 'Приятели',                         hasTest: false },
-  { id: 'b2-lesson-07', number: 7,  title: 'Новини и медии',                   hasTest: false },
-  { id: 'b2-lesson-08', number: 8,  title: 'Ваканции и развлечения',           hasTest: false },
-  { id: 'b2-lesson-09', number: 9,  title: 'Мечти',                            hasTest: false },
-  { id: 'b2-lesson-10', number: 10, title: 'История на България',              hasTest: false },
 ];
 
 export const B2_NAV_ITEMS: A1NavItem[] = [
@@ -63,11 +59,6 @@ export const B2_NAV_ITEMS: A1NavItem[] = [
   { type: 'lesson', id: 'b2-lesson-03', number: 3,  title: 'Паметници на ЮНЕСКО в България' },
   { type: 'lesson', id: 'b2-lesson-04', number: 4,  title: 'Хора' },
   { type: 'lesson', id: 'b2-lesson-05', number: 5,  title: 'Работа' },
-  { type: 'lesson', id: 'b2-lesson-06', number: 6,  title: 'Приятели' },
-  { type: 'lesson', id: 'b2-lesson-07', number: 7,  title: 'Новини и медии' },
-  { type: 'lesson', id: 'b2-lesson-08', number: 8,  title: 'Ваканции и развлечения' },
-  { type: 'lesson', id: 'b2-lesson-09', number: 9,  title: 'Мечти' },
-  { type: 'lesson', id: 'b2-lesson-10', number: 10, title: 'История на България' },
 ];
 
 export const B2_TEST_FOLDER_MAP: Record<string, string> = {};
@@ -79,4 +70,5 @@ export const B2_LESSON_EXERCISE_COUNTS: Record<string, number> = {
   'b2-lesson-02': 16,
   'b2-lesson-03': 21,
   'b2-lesson-04': 21,
+  'b2-lesson-05': 18,
 };

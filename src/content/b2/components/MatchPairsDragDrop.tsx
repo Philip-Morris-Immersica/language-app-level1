@@ -29,6 +29,7 @@ import { Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
+import { ImageLightbox } from '@/components/ImageLightbox';
 import type { B2MatchPairsDragDropExercise } from '../types';
 
 interface Props {
@@ -293,7 +294,10 @@ export function MatchPairsDragDrop({ exercise, onComplete }: Props) {
       const pairId = pair.id || `pair-${index}`;
       for (const col of cols) {
         const key = slotKey(pairId, col);
-        const isCorrect = placements[key] === correctOf(pair, col);
+        const placed = placements[key];
+        const isCorrect =
+          placed === correctOf(pair, col) ||
+          (col === 'a' && !!placed && !!pair.acceptedRights?.includes(placed));
         newValidation[key] = isCorrect;
         total++;
         if (isCorrect) correctCount++;
@@ -400,15 +404,28 @@ export function MatchPairsDragDrop({ exercise, onComplete }: Props) {
                     </div>
                   )}
 
-                  <div
-                    className={`flex-shrink-0 ${
-                      showOrdinal ? 'w-28 md:w-40 lg:w-48' : 'w-16 md:w-20 lg:w-24'
-                    }`}
-                  >
-                    <span className="text-sm md:text-base font-medium text-gray-800 leading-snug">
-                      {pair.left}
-                    </span>
-                  </div>
+                  {pair.leftImageUrl ? (
+                    <div className="flex-shrink-0 w-32 sm:w-40 md:w-48">
+                      <ImageLightbox src={pair.leftImageUrl} alt={pair.left}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={pair.leftImageUrl}
+                          alt={pair.left}
+                          className="w-full h-auto max-h-36 md:max-h-44 object-contain rounded-lg border border-gray-100 shadow-sm bg-white"
+                        />
+                      </ImageLightbox>
+                    </div>
+                  ) : (
+                    <div
+                      className={`flex-shrink-0 ${
+                        showOrdinal ? 'w-28 md:w-40 lg:w-48' : 'w-16 md:w-20 lg:w-24'
+                      }`}
+                    >
+                      <span className="text-sm md:text-base font-medium text-gray-800 leading-snug">
+                        {pair.left}
+                      </span>
+                    </div>
+                  )}
 
                   <div className="flex-1 min-w-0">{renderSlot(pairId, 'a')}</div>
                 </div>

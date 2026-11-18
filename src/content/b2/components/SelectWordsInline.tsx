@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useT } from '@/i18n/useT';
 import { useExercisePersistence } from '@/hooks/useExercisePersistence';
 import type { B2SelectWordsInlineExercise } from '../types';
+import { ModelBox } from './ModelBox';
 
 interface Props {
   exercise: B2SelectWordsInlineExercise;
@@ -79,82 +80,96 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
   };
 
   if (exercise.presentation === 'checklist') {
-    const options = exercise.blocks.flatMap(block =>
-      block.tokens.filter(token => token.selectable !== false).map(token => ({
-        key: tokenKey(block.id, token.id),
-        text: token.text,
-      })),
-    );
+    // A block with a `heading` starts a new question group; heading-less blocks join the current one.
+    const groups: { key: string; heading?: string; options: { key: string; text: string }[] }[] = [];
+    for (const block of exercise.blocks) {
+      if (block.heading || groups.length === 0) {
+        groups.push({ key: block.id, heading: block.heading, options: [] });
+      }
+      groups[groups.length - 1].options.push(
+        ...block.tokens
+          .filter(token => token.selectable !== false)
+          .map(token => ({ key: tokenKey(block.id, token.id), text: token.text })),
+      );
+    }
     return (
       <div className="rounded-xl bg-white p-4 shadow-md md:p-8">
-        <ul className="space-y-3">
-          {options.map(option => {
-            const isSelected = selectedSet.has(option.key);
-            const isCorrect = correctIds.has(option.key);
-            const accepted = submitted && isSelected && isCorrect;
-            const wrong = submitted && isSelected && !isCorrect;
-            const missed = submitted && !isSelected && isCorrect;
-            // Tailwind does not scan `src/content/` — novel styles are inline.
-            const tone = accepted
-              ? { border: '#32C189', bg: '#DAF6EB', text: '#1F5741' }
-              : wrong
-                ? { border: '#D25A45', bg: '#FCE2DE', text: '#683229' }
-                : missed
-                  ? { border: '#E0A526', bg: '#FEF1D1', text: '#684D0B' }
-                  : isSelected
+        <div className="space-y-6">
+          {groups.map(group => (
+            <section key={group.key}>
+              {group.heading && <h4 className="mb-3 font-bold text-[#0072BC]">{group.heading}</h4>}
+              <ul className="space-y-3">
+                {group.options.map(option => {
+                  const isSelected = selectedSet.has(option.key);
+                  const isCorrect = correctIds.has(option.key);
+                  const accepted = submitted && isSelected && isCorrect;
+                  const wrong = submitted && isSelected && !isCorrect;
+                  const missed = submitted && !isSelected && isCorrect;
+                  // Tailwind does not scan `src/content/` — novel styles are inline.
+                  const tone = accepted
                     ? { border: '#32C189', bg: '#DAF6EB', text: '#1F5741' }
-                    : { border: '#e5e7eb', bg: '#f9fafb', text: '#111827' };
-            const boxStyle = wrong
-              ? { borderColor: '#D25A45', backgroundColor: '#D25A45', color: '#fff' }
-              : isSelected
-                ? { borderColor: '#32C189', backgroundColor: '#32C189', color: '#fff' }
-                : missed
-                  ? { borderColor: '#E0A526', backgroundColor: '#fff', color: '#E0A526' }
-                  : { borderColor: '#9ca3af', backgroundColor: '#fff', color: 'transparent' };
-            return (
-              <li key={option.key}>
-                <button
-                  type="button"
-                  role="checkbox"
-                  aria-checked={isSelected}
-                  disabled={submitted}
-                  onClick={() => toggle(option.key)}
-                  className="text-base md:text-lg"
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    minHeight: 48,
-                    alignItems: 'center',
-                    gap: 12,
-                    padding: '12px 16px',
-                    textAlign: 'start',
-                    borderRadius: 8,
-                    border: `2px solid ${tone.border}`,
-                    backgroundColor: tone.bg,
-                    color: tone.text,
-                    cursor: submitted ? 'default' : 'pointer',
-                  }}
-                >
-                  <span
-                    style={{
-                      display: 'flex',
-                      width: 24,
-                      height: 24,
-                      flexShrink: 0,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 4,
-                      border: '2px solid',
-                      ...boxStyle,
-                    }}
-                  >
-                    {wrong ? <XCircle className="h-4 w-4" /> : <Check className="h-4 w-4" strokeWidth={3} />}
-                  </span>
-                  <span style={wrong ? { textDecoration: 'line-through' } : undefined}>{option.text}</span>
-                </button>              </li>
-            );
-          })}
-        </ul>
+                    : wrong
+                      ? { border: '#D25A45', bg: '#FCE2DE', text: '#683229' }
+                      : missed
+                        ? { border: '#E0A526', bg: '#FEF1D1', text: '#684D0B' }
+                        : isSelected
+                          ? { border: '#32C189', bg: '#DAF6EB', text: '#1F5741' }
+                          : { border: '#e5e7eb', bg: '#f9fafb', text: '#111827' };
+                  const boxStyle = wrong
+                    ? { borderColor: '#D25A45', backgroundColor: '#D25A45', color: '#fff' }
+                    : isSelected
+                      ? { borderColor: '#32C189', backgroundColor: '#32C189', color: '#fff' }
+                      : missed
+                        ? { borderColor: '#E0A526', backgroundColor: '#fff', color: '#E0A526' }
+                        : { borderColor: '#9ca3af', backgroundColor: '#fff', color: 'transparent' };
+                  return (
+                    <li key={option.key}>
+                      <button
+                        type="button"
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        disabled={submitted}
+                        onClick={() => toggle(option.key)}
+                        className="text-base md:text-lg"
+                        style={{
+                          display: 'flex',
+                          width: '100%',
+                          minHeight: 48,
+                          alignItems: 'center',
+                          gap: 12,
+                          padding: '12px 16px',
+                          textAlign: 'start',
+                          borderRadius: 8,
+                          border: `2px solid ${tone.border}`,
+                          backgroundColor: tone.bg,
+                          color: tone.text,
+                          cursor: submitted ? 'default' : 'pointer',
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: 'flex',
+                            width: 24,
+                            height: 24,
+                            flexShrink: 0,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 4,
+                            border: '2px solid',
+                            ...boxStyle,
+                          }}
+                        >
+                          {wrong ? <XCircle className="h-4 w-4" /> : <Check className="h-4 w-4" strokeWidth={3} />}
+                        </span>
+                        <span style={wrong ? { textDecoration: 'line-through' } : undefined}>{option.text}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+        </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           {exercise.mode === 'scored' && !submitted && (
@@ -191,6 +206,7 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
 
   return (
     <div className="rounded-xl bg-white p-4 shadow-md md:p-8">
+      {exercise.model && exercise.model.length > 0 && <ModelBox lines={exercise.model} />}
       {exercise.image && (
         // Natural aspect ratio (no fixed box) so the photo never gets bars above/below.
         <div style={{ maxWidth: 672, margin: '0 auto 20px' }}>
@@ -202,13 +218,29 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
           />
         </div>
       )}
+      {exercise.prefaceText && (
+        <p className="mb-5 text-base leading-relaxed text-gray-800 md:text-lg">{exercise.prefaceText}</p>
+      )}
       <div className="space-y-5">
         {exercise.blocks.map(block => (
-          <section key={block.id} className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+          <section
+            key={block.id}
+            className={block.plain ? undefined : 'rounded-xl border border-gray-200 bg-gray-50 p-4'}
+          >
+            {block.image && (
+              <img
+                src={block.image.imageUrl}
+                alt={block.image.alt ?? ''}
+                loading="lazy"
+                style={{ display: 'block', width: '100%', maxWidth: 672, height: 'auto', margin: '0 auto 16px', borderRadius: 8 }}
+              />
+            )}
             {block.heading && (
               <h4 className="mb-3 font-bold text-[#0072BC]">{block.heading}</h4>
             )}
-            <p className="text-base leading-9 text-gray-900 md:text-lg">
+            {/* Line height inline (Tailwind skips src/content); buttons have no vertical padding,
+                so lines with and without clickable words are equally tall. */}
+            <p className="text-base text-gray-900 md:text-lg" style={{ lineHeight: 2 }}>
               {block.tokens.map((token, tokenIndex) => {
                 const selectionId = tokenKey(block.id, token.id);
                 const selectable = token.selectable !== false;
@@ -262,8 +294,9 @@ export function SelectWordsInline({ exercise, onComplete, exerciseId }: Props) {
                       aria-pressed={isSelected}
                       disabled={submitted}
                       onClick={() => toggle(selectionId)}
+                      style={{ paddingTop: 0, paddingBottom: 0, lineHeight: 'inherit', verticalAlign: 'baseline' }}
                       className={[
-                        'inline rounded px-0.5 py-1 text-start transition-colors',
+                        'inline rounded px-0.5 text-start transition-colors',
                         !submitted && isSelected
                           ? 'bg-[#DAF6EB] font-semibold text-[#1F5741] underline decoration-2 underline-offset-4'
                           : '',

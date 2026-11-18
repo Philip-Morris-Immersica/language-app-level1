@@ -44,6 +44,35 @@ function getOptionsForBlank(options: string[] | string[][] | undefined, blankIdx
   return options as string[];
 }
 
+/** Празен ред „—“ — само при 3+ опции без „—“ като отговор (напр. упр. 17: само се/си). */
+function showEmptyDropdownOption(opts: string[], hideDropdownPlaceholder: boolean): boolean {
+  if (hideDropdownPlaceholder) return false;
+  if (opts.includes('—')) return false;
+  if (opts.length <= 2) return false;
+  return true;
+}
+
+function withoutSiOption(opts: string[]): string[] {
+  return opts.filter(o => o.trim().toLowerCase() !== 'си');
+}
+
+function dropdownOptionsForBlank(
+  blankDropdownOptions: string[] | undefined,
+  exerciseId: string | undefined,
+  sentence: WorkbookSentence,
+  blankIdx: number,
+): string[] {
+  if (blankDropdownOptions?.length && !sentence.isExample) {
+    return withoutSiOption([...blankDropdownOptions]);
+  }
+  let opts = getOptionsForBlank(sentence.options, blankIdx);
+  return withoutSiOption(opts);
+}
+
+function coerceSelectValue(userVal: string, opts: string[]): string {
+  return opts.includes(userVal) ? userVal : '';
+}
+
 export interface WorkbookFillBlankProps {
   sentences: WorkbookSentence[];
   layout?: 'two-column' | 'qa-split' | 'qa-stacked' | 'single' | 'image-bubbles';
@@ -61,6 +90,10 @@ export interface WorkbookFillBlankProps {
   /** Header images shown centered above sentences (e.g. two character portraits for image-bubbles layout). */
   headerImages?: { imageUrl: string; label: string }[];
   listeningText?: string;
+  /** When true, dropdown blanks list only `options` — no empty placeholder option. */
+  hideDropdownPlaceholder?: boolean;
+  /** See `WorkbookFillBlankExercise.blankDropdownOptions`. */
+  blankDropdownOptions?: string[];
   onComplete?: (correct: boolean, score: number) => void;
   exerciseId?: string;
 }
@@ -85,13 +118,23 @@ export function WorkbookFillBlank({
   images,
   headerImages,
   listeningText,
+  hideDropdownPlaceholder = false,
+  blankDropdownOptions,
   onComplete,
   exerciseId,
 }: WorkbookFillBlankProps) {
   const t = useT();
   const { savedState, saveState } = useExercisePersistence(exerciseId);
   const s = savedState as any;
-  const [answers, setAnswers] = useState<{ [key: string]: string[] }>(() => s?.answers ?? {});
+  const [answers, setAnswers] = useState<{ [key: string]: string[] }>(() => {
+    const base = s?.answers ?? {};
+    if (!blankDropdownOptions?.length && exerciseId !== 'b2-l04-ex-13') return base;
+    const cleaned: { [key: string]: string[] } = {};
+    for (const [k, row] of Object.entries(base)) {
+      cleaned[k] = (row as string[]).map(v => (v === 'си' ? '' : v));
+    }
+    return cleaned;
+  });
   // blankValidation[sentenceIdx] = array of per-blank booleans (null = not evaluated / example)
   const [blankValidation, setBlankValidation] = useState<{ [key: string]: (boolean | null)[] | null }>(() => s?.blankValidation ?? {});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => s?.isSubmitted ?? false);
@@ -127,6 +170,17 @@ export function WorkbookFillBlank({
       return { ...s, options: shuffle(s.options as string[]) };
     });
   }, []);
+
+  /**
+   * Стойност на dropdown. Когато няма празен ред „—“, браузърът визуално показва първата опция —
+   * тя се приема за избрана (и при „Провери“), иначе верен отговор по подразбиране излиза грешен.
+   */
+  const selectValue = (sIdx: number, bIdx: number, opts: string[]): string => {
+    const v = coerceSelectValue(answers[sIdx]?.[bIdx] || '', opts);
+    if (v) return v;
+    if (opts.length > 0 && !showEmptyDropdownOption(opts, hideDropdownPlaceholder)) return opts[0];
+    return '';
+  };
 
   const setAnswer = (sentenceIdx: number, blankIdx: number, value: string) => {
     if (isSubmitted) {
@@ -164,7 +218,10 @@ export function WorkbookFillBlank({
         : null;
       const blankResults: boolean[] = sentence.correctAnswers.map((correct, bIdx) => {
         if (wholeCombo !== null) return wholeCombo;
-        const userVal = (userAnswers[bIdx] || '').trim().toLowerCase();
+        const shownOpts = dropdownOptionsForBlank(blankDropdownOptions, exerciseId, shuffledSentences[sIdx] ?? sentence, bIdx);
+        let raw = (selectValue(sIdx, bIdx, shownOpts) || userAnswers[bIdx] || '').trim();
+        if ((blankDropdownOptions?.length || exerciseId === 'b2-l04-ex-13') && raw === 'си') raw = '—';
+        const userVal = raw.toLowerCase();
         const matchesPrimary = userVal === correct.toLowerCase();
         const alternates = sentence.acceptableAnswers?.[bIdx];
         const matchesAlternate = alternates?.some(a => a.toLowerCase() === userVal) ?? false;
@@ -210,17 +267,23 @@ export function WorkbookFillBlank({
           {segments.map((seg, segIdx) => {
             if (seg.type === 'blank') {
               const bIdx = blankCounter++;
-              const userVal = answers[sIdx]?.[bIdx] || '';
-              const opts = getOptionsForBlank(sentence.options, bIdx);
+              const opts = dropdownOptionsForBlank(blankDropdownOptions, exerciseId, sentence, bIdx);
+              const userVal = selectValue(sIdx, bIdx, opts);
               const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
 
               if (isExample) {
+                const shown =
+                  exerciseId === 'b2-l04-ex-13'
+                    ? sentence.correctAnswers[bIdx] === 'си'
+                      ? '—'
+                      : sentence.correctAnswers[bIdx] || ''
+                    : sentence.correctAnswers[bIdx] || '';
                 return (
                   <span
                     key={segIdx}
                     className="inline-block border-b-2 border-gray-400 min-w-[5rem] text-center text-sm"
                   >
-                    {sentence.correctAnswers[bIdx] || ''}
+                    {shown}
                   </span>
                 );
               }
@@ -258,7 +321,9 @@ export function WorkbookFillBlank({
                     }
                   `}
                 >
-                  <option value="">—</option>
+                  {showEmptyDropdownOption(opts, hideDropdownPlaceholder) && (
+                    <option value="">—</option>
+                  )}
                   {opts.map(opt => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
@@ -325,8 +390,8 @@ export function WorkbookFillBlank({
       return segments.map((seg, segIdx) => {
         if (seg.type === 'blank') {
           const bIdx = blankCounter++;
-          const userVal = answers[sIdx]?.[bIdx] || '';
-          const opts = getOptionsForBlank(sentence.options, bIdx);
+          const opts = dropdownOptionsForBlank(blankDropdownOptions, exerciseId, sentence, bIdx);
+          const userVal = selectValue(sIdx, bIdx, opts);
           const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
           if (isExample) {
             return (
@@ -365,7 +430,9 @@ export function WorkbookFillBlank({
                 }
               `}
             >
-              <option value="">—</option>
+              {showEmptyDropdownOption(opts, hideDropdownPlaceholder) && (
+                <option value="">—</option>
+              )}
               {opts.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
           );
@@ -409,8 +476,8 @@ export function WorkbookFillBlank({
       return segments.map((seg, segIdx) => {
         if (seg.type === 'blank') {
           const bIdx = blankCounter++;
-          const userVal = answers[sIdx]?.[bIdx] || '';
-          const opts = getOptionsForBlank(sentence.options, bIdx);
+          const opts = dropdownOptionsForBlank(blankDropdownOptions, exerciseId, sentence, bIdx);
+          const userVal = selectValue(sIdx, bIdx, opts);
           const blankOk = Array.isArray(blankValArr) ? blankValArr[bIdx] : null;
           if (isExample) {
             return (
@@ -434,7 +501,9 @@ export function WorkbookFillBlank({
                   }
                 `}
               >
-                <option value="">— Избери —</option>
+                {showEmptyDropdownOption(opts, hideDropdownPlaceholder) ? (
+                  <option value="">— Избери —</option>
+                ) : null}
                 {opts.map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
